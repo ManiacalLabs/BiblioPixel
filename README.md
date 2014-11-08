@@ -5,4 +5,4 @@ BiblioPixel is a pure Python 2 library for programming light animations. It prov
 
 In the current form, it is designed specifically for displays comprised of LED strips, but there are no real limits on what the output device can be, due to the output driver model.
 
-See the documentation in the Wiki for more detailed information.
+See the documentation in the [Wiki](https://github.com/ManiacalLabs/BiblioPixel/wiki) for more detailed information.
