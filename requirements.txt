@@ -1,0 +1,3 @@
+Pillow>=2.4.0
+pyserial>=2.7
+spidev==2.0
