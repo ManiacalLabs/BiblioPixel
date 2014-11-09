@@ -1,3 +1,5 @@
+For easy hardware interfacing, check out the BiblioPixel supported [AllPixel](http://maniacallabs.com/AllPixel).
+
 Overview
 ====
 
