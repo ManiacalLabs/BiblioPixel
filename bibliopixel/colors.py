@@ -247,18 +247,12 @@ def hex2rgb(hex):
     hex = hex.strip('#')
     if len(hex) == 6:
         split = (hex[0:2],hex[2:4],hex[4:6])
-    elif len(hex) == 8:
-        split = (hex[0:2],hex[2:4],hex[4:6], hex[6:8])
     else:
-        raise ValueError('Must pass in either a 6 or 8 character hex value!')
+        raise ValueError('Must pass in a 6 character hex value!')
 
-    alpha = 255
-    if len(split) == 3:
-        r, g, b = [int(x, 16) for x in split]
-    else:
-        r, g, b, alpha = [int(x, 16) for x in split]
+    r, g, b = [int(x, 16) for x in split]
 
-    return Color(r, g, b, alpha)
+    return (r, g, b)
 
 def rgb2hsv(self):
         h, s, v = colorsys.rgb_to_hsv(self.r / 255.0,

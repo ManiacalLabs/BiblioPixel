@@ -169,7 +169,12 @@ def showImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = co
 
     for x in range(ox, w + ox):
         for y in range(oy, h + oy):
-            r, g, b, a = img.getpixel((x - ox,y - oy))
+            r,g,b,a = (0,0,0,255)
+            rgba = img.getpixel((x - ox,y - oy))
+            if len(rgba) == 3: r,g,b = rgba
+            elif len(rgba) == 4: r,g,b,a = rgba
+            else: raise ValueError("Image must be in RGB or RGBA format!");
+
             if a == 0:
                 r, g, b = bgcolor
             else:
