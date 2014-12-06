@@ -36,6 +36,7 @@ class LEDTYPE:
     WS2812 = 3
     WS2812B = 3
     NEOPIXEL = 3
+    APA104 = 3
     #400khz variant of above
     WS2811_400 = 4
 
@@ -44,6 +45,9 @@ class LEDTYPE:
     TM1803 = 6
     UCS1903 = 7
     SM16716 = 8
+    APA102 = 9
+    LPD1886 = 10 
+    P9813 = 11 
 
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
