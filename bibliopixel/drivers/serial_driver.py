@@ -98,7 +98,7 @@ class DriverSerial(DriverBase):
     def _connect(self):
         try:
             if(self.dev == ""):
-                com_list = serial.tools.list_ports.grep("4242:8037")
+                com_list = serial.tools.list_ports.grep("1D50:60AB")
                 try:
                     port = com_list.next()
                     self.dev = port[0]
