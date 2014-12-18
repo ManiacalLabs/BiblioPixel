@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='BiblioPixel',
-    version='1.0.2',
+    version='1.0.3',
     description='BiblioPixel is a pure python library for manipulating a wide variety of LED strip based displays, both in strip and matrix form.',
     author='Adam Haile',
     author_email='adam@maniacallabs.com',
