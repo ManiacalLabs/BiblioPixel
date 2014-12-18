@@ -230,7 +230,7 @@ class LEDMatrix(LEDBase):
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
-        self.set(pixel, (r, g, b))
+        self.setRGB(pixel, (r, g, b))
 
     ###############################################################################
     # Drawing Functions
