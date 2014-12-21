@@ -148,25 +148,51 @@ class MatrixRotation:
     ROTATE_180 = 2 #rotate 180 degrees
     ROTATE_270 = 1 #rotate 270 degrees
 
-def mapGen(width, height, serpentine):
+def mapGen(width, height, serpentine, offset = 0):
     """Helper method to generate X,Y coordinate maps for strips"""
 
     result = []
     for y in range(height):
         if not serpentine or y % 2 == 0:
-            result.append([(width * y) + x for x in range(width)])
+            result.append([(width * y) + x + offset for x in range(width)])
         else:
-            result.append([((width * (y+1)) - 1) - x for x in range(width)])
+            result.append([((width * (y+1)) - 1) - x + offset for x in range(width)])
 
     return result
+
+def flattenMap(map):
+    return [i for r in map for i in r]
+
+class MultiMapBuilder():
+    def __init__(self):
+        self.map = []
+        self.offset = 0
+
+    def addRow(self, *maps):
+        yOff = len(self.map)
+        lengths = [len(m) for m in maps]
+        h = max(lengths)
+        if(min(lengths) != h):
+            raise ValueError("All maps in row must be the same height!")
+
+        offsets = [0 + self.offset]
+        count = 0
+        for m in maps:
+            offsets.append(h*len(m[0]) + offsets[count])
+            count += 1
+
+        for y in range(h):
+            self.map.append([])
+            for x in range(len(maps)):
+                self.map[y + yOff] += [i + offsets[x] for i in maps[x][y]]
+
+        self.offset = offsets[len(offsets)-1]
+
         
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width = 0, height = 0, coordMap = None, 
-                       rotation = MatrixRotation.ROTATE_0, vert_flip = False, 
-                       serpentine = True, multi_layout = [0]):
+    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True):
         """Main class for matricies.
-
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
         height - Y axis size of matrix
@@ -177,15 +203,11 @@ class LEDMatrix(LEDBase):
         super(LEDMatrix, self).__init__(driver)
 
         if width == 0 and height == 0:
-            colWidth = []
-            for row in multi_layout:
-                if not isinstance(row, list): row = [row]
-                height += self.driver[row[0]].height
-                for col in row:
-                    if col < len(self.driver):
-                        width += self.driver[col].width
-                    else:
-                        raise ValueError("multi_layout total count must match driver count!")
+            if len(self.driver) == 1:
+                width = self.driver[0].width
+                height = self.driver[0].height
+            else:
+                raise TypeError("Must provide width and height if using multiple drivers!")
 
         self.width = width
         self.height = height
@@ -204,12 +226,10 @@ class LEDMatrix(LEDBase):
         if coordMap:
             self.matrix_map = coordMap
         else:
-            for row in multi_layout:
-                if not isinstance(row, list): row = [row]
-
-            self.matrix_map = mapGen(self.width, self.height, serpentine)
-
-        self.driver.matrix_map = self.matrix_map
+            if len(self.driver) == 1:
+                self.matrix_map = mapGen(self.width, self.height, serpentine)
+            else:
+                raise TypeError("Must provide coordMap if using multiple drivers!")
 
         #apply rotation
         for i in range(rotation):

@@ -30,9 +30,6 @@ class DriverBase(object):
         for i in range(0, self.bufByteCount):
             self._buf.append(0)
 
-        #in case the driver needs the matrix mapping
-        self.matrix_map = None
-
     #Push new data to strand
     def update(self, data):
         raise RuntimeError("Base class update() called. This shouldn't happen")
