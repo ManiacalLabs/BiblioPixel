@@ -35,7 +35,7 @@ class ImageAnim(BaseMatrixAnim):
         oy = offset[1]
 
         buffer = [0 for x in range(self._led.bufByteCount)]
-        gamma = self._led.driver.gamma
+        gamma = self._led.driver[0].gamma
         if self._bgcolor != (0,0,0):
             for i in range(self._led.numLEDs):
                 buffer[i*3 + 0] = gamma[self._bgcolor[0]]

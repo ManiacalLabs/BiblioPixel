@@ -50,8 +50,8 @@ class LEDBase(object):
         """Push the current pixel state to the driver"""
         pos = 0
         for d in self.driver:
-            d.update(self.buffer[pos:d.numLEDs+pos])
-            pos += d.numLEDs
+            d.update(self.buffer[pos:d.bufByteCount+pos])
+            pos += d.bufByteCount
     
     #use with caution!
     def setBuffer(self, buf):
@@ -73,7 +73,7 @@ class LEDBase(object):
             raise ValueError('Brightness must be between 0 and 255')
         result = True
         for d in self.driver:
-            if(not self.driver.setMasterBrightness(bright)):
+            if(not d.setMasterBrightness(bright)):
                 result = False
                 break
 
@@ -148,7 +148,7 @@ class MatrixRotation:
     ROTATE_180 = 2 #rotate 180 degrees
     ROTATE_270 = 1 #rotate 270 degrees
 
-def mapGen(width, height, serpentine, offset = 0):
+def mapGen(width, height, serpentine = True, offset = 0, rotation = MatrixRotation.ROTATE_0, vert_flip=False):
     """Helper method to generate X,Y coordinate maps for strips"""
 
     result = []
@@ -158,10 +158,16 @@ def mapGen(width, height, serpentine, offset = 0):
         else:
             result.append([((width * (y+1)) - 1) - x + offset for x in range(width)])
 
+    for i in range(rotation):
+            result = zip(*result[::-1])
+
+    if vert_flip:
+            result = result[::-1]
+
     return result
 
-def flattenMap(map):
-    return [i for r in map for i in r]
+# def flattenMap(map):
+#     return [i for r in map for i in r]
 
 class MultiMapBuilder():
     def __init__(self):
