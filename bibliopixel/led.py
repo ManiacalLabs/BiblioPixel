@@ -3,10 +3,43 @@ import colors
 import time
 import math
 import font
+import time
+import threading
+
+class updateThread(threading.Thread):
+
+    def __init__(self, driver):
+        super(updateThread, self).__init__()
+        self.setDaemon(True)
+        self._stop = threading.Event()
+        self._wait = threading.Event()
+        self._data = []
+        self._driver = driver
+
+    def setData(self, data):
+        self._data = data
+        self._wait.set()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
+    def sending(self):
+        return self._wait.isSet()
+
+    def run(self):
+        while not self.stopped():
+            self._wait.wait()
+            self._driver.update(self._data)
+            self._data = []
+            self._wait.clear()
+
 
 class LEDBase(object):
 
-    def __init__(self, driver):
+    def __init__(self, driver, threadedUpdate):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
         if not isinstance(driver, list):
             driver = [driver]
@@ -29,6 +62,15 @@ class LEDBase(object):
         self._frameGenTime = 0
         self._frameTotalTime = None
 
+        self._threadedUpdate = threadedUpdate
+
+        if self._threadedUpdate:
+            for d in self.driver:
+                print "starting thread"
+                t = updateThread(d)
+                t.start()
+                d._thread = t
+
     def _get_base(self, pixel):
         if(pixel < 0 or pixel > self.lastIndex):
             return (0,0,0); #don't go out of bounds
@@ -49,8 +91,15 @@ class LEDBase(object):
     def update(self):
         """Push the current pixel state to the driver"""
         pos = 0
+        if self._threadedUpdate:
+            while all([d._thread.sending() for d in self.driver]):
+                time.sleep(0.000001)
+
         for d in self.driver:
-            d.update(self.buffer[pos:d.bufByteCount+pos])
+            if self._threadedUpdate:
+                d._thread.setData(self.buffer[pos:d.bufByteCount+pos])
+            else:
+                d.update(self.buffer[pos:d.bufByteCount+pos])
             pos += d.bufByteCount
     
     #use with caution!
@@ -110,8 +159,8 @@ class LEDBase(object):
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, driver):
-        super(LEDStrip, self).__init__(driver)
+    def __init__(self, driver, threadedUpdate = True):
+        super(LEDStrip, self).__init__(driver, threadedUpdate)
 
     #Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
@@ -197,7 +246,7 @@ class MultiMapBuilder():
         
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True):
+    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = True):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -206,7 +255,7 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super(LEDMatrix, self).__init__(driver)
+        super(LEDMatrix, self).__init__(driver, threadedUpdate)
 
         if width == 0 and height == 0:
             if len(self.driver) == 1:
