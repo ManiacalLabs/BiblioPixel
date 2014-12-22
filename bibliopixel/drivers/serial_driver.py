@@ -18,6 +18,8 @@ class CMDTYPE:
     SETUP_DATA = 1 #config data (LED type, SPI speed, num LEDs)
     PIXEL_DATA = 2 #raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
     BRIGHTNESS = 3 #data will be single 0-255 brightness value, length must be 0x00,0x01
+    GETID      = 4
+    SETID      = 5
 
 class RETURN_CODES:
     SUCCESS = 255 #All is well
@@ -100,6 +102,7 @@ class DriverSerial(DriverBase):
             if(self.dev == ""):
                 com_list = serial.tools.list_ports.grep("1D50:60AB")
                 try:
+                    #for port in com_list:
                     port = com_list.next()
                     self.dev = port[0]
                     log.logger.info( "Using COM Port: {:}".format(self.dev))
@@ -125,6 +128,7 @@ class DriverSerial(DriverBase):
             packet.append(self.bufByteCount & 0xFF) #set 1st byte of byteCount
             packet.append(self.bufByteCount >> 8) #set 2nd byte of byteCount
             packet.append(self._SPISpeed)
+            packet.append(0)
             self._com.write(packet)
 
             resp = self._com.read(1)
@@ -145,6 +149,28 @@ class DriverSerial(DriverBase):
         packet.append(size & 0xFF)
         packet.append(size >> 8)
         return packet
+
+    def setDeviceID(self, id):
+        if id < 0 or id > 255:
+            raise ValueError("ID must be an unsigned byte!")
+
+        packet = self._generateHeader(CMDTYPE.SETID, 1)
+        packet.append(id)
+        self._com.write(packet)
+
+        resp = self._com.read(1)
+        if len(resp) == 0:
+            self._comError()
+
+        if ord(resp) != RETURN_CODES.SUCCESS:
+            self._printError(ord(resp))
+
+    def getDeviceID(self):
+        packet = self._generateHeader(CMDTYPE.GETID, 0)
+        self._com.write(packet)
+        resp = ord(self._com.read(1))
+        return resp
+
 
     def setMasterBrightness(self, brightness):
         packet = self._generateHeader(CMDTYPE.BRIGHTNESS, 1)
