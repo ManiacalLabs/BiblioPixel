@@ -94,8 +94,10 @@ class LEDBase(object):
         """Push the current pixel state to the driver"""
         pos = 0
         if self._threadedUpdate:
+            #start = time.time() * 1000
             while all([d._thread.sending() for d in self.driver]):
                 time.sleep(0.000001)
+            #print (time.time() * 1000) - start
 
         for d in self.driver:
             if self._threadedUpdate:

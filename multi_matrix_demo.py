@@ -11,6 +11,7 @@ log.setLogLevel(log.DEBUG)
 # 	DriverVisualizer(width=24, height=24, port=1614, pixelSize = 5,  stayTop=True),
 # ]
 
+#Use DeviceIDManager.py to set or view your device IDs
 from bibliopixel.drivers.serial_driver import *
 drivers = [
 	DriverSerial(LEDTYPE.LPD8806, 24*24, deviceID = 1, SPISpeed = 2),
