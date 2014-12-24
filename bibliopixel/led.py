@@ -32,9 +32,12 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
-            self._driver.update(self._data)
+            #start = time.time() * 1000
+            self._driver._update(self._data)
+            #print (time.time() * 1000) - start
             self._data = []
             self._wait.clear()
+            
 
 
 class LEDBase(object):
@@ -66,7 +69,6 @@ class LEDBase(object):
 
         if self._threadedUpdate:
             for d in self.driver:
-                print "starting thread"
                 t = updateThread(d)
                 t.start()
                 d._thread = t
@@ -99,9 +101,12 @@ class LEDBase(object):
             if self._threadedUpdate:
                 d._thread.setData(self.buffer[pos:d.bufByteCount+pos])
             else:
-                d.update(self.buffer[pos:d.bufByteCount+pos])
+                d._update(self.buffer[pos:d.bufByteCount+pos])
             pos += d.bufByteCount
     
+    def lastThreadedUpdate(self):
+        return max([d.lastUpdate for d in self.driver])
+
     #use with caution!
     def setBuffer(self, buf):
         """Use with extreme caution!
