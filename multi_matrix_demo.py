@@ -3,6 +3,11 @@ import time
 import bibliopixel.log as log
 log.setLogLevel(log.DEBUG)
 
+from bibliopixel.drivers.serial_driver import *
+
+ledtype = LEDTYPE.NEOPIXEL
+w = 16
+h = 16
 # from bibliopixel.drivers.visualizer import DriverVisualizer
 # drivers = [
 # 	DriverVisualizer(width=24, height=24, port=1611, pixelSize = 5, stayTop=True),
@@ -12,12 +17,12 @@ log.setLogLevel(log.DEBUG)
 # ]
 
 #Use DeviceIDManager.py to set or view your device IDs
-from bibliopixel.drivers.serial_driver import *
+
 drivers = [
-	DriverSerial(LEDTYPE.LPD8806, 24*24, deviceID = 1, SPISpeed = 2),
-	DriverSerial(LEDTYPE.LPD8806, 24*24, deviceID = 2, SPISpeed = 2),
-	#DriverSerial(LEDTYPE.LPD8806, 24*24, deviceID = 3, SPISpeed = 2),
-	#DriverSerial(LEDTYPE.LPD8806, 24*24, deviceID = 4, SPISpeed = 2),
+	#DriverSerial(ledtype, w*h, deviceID = 1, SPISpeed = 2),
+	# DriverSerial(ledtype, w*h, deviceID = 2, SPISpeed = 2),
+	DriverSerial(ledtype, w*h, deviceID = 3, SPISpeed = 2),
+	# DriverSerial(ledtype, w*h, deviceID = 4, SPISpeed = 2),
 ]
 
 #load the LEDMatrix class
@@ -25,9 +30,9 @@ from bibliopixel.led import *
 #change rotation and vert_flip as needed by your display
 build = MultiMapBuilder()
 for d in drivers:
-	build.addRow(mapGen(24,24))
+	build.addRow(mapGen(w,h))
 
-led = LEDMatrix(driver = drivers, width = 24, height = 24*len(drivers), coordMap=build.map, threadedUpdate = True)
+led = LEDMatrix(driver = drivers, width = w, height = h*len(drivers), coordMap=build.map, threadedUpdate = True)
 
 try:
 	#load calibration test animation
@@ -38,7 +43,7 @@ try:
 	# anim = ScrollText(led, "Maniacal Labs", xPos=20, yPos=1, color=colors.Orange, bgcolor=colors.Off, size=2)
 	# anim.run(amt=1, fps=15)
 
-	#led.setMasterBrightness(64)
+	led.setMasterBrightness(64)
 
 	anim = Bloom(led, dir=True)
 	start = time.time() * 1000.0
@@ -53,7 +58,7 @@ try:
 except KeyboardInterrupt:
 	pass
 
-#led.all_off()
-#led.update()
+led.all_off()
+led.update()
 time.sleep(1)
 

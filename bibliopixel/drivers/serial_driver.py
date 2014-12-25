@@ -75,11 +75,11 @@ class DriverSerial(DriverBase):
             time.sleep(restart_timeout)
             resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
-                SerialDriver._printError(resp)
+                DriverSerial._printError(resp)
             else:
                 log.logger.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
-            SerialDriver._printError(resp)
+            DriverSerial._printError(resp)
 
     @staticmethod
     def findSerialDevices():
@@ -152,7 +152,7 @@ class DriverSerial(DriverBase):
 
             resp = self._com.read(1)
             if len(resp) == 0:
-                SerialDriver._comError()
+                DriverSerial._comError()
 
             return ord(resp)
 
@@ -184,10 +184,10 @@ class DriverSerial(DriverBase):
 
             resp = com.read(1)
             if len(resp) == 0:
-                SerialDriver._comError()
+                DriverSerial._comError()
             else:
                 if ord(resp) != RETURN_CODES.SUCCESS:
-                    SerialDriver._printError(ord(resp))
+                    DriverSerial._printError(ord(resp))
 
         except serial.SerialException as e:
             log.logger.error("Problem connecting to serial device.")
@@ -213,7 +213,7 @@ class DriverSerial(DriverBase):
         self._com.write(packet)
         resp = ord(self._com.read(1))
         if resp != RETURN_CODES.SUCCESS:
-            SerialDriver._printError(resp)
+            DriverSerial._printError(resp)
             return False
         else:
             return True
@@ -232,9 +232,9 @@ class DriverSerial(DriverBase):
         
         resp = self._com.read(1)
         if len(resp) == 0:
-                SerialDriver._comError()
+                DriverSerial._comError()
         if ord(resp) != RETURN_CODES.SUCCESS:
-            SerialDriver._printError(ord(resp))
+            DriverSerial._printError(ord(resp))
 
         self._com.flushInput()
 
