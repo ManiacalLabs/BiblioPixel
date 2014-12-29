@@ -53,7 +53,8 @@ class LEDTYPE:
 
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
-    
+    foundDevices = []
+    deviceIDS = {}
     def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 16, gamma = None, restart_timeout = 3, deviceID = None):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
@@ -83,11 +84,15 @@ class DriverSerial(DriverBase):
 
     @staticmethod
     def findSerialDevices():
-        result = []
-        for port in serial.tools.list_ports.grep("1D50:60AB"):
-            result.append(port[0])
+        if len(DriverSerial.foundDevices) == 0:
+            DriverSerial.foundDevices = []
+            DriverSerial.deviceIDS = {}
+            for port in serial.tools.list_ports.grep("1D50:60AB"):
+                DriverSerial.foundDevices.append(port[0])
+                id = DriverSerial.getDeviceID(port[0])
+                DriverSerial.deviceIDS[id] = port[0]
 
-        return result
+        return DriverSerial.foundDevices
 
     @staticmethod
     def _printError(error):
@@ -112,24 +117,24 @@ class DriverSerial(DriverBase):
     def _connect(self):
         try:
             if(self.dev == ""):
-                com_list = DriverSerial.findSerialDevices()
+                DriverSerial.findSerialDevices()
 
                 if self.deviceID != None:
-                    for p in com_list:
-                        try:
-                            if DriverSerial.getDeviceID(p) == self.deviceID:
-                                self.dev = p
-                                log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, self.deviceID))
-                                break
-                        except:
-                            pass
+                    if self.deviceID in DriverSerial.deviceIDS:
+                        self.dev = DriverSerial.deviceIDS[self.deviceID]
+                        log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, self.deviceID))
+                                
                     if self.dev == "":
                         error = "Unable to find device with ID: {}".format(self.deviceID)
                         log.logger.error(error)
                         raise ValueError(error)
-                elif len(com_list) > 0:
-                    self.dev = com_list[0]
-                    devID = DriverSerial.getDeviceID(self.dev)
+                elif len(DriverSerial.foundDevices) > 0:
+                    self.dev = DriverSerial.foundDevices[0]
+                    devID = -1
+                    for id in DriverSerial.deviceIDS:
+                        if DriverSerial.deviceIDS[id] == self.dev:
+                            devID = id
+
                     log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, devID))
 
             try:

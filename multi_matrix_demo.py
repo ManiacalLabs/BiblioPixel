@@ -6,8 +6,11 @@ log.setLogLevel(log.DEBUG)
 from bibliopixel.drivers.serial_driver import *
 
 ledtype = LEDTYPE.NEOPIXEL
-w = 16
-h = 16
+w = 25
+h = 25
+driverCount = 4
+numFrames = 1000
+
 # from bibliopixel.drivers.visualizer import DriverVisualizer
 # drivers = [
 # 	DriverVisualizer(width=24, height=24, port=1611, pixelSize = 5, stayTop=True),
@@ -18,21 +21,19 @@ h = 16
 
 #Use DeviceIDManager.py to set or view your device IDs
 
-drivers = [
-	#DriverSerial(ledtype, w*h, deviceID = 1, SPISpeed = 2),
-	# DriverSerial(ledtype, w*h, deviceID = 2, SPISpeed = 2),
-	DriverSerial(ledtype, w*h, deviceID = 3, SPISpeed = 2),
-	# DriverSerial(ledtype, w*h, deviceID = 4, SPISpeed = 2),
-]
+drivers = []
+for i in range(1, driverCount+1):
+	drivers.append(DriverSerial(ledtype, w*h, deviceID = i, SPISpeed = 2))
 
 #load the LEDMatrix class
 from bibliopixel.led import *
+import bibliopixel.colors as colors
 #change rotation and vert_flip as needed by your display
 build = MultiMapBuilder()
 for d in drivers:
-	build.addRow(mapGen(w,h))
+	build.addRow(mapGen(w,h,rotation=MatrixRotation.ROTATE_270))
 
-led = LEDMatrix(driver = drivers, width = w, height = h*len(drivers), coordMap=build.map, threadedUpdate = True)
+led = LEDMatrix(driver = drivers, threadedUpdate = True, width = w, height = h*len(drivers), coordMap=build.map)
 
 try:
 	#load calibration test animation
@@ -40,21 +41,18 @@ try:
 	# anim = MatrixCalibrationTest(led)
 
 	from matrix_animations import *
-	# anim = ScrollText(led, "Maniacal Labs", xPos=20, yPos=1, color=colors.Orange, bgcolor=colors.Off, size=2)
-	# anim.run(amt=1, fps=15)
 
-	led.setMasterBrightness(64)
+	led.setMasterBrightness(32)
+
 
 	anim = Bloom(led, dir=True)
 	start = time.time() * 1000.0
-	anim.run(amt=6, max_steps = 100)
-	print (time.time() * 1000.0) - start
-	#led.all_off()
-	#led.update()
+	anim.run(amt=6, max_steps = numFrames)
+	t = (time.time() * 1000.0) - start
+	print "Time: {:.2f}ms / FPS: {:.2f}".format(t, numFrames/(t/1000.0))
+	led.all_off()
+	led.update()
 
-	# from bibliopixel.image import *
-	# anim = ImageAnim(led, "C:/SVN/BiblioPixelExamples/anims/YoshiRotating.gif", offset=(0, 0), bgcolor=colors.Off, brightness=255)
-	# anim.run()
 except KeyboardInterrupt:
 	pass
 
