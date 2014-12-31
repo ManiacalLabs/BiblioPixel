@@ -4,25 +4,20 @@ import bibliopixel.log as log
 log.setLogLevel(log.DEBUG)
 
 from bibliopixel.drivers.serial_driver import *
+from bibliopixel.drivers.visualizer import *
 
+#global vars
 ledtype = LEDTYPE.NEOPIXEL
-w = 25
-h = 25
+w = 16
+h = 16
 driverCount = 4
-numFrames = 1000
-
-# from bibliopixel.drivers.visualizer import DriverVisualizer
-# drivers = [
-# 	DriverVisualizer(width=24, height=24, port=1611, pixelSize = 5, stayTop=True),
-# 	DriverVisualizer(width=24, height=24, port=1612, pixelSize = 5,  stayTop=True),
-# 	DriverVisualizer(width=24, height=24, port=1613, pixelSize = 5,  stayTop=True),
-# 	DriverVisualizer(width=24, height=24, port=1614, pixelSize = 5,  stayTop=True),
-# ]
+numFrames = 100
 
 #Use DeviceIDManager.py to set or view your device IDs
 
 drivers = []
 for i in range(1, driverCount+1):
+	#drivers.append(DriverVisualizer(width=w, height=h, port=1610+i, pixelSize = 8, stayTop=True))
 	drivers.append(DriverSerial(ledtype, w*h, deviceID = i, SPISpeed = 2))
 
 #load the LEDMatrix class
@@ -31,19 +26,14 @@ import bibliopixel.colors as colors
 #change rotation and vert_flip as needed by your display
 build = MultiMapBuilder()
 for d in drivers:
-	build.addRow(mapGen(w,h,rotation=MatrixRotation.ROTATE_270))
+	build.addRow(mapGen(w,h,rotation=MatrixRotation.ROTATE_0))
 
 led = LEDMatrix(driver = drivers, threadedUpdate = True, width = w, height = h*len(drivers), coordMap=build.map)
 
 try:
-	#load calibration test animation
-	# from bibliopixel.animation import MatrixCalibrationTest
-	# anim = MatrixCalibrationTest(led)
-
 	from matrix_animations import *
 
-	led.setMasterBrightness(32)
-
+	led.setMasterBrightness(255)
 
 	anim = Bloom(led, dir=True)
 	start = time.time() * 1000.0

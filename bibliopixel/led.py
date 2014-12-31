@@ -32,14 +32,10 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
-            #start = time.time() * 1000
             self._driver._update(self._data)
-            #print (time.time() * 1000) - start
             self._data = []
             self._wait.clear()
             
-
-
 class LEDBase(object):
 
     def __init__(self, driver, threadedUpdate):
@@ -94,10 +90,8 @@ class LEDBase(object):
         """Push the current pixel state to the driver"""
         pos = 0
         if self._threadedUpdate:
-            #start = time.time() * 1000
             while all([d._thread.sending() for d in self.driver]):
                 time.sleep(0.000001)
-            #print (time.time() * 1000) - start
 
         for d in self.driver:
             if self._threadedUpdate:
@@ -136,7 +130,7 @@ class LEDBase(object):
         #all or nothing, set them all back if False
         if not result:
             for d in self.driver:
-                self.setMasterBrightness(255)
+                d.setMasterBrightness(255)
             self.masterBrightness = bright
         else:
             self.masterBrightness = 255
@@ -166,7 +160,7 @@ class LEDBase(object):
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, driver, threadedUpdate = True):
+    def __init__(self, driver, threadedUpdate = False):
         super(LEDStrip, self).__init__(driver, threadedUpdate)
 
     #Fill the strand (or a subset) with a single color using a Color object
@@ -222,9 +216,6 @@ def mapGen(width, height, serpentine = True, offset = 0, rotation = MatrixRotati
 
     return result
 
-# def flattenMap(map):
-#     return [i for r in map for i in r]
-
 class MultiMapBuilder():
     def __init__(self):
         self.map = []
@@ -249,11 +240,10 @@ class MultiMapBuilder():
                 self.map[y + yOff] += [i + offsets[x] for i in maps[x][y]]
 
         self.offset = offsets[len(offsets)-1]
-
         
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = True):
+    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
