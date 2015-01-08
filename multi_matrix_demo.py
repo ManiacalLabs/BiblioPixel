@@ -8,9 +8,9 @@ from bibliopixel.drivers.visualizer import *
 
 #global vars
 ledtype = LEDTYPE.NEOPIXEL
-w = 16
-h = 16
-driverCount = 4
+w = 24
+h = 24
+driverCount = 2
 numFrames = 100
 
 #Use DeviceIDManager.py to set or view your device IDs
