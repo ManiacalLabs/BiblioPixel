@@ -7,7 +7,7 @@ import time
 import random
 
 class Rainbow(BaseStripAnim):
-    """Generate rainbow distributed over 384 pixels.
+    """Generate rainbow distributed over 256 pixels.
        If you want the full rainbow to fit in the number of pixels you
        are using, use RainbowCycle instead 
     """
@@ -216,7 +216,8 @@ class LarsonRainbow(LarsonScanner):
             led, colors.Off, tail, start, end)
 
     def step(self, amt = 1):
-        self._color = colors.hue2rgb_rainbow((self._step * (256 / self._size)) % 256)
+        self._color = colors.hue_helper(0, self._size, self._step)
+        #self._color = colors.hue2rgb_rainbow((self._step * (256 / self._size)) % 256)
 
         super(LarsonRainbow, self).step(amt)
 
@@ -294,7 +295,7 @@ class RGBClock(BaseStripAnim):
     """RGB Clock done with RGB LED strip(s)"""
 
     def __init__(self, led, hStart, hEnd, mStart, mEnd, sStart, sEnd):
-        super(RGBClock, self).__init__(led, 0, 0)
+        super(RGBClock, self).__init__(led, 0, -1)
         if hEnd < hStart:
             hEnd = hStart + 1
         if mEnd < mStart:

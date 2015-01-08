@@ -152,7 +152,6 @@ class DriverSerial(DriverBase):
             packet.append(self.bufByteCount & 0xFF) #set 1st byte of byteCount
             packet.append(self.bufByteCount >> 8) #set 2nd byte of byteCount
             packet.append(self._SPISpeed)
-            packet.append(0)
             self._com.write(packet)
 
             resp = self._com.read(1)
