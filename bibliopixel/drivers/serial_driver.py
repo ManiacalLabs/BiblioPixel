@@ -55,12 +55,13 @@ class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
     foundDevices = []
     deviceIDS = {}
-    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 16, gamma = None, restart_timeout = 3, deviceID = None):
+    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 16, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type == LEDTYPE.LPD8806 or type == LEDTYPE.WS2801 or type == LEDTYPE.SM16716):
             SPISpeed = 24
 
+        self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
         self._com = None
         self._type = type
@@ -83,11 +84,11 @@ class DriverSerial(DriverBase):
             DriverSerial._printError(resp)
 
     @staticmethod
-    def findSerialDevices():
+    def findSerialDevices(hardwareID = "1D50:60AB"):
         if len(DriverSerial.foundDevices) == 0:
             DriverSerial.foundDevices = []
             DriverSerial.deviceIDS = {}
-            for port in serial.tools.list_ports.grep("1D50:60AB"):
+            for port in serial.tools.list_ports.grep(hardwareID):
                 DriverSerial.foundDevices.append(port[0])
                 id = DriverSerial.getDeviceID(port[0])
                 DriverSerial.deviceIDS[id] = port[0]
@@ -117,7 +118,7 @@ class DriverSerial(DriverBase):
     def _connect(self):
         try:
             if(self.dev == ""):
-                DriverSerial.findSerialDevices()
+                DriverSerial.findSerialDevices(self._hardwareID)
 
                 if self.deviceID != None:
                     if self.deviceID in DriverSerial.deviceIDS:
@@ -140,7 +141,7 @@ class DriverSerial(DriverBase):
             try:
                 self._com =  serial.Serial(self.dev, timeout=5)
             except serial.SerialException as e:
-                ports = DriverSerial.findSerialDevices()
+                ports = DriverSerial.findSerialDevices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + "\n".join(ports)

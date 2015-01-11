@@ -71,7 +71,7 @@ class LEDBase(object):
 
     def _get_base(self, pixel):
         if(pixel < 0 or pixel > self.lastIndex):
-            return (0,0,0); #don't go out of bounds
+            return (0,0,0) #don't go out of bounds
 
         return (self.buffer[pixel*3 + 0], self.buffer[pixel*3 + 1], self.buffer[pixel*3 + 2])
 
@@ -310,7 +310,7 @@ class LEDMatrix(LEDBase):
     def get(self, x, y):
         """Gets the color of the pixel at x,y"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return #just throw out anything out of bounds
+            return (0,0,0)#just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
         return self._get_base(pixel)
