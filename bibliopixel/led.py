@@ -3,16 +3,53 @@ import colors
 import time
 import math
 import font
+import time
+import threading
 
-class LEDBase(object):
+class updateThread(threading.Thread):
 
     def __init__(self, driver):
+        super(updateThread, self).__init__()
+        self.setDaemon(True)
+        self._stop = threading.Event()
+        self._wait = threading.Event()
+        self._data = []
+        self._driver = driver
+
+    def setData(self, data):
+        self._data = data
+        self._wait.set()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
+    def sending(self):
+        return self._wait.isSet()
+
+    def run(self):
+        while not self.stopped():
+            self._wait.wait()
+            self._driver._update(self._data)
+            self._data = []
+            self._wait.clear()
+            
+class LEDBase(object):
+
+    def __init__(self, driver, threadedUpdate):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
+        if not isinstance(driver, list):
+            driver = [driver]
+
         self.driver = driver
         try:
             self.numLEDs
         except AttributeError as e:
-            self.numLEDs = driver.numLEDs
+            self.numLEDs = 0
+            for d in self.driver:
+                self.numLEDs += d.numLEDs
 
         self.bufByteCount = int(3 * self.numLEDs)
         self.lastIndex = self.numLEDs - 1
@@ -24,9 +61,17 @@ class LEDBase(object):
         self._frameGenTime = 0
         self._frameTotalTime = None
 
+        self._threadedUpdate = threadedUpdate
+
+        if self._threadedUpdate:
+            for d in self.driver:
+                t = updateThread(d)
+                t.start()
+                d._thread = t
+
     def _get_base(self, pixel):
         if(pixel < 0 or pixel > self.lastIndex):
-            return (0,0,0); #don't go out of bounds
+            return (0,0,0) #don't go out of bounds
 
         return (self.buffer[pixel*3 + 0], self.buffer[pixel*3 + 1], self.buffer[pixel*3 + 2])
 
@@ -43,8 +88,21 @@ class LEDBase(object):
 
     def update(self):
         """Push the current pixel state to the driver"""
-        self.driver.update(self.buffer)
+        pos = 0
+        if self._threadedUpdate:
+            while all([d._thread.sending() for d in self.driver]):
+                time.sleep(0.000001)
+
+        for d in self.driver:
+            if self._threadedUpdate:
+                d._thread.setData(self.buffer[pos:d.bufByteCount+pos])
+            else:
+                d._update(self.buffer[pos:d.bufByteCount+pos])
+            pos += d.bufByteCount
     
+    def lastThreadedUpdate(self):
+        return max([d.lastUpdate for d in self.driver])
+
     #use with caution!
     def setBuffer(self, buf):
         """Use with extreme caution!
@@ -63,12 +121,19 @@ class LEDBase(object):
         """
         if(bright > 255 or bright < 0):
             raise ValueError('Brightness must be between 0 and 255')
-        if(self.driver.setMasterBrightness(bright)):
-            self.masterBrightness = 255
-            return True
-        else:
+        result = True
+        for d in self.driver:
+            if(not d.setMasterBrightness(bright)):
+                result = False
+                break
+
+        #all or nothing, set them all back if False
+        if not result:
+            for d in self.driver:
+                d.setMasterBrightness(255)
             self.masterBrightness = bright
-            return False
+        else:
+            self.masterBrightness = 255
     
     #Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
@@ -95,8 +160,8 @@ class LEDBase(object):
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, driver):
-        super(LEDStrip, self).__init__(driver)
+    def __init__(self, driver, threadedUpdate = False):
+        super(LEDStrip, self).__init__(driver, threadedUpdate)
 
     #Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
@@ -133,23 +198,53 @@ class MatrixRotation:
     ROTATE_180 = 2 #rotate 180 degrees
     ROTATE_270 = 1 #rotate 270 degrees
 
-def mapGen(width, height, serpentine):
+def mapGen(width, height, serpentine = True, offset = 0, rotation = MatrixRotation.ROTATE_0, vert_flip=False):
     """Helper method to generate X,Y coordinate maps for strips"""
 
     result = []
     for y in range(height):
         if not serpentine or y % 2 == 0:
-            result.append([(width * y) + x for x in range(width)])
+            result.append([(width * y) + x + offset for x in range(width)])
         else:
-            result.append([((width * (y+1)) - 1) - x for x in range(width)])
+            result.append([((width * (y+1)) - 1) - x + offset for x in range(width)])
+
+    for i in range(rotation):
+            result = zip(*result[::-1])
+
+    if vert_flip:
+            result = result[::-1]
 
     return result
+
+class MultiMapBuilder():
+    def __init__(self):
+        self.map = []
+        self.offset = 0
+
+    def addRow(self, *maps):
+        yOff = len(self.map)
+        lengths = [len(m) for m in maps]
+        h = max(lengths)
+        if(min(lengths) != h):
+            raise ValueError("All maps in row must be the same height!")
+
+        offsets = [0 + self.offset]
+        count = 0
+        for m in maps:
+            offsets.append(h*len(m[0]) + offsets[count])
+            count += 1
+
+        for y in range(h):
+            self.map.append([])
+            for x in range(len(maps)):
+                self.map[y + yOff] += [i + offsets[x] for i in maps[x][y]]
+
+        self.offset = offsets[len(offsets)-1]
         
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True):
+    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False):
         """Main class for matricies.
-
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
         height - Y axis size of matrix
@@ -157,11 +252,14 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super(LEDMatrix, self).__init__(driver)
+        super(LEDMatrix, self).__init__(driver, threadedUpdate)
 
         if width == 0 and height == 0:
-            width = self.driver.width
-            height = self.driver.height
+            if len(self.driver) == 1:
+                width = self.driver[0].width
+                height = self.driver[0].height
+            else:
+                raise TypeError("Must provide width and height if using multiple drivers!")
 
         self.width = width
         self.height = height
@@ -180,9 +278,10 @@ class LEDMatrix(LEDBase):
         if coordMap:
             self.matrix_map = coordMap
         else:
-            self.matrix_map = mapGen(self.width, self.height, serpentine)
-
-        self.driver.matrix_map = self.matrix_map
+            if len(self.driver) == 1:
+                self.matrix_map = mapGen(self.width, self.height, serpentine)
+            else:
+                raise TypeError("Must provide coordMap if using multiple drivers!")
 
         #apply rotation
         for i in range(rotation):
@@ -211,7 +310,7 @@ class LEDMatrix(LEDBase):
     def get(self, x, y):
         """Gets the color of the pixel at x,y"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return #just throw out anything out of bounds
+            return (0,0,0)#just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
         return self._get_base(pixel)

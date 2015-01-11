@@ -18,6 +18,8 @@ class CMDTYPE:
     SETUP_DATA = 1 #config data (LED type, SPI speed, num LEDs)
     PIXEL_DATA = 2 #raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
     BRIGHTNESS = 3 #data will be single 0-255 brightness value, length must be 0x00,0x01
+    GETID      = 4
+    SETID      = 5
 
 class RETURN_CODES:
     SUCCESS = 255 #All is well
@@ -51,17 +53,22 @@ class LEDTYPE:
 
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
-    
-    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 16, gamma = None, restart_timeout = 3):
+    foundDevices = []
+    deviceIDS = {}
+    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 16, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type == LEDTYPE.LPD8806 or type == LEDTYPE.WS2801 or type == LEDTYPE.SM16716):
             SPISpeed = 24
 
+        self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
         self._com = None
         self._type = type
         self.dev = dev
+        self.deviceID = deviceID
+        if self.deviceID != None and (self.deviceID < 0 or self.deviceID > 255):
+            raise ValueError("deviceID must be between 0 and 255")
 
         resp = self._connect()
         if resp == RETURN_CODES.REBOOT: #reboot needed
@@ -70,14 +77,26 @@ class DriverSerial(DriverBase):
             time.sleep(restart_timeout)
             resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
-                self._printError(resp)
+                DriverSerial._printError(resp)
             else:
                 log.logger.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
-            self._printError(resp)
+            DriverSerial._printError(resp)
 
+    @staticmethod
+    def findSerialDevices(hardwareID = "1D50:60AB"):
+        if len(DriverSerial.foundDevices) == 0:
+            DriverSerial.foundDevices = []
+            DriverSerial.deviceIDS = {}
+            for port in serial.tools.list_ports.grep(hardwareID):
+                DriverSerial.foundDevices.append(port[0])
+                id = DriverSerial.getDeviceID(port[0])
+                DriverSerial.deviceIDS[id] = port[0]
 
-    def _printError(self, error):
+        return DriverSerial.foundDevices
+
+    @staticmethod
+    def _printError(error):
         msg = "Unknown error occured."
         if error == RETURN_CODES.ERROR_SIZE:
             msg = "Data packet size incorrect."
@@ -90,7 +109,8 @@ class DriverSerial(DriverBase):
         raise BiblioSerialError(msg)
 
 
-    def _comError(self):
+    @staticmethod
+    def _comError():
         error = "There was an unknown error communicating with the device."
         log.logger.error(error)
         raise IOError(error)
@@ -98,29 +118,37 @@ class DriverSerial(DriverBase):
     def _connect(self):
         try:
             if(self.dev == ""):
-                com_list = serial.tools.list_ports.grep("1D50:60AB")
-                try:
-                    port = com_list.next()
-                    self.dev = port[0]
-                    log.logger.info( "Using COM Port: {:}".format(self.dev))
-                except StopIteration:
-                    pass
+                DriverSerial.findSerialDevices(self._hardwareID)
+
+                if self.deviceID != None:
+                    if self.deviceID in DriverSerial.deviceIDS:
+                        self.dev = DriverSerial.deviceIDS[self.deviceID]
+                        log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, self.deviceID))
+                                
+                    if self.dev == "":
+                        error = "Unable to find device with ID: {}".format(self.deviceID)
+                        log.logger.error(error)
+                        raise ValueError(error)
+                elif len(DriverSerial.foundDevices) > 0:
+                    self.dev = DriverSerial.foundDevices[0]
+                    devID = -1
+                    for id in DriverSerial.deviceIDS:
+                        if DriverSerial.deviceIDS[id] == self.dev:
+                            devID = id
+
+                    log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, devID))
 
             try:
                 self._com =  serial.Serial(self.dev, timeout=5)
             except serial.SerialException as e:
-                ports = list(serial.tools.list_ports.comports())
+                ports = DriverSerial.findSerialDevices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
-                if len(ports) > 0: 
-                    p_list = []
-                    for p in ports:
-                        p_list.append(p[0] + " - " + p[1])
-
-                    error = "Invalid port specified. Try using one of: \n" + "\n".join(p_list)
+                if len(ports) > 0:
+                    error = "Invalid port specified. Try using one of: \n" + "\n".join(ports)
                 log.logger.info(error)
                 raise BiblioSerialError(error)
             
-            packet = self._generateHeader(CMDTYPE.SETUP_DATA, 4)
+            packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type) #set strip type
             packet.append(self.bufByteCount & 0xFF) #set 1st byte of byteCount
             packet.append(self.bufByteCount >> 8) #set 2nd byte of byteCount
@@ -129,7 +157,7 @@ class DriverSerial(DriverBase):
 
             resp = self._com.read(1)
             if len(resp) == 0:
-                self._comError()
+                DriverSerial._comError()
 
             return ord(resp)
 
@@ -139,20 +167,58 @@ class DriverSerial(DriverBase):
             log.logger.error(error)
             raise e
 
-    def _generateHeader(self, cmd, size):
+    @staticmethod
+    def _generateHeader(cmd, size):
         packet = bytearray()
         packet.append(cmd)
         packet.append(size & 0xFF)
         packet.append(size >> 8)
         return packet
 
+    @staticmethod
+    def setDeviceID(dev, id):
+        if id < 0 or id > 255:
+            raise ValueError("ID must be an unsigned byte!")
+
+        try:
+            com =  serial.Serial(dev, timeout=5)
+
+            packet = DriverSerial._generateHeader(CMDTYPE.SETID, 1)
+            packet.append(id)
+            com.write(packet)
+
+            resp = com.read(1)
+            if len(resp) == 0:
+                DriverSerial._comError()
+            else:
+                if ord(resp) != RETURN_CODES.SUCCESS:
+                    DriverSerial._printError(ord(resp))
+
+        except serial.SerialException as e:
+            log.logger.error("Problem connecting to serial device.")
+            raise IOError("Problem connecting to serial device.")
+            
+
+    @staticmethod
+    def getDeviceID(dev):
+        packet = DriverSerial._generateHeader(CMDTYPE.GETID, 0)
+        try:
+            com = serial.Serial(dev, timeout=5)
+            com.write(packet)
+            resp = ord(com.read(1))
+            return resp
+        except serial.SerialException as e:
+            #log.logger.error("Problem connecting to serial device.")
+            raise IOError("Problem connecting to serial device.")
+
+
     def setMasterBrightness(self, brightness):
-        packet = self._generateHeader(CMDTYPE.BRIGHTNESS, 1)
+        packet = DriverSerial._generateHeader(CMDTYPE.BRIGHTNESS, 1)
         packet.append(brightness)
         self._com.write(packet)
         resp = ord(self._com.read(1))
         if resp != RETURN_CODES.SUCCESS:
-            self._printError(resp)
+            DriverSerial._printError(resp)
             return False
         else:
             return True
@@ -160,7 +226,7 @@ class DriverSerial(DriverBase):
     #Push new data to strand
     def update(self, data):
         count = self.bufByteCount
-        packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
+        packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
 
         c_order = self.c_order
 
@@ -171,9 +237,9 @@ class DriverSerial(DriverBase):
         
         resp = self._com.read(1)
         if len(resp) == 0:
-                self._comError()
+                DriverSerial._comError()
         if ord(resp) != RETURN_CODES.SUCCESS:
-            self._printError(ord(resp))
+            DriverSerial._printError(ord(resp))
 
         self._com.flushInput()
 

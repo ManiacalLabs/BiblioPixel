@@ -54,15 +54,15 @@ class Bloom(BaseMatrixAnim):
         w = self._led.width
 
         #this ignores master brightness in the interest of speed
-        buf = [colors.hue_helper(self._vector[y][x], h, s) for y in range(h) for x in range(w)]
-        buf = [i for sub in buf for i in sub]
-        self._led.setBuffer(buf)
+        # buf = [colors.hue_helper(self._vector[y][x], h, s) for y in range(h) for x in range(w)]
+        # buf = [i for sub in buf for i in sub]
+        # self._led.setBuffer(buf)
 
         #this respects master brightness but is slower
-        #for y in range(self._led.height):
-        #    for x in range(self._led.width):
-        #        c = colors.hue_helper(self._vector[y][x], self._led.height, s)
-        #        self._led.set(x, y, c)
+        for y in range(self._led.height):
+           for x in range(self._led.width):
+               c = colors.hue_helper(self._vector[y][x], self._led.height, s)
+               self._led.set(x, y, c)
 
         self._step += amt
         if(self._step >= 255):

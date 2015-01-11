@@ -64,7 +64,20 @@ class BaseAnimation(object):
                     cycle_count += 1
                     self.animComplete = False
 
-            log.logger.debug("{}ms/{}fps / Frame: {}ms / Update: {}ms".format(int(now - start), int(1000 / max(int(now - start),1)), int(mid - start), int(now - mid)))
+            stepTime = int(mid - start)
+            if self._led._threadedUpdate:
+                updateTime = int(self._led.lastThreadedUpdate())
+                totalTime = updateTime
+            else:
+                updateTime = int(now - mid)
+                totalTime = stepTime + updateTime
+
+            
+
+            if self._led._threadedUpdate:
+                log.logger.debug("Frame: {}ms / Update Max: {}ms".format(stepTime, updateTime))
+            else:
+                log.logger.debug("{}ms/{}fps / Frame: {}ms / Update: {}ms".format(totalTime, int(1000 / max(totalTime,1)), stepTime, updateTime))
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)

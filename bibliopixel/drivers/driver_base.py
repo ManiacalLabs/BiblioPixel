@@ -1,3 +1,5 @@
+import time
+
 class ChannelOrder:
     RGB = [0,1,2]
     RBG = [0,2,1]
@@ -30,12 +32,18 @@ class DriverBase(object):
         for i in range(0, self.bufByteCount):
             self._buf.append(0)
 
-        #in case the driver needs the matrix mapping
-        self.matrix_map = None
+        self._thread = None
+        self.lastUpdate = 0
 
     #Push new data to strand
     def update(self, data):
         raise RuntimeError("Base class update() called. This shouldn't happen")
+
+    def _update(self, data):
+        start = time.time() * 1000.0
+        self.update(data)
+        if self._thread:
+            self.lastUpdate = (time.time() * 1000.0) - start
 
     def setMasterBrightness(self, brightness):
         return False
