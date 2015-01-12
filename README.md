@@ -1,5 +1,7 @@
 For easy hardware interfacing, check out the BiblioPixel supported [AllPixel](http://maniacallabs.com/AllPixel).
 
+Do you have an animation you would like to share? Submit to our [animation repository](https://github.com/ManiacalLabs/BiblioPixelAnimations) or post it to [our forum](http://forum.maniacallabs.com/forumdisplay.php?fid=6).
+
 Overview
 ====
 
