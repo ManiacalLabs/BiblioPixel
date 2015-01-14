@@ -1,6 +1,12 @@
 from driver_base import *
 
-from phue import Bridge
+try:
+    from phue import Bridge
+except:
+    error = "Unable to import phue. Please install. pip install phue"
+    log.logger.errorerror
+    raise ImportError(error)
+
 import colorsys
 
 
