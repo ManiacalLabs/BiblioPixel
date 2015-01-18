@@ -55,7 +55,7 @@ class DriverSPIBase(DriverBase):
                 import spidev
             except:
                 error = "Unable to import spidev. Please install. pip install spidev"
-                log.logger.errorerror
+                log.logger.error(error)
                 raise ImportError(error)
 
         if not os.path.exists(self.dev):
