@@ -300,8 +300,10 @@ class LEDMatrix(LEDBase):
 
     #Set single pixel to Color value
     def set(self, x, y, color):
+        print "w: {}, h: {}, x: {}, y: {}".format(self.width, self.height, x, y)
         """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
+            print "DUMP"
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
@@ -318,18 +320,21 @@ class LEDMatrix(LEDBase):
     def setHSV(self, x, y, hsv):
         """Set the pixel at x,y with an HSV tuple: (h, s, v)"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
+            print "DUMP"
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
-        self.setHSV(pixel, hsv)
+        super(LEDMatrix, self).setHSV(pixel, hsv)
 
     def setRGB(self, x, y, r, g, b):
         """Set the pixel at x,y with individual RGB values"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
+            print "DUMP"
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
-        self.setRGB(pixel, (r, g, b))
+        super(LEDMatrix, self).setRGB(pixel, r, g, b)
+
 
     ###############################################################################
     # Drawing Functions

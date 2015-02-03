@@ -1,3 +1,6 @@
+### v1.1.3
+Fixed bug with LEDMatrix setRGB/setHSV
+
 ### v1.1.1
 bug fixes
 added Philips Hue driver
