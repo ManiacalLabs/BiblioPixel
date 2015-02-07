@@ -1,3 +1,6 @@
+### v1.1.4
+Removed debug print statements 
+
 ### v1.1.3
 Fixed bug with LEDMatrix setRGB/setHSV
 

@@ -300,7 +300,6 @@ class LEDMatrix(LEDBase):
 
     #Set single pixel to Color value
     def set(self, x, y, color):
-        print "w: {}, h: {}, x: {}, y: {}".format(self.width, self.height, x, y)
         """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
             print "DUMP"
