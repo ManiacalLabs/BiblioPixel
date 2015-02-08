@@ -8,7 +8,7 @@ import log
 class DriverSPIBase(DriverBase):
     """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
     
-    def __init__(self, num, c_order = ChannelOrder.GRB, use_py_spi = True, dev="/dev/spidev0.0", SPISpeed = 16):
+    def __init__(self, num, c_order = ChannelOrder.GRB, use_py_spi = True, dev="/dev/spidev0.0", SPISpeed = 2):
 
         super(DriverSPIBase, self).__init__(num, c_order = c_order)
 

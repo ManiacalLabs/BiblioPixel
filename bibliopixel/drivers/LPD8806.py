@@ -3,7 +3,7 @@ from spi_driver_base import *
 class DriverLPD8806(DriverSPIBase):
     """Main driver for LPD8806 based LED strips on devices like the Raspberry Pi and BeagleBone"""
     
-    def __init__(self, num, c_order = ChannelOrder.RGB, use_py_spi = True, dev="/dev/spidev0.0", SPISpeed = 16):
+    def __init__(self, num, c_order = ChannelOrder.RGB, use_py_spi = True, dev="/dev/spidev0.0", SPISpeed = 2):
         super(DriverLPD8806, self).__init__(num, c_order = c_order, use_py_spi = use_py_spi, dev = dev, SPISpeed = SPISpeed)
            
         # Color calculations from

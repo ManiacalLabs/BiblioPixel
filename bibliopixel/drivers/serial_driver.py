@@ -55,7 +55,7 @@ class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
     foundDevices = []
     deviceIDS = {}
-    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 16, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
+    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type == LEDTYPE.LPD8806 or type == LEDTYPE.WS2801 or type == LEDTYPE.SM16716):
