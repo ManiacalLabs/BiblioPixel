@@ -302,7 +302,6 @@ class LEDMatrix(LEDBase):
     def set(self, x, y, color):
         """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
-            print "DUMP"
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
@@ -319,7 +318,6 @@ class LEDMatrix(LEDBase):
     def setHSV(self, x, y, hsv):
         """Set the pixel at x,y with an HSV tuple: (h, s, v)"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
-            print "DUMP"
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
