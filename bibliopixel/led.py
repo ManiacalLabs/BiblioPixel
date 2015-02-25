@@ -326,7 +326,6 @@ class LEDMatrix(LEDBase):
     def setRGB(self, x, y, r, g, b):
         """Set the pixel at x,y with individual RGB values"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
-            print "DUMP"
             return #just throw out anything out of bounds
 
         pixel = self.matrix_map[y][x]
