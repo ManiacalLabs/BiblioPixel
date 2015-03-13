@@ -51,6 +51,14 @@ class LEDTYPE:
     LPD1886 = 10 
     P9813 = 11 
 
+SPIChipsets = [
+    LEDTYPE.LPD8806,
+    LEDTYPE.WS2801,
+    LEDTYPE.SM16716,
+    LEDTYPE.APA102,
+    LEDTYPE.P9813
+]
+
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
     foundDevices = []
@@ -58,7 +66,7 @@ class DriverSerial(DriverBase):
     def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
-        if SPISpeed < 1 or SPISpeed > 24 or not (type == LEDTYPE.LPD8806 or type == LEDTYPE.WS2801 or type == LEDTYPE.SM16716):
+        if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 24
 
         self._hardwareID = hardwareID
@@ -82,6 +90,9 @@ class DriverSerial(DriverBase):
                 log.logger.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
             DriverSerial._printError(resp)
+
+        if type in SPIChipsets:
+            log.logger.info("Using SPI Speed: {}MHz".format(self._SPISpeed))
 
     @staticmethod
     def findSerialDevices(hardwareID = "1D50:60AB"):

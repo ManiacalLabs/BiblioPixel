@@ -125,12 +125,11 @@ class BaseMatrixAnim(BaseAnimation):
 class StripChannelTest(BaseStripAnim):
     def __init__(self, led):
         super(StripChannelTest, self).__init__(led)
-
-    colors =  [colors.Red, colors.Green, colors.Blue, colors.White]
+        self._internalDelay = 500
+        self.colors =  [colors.Red, colors.Green, colors.Blue, colors.White]
   
     def step(self, amt = 1):
-        self._internalDelay = 500
-
+        
         self._led.set(0, colors.Red)
         self._led.set(1, colors.Green)
         self._led.set(2, colors.Green)
@@ -146,11 +145,11 @@ class StripChannelTest(BaseStripAnim):
 class MatrixChannelTest(BaseMatrixAnim):
     def __init__(self, led):
         super(MatrixChannelTest, self).__init__(led, 0, 0)
+        self._internalDelay = 500
+        self.colors =  [colors.Red, colors.Green, colors.Blue, colors.White]
 
-    colors =  [colors.Red, colors.Green, colors.Blue, colors.White]
-    
     def step(self, amt = 1):
-        self._internalDelay = 1000
+        
         self._led.drawLine(0, 0, 0, self.height - 1, colors.Red)
         self._led.drawLine(1, 0, 1, self.height - 1, colors.Green)
         self._led.drawLine(2, 0, 2, self.height - 1, colors.Green)
@@ -166,16 +165,17 @@ class MatrixChannelTest(BaseMatrixAnim):
 class MatrixCalibrationTest(BaseMatrixAnim):
     def __init__(self, led):
         super(MatrixCalibrationTest, self).__init__(led, 0, 0)
-
-    colors = [colors.Red, colors.Green, colors.Green, colors.Blue, colors.Blue, colors.Blue]
+        self._internalDelay = 500
+        self.colors = [colors.Red, colors.Green, colors.Green, colors.Blue, colors.Blue, colors.Blue]
        
     def step(self, amt = 1):
-        self._internalDelay = 500
         self._led.all_off()
         i = self._step % self.width
         for x in range(i + 1):
             c = self.colors[x % len(self.colors)]
             self._led.drawLine(x, 0, x, i, c)
+
+        self.animComplete = (i == (self.width-1))
 
         self._step += 1
 
