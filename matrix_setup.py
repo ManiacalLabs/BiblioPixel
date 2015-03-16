@@ -11,4 +11,8 @@ led = LEDMatrix(driver, rotation = MatrixRotation.ROTATE_0, vert_flip = False)
 from bibliopixel.animation import MatrixCalibrationTest
 anim = MatrixCalibrationTest(led)
 
-anim.run()
+try:
+	anim.run()
+except KeyboardInterrupt:
+	led.all_off()
+	led.update()

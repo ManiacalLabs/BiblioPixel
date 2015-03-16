@@ -1,3 +1,6 @@
+### v1.1.5
+Bug fixes for AllPixel support
+
 ### v1.1.4
 Removed debug print statements 
 

@@ -83,7 +83,7 @@ class BaseAnimation(object):
                 diff = (self._msTime() - self._timeRef)
                 t = max(0, (sleep - diff) / 1000.0)
                 if t == 0:
-                    log.logger.warning("Timeout of %dms is less than the minimum of %d!" % (sleep, diff))
+                    log.logger.warning("Frame-time of %dms set, but took %dms!" % (sleep, diff))
                 time.sleep(t)
             cur_step += 1
 

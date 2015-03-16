@@ -7,4 +7,8 @@ led = LEDStrip(driver)
 
 from bibliopixel.animation import StripChannelTest
 anim = StripChannelTest(led)
-anim.run()
+try:
+	anim.run()
+except KeyboardInterrupt:
+	led.all_off()
+	led.update()
