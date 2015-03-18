@@ -1,0 +1,273 @@
+BiblioPixel and the [AllPixel](http://maniacallabs.com/AllPixel) could not be where they are today without the support of these awesome [Kickstarter](https://www.kickstarter.com/projects/1101128588/allpixel-usb-interface-for-all-your-led-needs) backers.
+
+- Mike 'Hamster' Field
+- Josh Ward
+- Shawn Lockard
+- Richard Nicoloff
+- Aaron G Pierce
+- Randy Glenn
+- PI
+- nml
+- Tanya Ward
+- Billy Shaw
+- Yes
+- teknynja
+- Samuel Smith Penning
+- John W
+- Evan Coonrod
+- Daniel Garcia
+- SuMo_D
+- todbot
+- PR Taylor
+- Dag Henrik B
+- Kaj Sanfridsson
+- G. Todd Vaules
+- Manxome Foe
+- Julian Horsey
+- Mark Kriegsman
+- Henner
+- Sha
+- Matthieu annema
+- Corey Thomas
+- Tom Lauwers
+- RJH
+- Ashley M. Kirchner
+- Charles McClelland
+- Gordy Keene
+- Irawan Tri Kusumo
+- Andrei
+- geomarn
+- Sasquats
+- LordLightningBolt of SwordLord
+- David Goulding
+- Nikhil Mosali
+- Sam Harvey
+- Ejay the Djay
+- Luis Lalueza
+- Stephen Goudge
+- aaricchavez
+- John Klein
+- gunnar.w
+- Christian Klemke
+- Moeg35
+- Marc TEUSCH
+- Arthur Margulies
+- bakerchang
+- mike latona
+- Leslie Hazelton
+- Glen Smith
+- L Turner
+- Evaristo Ramos, Jr.
+- Encoun2er
+- MedKorpz
+- Ruskigt Anonym
+- DTR
+- LGG
+- Bob Steinbeiser
+- James Hauser
+- John Skinger
+- Markus Fix
+- zwuckl
+- John Sasinowski
+- Bart Wolfe
+- FabSab75
+- Evas1st
+- Dan's Uncle Bob
+- Snoot Tunes
+- Miss Dana "inkednkinked" Macnab
+- Arun Kumar V
+- Tom Arnold K6AET
+- Micha Neumann
+- 42 Factory
+- Patrick Arns
+- Kean Maizels
+- Jerm
+- NotZippy
+- Kyle Carbone
+- Kvort the Duck
+- Dwight Morgan
+- Rajarshi Danger Nigam
+- Paul Giralt
+- Jon Burroughs
+- Jimmy Grewal
+- Willy
+- Frank Alvarez
+- Brian Doyle
+- eness
+- Kit Webster
+- danielkbx
+- j.c.sackett
+- Amaya
+- Ulf Zimmermann
+- Magnus Wittstrom
+- Joe Mildenhall
+- Scanner
+- Astro Jetson
+- Christopher Masto
+- SparkyUK
+- [TB]Rod
+- Hans Knecht
+- Ivan Markus
+- Doug Ferguson
+- sam notaro
+- David Taylor
+- Mick Snider
+- Austin K.Litman
+- DaveCo Industries
+- Randy Ray
+- Hecbel Igartua
+- Dean Goss
+- Gavin Wiggett
+- Karl Tiedt
+- Thallion
+- Alex Wayne
+- Jim Kirk
+- Kamiel
+- DJohnson
+- John Wiseheart
+- christopher collins
+- Sharon Thompson
+- Dirk-GER
+- Kenneth R Torbeck
+- plastbot industries
+- Newt
+- Kris Ranes
+- Alain Claes
+- aarphacker
+- Vo
+- Jeff Davis
+- Todd J. Cottle
+- Nicholas Perkins
+- Bill
+- Xixo
+- Peter Nickel
+- Dr Tim Mortensen
+- Thomas Off
+- Mark Arnold
+- Eric Waters
+- Mike Reish
+- Layne Harris
+- GeorgeIoak
+- WyoLum.com
+- Robert Regalia
+- Dan Regalia
+- Rich Hyde
+- Paul R Arnold
+- blandreth94
+- The Old Crow
+- Aaron wilson
+- Derp
+- Tim Slagle
+- nick hines
+- Rudy Van Nuffelen
+- Paul Young
+- Justin Rudebaugh
+- Matthias Ecker
+- W. Korfhage
+- Lisa Vandalia
+- Martin Roth
+- jolan00
+- Champagne Legros Bayo
+- Bill Griggs
+- Louis Roehrs
+- MadMike42
+- Nicolas Holst
+- CharlesHarman
+- Sujith SL
+- Nighguy
+- Brett Levy
+- Daniel Hess
+- Mike Andrews
+- otobey@chiisana.co
+- jrice
+- CA
+- Linolium
+- SM
+- Blinky_Light_Fan
+- KenTess
+- Brad Fike
+- Hot-Tubes
+- Jaime Zapata
+- Ernesto Martinez
+- Epoch19
+- Peter Gnodde
+- Anthony J. Clarke
+- RobotnickGER
+- Scott Cush
+- John-Pierre Garrucho
+- Görgel
+- Edmund Harriss
+- Tyler Prete
+- David L Ullman III
+- Rodney Radford
+- Jerry "RWL" Bocci
+- Mike Grusell
+- adamk
+- Justin J. Novack
+- Bubba
+- Eirik S. Mikkelsen
+- Brent Pease
+- Bridget McManus
+- hassyy
+- Matt Garfield
+- Praeluceo
+- WookieStackhouse
+- VortexTangent
+- Scott Minneman
+- MPrestridge
+- Richard DeVillier
+- Geoff Kuchera
+- J Sinclair
+- Simon Collings
+- W. van Leer
+- John Ternes
+- Weston Yager
+- Dr. Daryl McLaurine
+- Dave Perham
+- The Overlord of Khaftan
+- jiiijo
+- Dan Pollack
+- Chris Latsis
+- Samantha Jones
+- Mark S. Harris
+- Stormboard
+- Daniel McCoy
+- funvill
+- Simon J
+- 0lab.it
+- Marc Roth
+- Marc Gessner
+- Art Steinbach
+- John Hutchison Jr.
+- Sam Hulse
+- Gottfried D.
+- causeS
+- Echild
+- Blayne Watt
+- MARCO VERGARA
+- Dennis Williamson
+- Vaughan Crole
+- Don White
+- AJ Wiggs
+- TheProf
+- SDY
+- Cory Benjamin
+- Moskus
+- Staffan Hillberg
+- Phillip McKerrow
+- Glenn Reschke
+- Wolfgang Kremser
+- Nathan Turner
+- «Ukrainians»
+- Stewart Dugan
+- Jamie Schultz
+- Timothy Reese
+- NishanthB
+- Ben Hudson
+- James Osro Jackson
+- Angela H Tousey
+- Rob Voss
+- wachen
+- Andres Perez
+- Xavier J Gallegos
+- Jon Carlos
