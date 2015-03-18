@@ -10,7 +10,6 @@ BiblioPixel and the [AllPixel](http://maniacallabs.com/AllPixel) could not be wh
 - nml
 - Tanya Ward
 - Billy Shaw
-- Yes
 - teknynja
 - Samuel Smith Penning
 - John W
@@ -178,7 +177,6 @@ BiblioPixel and the [AllPixel](http://maniacallabs.com/AllPixel) could not be wh
 - Brett Levy
 - Daniel Hess
 - Mike Andrews
-- otobey@chiisana.co
 - jrice
 - CA
 - Linolium
