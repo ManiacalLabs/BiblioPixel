@@ -59,6 +59,13 @@ SPIChipsets = [
     LEDTYPE.P9813
 ]
 
+#Chipsets here require extra pixels padded at the end
+#Key must be an LEDTYPE
+#value a lambda function to calc the value based on numLEDs
+BufferChipsets = {
+    LEDTYPE.APA102 : lambda num: (int(num/64.0)+1)
+}
+
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
     foundDevices = []
@@ -67,12 +74,13 @@ class DriverSerial(DriverBase):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
-            SPISpeed = 24
+            SPISpeed = 1
 
         self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
         self._com = None
         self._type = type
+        self._bufPad = 0
         self.dev = dev
         self.deviceID = deviceID
         if self.deviceID != None and (self.deviceID < 0 or self.deviceID > 255):
@@ -161,8 +169,13 @@ class DriverSerial(DriverBase):
             
             packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type) #set strip type
-            packet.append(self.bufByteCount & 0xFF) #set 1st byte of byteCount
-            packet.append(self.bufByteCount >> 8) #set 2nd byte of byteCount
+            byteCount = self.bufByteCount
+            if self._type in BufferChipsets:
+                self._bufPad = BufferChipsets[self._type](self.numLEDs)*3
+                byteCount += self._bufPad
+
+            packet.append(byteCount & 0xFF) #set 1st byte of byteCount
+            packet.append(byteCount >> 8) #set 2nd byte of byteCount
             packet.append(self._SPISpeed)
             self._com.write(packet)
 
@@ -236,7 +249,7 @@ class DriverSerial(DriverBase):
 
     #Push new data to strand
     def update(self, data):
-        count = self.bufByteCount
+        count = self.bufByteCount + self._bufPad
         packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
 
         c_order = self.c_order
@@ -244,6 +257,7 @@ class DriverSerial(DriverBase):
         self._fixData(data)
 
         packet.extend(self._buf)
+        packet.extend([0]*self._bufPad)
         self._com.write(packet)
         
         resp = self._com.read(1)
