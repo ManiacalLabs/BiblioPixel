@@ -2,4 +2,4 @@ from led import *
 import log
 import colors
 
-VERSION = '1.1.5'
+VERSION = '1.1.6'

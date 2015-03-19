@@ -1,3 +1,6 @@
+### v1.1.6
+Bug fix for APA102 support in DriverSerial
+
 ### v1.1.5
 Bug fixes for AllPixel support
 
