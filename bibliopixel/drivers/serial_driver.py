@@ -11,6 +11,11 @@ except ImportError as e:
     log.logger.error(error)
     raise ImportError(error)
 
+if float(serial.VERSION) < 2.7:
+    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(serial.VERSION)
+    log.logger.error(error)
+    raise ImportError(error)
+
 class BiblioSerialError(Exception):
     pass
 
@@ -104,6 +109,7 @@ class DriverSerial(DriverBase):
 
     @staticmethod
     def findSerialDevices(hardwareID = "1D50:60AB"):
+        hardwareID = "(?i)"+hardwareID #forces case insensitive
         if len(DriverSerial.foundDevices) == 0:
             DriverSerial.foundDevices = []
             DriverSerial.deviceIDS = {}
