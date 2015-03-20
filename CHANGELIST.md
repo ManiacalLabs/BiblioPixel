@@ -1,3 +1,7 @@
+### v1.1.7
+Added check for pyserial version 
+Forced case insenitive grep for USB ID
+
 ### v1.1.6
 Bug fix for APA102 support in DriverSerial
 
