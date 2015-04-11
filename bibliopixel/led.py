@@ -93,6 +93,9 @@ class LEDBase(object):
             while all([d._thread.sending() for d in self.driver]):
                 time.sleep(0.000001)
 
+        if len(self.buffer) != self.bufByteCount:
+            raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(self.bufByteCount, len(self.buffer)))
+        
         for d in self.driver:
             if self._threadedUpdate:
                 d._thread.setData(self.buffer[pos:d.bufByteCount+pos])
@@ -110,7 +113,7 @@ class LEDBase(object):
         buf must also be in the exact format required by the display type.
         """
         if len(buf) != self.bufByteCount:
-            raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but only has {2}".format(self.numLEDs, self.bufByteCount, len(buf)))
+            raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(self.numLEDs, self.bufByteCount, len(buf)))
         self.buffer = buf
 
     #Set the master brightness for the LEDs 0 - 255

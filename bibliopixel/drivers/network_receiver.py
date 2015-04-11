@@ -16,9 +16,21 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
             
             if cmd == CMDTYPE.PIXEL_DATA:
                 data = bytearray()
+                emptyCount = 0
                 while len(data) < size:
-                    data.extend(self.request.recv(1024))
+                    buf = self.request.recv(4096)
+                    if len(buf) == 0: emptyCount += 1
+                    if emptyCount >= 5: 
+                        log.logger.exception("Failed to receive expected amount of data! Expected: {} bytes / Received: {} bytes".format(size, len(data)));
+                        self.request.sendall(RETURN_CODES.ERROR_SIZE)
+                        return
+
+                    data.extend(buf)
                 
+                if len(data) != size:
+                    log.logger.exception("Receieved data size incorrect! Expected: {} bytes / Received: {} bytes".format(size, len(data)));
+                    return
+
                 self.server.update(data)
                
                 if self.server.hasFrame:
