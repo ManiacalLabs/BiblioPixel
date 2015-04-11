@@ -5,6 +5,24 @@ from led import LEDMatrix
 from led import LEDStrip
 import colors
 
+import threading
+
+class animThread(threading.Thread):
+
+    def __init__(self, anim, args):
+        super(animThread, self).__init__()
+        self.setDaemon(True)
+        self._anim = anim
+        self._args = args
+
+    # def stopped(self):
+    #     return self._anim._stopThread
+
+    def run(self):
+        log.logger.debug("Starting thread...")
+        self._anim._run(**self._args)
+        log.logger.debug("Thread Complete")
+
 class BaseAnimation(object):
     def __init__(self, led):
         self._led = led
@@ -12,6 +30,9 @@ class BaseAnimation(object):
         self._step = 0
         self._timeRef = 0
         self._internalDelay = None
+        self._threaded = False
+        self._stopThread = False
+        self._thread = None
 
     def _msTime(self):
         return time.time() * 1000.0
@@ -22,7 +43,19 @@ class BaseAnimation(object):
     def step(self, amt = 1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
-    def run(self, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0):
+    def stopThread(self, wait = False):
+        if self._thread:
+            self._stopThread = True
+            if wait:
+                self._thread.join()
+
+    def stopped(self):
+        if self._thread:
+            return not self._thread.isAlive()
+        else: 
+            return True
+
+    def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles):
         """
         untilComplete makes it run until the animation signals it has completed a cycle
         max_cycles should be used with untilComplete to make it run for more than one cycle
@@ -33,7 +66,6 @@ class BaseAnimation(object):
         if sleep == None and fps != None:
             sleep = int(1000 / fps)
 
-
         initSleep = sleep
 
         self._step = 0
@@ -41,7 +73,7 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        while (not untilComplete and (max_steps == 0 or cur_step < max_steps)) or (untilComplete and not self.animComplete):
+        while not self._stopThread and ((not untilComplete and (max_steps == 0 or cur_step < max_steps)) or (untilComplete and not self.animComplete)):
             self._timeRef = self._msTime()
 
             start = self._msTime()
@@ -72,8 +104,6 @@ class BaseAnimation(object):
                 updateTime = int(now - mid)
                 totalTime = stepTime + updateTime
 
-            
-
             if self._led._threadedUpdate:
                 log.logger.debug("Frame: {}ms / Update Max: {}ms".format(stepTime, updateTime))
             else:
@@ -86,6 +116,23 @@ class BaseAnimation(object):
                     log.logger.warning("Frame-time of %dms set, but took %dms!" % (sleep, diff))
                 time.sleep(t)
             cur_step += 1
+
+    def run(self, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0, threaded = False, joinThread = False):
+
+        self._threaded = threaded
+        self._stopThread = False
+
+        if self._threaded:
+            args =  locals()
+            args.pop('self', None)
+            args.pop('threaded', None)
+            args.pop('joinThread', None)
+            self._thread = animThread(self, args)
+            self._thread.start()
+            if joinThread:
+                self._thread.join()
+        else:
+            self._run(amt, fps, sleep, max_steps, untilComplete, max_cycles)
 
 class BaseStripAnim(BaseAnimation):
     def __init__(self, led, start = 0, end = -1):
