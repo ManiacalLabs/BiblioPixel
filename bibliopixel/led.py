@@ -616,3 +616,32 @@ class LEDMatrix(LEDBase):
                 if x >= self.width:
                     break
 
+#Takes a matrix and displays it as individual columns over time
+class LEDPOV(LEDMatrix):
+
+    def __init__(self, driver, povHeight, width, rotation = MatrixRotation.ROTATE_0, vert_flip = False):
+        self.numLEDs = povHeight * width
+
+        super(LEDPOV, self).__init__(driver, width, povHeight, None, rotation, vert_flip, False)
+
+    #This is the magic. Overriding the normal update() method
+    #It will automatically break up the frame into columns spread over frameTime (ms)    
+    def update(self, frameTime = None):
+        if frameTime:
+            self._frameTotalTime = frameTime
+
+        sleep = None
+        if self._frameTotalTime:
+            sleep = (self._frameTotalTime - self._frameGenTime) / self.width
+
+        width = self.width
+        for h in range(width):
+            start = time.time() * 1000.0
+
+            buf = [item for sublist in [self.buffer[(width*i*3)+(h*3):(width*i*3)+(h*3)+(3)] for i in range(self.height)] for item in sublist]
+            self.driver.update(buf)
+            sendTime = (time.time() * 1000.0) - start
+            if sleep:
+                time.sleep(max(0, (sleep - sendTime) / 1000.0))
+
+                

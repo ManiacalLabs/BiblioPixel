@@ -25,6 +25,7 @@ class CMDTYPE:
     BRIGHTNESS = 3 #data will be single 0-255 brightness value, length must be 0x00,0x01
     GETID      = 4
     SETID      = 5
+    GETVER     = 6
 
 class RETURN_CODES:
     SUCCESS = 255 #All is well
@@ -33,6 +34,7 @@ class RETURN_CODES:
     ERROR_SIZE = 1 #Data receieved does not match given command length
     ERROR_UNSUPPORTED = 2 #Unsupported command
     ERROR_PIXEL_COUNT = 3 #Too many pixels for device
+    ERROR_BAD_CMD = 4 #Unknown Command
 
 class LEDTYPE:
     GENERIC = 0 #Use if the serial device only supports one chipset
@@ -75,6 +77,7 @@ class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
     foundDevices = []
     deviceIDS = {}
+    deviceVers = []
     def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
         super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
 
@@ -87,6 +90,7 @@ class DriverSerial(DriverBase):
         self._type = type
         self._bufPad = 0
         self.dev = dev
+        self.devVer = 0
         self.deviceID = deviceID
         if self.deviceID != None and (self.deviceID < 0 or self.deviceID > 255):
             raise ValueError("deviceID must be between 0 and 255")
@@ -114,9 +118,12 @@ class DriverSerial(DriverBase):
             DriverSerial.foundDevices = []
             DriverSerial.deviceIDS = {}
             for port in serial.tools.list_ports.grep(hardwareID):
-                DriverSerial.foundDevices.append(port[0])
                 id = DriverSerial.getDeviceID(port[0])
-                DriverSerial.deviceIDS[id] = port[0]
+                ver = DriverSerial.getDeviceVer(port[0])
+                if id >= 0:
+                    DriverSerial.deviceIDS[id] = port[0]
+                    DriverSerial.foundDevices.append(port[0])
+                    DriverSerial.deviceVers.append(ver)
 
         return DriverSerial.foundDevices
 
@@ -129,8 +136,10 @@ class DriverSerial(DriverBase):
             msg = "Unsupported configuration attempted."
         elif error == RETURN_CODES.ERROR_PIXEL_COUNT:
             msg = "Too many pixels specified for device."
+        elif error == RETURN_CODES.ERROR_BAD_CMD:
+            msg = "Unsupported protocol command. Check your device version."
         
-        log.logger.error(msg)
+        log.logger.error("{}: {}".format(error, msg))
         raise BiblioSerialError(msg)
 
 
@@ -148,20 +157,32 @@ class DriverSerial(DriverBase):
                 if self.deviceID != None:
                     if self.deviceID in DriverSerial.deviceIDS:
                         self.dev = DriverSerial.deviceIDS[self.deviceID]
-                        log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, self.deviceID))
-                                
+                        self.devVer = 0
+                        try:
+                            i = DriverSerial.foundDevices.index(self.dev)
+                            self.devVer = DriverSerial.deviceVers[i]
+                        except:
+                            pass
+                        log.logger.info( "Using COM Port: {}, Device ID: {}, Device Ver: {}".format(self.dev, self.deviceID, self.devVer))
+
                     if self.dev == "":
                         error = "Unable to find device with ID: {}".format(self.deviceID)
                         log.logger.error(error)
                         raise ValueError(error)
                 elif len(DriverSerial.foundDevices) > 0:
                     self.dev = DriverSerial.foundDevices[0]
+                    self.devVer = 0
+                    try:
+                        i = DriverSerial.foundDevices.index(self.dev)
+                        self.devVer = DriverSerial.deviceVers[i]
+                    except:
+                        pass
                     devID = -1
                     for id in DriverSerial.deviceIDS:
                         if DriverSerial.deviceIDS[id] == self.dev:
                             devID = id
 
-                    log.logger.info( "Using COM Port: {}, Device ID: {}".format(self.dev, devID))
+                    log.logger.info( "Using COM Port: {}, Device ID: {}, Device Ver: {}".format(self.dev, devID, self.devVer))
 
             try:
                 self._com =  serial.Serial(self.dev, timeout=5)
@@ -177,8 +198,11 @@ class DriverSerial(DriverBase):
             packet.append(self._type) #set strip type
             byteCount = self.bufByteCount
             if self._type in BufferChipsets:
-                self._bufPad = BufferChipsets[self._type](self.numLEDs)*3
-                byteCount += self._bufPad
+                if self._type == LEDTYPE.APA102 and self.devVer >= 2:
+                    pass
+                else:
+                    self._bufPad = BufferChipsets[self._type](self.numLEDs)*3
+                    byteCount += self._bufPad
 
             packet.append(byteCount & 0xFF) #set 1st byte of byteCount
             packet.append(byteCount >> 8) #set 2nd byte of byteCount
@@ -238,8 +262,25 @@ class DriverSerial(DriverBase):
             resp = ord(com.read(1))
             return resp
         except serial.SerialException as e:
-            #log.logger.error("Problem connecting to serial device.")
-            raise IOError("Problem connecting to serial device.")
+            log.logger.error("Problem connecting to serial device.")
+            return -1
+
+    @staticmethod
+    def getDeviceVer(dev):
+        packet = DriverSerial._generateHeader(CMDTYPE.GETVER, 0)
+        try:
+            com = serial.Serial(dev, timeout=0.5)
+            com.write(packet)
+            ver = 0
+            resp = com.read(1)
+            if len(resp) > 0:
+                resp = ord(resp)
+                if resp == RETURN_CODES.SUCCESS:
+                    ver = ord(com.read(1))
+            return ver
+        except serial.SerialException as e:
+            log.logger.error("Problem connecting to serial device.")
+            return 0
 
 
     def setMasterBrightness(self, brightness):
