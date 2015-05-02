@@ -645,3 +645,63 @@ class LEDPOV(LEDMatrix):
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))
 
                 
+class LEDCircle(LEDBase):
+
+    def __init__(self, driver, rings, threadedUpdate = False):
+        super(LEDCircle, self).__init__(driver, threadedUpdate)
+        self.rings = rings
+        self.ringCount = len(self.rings)
+        self.lastRing = self.ringCount - 1
+        self.ringSteps = []
+        num = 0
+        for r in self.rings:
+            count = (r[1] - r[0] + 1)
+            self.ringSteps.append(360.0/count)
+            num += count
+
+        if driver.numLEDs != num:
+            raise ValueError("Total ring LED count does not equal driver LED count!")
+
+    def angleToPixel(self, angle, ring):
+        if ring >= self.ringCount:
+            return -1
+
+        angle = angle%360
+        return self.rings[ring][0] + int(math.floor(angle/self.ringSteps[ring]))
+
+    #Set single pixel to Color value
+    def set(self, ring, angle, color):
+        """Set pixel to RGB color tuple"""
+        pixel = self.angleToPixel(angle, ring)
+        self._set_base(pixel, color)
+
+    def get(self, ring, angle):
+        """Get RGB color tuple of color at index pixel"""
+        pixel = self.angleToPixel(angle, ring)
+        return self._get_base(pixel)
+
+    def drawRadius(self, angle, color, startRing=0, endRing=-1):
+        if startRing < 0:
+            startRing = 0
+        if endRing < 0 or endRing > self.lastRing:
+            endRing = self.lastRing
+        for ring in range(startRing, endRing + 1):
+            self.set(ring, angle, color)
+
+    def fillRing(self, ring, color, startAngle=0, endAngle=None):
+        if endAngle == None:
+            endAngle = 359
+
+        if ring >= self.ringCount:
+            raise ValueError("Invalid ring!")
+
+        start = self.angleToPixel(startAngle, ring)
+        end = self.angleToPixel(endAngle, ring)
+        pixels = []
+        if start > end:
+            pixels = range(start, self.rings[ring][1]+1)
+            pixels.extend(range(self.rings[ring][0], end+1))
+        else:
+            pixels = range(start, end+1);
+        for i in pixels:
+            self._set_base(i, color)

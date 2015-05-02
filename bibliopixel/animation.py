@@ -3,6 +3,7 @@ import log
 
 from led import LEDMatrix
 from led import LEDStrip
+from led import LEDCircle
 import colors
 
 import threading
@@ -168,6 +169,18 @@ class BaseMatrixAnim(BaseAnimation):
 
         self.startX = startX
         self.startY = startY
+
+class BaseCircleAnim(BaseAnimation):
+    def __init__(self, led):
+        super(BaseCircleAnim, self).__init__(led)
+
+        if not isinstance(led, LEDCircle):
+            raise RuntimeError("Must use LEDCircle with Circle Animations!")
+
+        self.rings = led.rings
+        self.ringCount = led.ringCount
+        self.lastRing = led.lastRing
+        self.ringSteps = led.ringSteps
 
 class StripChannelTest(BaseStripAnim):
     def __init__(self, led):
