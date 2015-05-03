@@ -647,7 +647,7 @@ class LEDPOV(LEDMatrix):
                 
 class LEDCircle(LEDBase):
 
-    def __init__(self, driver, rings, threadedUpdate = False):
+    def __init__(self, driver, rings, rotation = 0, threadedUpdate = False):
         super(LEDCircle, self).__init__(driver, threadedUpdate)
         self.rings = rings
         self.ringCount = len(self.rings)
@@ -659,6 +659,8 @@ class LEDCircle(LEDBase):
             self.ringSteps.append(360.0/count)
             num += count
 
+        self.rotation = rotation
+
         if driver.numLEDs != num:
             raise ValueError("Total ring LED count does not equal driver LED count!")
 
@@ -666,7 +668,7 @@ class LEDCircle(LEDBase):
         if ring >= self.ringCount:
             return -1
 
-        angle = angle%360
+        angle = (angle+self.rotation)%360
         return self.rings[ring][0] + int(math.floor(angle/self.ringSteps[ring]))
 
     #Set single pixel to Color value
