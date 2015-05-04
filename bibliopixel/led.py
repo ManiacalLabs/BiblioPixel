@@ -616,3 +616,96 @@ class LEDMatrix(LEDBase):
                 if x >= self.width:
                     break
 
+#Takes a matrix and displays it as individual columns over time
+class LEDPOV(LEDMatrix):
+
+    def __init__(self, driver, povHeight, width, rotation = MatrixRotation.ROTATE_0, vert_flip = False):
+        self.numLEDs = povHeight * width
+
+        super(LEDPOV, self).__init__(driver, width, povHeight, None, rotation, vert_flip, False)
+
+    #This is the magic. Overriding the normal update() method
+    #It will automatically break up the frame into columns spread over frameTime (ms)    
+    def update(self, frameTime = None):
+        if frameTime:
+            self._frameTotalTime = frameTime
+
+        sleep = None
+        if self._frameTotalTime:
+            sleep = (self._frameTotalTime - self._frameGenTime) / self.width
+
+        width = self.width
+        for h in range(width):
+            start = time.time() * 1000.0
+
+            buf = [item for sublist in [self.buffer[(width*i*3)+(h*3):(width*i*3)+(h*3)+(3)] for i in range(self.height)] for item in sublist]
+            self.driver.update(buf)
+            sendTime = (time.time() * 1000.0) - start
+            if sleep:
+                time.sleep(max(0, (sleep - sendTime) / 1000.0))
+
+                
+class LEDCircle(LEDBase):
+
+    def __init__(self, driver, rings, rotation = 0, threadedUpdate = False):
+        super(LEDCircle, self).__init__(driver, threadedUpdate)
+        self.rings = rings
+        self.ringCount = len(self.rings)
+        self.lastRing = self.ringCount - 1
+        self.ringSteps = []
+        num = 0
+        for r in self.rings:
+            count = (r[1] - r[0] + 1)
+            self.ringSteps.append(360.0/count)
+            num += count
+
+        self.rotation = rotation
+
+        if driver.numLEDs != num:
+            raise ValueError("Total ring LED count does not equal driver LED count!")
+
+    def angleToPixel(self, angle, ring):
+        if ring >= self.ringCount:
+            return -1
+            
+        angle = (angle+self.rotation)%360
+        return self.rings[ring][0] + int(math.floor(angle/self.ringSteps[ring]))
+
+    #Set single pixel to Color value
+    def set(self, ring, angle, color):
+        """Set pixel to RGB color tuple"""
+        pixel = self.angleToPixel(angle, ring)
+        self._set_base(pixel, color)
+
+    def get(self, ring, angle):
+        """Get RGB color tuple of color at index pixel"""
+        pixel = self.angleToPixel(angle, ring)
+        return self._get_base(pixel)
+
+    def drawRadius(self, angle, color, startRing=0, endRing=-1):
+        if startRing < 0:
+            startRing = 0
+        if endRing < 0 or endRing > self.lastRing:
+            endRing = self.lastRing
+        for ring in range(startRing, endRing + 1):
+            self.set(ring, angle, color)
+
+    def fillRing(self, ring, color, startAngle=0, endAngle=None):
+        if endAngle == None:
+            endAngle = 359
+
+        if ring >= self.ringCount:
+            raise ValueError("Invalid ring!")
+
+        start = self.angleToPixel(startAngle, ring)
+        end = self.angleToPixel(endAngle, ring)
+        pixels = []
+        if start > end:
+            pixels = range(start, self.rings[ring][1]+1)
+            pixels.extend(range(self.rings[ring][0], end+1))
+        elif start == end:
+            pixels = range(self.rings[ring][0], self.rings[ring][1]+1)
+        else:
+            pixels = range(start, end+1);
+        for i in pixels:
+            self._set_base(i, color)

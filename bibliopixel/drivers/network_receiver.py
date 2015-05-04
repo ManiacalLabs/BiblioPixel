@@ -41,7 +41,8 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
                 self.request.sendall(packet)
 
             elif cmd == CMDTYPE.BRIGHTNESS:
-                bright = ord(self.request.recv(1))
+                res = self.request.recv(1)
+                bright = ord(res)
                 result = RETURN_CODES.ERROR_UNSUPPORTED
                 if self.server.setBrightness:
                     if self.server.setBrightness(bright):
