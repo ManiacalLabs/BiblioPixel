@@ -1,3 +1,6 @@
+### v1.2.1
+Added DriverAPA102
+
 ### v1.2.0
 Added LEDPOV, LEDCircle Classes
 Added Serial Device Version Support
