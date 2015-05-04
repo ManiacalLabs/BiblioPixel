@@ -667,7 +667,7 @@ class LEDCircle(LEDBase):
     def angleToPixel(self, angle, ring):
         if ring >= self.ringCount:
             return -1
-
+            
         angle = (angle+self.rotation)%360
         return self.rings[ring][0] + int(math.floor(angle/self.ringSteps[ring]))
 
@@ -703,6 +703,8 @@ class LEDCircle(LEDBase):
         if start > end:
             pixels = range(start, self.rings[ring][1]+1)
             pixels.extend(range(self.rings[ring][0], end+1))
+        elif start == end:
+            pixels = range(self.rings[ring][0], self.rings[ring][1]+1)
         else:
             pixels = range(start, end+1);
         for i in pixels:
