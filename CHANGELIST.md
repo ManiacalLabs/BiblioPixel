@@ -1,3 +1,9 @@
+### v1.2.0
+Added LEDPOV, LEDCircle Classes
+Added Serial Device Version Support
+Added threaded animation support
+Improved Serial Device detection
+
 ### v1.1.7
 Added check for pyserial version 
 Forced case insenitive grep for USB ID
