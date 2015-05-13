@@ -287,6 +287,9 @@ def wheel_color(position):
 def hue_helper(pos, length, cycle_step):
     return hue2rgb_rainbow(((pos * 255 / length) + cycle_step) % 255)
 
+def hue_helper360(pos, length, cycle_step):
+    return hue2rgb_360(((pos * 360 / length) + cycle_step) % 360)
+
 def wheel_helper(pos, length, cycle_step):
     """Helper for wheel_color that distributes colors over length and allows shifting position"""
     return wheel_color(((pos * WHEEL_MAX / length) + cycle_step) % WHEEL_MAX);

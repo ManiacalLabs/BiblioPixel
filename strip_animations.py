@@ -33,8 +33,6 @@ class RainbowCycle(BaseStripAnim):
 
     def step(self, amt = 1):
         for i in range(self._size):
-            #color = (i * (384 / self._size) + self._step) % 384
-            #c = colors.wheel_helper(i, self._size, self._step)
             c = colors.hue_helper(i, self._size, self._step)
             self._led.set(self._start + i, c)
 

@@ -700,10 +700,10 @@ class LEDCircle(LEDBase):
         start = self.angleToPixel(startAngle, ring)
         end = self.angleToPixel(endAngle, ring)
         pixels = []
-        if start > end:
+        if start >= end:
             pixels = range(start, self.rings[ring][1]+1)
             pixels.extend(range(self.rings[ring][0], end+1))
-        elif start == end:
+        elif start == end and startAngle > endAngle:
             pixels = range(self.rings[ring][0], self.rings[ring][1]+1)
         else:
             pixels = range(start, end+1);
