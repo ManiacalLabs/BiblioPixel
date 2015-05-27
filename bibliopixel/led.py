@@ -161,11 +161,6 @@ class LEDBase(object):
     def _resetBuffer(self):
         self.buffer = [0 for x in range(self.bufByteCount)]
 
-class LEDStrip(LEDBase):
-
-    def __init__(self, driver, threadedUpdate = False):
-        super(LEDStrip, self).__init__(driver, threadedUpdate)
-
     #Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
         """Fill the entire strip with RGB color tuple"""
@@ -185,6 +180,12 @@ class LEDStrip(LEDBase):
     def fillHSV(self, hsv, start=0, end=-1):
         """Fill the entire strip with HSV color tuple"""
         self.fill(colors.hsv2rgb(hsv), start, end)
+
+class LEDStrip(LEDBase):
+
+    def __init__(self, driver, threadedUpdate = False):
+        super(LEDStrip, self).__init__(driver, threadedUpdate)
+    
 
     #Set single pixel to Color value
     def set(self, pixel, color):
