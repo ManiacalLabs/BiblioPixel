@@ -169,7 +169,7 @@ class LEDBase(object):
         if end < 0 or end > self.lastIndex:
             end = self.lastIndex
         for led in range(start, end + 1): #since 0-index include end in range
-            self.set(led, color)
+            self._set_base(led, color)
 
     #Fill the strand (or a subset) with a single color using RGB values
     def fillRGB(self, r, g, b, start=0, end=-1):

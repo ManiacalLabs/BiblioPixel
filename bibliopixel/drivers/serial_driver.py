@@ -111,6 +111,11 @@ class DriverSerial(DriverBase):
         if type in SPIChipsets:
             log.logger.info("Using SPI Speed: {}MHz".format(self._SPISpeed))
 
+    def __exit__(self, type, value, traceback):
+        if self._com != None:
+            log.logger.info("Closing connection to: " + self.dev)
+            self._com.close()
+
     @staticmethod
     def findSerialDevices(hardwareID = "1D50:60AB"):
         hardwareID = "(?i)"+hardwareID #forces case insensitive
