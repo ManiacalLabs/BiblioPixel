@@ -62,3 +62,55 @@ class DriverVisualizer(DriverNetwork):
             os.system(command)
             sleep(0.5)
 
+MANIFEST = [
+        {
+            "id":"visualizer",
+            "class":DriverVisualizer,
+            "type": "driver",
+            "display": "Visualizer",
+            "params": [{
+                "id": "num",
+                "label": "# Pixels",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Total pixels in display. May use Width AND Height instead."
+            }, {
+                "id": "width",
+                "label": "Width",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Width of display. Set if using a matrix."
+            }, {
+                "id": "height",
+                "label": "Height",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Height of display. Set if using a matrix."
+            }, {
+                "id": "pixelSize",
+                "label": "Pixel Size",
+                "type": "int",
+                "default": 15,
+                "min": 5,
+                "max": 50,
+                "help":"Size of rendered pixels in UI."
+            }, {
+                "id":"port",
+                "label":"Port",
+                "type":"int",
+                "default":1618,
+                "help":"Port to connect to/listen on. Only change if using multiple visualizers.",
+                "advanced":True
+            },
+            {
+                "id":"stayTop",
+                "label":"Stay on Top",
+                "type":"bool",
+                "default":False,
+                "help":"Force Visualizer UI to stay on top of all other windows.",
+            }]
+        }
+]
