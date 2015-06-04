@@ -670,7 +670,13 @@ class LEDCircle(LEDBase):
             return -1
             
         angle = (angle+self.rotation)%360
-        return self.rings[ring][0] + int(math.floor(angle/self.ringSteps[ring]))
+        offset = int(round(angle/self.ringSteps[ring]))
+
+        #wraps it back around
+        if offset > self.rings[ring][1] - self.rings[ring][0]:
+            offset = 0
+
+        return self.rings[ring][0] + offset
 
     #Set single pixel to Color value
     def set(self, ring, angle, color):
