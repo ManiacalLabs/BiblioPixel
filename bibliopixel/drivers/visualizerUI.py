@@ -93,7 +93,7 @@ class VisualizerUI:
         self._values = []
         #init colors to all black (off)
         for i in range(self._count):
-            self._values.append("#ff1010")
+            self._values.append("#101010")
 
         c = self._canvas
 
