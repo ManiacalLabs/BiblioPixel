@@ -1,3 +1,7 @@
+### v1.2.2
+Improved LEDCircle Rendering
+Various bug fixes
+
 ### v1.2.1
 Added DriverAPA102
 
