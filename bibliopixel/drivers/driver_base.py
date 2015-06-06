@@ -35,6 +35,13 @@ class DriverBase(object):
         self._thread = None
         self.lastUpdate = 0
 
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, traceback):
+        pass
+    def cleanup(self):
+        return self.__exit__(None, None, None)
+
     #Push new data to strand
     def update(self, data):
         raise RuntimeError("Base class update() called. This shouldn't happen")

@@ -169,7 +169,7 @@ class LEDBase(object):
         if end < 0 or end > self.lastIndex:
             end = self.lastIndex
         for led in range(start, end + 1): #since 0-index include end in range
-            self.set(led, color)
+            self._set_base(led, color)
 
     #Fill the strand (or a subset) with a single color using RGB values
     def fillRGB(self, r, g, b, start=0, end=-1):
@@ -648,15 +648,22 @@ class LEDPOV(LEDMatrix):
                 
 class LEDCircle(LEDBase):
 
-    def __init__(self, driver, rings, rotation = 0, threadedUpdate = False):
+    def __init__(self, driver, rings, maxAngleDiff = 0, rotation = 0, threadedUpdate = False):
         super(LEDCircle, self).__init__(driver, threadedUpdate)
         self.rings = rings
+        self.maxAngleDiff = maxAngleDiff
+        self._full_coords = False
+        for r in self.rings:
+            self._full_coords |= (len(r) > 2)
         self.ringCount = len(self.rings)
         self.lastRing = self.ringCount - 1
         self.ringSteps = []
         num = 0
         for r in self.rings:
-            count = (r[1] - r[0] + 1)
+            if self._full_coords:
+                count = len(r)
+            else:
+                count = (r[1] - r[0] + 1)
             self.ringSteps.append(360.0/count)
             num += count
 
@@ -665,12 +672,38 @@ class LEDCircle(LEDBase):
         if driver.numLEDs != num:
             raise ValueError("Total ring LED count does not equal driver LED count!")
 
-    def angleToPixel(self, angle, ring):
+    def __genOffsetFromAngle(self, angle, ring):
         if ring >= self.ringCount:
             return -1
             
         angle = (angle+self.rotation)%360
-        return self.rings[ring][0] + int(math.floor(angle/self.ringSteps[ring]))
+        offset = int(round(angle/self.ringSteps[ring]))
+
+        #wraps it back around
+        if self._full_coords:
+            length = len(self.rings[ring])-1
+        else:
+            length = self.rings[ring][1] - self.rings[ring][0]
+
+        if offset > length:
+            offset = 0
+
+        if self.maxAngleDiff > 0:
+            calcAngle = (offset * self.ringSteps[ring]) % 360
+            diff = abs(angle - calcAngle)
+            if diff > self.maxAngleDiff:
+                return -1
+
+        return offset
+
+    def angleToPixel(self, angle, ring):
+        offset = self.__genOffsetFromAngle(angle, ring)
+        if offset < 0: return offset
+
+        if self._full_coords:
+            return self.rings[ring][offset]
+        else:
+            return self.rings[ring][0] + offset
 
     #Set single pixel to Color value
     def set(self, ring, angle, color):
@@ -698,15 +731,29 @@ class LEDCircle(LEDBase):
         if ring >= self.ringCount:
             raise ValueError("Invalid ring!")
 
-        start = self.angleToPixel(startAngle, ring)
-        end = self.angleToPixel(endAngle, ring)
+        def pixelRange(ring, start=0, stop=-1):
+            r = self.rings[ring]
+            if stop == -1:
+                if self._full_coords: 
+                    stop = len(r)-1 
+                else: stop = r[1]-r[0]
+
+            if self._full_coords:
+                return [r[i] for i in range(start, stop+1)]
+            else:
+                return range(start+r[0], stop+r[0]+1)
+
+        start = self.__genOffsetFromAngle(startAngle, ring)
+        end = self.__genOffsetFromAngle(endAngle, ring)
+
         pixels = []
         if start >= end:
-            pixels = range(start, self.rings[ring][1]+1)
-            pixels.extend(range(self.rings[ring][0], end+1))
+            pixels = pixelRange(ring, start)
+            pixels.extend(pixelRange(ring, 0, end))
         elif start == end and startAngle > endAngle:
-            pixels = range(self.rings[ring][0], self.rings[ring][1]+1)
+            pixels = pixelRange(ring)
         else:
-            pixels = range(start, end+1);
+            pixels = pixelRange(ring, start, end);
+
         for i in pixels:
             self._set_base(i, color)
