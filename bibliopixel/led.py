@@ -69,6 +69,13 @@ class LEDBase(object):
                 t.start()
                 d._thread = t
 
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, traceback):
+        pass
+    def cleanup(self):
+        return self.__exit__(None, None, None)
+
     def _get_base(self, pixel):
         if(pixel < 0 or pixel > self.lastIndex):
             return (0,0,0) #don't go out of bounds
@@ -757,3 +764,71 @@ class LEDCircle(LEDBase):
 
         for i in pixels:
             self._set_base(i, color)
+
+
+MANIFEST = [
+        {
+            "id":"strip",
+            "class":LEDStrip,
+            "type": "controller",
+            "display": "LEDStrip",
+            "params": [{
+                "id": "threadedUpdate",
+                "label": "Threaded Update",
+                "type": "bool",
+                "default": False,
+                "help":"Enable to run display updates on a separate thread, which can improve speed."
+            },]
+        },
+        {
+            "id":"matrix",
+            "class":LEDMatrix,
+            "type": "controller",
+            "display": "LEDMatrix",
+            "params": [{
+                "id": "width",
+                "label": "Width",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Width of display. Leave this and Height as 0 to get from driver."
+            }, {
+                "id": "height",
+                "label": "Height",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Height of display. Leave this and Width as 0 to get from driver."
+            },{
+                "id": "rotation",
+                "label": "Rotation",
+                "type": "combo",
+                "options": {
+                    0: "0&deg;",
+                    3: "90&deg;",
+                    2: "180&deg;",
+                    1: "270&deg;",
+                },
+                "default": 0
+            },{
+                "id":"vert_flip",
+                "label":"Vertical Flip",
+                "type":"bool",
+                "default":False,
+                "help":"Flip the display over the x-axis.",
+            },{
+                "id":"serpentine",
+                "label":"Serpentine",
+                "type":"bool",
+                "default":True,
+                "help":"Use a serpentine layout for the pixel map when auto-generated.",
+            },{
+                "id": "threadedUpdate",
+                "label": "Threaded Update",
+                "type": "bool",
+                "default": False,
+                "help":"Enable to run display updates on a separate thread, which can improve speed."
+            },]
+        }
+]
+

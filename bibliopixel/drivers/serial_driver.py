@@ -321,4 +321,118 @@ class DriverSerial(DriverBase):
         self._com.flushInput()
 
         
-        
+#def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2, 
+# gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB")
+import gamma        
+MANIFEST = [
+        {
+            "id":"serial",
+            "class":DriverSerial,
+            "type": "driver",
+            "display": "Serial (AllPixel)",
+            "params": [{
+                "id": "type",
+                "label": "LED Type",
+                "type": "combo",
+                "options": {
+                    0: "GENERIC",
+                    1: "LPD8806",
+                    2: "WS2801",
+                    3: "WS281x",
+                    4: "WS2811_400",
+                    5: "TM1804",
+                    6: "TM1803",
+                    7: "UCS1903",
+                    8: "SM16716",
+                    9: "APA102",
+                    10: "LPD1886",
+                    11: "P98131"
+                },
+                "default": None
+            }, {
+                "id": "num",
+                "label": "# Pixels",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Total pixels in display."
+            }, {
+                "id": "dev",
+                "label": "Device Path",
+                "type": "str",
+                "default": "",
+            }, {
+                "id": "c_order",
+                "label": "Channel Order",
+                "type": "combo",
+                "options": {
+                    0: "RGB",
+                    1: "RBG",
+                    2: "GRB",
+                    3: "GBR",
+                    4: "BRG",
+                    5: "BGR"
+                },
+                "options_map": [
+                    [0, 1, 2],
+                    [0, 2, 1],
+                    [1, 0, 2],
+                    [1, 2, 0],
+                    [2, 0, 1],
+                    [2, 1, 0]
+                ],
+                "default": 0
+            }, {
+                "id": "SPISpeed",
+                "label": "SPI Speed (MHz)",
+                "type": "int",
+                "default": 2,
+                "min": 1,
+                "max": 24,
+                "advanced": True
+            }, {
+                "id":"gamma",
+                "label":"Gamma",
+                "type":"combo",
+                "default":None,
+                "options":{
+                    0: "LPD8806",
+                    1: "APA102",
+                    2: "WS2801",
+                    3: "SM16716",
+                    4: "LPD6803",
+                    5: "WS281x"
+                },
+                "options_map":[
+                    gamma.LPD8806,
+                    gamma.APA102,
+                    gamma.WS2801,
+                    gamma.SM16716,
+                    gamma.LPD6803,
+                    gamma.WS2812B
+                ]
+            },{
+                "id": "restart_timeout",
+                "label": "Restart Timeout",
+                "type": "int",
+                "default": 3,
+                "min": 1,
+                "advanced": True
+            },{
+                "id": "deviceID",
+                "label": "Device ID",
+                "type": "int",
+                "default": None,
+                "min": 0,
+                "max": 255,
+                "msg": "AllPixel ID",
+                "advanced": True
+            },{
+                "id": "hardwareID",
+                "label": "Hardware ID",
+                "type": "str",
+                "default": "1D50:60AB",
+                "advanced": True
+            },]
+        }
+]
