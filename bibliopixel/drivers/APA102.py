@@ -1,3 +1,5 @@
+from spi_driver_base import *
+
 class DriverAPA102(DriverSPIBase):
     """Main driver for APA102 based LED strips on devices like the Raspberry Pi and BeagleBone"""
 
