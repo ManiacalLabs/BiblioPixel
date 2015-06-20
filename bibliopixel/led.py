@@ -809,7 +809,8 @@ MANIFEST = [
                     2: "180&deg;",
                     1: "270&deg;",
                 },
-                "default": 0
+                "default": 0,
+                "help":"Amount to rotate matrix by."
             },{
                 "id":"vert_flip",
                 "label":"Vertical Flip",

@@ -50,6 +50,17 @@ class BaseAnimation(object):
             if wait:
                 self._thread.join()
 
+    def __enter__(self):
+        return self
+    def __exit(self, type, value, traceback):
+        pass
+    def __exit__(self, type, value, traceback):
+        self.__exit(type, value, traceback)
+        self.stopThread(wait = True)
+        pass
+    def cleanup(self):
+        return self.__exit__(None, None, None)
+
     def stopped(self):
         if self._thread:
             return not self._thread.isAlive()
