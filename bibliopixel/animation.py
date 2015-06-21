@@ -56,6 +56,8 @@ class BaseAnimation(object):
         pass
     def __exit__(self, type, value, traceback):
         self.__exit(type, value, traceback)
+        self._led.all_off()
+        self._led.update()
         self.stopThread(wait = True)
         pass
     def cleanup(self):
@@ -145,6 +147,41 @@ class BaseAnimation(object):
                 self._thread.join()
         else:
             self._run(amt, fps, sleep, max_steps, untilComplete, max_cycles)
+
+    RUN_PARAMS = [{
+                "id": "amt",
+                "label": "Step Amount",
+                "type": "int",
+                "min": 1,
+                "default": 1,
+                "help":"Amount to step animation by on each frame. May not be used on some animations."
+            },{
+                "id": "fps",
+                "label": "Framerate",
+                "type": "int",
+                "default": None,
+                "help":"Framerate at which to run animation."
+            },{
+                "id": "max_steps",
+                "label": "Max Frames",
+                "type": "int",
+                "min": 0,
+                "default": 0,
+                "help":"Total frames to run before stopping."
+            },{
+                "id": "untilComplete",
+                "label": "Until Complete",
+                "type": "bool",
+                "default": False,
+                "help":"Run until animation marks itself as compelte. If supported."
+            },{
+                "id": "max_cycles",
+                "label": "Max Cycles",
+                "type": "int",
+                "min": 1,
+                "default": 1,
+                "help":"If Until Complete is set, animation will repeat this many times."
+            },]
 
 class BaseStripAnim(BaseAnimation):
     def __init__(self, led, start = 0, end = -1):
