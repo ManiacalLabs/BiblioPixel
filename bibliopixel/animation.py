@@ -131,16 +131,21 @@ class BaseAnimation(object):
                 time.sleep(t)
             cur_step += 1
 
-    def run(self, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0, threaded = False, joinThread = False):
+        if self._callback:
+            self._callback(self)
+
+    def run(self, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0, threaded = False, joinThread = False, callback=None):
 
         self._threaded = threaded
         self._stopThread = False
+        self._callback = callback
 
         if self._threaded:
             args =  locals()
             args.pop('self', None)
             args.pop('threaded', None)
             args.pop('joinThread', None)
+            args.pop('callback', None)
             self._thread = animThread(self, args)
             self._thread.start()
             if joinThread:
