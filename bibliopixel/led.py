@@ -651,8 +651,7 @@ class LEDPOV(LEDMatrix):
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))
-
-                
+               
 class LEDCircle(LEDBase):
 
     def __init__(self, driver, rings, maxAngleDiff = 0, rotation = 0, threadedUpdate = False):
@@ -764,7 +763,6 @@ class LEDCircle(LEDBase):
 
         for i in pixels:
             self._set_base(i, color)
-
 
 MANIFEST = [
         {
