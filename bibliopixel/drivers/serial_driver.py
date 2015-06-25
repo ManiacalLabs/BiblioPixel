@@ -330,6 +330,7 @@ MANIFEST = [
             "class":DriverSerial,
             "type": "driver",
             "display": "Serial (AllPixel)",
+            "desc": "Interface with USB Serial devices that support the AllPixel protocol.",
             "params": [{
                 "id": "type",
                 "label": "LED Type",
@@ -389,7 +390,7 @@ MANIFEST = [
                 "default": 2,
                 "min": 1,
                 "max": 24,
-                "advanced": True
+                "group":"Advanced"
             }, {
                 "id":"gamma",
                 "label":"Gamma",
@@ -417,7 +418,7 @@ MANIFEST = [
                 "type": "int",
                 "default": 3,
                 "min": 1,
-                "advanced": True
+                "group":"Advanced"
             },{
                 "id": "deviceID",
                 "label": "Device ID",
@@ -426,13 +427,13 @@ MANIFEST = [
                 "min": 0,
                 "max": 255,
                 "msg": "AllPixel ID",
-                "advanced": True
+                "group":"Advanced"
             },{
                 "id": "hardwareID",
                 "label": "Hardware ID",
                 "type": "str",
                 "default": "1D50:60AB",
-                "advanced": True
+                "group":"Advanced"
             },]
         }
 ]

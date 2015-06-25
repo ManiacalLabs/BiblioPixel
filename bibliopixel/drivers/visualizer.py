@@ -68,6 +68,7 @@ MANIFEST = [
             "class":DriverVisualizer,
             "type": "driver",
             "display": "Visualizer",
+            "desc": "Visualizer runs animations inside a simulator window.",
             "params": [{
                 "id": "num",
                 "label": "# Pixels",
@@ -103,7 +104,7 @@ MANIFEST = [
                 "type":"int",
                 "default":1618,
                 "help":"Port to connect to/listen on. Only change if using multiple visualizers.",
-                "advanced":True
+                "group":"Advanced"
             },
             {
                 "id":"stayTop",
