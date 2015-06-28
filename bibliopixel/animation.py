@@ -66,7 +66,7 @@ class BaseAnimation(object):
     def stopped(self):
         if self._thread:
             return not self._thread.isAlive()
-        else: 
+        else:
             return True
 
     def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles):
@@ -91,6 +91,8 @@ class BaseAnimation(object):
             self._timeRef = self._msTime()
 
             start = self._msTime()
+            if hasattr(self, "_input_dev"):
+                self._keys = self._input_dev.getKeys()
             self.step(amt)
             mid = self._msTime()
 
@@ -101,7 +103,7 @@ class BaseAnimation(object):
 
             self._led._frameGenTime = int(mid - start)
             self._led._frameTotalTime = sleep
-            
+
             self._led.update()
             now = self._msTime()
 
@@ -223,6 +225,12 @@ class BaseMatrixAnim(BaseAnimation):
         self.startX = startX
         self.startY = startY
 
+class BaseGameAnim(BaseMatrixAnim):
+    def __init__(self, led, inputDev):
+        super(BaseGameAnim, self).__init__(led)
+        self._input_dev = inputDev
+        self._keys = None
+
 class BaseCircleAnim(BaseAnimation):
     def __init__(self, led):
         super(BaseCircleAnim, self).__init__(led)
@@ -240,9 +248,9 @@ class StripChannelTest(BaseStripAnim):
         super(StripChannelTest, self).__init__(led)
         self._internalDelay = 500
         self.colors =  [colors.Red, colors.Green, colors.Blue, colors.White]
-  
+
     def step(self, amt = 1):
-        
+
         self._led.set(0, colors.Red)
         self._led.set(1, colors.Green)
         self._led.set(2, colors.Green)
@@ -262,7 +270,7 @@ class MatrixChannelTest(BaseMatrixAnim):
         self.colors =  [colors.Red, colors.Green, colors.Blue, colors.White]
 
     def step(self, amt = 1):
-        
+
         self._led.drawLine(0, 0, 0, self.height - 1, colors.Red)
         self._led.drawLine(1, 0, 1, self.height - 1, colors.Green)
         self._led.drawLine(2, 0, 2, self.height - 1, colors.Green)
@@ -280,7 +288,7 @@ class MatrixCalibrationTest(BaseMatrixAnim):
         super(MatrixCalibrationTest, self).__init__(led, 0, 0)
         self._internalDelay = 500
         self.colors = [colors.Red, colors.Green, colors.Green, colors.Blue, colors.Blue, colors.Blue]
-       
+
     def step(self, amt = 1):
         self._led.all_off()
         i = self._step % self.width
@@ -291,4 +299,3 @@ class MatrixCalibrationTest(BaseMatrixAnim):
         self.animComplete = (i == (self.width-1))
 
         self._step += 1
-
