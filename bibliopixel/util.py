@@ -13,3 +13,15 @@ class d(dict):
         for k,v in a.items():
             if not k in self:
                 self[k] = v
+
+def tuple_add(a, b):
+    return tuple(x + y for x,y in zip(a, b))
+
+def tuple_sub(a, b):
+    return tuple(x - y for x,y in zip(a, b))
+
+def tuple_mult(a, b):
+    return tuple(x * y for x,y in zip(a, b))
+
+def tuple_div(a, b):
+    return tuple(x / y for x,y in zip(a, b))

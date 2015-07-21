@@ -4,7 +4,7 @@ import sys
 import time
 
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import log
 
 class CMDTYPE:
@@ -20,7 +20,7 @@ class RETURN_CODES:
 
 class DriverNetwork(DriverBase):
     """Driver for communicating with another device on the network."""
-    
+
     def __init__(self, num = 0, width = 0, height = 0, host = "localhost", port = 3142):
         super(DriverNetwork, self).__init__(num, width, height)
 
@@ -30,7 +30,7 @@ class DriverNetwork(DriverBase):
         self._buf = []
         for i in range(0, self.bufByteCount):
             self._buf.append(0)
-           
+
 
     def _generateHeader(self, cmd, size):
         packet = bytearray()
@@ -64,11 +64,12 @@ class DriverNetwork(DriverBase):
             resp = ord(s.recv(1))
 
             s.close()
-        
+
             if resp != RETURN_CODES.SUCCESS:
                 log.logger.warning("Bytecount mismatch! {0}".format(resp))
 
         except Exception as e:
+            print e
             log.logger.exception(e)
             error = "Problem communicating with network receiver!"
             log.logger.error(error)
@@ -84,5 +85,3 @@ class DriverNetwork(DriverBase):
             return False
         else:
             return True
-        
-
