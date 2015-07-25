@@ -35,7 +35,7 @@ class updateThread(threading.Thread):
             self._driver._update(self._data)
             self._data = []
             self._wait.clear()
-            
+
 class LEDBase(object):
 
     def __init__(self, driver, threadedUpdate):
@@ -53,9 +53,9 @@ class LEDBase(object):
 
         self.bufByteCount = int(3 * self.numLEDs)
         self.lastIndex = self.numLEDs - 1
-        
+
         self.buffer = [0 for x in range(self.bufByteCount)]
-        
+
         self.masterBrightness = 255
 
         self._frameGenTime = 0
@@ -102,14 +102,14 @@ class LEDBase(object):
 
         if len(self.buffer) != self.bufByteCount:
             raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(self.bufByteCount, len(self.buffer)))
-        
+
         for d in self.driver:
             if self._threadedUpdate:
                 d._thread.setData(self.buffer[pos:d.bufByteCount+pos])
             else:
                 d._update(self.buffer[pos:d.bufByteCount+pos])
             pos += d.bufByteCount
-    
+
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.driver])
 
@@ -144,7 +144,7 @@ class LEDBase(object):
             self.masterBrightness = bright
         else:
             self.masterBrightness = 255
-    
+
     #Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
         """Set single pixel using individual RGB values instead of tuple"""
@@ -155,7 +155,7 @@ class LEDBase(object):
         """Set single pixel to HSV tuple"""
         color = colors.hsv2rgb(hsv)
         self._set_base(pixel, color)
-        
+
     #turns off the desired pixel
     def setOff(self, pixel):
         """Set single pixel off"""
@@ -182,7 +182,7 @@ class LEDBase(object):
     def fillRGB(self, r, g, b, start=0, end=-1):
         """Fill entire strip by giving individual RGB values instead of tuple"""
         self.fill((r, g, b), start, end)
-        
+
     #Fill the strand (or a subset) with a single color using HSV values
     def fillHSV(self, hsv, start=0, end=-1):
         """Fill the entire strip with HSV color tuple"""
@@ -192,7 +192,7 @@ class LEDStrip(LEDBase):
 
     def __init__(self, driver, threadedUpdate = False):
         super(LEDStrip, self).__init__(driver, threadedUpdate)
-    
+
 
     #Set single pixel to Color value
     def set(self, pixel, color):
@@ -251,7 +251,7 @@ class MultiMapBuilder():
                 self.map[y + yOff] += [i + offsets[x] for i in maps[x][y]]
 
         self.offset = offsets[len(offsets)-1]
-        
+
 class LEDMatrix(LEDBase):
 
     def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False):
@@ -398,19 +398,19 @@ class LEDMatrix(LEDBase):
             if (cornername & 0x4):
               self.set(x0 + x, y0 + y, color)
               self.set(x0 + y, y0 + x, color)
-            
+
             if (cornername & 0x2):
               self.set(x0 + x, y0 - y, color)
               self.set(x0 + y, y0 - x, color)
-            
+
             if (cornername & 0x8):
               self.set(x0 - y, y0 + x, color)
               self.set(x0 - x, y0 + y, color)
-            
+
             if (cornername & 0x1):
               self.set(x0 - y, y0 - x, color)
               self.set(x0 - x, y0 - y, color)
-    
+
     def _fillCircleHelper(self, x0, y0, r, cornername, delta, color):
         f     = 1 - r
         ddF_x = 1
@@ -430,7 +430,7 @@ class LEDMatrix(LEDBase):
             if (cornername & 0x1):
               self._drawFastVLine(x0+x, y0-y, 2*y+1+delta, color)
               self._drawFastVLine(x0+y, y0-x, 2*x+1+delta, color)
-            
+
             if (cornername & 0x2):
               self._drawFastVLine(x0-x, y0-y, 2*y+1+delta, color)
               self._drawFastVLine(x0-y, y0-x, 2*x+1+delta, color)
@@ -517,7 +517,7 @@ class LEDMatrix(LEDBase):
         """Draw triangle with points x0,y0 - x1,y1 - x2,y2"""
         self.drawLine(x0, y0, x1, y1, color)
         self.drawLine(x1, y1, x2, y2, color)
-        self.drawLine(x2, y2, x0, y0, color)  
+        self.drawLine(x2, y2, x0, y0, color)
 
     def fillTrangle(self, x0, y0, x1, y1, x2, y2, color):
         """Draw solid triangle with points x0,y0 - x1,y1 - x2,y2"""
@@ -584,20 +584,29 @@ class LEDMatrix(LEDBase):
             self._drawFastHLine(a, y, b-a+1, color)
 
     def drawChar(self, x, y, c, color, bg, size):
+        if size > 0:
+            FONT = font.GLCDFONT
+            fw, fh = 6, 8
+        else:
+            FONT = font.TINYFONT
+            fw, fh = 4, 6
+            size = 1
+
         c = ord(c) #make it the int value
-        for i in range(6):
+        #print size, chr(c), FONT[c]
+        for i in range(fw):
             xPos = x+(i*size)
             if ((xPos < self.width) and
-                (xPos + 6 * size -1) >= 0):
-                
-                if i == 5:
+                (xPos + fw * size -1) >= 0):
+
+                if i == fw-1:
                     line = 0
                 else:
-                    line = font.GLCDFONT[c][i]
-                for j in range(8):
+                    line = FONT[c][i]
+                for j in range(fh):
                     yPos = y+(j*size)
                     if ((yPos < self.height) and
-                        (yPos + 8 * size -1) >= 0):
+                        (yPos + fh * size -1) >= 0):
                         if line & 0x1:
                             if size == 1:
                                 self.set(xPos, yPos, color)
@@ -609,18 +618,24 @@ class LEDMatrix(LEDBase):
                             else:
                                 self.fillRect(xPos, yPos, size, size, bg)
                     line >>= 1
-        
+
     def drawText(self, text, x = 0, y = 0, color = colors.White, bg = colors.Off, size = 1):
+        osize = size
+        if size > 0:
+            fw, fh = 6, 8
+        else:
+            fw, fh = 4, 6
+            size = 1
         for c in text:
             if c == '\n':
                 pass
-                y += size*8
+                y += size*fh
                 x = 0
             elif c == '\r':
                 pass #skip it
             else:
-                self.drawChar(x, y, c, color, bg, size)
-                x += size*6
+                self.drawChar(x, y, c, color, bg, osize)
+                x += size*fw
                 if x >= self.width:
                     break
 
@@ -633,7 +648,7 @@ class LEDPOV(LEDMatrix):
         super(LEDPOV, self).__init__(driver, width, povHeight, None, rotation, vert_flip, False)
 
     #This is the magic. Overriding the normal update() method
-    #It will automatically break up the frame into columns spread over frameTime (ms)    
+    #It will automatically break up the frame into columns spread over frameTime (ms)
     def update(self, frameTime = None):
         if frameTime:
             self._frameTotalTime = frameTime
@@ -651,7 +666,7 @@ class LEDPOV(LEDMatrix):
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))
-               
+
 class LEDCircle(LEDBase):
 
     def __init__(self, driver, rings, maxAngleDiff = 0, rotation = 0, threadedUpdate = False):
@@ -681,7 +696,7 @@ class LEDCircle(LEDBase):
     def __genOffsetFromAngle(self, angle, ring):
         if ring >= self.ringCount:
             return -1
-            
+
         angle = (angle+self.rotation)%360
         offset = int(round(angle/self.ringSteps[ring]))
 
@@ -740,8 +755,8 @@ class LEDCircle(LEDBase):
         def pixelRange(ring, start=0, stop=-1):
             r = self.rings[ring]
             if stop == -1:
-                if self._full_coords: 
-                    stop = len(r)-1 
+                if self._full_coords:
+                    stop = len(r)-1
                 else: stop = r[1]-r[0]
 
             if self._full_coords:
@@ -830,4 +845,3 @@ MANIFEST = [
             },]
         }
 ]
-

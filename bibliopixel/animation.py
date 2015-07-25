@@ -38,7 +38,13 @@ class BaseAnimation(object):
     def _msTime(self):
         return time.time() * 1000.0
 
-    def preRun(self):
+    def preRun(self, amt=1):
+        pass
+
+    def preStep(self, amt=1):
+        pass
+
+    def postStep(self, amt=1):
         pass
 
     def step(self, amt = 1):
@@ -93,7 +99,9 @@ class BaseAnimation(object):
             start = self._msTime()
             if hasattr(self, "_input_dev"):
                 self._keys = self._input_dev.getKeys()
+            self.preStep(amt)
             self.step(amt)
+            self.postStep(amt)
             mid = self._msTime()
 
             if initSleep:
@@ -230,6 +238,21 @@ class BaseGameAnim(BaseMatrixAnim):
         super(BaseGameAnim, self).__init__(led)
         self._input_dev = inputDev
         self._keys = None
+        self._speedStep = 0
+        self._speeds = {}
+
+    def setSpeed(self, name, speed):
+        self._speeds[name] = speed
+
+    def checkSpeed(self, name):
+        return (name in self._speeds) and (self._speedStep % self._speeds[name] == 0)
+
+    def preStep(self, amt):
+        pass
+
+    def postStep(self, amt):
+        self._speedStep += 1
+
 
 class BaseCircleAnim(BaseAnimation):
     def __init__(self, led):

@@ -8,11 +8,11 @@ import random
 
 def genVector(width, height, x_mult = 1, y_mult = 1):
     """Generates a map of vector lengths from the center point to each coordinate
-    
+
     widht - width of matrix to generate
     height - height of matrix to generate
-    x_mult - value to scale x-axis by 
-    y_mult - value to scale y-axis by 
+    x_mult - value to scale x-axis by
+    y_mult - value to scale y-axis by
     """
     centerX = (width - 1) / 2.0
     centerY = (height - 1) / 2.0
@@ -88,7 +88,7 @@ class AnalogClock(BaseMatrixAnim):
         self._led.drawLine(self._centerX, self._centerY, p_hrs[0], p_hrs[1], (255, 0, 0))
         self._led.drawLine(self._centerX, self._centerY, p_min[0], p_min[1], (0, 255, 0))
         self._led.drawLine(self._centerX, self._centerY, p_sec[0], p_sec[1], (0, 0, 255))
-        
+
         self._step = 0
 
 class RGBAnalogClock(BaseMatrixAnim):
@@ -118,7 +118,7 @@ class RGBAnalogClock(BaseMatrixAnim):
         self._led.drawLine(self._centerX, self._centerY, p_hrs[0], p_hrs[1], c_hrs)
         self._led.drawLine(self._centerX, self._centerY, p_min[0], p_min[1], c_min)
         self._led.drawLine(self._centerX, self._centerY, p_sec[0], p_sec[1], c_sec)
-        
+
         self._step = 0
 
 class MatrixRain(BaseMatrixAnim):
@@ -129,7 +129,7 @@ class MatrixRain(BaseMatrixAnim):
         self._tail = tail
         self._drops = [[] for x in range(self._led.width)]
         self._growthRate = growthRate
-       
+
     def _drawDrop(self, x, y, color):
         for i in range(self._tail):
             if y-i >= 0 and y-i < self._led.height:
@@ -159,7 +159,7 @@ class MatrixRain(BaseMatrixAnim):
                         removals.append(drop)
                 for r in removals:
                     self._drops[x].remove(r)
-                      
+
         self._step = 0
 
 class MatrixRainBow(BaseMatrixAnim):
@@ -169,7 +169,7 @@ class MatrixRainBow(BaseMatrixAnim):
         self._tail = tail
         self._drops = [[] for x in range(self._led.width)]
         self._growthRate = growthRate
-       
+
     def _drawDrop(self, x, y, color):
         for i in range(self._tail):
             if y-i >= 0 and y-i < self._led.height:
@@ -198,7 +198,7 @@ class MatrixRainBow(BaseMatrixAnim):
                         removals.append(drop)
                 for r in removals:
                     self._drops[x].remove(r)
-                      
+
         self._step = 0
 
 class SpiningTriangle(BaseMatrixAnim):
@@ -243,17 +243,23 @@ class ScrollText(BaseMatrixAnim):
         self._text = text
         self.xPos = xPos
         self.yPos = yPos
+        self._osize = size
+        if size > 0:
+            self._dim = 6, 8
+        else:
+            self._dim = 4, 6
+            size = 1
         self._size = size
-        self._strW = len(text)*6*size
-       
+        self._strW = len(text)*self._dim[0]*size
+
     def step(self, amt = 1):
         self._led.all_off()
-        self._led.drawText(self._text, self.xPos, self.yPos, color = self.color, bg = self.bgcolor, size = self._size)
+        self._led.drawText(self._text, self.xPos, self.yPos, color = self.color, bg = self.bgcolor, size = self._osize)
         self.xPos -= amt
         if self.xPos + self._strW <= 0:
             self.xPos = self.startX + self.width - 1
             self.animComplete = True
-                      
+
         self._step = 0
 
 class BounceText(BaseMatrixAnim):
@@ -265,14 +271,20 @@ class BounceText(BaseMatrixAnim):
         self._text = text
         self.xPos = xPos
         self.yPos = yPos
+        self._osize = size
+        if size > 0:
+            self._dim = 6, 8
+        else:
+            self._dim = 4, 6
+            size = 1
         self._size = size
-        self._strW = len(text)*6*size
+        self._strW = len(text)*self._dim[0]*size
         self._dir = -1
         self._buffer = buffer
-       
+
     def step(self, amt = 1):
         self._led.all_off()
-        self._led.drawText(self._text, self.xPos, self.yPos, color = self.color, bg = self.bgcolor, size = self._size)
+        self._led.drawText(self._text, self.xPos, self.yPos, color = self.color, bg = self.bgcolor, size = self._osize)
 
         if self._strW < self.width:
             if self.xPos <= 0 + self._buffer and self._dir == -1:
@@ -288,5 +300,5 @@ class BounceText(BaseMatrixAnim):
                 self.animComplete = True
 
         self.xPos += amt * self._dir
-                      
+
         self._step = 0
