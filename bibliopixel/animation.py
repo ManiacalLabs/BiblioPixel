@@ -244,6 +244,12 @@ class BaseGameAnim(BaseMatrixAnim):
     def setSpeed(self, name, speed):
         self._speeds[name] = speed
 
+    def getSpeed(self, name):
+        if name in self._speeds:
+            return self._speeds[name]
+        else:
+            return None
+
     def checkSpeed(self, name):
         return (name in self._speeds) and (self._speedStep % self._speeds[name] == 0)
 
