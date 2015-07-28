@@ -243,6 +243,7 @@ class BaseGameAnim(BaseMatrixAnim):
         self._speedStep = 0
         self._speeds = {}
         self._keyfuncs = {}
+        self._anyFuncs = []
 
     def setSpeed(self, name, speed):
         self._speeds[name] = speed
@@ -260,15 +261,22 @@ class BaseGameAnim(BaseMatrixAnim):
         return (name in self._speeds) and (self._checkSpeed(self._speeds[name]))
 
     def addKeyFunc(self, key, func, speed = 1, hold = True):
-        self._keyfuncs[key] = d({
-            "func": func,
-            "speed": speed,
-            "hold": hold,
-            "last": False,
-            "inter": False
-            })
+        if not isinstance(key, list):
+            key = [key]
+        for k in key:
+            self._keyfuncs[k] = d({
+                "func": func,
+                "speed": speed,
+                "hold": hold,
+                "last": False,
+                "inter": False
+                })
+
+    def addAnyFunc(self, func):
+        self._anyFuncs.append(func)
 
     def handleKeys(self):
+
         kf = self._keyfuncs
         for key in self._keys:
             val = self._keys[key]
@@ -282,16 +290,17 @@ class BaseGameAnim(BaseMatrixAnim):
                             cfg.func()
                         else:
                             cfg.inter = cfg.last = val
-                    # else:
-                    #     cfg.inter |= val
                 else:
-
                     if speedPass:
                         if (val or cfg.inter) and not cfg.last:
                                 cfg.func()
                         cfg.inter = cfg.last = val
                     else:
                         cfg.inter |= val
+
+        if len(self._anyFuncs) > 0 and any(v == True for v in self._keys.itervalues()):
+            for f in self._anyFuncs:
+                f(self._keys)
 
     def preStep(self, amt):
         pass
