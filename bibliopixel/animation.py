@@ -6,6 +6,8 @@ from led import LEDStrip
 from led import LEDCircle
 import colors
 
+from util import d
+
 import threading
 
 class animThread(threading.Thread):
@@ -240,6 +242,7 @@ class BaseGameAnim(BaseMatrixAnim):
         self._keys = None
         self._speedStep = 0
         self._speeds = {}
+        self._keyfuncs = {}
 
     def setSpeed(self, name, speed):
         self._speeds[name] = speed
@@ -250,8 +253,45 @@ class BaseGameAnim(BaseMatrixAnim):
         else:
             return None
 
+    def _checkSpeed(self, speed):
+        return self._speedStep % speed == 0
+
     def checkSpeed(self, name):
-        return (name in self._speeds) and (self._speedStep % self._speeds[name] == 0)
+        return (name in self._speeds) and (self._checkSpeed(self._speeds[name]))
+
+    def addKeyFunc(self, key, func, speed = 1, hold = True):
+        self._keyfuncs[key] = d({
+            "func": func,
+            "speed": speed,
+            "hold": hold,
+            "last": False,
+            "inter": False
+            })
+
+    def handleKeys(self):
+        kf = self._keyfuncs
+        for key in self._keys:
+            val = self._keys[key]
+            if key in kf:
+                cfg = kf[key]
+                speedPass = self._checkSpeed(cfg.speed)
+
+                if cfg.hold:
+                    if speedPass:
+                        if (val or cfg.inter):
+                            cfg.func()
+                        else:
+                            cfg.inter = cfg.last = val
+                    # else:
+                    #     cfg.inter |= val
+                else:
+
+                    if speedPass:
+                        if (val or cfg.inter) and not cfg.last:
+                                cfg.func()
+                        cfg.inter = cfg.last = val
+                    else:
+                        cfg.inter |= val
 
     def preStep(self, amt):
         pass
