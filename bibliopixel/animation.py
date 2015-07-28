@@ -240,6 +240,7 @@ class BaseGameAnim(BaseMatrixAnim):
         super(BaseGameAnim, self).__init__(led)
         self._input_dev = inputDev
         self._keys = None
+        self._lastKeys = None
         self._speedStep = 0
         self._speeds = {}
         self._keyfuncs = {}
@@ -276,7 +277,10 @@ class BaseGameAnim(BaseMatrixAnim):
         self._anyFuncs.append(func)
 
     def handleKeys(self):
-
+        if len(self._anyFuncs) > 0 and (self._lastKeys != self._keys) and any(v == True for v in self._keys.itervalues()):
+            for f in self._anyFuncs:
+                f(self._keys)
+                
         kf = self._keyfuncs
         for key in self._keys:
             val = self._keys[key]
@@ -298,9 +302,7 @@ class BaseGameAnim(BaseMatrixAnim):
                     else:
                         cfg.inter |= val
 
-        if len(self._anyFuncs) > 0 and any(v == True for v in self._keys.itervalues()):
-            for f in self._anyFuncs:
-                f(self._keys)
+        self._lastKeys = self._keys
 
     def preStep(self, amt):
         pass

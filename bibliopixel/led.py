@@ -441,7 +441,7 @@ class LEDMatrix(LEDBase):
         self._fillCircleHelper(x0, y0, r, 3, 0, color)
 
     #Bresenham's algorithm - thx wikpedia
-    def drawLine(self, x0, y0, x1, y1, color):
+    def drawLine(self, x0, y0, x1, y1, color = (0,0,0), colorFunc = None):
         """Draw line from point x0,y0 to x,1,y1. Will draw beyond matrix bounds."""
         steep = abs(y1-y0) > abs(x1-x0)
         if steep:
@@ -462,7 +462,12 @@ class LEDMatrix(LEDBase):
         else:
             ystep = -1
 
+        count = 0
         for x in range(x0, x1+1):
+            if colorFunc:
+                color = colorFunc(count)
+                count += 1
+
             if steep:
                 self.set(y0, x, color)
             else:
