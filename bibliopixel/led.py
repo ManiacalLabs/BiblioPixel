@@ -617,7 +617,7 @@ class LEDMatrix(LEDBase):
                                 self.set(xPos, yPos, color)
                             else:
                                 self.fillRect(xPos, yPos, size, size, color)
-                        elif bg != color:
+                        elif bg != color and bg != None:
                             if size == 1:
                                 self.set(xPos, yPos, bg)
                             else:
