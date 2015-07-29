@@ -244,7 +244,6 @@ class BaseGameAnim(BaseMatrixAnim):
         self._speedStep = 0
         self._speeds = {}
         self._keyfuncs = {}
-        self._anyFuncs = []
 
     def setSpeed(self, name, speed):
         self._speeds[name] = speed
@@ -273,14 +272,7 @@ class BaseGameAnim(BaseMatrixAnim):
                 "inter": False
                 })
 
-    def addAnyFunc(self, func):
-        self._anyFuncs.append(func)
-
     def handleKeys(self):
-        if len(self._anyFuncs) > 0 and (self._lastKeys != self._keys) and any(v == True for v in self._keys.itervalues()):
-            for f in self._anyFuncs:
-                f(self._keys)
-                
         kf = self._keyfuncs
         for key in self._keys:
             val = self._keys[key]
@@ -301,7 +293,6 @@ class BaseGameAnim(BaseMatrixAnim):
                         cfg.inter = cfg.last = val
                     else:
                         cfg.inter |= val
-
         self._lastKeys = self._keys
 
     def preStep(self, amt):
