@@ -152,12 +152,15 @@ class BaseAnimation(object):
         self._stopThread = False
         self._callback = callback
 
+
         if self._threaded:
-            args =  locals()
-            args.pop('self', None)
-            args.pop('threaded', None)
-            args.pop('joinThread', None)
-            args.pop('callback', None)
+            args = {}
+            l = locals()
+            run_params = ["amt", "fps", "sleep", "max_steps", "untilComplete", "max_cycles"]
+            for p in run_params:
+                if p in l:
+                    args[p] = l[p]
+
             self._thread = animThread(self, args)
             self._thread.start()
             if joinThread:
