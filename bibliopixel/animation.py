@@ -180,6 +180,7 @@ class BaseAnimation(object):
                 "label": "Framerate",
                 "type": "int",
                 "default": None,
+                "min": 1,
                 "help":"Framerate at which to run animation."
             },{
                 "id": "max_steps",

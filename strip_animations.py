@@ -9,7 +9,7 @@ import random
 class Rainbow(BaseStripAnim):
     """Generate rainbow distributed over 256 pixels.
        If you want the full rainbow to fit in the number of pixels you
-       are using, use RainbowCycle instead 
+       are using, use RainbowCycle instead
     """
 
     def __init__(self, led, start=0, end=-1):
@@ -266,7 +266,7 @@ class WaveMove(BaseStripAnim):
                 (math.pi *
                 float(self._cycles) *
                 float(i) /
-                float(self._size)) 
+                float(self._size))
                 + self._moveStep)
 
             if y >= 0.0:
@@ -306,7 +306,7 @@ class RGBClock(BaseStripAnim):
         self._mEnd = mEnd
         self._sStart = sStart
         self._sEnd = sEnd
-        
+
 
     def step(self, amt = 1):
         t = time.localtime()
