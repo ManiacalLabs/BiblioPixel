@@ -789,6 +789,7 @@ MANIFEST = [
             "id":"strip",
             "class":LEDStrip,
             "type": "controller",
+            "control_type": "strip",
             "display": "LEDStrip",
             "params": [{
                 "id": "threadedUpdate",
@@ -802,6 +803,7 @@ MANIFEST = [
             "id":"matrix",
             "class":LEDMatrix,
             "type": "controller",
+            "control_type": "matrix",
             "display": "LEDMatrix",
             "params": [{
                 "id": "width",
