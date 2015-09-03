@@ -38,7 +38,7 @@ class updateThread(threading.Thread):
 
 class LEDBase(object):
 
-    def __init__(self, driver, threadedUpdate):
+    def __init__(self, driver, threadedUpdate, masterBrightness):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
         if not isinstance(driver, list):
             driver = [driver]
@@ -68,6 +68,8 @@ class LEDBase(object):
                 t = updateThread(d)
                 t.start()
                 d._thread = t
+
+        self.setMasterBrightness(masterBrightness)
 
     def __enter__(self):
         return self
@@ -190,8 +192,8 @@ class LEDBase(object):
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, driver, threadedUpdate = False):
-        super(LEDStrip, self).__init__(driver, threadedUpdate)
+    def __init__(self, driver, threadedUpdate = False, masterBrightness=255):
+        super(LEDStrip, self).__init__(driver, threadedUpdate, masterBrightness)
 
 
     #Set single pixel to Color value
@@ -254,7 +256,7 @@ class MultiMapBuilder():
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False):
+    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False, masterBrightness=255):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -263,7 +265,7 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super(LEDMatrix, self).__init__(driver, threadedUpdate)
+        super(LEDMatrix, self).__init__(driver, threadedUpdate, masterBrightness)
 
         if width == 0 and height == 0:
             if len(self.driver) == 1:
@@ -647,10 +649,10 @@ class LEDMatrix(LEDBase):
 #Takes a matrix and displays it as individual columns over time
 class LEDPOV(LEDMatrix):
 
-    def __init__(self, driver, povHeight, width, rotation = MatrixRotation.ROTATE_0, vert_flip = False):
+    def __init__(self, driver, povHeight, width, rotation = MatrixRotation.ROTATE_0, vert_flip = False, threadedUpdate = False, masterBrightness=255):
         self.numLEDs = povHeight * width
 
-        super(LEDPOV, self).__init__(driver, width, povHeight, None, rotation, vert_flip, False)
+        super(LEDPOV, self).__init__(driver, width, povHeight, None, rotation, vert_flip, threadedUpdate, masterBrightness)
 
     #This is the magic. Overriding the normal update() method
     #It will automatically break up the frame into columns spread over frameTime (ms)
@@ -674,8 +676,8 @@ class LEDPOV(LEDMatrix):
 
 class LEDCircle(LEDBase):
 
-    def __init__(self, driver, rings, maxAngleDiff = 0, rotation = 0, threadedUpdate = False):
-        super(LEDCircle, self).__init__(driver, threadedUpdate)
+    def __init__(self, driver, rings, maxAngleDiff = 0, rotation = 0, threadedUpdate = False, masterBrightness=255):
+        super(LEDCircle, self).__init__(driver, threadedUpdate, masterBrightness)
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff
         self._full_coords = False
@@ -797,6 +799,14 @@ MANIFEST = [
                 "type": "bool",
                 "default": False,
                 "help":"Enable to run display updates on a separate thread, which can improve speed."
+            },{
+                "id": "masterBrightness",
+                "label": "Master Brightness",
+                "type": "int",
+                "min": 1,
+                "max": 255,
+                "default": 255,
+                "help":"Master brightness for display, 0-255"
             },]
         },
         {
@@ -849,6 +859,14 @@ MANIFEST = [
                 "type": "bool",
                 "default": False,
                 "help":"Enable to run display updates on a separate thread, which can improve speed."
+            },{
+                "id": "masterBrightness",
+                "label": "Master Brightness",
+                "type": "int",
+                "min": 1,
+                "max": 255,
+                "default": 255,
+                "help":"Master brightness for display, 0-255"
             },]
         }
 ]
