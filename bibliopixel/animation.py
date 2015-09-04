@@ -36,6 +36,8 @@ class BaseAnimation(object):
         self._threaded = False
         self._stopThread = False
         self._thread = None
+        self.untilComplete = False
+        self._callback = None
 
     def _msTime(self):
         return time.time() * 1000.0
@@ -53,6 +55,7 @@ class BaseAnimation(object):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def stopThread(self, wait = False):
+        print "Stopping thread..."
         if self._thread:
             self._stopThread = True
             if wait:
@@ -60,14 +63,16 @@ class BaseAnimation(object):
 
     def __enter__(self):
         return self
+
     def __exit(self, type, value, traceback):
         pass
+
     def __exit__(self, type, value, traceback):
         self.__exit(type, value, traceback)
         self._led.all_off()
         self._led.update()
         self.stopThread(wait = True)
-        pass
+
     def cleanup(self):
         return self.__exit__(None, None, None)
 
@@ -78,10 +83,7 @@ class BaseAnimation(object):
             return True
 
     def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles):
-        """
-        untilComplete makes it run until the animation signals it has completed a cycle
-        max_cycles should be used with untilComplete to make it run for more than one cycle
-        """
+        self.untilComplete = untilComplete
         self.preRun()
 
         #calculate sleep time base on desired Frames per Second
@@ -152,7 +154,6 @@ class BaseAnimation(object):
         self._stopThread = False
         self._callback = callback
 
-
         if self._threaded:
             args = {}
             l = locals()
@@ -203,6 +204,60 @@ class BaseAnimation(object):
                 "default": 1,
                 "help":"If Until Complete is set, animation will repeat this many times."
             },]
+
+class AnimationQueue(BaseAnimation):
+    def __init__(self, led, anims=[]):
+        super(AnimationQueue, self).__init__(led)
+        self.anims = anims
+        self.curAnim = None
+        self.animIndex = 0;
+        self._internalDelay = 0 #never wait
+
+    #overriding to handle all the animations
+    def stopThread(self, wait = False):
+        print "Stopping queue..."
+        for a,r in self.anims:
+            #a bit of a hack. they aren't threaded, but stops them anyway
+            a._stopThread = True
+        super(AnimationQueue, self).stopThread(wait)
+
+    def addAnim(self, anim, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0):
+        a = (
+            anim,
+            {
+                "amt": amt,
+                "fps": fps,
+                "sleep": sleep,
+                "max_steps": max_steps,
+                "untilComplete": untilComplete,
+                "max_cycles": max_cycles
+            }
+        )
+        self.anims.append(a)
+
+    
+
+    def preRun(self, amt=1):
+        if len(self.anims) == 0:
+            raise Exception("Must provide at least one animation.")
+        self.animIndex = -1
+
+    def step(self, amt=1):
+        self.animIndex += 1
+        if self.animIndex >= len(self.anims):
+            if self.untilComplete:
+                self.animComplete = True
+            else:
+                self.animIndex = 0
+
+        if not self.animComplete:
+            self.curAnim = self.anims[self.animIndex]
+
+            anim, run = self.curAnim
+            run['threaded'] = False
+            run['joinThread'] = False
+            run['callback'] = None
+            anim.run(**(run))
 
 class BaseStripAnim(BaseAnimation):
     def __init__(self, led, start = 0, end = -1):
@@ -304,7 +359,6 @@ class BaseGameAnim(BaseMatrixAnim):
 
     def postStep(self, amt):
         self._speedStep += 1
-
 
 class BaseCircleAnim(BaseAnimation):
     def __init__(self, led):
