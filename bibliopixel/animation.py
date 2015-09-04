@@ -36,7 +36,6 @@ class BaseAnimation(object):
         self._threaded = False
         self._stopThread = False
         self._thread = None
-        self.untilComplete = False
         self._callback = None
 
     def _msTime(self):
@@ -83,11 +82,10 @@ class BaseAnimation(object):
             return True
 
     def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles):
-        self.untilComplete = untilComplete
         self.preRun()
 
         #calculate sleep time base on desired Frames per Second
-        if sleep == None and fps != None:
+        if fps != None:
             sleep = int(1000 / fps)
 
         initSleep = sleep
@@ -212,6 +210,8 @@ class AnimationQueue(BaseAnimation):
         self.curAnim = None
         self.animIndex = 0;
         self._internalDelay = 0 #never wait
+        self.fps = None
+        self.untilComplete = False
 
     #overriding to handle all the animations
     def stopThread(self, wait = False):
@@ -221,13 +221,12 @@ class AnimationQueue(BaseAnimation):
             a._stopThread = True
         super(AnimationQueue, self).stopThread(wait)
 
-    def addAnim(self, anim, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0):
+    def addAnim(self, anim, amt = 1, fps=None, max_steps = 0, untilComplete = False, max_cycles = 0):
         a = (
             anim,
             {
                 "amt": amt,
                 "fps": fps,
-                "sleep": sleep,
                 "max_steps": max_steps,
                 "untilComplete": untilComplete,
                 "max_cycles": max_cycles
@@ -235,12 +234,30 @@ class AnimationQueue(BaseAnimation):
         )
         self.anims.append(a)
 
-    
+    RUN_PARAMS = [{
+                "id": "fps",
+                "label": "Default Framerate",
+                "type": "int",
+                "default": None,
+                "min": 1,
+                "help":"Default framerate to run all animations in queue."
+            },{
+                "id": "untilComplete",
+                "label": "Until Complete",
+                "type": "bool",
+                "default": False,
+                "help":"Run until animation marks itself as compelte. If supported."
+            }]
 
     def preRun(self, amt=1):
         if len(self.anims) == 0:
             raise Exception("Must provide at least one animation.")
         self.animIndex = -1
+
+    def run(self, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0, threaded = False, joinThread = False, callback=None):
+        self.fps = fps
+        self.untilComplete = untilComplete
+        super(AnimationQueue, self).run(amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = untilComplete, max_cycles = 0, threaded = threaded, joinThread = joinThread, callback=callback)
 
     def step(self, amt=1):
         self.animIndex += 1
@@ -257,6 +274,9 @@ class AnimationQueue(BaseAnimation):
             run['threaded'] = False
             run['joinThread'] = False
             run['callback'] = None
+
+            if run['fps'] == None and self.fps != None:
+                run['fps'] = self.fps
             anim.run(**(run))
 
 class BaseStripAnim(BaseAnimation):
