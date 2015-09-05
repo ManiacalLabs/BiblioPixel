@@ -54,7 +54,6 @@ class BaseAnimation(object):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def stopThread(self, wait = False):
-        print "Stopping thread..."
         if self._thread:
             self._stopThread = True
             if wait:
