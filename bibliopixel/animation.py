@@ -177,7 +177,7 @@ class BaseAnimation(object):
                 "id": "fps",
                 "label": "Framerate",
                 "type": "int",
-                "default": None,
+                "default": 30,
                 "min": 1,
                 "help":"Framerate at which to run animation."
             },{
