@@ -214,7 +214,6 @@ class AnimationQueue(BaseAnimation):
 
     #overriding to handle all the animations
     def stopThread(self, wait = False):
-        print "Stopping queue..."
         for a,r in self.anims:
             #a bit of a hack. they aren't threaded, but stops them anyway
             a._stopThread = True
