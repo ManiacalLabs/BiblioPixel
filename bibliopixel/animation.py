@@ -69,6 +69,7 @@ class BaseAnimation(object):
         self.__exit(type, value, traceback)
         self._led.all_off()
         self._led.update()
+        self._led.waitForUpdate()
         self.stopThread(wait = True)
 
     def cleanup(self):
@@ -203,8 +204,10 @@ class BaseAnimation(object):
             },]
 
 class AnimationQueue(BaseAnimation):
-    def __init__(self, led, anims=[]):
+    def __init__(self, led, anims=None):
         super(AnimationQueue, self).__init__(led)
+        if anims == None:
+            anims = []
         self.anims = anims
         self.curAnim = None
         self.animIndex = 0;

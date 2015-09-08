@@ -95,12 +95,15 @@ class LEDBase(object):
         else:
             self.buffer[pixel*3:(pixel*3)+3] = list(color)
 
-    def update(self):
-        """Push the current pixel state to the driver"""
-        pos = 0
+    def waitForUpdate(self):
         if self._threadedUpdate:
             while all([d._thread.sending() for d in self.driver]):
                 time.sleep(0.000001)
+
+    def update(self):
+        """Push the current pixel state to the driver"""
+        pos = 0
+        self.waitForUpdate()
 
         if len(self.buffer) != self.bufByteCount:
             raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(self.bufByteCount, len(self.buffer)))
