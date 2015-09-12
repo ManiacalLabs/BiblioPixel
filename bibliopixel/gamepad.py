@@ -1,6 +1,6 @@
 from util import d
 
-class BaseGamePad():
+class BaseGamePad(object):
     def __init__(self):
         pass
 

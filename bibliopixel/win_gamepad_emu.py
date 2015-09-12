@@ -4,10 +4,10 @@ import win32con
 from util import d
 from gamepad import BaseGamePad
 
-class GamePadEmu(BaseGamePad):
+class WinGamePadEmu(BaseGamePad):
     foundDevices = []
     def __init__(self, btn_map = [[win32con.VK_UP, "UP"], [win32con.VK_DOWN, "DOWN"], [win32con.VK_LEFT, "LEFT"], [win32con.VK_RIGHT, "RIGHT"], [win32con.VK_SPACE, "FIRE"], ["A","A"],["S","B"],["Z","X"],["X","Y"]]):
-        super(GamePadEmu, self).__init__()
+        super(WinGamePadEmu, self).__init__()
         self._map = btn_map
 
     def getKeys(self):

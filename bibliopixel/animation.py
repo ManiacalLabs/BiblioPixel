@@ -62,11 +62,11 @@ class BaseAnimation(object):
     def __enter__(self):
         return self
 
-    def __exit(self, type, value, traceback):
+    def _exit(self, type, value, traceback):
         pass
 
     def __exit__(self, type, value, traceback):
-        self.__exit(type, value, traceback)
+        self._exit(type, value, traceback)
         self._led.all_off()
         self._led.update()
         self._led.waitForUpdate()
