@@ -13,6 +13,9 @@ class BaseGamePad(object):
     def __exit__(self, type, value, traceback):
         pass
 
+    def close(self):
+        pass
+        
     def setLights(self, data):
         pass
 

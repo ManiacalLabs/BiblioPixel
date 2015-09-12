@@ -10,6 +10,7 @@ if float(serial.VERSION) < 2.7:
 
 from util import d
 from gamepad import BaseGamePad
+import log
 
 class CMDTYPE:
     INIT = 0
@@ -40,10 +41,13 @@ class SerialGamePad(BaseGamePad):
         if resp != RETURN_CODES.SUCCESS:
             SerialGamePad._printError(resp)
 
-    def __exit__(self, type, value, traceback):
+    def close(self):
         if self._com != None:
             log.logger.info("Closing connection to: " + self.dev)
             self._com.close()
+
+    def __exit__(self, type, value, traceback):
+        self.close()
 
     @staticmethod
     def findSerialDevices(hardwareID = "1B4F:9206"):

@@ -325,6 +325,11 @@ class BaseGameAnim(BaseMatrixAnim):
         self._speeds = {}
         self._keyfuncs = {}
 
+    def _exit(self, type, value, traceback):
+        if hasattr(self._input_dev, "setLights") and hasattr(self._input_dev, "setLightsOff"):
+            self._input_dev.setLightsOff(5)
+        self._input_dev.close()
+
     def setSpeed(self, name, speed):
         self._speeds[name] = speed
 
