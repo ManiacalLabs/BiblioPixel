@@ -4,6 +4,7 @@ import time
 import os
 os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import log
+import traceback
 try:
     import serial, serial.tools.list_ports
 except ImportError as e:
@@ -222,7 +223,7 @@ class DriverSerial(DriverBase):
 
         except serial.SerialException as e:
             error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
-            log.logger.exception(e)
+            log.logger.exception(traceback.format_exc())
             log.logger.error(error)
             raise e
 
