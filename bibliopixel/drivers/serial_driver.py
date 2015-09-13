@@ -2,7 +2,7 @@ from driver_base import *
 import sys
 import time
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import log
 try:
     import serial, serial.tools.list_ports
@@ -55,8 +55,8 @@ class LEDTYPE:
     UCS1903 = 7
     SM16716 = 8
     APA102 = 9
-    LPD1886 = 10 
-    P9813 = 11 
+    LPD1886 = 10
+    P9813 = 11
 
 SPIChipsets = [
     LEDTYPE.LPD8806,
@@ -143,7 +143,7 @@ class DriverSerial(DriverBase):
             msg = "Too many pixels specified for device."
         elif error == RETURN_CODES.ERROR_BAD_CMD:
             msg = "Unsupported protocol command. Check your device version."
-        
+
         log.logger.error("{}: {}".format(error, msg))
         raise BiblioSerialError(msg)
 
@@ -156,7 +156,7 @@ class DriverSerial(DriverBase):
 
     def _connect(self):
         try:
-            if(self.dev == ""):
+            if(self.dev == "" or self.dev == None):
                 DriverSerial.findSerialDevices(self._hardwareID)
 
                 if self.deviceID != None:
@@ -198,7 +198,7 @@ class DriverSerial(DriverBase):
                     error = "Invalid port specified. Try using one of: \n" + "\n".join(ports)
                 log.logger.info(error)
                 raise BiblioSerialError(error)
-            
+
             packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type) #set strip type
             byteCount = self.bufByteCount
@@ -256,7 +256,7 @@ class DriverSerial(DriverBase):
         except serial.SerialException as e:
             log.logger.error("Problem connecting to serial device.")
             raise IOError("Problem connecting to serial device.")
-            
+
 
     @staticmethod
     def getDeviceID(dev):
@@ -311,7 +311,7 @@ class DriverSerial(DriverBase):
         packet.extend(self._buf)
         packet.extend([0]*self._bufPad)
         self._com.write(packet)
-        
+
         resp = self._com.read(1)
         if len(resp) == 0:
                 DriverSerial._comError()
@@ -320,10 +320,10 @@ class DriverSerial(DriverBase):
 
         self._com.flushInput()
 
-        
-#def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2, 
+
+#def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2,
 # gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB")
-import gamma        
+import gamma
 MANIFEST = [
         {
             "id":"serial",
