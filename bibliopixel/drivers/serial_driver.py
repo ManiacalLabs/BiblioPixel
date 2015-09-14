@@ -171,7 +171,7 @@ class DriverSerial(DriverBase):
                             pass
                         log.logger.info( "Using COM Port: {}, Device ID: {}, Device Ver: {}".format(self.dev, self.deviceID, self.devVer))
 
-                    if self.dev == "":
+                    if self.dev == "" or self.dev == None:
                         error = "Unable to find device with ID: {}".format(self.deviceID)
                         log.logger.error(error)
                         raise ValueError(error)
@@ -223,7 +223,7 @@ class DriverSerial(DriverBase):
 
         except serial.SerialException as e:
             error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
-            log.logger.exception(traceback.format_exc())
+            log.logger.error(traceback.format_exc())
             log.logger.error(error)
             raise e
 

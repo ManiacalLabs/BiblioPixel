@@ -69,7 +69,6 @@ class DriverNetwork(DriverBase):
                 log.logger.warning("Bytecount mismatch! {0}".format(resp))
 
         except Exception as e:
-            print e
             log.logger.exception(e)
             error = "Problem communicating with network receiver!"
             log.logger.error(error)

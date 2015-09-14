@@ -56,9 +56,9 @@ class BaseAnimation(object):
 
     def stopThread(self, wait = False):
         if self._thread:
+            self._stopThread = True
             if self._threaded:
                 self._stopEvent.set()
-            self._stopThread = True
             if wait:
                 self._thread.join()
 
