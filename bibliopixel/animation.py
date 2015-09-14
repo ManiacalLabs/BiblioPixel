@@ -37,6 +37,7 @@ class BaseAnimation(object):
         self._stopThread = False
         self._thread = None
         self._callback = None
+        self._stopEvent = None
 
     def _msTime(self):
         return time.time() * 1000.0
@@ -55,6 +56,8 @@ class BaseAnimation(object):
 
     def stopThread(self, wait = False):
         if self._thread:
+            if self._threaded:
+                self._stopEvent.set()
             self._stopThread = True
             if wait:
                 self._thread.join()
@@ -140,7 +143,10 @@ class BaseAnimation(object):
                 t = max(0, (sleep - diff) / 1000.0)
                 if t == 0:
                     log.logger.warning("Frame-time of %dms set, but took %dms!" % (sleep, diff))
-                time.sleep(t)
+                if self._threaded:
+                    self._stopEvent.wait(t)
+                else:
+                    time.sleep(t)
             cur_step += 1
 
         if self._callback:
@@ -150,6 +156,9 @@ class BaseAnimation(object):
 
         self._threaded = threaded
         self._stopThread = False
+        if self._threaded:
+            self._stopEvent = threading.Event()
+            self._stopEvent.clear()
         self._callback = callback
 
         if self._threaded:
@@ -203,6 +212,14 @@ class BaseAnimation(object):
                 "help":"If Until Complete is set, animation will repeat this many times."
             },]
 
+class OffAnim(BaseAnimation):
+    def __init__(self, led, timeout=10):
+        super(OffAnim, self).__init__(led)
+        self._internalDelay = timeout * 1000
+
+    def step(self, amt=1):
+        self._led.all_off()
+
 class AnimationQueue(BaseAnimation):
     def __init__(self, led, anims=None):
         super(AnimationQueue, self).__init__(led)
@@ -235,21 +252,6 @@ class AnimationQueue(BaseAnimation):
         )
         self.anims.append(a)
 
-    RUN_PARAMS = [{
-                "id": "fps",
-                "label": "Default Framerate",
-                "type": "int",
-                "default": None,
-                "min": 1,
-                "help":"Default framerate to run all animations in queue."
-            },{
-                "id": "untilComplete",
-                "label": "Until Complete",
-                "type": "bool",
-                "default": False,
-                "help":"Run until animation marks itself as compelte. If supported."
-            }]
-
     def preRun(self, amt=1):
         if len(self.anims) == 0:
             raise Exception("Must provide at least one animation.")
@@ -279,6 +281,21 @@ class AnimationQueue(BaseAnimation):
             if run['fps'] == None and self.fps != None:
                 run['fps'] = self.fps
             anim.run(**(run))
+
+    RUN_PARAMS = [{
+                "id": "fps",
+                "label": "Default Framerate",
+                "type": "int",
+                "default": None,
+                "min": 1,
+                "help":"Default framerate to run all animations in queue."
+            },{
+                "id": "untilComplete",
+                "label": "Until Complete",
+                "type": "bool",
+                "default": False,
+                "help":"Run until animation marks itself as complete. If supported."
+            }]
 
 class BaseStripAnim(BaseAnimation):
     def __init__(self, led, start = 0, end = -1):
