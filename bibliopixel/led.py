@@ -13,11 +13,15 @@ class updateThread(threading.Thread):
         self.setDaemon(True)
         self._stop = threading.Event()
         self._wait = threading.Event()
+        self._reading = threading.Event()
+        self._reading.set()
         self._data = []
         self._driver = driver
 
     def setData(self, data):
+        self._reading.wait()
         self._data = data
+        self._reading.clear()
         self._wait.set()
 
     def stop(self):
@@ -35,6 +39,7 @@ class updateThread(threading.Thread):
             self._driver._update(self._data)
             self._data = []
             self._wait.clear()
+            self._reading.set()
 
 class LEDBase(object):
 

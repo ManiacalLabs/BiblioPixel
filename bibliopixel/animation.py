@@ -18,9 +18,6 @@ class animThread(threading.Thread):
         self._anim = anim
         self._args = args
 
-    # def stopped(self):
-    #     return self._anim._stopThread
-
     def run(self):
         log.logger.debug("Starting thread...")
         self._anim._run(**self._args)
@@ -34,10 +31,10 @@ class BaseAnimation(object):
         self._timeRef = 0
         self._internalDelay = None
         self._threaded = False
-        self._stopThread = False
         self._thread = None
         self._callback = None
-        self._stopEvent = None
+        self._stopEvent = threading.Event()
+        self._stopEvent.clear()
 
     def _msTime(self):
         return time.time() * 1000.0
@@ -56,9 +53,8 @@ class BaseAnimation(object):
 
     def stopThread(self, wait = False):
         if self._thread:
-            self._stopThread = True
-            if self._threaded:
-                self._stopEvent.set()
+            self._stopEvent.set()
+
             if wait:
                 self._thread.join()
 
@@ -98,7 +94,7 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        while not self._stopThread and ((not untilComplete and (max_steps == 0 or cur_step < max_steps)) or (untilComplete and not self.animComplete)):
+        while not self._stopEvent.isSet() and ((not untilComplete and (max_steps == 0 or cur_step < max_steps)) or (untilComplete and not self.animComplete)):
             self._timeRef = self._msTime()
 
             start = self._msTime()
@@ -155,9 +151,7 @@ class BaseAnimation(object):
     def run(self, amt = 1, fps=None, sleep=None, max_steps = 0, untilComplete = False, max_cycles = 0, threaded = False, joinThread = False, callback=None):
 
         self._threaded = threaded
-        self._stopThread = False
         if self._threaded:
-            self._stopEvent = threading.Event()
             self._stopEvent.clear()
         self._callback = callback
 
@@ -236,7 +230,7 @@ class AnimationQueue(BaseAnimation):
     def stopThread(self, wait = False):
         for a,r in self.anims:
             #a bit of a hack. they aren't threaded, but stops them anyway
-            a._stopThread = True
+            a._stopEvent.set()
         super(AnimationQueue, self).stopThread(wait)
 
     def addAnim(self, anim, amt = 1, fps=None, max_steps = 0, untilComplete = False, max_cycles = 0):
