@@ -105,10 +105,10 @@ class BaseAnimation(object):
             self.postStep(amt)
             mid = self._msTime()
 
-            if initSleep:
-                sleep = initSleep
-            elif self._internalDelay:
+            if self._internalDelay:
                 sleep = self._internalDelay
+            elif initSleep:
+                sleep = initSleep
 
             self._led._frameGenTime = int(mid - start)
             self._led._frameTotalTime = sleep
