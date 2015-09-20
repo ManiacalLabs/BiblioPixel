@@ -319,12 +319,43 @@ class LEDMatrix(LEDBase):
             self.width = h
             self.height = w
 
+        self.texture = None
+        self.set = self._setColor
+
+    def setTexture(self, tex = None):
+        if tex == None:
+            self.texture = tex
+            self.set = self._setColor
+        else:
+            if not isinstance(tex, list):
+                raise ValueError("Texture must be a list!")
+            elif len(tex) != self.height:
+                raise ValueError("Given texture is must be {} high!".format(self.height))
+            else:
+                for r in tex:
+                    if not isinstance(r, list):
+                        raise ValueError("Texture rows must be lists!")
+                    elif len(r) != self.width:
+                        raise ValueError("Texture rows must be {} wide!".format(self.width))
+
+            self.texture = tex
+            self.set = self._setTexture
+
     #Set single pixel to Color value
-    def set(self, x, y, color):
+    def _setColor(self, x, y, color = (0,0,0)):
         """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
         if x >= self.width or x < 0 or y >= self.height or y < 0:
             return #just throw out anything out of bounds
 
+        pixel = self.matrix_map[y][x]
+        self._set_base(pixel, color)
+
+    def _setTexture(self, x, y, color = None):
+        """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
+        if x >= self.width or x < 0 or y >= self.height or y < 0:
+            return #just throw out anything out of bounds
+        if color == None:
+            color = self.texture[y][x]
         pixel = self.matrix_map[y][x]
         self._set_base(pixel, color)
 
@@ -359,7 +390,7 @@ class LEDMatrix(LEDBase):
     # https://github.com/adafruit/Adafruit-GFX-Library/blob/master/Adafruit_GFX.cpp
     ###############################################################################
 
-    def drawCircle(self, x0, y0, r, color):
+    def drawCircle(self, x0, y0, r, color = None):
         """Draws a circle at point x0, y0 with radius r of the specified RGB color"""
         f = 1 - r
         ddF_x = 1
@@ -390,7 +421,7 @@ class LEDMatrix(LEDBase):
             self.set(x0 + y, y0 - x, color)
             self.set(x0 - y, y0 - x, color)
 
-    def _drawCircleHelper(self, x0, y0, r, cornername, color):
+    def _drawCircleHelper(self, x0, y0, r, cornername, color = None):
         f     = 1 - r
         ddF_x = 1
         ddF_y = -2 * r
@@ -421,7 +452,7 @@ class LEDMatrix(LEDBase):
               self.set(x0 - y, y0 - x, color)
               self.set(x0 - x, y0 - y, color)
 
-    def _fillCircleHelper(self, x0, y0, r, cornername, delta, color):
+    def _fillCircleHelper(self, x0, y0, r, cornername, delta, color = None):
         f     = 1 - r
         ddF_x = 1
         ddF_y = -2 * r
@@ -445,13 +476,13 @@ class LEDMatrix(LEDBase):
               self._drawFastVLine(x0-x, y0-y, 2*y+1+delta, color)
               self._drawFastVLine(x0-y, y0-x, 2*x+1+delta, color)
 
-    def fillCircle(self, x0, y0, r, color):
+    def fillCircle(self, x0, y0, r, color = None):
         """Draws a filled circle at point x0,y0 with radius r and specified color"""
         self._drawFastVLine(x0, y0-r, 2*r+1, color)
         self._fillCircleHelper(x0, y0, r, 3, 0, color)
 
     #Bresenham's algorithm - thx wikpedia
-    def drawLine(self, x0, y0, x1, y1, color = (0,0,0), colorFunc = None):
+    def drawLine(self, x0, y0, x1, y1, color = None, colorFunc = None):
         """Draw line from point x0,y0 to x,1,y1. Will draw beyond matrix bounds."""
         steep = abs(y1-y0) > abs(x1-x0)
         if steep:
@@ -488,29 +519,29 @@ class LEDMatrix(LEDBase):
                 y0 += ystep
                 err += dx
 
-    def _drawFastVLine(self, x, y, h, color):
+    def _drawFastVLine(self, x, y, h, color = None):
         self.drawLine(x, y, x, y+h-1, color)
 
-    def _drawFastHLine(self, x, y, w, color):
+    def _drawFastHLine(self, x, y, w, color = None):
         self.drawLine(x, y, x+w-1, y, color)
 
-    def drawRect(self, x, y, w, h, color):
+    def drawRect(self, x, y, w, h, color = None):
         """Draw rectangle with top-left corner at x,y, width w and height h"""
         self._drawFastHLine(x, y, w, color)
         self._drawFastHLine(x, y+h-1, w, color)
         self._drawFastVLine(x, y, h, color)
         self._drawFastVLine(x+w-1, y, h, color)
 
-    def fillRect(self, x, y, w, h, color):
+    def fillRect(self, x, y, w, h, color = None):
         """Draw solid rectangle with top-left corner at x,y, width w and height h"""
         for i in range(x, x+w):
             self._drawFastVLine(i, y, h, color)
 
-    def fillScreen(self, color):
+    def fillScreen(self, color = None):
         """Fill the matrix with the given RGB color"""
         self.fillRect(0, 0, self.width, self.height, color)
 
-    def drawRoundRect(self, x, y, w, h, r, color):
+    def drawRoundRect(self, x, y, w, h, r, color = None):
         """Draw rectangle with top-left corner at x,y, width w, height h, and corner radius r"""
         self._drawFastHLine(x+r  , y    , w-2*r, color) #Top
         self._drawFastHLine(x+r  , y+h-1, w-2*r, color) #Bottom
@@ -522,19 +553,19 @@ class LEDMatrix(LEDBase):
         self._drawCircleHelper(x+w-r-1, y+h-r-1, r, 4, color)
         self._drawCircleHelper(x+r    , y+h-r-1, r, 8, color)
 
-    def fillRoundRect(self, x, y, w, h, r, color):
+    def fillRoundRect(self, x, y, w, h, r, color = None):
         """Draw solid rectangle with top-left corner at x,y, width w, height h, and corner radius r"""
         self.fillRect(x+r, y, w-2*r, h, color)
         self._fillCircleHelper(x+w-r-1, y+r, r, 1, h-2*r-1, color)
         self._fillCircleHelper(x+r    , y+r, r, 2, h-2*r-1, color)
 
-    def drawTriangle(self, x0, y0, x1, y1, x2, y2, color):
+    def drawTriangle(self, x0, y0, x1, y1, x2, y2, color = None):
         """Draw triangle with points x0,y0 - x1,y1 - x2,y2"""
         self.drawLine(x0, y0, x1, y1, color)
         self.drawLine(x1, y1, x2, y2, color)
         self.drawLine(x2, y2, x0, y0, color)
 
-    def fillTrangle(self, x0, y0, x1, y1, x2, y2, color):
+    def fillTrangle(self, x0, y0, x1, y1, x2, y2, color = None):
         """Draw solid triangle with points x0,y0 - x1,y1 - x2,y2"""
         a = b = y = last = 0
 
@@ -634,7 +665,7 @@ class LEDMatrix(LEDBase):
                                 self.fillRect(xPos, yPos, size, size, bg)
                     line >>= 1
 
-    def drawText(self, text, x = 0, y = 0, color = colors.White, bg = colors.Off, size = 1):
+    def drawText(self, text, x = 0, y = 0, color = None, bg = colors.Off, size = 1):
         osize = size
         if size > 0:
             fw, fh = 6, 8
