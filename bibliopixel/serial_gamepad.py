@@ -136,7 +136,7 @@ class SerialGamePad(BaseGamePad):
 
             bits = ord(resp[0]) + (ord(resp[1]) << 8)
         except IOError:
-            log.error("IO Error Communicatng With Game Pad!")
+            log.logger.error("IO Error Communicatng With Game Pad!")
 
         index = 0
         result = {}
