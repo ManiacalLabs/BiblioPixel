@@ -62,37 +62,37 @@ def hsv2rgb_raw(hsv):
 
     HSV_SECTION_6 = 0x20
     HSV_SECTION_3 = 0x40
-    
+
     h, s, v = hsv
 
     #The brightness floor is minimum number that all of
     #R, G, and B will be set to.
     invsat = 255 - s
     brightness_floor = (v * invsat) / 256
-    
+
     #The color amplitude is the maximum amount of R, G, and B
     #that will be added on top of the brightness_floor to
     #create the specific hue desired.
     color_amplitude = v - brightness_floor
-    
+
     #figure out which section of the hue wheel we're in,
     #and how far offset we are within that section
     section = h / HSV_SECTION_3 #0..2
     offset = h % HSV_SECTION_3 #0..63
-    
+
     rampup = offset
     rampdown = (HSV_SECTION_3 - 1) - offset
-    
+
     # compute color-amplitude-scaled-down versions of rampup and rampdown
     rampup_amp_adj   = (rampup   * color_amplitude) / (256 / 4);
     rampdown_amp_adj = (rampdown * color_amplitude) / (256 / 4);
-    
+
     # add brightness_floor offset to everything
     rampup_adj_with_floor   = rampup_amp_adj   + brightness_floor;
     rampdown_adj_with_floor = rampdown_amp_adj + brightness_floor;
-    
+
     r, g, b = (0,0,0)
-    
+
     if section:
         if section == 1:
             # section 1: 0x40..0x7F
@@ -103,13 +103,13 @@ def hsv2rgb_raw(hsv):
             # section 2; 0x80..0xBF
             r = rampup_adj_with_floor;
             g = brightness_floor;
-            b = rampdown_adj_with_floor;    
+            b = rampdown_adj_with_floor;
     else:
         # section 0: 0x00..0x3F
         r = rampdown_adj_with_floor;
         g = rampup_adj_with_floor;
         b = brightness_floor;
-        
+
     return (r, g, b)
 
 def hue2rgb_raw(hue):
@@ -117,7 +117,7 @@ def hue2rgb_raw(hue):
         return hue_raw[hue]
     else:
         raise ValueError("hue must be between 0 and 255")
- 
+
 def hsv2rgb_spectrum(hsv):
     """Generates RGB values from  HSV values in line with a typical light spectrum"""
     h, s, v = hsv
@@ -128,7 +128,7 @@ def hue2rgb_spectrum(hue):
         return hue_spectrum[hue]
     else:
         raise ValueError("hue must be between 0 and 255")
-    
+
 def _nscale8x3_video(r, g, b, scale):
     """Internal Use Only"""
     nonzeroscale = 0
@@ -140,7 +140,7 @@ def _nscale8x3_video(r, g, b, scale):
     if b != 0:
         b = ((b * scale) >> 8) + nonzeroscale
     return (r, g, b)
-    
+
 def _scale8_video_LEAVING_R1_DIRTY( i, scale):
     """Internal Use Only"""
     nonzeroscale = 0
@@ -159,7 +159,7 @@ def hsv2rgb_rainbow(hsv):
     offset8 = offset * 8
     third = (offset8 * (256/3)) >> 8
     r, g, b = (0,0,0)
-    
+
     if not (h & 0x80):
         if not (h & 0x40):
             if not (h & 0x20):
@@ -200,7 +200,7 @@ def hsv2rgb_rainbow(hsv):
                 r = 171 + third
                 g = 0x00
                 b = 85 - third
-            
+
     if s != 255:
         r, g, b = _nscale8x3_video(r, g, b, s)
         desat = 255 - s
@@ -209,11 +209,11 @@ def hsv2rgb_rainbow(hsv):
         r = r + brightness_floor
         g = g + brightness_floor
         b = b + brightness_floor
-        
+
     if v != 255:
         v = _scale8_video_LEAVING_R1_DIRTY(v, v)
         r, g, b = _nscale8x3_video( r, g, b, v)
-        
+
     return (r, g, b)
 
 def hue2rgb_rainbow(hue):
@@ -241,7 +241,7 @@ def hue2rgb_360(hue):
         return hue_360[hue]
     else:
         raise ValueError("hue must be between 0 and 359")
-    
+
 def hex2rgb(hex):
     """Helper for converting RGB and RGBA hex values to Color"""
     hex = hex.strip('#')

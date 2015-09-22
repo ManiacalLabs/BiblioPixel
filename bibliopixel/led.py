@@ -90,15 +90,15 @@ class LEDBase(object):
         return (self.buffer[pixel*3 + 0], self.buffer[pixel*3 + 1], self.buffer[pixel*3 + 2])
 
     def _set_base(self, pixel, color):
-        if(pixel < 0 or pixel > self.lastIndex):
-            return; #don't go out of bounds
-
-        if self.masterBrightness < 255:
-            self.buffer[pixel*3 + 0] = (color[0] * self.masterBrightness) >> 8
-            self.buffer[pixel*3 + 1] = (color[1] * self.masterBrightness) >> 8
-            self.buffer[pixel*3 + 2] = (color[2] * self.masterBrightness) >> 8
-        else:
-            self.buffer[pixel*3:(pixel*3)+3] = list(color)
+        try:
+            if self.masterBrightness < 255:
+                self.buffer[pixel*3 + 0] = (color[0] * self.masterBrightness) >> 8
+                self.buffer[pixel*3 + 1] = (color[1] * self.masterBrightness) >> 8
+                self.buffer[pixel*3 + 2] = (color[2] * self.masterBrightness) >> 8
+            else:
+                self.buffer[pixel*3:(pixel*3)+3] = color
+        except IndexError:
+            pass
 
     def waitForUpdate(self):
         if self._threadedUpdate:
@@ -343,45 +343,41 @@ class LEDMatrix(LEDBase):
 
     #Set single pixel to Color value
     def _setColor(self, x, y, color = (0,0,0)):
-        """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
-        if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return #just throw out anything out of bounds
-
-        pixel = self.matrix_map[y][x]
-        self._set_base(pixel, color)
+        try:
+            pixel = self.matrix_map[y][x]
+            self._set_base(pixel, color)
+        except IndexError:
+            pass
 
     def _setTexture(self, x, y, color = None):
-        """Sets the pixel at x,y with an RGB tuple: (r, g, b)"""
-        if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return #just throw out anything out of bounds
-        if color == None:
-            color = self.texture[y][x]
-        pixel = self.matrix_map[y][x]
-        self._set_base(pixel, color)
+        try:
+            if color == None:
+                color = self.texture[y][x]
+            pixel = self.matrix_map[y][x]
+            self._set_base(pixel, color)
+        except IndexError:
+            pass
 
     def get(self, x, y):
-        """Gets the color of the pixel at x,y"""
-        if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return (0,0,0)#just throw out anything out of bounds
-
-        pixel = self.matrix_map[y][x]
-        return self._get_base(pixel)
+        try:
+            pixel = self.matrix_map[y][x]
+            return self._get_base(pixel)
+        except IndexError:
+            return (0,0,0)
 
     def setHSV(self, x, y, hsv):
-        """Set the pixel at x,y with an HSV tuple: (h, s, v)"""
-        if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return #just throw out anything out of bounds
-
-        pixel = self.matrix_map[y][x]
-        super(LEDMatrix, self).setHSV(pixel, hsv)
+        try:
+            pixel = self.matrix_map[y][x]
+            super(LEDMatrix, self).setHSV(pixel, hsv)
+        except IndexError:
+            pass
 
     def setRGB(self, x, y, r, g, b):
-        """Set the pixel at x,y with individual RGB values"""
-        if x >= self.width or x < 0 or y >= self.height or y < 0:
-            return #just throw out anything out of bounds
-
-        pixel = self.matrix_map[y][x]
-        super(LEDMatrix, self).setRGB(pixel, r, g, b)
+        try:
+            pixel = self.matrix_map[y][x]
+            super(LEDMatrix, self).setRGB(pixel, r, g, b)
+        except IndexError:
+            pass
 
 
     ###############################################################################
