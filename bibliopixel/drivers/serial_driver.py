@@ -322,8 +322,6 @@ class DriverSerial(DriverBase):
         self._com.flushInput()
 
 
-#def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2,
-# gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB")
 import gamma
 MANIFEST = [
         {

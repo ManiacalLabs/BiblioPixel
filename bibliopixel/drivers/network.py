@@ -31,7 +31,6 @@ class DriverNetwork(DriverBase):
         for i in range(0, self.bufByteCount):
             self._buf.append(0)
 
-
     def _generateHeader(self, cmd, size):
         packet = bytearray()
         packet.append(cmd)
@@ -84,3 +83,47 @@ class DriverNetwork(DriverBase):
             return False
         else:
             return True
+
+MANIFEST = [
+        {
+            "id":"network",
+            "class":DriverNetwork,
+            "type": "driver",
+            "display": "Network",
+            "desc": "Sends pixel data over the network to a reciever.",
+            "params": [{
+                "id": "num",
+                "label": "# Pixels",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Total pixels in display. May use Width AND Height instead."
+            }, {
+                "id": "width",
+                "label": "Width",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Width of display. Set if using a matrix."
+            }, {
+                "id": "height",
+                "label": "Height",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Height of display. Set if using a matrix."
+            }, {
+                "id": "host",
+                "label": "Pixel Size",
+                "type": "str",
+                "default": "localhost",
+                "help":"Receiver host to connect to."
+            }, {
+                "id":"port",
+                "label":"Port",
+                "type":"int",
+                "default":3142,
+                "help":"Port to connect to."
+            }]
+        }
+]
