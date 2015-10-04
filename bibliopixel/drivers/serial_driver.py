@@ -350,7 +350,7 @@ MANIFEST = [
                     10: "LPD1886",
                     11: "P98131"
                 },
-                "default": None
+                "default": 0
             }, {
                 "id": "num",
                 "label": "# Pixels",
