@@ -340,7 +340,7 @@ MANIFEST = [
                     0: "GENERIC",
                     1: "LPD8806",
                     2: "WS2801",
-                    3: "WS281x",
+                    3: "WS281x/NEOPIXEL",
                     4: "WS2811_400",
                     5: "TM1804",
                     6: "TM1803",

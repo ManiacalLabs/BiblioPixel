@@ -66,10 +66,10 @@ class BaseAnimation(object):
 
     def __exit__(self, type, value, traceback):
         self._exit(type, value, traceback)
+        self.stopThread(wait = True)
         self._led.all_off()
         self._led.update()
         self._led.waitForUpdate()
-        self.stopThread(wait = True)
 
     def cleanup(self):
         return self.__exit__(None, None, None)
