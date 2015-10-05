@@ -2,4 +2,4 @@ from led import LEDBase, LEDStrip, LEDPOV, LEDMatrix, LEDCircle, mapGen, MultiMa
 import log
 import colors
 
-VERSION = '1.2.4'
+__version__ = VERSION = '1.2.4'
