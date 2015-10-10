@@ -30,7 +30,7 @@ class SerialPadError(Exception):
 
 class SerialGamePad(BaseGamePad):
     foundDevices = []
-    def __init__(self, btn_map = ["Y", "B", "A", "X", "FIRE", "EMPTY", "UP", "DOWN", "RIGHT", "LEFT"], dev="", hardwareID = "1B4F:9206"):
+    def __init__(self, btn_map = ["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID = "1B4F:9206"):
         super(SerialGamePad, self).__init__()
         self._map = btn_map
         self._hardwareID = hardwareID
@@ -126,6 +126,7 @@ class SerialGamePad(BaseGamePad):
             packet = SerialGamePad._generateHeader(CMDTYPE.GET_BTNS, 0)
             self._com.write(packet)
             resp = self._com.read(1)
+
             if len(resp) == 0:
                  SerialGamePad._comError()
             elif ord(resp) != RETURN_CODES.SUCCESS:
@@ -149,7 +150,7 @@ class SerialGamePad(BaseGamePad):
         temp = [(0,0,0)]*len(data.keys())
         for key in data:
             i = self._map.index(key)
-            if i >= 0:
+            if i >= 0 and i < len(temp):
                 temp[i] = (data[key])
         leds = []
         for l in temp:
