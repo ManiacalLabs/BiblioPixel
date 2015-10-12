@@ -91,6 +91,8 @@ class LEDBase(object):
 
     def _set_base(self, pixel, color):
         try:
+            if pixel < 0: raise IndexError()
+
             if self.masterBrightness < 255:
                 self.buffer[pixel*3 + 0] = (color[0] * self.masterBrightness) >> 8
                 self.buffer[pixel*3 + 1] = (color[1] * self.masterBrightness) >> 8
@@ -344,6 +346,7 @@ class LEDMatrix(LEDBase):
     #Set single pixel to Color value
     def _setColor(self, x, y, color = (0,0,0)):
         try:
+            if x<0 or y<0: raise IndexError()
             pixel = self.matrix_map[y][x]
             self._set_base(pixel, color)
         except IndexError:
@@ -351,6 +354,7 @@ class LEDMatrix(LEDBase):
 
     def _setTexture(self, x, y, color = None):
         try:
+            if x<0 or y<0: raise IndexError()
             if color == None:
                 color = self.texture[y][x]
             pixel = self.matrix_map[y][x]
