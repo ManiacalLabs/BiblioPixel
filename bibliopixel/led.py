@@ -57,7 +57,8 @@ class LEDBase(object):
                 self.numLEDs += d.numLEDs
 
         self.bufByteCount = int(3 * self.numLEDs)
-        self.lastIndex = self.numLEDs - 1
+        self._last_i = self.lastIndex = self.numLEDs - 1
+
 
         self.buffer = [0 for x in range(self.bufByteCount)]
 
@@ -91,7 +92,7 @@ class LEDBase(object):
 
     def _set_base(self, pixel, color):
         try:
-            if pixel < 0: raise IndexError()
+            if pixel < 0 or pixel > self._last_i: raise IndexError()
 
             if self.masterBrightness < 255:
                 self.buffer[pixel*3 + 0] = (color[0] * self.masterBrightness) >> 8
@@ -132,7 +133,7 @@ class LEDBase(object):
         buf must also be in the exact format required by the display type.
         """
         if len(buf) != self.bufByteCount:
-            raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(self.numLEDs, self.bufByteCount, len(buf)))
+            raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(self.bufByteCount/3, self.bufByteCount, len(buf)))
         self.buffer = buf
 
     #Set the master brightness for the LEDs 0 - 255
@@ -202,18 +203,50 @@ class LEDBase(object):
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, driver, threadedUpdate = False, masterBrightness=255):
+    def __init__(self, driver, threadedUpdate = False, masterBrightness=255, pixelWidth=1):
         super(LEDStrip, self).__init__(driver, threadedUpdate, masterBrightness)
 
+        self.pixelWidth = pixelWidth
+        if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:
+            raise ValueError("pixelWidth must be greater than 0 and less than or equal to the total LED count!")
+        if self.numLEDs % self.pixelWidth != 0:
+            raise ValueError("Total LED count must be evenly divisible by pixelWidth!")
+        if self.pixelWidth == 1:
+            self.set = self._set
+        else:
+            self.set = self._setScaled
+            self.numLEDs = self.numLEDs / self.pixelWidth
+            self.lastIndex = self.numLEDs - 1
 
     #Set single pixel to Color value
-    def set(self, pixel, color):
+    def _set(self, pixel, color):
         """Set pixel to RGB color tuple"""
         self._set_base(pixel, color)
+
+    def _setScaled(self, pixel, color):
+        start = pixel*self.pixelWidth
+        for p in range(start, start+self.pixelWidth):
+            self._set_base(p, color)
 
     def get(self, pixel):
         """Get RGB color tuple of color at index pixel"""
         return self._get_base(pixel)
+
+    #Set single pixel to RGB value
+    def setRGB(self, pixel, r, g, b):
+        """Set single pixel using individual RGB values instead of tuple"""
+        color = (r, g, b)
+        self.set(pixel, color)
+
+    def setHSV(self, pixel, hsv):
+        """Set single pixel to HSV tuple"""
+        color = colors.hsv2rgb(hsv)
+        self.set(pixel, color)
+
+    #turns off the desired pixel
+    def setOff(self, pixel):
+        """Set single pixel off"""
+        self.set(pixel, (0, 0, 0))
 
 class MatrixRotation:
     ROTATE_0 = 0   #no rotation
@@ -266,7 +299,7 @@ class MultiMapBuilder():
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False, masterBrightness=255):
+    def __init__(self, driver, width = 0, height = 0, coordMap = None, rotation = MatrixRotation.ROTATE_0, vert_flip = False, serpentine = True, threadedUpdate = False, masterBrightness=255, pixelSize=(1,1)):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -286,6 +319,9 @@ class LEDMatrix(LEDBase):
 
         self.width = width
         self.height = height
+
+        self.pixelSize = pixelSize
+        pw, ph = self.pixelSize
 
         #if both are 0 try to assume it's a square display
         if self.width == 0 and self.height == 0:
