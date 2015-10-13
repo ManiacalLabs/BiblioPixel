@@ -360,6 +360,19 @@ class LEDMatrix(LEDBase):
         self.texture = None
         self.set = self._setColor
 
+        if pw < 0 or pw > self.width or ph < 0 or ph > self.height:
+            raise ValueError("pixelSize must be greater than 0 and not larger than total matrix!")
+        if self.width % pw != 0 or self.height % ph != 0:
+            raise ValueError("pixelSize must evenly divide into matrix dimensions!")
+
+        if pw==1 and ph==1:
+            self._set = self.__setNormal
+        else:
+            self._set = self.__setScaled
+            self.width = self.width/pw
+            self.height = self.height/ph
+            self.numLEDs = self.width * self.height
+
     def setTexture(self, tex = None):
         if tex == None:
             self.texture = tex
@@ -379,12 +392,26 @@ class LEDMatrix(LEDBase):
             self.texture = tex
             self.set = self._setTexture
 
+    def __setNormal(self, x, y, color):
+        try:
+            pixel = self.matrix_map[y][x]
+            self._set_base(pixel, color)
+        except IndexError:
+            pass
+
+    def __setScaled(self, x, y, color):
+        sx = x*self.pixelSize[0]
+        sy = y*self.pixelSize[1]
+
+        for xs in range(sx, sx+self.pixelSize[0]):
+            for ys in range(sy, sy+self.pixelSize[1]):
+                self.__setNormal(xs, ys, color)
+
     #Set single pixel to Color value
     def _setColor(self, x, y, color = (0,0,0)):
         try:
             if x<0 or y<0: raise IndexError()
-            pixel = self.matrix_map[y][x]
-            self._set_base(pixel, color)
+            self._set(x, y, color)
         except IndexError:
             pass
 
@@ -393,8 +420,7 @@ class LEDMatrix(LEDBase):
             if x<0 or y<0: raise IndexError()
             if color == None:
                 color = self.texture[y][x]
-            pixel = self.matrix_map[y][x]
-            self._set_base(pixel, color)
+            self._set(x, y, color)
         except IndexError:
             pass
 
@@ -406,18 +432,12 @@ class LEDMatrix(LEDBase):
             return (0,0,0)
 
     def setHSV(self, x, y, hsv):
-        try:
-            pixel = self.matrix_map[y][x]
-            super(LEDMatrix, self).setHSV(pixel, hsv)
-        except IndexError:
-            pass
+        color = colors.hsv2rgb(hsv)
+        self._set(x,y,color)
 
     def setRGB(self, x, y, r, g, b):
-        try:
-            pixel = self.matrix_map[y][x]
-            super(LEDMatrix, self).setRGB(pixel, r, g, b)
-        except IndexError:
-            pass
+        color = (r,g,b)
+        self._set(x,y,color)
 
 
     ###############################################################################
