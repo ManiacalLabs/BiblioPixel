@@ -409,6 +409,7 @@ class LEDMatrix(LEDBase):
 
     #Set single pixel to Color value
     def _setColor(self, x, y, color = (0,0,0)):
+        if color == None: color = (0,0,0)
         try:
             if x<0 or y<0: raise IndexError()
             self._set(x, y, color)
