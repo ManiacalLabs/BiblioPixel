@@ -4,23 +4,28 @@ import win32con
 from util import d
 from gamepad import BaseGamePad
 
+DEFAULT_MAP = {
+    "UP": win32con.VK_UP,
+    "DOWN": win32con.VK_DOWN,
+    "LEFT": win32con.VK_LEFT,
+    "RIGHT": win32con.VK_RIGHT,
+    "SELECT": win32con.VK_SPACE,
+    "START": win32con.VK_RETURN,
+    "A": "A",
+    "B": "S",
+    "X": "Z",
+    "Y": "X"
+}
+
 class WinGamePadEmu(BaseGamePad):
-    foundDevices = []
-    def __init__(self, btn_map = [[win32con.VK_UP, "UP"], [win32con.VK_DOWN, "DOWN"], [win32con.VK_LEFT, "LEFT"], [win32con.VK_RIGHT, "RIGHT"],
-                                  [win32con.VK_SPACE, "SELECT"], [win32con.VK_RETURN, "START"], ["A","A"],["S","B"],["Z","X"],["X","Y"]]):
+    def __init__(self, btn_map = DEFAULT_MAP):
         super(WinGamePadEmu, self).__init__()
         self._map = btn_map
 
     def getKeys(self):
         result = {}
-        for m in self._map:
-            key = m
-            val = m
-            if isinstance(m, list):
-                val = m[0]
-                key = m[1]
-            if isinstance(val, str):
-                val = ord(val[0])
-
-            result[key] = abs(win32api.GetAsyncKeyState(val)) > 1
+        for k in self._map:
+            v = self._map[k]
+            if isinstance(v, str): v = ord(v)
+            result[k] = abs(win32api.GetAsyncKeyState(v)) > 1
         return d(result)
