@@ -903,6 +903,14 @@ MANIFEST = [
                 "max": 255,
                 "default": 255,
                 "help":"Master brightness for display, 0-255"
+            },{
+                "id": "pixelWidth",
+                "label": "Pixel Width",
+                "group": "Advanced",
+                "type": "int",
+                "min": 1,
+                "default": 1,
+                "help":"Pixel scaling amount. Setting to >1 will make each logical pixel N LEDs in width."
             },]
         },
         {
@@ -963,6 +971,28 @@ MANIFEST = [
                 "max": 255,
                 "default": 255,
                 "help":"Master brightness for display, 0-255"
+            },{
+                "id": "pixelSize",
+                "label": "Pixel Size",
+                "group": "Advanced",
+                "type": "multi",
+                "controls": [
+                    {
+                        "label": "Width",
+                        "type": "int",
+                        "min": 1,
+                        "default": 1,
+                        "help":"Logical Pixel Width"
+                    },{
+                        "label": "Height",
+                        "type": "int",
+                        "min": 1,
+                        "default": 1,
+                        "help":"Logical Pixel Height"
+                    },
+                ],
+                "default": [1,1],
+                "help":"Pixel scaling amount. Each logical pixel will be Width*Height LEDs in size."
             },]
         }
 ]
