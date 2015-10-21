@@ -109,6 +109,7 @@ def loadImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = co
             if brightness != 255:
                 r, g, b = colors.color_scale((r, g, b), brightness)
 
-            texture[y][x] = (r, g, b)
+            if y>=0 and x>=0:
+                texture[y][x] = (r, g, b)
 
     return texture
