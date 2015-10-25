@@ -1,3 +1,22 @@
+### v2.0.0
+Added BaseGameAnim
+Added AnimationQueue
+Added GamePad controls
+Added Texture maps
+Added "with" construct support
+Added controller level masterBrightness
+Added transparency support
+Added Manifests for PixelWeb
+
+New, smaller font
+Moved built in animations to BiblioPixelAnimations
+Improved Image file manipulation
+Better threading
+
+Many speed improvements
+Many, many bug fixes
+
+
 ### v1.2.3
 Fixing APA102 driver
 
@@ -15,7 +34,7 @@ Added threaded animation support
 Improved Serial Device detection
 
 ### v1.1.7
-Added check for pyserial version 
+Added check for pyserial version
 Forced case insenitive grep for USB ID
 
 ### v1.1.6
@@ -25,7 +44,7 @@ Bug fix for APA102 support in DriverSerial
 Bug fixes for AllPixel support
 
 ### v1.1.4
-Removed debug print statements 
+Removed debug print statements
 
 ### v1.1.3
 Fixed bug with LEDMatrix setRGB/setHSV
