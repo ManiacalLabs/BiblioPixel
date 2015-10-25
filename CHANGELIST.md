@@ -16,6 +16,8 @@ Better threading
 Many speed improvements
 Many, many bug fixes
 
+### v1.2.4
+Adding util.py to support BiblioPixelAnimations
 
 ### v1.2.3
 Fixing APA102 driver
