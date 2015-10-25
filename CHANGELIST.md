@@ -1,20 +1,20 @@
 ### v2.0.0
-Added BaseGameAnim
-Added AnimationQueue
-Added GamePad controls
-Added Texture maps
-Added "with" construct support
-Added controller level masterBrightness
-Added transparency support
-Added Manifests for PixelWeb
+- Added BaseGameAnim
+- Added GamePad controls
+- Added AnimationQueue
+- Added "with" construct support
+- Added Texture maps
+- Added controller level masterBrightness
+- Added transparency support
+- Added Manifests for PixelWeb
 
-New, smaller font
-Moved built in animations to BiblioPixelAnimations
-Improved Image file manipulation
-Better threading
+- New, smaller font
+- Moved built in animations to BiblioPixelAnimations
+- Improved Image file manipulation
+- Better threading
 
-Many speed improvements
-Many, many bug fixes
+- Many speed improvements
+- Many, many bug fixes
 
 ### v1.2.4
 Adding util.py to support BiblioPixelAnimations
@@ -23,21 +23,21 @@ Adding util.py to support BiblioPixelAnimations
 Fixing APA102 driver
 
 ### v1.2.2
-Improved LEDCircle Rendering
-Various bug fixes
+- Improved LEDCircle Rendering
+- Various bug fixes
 
 ### v1.2.1
 Added DriverAPA102
 
 ### v1.2.0
-Added LEDPOV, LEDCircle Classes
-Added Serial Device Version Support
-Added threaded animation support
-Improved Serial Device detection
+- Added LEDPOV, LEDCircle Classes
+- Added Serial Device Version Support
+- Improved Serial Device detection
+- Added threaded animation support
 
 ### v1.1.7
-Added check for pyserial version
-Forced case insenitive grep for USB ID
+- Added check for pyserial version
+- Forced case insenitive grep for USB ID
 
 ### v1.1.6
 Bug fix for APA102 support in DriverSerial
