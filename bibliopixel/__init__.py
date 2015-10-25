@@ -1,5 +1,5 @@
-from led import *
+from led import LEDBase, LEDStrip, LEDPOV, LEDMatrix, LEDCircle, mapGen, MultiMapBuilder, MatrixRotation
 import log
 import colors
 
-VERSION = '1.2.4'
+__version__ = VERSION = '2.0.0'

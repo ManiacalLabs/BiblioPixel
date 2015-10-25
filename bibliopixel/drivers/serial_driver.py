@@ -2,8 +2,9 @@ from driver_base import *
 import sys
 import time
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import log
+import traceback
 try:
     import serial, serial.tools.list_ports
 except ImportError as e:
@@ -55,8 +56,8 @@ class LEDTYPE:
     UCS1903 = 7
     SM16716 = 8
     APA102 = 9
-    LPD1886 = 10 
-    P9813 = 11 
+    LPD1886 = 10
+    P9813 = 11
 
 SPIChipsets = [
     LEDTYPE.LPD8806,
@@ -143,7 +144,7 @@ class DriverSerial(DriverBase):
             msg = "Too many pixels specified for device."
         elif error == RETURN_CODES.ERROR_BAD_CMD:
             msg = "Unsupported protocol command. Check your device version."
-        
+
         log.logger.error("{}: {}".format(error, msg))
         raise BiblioSerialError(msg)
 
@@ -156,7 +157,7 @@ class DriverSerial(DriverBase):
 
     def _connect(self):
         try:
-            if(self.dev == ""):
+            if(self.dev == "" or self.dev == None):
                 DriverSerial.findSerialDevices(self._hardwareID)
 
                 if self.deviceID != None:
@@ -170,7 +171,7 @@ class DriverSerial(DriverBase):
                             pass
                         log.logger.info( "Using COM Port: {}, Device ID: {}, Device Ver: {}".format(self.dev, self.deviceID, self.devVer))
 
-                    if self.dev == "":
+                    if self.dev == "" or self.dev == None:
                         error = "Unable to find device with ID: {}".format(self.deviceID)
                         log.logger.error(error)
                         raise ValueError(error)
@@ -198,7 +199,7 @@ class DriverSerial(DriverBase):
                     error = "Invalid port specified. Try using one of: \n" + "\n".join(ports)
                 log.logger.info(error)
                 raise BiblioSerialError(error)
-            
+
             packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type) #set strip type
             byteCount = self.bufByteCount
@@ -222,7 +223,7 @@ class DriverSerial(DriverBase):
 
         except serial.SerialException as e:
             error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
-            log.logger.exception(e)
+            log.logger.error(traceback.format_exc())
             log.logger.error(error)
             raise e
 
@@ -256,7 +257,7 @@ class DriverSerial(DriverBase):
         except serial.SerialException as e:
             log.logger.error("Problem connecting to serial device.")
             raise IOError("Problem connecting to serial device.")
-            
+
 
     @staticmethod
     def getDeviceID(dev):
@@ -311,7 +312,7 @@ class DriverSerial(DriverBase):
         packet.extend(self._buf)
         packet.extend([0]*self._bufPad)
         self._com.write(packet)
-        
+
         resp = self._com.read(1)
         if len(resp) == 0:
                 DriverSerial._comError()
@@ -320,5 +321,118 @@ class DriverSerial(DriverBase):
 
         self._com.flushInput()
 
-        
-        
+
+import gamma
+MANIFEST = [
+        {
+            "id":"serial",
+            "class":DriverSerial,
+            "type": "driver",
+            "display": "Serial (AllPixel)",
+            "desc": "Interface with USB Serial devices that support the AllPixel protocol.",
+            "params": [{
+                "id": "type",
+                "label": "LED Type",
+                "type": "combo",
+                "options": {
+                    0: "GENERIC",
+                    1: "LPD8806",
+                    2: "WS2801",
+                    3: "WS281x/NEOPIXEL",
+                    4: "WS2811_400",
+                    5: "TM1804",
+                    6: "TM1803",
+                    7: "UCS1903",
+                    8: "SM16716",
+                    9: "APA102",
+                    10: "LPD1886",
+                    11: "P98131"
+                },
+                "default": 0
+            }, {
+                "id": "num",
+                "label": "# Pixels",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Total pixels in display."
+            }, {
+                "id": "dev",
+                "label": "Device Path",
+                "type": "str",
+                "default": "",
+            }, {
+                "id": "c_order",
+                "label": "Channel Order",
+                "type": "combo",
+                "options": {
+                    0: "RGB",
+                    1: "RBG",
+                    2: "GRB",
+                    3: "GBR",
+                    4: "BRG",
+                    5: "BGR"
+                },
+                "options_map": [
+                    [0, 1, 2],
+                    [0, 2, 1],
+                    [1, 0, 2],
+                    [1, 2, 0],
+                    [2, 0, 1],
+                    [2, 1, 0]
+                ],
+                "default": 0
+            }, {
+                "id": "SPISpeed",
+                "label": "SPI Speed (MHz)",
+                "type": "int",
+                "default": 2,
+                "min": 1,
+                "max": 24,
+                "group":"Advanced"
+            }, {
+                "id":"gamma",
+                "label":"Gamma",
+                "type":"combo",
+                "default":None,
+                "options":{
+                    0: "LPD8806",
+                    1: "APA102",
+                    2: "WS2801",
+                    3: "SM16716",
+                    4: "LPD6803",
+                    5: "WS281x"
+                },
+                "options_map":[
+                    gamma.LPD8806,
+                    gamma.APA102,
+                    gamma.WS2801,
+                    gamma.SM16716,
+                    gamma.LPD6803,
+                    gamma.WS2812B
+                ]
+            },{
+                "id": "restart_timeout",
+                "label": "Restart Timeout",
+                "type": "int",
+                "default": 3,
+                "min": 1,
+                "group":"Advanced"
+            },{
+                "id": "deviceID",
+                "label": "Device ID",
+                "type": "int",
+                "default": None,
+                "min": 0,
+                "max": 255,
+                "msg": "AllPixel ID",
+                "group":"Advanced"
+            },{
+                "id": "hardwareID",
+                "label": "Hardware ID",
+                "type": "str",
+                "default": "1D50:60AB",
+                "group":"Advanced"
+            },]
+        }
+]

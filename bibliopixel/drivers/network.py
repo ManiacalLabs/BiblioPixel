@@ -4,7 +4,7 @@ import sys
 import time
 
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import log
 
 class CMDTYPE:
@@ -20,7 +20,7 @@ class RETURN_CODES:
 
 class DriverNetwork(DriverBase):
     """Driver for communicating with another device on the network."""
-    
+
     def __init__(self, num = 0, width = 0, height = 0, host = "localhost", port = 3142):
         super(DriverNetwork, self).__init__(num, width, height)
 
@@ -30,7 +30,6 @@ class DriverNetwork(DriverBase):
         self._buf = []
         for i in range(0, self.bufByteCount):
             self._buf.append(0)
-           
 
     def _generateHeader(self, cmd, size):
         packet = bytearray()
@@ -64,7 +63,7 @@ class DriverNetwork(DriverBase):
             resp = ord(s.recv(1))
 
             s.close()
-        
+
             if resp != RETURN_CODES.SUCCESS:
                 log.logger.warning("Bytecount mismatch! {0}".format(resp))
 
@@ -84,5 +83,47 @@ class DriverNetwork(DriverBase):
             return False
         else:
             return True
-        
 
+MANIFEST = [
+        {
+            "id":"network",
+            "class":DriverNetwork,
+            "type": "driver",
+            "display": "Network",
+            "desc": "Sends pixel data over the network to a reciever.",
+            "params": [{
+                "id": "num",
+                "label": "# Pixels",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Total pixels in display. May use Width AND Height instead."
+            }, {
+                "id": "width",
+                "label": "Width",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Width of display. Set if using a matrix."
+            }, {
+                "id": "height",
+                "label": "Height",
+                "type": "int",
+                "default": 0,
+                "min": 0,
+                "help":"Height of display. Set if using a matrix."
+            }, {
+                "id": "host",
+                "label": "Pixel Size",
+                "type": "str",
+                "default": "localhost",
+                "help":"Receiver host to connect to."
+            }, {
+                "id":"port",
+                "label":"Port",
+                "type":"int",
+                "default":3142,
+                "help":"Port to connect to."
+            }]
+        }
+]

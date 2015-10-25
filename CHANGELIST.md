@@ -1,3 +1,21 @@
+### v2.0.0
+Added BaseGameAnim
+Added AnimationQueue
+Added GamePad controls
+Added Texture maps
+Added "with" construct support
+Added controller level masterBrightness
+Added transparency support
+Added Manifests for PixelWeb
+
+New, smaller font
+Moved built in animations to BiblioPixelAnimations
+Improved Image file manipulation
+Better threading
+
+Many speed improvements
+Many, many bug fixes
+
 ### v1.2.4
 Adding util.py to support BiblioPixelAnimations
 
