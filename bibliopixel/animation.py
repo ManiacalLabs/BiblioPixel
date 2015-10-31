@@ -196,7 +196,7 @@ class BaseAnimation(object):
                 "label": "Until Complete",
                 "type": "bool",
                 "default": False,
-                "help":"Run until animation marks itself as compelte. If supported."
+                "help":"Run until animation marks itself as complete. If supported."
             },{
                 "id": "max_cycles",
                 "label": "Max Cycles",
