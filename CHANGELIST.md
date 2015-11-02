@@ -1,3 +1,7 @@
+### v2.0.1
+- Fixed Spelling
+- Fixed untilComplete/max_steps bug
+
 ### v2.0.0
 - Added BaseGameAnim
 - Added GamePad controls
