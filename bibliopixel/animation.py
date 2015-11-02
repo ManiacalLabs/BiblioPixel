@@ -43,7 +43,7 @@ class BaseAnimation(object):
         pass
 
     def preStep(self, amt=1):
-        pass
+        self._led.all_off()
 
     def postStep(self, amt=1):
         pass
@@ -94,7 +94,7 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        while not self._stopEvent.isSet() and ((not untilComplete and (max_steps == 0 or cur_step < max_steps)) or (untilComplete and not self.animComplete)):
+        while not self._stopEvent.isSet() and ((max_steps > 0 and cur_step < max_steps) or (max_steps == 0 and untilComplete and not self.animComplete)):
             self._timeRef = self._msTime()
 
             start = self._msTime()
