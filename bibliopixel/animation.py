@@ -40,10 +40,10 @@ class BaseAnimation(object):
         return time.time() * 1000.0
 
     def preRun(self, amt=1):
-        pass
+        self._led.all_off()
 
     def preStep(self, amt=1):
-        self._led.all_off()
+        pass
 
     def postStep(self, amt=1):
         pass
