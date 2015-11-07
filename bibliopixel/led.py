@@ -793,7 +793,7 @@ class LEDCircle(LEDBase):
 
         self.rotation = rotation
 
-        if driver.numLEDs != num:
+        if self.numLEDs != num:
             raise ValueError("Total ring LED count does not equal driver LED count!")
 
     def __genOffsetFromAngle(self, angle, ring):
