@@ -400,7 +400,6 @@ MANIFEST = [
                     1: "APA102",
                     2: "WS2801",
                     3: "SM16716",
-                    4: "LPD6803",
                     5: "WS281x"
                 },
                 "options_map":[
@@ -408,7 +407,6 @@ MANIFEST = [
                     gamma.APA102,
                     gamma.WS2801,
                     gamma.SM16716,
-                    gamma.LPD6803,
                     gamma.WS2812B
                 ]
             },{
