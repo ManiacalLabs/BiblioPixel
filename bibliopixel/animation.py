@@ -40,7 +40,7 @@ class BaseAnimation(object):
         return time.time() * 1000.0
 
     def preRun(self, amt=1):
-        pass
+        self._led.all_off()
 
     def preStep(self, amt=1):
         pass
@@ -94,7 +94,7 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        while not self._stopEvent.isSet() and ((not untilComplete and (max_steps == 0 or cur_step < max_steps)) or (untilComplete and not self.animComplete)):
+        while not self._stopEvent.isSet() and ((max_steps == 0 and not untilComplete) or (max_steps > 0 and cur_step < max_steps) or (max_steps == 0 and untilComplete and not self.animComplete)):
             self._timeRef = self._msTime()
 
             start = self._msTime()
@@ -196,7 +196,7 @@ class BaseAnimation(object):
                 "label": "Until Complete",
                 "type": "bool",
                 "default": False,
-                "help":"Run until animation marks itself as compelte. If supported."
+                "help":"Run until animation marks itself as complete. If supported."
             },{
                 "id": "max_cycles",
                 "label": "Max Cycles",
