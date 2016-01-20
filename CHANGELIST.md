@@ -1,3 +1,12 @@
+### v2.0.6
+- Fix Issue #28: Error parsing new pyserial version 
+
+### v2.0.5
+- Fixes to LEDCircle
+
+### v2.0.3
+- Fixed clear before run bug
+
 ### v2.0.2
 - Fixed Spelling
 - Fixed untilComplete/max_steps bug
