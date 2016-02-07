@@ -10,8 +10,7 @@ import SocketServer
 import platform
 
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
-import log
+from .. import log
 
 from network_receiver import ThreadedDataServer, ThreadedDataHandler
 

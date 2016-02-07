@@ -2,8 +2,7 @@ from driver_base import *
 import sys
 import time
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import log
+from .. import gamma, log
 import traceback
 try:
     import serial, serial.tools.list_ports
@@ -324,7 +323,6 @@ class DriverSerial(DriverBase):
         self._com.flushInput()
 
 
-import gamma
 MANIFEST = [
         {
             "id":"serial",

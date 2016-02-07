@@ -7,8 +7,7 @@ from driver_base import *
 from network import *
 import math
 
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
-import log
+from .. import log
 
 class DriverVisualizer(DriverNetwork):
     """Main driver for Visualizer UI (for testing)"""

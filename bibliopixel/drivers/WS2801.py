@@ -1,7 +1,6 @@
 from spi_driver_base import *
 import os
-os.sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import gamma
+from .. import gamma
 
 class DriverWS2801(DriverSPIBase):
     """Main driver for WS2801 based LED strips on devices like the Raspberry Pi and BeagleBone"""
