@@ -4,8 +4,11 @@ except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
     raise ImportError(error)
 
-if float(serial.VERSION) < 2.7:
+from distutils.version import LooseVersion
+
+if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(serial.VERSION)
+    log.logger.error(error)
     raise ImportError(error)
 
 from util import d
