@@ -1,25 +1,28 @@
 try:
-    import serial, serial.tools.list_ports
+    import serial
+    import serial.tools.list_ports
 except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
     raise ImportError(error)
 
 from distutils.version import LooseVersion
-
-if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
-    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(serial.VERSION)
-    log.logger.error(error)
-    raise ImportError(error)
-
 from util import d
 from gamepad import BaseGamePad
 import log
+
+if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
+    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
+        serial.VERSION)
+    log.logger.error(error)
+    raise ImportError(error)
+
 
 class CMDTYPE:
     INIT = 0
     GET_BTNS = 1
     SET_LEDS = 2
     SET_MODE = 4
+
 
 class RETURN_CODES:
     SUCCESS = 255
@@ -28,12 +31,15 @@ class RETURN_CODES:
     ERROR_UNSUPPORTED = 2
     ERROR_BAD_CMD = 4
 
+
 class SerialPadError(Exception):
     pass
 
+
 class SerialGamePad(BaseGamePad):
     foundDevices = []
-    def __init__(self, btn_map = ["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID = "1B4F:9206"):
+
+    def __init__(self, btn_map=["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID="1B4F:9206"):
         super(SerialGamePad, self).__init__()
         self._map = btn_map
         self._hardwareID = hardwareID
@@ -45,7 +51,7 @@ class SerialGamePad(BaseGamePad):
             SerialGamePad._printError(resp)
 
     def close(self):
-        if self._com != None:
+        if self._com is not None:
             log.logger.info("Closing connection to: " + self.dev)
             self._com.close()
 
@@ -53,8 +59,8 @@ class SerialGamePad(BaseGamePad):
         self.close()
 
     @staticmethod
-    def findSerialDevices(hardwareID = "1B4F:9206"):
-        hardwareID = "(?i)"+hardwareID #forces case insensitive
+    def findSerialDevices(hardwareID="1B4F:9206"):
+        hardwareID = "(?i)" + hardwareID  # forces case insensitive
         if len(SerialGamePad.foundDevices) == 0:
             SerialGamePad.foundDevices = []
             for port in serial.tools.list_ports.grep(hardwareID):
@@ -88,15 +94,16 @@ class SerialGamePad(BaseGamePad):
 
                 if len(SerialGamePad.foundDevices) > 0:
                     self.dev = SerialGamePad.foundDevices[0]
-                    log.logger.info( "Using COM Port: {}".format(self.dev))
+                    log.logger.info("Using COM Port: {}".format(self.dev))
 
             try:
-                self._com =  serial.Serial(self.dev, timeout=5)
+                self._com = serial.Serial(self.dev, timeout=5)
             except serial.SerialException as e:
                 ports = SerialGamePad.findSerialDevices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
-                    error = "Invalid port specified. Try using one of: \n" + "\n".join(ports)
+                    error = "Invalid port specified. Try using one of: \n" + \
+                        "\n".join(ports)
                 log.logger.info(error)
                 raise SerialPadError(error)
 
@@ -131,7 +138,7 @@ class SerialGamePad(BaseGamePad):
             resp = self._com.read(1)
 
             if len(resp) == 0:
-                 SerialGamePad._comError()
+                SerialGamePad._comError()
             elif ord(resp) != RETURN_CODES.SUCCESS:
                 SerialGamePad._printError(ord(resp))
             resp = self._com.read(2)
@@ -145,12 +152,12 @@ class SerialGamePad(BaseGamePad):
         index = 0
         result = {}
         for m in self._map:
-            result[m] = (bits & (1<<index) > 0)
+            result[m] = (bits & (1 << index) > 0)
             index += 1
         return d(result)
 
     def setLights(self, data):
-        temp = [(0,0,0)]*len(data.keys())
+        temp = [(0, 0, 0)] * len(data.keys())
         for key in data:
             i = self._map.index(key)
             if i >= 0 and i < len(temp):
@@ -164,7 +171,7 @@ class SerialGamePad(BaseGamePad):
         self._com.write(packet)
         resp = self._com.read(1)
         if len(resp) == 0:
-             SerialGamePad._comError()
+            SerialGamePad._comError()
         elif ord(resp) != RETURN_CODES.SUCCESS:
             SerialGamePad._printError(ord(resp))
 
@@ -172,7 +179,7 @@ class SerialGamePad(BaseGamePad):
         data = {}
         num = 0
         for b in self._map:
-            data[b] = (0,0,0)
+            data[b] = (0, 0, 0)
             num += 1
             if num >= count:
                 break

@@ -1,5 +1,9 @@
+### v2.0.7
+- Fixed LEDPOV driver crash
+- Cleanup / Reformat of all code
+
 ### v2.0.6
-- Fix Issue #28: Error parsing new pyserial version 
+- Fix Issue #28: Error parsing new pyserial version
 
 ### v2.0.5
 - Fixes to LEDCircle

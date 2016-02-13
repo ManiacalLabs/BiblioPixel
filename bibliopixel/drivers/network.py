@@ -1,4 +1,4 @@
-from driver_base import *
+from driver_base import DriverBase
 import socket
 import sys
 import time
@@ -6,21 +6,24 @@ import time
 import os
 from .. import log
 
+
 class CMDTYPE:
-    SETUP_DATA = 1 #reserved for future use
+    SETUP_DATA = 1  # reserved for future use
     PIXEL_DATA = 2
     BRIGHTNESS = 3
 
+
 class RETURN_CODES:
-	SUCCESS = 255 #All is well
-	ERROR = 0 #Generic error
-	ERROR_SIZE = 1 #Data receieved does not match given command length
-	ERROR_UNSUPPORTED = 2 #Unsupported command
+    SUCCESS = 255  # All is well
+    ERROR = 0  # Generic error
+    ERROR_SIZE = 1  # Data receieved does not match given command length
+    ERROR_UNSUPPORTED = 2  # Unsupported command
+
 
 class DriverNetwork(DriverBase):
     """Driver for communicating with another device on the network."""
 
-    def __init__(self, num = 0, width = 0, height = 0, host = "localhost", port = 3142):
+    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142):
         super(DriverNetwork, self).__init__(num, width, height)
 
         self._host = host
@@ -43,11 +46,12 @@ class DriverNetwork(DriverBase):
             s.connect((self._host, self._port))
             return s
         except socket.gaierror:
-            error = "Unable to connect to or resolve host: {}".format(self._host)
+            error = "Unable to connect to or resolve host: {}".format(
+                self._host)
             log.logger.error(error)
             raise IOError(error)
 
-    #Push new data to strand
+    # Push new data to strand
     def update(self, data):
         try:
             s = self._connect()
@@ -84,45 +88,45 @@ class DriverNetwork(DriverBase):
             return True
 
 MANIFEST = [
-        {
-            "id":"network",
-            "class":DriverNetwork,
-            "type": "driver",
-            "display": "Network",
-            "desc": "Sends pixel data over the network to a reciever.",
-            "params": [{
+    {
+        "id": "network",
+        "class": DriverNetwork,
+        "type": "driver",
+        "display": "Network",
+        "desc": "Sends pixel data over the network to a reciever.",
+        "params": [{
                 "id": "num",
                 "label": "# Pixels",
                 "type": "int",
                 "default": 0,
                 "min": 0,
-                "help":"Total pixels in display. May use Width AND Height instead."
-            }, {
-                "id": "width",
-                "label": "Width",
-                "type": "int",
-                "default": 0,
-                "min": 0,
-                "help":"Width of display. Set if using a matrix."
-            }, {
-                "id": "height",
-                "label": "Height",
-                "type": "int",
-                "default": 0,
-                "min": 0,
-                "help":"Height of display. Set if using a matrix."
-            }, {
-                "id": "host",
-                "label": "Pixel Size",
-                "type": "str",
-                "default": "localhost",
-                "help":"Receiver host to connect to."
-            }, {
-                "id":"port",
-                "label":"Port",
-                "type":"int",
-                "default":3142,
-                "help":"Port to connect to."
-            }]
-        }
+                "help": "Total pixels in display. May use Width AND Height instead."
+        }, {
+            "id": "width",
+            "label": "Width",
+            "type": "int",
+            "default": 0,
+            "min": 0,
+            "help": "Width of display. Set if using a matrix."
+        }, {
+            "id": "height",
+            "label": "Height",
+            "type": "int",
+            "default": 0,
+            "min": 0,
+            "help": "Height of display. Set if using a matrix."
+        }, {
+            "id": "host",
+            "label": "Pixel Size",
+            "type": "str",
+            "default": "localhost",
+            "help": "Receiver host to connect to."
+        }, {
+            "id": "port",
+            "label": "Port",
+            "type": "int",
+            "default": 3142,
+            "help": "Port to connect to."
+        }]
+    }
 ]

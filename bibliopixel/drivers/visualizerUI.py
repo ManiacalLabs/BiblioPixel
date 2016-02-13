@@ -1,21 +1,19 @@
-from Tkinter import *
+from Tkinter import Tk, TclError, ALL, Canvas, TOP
 import threading
 import Queue
-from time import *
-import sys, time
-
-import threading
+import time
+import sys
 import SocketServer
-
 import platform
-
 import os
 from .. import log
 
 from network_receiver import ThreadedDataServer, ThreadedDataHandler
 
+
 class VisualizerUI:
-    def __init__(self, width, height, pixelSize, top = False):
+
+    def __init__(self, width, height, pixelSize, top=False):
         self._maxWindowWidth = 512
 
         self._master = Tk()
@@ -35,7 +33,7 @@ class VisualizerUI:
 
         self.initUI()
         self.configure(self.x, self.y)
-        
+
         self.checkQ()
 
         self._master.attributes("-topmost", top)
@@ -69,13 +67,13 @@ class VisualizerUI:
 
         try:
             for i in range(self._count):
-                    self._canvas.itemconfig(self._leds[i], fill=self._values[i])
+                self._canvas.itemconfig(self._leds[i], fill=self._values[i])
         except TclError:
-            #Looks like the UI closed!
+            # Looks like the UI closed!
             pass
 
-    def toHexColor(self, r,g,b):
-        return "#{0:02x}{1:02x}{2:02x}".format(r,g,b)
+    def toHexColor(self, r, g, b):
+        return "#{0:02x}{1:02x}{2:02x}".format(r, g, b)
 
     def update(self, data):
         self._q.put(data)
@@ -90,7 +88,7 @@ class VisualizerUI:
         self._count = x * y
 
         self._values = []
-        #init colors to all black (off)
+        # init colors to all black (off)
         for i in range(self._count):
             self._values.append("#101010")
 
@@ -99,15 +97,16 @@ class VisualizerUI:
         c.delete(ALL)
         self._leds = []
         for i in range(self._count):
-            index = c.create_rectangle(0,0,self._pixelSize,self._pixelSize, fill=self._values[i])
+            index = c.create_rectangle(
+                0, 0, self._pixelSize, self._pixelSize, fill=self._values[i])
             self._leds.append(index)
 
         self.layoutPixels()
 
     def layoutPixels(self):
-        if len(self._leds) == 0: return
-        
-        newRow = True
+        if len(self._leds) == 0:
+            return
+
         x_off = 0
         row = 0
         count = 0
@@ -115,34 +114,40 @@ class VisualizerUI:
         h = 0
         for y in range(self.y):
             for x in range(self.x):
-                if y%2 != 0: x = self.x - x - 1
-                _x = self._pixelPad + ((x - x_off) * (self._pixelSize + self._pixelSpace))
-                _y = self._pixelPad + ((y + row) * (self._pixelSize + self._pixelSpace)) 
-                if row > 0: 
+                if y % 2 != 0:
+                    x = self.x - x - 1
+                _x = self._pixelPad + \
+                    ((x - x_off) * (self._pixelSize + self._pixelSpace))
+                _y = self._pixelPad + \
+                    ((y + row) * (self._pixelSize + self._pixelSpace))
+                if row > 0:
                     _y += 3 * row
 
                 _w = _x + self._pixelSize + self._pixelSpace + self._pixelPad
-                if _w > w: w = _w
+                if _w > w:
+                    w = _w
                 _h = _y + self._pixelSize + self._pixelSpace + self._pixelPad
-                if _h > h: h = _h
+                if _h > h:
+                    h = _h
 
-                if self.y == 1 and _x + ((self._pixelSize + self._pixelSpace)*2) > self._maxWindowWidth:
+                if self.y == 1 and _x + ((self._pixelSize + self._pixelSpace) * 2) > self._maxWindowWidth:
                     row += 1
                     x_off += (x - x_off + 1)
 
-                self._canvas.coords(self._leds[count], _x, _y, _x + self._pixelSize, _y + self._pixelSize)
+                self._canvas.coords(
+                    self._leds[count], _x, _y, _x + self._pixelSize, _y + self._pixelSize)
                 count += 1
 
         self._master.geometry("{0}x{1}".format(w, h))
         self._master.update()
         self._canvas.config(width=w, height=h)
 
-    def __CancelCommand(self, event=None): 
+    def __CancelCommand(self, event=None):
         self._master.quit()
         self._master.destroy()
         sys.exit()
 
-    #def __resizeEvent(self, event):
+    # def __resizeEvent(self, event):
     #    width = self._master.winfo_width()
     #    height = self._master.winfo_height()
     #    if width != self._width or height != self._height:
@@ -150,7 +155,7 @@ class VisualizerUI:
     #        self._height = height
     #        self._master.after_idle(self.layoutPixels)
 
-    #def __handleResize(self):
+    # def __handleResize(self):
     #    width = self._master.winfo_width()
     #    height = self._master.winfo_height()
     #    if width != self._width or height != self._height:
@@ -158,11 +163,11 @@ class VisualizerUI:
     #        self._height = height
     #        self.layoutPixels()
     #    self._master.after_idle(self.__handleResize)
-   
+
     def initUI(self):
         m = self._master
         m.protocol('WM_DELETE_WINDOW', self.__CancelCommand)
-        
+
         m.title("BiblioPixel Visualizer")
         m.geometry("10x10")
         m.update()
@@ -174,21 +179,24 @@ class VisualizerUI:
         c = self._canvas
         c.pack(side=TOP)
 
-        #m.bind("<Configure>", self.__resizeEvent)
-
         self.layoutPixels()
-        #self._master.after_idle(self.__handleResize)
+        # self._master.after_idle(self.__handleResize)
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='BiblioPixel Visualizer')
-    parser.add_argument('--width', help='Matrix Width', required=True, type=int)
+    parser.add_argument('--width', help='Matrix Width',
+                        required=True, type=int)
     parser.add_argument('--height', help='Matrix Height', default=1, type=int)
-    parser.add_argument('--pixelsize', help='width/height of pixels in visualizer (default: 10)', default=10, type=int)
-    parser.add_argument('--top', help='Keep the visualizer on top of all other windows', action='store_true')
-    parser.add_argument('--port', help='Advanced: TCP port to listen on (default: 1618)', default=1618, type=int)
-    parser.add_argument('--allip', help='Visualizer will listen for data on all network connections', action='store_true')
-    
+    parser.add_argument(
+        '--pixelsize', help='width/height of pixels in visualizer (default: 10)', default=10, type=int)
+    parser.add_argument(
+        '--top', help='Keep the visualizer on top of all other windows', action='store_true')
+    parser.add_argument(
+        '--port', help='Advanced: TCP port to listen on (default: 1618)', default=1618, type=int)
+    parser.add_argument(
+        '--allip', help='Visualizer will listen for data on all network connections', action='store_true')
+
     args = vars(parser.parse_args())
 
     width = args['width']
@@ -211,11 +219,12 @@ if __name__ == '__main__':
         server.hasFrame = ui.hasFrame
 
         t = threading.Thread(target=server.serve_forever)
-        t.setDaemon(True) # don't hang on exit
+        t.setDaemon(True)  # don't hang on exit
         t.start()
     except Exception as e:
         log.logger.exception(e)
-        log.logger.error("Unable to open port. Another visualizer is likely running. Exiting...")
+        log.logger.error(
+            "Unable to open port. Another visualizer is likely running. Exiting...")
         sys.exit(2)
 
     ui.mainloop()

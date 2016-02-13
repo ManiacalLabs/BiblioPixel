@@ -1,11 +1,12 @@
-from driver_base import *
+from driver_base import DriverBase, ChannelOrder
 import sys
 import time
 import os
 from .. import gamma, log
 import traceback
 try:
-    import serial, serial.tools.list_ports
+    import serial
+    import serial.tools.list_ports
 except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
     log.logger.error(error)
@@ -14,41 +15,46 @@ except ImportError as e:
 from distutils.version import LooseVersion
 
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
-    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(serial.VERSION)
+    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
+        serial.VERSION)
     log.logger.error(error)
     raise ImportError(error)
+
 
 class BiblioSerialError(Exception):
     pass
 
+
 class CMDTYPE:
-    SETUP_DATA = 1 #config data (LED type, SPI speed, num LEDs)
-    PIXEL_DATA = 2 #raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
-    BRIGHTNESS = 3 #data will be single 0-255 brightness value, length must be 0x00,0x01
-    GETID      = 4
-    SETID      = 5
-    GETVER     = 6
+    SETUP_DATA = 1  # config data (LED type, SPI speed, num LEDs)
+    PIXEL_DATA = 2  # raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
+    BRIGHTNESS = 3  # data will be single 0-255 brightness value, length must be 0x00,0x01
+    GETID = 4
+    SETID = 5
+    GETVER = 6
+
 
 class RETURN_CODES:
-    SUCCESS = 255 #All is well
-    REBOOT = 42 #Device reboot needed after configuration
-    ERROR = 0 #Generic error
-    ERROR_SIZE = 1 #Data receieved does not match given command length
-    ERROR_UNSUPPORTED = 2 #Unsupported command
-    ERROR_PIXEL_COUNT = 3 #Too many pixels for device
-    ERROR_BAD_CMD = 4 #Unknown Command
+    SUCCESS = 255  # All is well
+    REBOOT = 42  # Device reboot needed after configuration
+    ERROR = 0  # Generic error
+    ERROR_SIZE = 1  # Data receieved does not match given command length
+    ERROR_UNSUPPORTED = 2  # Unsupported command
+    ERROR_PIXEL_COUNT = 3  # Too many pixels for device
+    ERROR_BAD_CMD = 4  # Unknown Command
+
 
 class LEDTYPE:
-    GENERIC = 0 #Use if the serial device only supports one chipset
+    GENERIC = 0  # Use if the serial device only supports one chipset
     LPD8806 = 1
-    WS2801  = 2
-    #These are all the same
+    WS2801 = 2
+    # These are all the same
     WS2811 = 3
     WS2812 = 3
     WS2812B = 3
     NEOPIXEL = 3
     APA104 = 3
-    #400khz variant of above
+    # 400khz variant of above
     WS2811_400 = 4
 
     TM1809 = 5
@@ -68,20 +74,22 @@ SPIChipsets = [
     LEDTYPE.P9813
 ]
 
-#Chipsets here require extra pixels padded at the end
-#Key must be an LEDTYPE
-#value a lambda function to calc the value based on numLEDs
+# Chipsets here require extra pixels padded at the end
+# Key must be an LEDTYPE
+# value a lambda function to calc the value based on numLEDs
 BufferChipsets = {
-    LEDTYPE.APA102 : lambda num: (int(num/64.0)+1)
+    LEDTYPE.APA102: lambda num: (int(num / 64.0) + 1)
 }
+
 
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
     foundDevices = []
     deviceIDS = {}
     deviceVers = []
-    def __init__(self, type, num, dev="", c_order = ChannelOrder.RGB, SPISpeed = 2, gamma = None, restart_timeout = 3, deviceID = None, hardwareID = "1D50:60AB"):
-        super(DriverSerial, self).__init__(num, c_order = c_order, gamma = gamma)
+
+    def __init__(self, type, num, dev="", c_order=ChannelOrder.RGB, SPISpeed=2, gamma=None, restart_timeout=3, deviceID=None, hardwareID="1D50:60AB"):
+        super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1
@@ -94,12 +102,13 @@ class DriverSerial(DriverBase):
         self.dev = dev
         self.devVer = 0
         self.deviceID = deviceID
-        if self.deviceID != None and (self.deviceID < 0 or self.deviceID > 255):
+        if self.deviceID is not None and (self.deviceID < 0 or self.deviceID > 255):
             raise ValueError("deviceID must be between 0 and 255")
 
         resp = self._connect()
-        if resp == RETURN_CODES.REBOOT: #reboot needed
-            log.logger.info("Reconfigure and reboot needed, waiting for controller to restart...")
+        if resp == RETURN_CODES.REBOOT:  # reboot needed
+            log.logger.info(
+                "Reconfigure and reboot needed, waiting for controller to restart...")
             self._com.close()
             time.sleep(restart_timeout)
             resp = self._connect()
@@ -114,13 +123,13 @@ class DriverSerial(DriverBase):
             log.logger.info("Using SPI Speed: {}MHz".format(self._SPISpeed))
 
     def __exit__(self, type, value, traceback):
-        if self._com != None:
+        if self._com is not None:
             log.logger.info("Closing connection to: " + self.dev)
             self._com.close()
 
     @staticmethod
-    def findSerialDevices(hardwareID = "1D50:60AB"):
-        hardwareID = "(?i)"+hardwareID #forces case insensitive
+    def findSerialDevices(hardwareID="1D50:60AB"):
+        hardwareID = "(?i)" + hardwareID  # forces case insensitive
         if len(DriverSerial.foundDevices) == 0:
             DriverSerial.foundDevices = []
             DriverSerial.deviceIDS = {}
@@ -149,7 +158,6 @@ class DriverSerial(DriverBase):
         log.logger.error("{}: {}".format(error, msg))
         raise BiblioSerialError(msg)
 
-
     @staticmethod
     def _comError():
         error = "There was an unknown error communicating with the device."
@@ -158,10 +166,10 @@ class DriverSerial(DriverBase):
 
     def _connect(self):
         try:
-            if(self.dev == "" or self.dev == None):
+            if(self.dev == "" or self.dev is None):
                 DriverSerial.findSerialDevices(self._hardwareID)
 
-                if self.deviceID != None:
+                if self.deviceID is not None:
                     if self.deviceID in DriverSerial.deviceIDS:
                         self.dev = DriverSerial.deviceIDS[self.deviceID]
                         self.devVer = 0
@@ -170,10 +178,12 @@ class DriverSerial(DriverBase):
                             self.devVer = DriverSerial.deviceVers[i]
                         except:
                             pass
-                        log.logger.info( "Using COM Port: {}, Device ID: {}, Device Ver: {}".format(self.dev, self.deviceID, self.devVer))
+                        log.logger.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
+                            self.dev, self.deviceID, self.devVer))
 
-                    if self.dev == "" or self.dev == None:
-                        error = "Unable to find device with ID: {}".format(self.deviceID)
+                    if self.dev == "" or self.dev is None:
+                        error = "Unable to find device with ID: {}".format(
+                            self.deviceID)
                         log.logger.error(error)
                         raise ValueError(error)
                 elif len(DriverSerial.foundDevices) > 0:
@@ -189,30 +199,32 @@ class DriverSerial(DriverBase):
                         if DriverSerial.deviceIDS[id] == self.dev:
                             devID = id
 
-                    log.logger.info( "Using COM Port: {}, Device ID: {}, Device Ver: {}".format(self.dev, devID, self.devVer))
+                    log.logger.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
+                        self.dev, devID, self.devVer))
 
             try:
-                self._com =  serial.Serial(self.dev, timeout=5)
+                self._com = serial.Serial(self.dev, timeout=5)
             except serial.SerialException as e:
                 ports = DriverSerial.findSerialDevices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
-                    error = "Invalid port specified. Try using one of: \n" + "\n".join(ports)
+                    error = "Invalid port specified. Try using one of: \n" + \
+                        "\n".join(ports)
                 log.logger.info(error)
                 raise BiblioSerialError(error)
 
             packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
-            packet.append(self._type) #set strip type
+            packet.append(self._type)  # set strip type
             byteCount = self.bufByteCount
             if self._type in BufferChipsets:
                 if self._type == LEDTYPE.APA102 and self.devVer >= 2:
                     pass
                 else:
-                    self._bufPad = BufferChipsets[self._type](self.numLEDs)*3
+                    self._bufPad = BufferChipsets[self._type](self.numLEDs) * 3
                     byteCount += self._bufPad
 
-            packet.append(byteCount & 0xFF) #set 1st byte of byteCount
-            packet.append(byteCount >> 8) #set 2nd byte of byteCount
+            packet.append(byteCount & 0xFF)  # set 1st byte of byteCount
+            packet.append(byteCount >> 8)  # set 2nd byte of byteCount
             packet.append(self._SPISpeed)
             self._com.write(packet)
 
@@ -242,7 +254,7 @@ class DriverSerial(DriverBase):
             raise ValueError("ID must be an unsigned byte!")
 
         try:
-            com =  serial.Serial(dev, timeout=5)
+            com = serial.Serial(dev, timeout=5)
 
             packet = DriverSerial._generateHeader(CMDTYPE.SETID, 1)
             packet.append(id)
@@ -255,10 +267,9 @@ class DriverSerial(DriverBase):
                 if ord(resp) != RETURN_CODES.SUCCESS:
                     DriverSerial._printError(ord(resp))
 
-        except serial.SerialException as e:
+        except serial.SerialException:
             log.logger.error("Problem connecting to serial device.")
             raise IOError("Problem connecting to serial device.")
-
 
     @staticmethod
     def getDeviceID(dev):
@@ -268,7 +279,7 @@ class DriverSerial(DriverBase):
             com.write(packet)
             resp = ord(com.read(1))
             return resp
-        except serial.SerialException as e:
+        except serial.SerialException:
             log.logger.error("Problem connecting to serial device.")
             return -1
 
@@ -285,10 +296,9 @@ class DriverSerial(DriverBase):
                 if resp == RETURN_CODES.SUCCESS:
                     ver = ord(com.read(1))
             return ver
-        except serial.SerialException as e:
+        except serial.SerialException:
             log.logger.error("Problem connecting to serial device.")
             return 0
-
 
     def setMasterBrightness(self, brightness):
         packet = DriverSerial._generateHeader(CMDTYPE.BRIGHTNESS, 1)
@@ -301,22 +311,20 @@ class DriverSerial(DriverBase):
         else:
             return True
 
-    #Push new data to strand
+    # Push new data to strand
     def update(self, data):
         count = self.bufByteCount + self._bufPad
         packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
 
-        c_order = self.c_order
-
         self._fixData(data)
 
         packet.extend(self._buf)
-        packet.extend([0]*self._bufPad)
+        packet.extend([0] * self._bufPad)
         self._com.write(packet)
 
         resp = self._com.read(1)
         if len(resp) == 0:
-                DriverSerial._comError()
+            DriverSerial._comError()
         if ord(resp) != RETURN_CODES.SUCCESS:
             DriverSerial._printError(ord(resp))
 
@@ -324,13 +332,13 @@ class DriverSerial(DriverBase):
 
 
 MANIFEST = [
-        {
-            "id":"serial",
-            "class":DriverSerial,
-            "type": "driver",
-            "display": "Serial (AllPixel)",
-            "desc": "Interface with USB Serial devices that support the AllPixel protocol.",
-            "params": [{
+    {
+        "id": "serial",
+        "class": DriverSerial,
+        "type": "driver",
+        "display": "Serial (AllPixel)",
+        "desc": "Interface with USB Serial devices that support the AllPixel protocol.",
+        "params": [{
                 "id": "type",
                 "label": "LED Type",
                 "type": "combo",
@@ -348,89 +356,89 @@ MANIFEST = [
                     10: "LPD1886",
                     11: "P98131"
                 },
-                "default": 0
-            }, {
-                "id": "num",
-                "label": "# Pixels",
-                "type": "int",
-                "default": 0,
-                "min": 0,
-                "help":"Total pixels in display."
-            }, {
-                "id": "dev",
-                "label": "Device Path",
-                "type": "str",
-                "default": "",
-            }, {
-                "id": "c_order",
-                "label": "Channel Order",
-                "type": "combo",
-                "options": {
+            "default": 0
+        }, {
+            "id": "num",
+            "label": "# Pixels",
+            "type": "int",
+            "default": 0,
+            "min": 0,
+            "help": "Total pixels in display."
+        }, {
+            "id": "dev",
+            "label": "Device Path",
+            "type": "str",
+            "default": "",
+        }, {
+            "id": "c_order",
+            "label": "Channel Order",
+            "type": "combo",
+            "options": {
                     0: "RGB",
                     1: "RBG",
                     2: "GRB",
                     3: "GBR",
                     4: "BRG",
                     5: "BGR"
-                },
-                "options_map": [
-                    [0, 1, 2],
-                    [0, 2, 1],
-                    [1, 0, 2],
-                    [1, 2, 0],
-                    [2, 0, 1],
-                    [2, 1, 0]
-                ],
-                "default": 0
-            }, {
-                "id": "SPISpeed",
-                "label": "SPI Speed (MHz)",
-                "type": "int",
-                "default": 2,
-                "min": 1,
-                "max": 24,
-                "group":"Advanced"
-            }, {
-                "id":"gamma",
-                "label":"Gamma",
-                "type":"combo",
-                "default":None,
-                "options":{
+            },
+            "options_map": [
+                [0, 1, 2],
+                [0, 2, 1],
+                [1, 0, 2],
+                [1, 2, 0],
+                [2, 0, 1],
+                [2, 1, 0]
+            ],
+            "default": 0
+        }, {
+            "id": "SPISpeed",
+            "label": "SPI Speed (MHz)",
+            "type": "int",
+            "default": 2,
+            "min": 1,
+            "max": 24,
+            "group": "Advanced"
+        }, {
+            "id": "gamma",
+            "label": "Gamma",
+            "type": "combo",
+            "default": None,
+            "options": {
                     0: "LPD8806",
                     1: "APA102",
                     2: "WS2801",
                     3: "SM16716",
                     5: "WS281x"
-                },
-                "options_map":[
-                    gamma.LPD8806,
-                    gamma.APA102,
-                    gamma.WS2801,
-                    gamma.SM16716,
-                    gamma.WS2812B
-                ]
-            },{
-                "id": "restart_timeout",
-                "label": "Restart Timeout",
-                "type": "int",
-                "default": 3,
-                "min": 1,
-                "group":"Advanced"
-            },{
-                "id": "deviceID",
-                "label": "Device ID",
-                "type": "int",
-                "default": None,
-                "min": 0,
-                "max": 255,
-                "msg": "AllPixel ID",
-                "group":"Advanced"
-            },{
-                "id": "hardwareID",
-                "label": "Hardware ID",
-                "type": "str",
-                "default": "1D50:60AB",
-                "group":"Advanced"
-            },]
-        }
+            },
+            "options_map": [
+                gamma.LPD8806,
+                gamma.APA102,
+                gamma.WS2801,
+                gamma.SM16716,
+                gamma.WS2812B
+            ]
+        }, {
+            "id": "restart_timeout",
+            "label": "Restart Timeout",
+            "type": "int",
+            "default": 3,
+            "min": 1,
+            "group": "Advanced"
+        }, {
+            "id": "deviceID",
+            "label": "Device ID",
+            "type": "int",
+            "default": None,
+            "min": 0,
+            "max": 255,
+            "msg": "AllPixel ID",
+            "group": "Advanced"
+        }, {
+            "id": "hardwareID",
+            "label": "Hardware ID",
+            "type": "str",
+            "default": "1D50:60AB",
+            "group": "Advanced"
+        }, ]
+    }
 ]

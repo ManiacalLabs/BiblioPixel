@@ -14,12 +14,11 @@ from led import LEDMatrix
 import colors
 
 
-def showImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = colors.Off, brightness = 255):
+def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
 
     if not isinstance(led, LEDMatrix):
         raise RuntimeError("Must use LEDMatrix with showImage!")
-
 
     bgcolor = colors.color_scale(bgcolor, brightness)
 
@@ -44,14 +43,17 @@ def showImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = co
 
     for x in range(ox, w + ox):
         for y in range(oy, h + oy):
-            r,g,b,a = (0,0,0,255)
-            rgba = img.getpixel((x - ox,y - oy))
+            r, g, b, a = (0, 0, 0, 255)
+            rgba = img.getpixel((x - ox, y - oy))
 
             if isinstance(rgba, int):
-                raise ValueError("Image must be in RGB or RGBA format!");
-            if len(rgba) == 3: r,g,b = rgba
-            elif len(rgba) == 4: r,g,b,a = rgba
-            else: raise ValueError("Image must be in RGB or RGBA format!");
+                raise ValueError("Image must be in RGB or RGBA format!")
+            if len(rgba) == 3:
+                r, g, b = rgba
+            elif len(rgba) == 4:
+                r, g, b, a = rgba
+            else:
+                raise ValueError("Image must be in RGB or RGBA format!")
 
             if a == 0:
                 r, g, b = bgcolor
@@ -63,12 +65,12 @@ def showImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = co
 
             led.set(x, y, (r, g, b))
 
-def loadImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = colors.Off, brightness = 255):
+
+def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
 
     if not isinstance(led, LEDMatrix):
         raise RuntimeError("Must use LEDMatrix with loadImage!")
-
 
     bgcolor = colors.color_scale(bgcolor, brightness)
 
@@ -89,16 +91,20 @@ def loadImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = co
     ox = offset[0]
     oy = offset[1]
 
-    texture = [[colors.Off for x in range(led.width)] for y in range(led.height)]
+    texture = [[colors.Off for x in range(led.width)]
+               for y in range(led.height)]
     for x in range(ox, w + ox):
         for y in range(oy, h + oy):
-            r,g,b,a = (0,0,0,255)
-            rgba = img.getpixel((x - ox,y - oy))
+            r, g, b, a = (0, 0, 0, 255)
+            rgba = img.getpixel((x - ox, y - oy))
             if isinstance(rgba, int):
-                raise ValueError("Image must be in RGB or RGBA format!");
-            if len(rgba) == 3: r,g,b = rgba
-            elif len(rgba) == 4: r,g,b,a = rgba
-            else: raise ValueError("Image must be in RGB or RGBA format!");
+                raise ValueError("Image must be in RGB or RGBA format!")
+            if len(rgba) == 3:
+                r, g, b = rgba
+            elif len(rgba) == 4:
+                r, g, b, a = rgba
+            else:
+                raise ValueError("Image must be in RGB or RGBA format!")
 
             if a == 0:
                 r, g, b = bgcolor
@@ -108,7 +114,7 @@ def loadImage(led, imagePath = "", imageObj = None, offset = (0,0), bgcolor = co
             if brightness != 255:
                 r, g, b = colors.color_scale((r, g, b), brightness)
 
-            if y>=0 and x>=0:
+            if y >= 0 and x >= 0:
                 texture[y][x] = (r, g, b)
 
     return texture

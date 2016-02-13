@@ -10,7 +10,7 @@ setup(
     url='http://github.com/maniacallabs/bibliopixel/',
     license='MIT',
     packages=['bibliopixel', 'bibliopixel.drivers'],
-    classifiers = [
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2',

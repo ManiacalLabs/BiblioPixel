@@ -1,9 +1,10 @@
-import threading 
+import threading
 import os
 import SocketServer
 from network import CMDTYPE, RETURN_CODES
 
 from .. import log
+
 
 class ThreadedDataHandler(SocketServer.BaseRequestHandler):
 
@@ -12,28 +13,32 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
             cmd = ord(self.request.recv(1))
             r = bytes(self.request.recv(2))
             size = (ord(r[1]) << 8) | ord(r[0])
-            
+
             if cmd == CMDTYPE.PIXEL_DATA:
                 data = bytearray()
                 emptyCount = 0
                 while len(data) < size:
                     buf = self.request.recv(4096)
-                    if len(buf) == 0: emptyCount += 1
-                    if emptyCount >= 5: 
-                        log.logger.exception("Failed to receive expected amount of data! Expected: {} bytes / Received: {} bytes".format(size, len(data)));
+                    if len(buf) == 0:
+                        emptyCount += 1
+                    if emptyCount >= 5:
+                        log.logger.exception(
+                            "Failed to receive expected amount of data! Expected: {} bytes / Received: {} bytes".format(size, len(data)))
                         self.request.sendall(RETURN_CODES.ERROR_SIZE)
                         return
 
                     data.extend(buf)
-                
+
                 if len(data) != size:
-                    log.logger.exception("Receieved data size incorrect! Expected: {} bytes / Received: {} bytes".format(size, len(data)));
+                    log.logger.exception(
+                        "Receieved data size incorrect! Expected: {} bytes / Received: {} bytes".format(size, len(data)))
                     return
 
                 self.server.update(data)
-               
+
                 if self.server.hasFrame:
-                    while self.server.hasFrame(): pass
+                    while self.server.hasFrame():
+                        pass
 
                 packet = bytearray()
                 packet.append(RETURN_CODES.SUCCESS)
@@ -53,16 +58,19 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
 
         except Exception as e:
             log.logger.exception(e)
-            pass #if there's a comm error, just move on 
+            pass  # if there's a comm error, just move on
         return
+
 
 class ThreadedDataServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     update = None
     setBrightness = None
     hasFrame = None
 
+
 class NetworkReceiver:
-    def __init__(self, led, port = 3142, interface = '0.0.0.0'):
+
+    def __init__(self, led, port=3142, interface='0.0.0.0'):
         self._led = led
         self.address = (interface, port)
         SocketServer.TCPServer.allow_reuse_address = True
@@ -70,9 +78,9 @@ class NetworkReceiver:
         self._server.update = self._update
         self._server.setBrightness = self._led.setMasterBrightness
 
-    def start(self, join = False):
+    def start(self, join=False):
         self._t = threading.Thread(target=self._server.serve_forever)
-        self._t.setDaemon(True) # don't hang on exit
+        self._t.setDaemon(True)  # don't hang on exit
         self._t.start()
         log.logger.info("Listening on {}".format(self.address))
         if join:
@@ -82,9 +90,8 @@ class NetworkReceiver:
         log.logger.info("Closing server...")
         self._server.shutdown()
         self._server.server_close()
-        #self._t.join()
+        # self._t.join()
 
     def _update(self, data):
         self._led.setBuffer(list(data))
         self._led.update()
-

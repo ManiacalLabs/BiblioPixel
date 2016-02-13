@@ -17,8 +17,10 @@ DEFAULT_MAP = {
     "Y": "X"
 }
 
+
 class WinGamePadEmu(BaseGamePad):
-    def __init__(self, btn_map = DEFAULT_MAP):
+
+    def __init__(self, btn_map=DEFAULT_MAP):
         super(WinGamePadEmu, self).__init__()
         self._map = btn_map
 
@@ -26,6 +28,7 @@ class WinGamePadEmu(BaseGamePad):
         result = {}
         for k in self._map:
             v = self._map[k]
-            if isinstance(v, str): v = ord(v)
+            if isinstance(v, str):
+                v = ord(v)
             result[k] = abs(win32api.GetAsyncKeyState(v)) > 1
         return d(result)

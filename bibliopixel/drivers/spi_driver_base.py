@@ -1,21 +1,22 @@
-from driver_base import *
+from driver_base import DriverBase, ChannelOrder
 import time
 
 import os
 from .. import log
 
+
 class DriverSPIBase(DriverBase):
     """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
-    
-    def __init__(self, num, c_order = ChannelOrder.GRB, use_py_spi = True, dev="/dev/spidev0.0", SPISpeed = 2):
 
-        super(DriverSPIBase, self).__init__(num, c_order = c_order)
+    def __init__(self, num, c_order=ChannelOrder.GRB, use_py_spi=True, dev="/dev/spidev0.0", SPISpeed=2):
+
+        super(DriverSPIBase, self).__init__(num, c_order=c_order)
 
         self.dev = dev
         self.use_py_spi = use_py_spi
         self._spiSpeed = SPISpeed
-        
-        #File based SPI requires a bytearray so we have to overwrite _buf
+
+        # File based SPI requires a bytearray so we have to overwrite _buf
         if self.use_py_spi:
             self._buf = []
         else:
@@ -25,7 +26,7 @@ class DriverSPIBase(DriverBase):
             self._buf.append(0)
 
         if self.use_py_spi:
-            a,b = -1,-1
+            a, b = -1, -1
             d = self.dev.replace("/dev/spidev", "")
             s = d.split('.')
             if len(s) == 2:
@@ -42,7 +43,8 @@ class DriverSPIBase(DriverBase):
             self.spi = spidev.SpiDev()
             self.spi.open(a, b)
             self.spi.max_speed_hz = int(self._spiSpeed * 1000000.0)
-            log.logger.info( 'py-spidev speed @ %.1f MHz' % (float(self.spi.max_speed_hz) / 1000000.0 ))
+            log.logger.info('py-spidev speed @ %.1f MHz' %
+                            (float(self.spi.max_speed_hz) / 1000000.0))
         else:
             self.spi = open(self.dev, "wb")
 
@@ -62,10 +64,10 @@ class DriverSPIBase(DriverBase):
             log.logger.error(error)
             raise IOError(error)
 
-        #permissions check
+        # permissions check
         try:
             open(self.dev)
-        except IOError as  e:
+        except IOError as e:
             if e.errno == 13:
                 error = "Cannot find SPI device. Please see https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup for details."
                 log.logger.error(error)
@@ -83,5 +85,3 @@ class DriverSPIBase(DriverBase):
     def update(self, data):
         self._fixData(data)
         self._sendData()
-        
-

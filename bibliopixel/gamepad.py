@@ -1,5 +1,6 @@
 from util import d
 
+
 class BaseGamePad(object):
     def __init__(self):
         pass
@@ -15,7 +16,7 @@ class BaseGamePad(object):
 
     def close(self):
         pass
-        
+
     def setLights(self, data):
         pass
 
