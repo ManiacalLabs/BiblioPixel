@@ -83,12 +83,15 @@ class BaseAnimation(object):
         else:
             return True
 
-    def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles):
+    def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds):
         self.preRun()
 
         # calculate sleep time base on desired Frames per Second
         if fps is not None:
             sleep = int(1000 / fps)
+
+        if seconds is not None:
+            max_steps = int((seconds * 1000) / sleep)
 
         initSleep = sleep
 
@@ -158,7 +161,7 @@ class BaseAnimation(object):
         if self._callback:
             self._callback(self)
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False, max_cycles=0, threaded=False, joinThread=False, callback=None):
+    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False, max_cycles=0, threaded=False, joinThread=False, callback=None, seconds=None):
 
         self._threaded = threaded
         if self._threaded:
@@ -169,7 +172,7 @@ class BaseAnimation(object):
             args = {}
             l = locals()
             run_params = ["amt", "fps", "sleep",
-                          "max_steps", "untilComplete", "max_cycles"]
+                          "max_steps", "untilComplete", "max_cycles", "seconds"]
             for p in run_params:
                 if p in l:
                     args[p] = l[p]
@@ -179,7 +182,7 @@ class BaseAnimation(object):
             if joinThread:
                 self._thread.join()
         else:
-            self._run(amt, fps, sleep, max_steps, untilComplete, max_cycles)
+            self._run(amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds)
 
     RUN_PARAMS = [{
         "id": "amt",
@@ -195,6 +198,13 @@ class BaseAnimation(object):
                 "default": 30,
                 "min": 1,
                 "help": "Framerate at which to run animation."
+    }, {
+        "id": "seconds",
+        "label": "Run For Seconds",
+        "type": "int",
+                "default": None,
+                "min": 0,
+                "help": "Number of seconds to run animation for, based on framerate."
     }, {
         "id": "max_steps",
         "label": "Max Frames",
