@@ -43,7 +43,7 @@ class DriverSPIBase(DriverBase):
             self.spi = spidev.SpiDev()
             self.spi.open(a, b)
             self.spi.max_speed_hz = int(self._spiSpeed * 1000000.0)
-            log.info('py-spidev speed @ %.1f MHz' %
+            log.info('py-spidev speed @ %.1f MHz',
                             (float(self.spi.max_speed_hz) / 1000000.0))
         else:
             self.spi = open(self.dev, "wb")

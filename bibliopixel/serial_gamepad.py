@@ -52,7 +52,7 @@ class SerialGamePad(BaseGamePad):
 
     def close(self):
         if self._com is not None:
-            log.info("Closing connection to: " + self.dev)
+            log.info("Closing connection to: %s", self.dev)
             self._com.close()
 
     def __exit__(self, type, value, traceback):
@@ -78,7 +78,7 @@ class SerialGamePad(BaseGamePad):
         elif error == RETURN_CODES.ERROR_BAD_CMD:
             msg = "Unsupported protocol command. Check your device version."
 
-        log.error("{}: {}".format(error, msg))
+        log.error("%s: %s", error, msg)
         raise SerialPadError(msg)
 
     @staticmethod
@@ -94,7 +94,7 @@ class SerialGamePad(BaseGamePad):
 
                 if len(SerialGamePad.foundDevices) > 0:
                     self.dev = SerialGamePad.foundDevices[0]
-                    log.info("Using COM Port: {}".format(self.dev))
+                    log.info("Using COM Port: %s", self.dev)
 
             try:
                 self._com = serial.Serial(self.dev, timeout=5)

@@ -141,17 +141,17 @@ class BaseAnimation(object):
 
             if self._led._threadedUpdate:
                 log.debug(
-                    "Frame: {}ms / Update Max: {}ms".format(stepTime, updateTime))
+                    "Frame: %sms / Update Max: %sms", stepTime, updateTime)
             else:
-                log.debug("{}ms/{}fps / Frame: {}ms / Update: {}ms".format(
-                    totalTime, int(1000 / max(totalTime, 1)), stepTime, updateTime))
+                log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
+                    totalTime, int(1000 / max(totalTime, 1)), stepTime, updateTime)
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)
                 t = max(0, (sleep - diff) / 1000.0)
                 if t == 0:
                     log.warning(
-                        "Frame-time of %dms set, but took %dms!" % (sleep, diff))
+                        "Frame-time of %dms set, but took %dms!", sleep, diff)
                 if self._threaded:
                     self._stopEvent.wait(t)
                 else:

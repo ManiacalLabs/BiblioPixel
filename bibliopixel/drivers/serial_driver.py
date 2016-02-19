@@ -120,11 +120,11 @@ class DriverSerial(DriverBase):
             DriverSerial._printError(resp)
 
         if type in SPIChipsets:
-            log.info("Using SPI Speed: {}MHz".format(self._SPISpeed))
+            log.info("Using SPI Speed: %sMHz", self._SPISpeed)
 
     def __exit__(self, type, value, traceback):
         if self._com is not None:
-            log.info("Closing connection to: " + self.dev)
+            log.info("Closing connection to: %s", self.dev)
             self._com.close()
 
     @staticmethod
@@ -155,7 +155,7 @@ class DriverSerial(DriverBase):
         elif error == RETURN_CODES.ERROR_BAD_CMD:
             msg = "Unsupported protocol command. Check your device version."
 
-        log.error("{}: {}".format(error, msg))
+        log.error("%s: %s", error, msg)
         raise BiblioSerialError(msg)
 
     @staticmethod
@@ -178,8 +178,8 @@ class DriverSerial(DriverBase):
                             self.devVer = DriverSerial.deviceVers[i]
                         except:
                             pass
-                        log.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
-                            self.dev, self.deviceID, self.devVer))
+                        log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
+                            self.dev, self.deviceID, self.devVer)
 
                     if self.dev == "" or self.dev is None:
                         error = "Unable to find device with ID: {}".format(
@@ -199,8 +199,8 @@ class DriverSerial(DriverBase):
                         if DriverSerial.deviceIDS[id] == self.dev:
                             devID = id
 
-                    log.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
-                        self.dev, devID, self.devVer))
+                    log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
+                        self.dev, devID, self.devVer)
 
             try:
                 self._com = serial.Serial(self.dev, timeout=5)
