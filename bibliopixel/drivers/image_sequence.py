@@ -9,7 +9,7 @@ try:
 
 except ImportError as e:
     error = "Please install Python Imaging Library: pip install pillow"
-    log.logger.error(error)
+    log.error(error)
     raise ImportError(error)
 
 
@@ -49,7 +49,7 @@ class DriverImageSequence(DriverBase):
         count = 0
         for img in self._images:
             file = output + "/" + ("%04d" % count) + ".png"
-            log.logger.info("Writing: " + file)
+            log.info("Writing: " + file)
             img.save(file)
             count += 1
 

@@ -60,7 +60,7 @@ class DriverVisualizer(DriverNetwork):
             command = "{0} {1} --width {2} --height {3} --pixelsize {4} --port {5} {6} {7} {8}".format(
                 exe_string, script, str(self.width), str(self.height), str(pixelSize), str(port), ip, top, suffix)
             # print command
-            log.logger.debug(command)
+            log.debug(command)
             os.system(command)
             time.sleep(0.5)
 

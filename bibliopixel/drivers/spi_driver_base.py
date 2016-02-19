@@ -35,7 +35,7 @@ class DriverSPIBase(DriverBase):
 
             if a < 0 or b < 0:
                 error = "When using py-spidev, the given device must be in the format /dev/spidev*.*"
-                log.logger.error(error)
+                log.error(error)
                 raise ValueError(error)
 
             self._bootstrapSPIDev()
@@ -43,7 +43,7 @@ class DriverSPIBase(DriverBase):
             self.spi = spidev.SpiDev()
             self.spi.open(a, b)
             self.spi.max_speed_hz = int(self._spiSpeed * 1000000.0)
-            log.logger.info('py-spidev speed @ %.1f MHz' %
+            log.info('py-spidev speed @ %.1f MHz' %
                             (float(self.spi.max_speed_hz) / 1000000.0))
         else:
             self.spi = open(self.dev, "wb")
@@ -56,12 +56,12 @@ class DriverSPIBase(DriverBase):
                 import spidev
             except:
                 error = "Unable to import spidev. Please install. pip install spidev"
-                log.logger.error(error)
+                log.error(error)
                 raise ImportError(error)
 
         if not os.path.exists(self.dev):
             error = "Cannot find SPI device. Please see https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup for details."
-            log.logger.error(error)
+            log.error(error)
             raise IOError(error)
 
         # permissions check
@@ -70,7 +70,7 @@ class DriverSPIBase(DriverBase):
         except IOError as e:
             if e.errno == 13:
                 error = "Cannot find SPI device. Please see https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup for details."
-                log.logger.error(error)
+                log.error(error)
                 raise IOError(error)
             else:
                 raise e

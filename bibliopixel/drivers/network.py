@@ -48,7 +48,7 @@ class DriverNetwork(DriverBase):
         except socket.gaierror:
             error = "Unable to connect to or resolve host: {}".format(
                 self._host)
-            log.logger.error(error)
+            log.error(error)
             raise IOError(error)
 
     # Push new data to strand
@@ -68,12 +68,12 @@ class DriverNetwork(DriverBase):
             s.close()
 
             if resp != RETURN_CODES.SUCCESS:
-                log.logger.warning("Bytecount mismatch! {0}".format(resp))
+                log.warning("Bytecount mismatch! {0}".format(resp))
 
         except Exception as e:
-            log.logger.exception(e)
+            log.exception(e)
             error = "Problem communicating with network receiver!"
-            log.logger.error(error)
+            log.error(error)
             raise IOError(error)
 
     def setMasterBrightness(self, brightness):

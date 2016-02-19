@@ -9,7 +9,7 @@ try:
     import serial.tools.list_ports
 except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
-    log.logger.error(error)
+    log.error(error)
     raise ImportError(error)
 
 from distutils.version import LooseVersion
@@ -17,7 +17,7 @@ from distutils.version import LooseVersion
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
         serial.VERSION)
-    log.logger.error(error)
+    log.error(error)
     raise ImportError(error)
 
 
@@ -107,7 +107,7 @@ class DriverSerial(DriverBase):
 
         resp = self._connect()
         if resp == RETURN_CODES.REBOOT:  # reboot needed
-            log.logger.info(
+            log.info(
                 "Reconfigure and reboot needed, waiting for controller to restart...")
             self._com.close()
             time.sleep(restart_timeout)
@@ -115,16 +115,16 @@ class DriverSerial(DriverBase):
             if resp != RETURN_CODES.SUCCESS:
                 DriverSerial._printError(resp)
             else:
-                log.logger.info("Reconfigure success!")
+                log.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
             DriverSerial._printError(resp)
 
         if type in SPIChipsets:
-            log.logger.info("Using SPI Speed: {}MHz".format(self._SPISpeed))
+            log.info("Using SPI Speed: {}MHz".format(self._SPISpeed))
 
     def __exit__(self, type, value, traceback):
         if self._com is not None:
-            log.logger.info("Closing connection to: " + self.dev)
+            log.info("Closing connection to: " + self.dev)
             self._com.close()
 
     @staticmethod
@@ -155,13 +155,13 @@ class DriverSerial(DriverBase):
         elif error == RETURN_CODES.ERROR_BAD_CMD:
             msg = "Unsupported protocol command. Check your device version."
 
-        log.logger.error("{}: {}".format(error, msg))
+        log.error("{}: {}".format(error, msg))
         raise BiblioSerialError(msg)
 
     @staticmethod
     def _comError():
         error = "There was an unknown error communicating with the device."
-        log.logger.error(error)
+        log.error(error)
         raise IOError(error)
 
     def _connect(self):
@@ -178,13 +178,13 @@ class DriverSerial(DriverBase):
                             self.devVer = DriverSerial.deviceVers[i]
                         except:
                             pass
-                        log.logger.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
+                        log.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
                             self.dev, self.deviceID, self.devVer))
 
                     if self.dev == "" or self.dev is None:
                         error = "Unable to find device with ID: {}".format(
                             self.deviceID)
-                        log.logger.error(error)
+                        log.error(error)
                         raise ValueError(error)
                 elif len(DriverSerial.foundDevices) > 0:
                     self.dev = DriverSerial.foundDevices[0]
@@ -199,7 +199,7 @@ class DriverSerial(DriverBase):
                         if DriverSerial.deviceIDS[id] == self.dev:
                             devID = id
 
-                    log.logger.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
+                    log.info("Using COM Port: {}, Device ID: {}, Device Ver: {}".format(
                         self.dev, devID, self.devVer))
 
             try:
@@ -210,7 +210,7 @@ class DriverSerial(DriverBase):
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \
                         "\n".join(ports)
-                log.logger.info(error)
+                log.info(error)
                 raise BiblioSerialError(error)
 
             packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
@@ -236,8 +236,8 @@ class DriverSerial(DriverBase):
 
         except serial.SerialException as e:
             error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
-            log.logger.error(traceback.format_exc())
-            log.logger.error(error)
+            log.error(traceback.format_exc())
+            log.error(error)
             raise e
 
     @staticmethod
@@ -268,7 +268,7 @@ class DriverSerial(DriverBase):
                     DriverSerial._printError(ord(resp))
 
         except serial.SerialException:
-            log.logger.error("Problem connecting to serial device.")
+            log.error("Problem connecting to serial device.")
             raise IOError("Problem connecting to serial device.")
 
     @staticmethod
@@ -280,7 +280,7 @@ class DriverSerial(DriverBase):
             resp = ord(com.read(1))
             return resp
         except serial.SerialException:
-            log.logger.error("Problem connecting to serial device.")
+            log.error("Problem connecting to serial device.")
             return -1
 
     @staticmethod
@@ -297,7 +297,7 @@ class DriverSerial(DriverBase):
                     ver = ord(com.read(1))
             return ver
         except serial.SerialException:
-            log.logger.error("Problem connecting to serial device.")
+            log.error("Problem connecting to serial device.")
             return 0
 
     def setMasterBrightness(self, brightness):
