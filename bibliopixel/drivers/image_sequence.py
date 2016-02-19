@@ -49,7 +49,7 @@ class DriverImageSequence(DriverBase):
         count = 0
         for img in self._images:
             file = output + "/" + ("%04d" % count) + ".png"
-            log.info("Writing: " + file)
+            log.info("Writing: %s", file)
             img.save(file)
             count += 1
 

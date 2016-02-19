@@ -68,7 +68,7 @@ class DriverNetwork(DriverBase):
             s.close()
 
             if resp != RETURN_CODES.SUCCESS:
-                log.warning("Bytecount mismatch! {0}".format(resp))
+                log.warning("Bytecount mismatch! %s", resp)
 
         except Exception as e:
             log.exception(e)

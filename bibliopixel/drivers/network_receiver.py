@@ -23,7 +23,7 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
                         emptyCount += 1
                     if emptyCount >= 5:
                         log.exception(
-                            "Failed to receive expected amount of data! Expected: {} bytes / Received: {} bytes".format(size, len(data)))
+                            "Failed to receive expected amount of data! Expected: %s bytes / Received: %s bytes", size, len(data))
                         self.request.sendall(RETURN_CODES.ERROR_SIZE)
                         return
 
@@ -31,7 +31,9 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
 
                 if len(data) != size:
                     log.exception(
-                        "Receieved data size incorrect! Expected: {} bytes / Received: {} bytes".format(size, len(data)))
+                        "Received data size incorrect! "
+                        "Expected: %s bytes / Received: {%s bytes",
+                        size, len(data))
                     return
 
                 self.server.update(data)
@@ -82,7 +84,7 @@ class NetworkReceiver:
         self._t = threading.Thread(target=self._server.serve_forever)
         self._t.setDaemon(True)  # don't hang on exit
         self._t.start()
-        log.info("Listening on {}".format(self.address))
+        log.info("Listening on %s", self.address)
         if join:
             self._t.join()
 
