@@ -1,5 +1,6 @@
-from led import LEDBase, LEDStrip, LEDPOV, LEDMatrix, LEDCircle, mapGen, MultiMapBuilder, MatrixRotation
-import log
-import colors
+from . led import (LEDBase, LEDCircle, LEDMatrix, LEDPOV, LEDStrip,
+                   MatrixRotation, MultiMapBuilder, mapGen)
+
+from . import animation, colors, font, gamma, led, log, util
 
 __version__ = VERSION = '2.0.7'
