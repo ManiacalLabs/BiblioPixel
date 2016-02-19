@@ -6,7 +6,7 @@ try:
     from PIL import Image, ImageSequence
 except ImportError as e:
     error = "Please install Python Imaging Library: pip install pillow"
-    log.logger.error(error)
+    log.error(error)
     raise ImportError(error)
 
 import glob

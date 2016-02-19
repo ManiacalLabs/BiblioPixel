@@ -13,7 +13,7 @@ import log
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
         serial.VERSION)
-    log.logger.error(error)
+    log.error(error)
     raise ImportError(error)
 
 
@@ -52,7 +52,7 @@ class SerialGamePad(BaseGamePad):
 
     def close(self):
         if self._com is not None:
-            log.logger.info("Closing connection to: " + self.dev)
+            log.info("Closing connection to: " + self.dev)
             self._com.close()
 
     def __exit__(self, type, value, traceback):
@@ -78,13 +78,13 @@ class SerialGamePad(BaseGamePad):
         elif error == RETURN_CODES.ERROR_BAD_CMD:
             msg = "Unsupported protocol command. Check your device version."
 
-        log.logger.error("{}: {}".format(error, msg))
+        log.error("{}: {}".format(error, msg))
         raise SerialPadError(msg)
 
     @staticmethod
     def _comError():
         error = "There was an unknown error communicating with the device."
-        log.logger.error(error)
+        log.error(error)
         raise IOError(error)
 
     def _connect(self):
@@ -94,7 +94,7 @@ class SerialGamePad(BaseGamePad):
 
                 if len(SerialGamePad.foundDevices) > 0:
                     self.dev = SerialGamePad.foundDevices[0]
-                    log.logger.info("Using COM Port: {}".format(self.dev))
+                    log.info("Using COM Port: {}".format(self.dev))
 
             try:
                 self._com = serial.Serial(self.dev, timeout=5)
@@ -104,7 +104,7 @@ class SerialGamePad(BaseGamePad):
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \
                         "\n".join(ports)
-                log.logger.info(error)
+                log.info(error)
                 raise SerialPadError(error)
 
             packet = SerialGamePad._generateHeader(CMDTYPE.INIT, 0)
@@ -118,8 +118,8 @@ class SerialGamePad(BaseGamePad):
 
         except serial.SerialException as e:
             error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
-            log.logger.exception(e)
-            log.logger.error(error)
+            log.exception(e)
+            log.error(error)
             raise e
 
     @staticmethod
@@ -147,7 +147,7 @@ class SerialGamePad(BaseGamePad):
 
             bits = ord(resp[0]) + (ord(resp[1]) << 8)
         except IOError:
-            log.logger.error("IO Error Communicatng With Game Pad!")
+            log.error("IO Error Communicatng With Game Pad!")
 
         index = 0
         result = {}

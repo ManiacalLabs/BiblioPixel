@@ -1,26 +1,17 @@
-import logging
-from logging import DEBUG, INFO, WARNING, CRITICAL, ERROR
-import sys
+import logging, sys
+
+from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 
 class InfoFilter(logging.Filter):
-
     def filter(self, rec):
         return rec.levelno in (logging.DEBUG, logging.INFO)
 
-logger = logging.getLogger("BiblioPixel")
 
-
-def setLogLevel(level):
-    global logger
-    logger.setLevel(level)
-
-
-def __setup_custom_logger():
-    formatter = logging.Formatter(
-        fmt='%(levelname)s - %(module)s - %(message)s')
-
-    global logger
+def _new_custom_logger(name='BiblioPixel',
+                       fmt='%(levelname)s - %(module)s - %(message)s'):
+    logger = logging.getLogger(name)
+    formatter = logging.Formatter(fmt=fmt)
 
     if len(logger.handlers) == 0:
         logger.setLevel(logging.INFO)
@@ -36,4 +27,13 @@ def __setup_custom_logger():
         logger.addHandler(h1)
         logger.addHandler(h2)
 
-__setup_custom_logger()
+    return logger
+
+
+logger = _new_custom_logger()
+
+setLogLevel = logger.setLevel
+
+debug, info, warning, error, critical, exception = (
+    logger.debug, logger.info, logger.warning, logger.error, logger.critical,
+    logger.exception)

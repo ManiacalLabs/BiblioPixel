@@ -55,7 +55,7 @@ class VisualizerUI:
     def updateUI(self, data):
         size = len(data) / 3
         if size != self._count:
-            log.logger.warning("Bytecount mismatch")
+            log.warning("Bytecount mismatch")
             return
 
         for i in range(size):
@@ -222,8 +222,8 @@ if __name__ == '__main__':
         t.setDaemon(True)  # don't hang on exit
         t.start()
     except Exception as e:
-        log.logger.exception(e)
-        log.logger.error(
+        log.exception(e)
+        log.error(
             "Unable to open port. Another visualizer is likely running. Exiting...")
         sys.exit(2)
 

@@ -20,9 +20,9 @@ class animThread(threading.Thread):
         self._args = args
 
     def run(self):
-        log.logger.debug("Starting thread...")
+        log.debug("Starting thread...")
         self._anim._run(**self._args)
-        log.logger.debug("Thread Complete")
+        log.debug("Thread Complete")
 
 
 class BaseAnimation(object):
@@ -140,17 +140,17 @@ class BaseAnimation(object):
                 totalTime = stepTime + updateTime
 
             if self._led._threadedUpdate:
-                log.logger.debug(
+                log.debug(
                     "Frame: {}ms / Update Max: {}ms".format(stepTime, updateTime))
             else:
-                log.logger.debug("{}ms/{}fps / Frame: {}ms / Update: {}ms".format(
+                log.debug("{}ms/{}fps / Frame: {}ms / Update: {}ms".format(
                     totalTime, int(1000 / max(totalTime, 1)), stepTime, updateTime))
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)
                 t = max(0, (sleep - diff) / 1000.0)
                 if t == 0:
-                    log.logger.warning(
+                    log.warning(
                         "Frame-time of %dms set, but took %dms!" % (sleep, diff))
                 if self._threaded:
                     self._stopEvent.wait(t)

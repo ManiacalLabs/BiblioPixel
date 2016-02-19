@@ -5,7 +5,7 @@ try:
     from phue import Bridge
 except:
     error = "Unable to import phue. Please install. pip install phue"
-    log.logger.error(error)
+    log.error(error)
     raise ImportError(error)
 
 import colorsys
