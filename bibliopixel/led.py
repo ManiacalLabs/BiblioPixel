@@ -50,12 +50,8 @@ class LEDBase(object):
             driver = [driver]
 
         self.driver = driver
-        try:
-            self.numLEDs
-        except AttributeError:
-            self.numLEDs = 0
-            for d in self.driver:
-                self.numLEDs += d.numLEDs
+        if not hasattr(self, 'numLEDs'):
+            self.numLEDs = sum(d.numLEDs for d in self.driver)
 
         self.bufByteCount = int(3 * self.numLEDs)
         self._last_i = self.lastIndex = self.numLEDs - 1
@@ -89,8 +85,8 @@ class LEDBase(object):
         return self.__exit__(None, None, None)
 
     def _get_base(self, pixel):
-        if(pixel < 0 or pixel > self.lastIndex):
-            return (0, 0, 0)  # don't go out of bounds
+        if pixel < 0 or pixel > self.lastIndex:
+            return 0, 0, 0  # don't go out of bounds
 
         return (self.buffer[pixel * 3 + 0], self.buffer[pixel * 3 + 1], self.buffer[pixel * 3 + 2])
 
@@ -152,11 +148,11 @@ class LEDBase(object):
 
         If the driver supports it the brightness will be sent to the receiver directly.
         """
-        if(bright > 255 or bright < 0):
+        if bright > 255 or bright < 0:
             raise ValueError('Brightness must be between 0 and 255')
         result = True
         for d in self.driver:
-            if(not d.setMasterBrightness(bright)):
+            if not d.setMasterBrightness(bright):
                 result = False
                 break
 
@@ -194,8 +190,7 @@ class LEDBase(object):
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
         """Fill the entire strip with RGB color tuple"""
-        if start < 0:
-            start = 0
+        start = max(start, 0)
         if end < 0 or end > self.lastIndex:
             end = self.lastIndex
         for led in range(start, end + 1):  # since 0-index include end in range
@@ -437,32 +432,25 @@ class LEDMatrix(LEDBase):
                 self.__setNormal(xs, ys, color)
 
     # Set single pixel to Color value
-    def _setColor(self, x, y, color=(0, 0, 0)):
-        if color is None:
-            color = (0, 0, 0)
+    def _setColor(self, x, y, color=None):
         try:
-            if x < 0 or y < 0:
-                raise IndexError()
-            self._set(x, y, color)
+            self._set(x, y, color or (0, 0, 0))
         except IndexError:
             pass
 
     def _setTexture(self, x, y, color=None):
-        try:
-            if x < 0 or y < 0:
-                raise IndexError()
-            if color is None:
-                color = self.texture[y][x]
-            self._set(x, y, color)
-        except IndexError:
-            pass
+        if x > 0 and y >= 0:
+            try:
+                self._set(x, y, color or self.texture[y][x])
+            except IndexError:
+                pass
 
     def get(self, x, y):
         try:
             pixel = self.matrix_map[y][x]
             return self._get_base(pixel)
         except IndexError:
-            return (0, 0, 0)
+            return 0, 0, 0
 
     def setHSV(self, x, y, hsv):
         color = colors.hsv2rgb(hsv)

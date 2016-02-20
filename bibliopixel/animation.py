@@ -78,16 +78,13 @@ class BaseAnimation(object):
         return self.__exit__(None, None, None)
 
     def stopped(self):
-        if self._thread:
-            return not self._thread.isAlive()
-        else:
-            return True
+        return not (self._thread and self._thread.isAlive())
 
     def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds):
         self.preRun()
 
         # calculate sleep time base on desired Frames per Second
-        if fps is not None:
+        if fps:
             sleep = int(1000 / fps)
 
         if seconds is not None:
@@ -242,9 +239,7 @@ class AnimationQueue(BaseAnimation):
 
     def __init__(self, led, anims=None):
         super(AnimationQueue, self).__init__(led)
-        if anims is None:
-            anims = []
-        self.anims = anims
+        self.anims = anims or []
         self.curAnim = None
         self.animIndex = 0
         self._internalDelay = 0  # never wait
@@ -294,12 +289,9 @@ class AnimationQueue(BaseAnimation):
             self.curAnim = self.anims[self.animIndex]
 
             anim, run = self.curAnim
-            run['threaded'] = False
-            run['joinThread'] = False
-            run['callback'] = None
+            run.update(threaded=False, joinThread=False, callback=None)
 
-            if run['fps'] is None and self.fps is not None:
-                run['fps'] = self.fps
+            run['fps'] = run.get('fps') or self.fps
             anim.run(**(run))
 
     RUN_PARAMS = [{
@@ -326,10 +318,8 @@ class BaseStripAnim(BaseAnimation):
         if not isinstance(led, LEDStrip):
             raise RuntimeError("Must use LEDStrip with Strip Animations!")
 
-        self._start = start
+        self._start = max(start, 0)
         self._end = end
-        if self._start < 0:
-            self._start = 0
         if self._end < 0 or self._end > self._led.lastIndex:
             self._end = self._led.lastIndex
 
@@ -343,15 +333,8 @@ class BaseMatrixAnim(BaseAnimation):
         if not isinstance(led, LEDMatrix):
             raise RuntimeError("Must use LEDMatrix with Matrix Animations!")
 
-        if width == 0:
-            self.width = led.width
-        else:
-            self.width = width
-
-        if height == 0:
-            self.height = led.height
-        else:
-            self.height = height
+        self.width = width or led.width
+        self.height = height or led.height
 
         self.startX = startX
         self.startY = startY
@@ -369,7 +352,7 @@ class BaseGameAnim(BaseMatrixAnim):
         self._keyfuncs = {}
 
     def _exit(self, type, value, traceback):
-        if hasattr(self._input_dev, "setLights") and hasattr(self._input_dev, "setLightsOff"):
+        if hasattr(self._input_dev, 'setLightsOff'):
             self._input_dev.setLightsOff(5)
         self._input_dev.close()
 
@@ -377,16 +360,13 @@ class BaseGameAnim(BaseMatrixAnim):
         self._speeds[name] = speed
 
     def getSpeed(self, name):
-        if name in self._speeds:
-            return self._speeds[name]
-        else:
-            return None
+        return self._speeds.get(name)
 
     def _checkSpeed(self, speed):
-        return self._speedStep % speed == 0
+        return not (self._speedStep % speed)
 
     def checkSpeed(self, name):
-        return (name in self._speeds) and (self._checkSpeed(self._speeds[name]))
+        return name in self._speeds and self._checkSpeed(self._speeds[name])
 
     def addKeyFunc(self, key, func, speed=1, hold=True):
         if not isinstance(key, list):
@@ -414,13 +394,12 @@ class BaseGameAnim(BaseMatrixAnim):
                             cfg.func()
                         else:
                             cfg.inter = cfg.last = val
+                elif speedPass:
+                    if (val or cfg.inter) and not cfg.last:
+                        cfg.func()
+                    cfg.inter = cfg.last = val
                 else:
-                    if speedPass:
-                        if (val or cfg.inter) and not cfg.last:
-                            cfg.func()
-                        cfg.inter = cfg.last = val
-                    else:
-                        cfg.inter |= val
+                    cfg.inter |= val
         self._lastKeys = self._keys
 
     def preStep(self, amt):
