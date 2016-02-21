@@ -18,14 +18,7 @@ class DriverSPIBase(DriverBase):
 
         # File based SPI requires a bytearray so we have to overwrite _buf
         if self.use_py_spi:
-            self._buf = []
-        else:
-            self._buf = bytearray()
-
-        for i in range(0, self.bufByteCount):
-            self._buf.append(0)
-
-        if self.use_py_spi:
+            self._buf = bytearray(self._buf)
             a, b = -1, -1
             d = self.dev.replace("/dev/spidev", "")
             s = d.split('.')

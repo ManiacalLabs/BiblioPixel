@@ -21,19 +21,14 @@ class DriverBase(object):
                     "Either num or width and height must be provided!")
 
         self.numLEDs = num
-        self.gamma = gamma
-        if self.gamma is None:
-            self.gamma = [i for i in range(256)]
+        self.gamma = gamma or range(256)
 
         self.c_order = c_order
 
         self.width = width
         self.height = height
         self.bufByteCount = int(3 * self.numLEDs)
-
-        self._buf = []
-        for i in range(0, self.bufByteCount):
-            self._buf.append(0)
+        self._buf = [0] * self.bufByteCount
 
         self._thread = None
         self.lastUpdate = 0
