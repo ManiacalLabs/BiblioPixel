@@ -141,7 +141,7 @@ class BaseAnimation(object):
                     "Frame: %sms / Update Max: %sms", stepTime, updateTime)
             else:
                 log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                    totalTime, int(1000 / max(totalTime, 1)), stepTime, updateTime)
+                          totalTime, int(1000 / max(totalTime, 1)), stepTime, updateTime)
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)
