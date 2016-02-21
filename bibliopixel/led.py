@@ -60,7 +60,9 @@ class LEDBase(object):
         self.bufByteCount = int(3 * self.numLEDs)
         self._last_i = self.lastIndex = self.numLEDs - 1
 
-        self.buffer = [0 for x in range(self.bufByteCount)]
+        # This buffer will always be the same list - i.e. is guaranteed to only
+        # be changed by list surgery, never assignment.
+        self.buffer = [0] * self.bufByteCount
 
         self.masterBrightness = 255
 
@@ -142,7 +144,7 @@ class LEDBase(object):
         if len(buf) != self.bufByteCount:
             raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(
                 self.bufByteCount / 3, self.bufByteCount, len(buf)))
-        self.buffer = buf
+        self.buffer[:] = buf
 
     # Set the master brightness for the LEDs 0 - 255
     def setMasterBrightness(self, bright):
@@ -187,7 +189,7 @@ class LEDBase(object):
         self._resetBuffer()
 
     def _resetBuffer(self):
-        self.buffer = [0 for x in range(self.bufByteCount)]
+        self.buffer[:] = [0] * self.bufByteCount
 
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):

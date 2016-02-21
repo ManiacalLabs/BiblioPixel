@@ -29,10 +29,6 @@ class DriverNetwork(DriverBase):
         self._host = host
         self._port = port
 
-        self._buf = []
-        for i in range(0, self.bufByteCount):
-            self._buf.append(0)
-
     def _generateHeader(self, cmd, size):
         packet = bytearray()
         packet.append(cmd)
