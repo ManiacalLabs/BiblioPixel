@@ -1,7 +1,7 @@
 class AttributeDict(dict):
     """A dict that exposes its values as attributes."""
     def __getattr__(self, key):
-        return self[k]
+        return self[key]
 
 d = AttributeDict
 
