@@ -38,6 +38,7 @@ class BaseAnimation(object):
         self._callback = None
         self._stopEvent = threading.Event()
         self._stopEvent.clear()
+        self._led._threadedAnim = False
 
     def _msTime(self):
         return time.time() * 1000.0
@@ -155,12 +156,14 @@ class BaseAnimation(object):
                     time.sleep(t)
             cur_step += 1
 
+        self._exit(None, None, None)
+
         if self._callback:
             self._callback(self)
 
     def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False, max_cycles=0, threaded=False, joinThread=False, callback=None, seconds=None):
 
-        self._threaded = threaded
+        self._led._threadedAnim = self._threaded = threaded
         if self._threaded:
             self._stopEvent.clear()
         self._callback = callback
@@ -197,7 +200,7 @@ class BaseAnimation(object):
                 "help": "Framerate at which to run animation."
     }, {
         "id": "seconds",
-        "label": "Run For Seconds",
+        "label": "Run Seconds",
         "type": "int",
                 "default": None,
                 "min": 0,
@@ -253,7 +256,7 @@ class AnimationQueue(BaseAnimation):
             a._stopEvent.set()
         super(AnimationQueue, self).stopThread(wait)
 
-    def addAnim(self, anim, amt=1, fps=None, max_steps=0, untilComplete=False, max_cycles=0):
+    def addAnim(self, anim, amt=1, fps=None, max_steps=0, untilComplete=False, max_cycles=0, seconds=None):
         a = (
             anim,
             {
@@ -261,7 +264,8 @@ class AnimationQueue(BaseAnimation):
                 "fps": fps,
                 "max_steps": max_steps,
                 "untilComplete": untilComplete,
-                "max_cycles": max_cycles
+                "max_cycles": max_cycles,
+                "seconds": seconds
             }
         )
         self.anims.append(a)
@@ -271,11 +275,11 @@ class AnimationQueue(BaseAnimation):
             raise Exception("Must provide at least one animation.")
         self.animIndex = -1
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False, max_cycles=0, threaded=False, joinThread=False, callback=None):
+    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False, max_cycles=0, threaded=False, joinThread=False, callback=None, seconds=None):
         self.fps = fps
         self.untilComplete = untilComplete
         super(AnimationQueue, self).run(amt=1, fps=None, sleep=None, max_steps=0, untilComplete=untilComplete,
-                                        max_cycles=0, threaded=threaded, joinThread=joinThread, callback=callback)
+                                        max_cycles=0, threaded=threaded, joinThread=joinThread, callback=callback, seconds=seconds)
 
     def step(self, amt=1):
         self.animIndex += 1

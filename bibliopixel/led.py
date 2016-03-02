@@ -73,6 +73,10 @@ class LEDBase(object):
                 t.start()
                 d._thread = t
 
+        self._waitingBrightness = False
+        self._waitingBrightnessValue = None
+        self._threadedAnim = False
+
         self.setMasterBrightness(masterBrightness)
 
     def __enter__(self):
@@ -112,11 +116,15 @@ class LEDBase(object):
             while all([d._thread.sending() for d in self.driver]):
                 time.sleep(0.000001)
 
+    def doBrightness(self):
+        if self._waitingBrightness:
+            self._doMasterBrigtness(self._waitingBrightnessValue)
+
     def update(self):
         """Push the current pixel state to the driver"""
         pos = 0
         self.waitForUpdate()
-
+        self.doBrightness()
         if len(self.buffer) != self.bufByteCount:
             raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(
                 self.bufByteCount, len(self.buffer)))
@@ -143,13 +151,8 @@ class LEDBase(object):
         self.buffer[:] = buf
 
     # Set the master brightness for the LEDs 0 - 255
-    def setMasterBrightness(self, bright):
-        """Sets the master brightness scaling, 0 - 255
-
-        If the driver supports it the brightness will be sent to the receiver directly.
-        """
-        if bright > 255 or bright < 0:
-            raise ValueError('Brightness must be between 0 and 255')
+    def _doMasterBrigtness(self, bright):
+        self.waitForUpdate()
         result = True
         for d in self.driver:
             if not d.setMasterBrightness(bright):
@@ -163,6 +166,23 @@ class LEDBase(object):
             self.masterBrightness = bright
         else:
             self.masterBrightness = 255
+
+        self._waitingBrightnessValue = None
+        self._waitingBrightness = False
+
+    def setMasterBrightness(self, bright):
+        """Sets the master brightness scaling, 0 - 255
+
+        If the driver supports it the brightness will be sent to the receiver directly.
+        """
+        if bright > 255 or bright < 0:
+            raise ValueError('Brightness must be between 0 and 255')
+
+        if self._threadedAnim:
+            self._waitingBrightnessValue = bright
+            self._waitingBrightness = True
+        else:
+            self._doMasterBrigtness(bright)
 
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
