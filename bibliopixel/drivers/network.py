@@ -4,7 +4,8 @@ import sys
 import time
 
 import os
-from .. import log
+os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import log
 
 
 class CMDTYPE:
