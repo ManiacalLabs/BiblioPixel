@@ -3,7 +3,8 @@ import os
 import SocketServer
 from network import CMDTYPE, RETURN_CODES
 
-from .. import log
+os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import log
 
 
 class ThreadedDataHandler(SocketServer.BaseRequestHandler):
