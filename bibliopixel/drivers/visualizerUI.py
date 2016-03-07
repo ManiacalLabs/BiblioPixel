@@ -6,7 +6,8 @@ import sys
 import SocketServer
 import platform
 import os
-from .. import log
+os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import log
 
 from network_receiver import ThreadedDataServer, ThreadedDataHandler
 
@@ -14,7 +15,7 @@ from network_receiver import ThreadedDataServer, ThreadedDataHandler
 class VisualizerUI:
 
     def __init__(self, width, height, pixelSize, top=False):
-        self._maxWindowWidth = 512
+        self._maxWindowWidth = 1024
 
         self._master = Tk()
         self._q = Queue.Queue()
