@@ -18,7 +18,6 @@ class DriverSPIBase(DriverBase):
 
         # File based SPI requires a bytearray so we have to overwrite _buf
         if self.use_py_spi:
-            self._buf = bytearray(self._buf)
             a, b = -1, -1
             d = self.dev.replace("/dev/spidev", "")
             s = d.split('.')
@@ -37,8 +36,9 @@ class DriverSPIBase(DriverBase):
             self.spi.open(a, b)
             self.spi.max_speed_hz = int(self._spiSpeed * 1000000.0)
             log.info('py-spidev speed @ %.1f MHz',
-                            (float(self.spi.max_speed_hz) / 1000000.0))
+                     (float(self.spi.max_speed_hz) / 1000000.0))
         else:
+            self._buf = bytearray(self._buf)
             self.spi = open(self.dev, "wb")
 
     def _bootstrapSPIDev(self):

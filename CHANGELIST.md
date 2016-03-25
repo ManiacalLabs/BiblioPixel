@@ -1,3 +1,6 @@
+### v2.0.10
+- Support py-spidev 3.x series
+
 ### v2.0.7
 - Fixed LEDPOV driver crash
 - Cleanup / Reformat of all code
