@@ -1,10 +1,5 @@
-#!/usr/bin/env python
-import colors
-import time
-import math
-import font
-import threading
-
+import math, threading, time
+from . import colors, font
 
 class updateThread(threading.Thread):
 

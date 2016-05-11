@@ -6,10 +6,9 @@ import sys
 import SocketServer
 import platform
 import os
-os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import log
+from .. import log
 
-from network_receiver import ThreadedDataServer, ThreadedDataHandler
+from . network_receiver import ThreadedDataServer, ThreadedDataHandler
 
 
 class VisualizerUI:
@@ -183,7 +182,7 @@ class VisualizerUI:
         self.layoutPixels()
         # self._master.after_idle(self.__handleResize)
 
-if __name__ == '__main__':
+def main():
     import argparse
     parser = argparse.ArgumentParser(description='BiblioPixel Visualizer')
     parser.add_argument('--width', help='Matrix Width',

@@ -1,4 +1,4 @@
-from spi_driver_base import DriverSPIBase, ChannelOrder
+from . spi_driver_base import DriverSPIBase, ChannelOrder
 import os
 from .. import gamma
 

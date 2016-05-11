@@ -1,14 +1,8 @@
-import time
-import log
+import threading, time
 
-from led import LEDMatrix
-from led import LEDStrip
-from led import LEDCircle
-import colors
-
-from util import d
-
-import threading
+from . led import LEDMatrix, LEDStrip, LEDCircle
+from . import colors, log
+from . util import d
 
 
 class animThread(threading.Thread):
