@@ -52,7 +52,8 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = [0] * self.bufByteCount
+        self._colors = []
+        self.all_off()
 
         self.masterBrightness = 255
 
@@ -196,9 +197,6 @@ class LEDBase(object):
 
     def all_off(self):
         """Set all pixels off"""
-        self._resetBuffer()
-
-    def _resetBuffer(self):
         self._colors[:] = [0] * self.bufByteCount
 
     # Fill the strand (or a subset) with a single color using a Color object
