@@ -1,3 +1,6 @@
 *.pyc
+__pycache__
 dist
 MANIFEST
+TAGS
+.DS_Store
