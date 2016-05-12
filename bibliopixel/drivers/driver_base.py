@@ -46,9 +46,10 @@ class DriverBase(object):
 
     # Push new data to strand
     def update(self, data):
-        raise RuntimeError("Base class update() called. This shouldn't happen")
+        # TODO: use abc here.
+        raise RuntimeError("Base class receive_colors() called.")
 
-    def _update(self, data):
+    def receive_colors(self, data):
         start = time.time() * 1000.0
         self.update(data)
         if self._thread:

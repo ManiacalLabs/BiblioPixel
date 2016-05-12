@@ -78,7 +78,7 @@ class NetworkReceiver:
         self.address = (interface, port)
         SocketServer.TCPServer.allow_reuse_address = True
         self._server = ThreadedDataServer(self.address, ThreadedDataHandler)
-        self._server.update = self._update
+        self._server.update = self.receive_colors
         self._server.setBrightness = self._led.setMasterBrightness
 
     def start(self, join=False):
@@ -95,6 +95,6 @@ class NetworkReceiver:
         self._server.server_close()
         # self._t.join()
 
-    def _update(self, data):
+    def receive_colors(self, data):
         self._led.setBuffer(list(data))
         self._led.push_to_driver()

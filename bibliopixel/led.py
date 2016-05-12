@@ -31,7 +31,7 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
-            self._driver._update(self._data)
+            self._driver.receive_colors(self._data)
             self._data = []
             self._wait.clear()
             self._reading.set()
@@ -134,7 +134,7 @@ class LEDBase(object):
             if self._threadedUpdate:
                 d._thread.setData(self._colors[pos:d.bufByteCount() + pos])
             else:
-                d._update(self._colors[pos:d.bufByteCount() + pos])
+                d.receive_colors(self._colors[pos:d.bufByteCount() + pos])
             pos += d.bufByteCount()
 
     def lastThreadedUpdate(self):
