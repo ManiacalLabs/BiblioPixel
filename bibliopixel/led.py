@@ -73,6 +73,10 @@ class LEDBase(object):
 
         self.setMasterBrightness(masterBrightness)
 
+    def update(self):
+        """DEPRECATED."""
+        return self.push_to_driver()
+
     def __enter__(self):
         return self
 
@@ -117,7 +121,7 @@ class LEDBase(object):
         if self._waitingBrightness:
             self._doMasterBrigtness(self._waitingBrightnessValue)
 
-    def update(self):
+    def push_to_driver(self):
         """Push the current pixel state to the driver"""
         pos = 0
         self.waitForUpdate()
@@ -794,10 +798,10 @@ class LEDPOV(LEDMatrix):
         super(LEDPOV, self).__init__(driver, width, povHeight, None,
                                      rotation, vert_flip, threadedUpdate, masterBrightness)
 
-    # This is the magic. Overriding the normal update() method
+    # This is the magic. Overriding the normal push_to_driver() method
     # It will automatically break up the frame into columns spread over
     # frameTime (ms)
-    def update(self, frameTime=None):
+    def push_to_driver(self, frameTime=None):
         if frameTime:
             self._frameTotalTime = frameTime
 

@@ -97,4 +97,4 @@ class NetworkReceiver:
 
     def _update(self, data):
         self._led.setBuffer(list(data))
-        self._led.update()
+        self._led.push_to_driver()

@@ -66,7 +66,7 @@ class BaseAnimation(object):
         self._exit(type, value, traceback)
         self.stopThread(wait=True)
         self._led.all_off()
-        self._led.update()
+        self._led.push_to_driver()
         self._led.waitForUpdate()
 
     def cleanup(self):
@@ -115,7 +115,7 @@ class BaseAnimation(object):
             self._led._frameGenTime = int(mid - start)
             self._led._frameTotalTime = sleep
 
-            self._led.update()
+            self._led.push_to_driver()
             now = self._msTime()
 
             if self.animComplete and max_cycles > 0:
