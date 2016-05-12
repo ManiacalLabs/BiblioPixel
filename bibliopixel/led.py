@@ -52,7 +52,7 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self.buffer = [0] * self.bufByteCount
+        self._colors = [0] * self.bufByteCount
 
         self.masterBrightness = 255
 
@@ -86,7 +86,7 @@ class LEDBase(object):
         if pixel < 0 or pixel >= self.numLEDs:
             return 0, 0, 0  # don't go out of bounds
 
-        return (self.buffer[pixel * 3 + 0], self.buffer[pixel * 3 + 1], self.buffer[pixel * 3 + 2])
+        return (self._colors[pixel * 3 + 0], self._colors[pixel * 3 + 1], self._colors[pixel * 3 + 2])
 
     def _set_base(self, pixel, color):
         try:
@@ -94,14 +94,14 @@ class LEDBase(object):
                 raise IndexError()
 
             if self.masterBrightness < 255:
-                self.buffer[pixel * 3 +
+                self._colors[pixel * 3 +
                             0] = (color[0] * self.masterBrightness) >> 8
-                self.buffer[pixel * 3 +
+                self._colors[pixel * 3 +
                             1] = (color[1] * self.masterBrightness) >> 8
-                self.buffer[pixel * 3 +
+                self._colors[pixel * 3 +
                             2] = (color[2] * self.masterBrightness) >> 8
             else:
-                self.buffer[pixel * 3:(pixel * 3) + 3] = color
+                self._colors[pixel * 3:(pixel * 3) + 3] = color
         except IndexError:
             pass
 
@@ -119,15 +119,15 @@ class LEDBase(object):
         pos = 0
         self.waitForUpdate()
         self.doBrightness()
-        if len(self.buffer) != self.bufByteCount:
+        if len(self._colors) != self.bufByteCount:
             raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(
-                self.bufByteCount, len(self.buffer)))
+                self.bufByteCount, len(self._colors)))
 
         for d in self.driver:
             if self._threadedUpdate:
-                d._thread.setData(self.buffer[pos:d.bufByteCount + pos])
+                d._thread.setData(self._colors[pos:d.bufByteCount + pos])
             else:
-                d._update(self.buffer[pos:d.bufByteCount + pos])
+                d._update(self._colors[pos:d.bufByteCount + pos])
             pos += d.bufByteCount
 
     def lastThreadedUpdate(self):
@@ -142,7 +142,7 @@ class LEDBase(object):
         if len(buf) != self.bufByteCount:
             raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(
                 self.bufByteCount / 3, self.bufByteCount, len(buf)))
-        self.buffer[:] = buf
+        self._colors[:] = buf
 
     # Set the master brightness for the LEDs 0 - 255
     def _doMasterBrigtness(self, bright):
@@ -199,7 +199,7 @@ class LEDBase(object):
         self._resetBuffer()
 
     def _resetBuffer(self):
-        self.buffer[:] = [0] * self.bufByteCount
+        self._colors[:] = [0] * self.bufByteCount
 
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
@@ -809,7 +809,7 @@ class LEDPOV(LEDMatrix):
         for h in range(width):
             start = time.time() * 1000.0
 
-            buf = [item for sublist in [self.buffer[(width * i * 3) + (h * 3):(
+            buf = [item for sublist in [self._colors[(width * i * 3) + (h * 3):(
                 width * i * 3) + (h * 3) + (3)] for i in range(self.height)] for item in sublist]
             self.driver[0].update(buf)
             sendTime = (time.time() * 1000.0) - start
