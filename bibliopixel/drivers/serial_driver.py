@@ -312,7 +312,7 @@ class DriverSerial(DriverBase):
             return True
 
     # Push new data to strand
-    def update(self, data):
+    def _receive_colors(self, data):
         count = self.bufByteCount() + self._bufPad
         packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
 

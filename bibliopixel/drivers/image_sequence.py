@@ -26,7 +26,7 @@ class DriverImageSequence(DriverBase):
             self.height = 1
 
     # Push new data to strand
-    def update(self, data):
+    def _receive_colors(self, data):
         map = self.matrix_map
         size = self._pixelSize
         img = Image.new("RGB", (self.width * size, self.height * size), None)

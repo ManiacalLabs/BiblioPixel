@@ -76,6 +76,6 @@ class DriverSPIBase(DriverBase):
             self.spi.write(self._buf)
             self.spi.flush()
 
-    def update(self, data):
+    def _receive_colors(self, data):
         self._fixData(data)
         self._sendData()

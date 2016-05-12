@@ -11,7 +11,7 @@ class DriverDummy(DriverBase):
         self._delay = delay
 
     # Push new data to strand
-    def update(self, data):
+    def _receive_colors(self, data):
         if self._delay > 0:
             time.sleep(self._delay / 1000.0)
         else:

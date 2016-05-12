@@ -45,7 +45,7 @@ class DriverNetwork(DriverBase):
             raise IOError(error)
 
     # Push new data to strand
-    def update(self, data):
+    def _receive_colors(self, data):
         try:
             s = self._connect()
 

@@ -45,13 +45,13 @@ class DriverBase(object):
         return 3 * self.numLEDs
 
     # Push new data to strand
-    def update(self, data):
+    def _receive_colors(self, data):
         # TODO: use abc here.
         raise RuntimeError("Base class receive_colors() called.")
 
     def receive_colors(self, data):
         start = time.time() * 1000.0
-        self.update(data)
+        self._receive_colors(data)
         if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
 

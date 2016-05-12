@@ -66,7 +66,7 @@ class DriverHue(DriverBase):
         s = int(self._mapRange(s, 0.0, 1.0, 0, 254))
         return (h, s)
 
-    def update(self, data):
+    def _receive_colors(self, data):
         pixels = [tuple(data[(p * 3):(p * 3) + 3])
                   for p in range(len(data) / 3)]
 
