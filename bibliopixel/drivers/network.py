@@ -49,7 +49,7 @@ class DriverNetwork(DriverBase):
         try:
             s = self._connect()
 
-            count = self.bufByteCount
+            count = self.bufByteCount()
             packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
 
             packet.extend(data)

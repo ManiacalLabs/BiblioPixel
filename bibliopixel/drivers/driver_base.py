@@ -27,8 +27,7 @@ class DriverBase(object):
 
         self.width = width
         self.height = height
-        self.bufByteCount = int(3 * self.numLEDs)
-        self._buf = [0] * self.bufByteCount
+        self._buf = [0] * self.bufByteCount()
 
         self._thread = None
         self.lastUpdate = 0
@@ -41,6 +40,9 @@ class DriverBase(object):
 
     def cleanup(self):
         return self.__exit__(None, None, None)
+
+    def bufByteCount(self):
+        return 3 * self.numLEDs
 
     # Push new data to strand
     def update(self, data):

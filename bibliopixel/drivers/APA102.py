@@ -12,11 +12,11 @@ class DriverAPA102(DriverSPIBase):
 
     def _fixData(self, data):
         gamma = self.gamma
-        self._buf[:] = [0] * self.bufByteCount
+        self._buf[:] = [0] * self.bufByteCount()
         for a, b in enumerate(self.c_order):
             self._buf[a:self.numLEDs * 3:3] = [gamma[v] for v in data[b::3]]
 
-        newBuf = [0xFF] * (self.bufByteCount + self.numLEDs)
+        newBuf = [0xFF] * (self.bufByteCount() + self.numLEDs)
         newBuf[1::4] = self._buf[0::3]
         newBuf[2::4] = self._buf[1::3]
         newBuf[3::4] = self._buf[2::3]

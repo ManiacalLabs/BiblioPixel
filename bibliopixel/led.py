@@ -48,7 +48,6 @@ class LEDBase(object):
         if not hasattr(self, 'numLEDs'):
             self.numLEDs = sum(d.numLEDs for d in self.driver)
 
-        self.bufByteCount = int(3 * self.numLEDs)
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
@@ -82,6 +81,9 @@ class LEDBase(object):
 
     def cleanup(self):
         return self.__exit__(None, None, None)
+
+    def bufByteCount(self):
+        return 3 * self.numLEDs
 
     def _get_base(self, pixel):
         if pixel < 0 or pixel >= self.numLEDs:
@@ -120,16 +122,16 @@ class LEDBase(object):
         pos = 0
         self.waitForUpdate()
         self.doBrightness()
-        if len(self._colors) != self.bufByteCount:
+        if len(self._colors) != self.bufByteCount():
             raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(
-                self.bufByteCount, len(self._colors)))
+                self.bufByteCount(), len(self._colors)))
 
         for d in self.driver:
             if self._threadedUpdate:
-                d._thread.setData(self._colors[pos:d.bufByteCount + pos])
+                d._thread.setData(self._colors[pos:d.bufByteCount() + pos])
             else:
-                d._update(self._colors[pos:d.bufByteCount + pos])
-            pos += d.bufByteCount
+                d._update(self._colors[pos:d.bufByteCount() + pos])
+            pos += d.bufByteCount()
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.driver])
@@ -140,9 +142,9 @@ class LEDBase(object):
         Directly sets the internal buffer and bypasses all brightness and rotation control.
         buf must also be in the exact format required by the display type.
         """
-        if len(buf) != self.bufByteCount:
+        if len(buf) != self.bufByteCount():
             raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(
-                self.bufByteCount / 3, self.bufByteCount, len(buf)))
+                self.bufByteCount / 3, self.bufByteCount(), len(buf)))
         self._colors[:] = buf
 
     # Set the master brightness for the LEDs 0 - 255
@@ -197,7 +199,7 @@ class LEDBase(object):
 
     def all_off(self):
         """Set all pixels off"""
-        self._colors[:] = [0] * self.bufByteCount
+        self._colors[:] = [0] * self.bufByteCount()
 
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
