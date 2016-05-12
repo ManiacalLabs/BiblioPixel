@@ -318,8 +318,8 @@ class BaseStripAnim(BaseAnimation):
 
         self._start = max(start, 0)
         self._end = end
-        if self._end < 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
+        if self._end < 0 or self._end >= self._led.numLEDs:
+            self._end = self._led.numLEDs - 1
 
         self._size = self._end - self._start + 1
 

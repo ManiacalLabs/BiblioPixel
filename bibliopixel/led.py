@@ -49,7 +49,6 @@ class LEDBase(object):
             self.numLEDs = sum(d.numLEDs for d in self.driver)
 
         self.bufByteCount = int(3 * self.numLEDs)
-        self._last_i = self.lastIndex = self.numLEDs - 1
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
@@ -84,14 +83,14 @@ class LEDBase(object):
         return self.__exit__(None, None, None)
 
     def _get_base(self, pixel):
-        if pixel < 0 or pixel > self.lastIndex:
+        if pixel < 0 or pixel >= self.numLEDs:
             return 0, 0, 0  # don't go out of bounds
 
         return (self.buffer[pixel * 3 + 0], self.buffer[pixel * 3 + 1], self.buffer[pixel * 3 + 2])
 
     def _set_base(self, pixel, color):
         try:
-            if pixel < 0 or pixel > self._last_i:
+            if pixel < 0 or pixel > self.numLEDs - 1:
                 raise IndexError()
 
             if self.masterBrightness < 255:
@@ -206,8 +205,8 @@ class LEDBase(object):
     def fill(self, color, start=0, end=-1):
         """Fill the entire strip with RGB color tuple"""
         start = max(start, 0)
-        if end < 0 or end > self.lastIndex:
-            end = self.lastIndex
+        if end < 0 or end >= self.numLEDs:
+            end = self.numLEDs - 1
         for led in range(start, end + 1):  # since 0-index include end in range
             self._set_base(led, color)
 
@@ -240,7 +239,6 @@ class LEDStrip(LEDBase):
         else:
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
-            self.lastIndex = self.numLEDs - 1
 
     # Set single pixel to Color value
     def _set(self, pixel, color):
