@@ -1,4 +1,4 @@
-from driver_base import DriverBase, ChannelOrder
+from . driver_base import DriverBase, ChannelOrder
 import sys
 import time
 import os

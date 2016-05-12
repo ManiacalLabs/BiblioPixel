@@ -1,4 +1,4 @@
-from spi_driver_base import DriverSPIBase, ChannelOrder
+from . spi_driver_base import DriverSPIBase, ChannelOrder
 
 
 class DriverAPA102(DriverSPIBase):

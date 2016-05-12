@@ -1,11 +1,6 @@
-import time
+import time, os, platform, subprocess, math
 
-import os
-import platform
-import subprocess
-from network import DriverNetwork, socket
-import math
-
+from . network import DriverNetwork, socket
 from .. import log
 
 
@@ -44,8 +39,9 @@ class DriverVisualizer(DriverNetwork):
                 exe_string = "python"
                 suffix = "&"
 
-            dname = os.path.dirname(os.path.abspath(__file__))
-            script = '{}/visualizerUI.py'.format(dname)
+            dname = os.path.dirname(os.path.dirname(os.path.dirname(
+                os.path.abspath(__file__))))
+            script = os.path.join(dname, 'visualizer.py')
 
             if allip:
                 ip = "--allip"

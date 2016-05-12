@@ -1,4 +1,4 @@
-from driver_base import DriverBase
+from . driver_base import DriverBase
 from .. import log
 
 try:
