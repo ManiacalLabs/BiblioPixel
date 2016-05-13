@@ -90,27 +90,15 @@ class LEDBase(object):
         return 3 * self.numLEDs
 
     def _get_base(self, pixel):
-        if pixel < 0 or pixel >= self.numLEDs:
-            return 0, 0, 0  # don't go out of bounds
-
-        return (self._colors[pixel * 3 + 0], self._colors[pixel * 3 + 1], self._colors[pixel * 3 + 2])
+        if pixel >= 0 and pixel < self.numLEDs:
+            return self._colors[pixel]
+        return 0, 0, 0  # don't go out of bounds
 
     def _set_base(self, pixel, color):
-        try:
-            if pixel < 0 or pixel > self.numLEDs - 1:
-                raise IndexError()
-
+        if pixel >= 0 and pixel < self.numLEDs:
             if self.masterBrightness < 255:
-                self._colors[pixel * 3 +
-                            0] = (color[0] * self.masterBrightness) >> 8
-                self._colors[pixel * 3 +
-                            1] = (color[1] * self.masterBrightness) >> 8
-                self._colors[pixel * 3 +
-                            2] = (color[2] * self.masterBrightness) >> 8
-            else:
-                self._colors[pixel * 3:(pixel * 3) + 3] = color
-        except IndexError:
-            pass
+                color = ((c * self.masterBrightness) >> 8 for c in color)
+            self._colors[pixel] = tuple(color)
 
     def waitForUpdate(self):
         if self._threadedUpdate:
@@ -126,30 +114,34 @@ class LEDBase(object):
         pos = 0
         self.waitForUpdate()
         self.doBrightness()
-        if len(self._colors) != self.bufByteCount():
-            raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(
-                self.bufByteCount(), len(self._colors)))
-
         for d in self.driver:
+            col = self._colors[pos:pos + d.numLEDs]
+            data = [i for sublist in col for i in sublist]
             if self._threadedUpdate:
-                d._thread.setData(self._colors[pos:d.bufByteCount() + pos])
+                d._thread.setData(data)
             else:
-                d.receive_colors(self._colors[pos:d.bufByteCount() + pos])
-            pos += d.bufByteCount()
+                d.receive_colors(data)
+            pos += d.numLEDs
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.driver])
 
     # use with caution!
-    def setBuffer(self, buf):
+    def set_colors(self, buf):
         """Use with extreme caution!
         Directly sets the internal buffer and bypasses all brightness and rotation control.
         buf must also be in the exact format required by the display type.
         """
-        if len(buf) != self.bufByteCount():
-            raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(
-                self.bufByteCount / 3, self.bufByteCount(), len(buf)))
+        if len(self._colors) != len(buf):
+            raise IOError("Data buffer size incorrect! "
+                          "Expected: {} bytes / Received: {} bytes".format(
+                len(self._colors), len(buf)))
         self._colors[:] = buf
+
+    def setBuffer(self, buf):
+        """DEPRECATED!"""
+        # https://stackoverflow.com/questions/1624883
+        self.set_colors(res = zip(*(iter(buf),) * 3))
 
     # Set the master brightness for the LEDs 0 - 255
     def _doMasterBrigtness(self, bright):
@@ -188,8 +180,7 @@ class LEDBase(object):
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
         """Set single pixel using individual RGB values instead of tuple"""
-        color = (r, g, b)
-        self._set_base(pixel, color)
+        self._set_base(pixel, (r, g, b))
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
@@ -203,7 +194,7 @@ class LEDBase(object):
 
     def all_off(self):
         """Set all pixels off"""
-        self._colors[:] = [0] * self.bufByteCount()
+        self._colors[:] = [(0, 0, 0)] * self.numLEDs
 
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
@@ -261,8 +252,7 @@ class LEDStrip(LEDBase):
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
         """Set single pixel using individual RGB values instead of tuple"""
-        color = (r, g, b)
-        self.set(pixel, color)
+        self.set(pixel, (r, g, b))
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
@@ -814,8 +804,7 @@ class LEDPOV(LEDMatrix):
             start = time.time() * 1000.0
 
             def color(i):
-                offset = (h + width * i) * 3
-                return self._colors[offset:offset + 3]
+                return self._colors[(h + width * i) * 3]
             buf = [color(i) for i in range(self.height)]
             buf = [item for sublist in buf for item in sublist]
             self.driver[0].receive_colors(buf)
