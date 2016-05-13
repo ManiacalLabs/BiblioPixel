@@ -19,9 +19,6 @@ class DriverLPD8806(DriverSPIBase):
 
     # LPD8806 requires gamma correction and only supports 7-bits per channel
     # running each value through gamma will fix all of this.
-    # def _write_colors_to_buffer(self, data):
-    #    for a, b in enumerate(self.c_order):
-    #        self._buf[a:self.numLEDs*3:3] = [self.gamma[v] for v in data[b::3]]
 
 MANIFEST = [
     {

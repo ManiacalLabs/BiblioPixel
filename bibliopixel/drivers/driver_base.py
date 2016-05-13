@@ -59,6 +59,6 @@ class DriverBase(object):
         return False
 
     def _write_colors_to_buffer(self, data):
-        gamma = self.gamma
+        gamma, numLEDs = self.gamma, self.numLEDs
         for a, b in enumerate(self.c_order):
-            self._buf[a:self.numLEDs * 3:3] = [gamma[v] for v in data[b::3]]
+            self._buf[a:numLEDs * 3:3] = [gamma[v] for v in data[b::3]]

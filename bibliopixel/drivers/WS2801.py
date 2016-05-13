@@ -14,12 +14,6 @@ class DriverWS2801(DriverSPIBase):
 
         self.gamma = gamma.WS2801
 
-    # WS2801 requires gamma correction so we run it through gamma as the
-    # channels are ordered
-    def _write_colors_to_buffer(self, data):
-        for a, b in enumerate(self.c_order):
-            self._buf[a:self.numLEDs * 3:3] = [self.gamma[v]
-                                               for v in data[b::3]]
 
 MANIFEST = [
     {
