@@ -813,9 +813,12 @@ class LEDPOV(LEDMatrix):
         for h in range(width):
             start = time.time() * 1000.0
 
-            buf = [item for sublist in [self._colors[(width * i * 3) + (h * 3):(
-                width * i * 3) + (h * 3) + (3)] for i in range(self.height)] for item in sublist]
-            self.driver[0].update(buf)
+            def color(i):
+                offset = (h + width * i) * 3
+                return self._colors[offset:offset + 3]
+            buf = [color(i) for i in range(self.height)]
+            buf = [item for sublist in buf for item in sublist]
+            self.driver[0].receive_colors(buf)
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))
