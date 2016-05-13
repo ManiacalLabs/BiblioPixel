@@ -26,7 +26,7 @@ class DriverImageSequence(DriverBase):
             self.height = 1
 
     # Push new data to strand
-    def _receive_colors(self, data):
+    def _receive_colors(self, colors, pos):
         map = self.matrix_map
         size = self._pixelSize
         img = Image.new("RGB", (self.width * size, self.height * size), None)
@@ -37,7 +37,7 @@ class DriverImageSequence(DriverBase):
                     i = map[y][x]
                 else:
                     i = x
-                rgb = tuple(data[i * 3:i * 3 + 3])
+                rgb = colors[i + pos]
                 draw.rectangle([x * size, y * size, x * size +
                                 size - 1, y * size + size - 1], rgb, rgb)
 

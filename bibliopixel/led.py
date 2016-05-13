@@ -13,9 +13,9 @@ class updateThread(threading.Thread):
         self._data = []
         self._driver = driver
 
-    def setData(self, data):
+    def setData(self, colors, pos):
         self._reading.wait()
-        self._data = data
+        self._data = (colors, pos)
         self._reading.clear()
         self._wait.set()
 
@@ -31,7 +31,7 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
-            self._driver.receive_colors(self._data)
+            self._driver.receive_colors(*self._data)
             self._data = []
             self._wait.clear()
             self._reading.set()
@@ -47,7 +47,6 @@ class LEDBase(object):
         self.driver = driver
         if not hasattr(self, 'numLEDs'):
             self.numLEDs = sum(d.numLEDs for d in self.driver)
-
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
@@ -74,7 +73,7 @@ class LEDBase(object):
         self.setMasterBrightness(masterBrightness)
 
     def update(self):
-        """DEPRECATED."""
+        """DEPRECATED - use self.push_to_driver()"""
         return self.push_to_driver()
 
     def __enter__(self):
@@ -85,9 +84,6 @@ class LEDBase(object):
 
     def cleanup(self):
         return self.__exit__(None, None, None)
-
-    def bufByteCount(self):
-        return 3 * self.numLEDs
 
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
@@ -115,12 +111,10 @@ class LEDBase(object):
         self.waitForUpdate()
         self.doBrightness()
         for d in self.driver:
-            col = self._colors[pos:pos + d.numLEDs]
-            data = [i for sublist in col for i in sublist]
             if self._threadedUpdate:
-                d._thread.setData(data)
+                d._thread.setData(self._colors, pos)
             else:
-                d.receive_colors(data)
+                d.receive_colors(self._colors, pos)
             pos += d.numLEDs
 
     def lastThreadedUpdate(self):
@@ -806,8 +800,7 @@ class LEDPOV(LEDMatrix):
             def color(i):
                 return self._colors[(h + width * i) * 3]
             buf = [color(i) for i in range(self.height)]
-            buf = [item for sublist in buf for item in sublist]
-            self.driver[0].receive_colors(buf)
+            self.driver[0].receive_colors(buf, 0)
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))

@@ -45,15 +45,14 @@ class DriverNetwork(DriverBase):
             raise IOError(error)
 
     # Push new data to strand
-    def _receive_colors(self, data):
+    def _receive_colors(self, colors, pos):
         try:
             s = self._connect()
 
             count = self.bufByteCount()
             packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
-
-            packet.extend(data)
-
+            indexes = range(pos, pos + self.numLEDs)
+            packet.extend(c for i in indexes for c in colors[i])
             s.sendall(packet)
 
             resp = ord(s.recv(1))

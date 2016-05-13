@@ -2,12 +2,12 @@ import time
 
 
 class ChannelOrder:
-    RGB = [0, 1, 2]
-    RBG = [0, 2, 1]
-    GRB = [1, 0, 2]
-    GBR = [1, 2, 0]
-    BRG = [2, 0, 1]
-    BGR = [2, 1, 0]
+    RGB = 0, 1, 2
+    RBG = 0, 2, 1
+    GRB = 1, 0, 2
+    GBR = 1, 2, 0
+    BRG = 2, 0, 1
+    BGR = 2, 1, 0
 
 
 class DriverBase(object):
@@ -45,20 +45,21 @@ class DriverBase(object):
         return 3 * self.numLEDs
 
     # Push new data to strand
-    def _receive_colors(self, data):
+    def _receive_colors(self, colors, pos):
         # TODO: use abc here.
         raise RuntimeError("Base class receive_colors() called.")
 
-    def receive_colors(self, data):
+    def receive_colors(self, colors, pos):
         start = time.time() * 1000.0
-        self._receive_colors(data)
+        self._receive_colors(colors, pos)
         if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
 
     def setMasterBrightness(self, brightness):
         return False
 
-    def _write_colors_to_buffer(self, data):
-        gamma, numLEDs = self.gamma, self.numLEDs
-        for a, b in enumerate(self.c_order):
-            self._buf[a:numLEDs * 3:3] = [gamma[v] for v in data[b::3]]
+    def _write_colors_to_buffer(self, colors, pos):
+        gamma, (r, g, b) = self.gamma, self.c_order
+        for i in range(self.numLEDs):
+            c = colors[i + pos]
+            self._buf[i * 3:(i + 1) * 3] = gamma[c[r]], gamma[c[g]], gamma[c[b]]

@@ -66,12 +66,9 @@ class DriverHue(DriverBase):
         s = int(self._mapRange(s, 0.0, 1.0, 0, 254))
         return (h, s)
 
-    def _receive_colors(self, data):
-        pixels = [tuple(data[(p * 3):(p * 3) + 3])
-                  for p in range(len(data) / 3)]
-
+    def _receive_colors(self, colors, pos):
         for i in range(len(self._ids)):
-            h, s = self._rgb2hs(pixels[i])
+            h, s = self._rgb2hs(colors[i + pos])
             bri = self._brightness
             if s == 0:
                 bri = 0
