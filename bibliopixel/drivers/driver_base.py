@@ -27,7 +27,7 @@ class DriverBase(object):
 
         self.width = width
         self.height = height
-        self._buf = [0] * self.bufByteCount()
+        self._buf = bytearray(self.bufByteCount())
 
         self._thread = None
         self.lastUpdate = 0
@@ -58,7 +58,7 @@ class DriverBase(object):
     def setMasterBrightness(self, brightness):
         return False
 
-    def _fixData(self, data):
+    def _write_colors_to_buffer(self, data):
         gamma = self.gamma
         for a, b in enumerate(self.c_order):
             self._buf[a:self.numLEDs * 3:3] = [gamma[v] for v in data[b::3]]

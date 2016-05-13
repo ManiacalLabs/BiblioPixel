@@ -10,9 +10,9 @@ class DriverAPA102(DriverSPIBase):
         # APA102 requires latch bytes at the end
         self._latchBytes = (int(num / 64.0) + 1)
 
-    def _fixData(self, data):
+    def _write_colors_to_buffer(self, data):
         gamma = self.gamma
-        self._buf[:] = [0] * self.bufByteCount()
+        self._buf[:] = bytearray(self.bufByteCount())
         for a, b in enumerate(self.c_order):
             self._buf[a:self.numLEDs * 3:3] = [gamma[v] for v in data[b::3]]
 

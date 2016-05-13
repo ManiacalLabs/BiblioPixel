@@ -316,7 +316,7 @@ class DriverSerial(DriverBase):
         count = self.bufByteCount() + self._bufPad
         packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
 
-        self._fixData(data)
+        self._write_colors_to_buffer(data)
 
         packet.extend(self._buf)
         packet.extend([0] * self._bufPad)
