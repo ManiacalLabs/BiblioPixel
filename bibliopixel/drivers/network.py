@@ -52,7 +52,7 @@ class DriverNetwork(DriverBase):
             count = self.bufByteCount()
             packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
             indexes = range(pos, pos + self.numLEDs)
-            packet.extend(c for i in indexes for c in colors[i])
+            packet.extend(int(c) for i in indexes for c in colors[i])
             s.sendall(packet)
 
             resp = ord(s.recv(1))

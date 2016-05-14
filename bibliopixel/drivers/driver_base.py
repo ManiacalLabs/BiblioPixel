@@ -62,4 +62,5 @@ class DriverBase(object):
         gamma, (r, g, b) = self.gamma, self.c_order
         for i in range(self.numLEDs):
             c = colors[i + pos]
-            self._buf[i * 3:(i + 1) * 3] = gamma[c[r]], gamma[c[g]], gamma[c[b]]
+            self._buf[i * 3:(i + 1) * 3] = (
+                int(gamma[c[r]]), int(gamma[c[g]]), int(gamma[c[b]]))

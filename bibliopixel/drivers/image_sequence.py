@@ -38,6 +38,7 @@ class DriverImageSequence(DriverBase):
                 else:
                     i = x
                 rgb = colors[i + pos]
+                # TODO: is it an issue that colors now are floats?
                 draw.rectangle([x * size, y * size, x * size +
                                 size - 1, y * size + size - 1], rgb, rgb)
 
