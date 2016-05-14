@@ -1,6 +1,11 @@
 import math, threading, time
 from . import colors, font
 
+try:
+    from tdsp import ColorList
+except:
+    ColorList = list
+
 class updateThread(threading.Thread):
 
     def __init__(self, driver):
@@ -50,8 +55,9 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = []
+        self._colors = ColorList()
         self.all_off()
+        assert len(self._colors) == self.numLEDs
 
         self.masterBrightness = 255
 
