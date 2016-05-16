@@ -1,6 +1,11 @@
 import math, threading, time
 from . import colors, font
 
+try:
+    from tdsp import ColorList
+except:
+    ColorList = list
+
 class updateThread(threading.Thread):
 
     def __init__(self, driver):
