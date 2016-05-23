@@ -1,10 +1,10 @@
 import threading
 import os
 import SocketServer
-from network import CMDTYPE, RETURN_CODES
+from . network import CMDTYPE, RETURN_CODES
 
 os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import log
+from .. import log
 
 
 class ThreadedDataHandler(SocketServer.BaseRequestHandler):
@@ -78,7 +78,7 @@ class NetworkReceiver:
         self.address = (interface, port)
         SocketServer.TCPServer.allow_reuse_address = True
         self._server = ThreadedDataServer(self.address, ThreadedDataHandler)
-        self._server.update = self._update
+        self._server.update = self.update
         self._server.setBrightness = self._led.setMasterBrightness
 
     def start(self, join=False):
@@ -95,6 +95,6 @@ class NetworkReceiver:
         self._server.server_close()
         # self._t.join()
 
-    def _update(self, data):
+    def update(self, data):
         self._led.setBuffer(list(data))
-        self._led.update()
+        self._led.push_to_driver()

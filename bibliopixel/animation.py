@@ -1,14 +1,8 @@
-import time
-import log
+import threading, time
 
-from led import LEDMatrix
-from led import LEDStrip
-from led import LEDCircle
-import colors
-
-from util import d
-
-import threading
+from . led import LEDMatrix, LEDStrip, LEDCircle
+from . import colors, log
+from . util import d
 
 
 class animThread(threading.Thread):
@@ -72,7 +66,7 @@ class BaseAnimation(object):
         self._exit(type, value, traceback)
         self.stopThread(wait=True)
         self._led.all_off()
-        self._led.update()
+        self._led.push_to_driver()
         self._led.waitForUpdate()
 
     def cleanup(self):
@@ -121,7 +115,7 @@ class BaseAnimation(object):
             self._led._frameGenTime = int(mid - start)
             self._led._frameTotalTime = sleep
 
-            self._led.update()
+            self._led.push_to_driver()
             now = self._msTime()
 
             if self.animComplete and max_cycles > 0:
@@ -324,8 +318,8 @@ class BaseStripAnim(BaseAnimation):
 
         self._start = max(start, 0)
         self._end = end
-        if self._end < 0 or self._end > self._led.lastIndex:
-            self._end = self._led.lastIndex
+        if self._end < 0 or self._end >= self._led.numLEDs:
+            self._end = self._led.numLEDs - 1
 
         self._size = self._end - self._start + 1
 

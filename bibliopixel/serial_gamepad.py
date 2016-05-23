@@ -6,7 +6,7 @@ except ImportError as e:
     raise ImportError(error)
 
 from distutils.version import LooseVersion
-from util import d
+from . util import d
 from gamepad import BaseGamePad
 import log
 

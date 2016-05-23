@@ -1,4 +1,4 @@
-from driver_base import DriverBase, ChannelOrder
+from . driver_base import DriverBase, ChannelOrder
 import time
 
 import os
@@ -8,7 +8,8 @@ from .. import log
 class DriverSPIBase(DriverBase):
     """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
 
-    def __init__(self, num, c_order=ChannelOrder.GRB, use_py_spi=True, dev="/dev/spidev0.0", SPISpeed=2):
+    def __init__(self, num, c_order=ChannelOrder.GRB, use_py_spi=True,
+                 dev="/dev/spidev0.0", SPISpeed=2, open=open):
 
         super(DriverSPIBase, self).__init__(num, c_order=c_order)
 
@@ -75,6 +76,6 @@ class DriverSPIBase(DriverBase):
             self.spi.write(self._buf)
             self.spi.flush()
 
-    def update(self, data):
-        self._fixData(data)
+    def _receive_colors(self, colors, pos):
+        self._write_colors_to_buffer(colors, pos)
         self._sendData()

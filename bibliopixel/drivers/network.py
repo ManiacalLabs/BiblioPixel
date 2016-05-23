@@ -1,11 +1,7 @@
-from driver_base import DriverBase
-import socket
-import sys
-import time
+import socket, sys, time, os
 
-import os
-os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import log
+from . driver_base import DriverBase
+from .. import log
 
 
 class CMDTYPE:
@@ -49,15 +45,14 @@ class DriverNetwork(DriverBase):
             raise IOError(error)
 
     # Push new data to strand
-    def update(self, data):
+    def _receive_colors(self, colors, pos):
         try:
             s = self._connect()
 
-            count = self.bufByteCount
+            count = self.bufByteCount()
             packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
-
-            packet.extend(data)
-
+            indexes = range(pos, pos + self.numLEDs)
+            packet.extend(int(c) for i in indexes for c in colors[i])
             s.sendall(packet)
 
             resp = ord(s.recv(1))

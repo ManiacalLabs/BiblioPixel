@@ -1,10 +1,10 @@
-#!/usr/bin/env python
-import colors
-import time
-import math
-import font
-import threading
+import math, threading, time
+from . import colors, font
 
+try:
+    from tdsp import ColorList
+except:
+    ColorList = list
 
 class updateThread(threading.Thread):
 
@@ -18,9 +18,9 @@ class updateThread(threading.Thread):
         self._data = []
         self._driver = driver
 
-    def setData(self, data):
+    def setData(self, colors, pos):
         self._reading.wait()
-        self._data = data
+        self._data = (colors, pos)
         self._reading.clear()
         self._wait.set()
 
@@ -36,7 +36,7 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
-            self._driver._update(self._data)
+            self._driver.receive_colors(*self._data)
             self._data = []
             self._wait.clear()
             self._reading.set()
@@ -53,12 +53,11 @@ class LEDBase(object):
         if not hasattr(self, 'numLEDs'):
             self.numLEDs = sum(d.numLEDs for d in self.driver)
 
-        self.bufByteCount = int(3 * self.numLEDs)
-        self._last_i = self.lastIndex = self.numLEDs - 1
-
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self.buffer = [0] * self.bufByteCount
+        self._colors = ColorList()
+        self.all_off()
+        assert len(self._colors) == self.numLEDs
 
         self.masterBrightness = 255
 
@@ -79,6 +78,10 @@ class LEDBase(object):
 
         self.setMasterBrightness(masterBrightness)
 
+    def update(self):
+        """DEPRECATED - use self.push_to_driver()"""
+        return self.push_to_driver()
+
     def __enter__(self):
         return self
 
@@ -89,27 +92,15 @@ class LEDBase(object):
         return self.__exit__(None, None, None)
 
     def _get_base(self, pixel):
-        if pixel < 0 or pixel > self.lastIndex:
-            return 0, 0, 0  # don't go out of bounds
-
-        return (self.buffer[pixel * 3 + 0], self.buffer[pixel * 3 + 1], self.buffer[pixel * 3 + 2])
+        if pixel >= 0 and pixel < self.numLEDs:
+            return self._colors[pixel]
+        return 0, 0, 0  # don't go out of bounds
 
     def _set_base(self, pixel, color):
-        try:
-            if pixel < 0 or pixel > self._last_i:
-                raise IndexError()
-
+        if pixel >= 0 and pixel < self.numLEDs:
             if self.masterBrightness < 255:
-                self.buffer[pixel * 3 +
-                            0] = (color[0] * self.masterBrightness) >> 8
-                self.buffer[pixel * 3 +
-                            1] = (color[1] * self.masterBrightness) >> 8
-                self.buffer[pixel * 3 +
-                            2] = (color[2] * self.masterBrightness) >> 8
-            else:
-                self.buffer[pixel * 3:(pixel * 3) + 3] = color
-        except IndexError:
-            pass
+                color = ((c * self.masterBrightness) >> 8 for c in color)
+            self._colors[pixel] = tuple(color)
 
     def waitForUpdate(self):
         if self._threadedUpdate:
@@ -120,35 +111,37 @@ class LEDBase(object):
         if self._waitingBrightness:
             self._doMasterBrigtness(self._waitingBrightnessValue)
 
-    def update(self):
+    def push_to_driver(self):
         """Push the current pixel state to the driver"""
         pos = 0
         self.waitForUpdate()
         self.doBrightness()
-        if len(self.buffer) != self.bufByteCount:
-            raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(
-                self.bufByteCount, len(self.buffer)))
-
         for d in self.driver:
             if self._threadedUpdate:
-                d._thread.setData(self.buffer[pos:d.bufByteCount + pos])
+                d._thread.setData(self._colors, pos)
             else:
-                d._update(self.buffer[pos:d.bufByteCount + pos])
-            pos += d.bufByteCount
+                d.receive_colors(self._colors, pos)
+            pos += d.numLEDs
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.driver])
 
     # use with caution!
-    def setBuffer(self, buf):
+    def set_colors(self, buf):
         """Use with extreme caution!
         Directly sets the internal buffer and bypasses all brightness and rotation control.
         buf must also be in the exact format required by the display type.
         """
-        if len(buf) != self.bufByteCount:
-            raise ValueError("For this display type and {0} LEDs, buffer must have {1} bytes but has {2}".format(
-                self.bufByteCount / 3, self.bufByteCount, len(buf)))
-        self.buffer[:] = buf
+        if len(self._colors) != len(buf):
+            raise IOError("Data buffer size incorrect! "
+                          "Expected: {} bytes / Received: {} bytes".format(
+                len(self._colors), len(buf)))
+        self._colors[:] = buf
+
+    def setBuffer(self, buf):
+        """DEPRECATED!"""
+        # https://stackoverflow.com/questions/1624883
+        self.set_colors(res = zip(*(iter(buf),) * 3))
 
     # Set the master brightness for the LEDs 0 - 255
     def _doMasterBrigtness(self, bright):
@@ -187,8 +180,7 @@ class LEDBase(object):
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
         """Set single pixel using individual RGB values instead of tuple"""
-        color = (r, g, b)
-        self._set_base(pixel, color)
+        self._set_base(pixel, (r, g, b))
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
@@ -202,17 +194,14 @@ class LEDBase(object):
 
     def all_off(self):
         """Set all pixels off"""
-        self._resetBuffer()
-
-    def _resetBuffer(self):
-        self.buffer[:] = [0] * self.bufByteCount
+        self._colors[:] = [(0, 0, 0)] * self.numLEDs
 
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
         """Fill the entire strip with RGB color tuple"""
         start = max(start, 0)
-        if end < 0 or end > self.lastIndex:
-            end = self.lastIndex
+        if end < 0 or end >= self.numLEDs:
+            end = self.numLEDs - 1
         for led in range(start, end + 1):  # since 0-index include end in range
             self._set_base(led, color)
 
@@ -245,7 +234,6 @@ class LEDStrip(LEDBase):
         else:
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
-            self.lastIndex = self.numLEDs - 1
 
     # Set single pixel to Color value
     def _set(self, pixel, color):
@@ -264,8 +252,7 @@ class LEDStrip(LEDBase):
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
         """Set single pixel using individual RGB values instead of tuple"""
-        color = (r, g, b)
-        self.set(pixel, color)
+        self.set(pixel, (r, g, b))
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
@@ -801,10 +788,10 @@ class LEDPOV(LEDMatrix):
         super(LEDPOV, self).__init__(driver, width, povHeight, None,
                                      rotation, vert_flip, threadedUpdate, masterBrightness)
 
-    # This is the magic. Overriding the normal update() method
+    # This is the magic. Overriding the normal push_to_driver() method
     # It will automatically break up the frame into columns spread over
     # frameTime (ms)
-    def update(self, frameTime=None):
+    def push_to_driver(self, frameTime=None):
         if frameTime:
             self._frameTotalTime = frameTime
 
@@ -816,9 +803,10 @@ class LEDPOV(LEDMatrix):
         for h in range(width):
             start = time.time() * 1000.0
 
-            buf = [item for sublist in [self.buffer[(width * i * 3) + (h * 3):(
-                width * i * 3) + (h * 3) + (3)] for i in range(self.height)] for item in sublist]
-            self.driver[0].update(buf)
+            def color(i):
+                return self._colors[(h + width * i) * 3]
+            buf = [color(i) for i in range(self.height)]
+            self.driver[0].receive_colors(buf, 0)
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))

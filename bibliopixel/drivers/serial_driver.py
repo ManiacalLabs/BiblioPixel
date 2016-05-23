@@ -1,4 +1,4 @@
-from driver_base import DriverBase, ChannelOrder
+from . driver_base import DriverBase, ChannelOrder
 import sys
 import time
 import os
@@ -215,7 +215,7 @@ class DriverSerial(DriverBase):
 
             packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type)  # set strip type
-            byteCount = self.bufByteCount
+            byteCount = self.bufByteCount()
             if self._type in BufferChipsets:
                 if self._type == LEDTYPE.APA102 and self.devVer >= 2:
                     pass
@@ -312,11 +312,11 @@ class DriverSerial(DriverBase):
             return True
 
     # Push new data to strand
-    def update(self, data):
-        count = self.bufByteCount + self._bufPad
+    def _receive_colors(self, colors, pos):
+        count = self.bufByteCount() + self._bufPad
         packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
 
-        self._fixData(data)
+        self._write_colors_to_buffer(colors, pos)
 
         packet.extend(self._buf)
         packet.extend([0] * self._bufPad)

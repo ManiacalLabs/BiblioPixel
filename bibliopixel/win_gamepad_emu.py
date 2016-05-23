@@ -1,7 +1,7 @@
 import win32api
 import win32con
 
-from util import d
+from . util import d
 from gamepad import BaseGamePad
 
 DEFAULT_MAP = {
