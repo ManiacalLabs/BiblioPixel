@@ -9,6 +9,8 @@ class ChannelOrder:
     BRG = 2, 0, 1
     BGR = 2, 1, 0
 
+    ORDERS = RGB, RBG, GRB, GBR, BRG, BGR
+
 
 class DriverBase(object):
     """Base driver class to build other drivers from"""
@@ -24,6 +26,7 @@ class DriverBase(object):
         self.gamma = gamma or range(256)
 
         self.c_order = c_order
+        self.perm = ChannelOrder.ORDERS.index(c_order)
 
         self.width = width
         self.height = height
