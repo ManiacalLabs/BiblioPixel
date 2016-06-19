@@ -1,5 +1,10 @@
+from __future__ import division
+import math
+
+
 class AttributeDict(dict):
     """A dict that exposes its values as attributes."""
+
     def __getattr__(self, key):
         return self[key]
 
@@ -20,8 +25,6 @@ def tuple_mult(a, b):
 
 def tuple_div(a, b):
     return tuple(x / y for x, y in zip(a, b))
-
-import math
 
 
 def pointOnCircle(cx, cy, radius, angle):
