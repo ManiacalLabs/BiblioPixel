@@ -34,6 +34,7 @@
 
 import colorsys
 import types
+import util
 
 
 def color_scale(color, level):
@@ -303,6 +304,21 @@ def wheel_color(position):
     #    g = 0
 
     # return (r, g, b)
+
+
+def hue_gradient(start, stop, steps):
+    assert (start >= 0 and start < 256) and (stop >= 0 and stop < 256), "hue must be between 0 and 255"
+    flip = False
+    if start > stop:
+        start, stop = stop, start
+        flip = True
+
+    stops = util.even_dist(start, stop, steps)
+
+    if flip:
+        stops = stops[::-1]
+
+    return stops
 
 
 def hue_helper(pos, length, cycle_step):

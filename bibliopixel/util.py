@@ -27,6 +27,14 @@ def tuple_div(a, b):
     return tuple(x / y for x, y in zip(a, b))
 
 
+def even_dist(start, stop, steps):
+    steps -= 1
+    start = float(start)
+    stop = float(stop)
+    div = (stop - start) / steps
+    return [int(round(start + x * div)) for x in range(steps)] + [int(stop)]
+
+
 def pointOnCircle(cx, cy, radius, angle):
     """Calculates the coordinates of a point on a circle given the center point, radius, and angle"""
     angle = math.radians(angle) - (math.pi / 2)
