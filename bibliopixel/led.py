@@ -141,7 +141,7 @@ class LEDBase(object):
     def setBuffer(self, buf):
         """DEPRECATED!"""
         # https://stackoverflow.com/questions/1624883
-        self.set_colors(res = zip(*(iter(buf),) * 3))
+        self.set_colors(buf=zip(*(iter(buf),) * 3))
 
     # Set the master brightness for the LEDs 0 - 255
     def _doMasterBrigtness(self, bright):
