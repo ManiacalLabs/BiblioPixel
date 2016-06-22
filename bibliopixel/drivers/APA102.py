@@ -4,8 +4,10 @@ from . spi_driver_base import DriverSPIBase, ChannelOrder
 class DriverAPA102(DriverSPIBase):
     """Main driver for APA102 based LED strips on devices like the Raspberry Pi and BeagleBone"""
 
-    def __init__(self, num, **kwds):
-        super(DriverAPA102, self).__init__(num, **kwds)
+    def __init__(self, num, c_order=ChannelOrder.RGB, use_py_spi=True,
+                 dev="/dev/spidev0.0", SPISpeed=2, open=open):
+        super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
+                         SPISpeed=SPISpeed, open=open)
 
         # APA102 requires latch bytes at the end
         self._latchBytes = (int(num / 64.0) + 1)
