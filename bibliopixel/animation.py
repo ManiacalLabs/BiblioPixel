@@ -33,6 +33,7 @@ class BaseAnimation(object):
         self._stopEvent = threading.Event()
         self._stopEvent.clear()
         self._led._threadedAnim = False
+        self._free_run = False
 
     def _msTime(self):
         return time.time() * 1000.0
@@ -107,7 +108,9 @@ class BaseAnimation(object):
             self.postStep(amt)
             mid = self._msTime()
 
-            if self._internalDelay:
+            if self._free_run:
+                sleep = None
+            elif self._internalDelay:
                 sleep = self._internalDelay
             elif initSleep:
                 sleep = initSleep
