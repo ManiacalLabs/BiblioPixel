@@ -459,11 +459,10 @@ class LEDMatrix(LEDBase):
             pass
 
     def _setTexture(self, x, y, color=None):
-        if x > 0 and y >= 0:
-            try:
-                self._set(x, y, color or self.texture[y][x])
-            except IndexError:
-                pass
+        try:
+            self._set(x, y, color or self.texture[y][x])
+        except IndexError:
+            pass
 
     def get(self, x, y):
         try:
