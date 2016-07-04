@@ -2,10 +2,13 @@
 from __future__ import division
 import math, threading, time
 from . import colors, font
+from . import log
 
 try:
     from timedata import ColorList
+    log.info('Using timedata.')
 except:
+    log.info('timedata not available. Using standard Python lists.')
     ColorList = list
 
 
