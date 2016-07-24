@@ -1,9 +1,13 @@
 from . driver_base import DriverBase, ChannelOrder
+
 import sys
 import time
 import os
-from .. import gamma, log
 import traceback
+
+from .. import gamma, log
+from .. return_codes import RETURN_CODES, print_error
+
 try:
     import serial
     import serial.tools.list_ports
@@ -21,10 +25,6 @@ if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     raise ImportError(error)
 
 
-class BiblioSerialError(Exception):
-    pass
-
-
 class CMDTYPE:
     SETUP_DATA = 1  # config data (LED type, SPI speed, num LEDs)
     PIXEL_DATA = 2  # raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
@@ -32,16 +32,6 @@ class CMDTYPE:
     GETID = 4
     SETID = 5
     GETVER = 6
-
-
-class RETURN_CODES:
-    SUCCESS = 255  # All is well
-    REBOOT = 42  # Device reboot needed after configuration
-    ERROR = 0  # Generic error
-    ERROR_SIZE = 1  # Data receieved does not match given command length
-    ERROR_UNSUPPORTED = 2  # Unsupported command
-    ERROR_PIXEL_COUNT = 3  # Too many pixels for device
-    ERROR_BAD_CMD = 4  # Unknown Command
 
 
 class LEDTYPE:
@@ -113,11 +103,11 @@ class DriverSerial(DriverBase):
             time.sleep(restart_timeout)
             resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
-                DriverSerial._printError(resp)
+                print_error(resp)
             else:
                 log.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
-            DriverSerial._printError(resp)
+            print_error(resp)
 
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._SPISpeed)
@@ -142,21 +132,6 @@ class DriverSerial(DriverBase):
                     DriverSerial.deviceVers.append(ver)
 
         return DriverSerial.foundDevices
-
-    @staticmethod
-    def _printError(error):
-        msg = "Unknown error occured."
-        if error == RETURN_CODES.ERROR_SIZE:
-            msg = "Data packet size incorrect."
-        elif error == RETURN_CODES.ERROR_UNSUPPORTED:
-            msg = "Unsupported configuration attempted."
-        elif error == RETURN_CODES.ERROR_PIXEL_COUNT:
-            msg = "Too many pixels specified for device."
-        elif error == RETURN_CODES.ERROR_BAD_CMD:
-            msg = "Unsupported protocol command. Check your device version."
-
-        log.error("%s: %s", error, msg)
-        raise BiblioSerialError(msg)
 
     @staticmethod
     def _comError():
@@ -265,7 +240,7 @@ class DriverSerial(DriverBase):
                 DriverSerial._comError()
             else:
                 if ord(resp) != RETURN_CODES.SUCCESS:
-                    DriverSerial._printError(ord(resp))
+                    print_error(ord(resp))
 
         except serial.SerialException:
             log.error("Problem connecting to serial device.")
@@ -306,7 +281,7 @@ class DriverSerial(DriverBase):
         self._com.write(packet)
         resp = ord(self._com.read(1))
         if resp != RETURN_CODES.SUCCESS:
-            DriverSerial._printError(resp)
+            print_error(resp)
             return False
         else:
             return True
@@ -327,7 +302,7 @@ class DriverSerial(DriverBase):
         if len(resp) == 0:
             DriverSerial._comError()
         if ord(resp) != RETURN_CODES.SUCCESS:
-            DriverSerial._printError(ord(resp))
+            print_error(ord(resp))
 
         self._com.flushInput()
 

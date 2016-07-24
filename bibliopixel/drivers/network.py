@@ -2,19 +2,13 @@ import socket, sys, time, os
 
 from . driver_base import DriverBase
 from .. import log
+from .. return_codes import RETURN_CODES
 
 
 class CMDTYPE:
     SETUP_DATA = 1  # reserved for future use
     PIXEL_DATA = 2
     BRIGHTNESS = 3
-
-
-class RETURN_CODES:
-    SUCCESS = 255  # All is well
-    ERROR = 0  # Generic error
-    ERROR_SIZE = 1  # Data receieved does not match given command length
-    ERROR_UNSUPPORTED = 2  # Unsupported command
 
 
 class DriverNetwork(DriverBase):
@@ -75,10 +69,8 @@ class DriverNetwork(DriverBase):
         s = self._connect()
         s.sendall(packet)
         resp = ord(s.recv(1))
-        if resp != RETURN_CODES.SUCCESS:
-            return False
-        else:
-            return True
+        return resp == RETURN_CODES.SUCCESS
+
 
 MANIFEST = [
     {

@@ -1,12 +1,8 @@
-try:
-    import serial
-    import serial.tools.list_ports
-except ImportError as e:
-    error = "Please install pyserial 2.7+! pip install pyserial"
-    raise ImportError(error)
+from distutils.version import LooseVersion
 
 from distutils.version import LooseVersion
 from . util import d
+from . return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
 import log
 
@@ -22,14 +18,6 @@ class CMDTYPE:
     GET_BTNS = 1
     SET_LEDS = 2
     SET_MODE = 4
-
-
-class RETURN_CODES:
-    SUCCESS = 255
-    ERROR = 0
-    ERROR_SIZE = 1
-    ERROR_UNSUPPORTED = 2
-    ERROR_BAD_CMD = 4
 
 
 class SerialPadError(Exception):
@@ -48,7 +36,7 @@ class SerialGamePad(BaseGamePad):
 
         resp = self._connect()
         if resp != RETURN_CODES.SUCCESS:
-            SerialGamePad._printError(resp)
+            print_error(resp, SerialPadError)
 
     def close(self):
         if self._com is not None:
@@ -140,7 +128,7 @@ class SerialGamePad(BaseGamePad):
             if len(resp) == 0:
                 SerialGamePad._comError()
             elif ord(resp) != RETURN_CODES.SUCCESS:
-                SerialGamePad._printError(ord(resp))
+                print_error(ord(resp), SerialPadError)
             resp = self._com.read(2)
             if len(resp) != 2:
                 SerialGamePad._comError()
@@ -173,7 +161,7 @@ class SerialGamePad(BaseGamePad):
         if len(resp) == 0:
             SerialGamePad._comError()
         elif ord(resp) != RETURN_CODES.SUCCESS:
-            SerialGamePad._printError(ord(resp))
+            print_error(ord(resp), SerialPadError)
 
     def setLightsOff(self, count):
         data = {}
