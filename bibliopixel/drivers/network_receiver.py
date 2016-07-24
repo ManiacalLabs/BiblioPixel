@@ -1,7 +1,8 @@
 import threading
 import os
 import SocketServer
-from . network import CMDTYPE, RETURN_CODES
+from .. return_codes import RETURN_CODES
+from . network import CMDTYPE
 
 os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from .. import log
