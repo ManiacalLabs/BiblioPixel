@@ -191,7 +191,7 @@ class DriverSerial(DriverBase):
                 log.info(error)
                 raise BiblioSerialError(error)
 
-            packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
+            packet = util.generate_header(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type)  # set strip type
             byteCount = self.bufByteCount()
             if self._type in BufferChipsets:
@@ -219,14 +219,6 @@ class DriverSerial(DriverBase):
             raise e
 
     @staticmethod
-    def _generateHeader(cmd, size):
-        packet = bytearray()
-        packet.append(cmd)
-        packet.append(size & 0xFF)
-        packet.append(size >> 8)
-        return packet
-
-    @staticmethod
     def setDeviceID(dev, id):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
@@ -234,7 +226,7 @@ class DriverSerial(DriverBase):
         try:
             com = serial.Serial(dev, timeout=5)
 
-            packet = DriverSerial._generateHeader(CMDTYPE.SETID, 1)
+            packet = util.generate_header(CMDTYPE.SETID, 1)
             packet.append(id)
             com.write(packet)
 
@@ -251,7 +243,7 @@ class DriverSerial(DriverBase):
 
     @staticmethod
     def getDeviceID(dev):
-        packet = DriverSerial._generateHeader(CMDTYPE.GETID, 0)
+        packet = util.generate_header(CMDTYPE.GETID, 0)
         try:
             com = serial.Serial(dev, timeout=5)
             com.write(packet)
@@ -263,7 +255,7 @@ class DriverSerial(DriverBase):
 
     @staticmethod
     def getDeviceVer(dev):
-        packet = DriverSerial._generateHeader(CMDTYPE.GETVER, 0)
+        packet = util.generate_header(CMDTYPE.GETVER, 0)
         try:
             com = serial.Serial(dev, timeout=0.5)
             com.write(packet)
@@ -279,7 +271,7 @@ class DriverSerial(DriverBase):
             return 0
 
     def setMasterBrightness(self, brightness):
-        packet = DriverSerial._generateHeader(CMDTYPE.BRIGHTNESS, 1)
+        packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(brightness)
         self._com.write(packet)
         resp = ord(self._com.read(1))
@@ -292,7 +284,7 @@ class DriverSerial(DriverBase):
     # Push new data to strand
     def _receive_colors(self, colors, pos):
         count = self.bufByteCount() + self._bufPad
-        packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
+        packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
         self._write_colors_to_buffer(colors, pos)
 
