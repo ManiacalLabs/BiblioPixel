@@ -1,7 +1,7 @@
 import socket, sys, time, os
 
 from . driver_base import DriverBase
-from .. import log
+from .. import log, util
 from .. return_codes import RETURN_CODES
 
 
@@ -20,13 +20,6 @@ class DriverNetwork(DriverBase):
         self._host = host
         self._port = port
 
-    def _generateHeader(self, cmd, size):
-        packet = bytearray()
-        packet.append(cmd)
-        packet.append(size & 0xFF)
-        packet.append(size >> 8)
-        return packet
-
     def _connect(self):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -44,7 +37,7 @@ class DriverNetwork(DriverBase):
             s = self._connect()
 
             count = self.bufByteCount()
-            packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
+            packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
             colors = self._flatten(colors)
             packet.extend(colors)
@@ -64,7 +57,7 @@ class DriverNetwork(DriverBase):
             raise IOError(error)
 
     def setMasterBrightness(self, brightness):
-        packet = self._generateHeader(CMDTYPE.BRIGHTNESS, 1)
+        packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(brightness)
         s = self._connect()
         s.sendall(packet)

@@ -1,6 +1,4 @@
 from distutils.version import LooseVersion
-
-from distutils.version import LooseVersion
 from . util import d
 from . return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
@@ -95,7 +93,7 @@ class SerialGamePad(BaseGamePad):
                 log.info(error)
                 raise SerialPadError(error)
 
-            packet = SerialGamePad._generateHeader(CMDTYPE.INIT, 0)
+            packet = util.generate_header(CMDTYPE.INIT, 0)
             self._com.write(packet)
 
             resp = self._com.read(1)
@@ -110,18 +108,10 @@ class SerialGamePad(BaseGamePad):
             log.error(error)
             raise e
 
-    @staticmethod
-    def _generateHeader(cmd, size):
-        packet = bytearray()
-        packet.append(cmd)
-        packet.append(size & 0xFF)
-        packet.append(size >> 8)
-        return packet
-
     def getKeys(self):
         bits = 0
         try:
-            packet = SerialGamePad._generateHeader(CMDTYPE.GET_BTNS, 0)
+            packet = util.generate_header(CMDTYPE.GET_BTNS, 0)
             self._com.write(packet)
             resp = self._com.read(1)
 
@@ -154,7 +144,7 @@ class SerialGamePad(BaseGamePad):
         for l in temp:
             leds.extend(l)
 
-        packet = SerialGamePad._generateHeader(CMDTYPE.SET_LEDS, len(leds))
+        packet = util.generate_header(CMDTYPE.SET_LEDS, len(leds))
         packet.extend(leds)
         self._com.write(packet)
         resp = self._com.read(1)
