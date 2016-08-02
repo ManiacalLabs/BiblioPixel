@@ -17,7 +17,7 @@ class DriverBase(object):
     """Base driver class to build other drivers from"""
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
-                 gamma=None, gamma_value=1.0):
+                 gamma=None, gamma_value=1.0, min_value=0, max_value=255):
         if num == 0:
             num = width * height
             if num == 0:
@@ -37,6 +37,18 @@ class DriverBase(object):
 
         self._thread = None
         self.lastUpdate = 0
+
+        self._frame = None
+
+        try:
+            import timedata
+            self._renderer = timedata.Renderer(
+                gamma=gamma_value,
+                permutation=self.perm,
+                min=min_value,
+                max=max_value).render
+        except:
+            pass
 
     def __enter__(self):
         return self
@@ -64,10 +76,15 @@ class DriverBase(object):
     def setMasterBrightness(self, brightness):
         return False
 
-    def _render(self, colors, pos):
+    def _renderer(self, colors, offset=0, length=-1, output=None):
         gamma, (r, g, b) = self.gamma, self.c_order
-        for i in range(self.numLEDs):
+        for i in range(length):
             fix = lambda x: gamma[int(max(0, min(255, int(x))))]  # flake8: noqa
-            ci = colors[i + pos]
+            ci = colors[i + offset]
             colors[i + pos] = (fix(ci[r]), fix(ci[g]), fix(ci[b]))
         return bytearray(i for c in colors for i in c)
+
+    def _render(self, colors, offset):
+        self._frame = self._renderer(
+            colors, offset=offset, length=self.numLEDs, output=self._frame)
+        return self._frame
