@@ -32,7 +32,7 @@ class DriverNetwork(DriverBase):
             raise IOError(error)
 
     def _render(self, colors, pos):
-        return bytearray(i for c in colors for i in c)
+        return bytearray(min(255, int(i)) for c in colors for i in c)
 
     # Push new data to strand
     def _receive_colors(self, colors, pos):

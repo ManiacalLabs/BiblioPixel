@@ -5,7 +5,7 @@ from . import colors, font
 
 try:
     from timedata import ColorList
-    ColorList = list  # This line disables timedata temporarily.
+
 except:
     ColorList = list
 
