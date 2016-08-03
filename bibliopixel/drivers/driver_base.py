@@ -73,8 +73,11 @@ class DriverBase(object):
         if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
 
-    def setMasterBrightness(self, brightness):
-        return False
+    def set_brightness(self, brightness):
+        if brightness > 255 or brightness < 0:
+            raise ValueError('Brightness must be between 0 and 255')
+        self._brightness = brightness
+        return True
 
     def _renderer(self, colors, offset=0, length=-1, output=None):
         gamma, (r, g, b) = self.gamma, self.c_order

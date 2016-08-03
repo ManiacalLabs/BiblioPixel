@@ -80,7 +80,7 @@ class NetworkReceiver:
         SocketServer.TCPServer.allow_reuse_address = True
         self._server = ThreadedDataServer(self.address, ThreadedDataHandler)
         self._server.update = self.update
-        self._server.setBrightness = self._led.setMasterBrightness
+        self._server.setBrightness = self._led.set_brightness
 
     def start(self, join=False):
         self._t = threading.Thread(target=self._server.serve_forever)

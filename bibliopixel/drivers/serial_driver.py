@@ -267,16 +267,15 @@ class DriverSerial(DriverBase):
             log.error("Problem connecting to serial device.")
             return 0
 
-    def setMasterBrightness(self, brightness):
+    def set_brightness(self, brightness):
+        super.set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
-        packet.append(brightness)
+        packet.append(self._brightness)
         self._com.write(packet)
         resp = ord(self._com.read(1))
-        if resp != RETURN_CODES.SUCCESS:
-            print_error(resp)
-            return False
-        else:
+        if resp == RETURN_CODES.SUCCESS:
             return True
+        print_error(resp)
 
     # Push new data to strand
     def _receive_colors(self, colors, pos):

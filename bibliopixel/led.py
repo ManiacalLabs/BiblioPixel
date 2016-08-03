@@ -80,7 +80,7 @@ class LEDBase(object):
         self._waitingBrightnessValue = None
         self._threadedAnim = False
 
-        self.setMasterBrightness(masterBrightness)
+        self.set_brightness(masterBrightness)
 
     def update(self):
         """DEPRECATED - use self.push_to_driver()"""
@@ -113,7 +113,7 @@ class LEDBase(object):
 
     def doBrightness(self):
         if self._waitingBrightness:
-            self._doMasterBrigtness(self._waitingBrightnessValue)
+            self.do_set_brightness(self._waitingBrightnessValue)
 
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
@@ -147,26 +147,15 @@ class LEDBase(object):
         self.set_colors(buf=zip(*(iter(buf),) * 3))
 
     # Set the master brightness for the LEDs 0 - 255
-    def _doMasterBrigtness(self, bright):
+    def _do_set_brightness(self, bright):
         self.waitForUpdate()
-        result = True
         for d in self.driver:
-            if not d.setMasterBrightness(bright):
-                result = False
-                break
-
-        # all or nothing, set them all back if False
-        if not result:
-            for d in self.driver:
-                d.setMasterBrightness(255)
-            self.masterBrightness = bright
-        else:
-            self.masterBrightness = 255
+            d.set_brightness(bright)
 
         self._waitingBrightnessValue = None
         self._waitingBrightness = False
 
-    def setMasterBrightness(self, bright):
+    def set_brightness(self, bright):
         """Sets the master brightness scaling, 0 - 255
 
         If the driver supports it the brightness will be sent to the receiver directly.
@@ -178,7 +167,7 @@ class LEDBase(object):
             self._waitingBrightnessValue = bright
             self._waitingBrightness = True
         else:
-            self._doMasterBrigtness(bright)
+            self._do_set_brightness(bright)
 
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
