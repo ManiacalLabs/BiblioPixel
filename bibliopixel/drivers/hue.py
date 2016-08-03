@@ -38,13 +38,6 @@ class DriverHue(DriverBase):
 
         self.setTransitionTime(0)  # start with no transition time
 
-    def setMasterBrightness(self, brightness):
-        if brightness < 0 or brightness > 255:
-            raise ValueError("Brightness value must be between 0 and 255")
-        self._brightness = brightness
-
-        return True
-
     def setTransitionTime(self, time):
         if time < 0.0 or time > 30.0:
             raise ValueError(
