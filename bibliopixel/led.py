@@ -90,10 +90,10 @@ class LEDBase(object):
         return self
 
     def __exit__(self, type, value, traceback):
-        pass
+        return self.cleanup()
 
     def cleanup(self):
-        return self.__exit__(None, None, None)
+        pass
 
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
