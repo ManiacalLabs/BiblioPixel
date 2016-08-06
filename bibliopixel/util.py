@@ -1,7 +1,6 @@
 from __future__ import division
 import math
 
-
 class AttributeDict(dict):
     """A dict that exposes its values as attributes."""
 

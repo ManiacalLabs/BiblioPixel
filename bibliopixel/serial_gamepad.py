@@ -1,10 +1,18 @@
 from distutils.version import LooseVersion
-
-from distutils.version import LooseVersion
 from . util import d
 from . return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
 import log
+
+try:
+    import serial
+    import serial.tools.list_ports
+except ImportError as e:
+    error = "Please install pyserial 2.7+! pip install pyserial"
+    log.error(error)
+    raise ImportError(error)
+
+from distutils.version import LooseVersion
 
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
@@ -142,7 +150,7 @@ class SerialGamePad(BaseGamePad):
         for m in self._map:
             result[m] = (bits & (1 << index) > 0)
             index += 1
-        return d(result)
+        return util.d(result)
 
     def setLights(self, data):
         temp = [(0, 0, 0)] * len(data.keys())
