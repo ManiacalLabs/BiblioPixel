@@ -1,3 +1,6 @@
+import log
+
+
 class RETURN_CODES:
     SUCCESS = 255  # All is well
     REBOOT = 42  # Device reboot needed after configuration

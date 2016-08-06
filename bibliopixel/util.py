@@ -1,5 +1,6 @@
 import math
 
+
 def generate_header(cmd, size):
     packet = bytearray()
     packet.append(cmd)

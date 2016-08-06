@@ -6,7 +6,7 @@ import os
 import traceback
 
 from .. import gamma, log, util
-from .. return_codes import RETURN_CODES, print_error
+from .. return_codes import RETURN_CODES, print_error, BiblioSerialError
 
 try:
     import serial
