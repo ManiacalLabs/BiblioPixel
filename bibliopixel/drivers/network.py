@@ -31,15 +31,18 @@ class DriverNetwork(DriverBase):
             log.error(error)
             raise IOError(error)
 
+    def _render(self, colors, pos):
+        return bytearray(min(255, int(i)) for c in colors for i in c)
+
     # Push new data to strand
-    def _receive_colors(self, colors):
+    def _receive_colors(self, colors, pos):
         try:
             s = self._connect()
 
             count = self.bufByteCount()
             packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
-            colors = self._flatten(colors)
+            colors = self._render(colors, pos)
             packet.extend(colors)
             s.sendall(packet)
 
@@ -56,9 +59,10 @@ class DriverNetwork(DriverBase):
             log.error(error)
             raise IOError(error)
 
-    def setMasterBrightness(self, brightness):
+    def set_brightness(self, brightness):
+        super().set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
-        packet.append(brightness)
+        packet.append(self._brightness)
         s = self._connect()
         s.sendall(packet)
         resp = ord(s.recv(1))

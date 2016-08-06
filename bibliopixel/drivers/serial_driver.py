@@ -112,6 +112,9 @@ class DriverSerial(DriverBase):
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._SPISpeed)
 
+    def __enter__(self):
+        pass
+
     def __exit__(self, type, value, traceback):
         if self._com is not None:
             log.info("Closing connection to: %s", self.dev)
@@ -267,24 +270,22 @@ class DriverSerial(DriverBase):
             log.error("Problem connecting to serial device.")
             return 0
 
-    def setMasterBrightness(self, brightness):
+    def set_brightness(self, brightness):
+        super.set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
-        packet.append(brightness)
+        packet.append(self._brightness)
         self._com.write(packet)
         resp = ord(self._com.read(1))
-        if resp != RETURN_CODES.SUCCESS:
-            print_error(resp)
-            return False
-        else:
+        if resp == RETURN_CODES.SUCCESS:
             return True
+        print_error(resp)
 
     # Push new data to strand
-    def _receive_colors(self, colors):
+    def _receive_colors(self, colors, pos):
         count = self.bufByteCount() + self._bufPad
         packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
-        colors = self._color_correct(colors)
-        self._buf = self._flatten(colors)
+        self._buf = self._render(colors, pos)
 
         packet.extend(self._buf)
         packet.extend([0] * self._bufPad)
