@@ -1,12 +1,6 @@
-try:
-    import serial
-    import serial.tools.list_ports
-except ImportError as e:
-    error = "Please install pyserial 2.7+! pip install pyserial"
-    raise ImportError(error)
-
 from distutils.version import LooseVersion
 from . util import d
+from . return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
 import log
 
@@ -22,14 +16,6 @@ class CMDTYPE:
     GET_BTNS = 1
     SET_LEDS = 2
     SET_MODE = 4
-
-
-class RETURN_CODES:
-    SUCCESS = 255
-    ERROR = 0
-    ERROR_SIZE = 1
-    ERROR_UNSUPPORTED = 2
-    ERROR_BAD_CMD = 4
 
 
 class SerialPadError(Exception):
@@ -48,7 +34,7 @@ class SerialGamePad(BaseGamePad):
 
         resp = self._connect()
         if resp != RETURN_CODES.SUCCESS:
-            SerialGamePad._printError(resp)
+            print_error(resp, SerialPadError)
 
     def close(self):
         if self._com is not None:
@@ -107,7 +93,7 @@ class SerialGamePad(BaseGamePad):
                 log.info(error)
                 raise SerialPadError(error)
 
-            packet = SerialGamePad._generateHeader(CMDTYPE.INIT, 0)
+            packet = util.generate_header(CMDTYPE.INIT, 0)
             self._com.write(packet)
 
             resp = self._com.read(1)
@@ -122,25 +108,17 @@ class SerialGamePad(BaseGamePad):
             log.error(error)
             raise e
 
-    @staticmethod
-    def _generateHeader(cmd, size):
-        packet = bytearray()
-        packet.append(cmd)
-        packet.append(size & 0xFF)
-        packet.append(size >> 8)
-        return packet
-
     def getKeys(self):
         bits = 0
         try:
-            packet = SerialGamePad._generateHeader(CMDTYPE.GET_BTNS, 0)
+            packet = util.generate_header(CMDTYPE.GET_BTNS, 0)
             self._com.write(packet)
             resp = self._com.read(1)
 
             if len(resp) == 0:
                 SerialGamePad._comError()
             elif ord(resp) != RETURN_CODES.SUCCESS:
-                SerialGamePad._printError(ord(resp))
+                print_error(ord(resp), SerialPadError)
             resp = self._com.read(2)
             if len(resp) != 2:
                 SerialGamePad._comError()
@@ -166,14 +144,14 @@ class SerialGamePad(BaseGamePad):
         for l in temp:
             leds.extend(l)
 
-        packet = SerialGamePad._generateHeader(CMDTYPE.SET_LEDS, len(leds))
+        packet = util.generate_header(CMDTYPE.SET_LEDS, len(leds))
         packet.extend(leds)
         self._com.write(packet)
         resp = self._com.read(1)
         if len(resp) == 0:
             SerialGamePad._comError()
         elif ord(resp) != RETURN_CODES.SUCCESS:
-            SerialGamePad._printError(ord(resp))
+            print_error(ord(resp), SerialPadError)
 
     def setLightsOff(self, count):
         data = {}

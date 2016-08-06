@@ -16,7 +16,8 @@ class ChannelOrder:
 class DriverBase(object):
     """Base driver class to build other drivers from"""
 
-    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB, gamma=None):
+    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
+                 gamma=None, gamma_value=1.0, min_value=0, max_value=255):
         if num == 0:
             num = width * height
             if num == 0:
@@ -25,6 +26,7 @@ class DriverBase(object):
 
         self.numLEDs = num
         self.gamma = gamma or range(256)
+        self.gamma_value = gamma_value
 
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
@@ -36,16 +38,17 @@ class DriverBase(object):
         self._thread = None
         self.lastUpdate = 0
 
-        if 'timedata' in sys.modules:
-            self._flatten = self._flatten_timedata
-        else:
-            self._flatten = self._flatten_basic
+        self._frame = None
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        pass
+        try:
+            import timedata
+            self._renderer = timedata.Renderer(
+                gamma=gamma_value,
+                permutation=self.perm,
+                min=min_value,
+                max=max_value).render
+        except:
+            pass
 
     def cleanup(self):
         return self.__exit__(None, None, None)
@@ -54,30 +57,31 @@ class DriverBase(object):
         return 3 * self.numLEDs
 
     # Push new data to strand
-    def _receive_colors(self, colors):
+    def _receive_colors(self, colors, pos):
         # TODO: use abc here.
         raise RuntimeError("Base class receive_colors() called.")
 
     def receive_colors(self, colors, pos):
         start = time.time() * 1000.0
-        self._receive_colors(colors[pos:self.numLEDs+pos])
+        self._receive_colors(colors, pos)
         if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
 
-    def setMasterBrightness(self, brightness):
-        return False
+    def set_brightness(self, brightness):
+        if brightness > 255 or brightness < 0:
+            raise ValueError('Brightness must be between 0 and 255')
+        self._brightness = brightness
+        return True
 
-    # call _flatten() instead!
-    def _flatten_basic(self, colors):
-        return [i for c in colors for i in c]
-
-    # call _flatten() instead!
-    def _flatten_timedata(self, colors):
-        return [int(i) for i in self._flatten_basic(colors)]
-
-    def _color_correct(self, colors):
+    def _renderer(self, colors, offset=0, length=-1, output=None):
         gamma, (r, g, b) = self.gamma, self.c_order
-        for i in range(self.numLEDs):
+        for i in range(length):
             fix = lambda x: gamma[int(max(0, min(255, int(x))))]  # flake8: noqa
-            colors[i] = (fix(colors[i][r]), fix(colors[i][g]), fix(colors[i][b]))
-        return colors
+            ci = colors[i + offset]
+            colors[i + pos] = (fix(ci[r]), fix(ci[g]), fix(ci[b]))
+        return bytearray(i for c in colors for i in c)
+
+    def _render(self, colors, offset):
+        self._frame = self._renderer(
+            colors, offset=offset, length=self.numLEDs, output=self._frame)
+        return self._frame

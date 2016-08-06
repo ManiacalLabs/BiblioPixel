@@ -1,7 +1,8 @@
 import threading
 import os
 import SocketServer
-from . network import CMDTYPE, RETURN_CODES
+from .. return_codes import RETURN_CODES
+from . network import CMDTYPE
 
 os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from .. import log
@@ -79,7 +80,7 @@ class NetworkReceiver:
         SocketServer.TCPServer.allow_reuse_address = True
         self._server = ThreadedDataServer(self.address, ThreadedDataHandler)
         self._server.update = self.update
-        self._server.setBrightness = self._led.setMasterBrightness
+        self._server.setBrightness = self._led.set_brightness
 
     def start(self, join=False):
         self._t = threading.Thread(target=self._server.serve_forever)

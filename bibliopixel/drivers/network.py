@@ -1,20 +1,14 @@
 import socket, sys, time, os
 
 from . driver_base import DriverBase
-from .. import log
+from .. import log, util
+from .. return_codes import RETURN_CODES
 
 
 class CMDTYPE:
     SETUP_DATA = 1  # reserved for future use
     PIXEL_DATA = 2
     BRIGHTNESS = 3
-
-
-class RETURN_CODES:
-    SUCCESS = 255  # All is well
-    ERROR = 0  # Generic error
-    ERROR_SIZE = 1  # Data receieved does not match given command length
-    ERROR_UNSUPPORTED = 2  # Unsupported command
 
 
 class DriverNetwork(DriverBase):
@@ -25,13 +19,6 @@ class DriverNetwork(DriverBase):
 
         self._host = host
         self._port = port
-
-    def _generateHeader(self, cmd, size):
-        packet = bytearray()
-        packet.append(cmd)
-        packet.append(size & 0xFF)
-        packet.append(size >> 8)
-        return packet
 
     def _connect(self):
         try:
@@ -44,15 +31,18 @@ class DriverNetwork(DriverBase):
             log.error(error)
             raise IOError(error)
 
+    def _render(self, colors, pos):
+        return bytearray(min(255, int(i)) for c in colors for i in c)
+
     # Push new data to strand
-    def _receive_colors(self, colors):
+    def _receive_colors(self, colors, pos):
         try:
             s = self._connect()
 
             count = self.bufByteCount()
-            packet = self._generateHeader(CMDTYPE.PIXEL_DATA, count)
+            packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
-            colors = self._flatten(colors)
+            colors = self._render(colors, pos)
             packet.extend(colors)
             s.sendall(packet)
 
@@ -69,16 +59,15 @@ class DriverNetwork(DriverBase):
             log.error(error)
             raise IOError(error)
 
-    def setMasterBrightness(self, brightness):
-        packet = self._generateHeader(CMDTYPE.BRIGHTNESS, 1)
-        packet.append(brightness)
+    def set_brightness(self, brightness):
+        super().set_brightness(brightness)
+        packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
+        packet.append(self._brightness)
         s = self._connect()
         s.sendall(packet)
         resp = ord(s.recv(1))
-        if resp != RETURN_CODES.SUCCESS:
-            return False
-        else:
-            return True
+        return resp == RETURN_CODES.SUCCESS
+
 
 MANIFEST = [
     {

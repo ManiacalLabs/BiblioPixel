@@ -1,9 +1,13 @@
 from . driver_base import DriverBase, ChannelOrder
+
 import sys
 import time
 import os
-from .. import gamma, log
 import traceback
+
+from .. import gamma, log, util
+from .. return_codes import RETURN_CODES, print_error
+
 try:
     import serial
     import serial.tools.list_ports
@@ -21,10 +25,6 @@ if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     raise ImportError(error)
 
 
-class BiblioSerialError(Exception):
-    pass
-
-
 class CMDTYPE:
     SETUP_DATA = 1  # config data (LED type, SPI speed, num LEDs)
     PIXEL_DATA = 2  # raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
@@ -32,16 +32,6 @@ class CMDTYPE:
     GETID = 4
     SETID = 5
     GETVER = 6
-
-
-class RETURN_CODES:
-    SUCCESS = 255  # All is well
-    REBOOT = 42  # Device reboot needed after configuration
-    ERROR = 0  # Generic error
-    ERROR_SIZE = 1  # Data receieved does not match given command length
-    ERROR_UNSUPPORTED = 2  # Unsupported command
-    ERROR_PIXEL_COUNT = 3  # Too many pixels for device
-    ERROR_BAD_CMD = 4  # Unknown Command
 
 
 class LEDTYPE:
@@ -113,14 +103,17 @@ class DriverSerial(DriverBase):
             time.sleep(restart_timeout)
             resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
-                DriverSerial._printError(resp)
+                print_error(resp)
             else:
                 log.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
-            DriverSerial._printError(resp)
+            print_error(resp)
 
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._SPISpeed)
+
+    def __enter__(self):
+        pass
 
     def __exit__(self, type, value, traceback):
         if self._com is not None:
@@ -142,21 +135,6 @@ class DriverSerial(DriverBase):
                     DriverSerial.deviceVers.append(ver)
 
         return DriverSerial.foundDevices
-
-    @staticmethod
-    def _printError(error):
-        msg = "Unknown error occured."
-        if error == RETURN_CODES.ERROR_SIZE:
-            msg = "Data packet size incorrect."
-        elif error == RETURN_CODES.ERROR_UNSUPPORTED:
-            msg = "Unsupported configuration attempted."
-        elif error == RETURN_CODES.ERROR_PIXEL_COUNT:
-            msg = "Too many pixels specified for device."
-        elif error == RETURN_CODES.ERROR_BAD_CMD:
-            msg = "Unsupported protocol command. Check your device version."
-
-        log.error("%s: %s", error, msg)
-        raise BiblioSerialError(msg)
 
     @staticmethod
     def _comError():
@@ -213,7 +191,7 @@ class DriverSerial(DriverBase):
                 log.info(error)
                 raise BiblioSerialError(error)
 
-            packet = DriverSerial._generateHeader(CMDTYPE.SETUP_DATA, 4)
+            packet = util.generate_header(CMDTYPE.SETUP_DATA, 4)
             packet.append(self._type)  # set strip type
             byteCount = self.bufByteCount()
             if self._type in BufferChipsets:
@@ -241,14 +219,6 @@ class DriverSerial(DriverBase):
             raise e
 
     @staticmethod
-    def _generateHeader(cmd, size):
-        packet = bytearray()
-        packet.append(cmd)
-        packet.append(size & 0xFF)
-        packet.append(size >> 8)
-        return packet
-
-    @staticmethod
     def setDeviceID(dev, id):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
@@ -256,7 +226,7 @@ class DriverSerial(DriverBase):
         try:
             com = serial.Serial(dev, timeout=5)
 
-            packet = DriverSerial._generateHeader(CMDTYPE.SETID, 1)
+            packet = util.generate_header(CMDTYPE.SETID, 1)
             packet.append(id)
             com.write(packet)
 
@@ -265,7 +235,7 @@ class DriverSerial(DriverBase):
                 DriverSerial._comError()
             else:
                 if ord(resp) != RETURN_CODES.SUCCESS:
-                    DriverSerial._printError(ord(resp))
+                    print_error(ord(resp))
 
         except serial.SerialException:
             log.error("Problem connecting to serial device.")
@@ -273,7 +243,7 @@ class DriverSerial(DriverBase):
 
     @staticmethod
     def getDeviceID(dev):
-        packet = DriverSerial._generateHeader(CMDTYPE.GETID, 0)
+        packet = util.generate_header(CMDTYPE.GETID, 0)
         try:
             com = serial.Serial(dev, timeout=5)
             com.write(packet)
@@ -285,7 +255,7 @@ class DriverSerial(DriverBase):
 
     @staticmethod
     def getDeviceVer(dev):
-        packet = DriverSerial._generateHeader(CMDTYPE.GETVER, 0)
+        packet = util.generate_header(CMDTYPE.GETVER, 0)
         try:
             com = serial.Serial(dev, timeout=0.5)
             com.write(packet)
@@ -300,24 +270,22 @@ class DriverSerial(DriverBase):
             log.error("Problem connecting to serial device.")
             return 0
 
-    def setMasterBrightness(self, brightness):
-        packet = DriverSerial._generateHeader(CMDTYPE.BRIGHTNESS, 1)
-        packet.append(brightness)
+    def set_brightness(self, brightness):
+        super.set_brightness(brightness)
+        packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
+        packet.append(self._brightness)
         self._com.write(packet)
         resp = ord(self._com.read(1))
-        if resp != RETURN_CODES.SUCCESS:
-            DriverSerial._printError(resp)
-            return False
-        else:
+        if resp == RETURN_CODES.SUCCESS:
             return True
+        print_error(resp)
 
     # Push new data to strand
-    def _receive_colors(self, colors):
+    def _receive_colors(self, colors, pos):
         count = self.bufByteCount() + self._bufPad
-        packet = DriverSerial._generateHeader(CMDTYPE.PIXEL_DATA, count)
+        packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
-        colors = self._color_correct(colors)
-        self._buf = self._flatten(colors)
+        self._buf = self._render(colors, pos)
 
         packet.extend(self._buf)
         packet.extend([0] * self._bufPad)
@@ -327,7 +295,7 @@ class DriverSerial(DriverBase):
         if len(resp) == 0:
             DriverSerial._comError()
         if ord(resp) != RETURN_CODES.SUCCESS:
-            DriverSerial._printError(ord(resp))
+            print_error(ord(resp))
 
         self._com.flushInput()
 

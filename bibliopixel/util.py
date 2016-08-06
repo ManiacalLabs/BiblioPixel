@@ -1,5 +1,11 @@
-from __future__ import division
 import math
+
+def generate_header(cmd, size):
+    packet = bytearray()
+    packet.append(cmd)
+    packet.append(size & 0xFF)
+    packet.append(size >> 8)
+    return packet
 
 
 class AttributeDict(dict):
