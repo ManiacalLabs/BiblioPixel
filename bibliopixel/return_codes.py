@@ -1,4 +1,3 @@
-import log
 
 
 class RETURN_CODES:
