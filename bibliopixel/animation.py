@@ -149,7 +149,7 @@ class BaseAnimation(object):
                     time.sleep(t)
             cur_step += 1
 
-        self._exit(None, None, None)
+        self.__exit__(None, None, None)
 
         if self._callback:
             self._callback(self)
