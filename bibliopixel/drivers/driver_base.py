@@ -1,6 +1,6 @@
 import time
 import sys
-
+from .. import log
 
 class ChannelOrder:
     RGB = 0, 1, 2
@@ -40,15 +40,17 @@ class DriverBase(object):
 
         self._frame = None
 
-        try:
-            import timedata
-            self._renderer = timedata.Renderer(
-                gamma=gamma_value,
-                permutation=self.perm,
-                min=min_value,
-                max=max_value).render
-        except:
-            pass
+        if '--disable_timedata' not in sys.argv:
+            try:
+                import timedata
+                log.info('Loading timedata renderer')
+                self._renderer = timedata.Renderer(
+                    gamma=gamma_value,
+                    permutation=self.perm,
+                    min=min_value,
+                    max=max_value).render
+            except:
+                pass
 
     def cleanup(self):
         return self.__exit__(None, None, None)
