@@ -1,20 +1,6 @@
-#!/usr/bin/env python
-from __future__ import division
-import math, threading, time
-from . import colors, font
-from . import log
-import sys
-
-if '--disable_timedata' in sys.argv:
-    log.info("timedata disabled, using standard Python lists")
-    ColorList = list
-else:
-    try:
-        from timedata import ColorList
-        log.info('Using timedata')
-    except:
-        log.info('timedata not available. Using standard Python lists')
-        ColorList = list
+import math, sys, threading, time
+from . import colors, font, log
+from . timedata import timedata
 
 
 class updateThread(threading.Thread):
@@ -64,9 +50,11 @@ class LEDBase(object):
         if not hasattr(self, 'numLEDs'):
             self.numLEDs = sum(d.numLEDs for d in self.driver)
 
-        # This buffer will always be the same list - i.e. is guaranteed to only
+        # self._colors will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = ColorList()
+        # This means you can keep a reference to it, and mutate it.
+        self._colors = timedata().ColorList() if timedata() else []
+
         self.all_off()
         assert len(self._colors) == self.numLEDs
 
