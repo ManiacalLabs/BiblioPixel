@@ -3,6 +3,7 @@ import sys
 from .. import log
 from .. timedata import timedata
 
+
 class ChannelOrder:
     RGB = 0, 1, 2
     RBG = 0, 2, 1
@@ -16,6 +17,8 @@ class ChannelOrder:
 
 class DriverBase(object):
     """Base driver class to build other drivers from"""
+
+    USE_TIMEDATA = False and '--disable_timedata' not in sys.argv
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
                  gamma=None, gamma_value=1.0, min_value=0, max_value=255):
