@@ -1,21 +1,8 @@
 #!/usr/bin/env python
-from __future__ import division
-import math, threading, time
-from . import colors, font
-from . import log
-import sys
 
-if '--disable_timedata' in sys.argv:
-    log.info("timedata disabled, using standard Python lists")
-    ColorList = list
-else:
-    try:
-        from timedata import ColorList
-        log.info('Using timedata')
-    except:
-        log.info('timedata not available. Using standard Python lists')
-        ColorList = list
-
+import math, sys, threading, time
+from . import colors, font, log
+from . use_timedata import timedata, ColorList
 
 class updateThread(threading.Thread):
 
@@ -102,7 +89,9 @@ class LEDBase(object):
     def cleanup(self):
         pass
 
-    def _get_base(self, pixel):
+    def _get_base(self, pixel, result=None):
+        if result and timedata:
+            return self._colors.get(pixel, result)
         if pixel >= 0 and pixel < self.numLEDs:
             return self._colors[pixel]
         return 0, 0, 0  # don't go out of bounds
@@ -244,9 +233,12 @@ class LEDStrip(LEDBase):
         for p in range(start, start + self.pixelWidth):
             self._set_base(p, color)
 
-    def get(self, pixel):
-        """Get RGB color tuple of color at index pixel"""
-        return self._get_base(pixel)
+    def get(self, pixel, result=None):
+        """Get RGB color tuple of color at index pixel.
+           Arguments:
+               result: optional timedata.Color to reuse.
+           """
+        return self._get_base(pixel, result)
 
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
@@ -451,10 +443,10 @@ class LEDMatrix(LEDBase):
             except IndexError:
                 pass
 
-    def get(self, x, y):
+    def get(self, x, y, result=None):
         try:
             pixel = self.matrix_map[y][x]
-            return self._get_base(pixel)
+            return self._get_base(pixel, result)
         except IndexError:
             return 0, 0, 0
 
@@ -964,10 +956,10 @@ class LEDCircle(LEDBase):
         pixel = self.angleToPixel(angle, ring)
         self._set_base(pixel, color)
 
-    def get(self, ring, angle):
+    def get(self, ring, angle, result=None):
         """Get RGB color tuple of color at index pixel"""
         pixel = self.angleToPixel(angle, ring)
-        return self._get_base(pixel)
+        return self._get_base(pixel, result)
 
     def drawRadius(self, angle, color, startRing=0, endRing=-1):
         if startRing < 0:
