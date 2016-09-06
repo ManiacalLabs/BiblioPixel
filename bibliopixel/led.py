@@ -2,7 +2,6 @@ import math, sys, threading, time
 from . import colors, font, log
 from . timedata import timedata
 
-
 class updateThread(threading.Thread):
 
     def __init__(self, driver):
