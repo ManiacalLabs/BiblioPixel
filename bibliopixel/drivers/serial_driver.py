@@ -271,7 +271,7 @@ class DriverSerial(DriverBase):
             return 0
 
     def set_brightness(self, brightness):
-        super.set_brightness(brightness)
+        super().set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         self._com.write(packet)

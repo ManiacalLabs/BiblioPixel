@@ -42,11 +42,14 @@ class DriverBase(object):
 
         self._frame = None
 
-        self._renderer = timedata() and timedata().Renderer(
-            gamma=gamma_value,
-            permutation=self.perm,
-            min=min_value,
-            max=max_value).render
+        if timedata():
+            self._renderer = timedata() and timedata().Renderer(
+                gamma=gamma_value,
+                permutation=self.perm,
+                min=min_value,
+                max=max_value).render
+
+        print(self._renderer)
 
     def cleanup(self):
         return self.__exit__(None, None, None)
@@ -76,7 +79,7 @@ class DriverBase(object):
         for i in range(length):
             fix = lambda x: gamma[int(max(0, min(255, int(x))))]  # flake8: noqa
             ci = colors[i + offset]
-            colors[i + pos] = (fix(ci[r]), fix(ci[g]), fix(ci[b]))
+            colors[i + offset] = (fix(ci[r]), fix(ci[g]), fix(ci[b]))
         return bytearray(i for c in colors for i in c)
 
     def _render(self, colors, offset):
