@@ -1,6 +1,10 @@
 import threading
 import os
-import SocketServer
+
+try:
+    import SocketServer
+except:
+    import socketserver as SocketServer
 from .. return_codes import RETURN_CODES
 from . network import CMDTYPE
 

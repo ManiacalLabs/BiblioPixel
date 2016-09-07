@@ -1,9 +1,13 @@
-from Tkinter import Tk, TclError, ALL, Canvas, TOP
+try:
+    from Tkinter import Tk, TclError, ALL, Canvas, TOP
+    from Queue import Queue
+except:
+    from tkinter import Tk, TclError, ALL, Canvas, TOP
+    from queue import Queue
+
 import threading
-import Queue
 import time
 import sys
-import SocketServer
 import platform
 import os
 from .. import log
@@ -17,7 +21,7 @@ class VisualizerUI:
         self._maxWindowWidth = 1024
 
         self._master = Tk()
-        self._q = Queue.Queue()
+        self._q = Queue()
         self._hasFrame = False
 
         self.x = width

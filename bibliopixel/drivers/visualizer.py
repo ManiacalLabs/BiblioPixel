@@ -31,12 +31,12 @@ class DriverVisualizer(DriverNetwork):
             operating_system = platform.system().lower()
             suffix = ""
             if "windows" in operating_system:
-                exe_string = "start python"
+                exe_string = "start python3"
             elif "darwin" in operating_system:
-                exe_string = "python2.7"
+                exe_string = "python3"
                 suffix = "&"
             else:
-                exe_string = "python2.7"
+                exe_string = "python3"
                 suffix = "&"
 
             dname = os.path.dirname(os.path.dirname(os.path.dirname(
