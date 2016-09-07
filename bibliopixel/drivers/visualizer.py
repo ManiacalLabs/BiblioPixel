@@ -3,6 +3,8 @@ import time, os, platform, subprocess, math
 from . network import DriverNetwork, socket
 from .. import log
 
+USE_PYTHON3 = False
+
 
 class DriverVisualizer(DriverNetwork):
     """Main driver for Visualizer UI (for testing)"""
@@ -29,15 +31,13 @@ class DriverVisualizer(DriverNetwork):
             s.close()
         except:
             operating_system = platform.system().lower()
-            suffix = ""
-            if "windows" in operating_system:
-                exe_string = "start python"
-            elif "darwin" in operating_system:
-                exe_string = "python2.7"
-                suffix = "&"
+            if 'windows' in operating_system:
+                exe_string = 'start python'
+                suffix = ''
             else:
-                exe_string = "python2.7"
                 suffix = "&"
+                exe_string = 'python3' if USE_PYTHON3 else 'python2.7'
+
 
             dname = os.path.dirname(os.path.dirname(os.path.dirname(
                 os.path.abspath(__file__))))
