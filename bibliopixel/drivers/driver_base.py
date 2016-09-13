@@ -53,14 +53,17 @@ class DriverBase(object):
         raise RuntimeError("Base class receive_colors() called.")
 
     def receive_colors(self, colors, pos):
-        start = time.time() * 1000.0
-        self._receive_colors(colors, pos)
         if self._thread:
+            start = time.time() * 1000.0
+            self._receive_colors(colors, pos)
             self.lastUpdate = (time.time() * 1000.0) - start
+        else:
+            self._receive_colors(colors, pos)
+
 
     def set_brightness(self, brightness):
         if brightness > 255 or brightness < 0:
-            raise ValueError('Brightness must be between 0 and 255')
+            raise ValueError('Brightness not between 0 and 255: %s' % brightness)
         self._brightness = brightness
         return True
 
