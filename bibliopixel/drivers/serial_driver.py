@@ -380,7 +380,7 @@ MANIFEST = [
                     5: "WS281x"
             },
             "options_map": [
-                gamma.NEWER_LPD8806,
+                gamma.LPD8806,
                 gamma.APA102,
                 gamma.WS2801,
                 gamma.SM16716,

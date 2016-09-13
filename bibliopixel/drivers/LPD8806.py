@@ -12,7 +12,7 @@ class DriverLPD8806(DriverSPIBase):
                  dev="/dev/spidev0.0",
                  SPISpeed=2, open=open):
         super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
-                         SPISpeed=SPISpeed, open=open, gamma=gamma.NEW_LPD8806)
+                         SPISpeed=SPISpeed, open=open, gamma=gamma.LPD8806)
 
         # LPD8806 requires latch bytes at the end
         self._latchBytes = (self.numLEDs + 31) // 32
