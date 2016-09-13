@@ -4,6 +4,7 @@ import time
 import math
 import font
 import threading
+import and_event
 
 
 class updateDriverThread(threading.Thread):
@@ -65,6 +66,8 @@ class updateThread(threading.Thread):
             t.start()
             d._thread = t
 
+        self._updated = and_event.AndEvent([d._thread._updating for d in self._drivers])
+
     def setData(self, data):
         assert len(data) == len(self._drivers), "Must have as many data blocks as drivers"
         self._reading.wait()
@@ -84,17 +87,22 @@ class updateThread(threading.Thread):
         while not self.stopped():
             self._wait.wait()
 
-            while all([d._thread.sending() for d in self._drivers]):
-                time.sleep(0.00000000001)
+            # while all([d._thread.sending() for d in self._drivers]):
+            #     time.sleep(0.00000000001)
+
+            self._updated.wait()
             # for d in self._drivers:
             #     d._thread._updating.wait()
 
             for d in self._drivers:
                 d._thread.sync()
 
+            self._updated.clear()
+
             self._data = []
             self._wait.clear()
             self._reading.set()
+
 
 
 class LEDBase(object):
