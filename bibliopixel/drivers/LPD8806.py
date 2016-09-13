@@ -1,3 +1,5 @@
+from .. import gamma
+
 from . spi_driver_base import DriverSPIBase, ChannelOrder
 
 class DriverLPD8806(DriverSPIBase):
@@ -10,12 +12,7 @@ class DriverLPD8806(DriverSPIBase):
                  dev="/dev/spidev0.0",
                  SPISpeed=2, open=open):
         super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
-                         SPISpeed=SPISpeed, open=open)
-
-        # Color calculations from
-        # http://learn.adafruit.com/light-painting-with-raspberry-pi
-        self.gamma = [0x80 | int(
-            pow(float(i) / 255.0, 2.5) * 127.0 + 0.5) for i in range(256)]
+                         SPISpeed=SPISpeed, open=open, gamma=gamma.NEW_LPD8806)
 
         # LPD8806 requires latch bytes at the end
         self._latchBytes = (self.numLEDs + 31) // 32

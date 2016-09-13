@@ -44,13 +44,13 @@ class DriverTest(unittest.TestCase):
             list(driver._buf), [0, 0, 0, 64, 1, 8, 128, 2, 16, 192, 3, 24])
 
     def test_gamma(self):
-        driver = DriverBase(num=4, gamma=gamma.LPD8806)
+        driver = DriverBase(num=4, gamma=gamma.OLD_LPD8806)
         driver._render(self.COLORS, 0)
         self.assertEqual(
             list(driver._buf), [0, 0, 0, 0, 0, 8, 0, 0, 46, 0, 1, 125])
 
         driver = DriverBase(num=4, c_order=ChannelOrder.RGB,
-                            gamma=gamma.LPD8806)
+                            gamma=gamma.OLD_LPD8806)
         driver._render(self.COLORS, 0)
         self.assertEqual(
             list(driver._buf), [0, 0, 0, 0, 0, 8, 0, 0, 46, 0, 1, 125])
