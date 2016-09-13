@@ -32,6 +32,7 @@ class CMDTYPE:
     GETID = 4
     SETID = 5
     GETVER = 6
+    SYNC = 7
 
 
 class LEDTYPE:
@@ -157,7 +158,7 @@ class DriverSerial(DriverBase):
                         except:
                             pass
                         log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
-                            self.dev, self.deviceID, self.devVer)
+                                 self.dev, self.deviceID, self.devVer)
 
                     if self.dev == "" or self.dev is None:
                         error = "Unable to find device with ID: {}".format(
@@ -178,7 +179,7 @@ class DriverSerial(DriverBase):
                             devID = id
 
                     log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
-                        self.dev, devID, self.devVer)
+                             self.dev, devID, self.devVer)
 
             try:
                 self._com = serial.Serial(self.dev, timeout=5)
@@ -271,7 +272,7 @@ class DriverSerial(DriverBase):
             return 0
 
     def set_brightness(self, brightness):
-        super.set_brightness(brightness)
+        super().set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         self._com.write(packet)
@@ -298,6 +299,23 @@ class DriverSerial(DriverBase):
             print_error(ord(resp))
 
         self._com.flushInput()
+
+    def _sync(self):
+        packet = util.generate_header(CMDTYPE.SYNC, 0)
+        self._com.write(packet)
+        resp = self._com.read(1)
+        if len(resp) == 0:
+            DriverSerial._comError()
+        if ord(resp) != RETURN_CODES.SUCCESS:
+            return_codes.print_error(ord(resp))
+
+        self._com.flushInput()
+
+
+class DriverTeensySmartMatrix(DriverSerial):
+    def __init__(self, width, height, dev="", deviceID=None, hardwareID="16C0:0483"):
+        super(DriverTeensySmartMatrix, self).__init__(type=LEDTYPE.GENERIC, num=width * height, deviceID=deviceID, hardwareID=hardwareID)
+        self.sync = self._sync
 
 
 MANIFEST = [
@@ -407,6 +425,48 @@ MANIFEST = [
             "label": "Hardware ID",
             "type": "str",
             "default": "1D50:60AB",
+            "group": "Advanced"
+        }, ]
+    },
+    {
+        "id": "teensysmartmatrix",
+        "class": DriverTeensySmartMatrix,
+        "type": "driver",
+        "display": "Teensy SmartMatrix",
+        "desc": "Interface with Teensy SmartMatrix Controller.",
+        "params": [{
+            "id": "width",
+            "label": "Width",
+            "type": "int",
+            "default": 32,
+            "min": 16,
+            "help": "Width of display. Firmware hardcoded."
+        }, {
+            "id": "height",
+            "label": "Height",
+            "type": "int",
+            "default": 32,
+            "min": 16,
+            "help": "Width of display. Firmware hardcoded."
+        }, {
+            "id": "dev",
+            "label": "Device Path",
+            "type": "str",
+            "default": "",
+        }, {
+            "id": "deviceID",
+            "label": "Device ID",
+            "type": "int",
+            "default": None,
+            "min": 0,
+            "max": 255,
+            "msg": "Teensy ID",
+            "group": "Advanced"
+        }, {
+            "id": "hardwareID",
+            "label": "Hardware ID",
+            "type": "str",
+            "default": "16C0:0483",
             "group": "Advanced"
         }, ]
     }

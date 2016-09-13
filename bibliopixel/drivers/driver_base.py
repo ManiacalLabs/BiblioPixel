@@ -63,6 +63,9 @@ class DriverBase(object):
     def bufByteCount(self):
         return 3 * self.numLEDs
 
+    def sync(self):
+        pass
+
     # Push new data to strand
     def _receive_colors(self, colors, pos):
         # TODO: use abc here.

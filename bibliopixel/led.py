@@ -1,14 +1,15 @@
 import math, threading, time
-from . import colors, font, matrix, timedata
+from . import and_event, colors, font, matrix, timedata
 
 
-class updateThread(threading.Thread):
+class updateDriverThread(threading.Thread):
 
     def __init__(self, driver):
-        super(updateThread, self).__init__()
+        super(updateDriverThread, self).__init__()
         self.setDaemon(True)
         self._stop = threading.Event()
         self._wait = threading.Event()
+        self._updating = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
         self._data = []
@@ -19,6 +20,10 @@ class updateThread(threading.Thread):
         self._data = (colors, pos)
         self._reading.clear()
         self._wait.set()
+
+    def sync(self):
+        self._updating.wait()
+        self._driver.sync()
 
     def stop(self):
         self._stop.set()
@@ -32,10 +37,67 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
+            self._updating.clear()
             self._driver.receive_colors(*self._data)
             self._data = []
             self._wait.clear()
             self._reading.set()
+            self._updating.set()
+
+
+class updateThread(threading.Thread):
+
+    def __init__(self, drivers):
+        super(updateThread, self).__init__()
+        self.setDaemon(True)
+        self._stop = threading.Event()
+        self._wait = threading.Event()
+        self._reading = threading.Event()
+        self._reading.set()
+        self._data = []
+        self._drivers = drivers
+        for d in self._drivers:
+            t = updateDriverThread(d)
+            t.start()
+            d._thread = t
+
+        self._updated = and_event.AndEvent([d._thread._updating for d in self._drivers])
+
+    def setData(self, data):
+        assert len(data) == len(self._drivers), "Must have as many data blocks as drivers"
+        self._reading.wait()
+        self._data = data
+        for i in range(len(data)):
+            self._drivers[i]._thread.setData(*data[i])
+        self._reading.clear()
+        self._wait.set()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
+    def run(self):
+        while not self.stopped():
+            self._wait.wait()
+
+            # while all([d._thread.sending() for d in self._drivers]):
+            #     time.sleep(0.00000000001)
+
+            self._updated.wait()
+            # for d in self._drivers:
+            #     d._thread._updating.wait()
+
+            for d in self._drivers:
+                d._thread.sync()
+
+            self._updated.clear()
+
+            self._data = []
+            self._wait.clear()
+            self._reading.set()
+
 
 
 class LEDBase(object):
@@ -63,10 +125,8 @@ class LEDBase(object):
         self._threadedUpdate = threadedUpdate
 
         if self._threadedUpdate:
-            for d in self.driver:
-                t = updateThread(d)
-                t.start()
-                d._thread = t
+            self._updateThread = updateThread(self.driver)
+            self._updateThread.start()
 
         self._waitingBrightness = False
         self._waitingBrightnessValue = None
@@ -112,12 +172,18 @@ class LEDBase(object):
         pos = 0
         self.waitForUpdate()
         self.doBrightness()
+
+        data = []
         for d in self.driver:
-            if self._threadedUpdate:
-                d._thread.setData(self._colors, pos)
-            else:
-                d.receive_colors(self._colors, pos)
+            data.append([self._colors, pos])
             pos += d.numLEDs
+        if self._threadedUpdate:
+            self._updateThread.setData(data)
+        else:
+            for i in range(len(self.driver)):
+                self.driver[i].receive_colors(*data[i])
+            for d in self.driver:
+                d.sync()
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.driver])
