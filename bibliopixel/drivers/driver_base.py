@@ -1,3 +1,4 @@
+from .. import gamma as _gamma
 import time
 
 
@@ -15,7 +16,8 @@ class ChannelOrder:
 class DriverBase(object):
     """Base driver class to build other drivers from"""
 
-    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB, gamma=None):
+    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
+                 gamma=None):
         if num == 0:
             num = width * height
             if num == 0:
@@ -23,7 +25,7 @@ class DriverBase(object):
                     "Either num or width and height must be provided!")
 
         self.numLEDs = num
-        self.gamma = gamma or range(256)
+        self.gamma = gamma or _gamma.DEFAULT
 
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
@@ -59,7 +61,6 @@ class DriverBase(object):
             self.lastUpdate = (time.time() * 1000.0) - start
         else:
             self._receive_colors(colors, pos)
-
 
     def set_brightness(self, brightness):
         if brightness > 255 or brightness < 0:

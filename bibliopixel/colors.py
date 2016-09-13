@@ -48,6 +48,7 @@ def color_blend(a, b):
 
 
 def gamma_correct(color, gamma):
+    # DEPRECATED
     """Applies a gamma correction to an RGB color tuple"""
     return (gamma[color[0]], gamma[color[1]], gamma[color[2]])
 
