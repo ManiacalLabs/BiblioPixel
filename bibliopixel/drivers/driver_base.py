@@ -13,7 +13,7 @@ class ChannelOrder:
 class DriverBase(object):
     """Base driver class to build other drivers from"""
 
-    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB, gamma=None):
+    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB, gamma=None, req_sync=False):
         if num == 0:
             num = width * height
             if num == 0:
@@ -22,6 +22,8 @@ class DriverBase(object):
 
         self.numLEDs = num
         self.gamma = gamma or range(256)
+
+        self.req_sync = req_sync
 
         self.c_order = c_order
 
@@ -45,6 +47,9 @@ class DriverBase(object):
     # Push new data to strand
     def update(self, data):
         raise RuntimeError("Base class update() called. This shouldn't happen")
+
+    def sync(self):
+        pass
 
     def _update(self, data):
         start = time.time() * 1000.0

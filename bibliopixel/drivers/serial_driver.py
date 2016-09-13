@@ -32,6 +32,7 @@ class CMDTYPE:
     GETID = 4
     SETID = 5
     GETVER = 6
+    SYNC = 7
 
 
 class RETURN_CODES:
@@ -88,14 +89,15 @@ class DriverSerial(DriverBase):
     deviceIDS = {}
     deviceVers = []
 
-    def __init__(self, type, num, dev="", c_order=ChannelOrder.RGB, SPISpeed=2, gamma=None, restart_timeout=3, deviceID=None, hardwareID="1D50:60AB"):
-        super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma)
+    def __init__(self, type, num, dev="", c_order=ChannelOrder.RGB, SPISpeed=2, gamma=None, restart_timeout=3, deviceID=None, hardwareID="1D50:60AB", req_sync=False):
+        super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma, req_sync=req_sync)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1
 
         self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
+        self._req_sync = req_sync
         self._com = None
         self._type = type
         self._bufPad = 0
@@ -322,6 +324,19 @@ class DriverSerial(DriverBase):
         packet.extend([0] * self._bufPad)
         self._com.write(packet)
 
+        resp = self._com.read(1)
+        if len(resp) == 0:
+            DriverSerial._comError()
+        if ord(resp) != RETURN_CODES.SUCCESS:
+            DriverSerial._printError(ord(resp))
+
+        self._com.flushInput()
+        if not self.req_sync:
+            self.sync()
+
+    def sync(self):
+        packet = DriverSerial._generateHeader(CMDTYPE.SYNC, 0)
+        self._com.write(packet)
         resp = self._com.read(1)
         if len(resp) == 0:
             DriverSerial._comError()

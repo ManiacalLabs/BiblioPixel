@@ -6,13 +6,14 @@ import font
 import threading
 
 
-class updateThread(threading.Thread):
+class updateDriverThread(threading.Thread):
 
     def __init__(self, driver):
-        super(updateThread, self).__init__()
+        super(updateDriverThread, self).__init__()
         self.setDaemon(True)
         self._stop = threading.Event()
         self._wait = threading.Event()
+        self._updating = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
         self._data = []
@@ -23,6 +24,10 @@ class updateThread(threading.Thread):
         self._data = data
         self._reading.clear()
         self._wait.set()
+
+    def sync(self):
+        self._updating.wait()
+        self._driver.sync()
 
     def stop(self):
         self._stop.set()
@@ -36,7 +41,57 @@ class updateThread(threading.Thread):
     def run(self):
         while not self.stopped():
             self._wait.wait()
+            self._updating.clear()
             self._driver._update(self._data)
+            self._data = []
+            self._wait.clear()
+            self._reading.set()
+            self._updating.set()
+
+
+class updateThread(threading.Thread):
+
+    def __init__(self, drivers):
+        super(updateThread, self).__init__()
+        self.setDaemon(True)
+        self._stop = threading.Event()
+        self._wait = threading.Event()
+        self._reading = threading.Event()
+        self._reading.set()
+        self._data = []
+        self._drivers = drivers
+        for d in self._drivers:
+            t = updateDriverThread(d)
+            t.start()
+            d._thread = t
+
+    def setData(self, data):
+        assert len(data) == len(self._drivers), "Must have as many data blocks as drivers"
+        self._reading.wait()
+        self._data = data
+        for i in range(len(data)):
+            self._drivers[i]._thread.setData(data[i])
+        self._reading.clear()
+        self._wait.set()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
+    def run(self):
+        while not self.stopped():
+            self._wait.wait()
+
+            while all([d._thread.sending() for d in self._drivers]):
+                time.sleep(0.00000000001)
+            # for d in self._drivers:
+            #     d._thread._updating.wait()
+
+            for d in self._drivers:
+                d._thread.sync()
+
             self._data = []
             self._wait.clear()
             self._reading.set()
@@ -68,10 +123,8 @@ class LEDBase(object):
         self._threadedUpdate = threadedUpdate
 
         if self._threadedUpdate:
-            for d in self.driver:
-                t = updateThread(d)
-                t.start()
-                d._thread = t
+            self._updateThread = updateThread(self.driver)
+            self._updateThread.start()
 
         self._waitingBrightness = False
         self._waitingBrightnessValue = None
@@ -129,12 +182,17 @@ class LEDBase(object):
             raise IOError("Data buffer size incorrect! Expected: {} bytes / Received: {} bytes".format(
                 self.bufByteCount, len(self.buffer)))
 
+        data = []
         for d in self.driver:
-            if self._threadedUpdate:
-                d._thread.setData(self.buffer[pos:d.bufByteCount + pos])
-            else:
-                d._update(self.buffer[pos:d.bufByteCount + pos])
+            data.append(self.buffer[pos:d.bufByteCount + pos])
             pos += d.bufByteCount
+        if self._threadedUpdate:
+            self._updateThread.setData(data)
+        else:
+            for i in range(len(self.driver)):
+                self.driver[i]._update(data[i])
+            for d in self.driver:
+                d.sync()
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.driver])
