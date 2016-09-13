@@ -12,9 +12,7 @@ class DriverWS2801(DriverSPIBase):
             raise ValueError(
                 "WS2801 requires an SPI speed no greater than 1MHz or SPI speed was set <= 0")
         super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
-                         SPISpeed=SPISpeed, open=open)
-
-        self.gamma = gamma.WS2801
+                         SPISpeed=SPISpeed, open=open, gamma=gamma.WS2801)
 
 
 MANIFEST = [

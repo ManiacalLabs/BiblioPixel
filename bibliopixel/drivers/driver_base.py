@@ -69,8 +69,7 @@ class DriverBase(object):
         return True
 
     def _render(self, colors, pos):
-        gamma, (r, g, b) = self.gamma, self.c_order
+        fix, (r, g, b) = self.gamma.get, self.c_order
         for i in range(self.numLEDs):
-            fix = lambda x: gamma[max(0, min(255, int(x)))]
             c = tuple(int(x) for x in colors[i + pos])
             self._buf[i * 3:(i + 1) * 3] = fix(c[r]), fix(c[g]), fix(c[b])
