@@ -64,7 +64,7 @@ class DriverBase(object):
         self._brightness = brightness
         return True
 
-    def _write_colors_to_buffer(self, colors, pos):
+    def _render(self, colors, pos):
         gamma, (r, g, b) = self.gamma, self.c_order
         for i in range(self.numLEDs):
             fix = lambda x: gamma[max(0, min(255, int(x)))]
