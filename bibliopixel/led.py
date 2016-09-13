@@ -1,10 +1,5 @@
 import math, threading, time
-from . import colors, font
-
-try:
-    from tdsp import ColorList
-except:
-    ColorList = list
+from . import colors, font, timedata
 
 class updateThread(threading.Thread):
 
@@ -55,7 +50,7 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = ColorList()
+        self._colors = timedata.ColorList()
         self.all_off()
         assert len(self._colors) == self.numLEDs
 
