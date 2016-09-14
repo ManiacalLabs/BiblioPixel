@@ -491,7 +491,7 @@ MANIFEST = [
             "default": None,
             "min": 0,
             "max": 255,
-            "msg": "AllPixel ID",
+            "msg": "Teensy ID",
             "group": "Advanced"
         }, {
             "id": "hardwareID",
