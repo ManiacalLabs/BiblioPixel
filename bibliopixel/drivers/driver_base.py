@@ -1,4 +1,6 @@
 from .. import gamma as _gamma
+from .. import timedata
+
 import time
 
 
@@ -25,7 +27,8 @@ class DriverBase(object):
                     "Either num or width and height must be provided!")
 
         self.numLEDs = num
-        self.gamma = gamma or _gamma.DEFAULT
+        gamma = gamma or _gamma.DEFAULT
+        self.gamma = gamma
 
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
@@ -36,6 +39,13 @@ class DriverBase(object):
 
         self._thread = None
         self.lastUpdate = 0
+
+        self._render_td = timedata.Renderer(
+            gamma=gamma.gamma,
+            offset=gamma.offset,
+            permutation=self.perm,
+            min=gamma.lower_bound,
+            max=255)
 
     def __enter__(self):
         return self
@@ -68,8 +78,13 @@ class DriverBase(object):
         self._brightness = brightness
         return True
 
-    def _render(self, colors, pos):
+    def _render_py(self, colors, pos, length=-1, output=None):
         fix, (r, g, b) = self.gamma.get, self.c_order
-        for i in range(self.numLEDs):
+        for i in range(length):
             c = tuple(int(x) for x in colors[i + pos])
-            self._buf[i * 3:(i + 1) * 3] = fix(c[r]), fix(c[g]), fix(c[b])
+            output[i * 3:(i + 1) * 3] = fix(c[r]), fix(c[g]), fix(c[b])
+        return output
+
+    def _render(self, colors, pos):
+        r = (hasattr(colors, 'indexer') and self._render_td) or self._render_py
+        self._buf = r(colors, pos, self.numLEDs, self._buf)

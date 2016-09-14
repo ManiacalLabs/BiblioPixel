@@ -6,17 +6,31 @@ from bibliopixel.drivers.APA102 import DriverAPA102
 from bibliopixel.drivers.LPD8806 import DriverLPD8806
 from bibliopixel.drivers.WS2801 import DriverWS2801
 
+from bibliopixel import timedata
+
 
 def mock_open(self, fname, perm='r'):
     pass #
 
 class DriverTest(unittest.TestCase):
-    COLORS = [(0, 0, 0),
-              (1, 8, 64),
-              (2, 16, 128),
-              (3, 24, 192)]
+    COLORS_PY = [(0, 0, 0),
+                (1, 8, 64),
+                (2, 16, 128),
+                (3, 24, 192)]
+
+    COLORS_TD = timedata.ColorList255(COLORS_PY)
+
+    ALL_COLORS = COLORS_PY, COLORS_TD
 
     SPD = dict(use_py_spi=False, open=mock_open)
+
+    def do_test(self, driver, colors, expected):
+        driver._render(colors, 0)
+        self.assertEqual(list(driver._buf), expected)
+
+    def do_both_tests(self, driver, expected):
+        for c in self.ALL_COLORS:
+            self.do_test(driver, c, expected)
 
     def test_trivial(self):
         driver = DriverBase(num=4)
@@ -28,53 +42,42 @@ class DriverTest(unittest.TestCase):
 
     def test_simple(self):
         driver = DriverBase(num=4)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf), [0, 0, 0, 1, 8, 64, 2, 16, 128, 3, 24, 192])
+        expected = [0, 0, 0, 1, 8, 64, 2, 16, 128, 3, 24, 192]
+        self.do_both_tests(driver, expected)
 
     def test_permute(self):
         driver = DriverBase(num=4, c_order=ChannelOrder.GRB)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf), [0, 0, 0, 8, 1, 64, 16, 2, 128, 24, 3, 192])
+        expected = [0, 0, 0, 8, 1, 64, 16, 2, 128, 24, 3, 192]
+        self.do_both_tests(driver, expected)
 
+    def test_permute2(self):
         driver = DriverBase(num=4, c_order=ChannelOrder.BRG)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf), [0, 0, 0, 64, 1, 8, 128, 2, 16, 192, 3, 24])
+        expected = [0, 0, 0, 64, 1, 8, 128, 2, 16, 192, 3, 24]
+        self.do_both_tests(driver, expected)
 
-    def test_gamma(self):
+    def test_gamma1(self):
         driver = DriverBase(num=4, gamma=gamma.LPD8806)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf),
-            [128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190])
-
-        driver = DriverBase(num=4, c_order=ChannelOrder.RGB,
-                            gamma=gamma.LPD8806)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf),
-            [128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190])
+        expected = [128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190]
+        self.do_test(driver, self.COLORS_PY, expected)
+        expected[-1] = 191
+        self.do_test(driver, self.COLORS_TD, expected)
 
     def test_apa102(self):
         driver = DriverAPA102(num=4, **self.SPD)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf),
-            [0, 0, 0, 0, 255, 0, 0, 0, 255, 1, 8, 64,
-             255, 2, 16, 128, 255, 3, 24, 192, 255, 0, 0, 0])
+        expected = [0, 0, 0, 0, 255, 0, 0, 0, 255, 1, 8, 64,
+                    255, 2, 16, 128, 255, 3, 24, 192, 255, 0, 0, 0]
+        self.do_test(driver, self.COLORS_PY, expected)
+        # self.do_test(driver, self.COLORS_TD, expected) TODO
 
     def test_lpd8806(self):
         driver = DriverLPD8806(num=4, **self.SPD)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf),
-            [128, 128, 128, 128, 128, 132,
-             128, 128, 151, 128, 128, 190, 0])
+        expected = [
+            128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190, 0]
+        self.do_test(driver, self.COLORS_PY, expected)
+        expected[-2] = 191
+        self.do_test(driver, self.COLORS_TD, expected)
 
     def test_ws2801(self):
         driver = DriverWS2801(num=4, **self.SPD)
-        driver._render(self.COLORS, 0)
-        self.assertEqual(
-            list(driver._buf), [0, 0, 0, 0, 0, 8, 0, 0, 45, 0, 0, 125])
+        expected = [0, 0, 0, 0, 0, 8, 0, 0, 45, 0, 0, 125]
+        self.do_both_tests(driver, expected)
