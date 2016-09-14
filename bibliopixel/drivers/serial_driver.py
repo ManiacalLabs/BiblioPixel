@@ -89,15 +89,14 @@ class DriverSerial(DriverBase):
     deviceIDS = {}
     deviceVers = []
 
-    def __init__(self, type, num, dev="", c_order=ChannelOrder.RGB, SPISpeed=2, gamma=None, restart_timeout=3, deviceID=None, hardwareID="1D50:60AB", req_sync=False):
-        super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma, req_sync=req_sync)
+    def __init__(self, type, num, dev="", c_order=ChannelOrder.RGB, SPISpeed=2, gamma=None, restart_timeout=3, deviceID=None, hardwareID="1D50:60AB"):
+        super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1
 
         self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
-        self._req_sync = req_sync
         self._com = None
         self._type = type
         self._bufPad = 0
@@ -331,10 +330,8 @@ class DriverSerial(DriverBase):
             DriverSerial._printError(ord(resp))
 
         self._com.flushInput()
-        if not self.req_sync:
-            self.sync()
 
-    def sync(self):
+    def _sync(self):
         packet = DriverSerial._generateHeader(CMDTYPE.SYNC, 0)
         self._com.write(packet)
         resp = self._com.read(1)
@@ -348,7 +345,9 @@ class DriverSerial(DriverBase):
 
 class DriverTeensySmartMatrix(DriverSerial):
     def __init__(self, width, height, dev="", deviceID=None, hardwareID="16C0:0483"):
-        super(DriverTeensySmartMatrix, self).__init__(type=LEDTYPE.GENERIC, num=width * height, deviceID=deviceID, hardwareID=hardwareID, req_sync=True)
+        super(DriverTeensySmartMatrix, self).__init__(type=LEDTYPE.GENERIC, num=width * height, deviceID=deviceID, hardwareID=hardwareID)
+        self.sync = self._sync
+
 
 MANIFEST = [
     {
