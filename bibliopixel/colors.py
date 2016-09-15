@@ -216,7 +216,7 @@ def hsv2rgb_360(hsv):
 
     h, s, v = hsv
 
-    r, g, b = colorsys.hsv_to_rgb(h // 360.0, s, v)
+    r, g, b = colorsys.hsv_to_rgb(h / 360.0, s, v)
     return (int(r * 255.0), int(g * 255.0), int(b * 255.0))
 
 
@@ -225,6 +225,7 @@ hue_raw = [hsv2rgb_raw((hue, 255, 255)) for hue in range(256)]
 hue_rainbow = [hsv2rgb_rainbow((hue, 255, 255)) for hue in range(256)]
 hue_spectrum = [hsv2rgb_spectrum((hue, 255, 255)) for hue in range(256)]
 hue_360 = [hsv2rgb_360((hue, 1.0, 1.0)) for hue in range(360)]
+# print hue_360
 
 
 def hue2rgb_raw(hue):

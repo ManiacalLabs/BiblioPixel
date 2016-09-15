@@ -481,6 +481,15 @@ class LEDMatrix(LEDBase):
             self.height = self.height / ph
             self.numLEDs = self.width * self.height
 
+        self.fonts = font.fonts
+
+    def loadFont(self, name, height, width, data):
+        self.fonts[name] = {
+            "data": data,
+            "height": height,
+            "width": width
+        }
+
     def setTexture(self, tex=None):
         if tex is None:
             self.texture = tex
@@ -887,59 +896,54 @@ class LEDMatrix(LEDBase):
                 a, b = b, a
             self._drawFastHLine(a, y, b - a + 1, color, aa)
 
-    def drawChar(self, x, y, c, color, bg, size, aa=False):
-        if size > 0:
-            FONT = font.GLCDFONT
-            fw, fh = 6, 8
-        else:
-            FONT = font.TINYFONT
-            fw, fh = 4, 6
-            size = 1
+    def drawChar(self, x, y, c, color, bg, aa=False, font=font.default_font, font_scale=1):
+        assert font_scale >= 1, "font_scale must be >= 1"
+        f = self.fonts[font]
+        fh = f['height']
+        FONT = f['data']
 
         c = ord(c)  # make it the int value
-        # print size, chr(c), FONT[c]
-        for i in range(fw):
-            xPos = x + (i * size)
-            if ((xPos < self.width) and
-                    (xPos + fw * size - 1) >= 0):
+        if c < f['bounds'][0] or c > f['bounds'][1]:
+            c_data = f['undef']
+        else:
+            c_data = FONT[c - f['bounds'][0]]
 
-                if i == fw - 1:
+        fw = len(c_data)
+        for i in range(fw + f['sep']):
+            xPos = x + (i * font_scale)
+            if ((xPos < self.width) and (xPos + fw * font_scale - 1) >= 0):
+                if i >= fw:
                     line = 0
                 else:
                     line = FONT[c][i]
                 for j in range(fh):
-                    yPos = y + (j * size)
+                    yPos = y + (j * font_scale)
                     if ((yPos < self.height) and
-                            (yPos + fh * size - 1) >= 0):
+                            (yPos + fh * font_scale - 1) >= 0):
                         if line & 0x1:
-                            if size == 1:
+                            if font_scale == 1:
                                 self.set(xPos, yPos, color)
                             else:
-                                self.fillRect(xPos, yPos, size, size, color, aa)
+                                self.fillRect(xPos, yPos, font_scale, font_scale, color, aa)
                         elif bg != color and bg is not None:
-                            if size == 1:
+                            if font_scale == 1:
                                 self.set(xPos, yPos, bg)
                             else:
-                                self.fillRect(xPos, yPos, size, size, bg, aa)
+                                self.fillRect(xPos, yPos, font_scale, font_scale, bg, aa)
                     line >>= 1
+        return fw + f['sep']
 
-    def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, size=1, aa=False):
-        osize = size
-        if size > 0:
-            fw, fh = 6, 8
-        else:
-            fw, fh = 4, 6
-            size = 1
+    def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+        fh = self.fonts[font]['height']
         for c in text:
             if c == '\n':
-                pass
-                y += size * fh
+                y += font_scale * fh
                 x = 0
             elif c == '\r':
                 pass  # skip it
             else:
-                self.drawChar(x, y, c, color, bg, osize, aa)
-                x += size * fw
+                fw = self.drawChar(x, y, c, color, bg, aa, font, font_scale)
+                x += font_scale * fw
                 if x >= self.width:
                     break
 

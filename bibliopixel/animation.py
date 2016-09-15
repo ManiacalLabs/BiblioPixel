@@ -33,6 +33,7 @@ class BaseAnimation(object):
         self._step = 0
         self._timeRef = 0
         self._internalDelay = None
+        self._sleep = None
         self._threaded = False
         self._thread = None
         self._callback = None
@@ -121,6 +122,8 @@ class BaseAnimation(object):
             elif initSleep:
                 sleep = initSleep
 
+            self._sleep = sleep
+
             self._led._frameGenTime = int(mid - start)
             self._led._frameTotalTime = sleep
 
@@ -198,7 +201,7 @@ class BaseAnimation(object):
         "id": "fps",
         "label": "Framerate",
         "type": "int",
-                "default": 30,
+                "default": 15,
                 "min": 1,
                 "help": "Framerate at which to run animation."
     }, {
