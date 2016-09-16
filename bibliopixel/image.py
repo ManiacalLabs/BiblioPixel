@@ -1,10 +1,10 @@
-import glob, os, sys
-from . import colors, log
+import glob, numbers, os, sys
+from . import colors, log, timedata
 
 try:
-    import PIL.Image
+    from PIL import Image, ImageSequence
 except ImportError as e:
-    PIL = None
+    Image, ImageSequence = None
 
 
 def show_image(setter, width, height,
@@ -15,11 +15,11 @@ def show_image(setter, width, height,
 
     img = image_obj
     if image_path and not img:
-        if not PIL:
+        if not Image:
             error = "Please install Python Imaging Library: pip install pillow"
             log.error(error)
             raise ImportError(error)
-        img = PIL.Image.open(image_path)
+        img = Image.open(image_path)
     elif not img:
         raise ValueError('Must provide either image_path or image_obj')
 
@@ -79,3 +79,75 @@ def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Of
 
     return show_image(setter, led.width, led.height, imagePath, imageObj,
                       offset, bgcolor, brightness)
+
+
+def convert_mode(image, mode='RGB'):
+    """Return an image in the given mode."""
+    return image if (image.mode == mode) else image.convert(mode=mode)
+
+
+def image_to_colorlist(image, container=timedata.ColorList255):
+    """Given a PIL.Image, returns a ColorList of its pixels."""
+    return container(convert_mode(image).getdata())
+
+
+def animated_gif_to_colorlists(image, container):
+    """Given an animated GIF, return a list with a colorlist for each frame."""
+    it = ImageSequence.Iterator(image)
+    return [image_to_colorlist(i, container) for i in it]
+
+
+def crop(image, top_offset=0, left_offset=0, bottom_offset=0, right_offset=0):
+    """Return an image cropped on top, bottom, left or right."""
+    if bottom_offset or top_offset or left_offset or right_offset:
+        width, height = image.size
+        box = (left_offset, top_offset,
+               width - right_offset, height - bottom_offset)
+        image = image.crop(box=box)
+
+    return image
+
+
+def resize(image, x, y, stretch=False, top=None, left=None, mode='RGB',
+           resample=Image.ANTIALIAS):
+    """Return an image resized."""
+    if x <= 0:
+        raise ValueError('x must be greater than zero')
+    if y <= 0:
+        raise ValueError('y must be greater than zero')
+    if not isinstance(resample, numbers.Number):
+        try:
+            resample = getattr(Image, resample.upper())
+        except:
+            raise ValueError("(1) Didn't understand resample=%s" % resample)
+        if not isinstance(resample, Number):
+            raise ValueError("(2) Didn't understand resample=%s" % resample)
+
+    size = x, y
+    if stretch:
+        return image.resize(size, resample=resample)
+    result = Image.new(mode, size)
+
+    ratios = [d1 / d2 for d1, d2 in zip(size, image.size)]
+    if ratios[0] < ratios[1]:
+        new_size = (size[0], int(image.size[1] * ratios[0]))
+    else:
+        new_size = (int(image.size[0] * ratios[1]), size[1])
+
+    image = image.resize(new_size, resample=resample)
+    if left is None:
+        box_x = int((x - new_size[0]) / 2)
+    elif left:
+        box_x = 0
+    else:
+        box_x = x - new_size[0]
+
+    if top is None:
+        box_y = int((y - new_size[1]) / 2)
+    elif top:
+        box_y = 0
+    else:
+        box_y = y - new_size[1]
+
+    result.paste(image, box=(box_x, box_y))
+    return result
