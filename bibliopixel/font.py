@@ -704,3 +704,14 @@ def str_dim(text, font=default_font, font_scale=1, final_sep=True):
             x_list = [xi - font_scale * f['sep'] for xi in x_list]
 
     return (max(x_list), y)
+
+
+def get_font_menu_options():
+    options = {}
+    options_map = []
+    count = 0
+    for k in fonts.keys():
+        options[count] = k
+        options_map.append(k)
+        count += 1
+    return (options, options_map)
