@@ -1,45 +1,32 @@
-import sys
-import os
-from . import log
+import glob, os, sys
+from . import colors, log
 
 try:
-    from PIL import Image, ImageSequence
+    import PIL.Image
 except ImportError as e:
-    error = "Please install Python Imaging Library: pip install pillow"
-    log.error(error)
-    raise ImportError(error)
-
-import glob
-from led import LEDMatrix
-import colors
+    PIL = None
 
 
-def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
-    """Display an image on the matrix"""
-
-    if not isinstance(led, LEDMatrix):
-        raise RuntimeError("Must use LEDMatrix with showImage!")
-
+def show_image(setter, width, height,
+               image_path='', image_obj=None, offset=(0, 0), bgcolor=colors.Off,
+               brightness=255):
+    """Display an image on a matrix."""
     bgcolor = colors.color_scale(bgcolor, brightness)
 
-    img = imageObj
-    if not img and not (imagePath == ""):
-        img = Image.open(imagePath)
+    img = image_obj
+    if image_path and not img:
+        if not PIL:
+            error = "Please install Python Imaging Library: pip install pillow"
+            log.error(error)
+            raise ImportError(error)
+        img = PIL.Image.open(image_path)
     elif not img:
-        raise ValueError("Must provide either imagePath or imageObj")
+        raise ValueError('Must provide either image_path or image_obj')
 
-    w = led.width - offset[0]
-    if img.size[0] < w:
-        w = img.size[0]
-
-    h = led.height - offset[1]
-    if img.size[1] < h:
-        h = img.size[1]
-
+    w = min(width - offset[0], img.size[0])
+    h = min(height - offset[1], img.size[1])
     ox = offset[0]
     oy = offset[1]
-
-    led.all_off()
 
     for x in range(ox, w + ox):
         for y in range(oy, h + oy):
@@ -47,13 +34,13 @@ def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Of
             rgba = img.getpixel((x - ox, y - oy))
 
             if isinstance(rgba, int):
-                raise ValueError("Image must be in RGB or RGBA format!")
+                raise ValueError('Image must be in RGB or RGBA format!')
             if len(rgba) == 3:
                 r, g, b = rgba
             elif len(rgba) == 4:
                 r, g, b, a = rgba
             else:
-                raise ValueError("Image must be in RGB or RGBA format!")
+                raise ValueError('Image must be in RGB or RGBA format!')
 
             if a == 0:
                 r, g, b = bgcolor
@@ -63,7 +50,19 @@ def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Of
             if brightness != 255:
                 r, g, b = colors.color_scale((r, g, b), brightness)
 
-            led.set(x, y, (r, g, b))
+            setter(x, y, (r, g, b))
+
+
+
+def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
+    """Display an image on the matrix"""
+    if not isinstance(led, LEDMatrix):
+        raise RuntimeError("Must use LEDMatrix with showImage!")
+
+    led.all_off()
+
+    return show_image(led.set, led.width, led.height, imagePath, imageObj,
+                      offset, bgcolor, brightness)
 
 
 def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
@@ -72,49 +71,11 @@ def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Of
     if not isinstance(led, LEDMatrix):
         raise RuntimeError("Must use LEDMatrix with loadImage!")
 
-    bgcolor = colors.color_scale(bgcolor, brightness)
+    texture = [[colors.Off for x in range(led.width)] for y in range(led.height)]
 
-    img = imageObj
-    if not img and not (imagePath == ""):
-        img = Image.open(imagePath)
-    elif not img:
-        raise ValueError("Must provide either imagePath or imageObj")
+    def setter(x, y, pixel):
+        if y >= 0 and x >= 0:
+            texture[y][x] = (r, g, b)
 
-    w = led.width - offset[0]
-    if img.size[0] < w:
-        w = img.size[0]
-
-    h = led.height - offset[1]
-    if img.size[1] < h:
-        h = img.size[1]
-
-    ox = offset[0]
-    oy = offset[1]
-
-    texture = [[colors.Off for x in range(led.width)]
-               for y in range(led.height)]
-    for x in range(ox, w + ox):
-        for y in range(oy, h + oy):
-            r, g, b, a = (0, 0, 0, 255)
-            rgba = img.getpixel((x - ox, y - oy))
-            if isinstance(rgba, int):
-                raise ValueError("Image must be in RGB or RGBA format!")
-            if len(rgba) == 3:
-                r, g, b = rgba
-            elif len(rgba) == 4:
-                r, g, b, a = rgba
-            else:
-                raise ValueError("Image must be in RGB or RGBA format!")
-
-            if a == 0:
-                r, g, b = bgcolor
-            else:
-                r, g, b = colors.color_scale((r, g, b), a)
-
-            if brightness != 255:
-                r, g, b = colors.color_scale((r, g, b), brightness)
-
-            if y >= 0 and x >= 0:
-                texture[y][x] = (r, g, b)
-
-    return texture
+    return show_image(setter, led.width, led.height, imagePath, imageObj,
+                      offset, bgcolor, brightness)
