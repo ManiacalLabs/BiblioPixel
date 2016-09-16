@@ -50,7 +50,7 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = timedata.ColorList()
+        self._colors = timedata.ColorList255()
         self.all_off()
         assert len(self._colors) == self.numLEDs
 
@@ -718,7 +718,7 @@ class LEDMatrix(LEDBase):
         self.drawLine(x1, y1, x2, y2, color, aa)
         self.drawLine(x2, y2, x0, y0, color, aa)
 
-    def fillTrangle(self, x0, y0, x1, y1, x2, y2, color=None, aa=False):
+    def fillTriangle(self, x0, y0, x1, y1, x2, y2, color=None, aa=False):
         """Draw solid triangle with points x0,y0 - x1,y1 - x2,y2"""
         a = b = y = last = 0
 
@@ -789,6 +789,8 @@ class LEDMatrix(LEDBase):
             if a > b:
                 a, b = b, a
             self._drawFastHLine(a, y, b - a + 1, color, aa)
+
+    fillTrangle = fillTriangle  # DEPRECATED!
 
     def drawChar(self, x, y, c, color, bg, size, aa=False):
         if size > 0:
