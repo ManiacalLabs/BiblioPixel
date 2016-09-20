@@ -46,9 +46,14 @@ class DriverNetwork(DriverBase):
             packet.extend(colors)
             s.sendall(packet)
 
-            resp = ord(s.recv(1))
-
+            resp = s.recv(1)
             s.close()
+
+            if len(resp) == 0:
+                log.warning("No response code received!")
+                return
+
+            resp = ord(resp) # caste byte to int
 
             if resp != RETURN_CODES.SUCCESS:
                 log.warning("Bytecount mismatch! %s", resp)
@@ -60,7 +65,7 @@ class DriverNetwork(DriverBase):
             raise IOError(error)
 
     def set_brightness(self, brightness):
-        super().set_brightness(brightness)
+        super(DriverNetwork, self).set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         s = self._connect()

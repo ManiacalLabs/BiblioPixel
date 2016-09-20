@@ -11,7 +11,7 @@ class DriverLPD8806(DriverSPIBase):
                  dev="/dev/spidev0.0",
                  SPISpeed=2):
         super(DriverLPD8806, self).__init__(
-            num, num,
+            num,
             c_order=c_order, use_py_spi=use_py_spi, dev=dev, SPISpeed=SPISpeed)
 
         # Color calculations from

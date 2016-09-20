@@ -34,7 +34,7 @@
 from __future__ import division
 import colorsys
 import types
-import util
+from . import util
 
 
 def color_scale(color, level):
