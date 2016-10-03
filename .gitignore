@@ -2,3 +2,6 @@
 dist
 MANIFEST
 BiblioPixel.egg*
+*.so
+.DS_STORE
+*.pyc
