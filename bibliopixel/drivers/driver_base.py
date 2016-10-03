@@ -35,7 +35,7 @@ class DriverBase(object):
 
         self.width = width
         self.height = height
-        self._buf = bytearray(self.bufByteCount())
+        self._buf = self._make_buf()
 
         self._thread = None
         self.lastUpdate = 0
@@ -46,6 +46,10 @@ class DriverBase(object):
             permutation=self.perm,
             min=gamma.lower_bound,
             max=255)
+
+
+    def _make_buf(self):
+        return bytearray(self.bufByteCount())
 
     def __enter__(self):
         return self
