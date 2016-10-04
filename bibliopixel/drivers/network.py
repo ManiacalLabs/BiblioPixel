@@ -24,11 +24,13 @@ class RETURN_CODES:
 class DriverNetwork(DriverBase):
     """Driver for communicating with another device on the network."""
 
-    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142):
+    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142, persist=False):
         super(DriverNetwork, self).__init__(num, width, height)
 
         self._host = host
         self._port = port
+        self._sock = None
+        self.persist = persist
 
     def _generateHeader(self, cmd, size):
         packet = bytearray()
@@ -38,10 +40,12 @@ class DriverNetwork(DriverBase):
         return packet
 
     def _connect(self):
+        if self.persist and self._sock:
+            return self._sock
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((self._host, self._port))
-            return s
+            self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self._sock.connect((self._host, self._port))
+            return self._sock
         except socket.gaierror:
             error = "Unable to connect to or resolve host: {}".format(
                 self._host)
@@ -62,7 +66,8 @@ class DriverNetwork(DriverBase):
 
             resp = ord(s.recv(1))
 
-            s.close()
+            if not self.persist:
+                s.close()
 
             if resp != RETURN_CODES.SUCCESS:
                 log.warning("Bytecount mismatch! %s", resp)
