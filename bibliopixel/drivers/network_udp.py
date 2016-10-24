@@ -42,12 +42,12 @@ class DriverNetworkUDP(DriverBase):
 
     def _connect(self):
         try:
+            self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
             if self._multicast:
-                self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 ttl = struct.pack('b', 1)
                 self._sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
-            else:
-                self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
             return self._sock
         except socket.gaierror:
             error = "Unable to connect to or resolve host: {}".format(
