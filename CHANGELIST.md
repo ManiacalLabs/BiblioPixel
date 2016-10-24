@@ -1,3 +1,8 @@
+### v2.1.0
+- added new font handling
+- added receiver animations
+- many other bug fixes
+
 ### v2.0.10
 - Support py-spidev 3.x series
 
