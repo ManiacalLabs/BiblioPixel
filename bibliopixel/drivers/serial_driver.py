@@ -93,6 +93,8 @@ class DriverSerial(DriverBase):
         self.dev = dev
         self.devVer = 0
         self.deviceID = deviceID
+        self._sync_packet = util.generate_header(CMDTYPE.SYNC, 0)
+
         if self.deviceID is not None and (self.deviceID < 0 or self.deviceID > 255):
             raise ValueError("deviceID must be between 0 and 255")
 
@@ -281,6 +283,18 @@ class DriverSerial(DriverBase):
             return True
         print_error(resp)
 
+    def _write_packet(self, packet):
+        self._com.write(packet)
+
+        resp = self._com.read(1)
+        if len(resp) == 0:
+            DriverSerial._comError()
+        if ord(resp) != RETURN_CODES.SUCCESS:
+            return_codes.print_error(ord(resp))
+
+        self._com.flushInput()
+
+
     # Push new data to strand
     def _receive_colors(self, colors, pos):
         count = self.bufByteCount() + self._bufPad
@@ -290,26 +304,10 @@ class DriverSerial(DriverBase):
 
         packet.extend(self._buf)
         packet.extend([0] * self._bufPad)
-        self._com.write(packet)
-
-        resp = self._com.read(1)
-        if len(resp) == 0:
-            DriverSerial._comError()
-        if ord(resp) != RETURN_CODES.SUCCESS:
-            print_error(ord(resp))
-
-        self._com.flushInput()
+        self._write_packet(packet)
 
     def _sync(self):
-        packet = util.generate_header(CMDTYPE.SYNC, 0)
-        self._com.write(packet)
-        resp = self._com.read(1)
-        if len(resp) == 0:
-            DriverSerial._comError()
-        if ord(resp) != RETURN_CODES.SUCCESS:
-            return_codes.print_error(ord(resp))
-
-        self._com.flushInput()
+        self._com.write(self._sync_packet)
 
 
 class DriverTeensySmartMatrix(DriverSerial):
