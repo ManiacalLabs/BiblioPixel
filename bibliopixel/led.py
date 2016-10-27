@@ -5,14 +5,11 @@ from . import and_event, colors, font, matrix, timedata, update_thread
 
 class LEDBase(object):
 
-    def __init__(self, driver, threadedUpdate, masterBrightness):
+    def __init__(self, drivers, threadedUpdate, masterBrightness):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
-        if not isinstance(driver, list):
-            driver = [driver]
-
-        self.driver = driver
+        self.drivers = drivers if isinstance(drivers, list) else [drivers]
         if not hasattr(self, 'numLEDs'):
-            self.numLEDs = sum(d.numLEDs for d in self.driver)
+            self.numLEDs = sum(d.numLEDs for d in self.drivers)
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
@@ -28,7 +25,7 @@ class LEDBase(object):
         self._threadedUpdate = threadedUpdate
 
         if self._threadedUpdate:
-            self._updateThread = update_thread.UpdateThread(self.driver)
+            self._updateThread = update_thread.UpdateThread(self.drivers)
             self._updateThread.start()
 
         self._waitingBrightness = False
@@ -63,7 +60,7 @@ class LEDBase(object):
 
     def waitForUpdate(self):
         if self._threadedUpdate:
-            while all([d._thread.sending() for d in self.driver]):
+            while all([d._thread.sending() for d in self.drivers]):
                 time.sleep(0.000001)
 
     def doBrightness(self):
@@ -77,19 +74,19 @@ class LEDBase(object):
         self.doBrightness()
 
         data = []
-        for d in self.driver:
+        for d in self.drivers:
             data.append([self._colors, pos])
             pos += d.numLEDs
         if self._threadedUpdate:
             self._updateThread.setData(data)
         else:
-            for i in range(len(self.driver)):
-                self.driver[i].receive_colors(*data[i])
-            for d in self.driver:
+            for i in range(len(self.drivers)):
+                self.drivers[i].receive_colors(*data[i])
+            for d in self.drivers:
                 d.sync()
 
     def lastThreadedUpdate(self):
-        return max([d.lastUpdate for d in self.driver])
+        return max([d.lastUpdate for d in self.drivers])
 
     # use with caution!
     def set_colors(self, buf):
@@ -111,7 +108,7 @@ class LEDBase(object):
     # Set the master brightness for the LEDs 0 - 255
     def _do_set_brightness(self, bright):
         self.waitForUpdate()
-        for d in self.driver:
+        for d in self.drivers:
             d.set_brightness(bright)
 
         self._waitingBrightnessValue = None
@@ -172,9 +169,8 @@ class LEDBase(object):
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, driver, threadedUpdate=False, masterBrightness=255, pixelWidth=1):
-        super(LEDStrip, self).__init__(
-            driver, threadedUpdate, masterBrightness)
+    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1):
+        super().__init__(drivers, threadedUpdate, masterBrightness)
 
         self.pixelWidth = pixelWidth
         if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:
@@ -275,7 +271,7 @@ class MultiMapBuilder():
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, driver, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1)):
+    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1)):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -284,20 +280,17 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super(LEDMatrix, self).__init__(
-            driver, threadedUpdate, masterBrightness)
+        super().__init__(drivers, threadedUpdate, masterBrightness)
 
         if width == 0 and height == 0:
-            if len(self.driver) == 1:
-                width = self.driver[0].width
-                height = self.driver[0].height
-            else:
+            if len(self.driver) != 1:
                 raise TypeError(
                     "Must provide width and height if using multiple drivers!")
+            width = self.driver[0].width
+            height = self.driver[0].height
 
         self.width = width
         self.height = height
-
         self.pixelSize = pixelSize
         pw, ph = self.pixelSize
 
@@ -316,7 +309,7 @@ class LEDMatrix(LEDBase):
         if coordMap:
             self.matrix_map = coordMap
         else:
-            if len(self.driver) == 1:
+            if len(self.drivers) == 1:
                 self.matrix_map = mapGen(self.width, self.height, serpentine)
             else:
                 raise TypeError(
@@ -487,11 +480,11 @@ class LEDMatrix(LEDBase):
 # Takes a matrix and displays it as individual columns over time
 class LEDPOV(LEDMatrix):
 
-    def __init__(self, driver, povHeight, width, rotation=MatrixRotation.ROTATE_0, vert_flip=False, threadedUpdate=False, masterBrightness=255):
+    def __init__(self, drivers, povHeight, width, rotation=MatrixRotation.ROTATE_0, vert_flip=False, threadedUpdate=False, masterBrightness=255):
         self.numLEDs = povHeight * width
 
-        super(LEDPOV, self).__init__(driver, width, povHeight, None,
-                                     rotation, vert_flip, threadedUpdate, masterBrightness)
+        super().__init__(drivers, width, povHeight, None,
+                         rotation, vert_flip, threadedUpdate, masterBrightness)
 
     # This is the magic. Overriding the normal push_to_driver() method
     # It will automatically break up the frame into columns spread over
@@ -511,7 +504,7 @@ class LEDPOV(LEDMatrix):
             def color(i):
                 return self._colors[(h + width * i) * 3]
             buf = [color(i) for i in range(self.height)]
-            self.driver[0].receive_colors(buf, 0)
+            self.drivers[0].receive_colors(buf, 0)
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))
@@ -519,9 +512,8 @@ class LEDPOV(LEDMatrix):
 
 class LEDCircle(LEDBase):
 
-    def __init__(self, driver, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255):
-        super(LEDCircle, self).__init__(
-            driver, threadedUpdate, masterBrightness)
+    def __init__(self, drivers, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255):
+        super().__init__(drivers, threadedUpdate, masterBrightness)
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff
         self._full_coords = False
