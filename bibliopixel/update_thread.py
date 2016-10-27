@@ -1,6 +1,7 @@
 import threading
 
-from . import and_event
+from . import compose_events
+
 
 class UpdateDriverThread(threading.Thread):
 
@@ -60,7 +61,8 @@ class UpdateThread(threading.Thread):
             t.start()
             d._thread = t
 
-        self._updated = and_event.AndEvent([d._thread._updating for d in self._drivers])
+        events = (d._thread._updating for d in self._drivers)
+        self._updated = compose_events.compose_events(events)
 
     def update_colors(self):
         self._reading.wait()

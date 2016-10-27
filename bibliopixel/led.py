@@ -1,6 +1,6 @@
 import math, threading, time
-from . import and_event, colors, font, matrix, timedata, update_thread
 
+from . import colors, font, matrix, timedata, update_thread
 
 
 class LEDBase(object):

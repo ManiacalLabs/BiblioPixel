@@ -1,12 +1,11 @@
 import threading, unittest
 
-from bibliopixel import and_event
+from bibliopixel import compose_events
 
-
-class AndEventTest(unittest.TestCase):
-    def do_test(self, ander):
+class ComposeEventTest(unittest.TestCase):
+    def test_compose_events(self):
         a, b = threading.Event(), threading.Event()
-        master = ander([a, b])
+        master = compose_events.compose_events([a, b])
         self.assertFalse(master.is_set())
         a.set()
         self.assertFalse(master.is_set())
@@ -20,9 +19,3 @@ class AndEventTest(unittest.TestCase):
         self.assertFalse(master.is_set())
         a.set()
         self.assertTrue(master.is_set())
-
-    def test_and_event(self):
-        self.do_test(and_event.AndEvent)
-
-    def test_compose_events(self):
-        self.do_test(and_event.compose_events)
