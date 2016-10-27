@@ -1,19 +1,17 @@
 import threading
 
-from . import compose_events
+from . import compose_events, task_thread
 
 
-class UpdateDriverThread(threading.Thread):
+class UpdateDriverThread(task_thread.LoopThread):
 
     def __init__(self, driver):
-        super(UpdateDriverThread, self).__init__()
+        super().__init__()
         self.setDaemon(True)
-        self._stop = False
         self._wait = threading.Event()
-        self._updating = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
-        self._data = []
+        self._updating = threading.Event()
         self._driver = driver
 
     def update_colors(self):
@@ -25,33 +23,26 @@ class UpdateDriverThread(threading.Thread):
         self._updating.wait()
         self._driver.sync()
 
-    def stop(self):
-        self._stop = True
-
     def sending(self):
         return self._wait.isSet()
 
-    def run(self):
-        while not self._stop:
-            self._wait.wait()
-            self._updating.clear()
-            self._driver.update_colors()
-            self._data = []
-            self._wait.clear()
-            self._reading.set()
-            self._updating.set()
+    def _loop(self):
+        self._wait.wait()
+        self._updating.clear()
+        self._driver.update_colors()
+        self._wait.clear()
+        self._reading.set()
+        self._updating.set()
 
 
-class UpdateThread(threading.Thread):
+class UpdateThread(task_thread.LoopThread):
 
     def __init__(self, drivers):
-        super(UpdateThread, self).__init__()
+        super().__init__()
         self.setDaemon(True)
-        self._stop = False
         self._wait = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
-        self._data = []
         self._drivers = drivers
         for d in self._drivers:
             t = UpdateDriverThread(d)
@@ -68,25 +59,13 @@ class UpdateThread(threading.Thread):
         self._reading.clear()
         self._wait.set()
 
-    def stop(self):
-        self._stop = True
+    def _loop(self):
+        self._wait.wait()
+        self._updated.wait()
 
-    def run(self):
-        while not self._stop:
-            self._wait.wait()
+        for d in self._drivers:
+            d._thread.sync()
 
-            # while all([d._thread.sending() for d in self._drivers]):
-            #     time.sleep(0.00000000001)
-
-            self._updated.wait()
-            # for d in self._drivers:
-            #     d._thread._updating.wait()
-
-            for d in self._drivers:
-                d._thread.sync()
-
-            self._updated.clear()
-
-            self._data = []
-            self._wait.clear()
-            self._reading.set()
+        self._updated.clear()
+        self._wait.clear()
+        self._reading.set()
