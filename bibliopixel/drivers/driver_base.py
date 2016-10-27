@@ -74,10 +74,9 @@ class DriverBase(object):
     def receive_colors(self, colors, pos):
         if self._thread:
             start = time.time() * 1000.0
-            self._receive_colors(colors, pos)
+        self._receive_colors(colors, pos)
+        if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
-        else:
-            self._receive_colors(colors, pos)
 
     def set_brightness(self, brightness):
         if brightness > 255 or brightness < 0:

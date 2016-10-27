@@ -283,7 +283,7 @@ class DriverSerial(DriverBase):
             return True
         print_error(resp)
 
-    def _write_packet(self, packet):
+    def _send_packet(self, packet):
         self._com.write(packet)
 
         resp = self._com.read(1)
@@ -294,9 +294,7 @@ class DriverSerial(DriverBase):
 
         self._com.flushInput()
 
-
-    # Push new data to strand
-    def _receive_colors(self, colors, pos):
+    def _compute_packet(self, colors, pos):
         count = self.bufByteCount() + self._bufPad
         packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
@@ -304,7 +302,12 @@ class DriverSerial(DriverBase):
 
         packet.extend(self._buf)
         packet.extend([0] * self._bufPad)
-        self._write_packet(packet)
+        return packet
+
+    def _receive_colors(self, colors, pos):
+        """Push new data."""
+        packet = self._compute_packet(colors, pos)
+        self._send_packet(packet)
 
     def _sync(self):
         self._com.write(self._sync_packet)
