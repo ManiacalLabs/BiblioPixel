@@ -283,8 +283,8 @@ class DriverSerial(DriverBase):
             return True
         print_error(resp)
 
-    def _send_packet(self, packet):
-        self._com.write(packet)
+    def _send_packet(self):
+        self._com.write(self._packet)
 
         resp = self._com.read(1)
         if len(resp) == 0:
@@ -294,15 +294,14 @@ class DriverSerial(DriverBase):
 
         self._com.flushInput()
 
-    def _compute_packet(self, colors, pos):
+    def _compute_packet(self):
         count = self.bufByteCount() + self._bufPad
-        packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
+        self._packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
-        self._render(colors, pos)
+        self._render()
 
-        packet.extend(self._buf)
-        packet.extend([0] * self._bufPad)
-        return packet
+        self._packet.extend(self._buf)
+        self._packet.extend([0] * self._bufPad)
 
     def _sync(self):
         self._com.write(self._sync_packet)

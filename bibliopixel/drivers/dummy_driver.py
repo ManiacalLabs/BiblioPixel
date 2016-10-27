@@ -11,7 +11,7 @@ class DriverDummy(DriverBase):
         self._delay = delay
 
     # Push new data to strand
-    def _compute_packet(self, colors, pos):
+    def _compute_packet(self):
         if self._delay > 0:
             time.sleep(self._delay / 1000.0)
         else:

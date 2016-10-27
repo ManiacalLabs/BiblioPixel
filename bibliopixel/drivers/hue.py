@@ -59,10 +59,9 @@ class DriverHue(DriverBase):
         s = int(self._mapRange(s, 0.0, 1.0, 0, 254))
         return (h, s)
 
-    def _send_packet(self, packet):
-        colors, pos = packet
+    def _send_packet(self):
         for i in range(len(self._ids)):
-            h, s = self._rgb2hs(colors[i + pos])
+            h, s = self._rgb2hs(self._colors[i + self._pos])
             bri = self._brightness
             if s == 0:
                 bri = 0

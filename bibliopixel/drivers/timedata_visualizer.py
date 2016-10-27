@@ -41,9 +41,9 @@ class TimedataVisualizer(DriverBase):
     def _make_buf(self):
         pass
 
-    def _compute_packet(self, colors, pos):
+    def _compute_packet(self):
         self._buf = self.address if timedata.enabled() else self.memory
-        self._render(colors, pos)
+        self._render()
 
-    def _send_packet(self, packet):
+    def _send_packet(self):
         self.window.repaint()

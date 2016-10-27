@@ -15,9 +15,8 @@ class UpdateDriverThread(threading.Thread):
         self._data = []
         self._driver = driver
 
-    def setData(self, colors, pos):
+    def update_colors(self):
         self._reading.wait()
-        self._data = (colors, pos)
         self._reading.clear()
         self._wait.set()
 
@@ -38,7 +37,7 @@ class UpdateDriverThread(threading.Thread):
         while not self.stopped():
             self._wait.wait()
             self._updating.clear()
-            self._driver.receive_colors(*self._data)
+            self._driver.update_colors()
             self._data = []
             self._wait.clear()
             self._reading.set()
@@ -63,12 +62,10 @@ class UpdateThread(threading.Thread):
 
         self._updated = and_event.AndEvent([d._thread._updating for d in self._drivers])
 
-    def setData(self, data):
-        assert len(data) == len(self._drivers), "Must have as many data blocks as drivers"
+    def update_colors(self):
         self._reading.wait()
-        self._data = data
-        for i in range(len(data)):
-            self._drivers[i]._thread.setData(*data[i])
+        for d in self._drivers:
+            d._thread.update_colors()
         self._reading.clear()
         self._wait.set()
 

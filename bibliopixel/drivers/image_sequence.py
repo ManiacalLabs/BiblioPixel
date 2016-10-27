@@ -26,10 +26,9 @@ class DriverImageSequence(DriverBase):
             self.height = 1
 
     # Push new data to strand
-    def _send_packet(self, packet):
+    def _send_packet(self):
         # TODO: This is all done on the I/O thread.  Some of this could be done
         # on the compute thread...
-        colors, pos = packet
         map = self.matrix_map
         size = self._pixelSize
         img = Image.new("RGB", (self.width * size, self.height * size), None)
@@ -40,7 +39,7 @@ class DriverImageSequence(DriverBase):
                     i = map[y][x]
                 else:
                     i = x
-                rgb = colors[i + pos]
+                rgb = self._colors[i + self._pos]
                 # TODO: is it an issue that colors now are floats?
                 draw.rectangle([x * size, y * size, x * size +
                                 size - 1, y * size + size - 1], rgb, rgb)

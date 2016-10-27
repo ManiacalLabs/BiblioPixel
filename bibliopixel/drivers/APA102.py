@@ -12,8 +12,8 @@ class DriverAPA102(DriverSPIBase):
         # APA102 requires latch bytes at the end
         self._latchBytes = (int(num / 64.0) + 1)
 
-    def _render(self, colors, pos):
-        super()._render(colors, pos)
+    def _render(self):
+        super()._render()
         newBuf = [0xFF] * (self.bufByteCount() + self.numLEDs)
         newBuf[1::4] = self._buf[0::3]
         newBuf[2::4] = self._buf[1::3]

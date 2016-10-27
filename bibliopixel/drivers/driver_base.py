@@ -47,6 +47,9 @@ class DriverBase(object):
             min=gamma.lower_bound,
             max=255)
 
+    def set_colors(self, colors, pos):
+        self._colors = colors
+        self._pos = pos
 
     def _make_buf(self):
         return bytearray(self.bufByteCount())
@@ -66,26 +69,26 @@ class DriverBase(object):
     def sync(self):
         pass
 
-    def _compute_packet(self, colors, pos):
+    def _compute_packet(self):
         """Compute the packet from the colors and position.
 
         Eventually, this will run on the compute thread.
         """
-        return colors, pos
+        pass
 
-    def _send_packet(self, packet):
+    def _send_packet(self):
         """Send the packet to the driver.
 
         Eventually, this will run on an I/O thread.
         """
         pass
 
-    def receive_colors(self, colors, pos):
+    def update_colors(self):
         if self._thread:
             start = time.time() * 1000.0
 
-        packet = self._compute_packet(colors, pos)
-        self._send_packet(packet)
+        self._compute_packet()
+        self._send_packet()
 
         if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
@@ -103,6 +106,7 @@ class DriverBase(object):
             output[i * 3:(i + 1) * 3] = fix(c[r]), fix(c[g]), fix(c[b])
         return output
 
-    def _render(self, colors, pos):
-        r = (hasattr(colors, 'indexer') and self._render_td) or self._render_py
-        self._buf = r(colors, pos, self.numLEDs, self._buf)
+    def _render(self):
+        r = (hasattr(self._colors, 'indexer') and self._render_td
+                 ) or self._render_py
+        self._buf = r(self._colors, self._pos, self.numLEDs, self._buf)

@@ -8,6 +8,7 @@ class LEDBase(object):
     def __init__(self, drivers, threadedUpdate, masterBrightness):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
+
         if not hasattr(self, 'numLEDs'):
             self.numLEDs = sum(d.numLEDs for d in self.drivers)
 
@@ -16,6 +17,11 @@ class LEDBase(object):
         self._colors = timedata.ColorList255()
         self.all_off()
         assert len(self._colors) == self.numLEDs
+
+        pos = 0
+        for d in self.drivers:
+            d.set_colors(self._colors, pos)
+            pos += d.numLEDs
 
         self.masterBrightness = 255
 
@@ -69,19 +75,14 @@ class LEDBase(object):
 
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
-        pos = 0
         self.waitForUpdate()
         self.doBrightness()
 
-        data = []
-        for d in self.drivers:
-            data.append([self._colors, pos])
-            pos += d.numLEDs
         if self._threadedUpdate:
-            self._updateThread.setData(data)
+            self._updateThread.update_colors()
         else:
-            for i in range(len(self.drivers)):
-                self.drivers[i].receive_colors(*data[i])
+            for d in self.drivers:
+                d.update_colors()
             for d in self.drivers:
                 d.sync()
 
@@ -504,7 +505,7 @@ class LEDPOV(LEDMatrix):
             def color(i):
                 return self._colors[(h + width * i) * 3]
             buf = [color(i) for i in range(self.height)]
-            self.drivers[0].receive_colors(buf, 0)
+            self.drivers[0].update_colors()
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))

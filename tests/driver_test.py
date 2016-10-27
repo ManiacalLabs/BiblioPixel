@@ -25,7 +25,8 @@ class DriverTest(unittest.TestCase):
     SPD = dict(use_py_spi=False, open=mock_open)
 
     def do_test(self, driver, colors, expected):
-        driver._render(colors, 0)
+        driver.set_colors(colors, 0)
+        driver._render()
         self.assertEqual(list(driver._buf), expected)
 
     def do_both_tests(self, driver, expected):
@@ -37,7 +38,8 @@ class DriverTest(unittest.TestCase):
         for i in range(len(driver._buf)):
            driver._buf[i] = 23  # randomize
         self.assertTrue(all(driver._buf))
-        driver._render([(0, 0, 0)] * 4, 0)
+        driver.set_colors([(0, 0, 0)] * 4, 0)
+        driver._render()
         self.assertFalse(any(driver._buf))  # It wrote zeroes!
 
     def test_simple(self):
