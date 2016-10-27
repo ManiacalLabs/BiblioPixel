@@ -8,7 +8,7 @@ class UpdateDriverThread(threading.Thread):
     def __init__(self, driver):
         super(UpdateDriverThread, self).__init__()
         self.setDaemon(True)
-        self._stop = threading.Event()
+        self._stop = False
         self._wait = threading.Event()
         self._updating = threading.Event()
         self._reading = threading.Event()
@@ -26,16 +26,13 @@ class UpdateDriverThread(threading.Thread):
         self._driver.sync()
 
     def stop(self):
-        self._stop.set()
-
-    def stopped(self):
-        return self._stop.isSet()
+        self._stop = True
 
     def sending(self):
         return self._wait.isSet()
 
     def run(self):
-        while not self.stopped():
+        while not self._stop:
             self._wait.wait()
             self._updating.clear()
             self._driver.update_colors()
@@ -50,7 +47,7 @@ class UpdateThread(threading.Thread):
     def __init__(self, drivers):
         super(UpdateThread, self).__init__()
         self.setDaemon(True)
-        self._stop = threading.Event()
+        self._stop = False
         self._wait = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
@@ -72,13 +69,10 @@ class UpdateThread(threading.Thread):
         self._wait.set()
 
     def stop(self):
-        self._stop.set()
-
-    def stopped(self):
-        return self._stop.isSet()
+        self._stop = True
 
     def run(self):
-        while not self.stopped():
+        while not self._stop:
             self._wait.wait()
 
             # while all([d._thread.sending() for d in self._drivers]):
