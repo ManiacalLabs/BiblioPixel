@@ -8,6 +8,8 @@ except:
 
 ENABLED = '--disable_timedata' not in sys.argv
 
+def enabled():
+    return ENABLED and TIMEDATA
 
 
 def message():
@@ -17,16 +19,16 @@ def message():
 
 
 def ColorList(*arg):
-    return TIMEDATA.ColorList(*arg) if ENABLED and TIMEDATA else list(*arg)
+    return TIMEDATA.ColorList(*arg) if enabled() else list(*arg)
 
 
 def ColorList255(*arg):
     return TIMEDATA.color.rgb.c255.ColorList(*arg) if (
-        ENABLED and TIMEDATA) else list(*arg)
+        enabled()) else list(*arg)
 
 
 def Renderer(**kwds):
-    return ENABLED and TIMEDATA and TIMEDATA.Renderer(**kwds).render
+    return enabled() and TIMEDATA.Renderer(**kwds).render
 
 
 log.info(message())

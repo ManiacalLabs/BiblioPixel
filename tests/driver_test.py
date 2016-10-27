@@ -59,7 +59,9 @@ class DriverTest(unittest.TestCase):
         driver = DriverBase(num=4, gamma=gamma.LPD8806)
         expected = [128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190]
         self.do_test(driver, self.COLORS_PY, expected)
-        expected[-1] = 191
+        if timedata.enabled():
+            # BP computations and TD computations are a little different.
+            expected[-1] += 1
         self.do_test(driver, self.COLORS_TD, expected)
 
     def test_apa102(self):
@@ -74,7 +76,9 @@ class DriverTest(unittest.TestCase):
         expected = [
             128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190, 0]
         self.do_test(driver, self.COLORS_PY, expected)
-        expected[-2] = 191
+        if timedata.enabled():
+            # BP computations and TD computations are a little different.
+            expected[-2] += 1
         self.do_test(driver, self.COLORS_TD, expected)
 
     def test_ws2801(self):
