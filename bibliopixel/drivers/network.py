@@ -31,15 +31,17 @@ class DriverNetwork(DriverBase):
             log.error(error)
             raise IOError(error)
 
+    def _compute_packet(self, colors, pos):
+        count = self.bufByteCount()
+        packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
+        indexes = range(pos, pos + self.numLEDs)
+        packet.extend(int(c) for i in indexes for c in colors[i])
+        return packet
+
     # Push new data to strand
-    def _receive_colors(self, colors, pos):
+    def _send_packet(self, packet):
         try:
             s = self._connect()
-
-            count = self.bufByteCount()
-            packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
-            indexes = range(pos, pos + self.numLEDs)
-            packet.extend(int(c) for i in indexes for c in colors[i])
             s.sendall(packet)
 
             resp = ord(s.recv(1))

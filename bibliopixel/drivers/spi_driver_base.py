@@ -68,13 +68,13 @@ class DriverSPIBase(DriverBase):
             else:
                 raise e
 
-    def _sendData(self):
+    def _send_packet(self, packet):
         if self.use_py_spi:
-            self.spi.xfer2(self._buf)
+            self.spi.xfer2(packet)
         else:
-            self.spi.write(self._buf)
+            self.spi.write(packet)
             self.spi.flush()
 
-    def _receive_colors(self, colors, pos):
+    def _compute_packet(self, colors, pos):
         self._render(colors, pos)
-        self._sendData()
+        return self._buf

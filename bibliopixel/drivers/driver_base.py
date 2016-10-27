@@ -66,15 +66,27 @@ class DriverBase(object):
     def sync(self):
         pass
 
-    # Push new data to strand
-    def _receive_colors(self, colors, pos):
-        # TODO: use abc here.
-        raise RuntimeError("Base class receive_colors() called.")
+    def _compute_packet(self, colors, pos):
+        """Compute the packet from the colors and position.
+
+        Eventually, this will run on the compute thread.
+        """
+        return colors, pos
+
+    def _send_packet(self, packet):
+        """Send the packet to the driver.
+
+        Eventually, this will run on an I/O thread.
+        """
+        pass
 
     def receive_colors(self, colors, pos):
         if self._thread:
             start = time.time() * 1000.0
-        self._receive_colors(colors, pos)
+
+        packet = self._compute_packet(colors, pos)
+        self._send_packet(packet)
+
         if self._thread:
             self.lastUpdate = (time.time() * 1000.0) - start
 

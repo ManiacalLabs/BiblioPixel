@@ -304,11 +304,6 @@ class DriverSerial(DriverBase):
         packet.extend([0] * self._bufPad)
         return packet
 
-    def _receive_colors(self, colors, pos):
-        """Push new data."""
-        packet = self._compute_packet(colors, pos)
-        self._send_packet(packet)
-
     def _sync(self):
         self._com.write(self._sync_packet)
 

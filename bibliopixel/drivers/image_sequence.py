@@ -26,7 +26,10 @@ class DriverImageSequence(DriverBase):
             self.height = 1
 
     # Push new data to strand
-    def _receive_colors(self, colors, pos):
+    def _send_packet(self, packet):
+        # TODO: This is all done on the I/O thread.  Some of this could be done
+        # on the compute thread...
+        colors, pos = packet
         map = self.matrix_map
         size = self._pixelSize
         img = Image.new("RGB", (self.width * size, self.height * size), None)

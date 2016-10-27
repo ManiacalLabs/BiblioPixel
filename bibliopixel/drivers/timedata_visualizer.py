@@ -1,7 +1,7 @@
 import ctypes, timedata_visualizer
 
 from . driver_base import DriverBase
-from .. import log
+from .. import log, timedata
 
 class TimedataVisualizer(DriverBase):
     """Driver for timedata_visualizer UI"""
@@ -19,7 +19,8 @@ class TimedataVisualizer(DriverBase):
 
         size = self.width * self.height * 3
         self.app = timedata_visualizer.JuceApplication(size)
-        self.address = ctypes.addressof(self.app.memory)
+        self.memory = self.app.memory
+        self.address = ctypes.addressof(self.memory)
 
         self.window = self.app.LightWindow(self.width, self.height)
         ipad = 1
@@ -40,7 +41,9 @@ class TimedataVisualizer(DriverBase):
     def _make_buf(self):
         pass
 
-    def _receive_colors(self, colors, pos):
-        self._buf = self.address
+    def _compute_packet(self, colors, pos):
+        self._buf = self.address if timedata.enabled() else self.memory
         self._render(colors, pos)
+
+    def _send_packet(self, packet):
         self.window.repaint()
