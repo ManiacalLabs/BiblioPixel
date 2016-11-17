@@ -63,6 +63,8 @@ class DriverNetworkUDP(DriverBase):
     # Push new data to strand
     def update(self, data):
         try:
+            self._fixData(data)
+            data = self._buf
             s = self._connect()
 
             count = self.bufByteCount
