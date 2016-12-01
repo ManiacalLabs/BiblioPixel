@@ -3,4 +3,4 @@ from . led import (LEDBase, LEDCircle, LEDMatrix, LEDPOV, LEDStrip,
 
 from . import animation, colors, font, gamma, led, log, util
 
-__version__ = VERSION = '2.1.0'
+__version__ = VERSION = '2.1.1'

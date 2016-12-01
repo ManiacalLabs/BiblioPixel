@@ -1,3 +1,6 @@
+### v2.1.1
+Adding PiWS281X driver
+
 ### v2.1.0
 - added new font handling
 - added receiver animations
