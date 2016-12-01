@@ -26,12 +26,6 @@ class DriverPiWS281X(DriverBase):
         # Intialize the library (must be called once before other functions).
         self._strip.begin()
 
-    # WS2812 requires gamma correction so we run it through gamma as the
-    # channels are ordered
-    def _fixData(self, data):
-        for a, b in enumerate(self.c_order):
-            self._buf[a:self.numLEDs * 3:3] = [self.gamma[v] for v in data[b::3]]
-
     # Set Brightness of the strip. A brightness of 0 is the darkest and 255 is
     # the brightest
     def setMasterBrightness(self, brightness):
@@ -41,6 +35,7 @@ class DriverPiWS281X(DriverBase):
     def update(self, data):
         # handle channel order and gamma correction
         self._fixData(data)
+        data = self._buf
 
         pixels = [tuple(data[(p * 3):(p * 3) + 3])
                   for p in range(len(data) / 3)]

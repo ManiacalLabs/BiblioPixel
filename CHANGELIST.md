@@ -1,3 +1,6 @@
+### v2.1.2
+Fixing PiWS281X channel order
+
 ### v2.1.1
 Adding PiWS281X driver
 

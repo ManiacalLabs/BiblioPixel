@@ -1,3 +1,4 @@
+NONE = range(256)
 # From https://github.com/scottjgibson/PixelPi/blob/master/pixelpi.py
 LPD8806 = [int(pow(float(i) / 255.0, 2.5) * 255.0 + 0.5) for i in range(256)]
 APA102 = LPD8806
