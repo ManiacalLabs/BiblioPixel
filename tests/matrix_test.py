@@ -3,6 +3,7 @@ import unittest
 from bibliopixel.led import LEDMatrix
 from bibliopixel.drivers.driver_base import DriverBase
 
+
 def make_matrix(*, width, height, **kwds):
     driver = DriverBase(num=width * height)
     return LEDMatrix(driver, width=width, height=height, **kwds)
@@ -11,6 +12,7 @@ WHITE = (255, 255, 255)
 
 
 class MatrixTest(unittest.TestCase):
+
     def assert_changed(self, matrix, expected):
         changed = [i for i, c in enumerate(matrix._colors) if c[0]]
         if changed != expected:
