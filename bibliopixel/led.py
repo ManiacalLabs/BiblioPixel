@@ -1,4 +1,6 @@
-import math, threading, time
+import math
+import threading
+import time
 
 from . import colors, font, matrix, timedata, update_thread
 
@@ -98,7 +100,7 @@ class LEDBase(object):
         if len(self._colors) != len(buf):
             raise IOError("Data buffer size incorrect! "
                           "Expected: {} bytes / Received: {} bytes".format(
-                len(self._colors), len(buf)))
+                              len(self._colors), len(buf)))
         self._colors[:] = buf
 
     def setBuffer(self, buf):
@@ -475,7 +477,8 @@ class LEDMatrix(LEDBase):
         matrix.draw_char(self.set, x, y, c, color, bg, size, aa)
 
     def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, size=1, aa=False):
-        matrix.draw_text(self.set, text, self.width, self.height, x, y, color, bg, size, aa)
+        matrix.draw_text(self.set, text, self.width,
+                         self.height, x, y, color, bg, size, aa)
 
 
 # Takes a matrix and displays it as individual columns over time
