@@ -1,6 +1,4 @@
-import math
-import threading
-import time
+import math, threading, time
 
 from . import colors, font, matrix, timedata, update_thread
 
@@ -99,8 +97,8 @@ class LEDBase(object):
         """
         if len(self._colors) != len(buf):
             raise IOError("Data buffer size incorrect! "
-                          "Expected: {} bytes / Received: {} bytes".format(
-                              len(self._colors), len(buf)))
+                          "Expected: {} bytes / Received: {} bytes"
+                          .format(len(self._colors), len(buf)))
         self._colors[:] = buf
 
     def setBuffer(self, buf):
