@@ -1,5 +1,5 @@
 from distutils.version import LooseVersion
-from . util import d, generate_header
+from . util import AttributeDict, generate_header
 from . return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
 import log
@@ -140,7 +140,7 @@ class SerialGamePad(BaseGamePad):
         for m in self._map:
             result[m] = (bits & (1 << index) > 0)
             index += 1
-        return d(result)
+        return AttributeDict(result)
 
     def setLights(self, data):
         temp = [(0, 0, 0)] * len(data.keys())

@@ -1,4 +1,4 @@
-from . util import d
+from . util import AttributeDict
 
 
 class BaseGamePad(object):

@@ -2,7 +2,7 @@ import threading, time
 
 from . led import LEDMatrix, LEDStrip, LEDCircle
 from . import colors, log
-from . util import d
+from . util import AttributeDict
 
 
 class animThread(threading.Thread):
@@ -369,7 +369,7 @@ class BaseGameAnim(BaseMatrixAnim):
         if not isinstance(key, list):
             key = [key]
         for k in key:
-            self._keyfuncs[k] = d({
+            self._keyfuncs[k] = AttributeDict({
                 "func": func,
                 "speed": speed,
                 "hold": hold,
