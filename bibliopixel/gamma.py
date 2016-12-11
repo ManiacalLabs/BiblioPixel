@@ -4,7 +4,10 @@ class Gamma(object):
         self.offset = offset
         self.lower_bound = lower_bound
         width = 255 - lower_bound
-        gam = lambda i: int(lower_bound + pow(i / 255, gamma) * width + offset)
+
+        def gam(i):
+            return int(lower_bound + pow(i / 255, gamma) * width + offset)
+
         self.table = tuple(gam(i) for i in range(256))
 
     def get(self, i):

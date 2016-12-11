@@ -3,6 +3,7 @@ import ctypes, timedata_visualizer
 from . driver_base import DriverBase
 from .. import log, timedata
 
+
 class TimedataVisualizer(DriverBase):
     """Driver for timedata_visualizer UI"""
 

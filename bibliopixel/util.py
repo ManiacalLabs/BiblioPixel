@@ -1,5 +1,6 @@
 import math
 
+
 def generate_header(cmd, size):
     packet = bytearray()
     packet.append(cmd)
@@ -7,11 +8,13 @@ def generate_header(cmd, size):
     packet.append(size >> 8)
     return packet
 
+
 class AttributeDict(dict):
     """A dict that exposes its values as attributes."""
 
     def __getattr__(self, key):
         return self[key]
+
 
 d = AttributeDict
 

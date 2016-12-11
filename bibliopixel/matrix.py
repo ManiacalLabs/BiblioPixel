@@ -7,36 +7,37 @@ from . import colors, font
 # https://github.com/adafruit/Adafruit-GFX-Library/blob/master/Adafruit_GFX.cpp
 ##########################################################################
 
+
 def draw_circle(setter, x0, y0, r, color=None):
-   """Draws a circle at point x0, y0 with radius r of the specified RGB color"""
-   f = 1 - r
-   ddF_x = 1
-   ddF_y = -2 * r
-   x = 0
-   y = r
+    """Draws a circle at point x0, y0 with radius r of the specified RGB color"""
+    f = 1 - r
+    ddF_x = 1
+    ddF_y = -2 * r
+    x = 0
+    y = r
 
-   setter(x0, y0 + r, color)
-   setter(x0, y0 - r, color)
-   setter(x0 + r, y0, color)
-   setter(x0 - r, y0, color)
+    setter(x0, y0 + r, color)
+    setter(x0, y0 - r, color)
+    setter(x0 + r, y0, color)
+    setter(x0 - r, y0, color)
 
-   while x < y:
-       if f >= 0:
-           y -= 1
-           ddF_y += 2
-           f += ddF_y
-       x += 1
-       ddF_x += 2
-       f += ddF_x
+    while x < y:
+        if f >= 0:
+            y -= 1
+            ddF_y += 2
+            f += ddF_y
+        x += 1
+        ddF_x += 2
+        f += ddF_x
 
-       setter(x0 + x, y0 + y, color)
-       setter(x0 - x, y0 + y, color)
-       setter(x0 + x, y0 - y, color)
-       setter(x0 - x, y0 - y, color)
-       setter(x0 + y, y0 + x, color)
-       setter(x0 - y, y0 + x, color)
-       setter(x0 + y, y0 - x, color)
-       setter(x0 - y, y0 - x, color)
+        setter(x0 + x, y0 + y, color)
+        setter(x0 - x, y0 + y, color)
+        setter(x0 + x, y0 - y, color)
+        setter(x0 - x, y0 - y, color)
+        setter(x0 + y, y0 + x, color)
+        setter(x0 - y, y0 + x, color)
+        setter(x0 + y, y0 - x, color)
+        setter(x0 - y, y0 - x, color)
 
 
 def _draw_circle_helper(setter, x0, y0, r, cornername, color=None):
@@ -270,7 +271,7 @@ def fill_round_rect(setter, x, y, w, h, r, color=None, aa=False):
     and corner radius r"""
     fill_rect(setter, x + r, y, w - 2 * r, h, color, aa)
     _fill_circle_helper(setter, x + w - r - 1, y + r, r,
-                           1, h - 2 * r - 1, color, aa)
+                        1, h - 2 * r - 1, color, aa)
     _fill_circle_helper(setter, x + r, y + r, r, 2, h - 2 * r - 1, color, aa)
 
 
@@ -381,7 +382,8 @@ def draw_char(setter, width, height, x, y, c, color, bg, size, aa=False):
                         if size == 1:
                             setter(xPos, yPos, color)
                         else:
-                            fill_rect(setter, xPos, yPos, size, size, color, aa)
+                            fill_rect(setter, xPos, yPos,
+                                      size, size, color, aa)
                     elif bg != color and bg is not None:
                         if size == 1:
                             setter(xPos, yPos, bg)

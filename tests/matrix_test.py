@@ -8,6 +8,7 @@ def make_matrix(*, width, height, **kwds):
     driver = DriverBase(num=width * height)
     return LEDMatrix(driver, width=width, height=height, **kwds)
 
+
 WHITE = (255, 255, 255)
 
 
@@ -151,7 +152,7 @@ class MatrixTest(unittest.TestCase):
         matrix.drawTriangle(0, 0, 11, 4, 5, 12, WHITE)
         expected = [0, 1, 27, 28, 29, 31, 33, 37, 38, 54, 55, 56, 62, 66, 74,
                     75, 85, 93, 98, 106, 118, 124, 131, 136, 152, 155, 164, 167,
-                    185, 186,  197]
+                    185, 186, 197]
         self.assert_changed(matrix, expected)
 
     def DISABLED_test_fill_triangle(self):

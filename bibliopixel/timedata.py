@@ -8,6 +8,7 @@ except:
 
 ENABLED = '--disable_timedata' not in sys.argv
 
+
 def enabled():
     return ENABLED and TIMEDATA
 

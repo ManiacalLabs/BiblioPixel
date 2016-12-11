@@ -21,6 +21,7 @@ class DriverAPA102(DriverSPIBase):
         self._buf[:] = [0, 0, 0, 0] + newBuf
         self._buf.extend([0xFF, 0, 0, 0] * self._latchBytes)
 
+
 MANIFEST = [
     {
         "id": "APA102",

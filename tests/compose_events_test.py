@@ -2,6 +2,7 @@ import threading, unittest
 
 from bibliopixel import compose_events
 
+
 class ComposeEventTest(unittest.TestCase):
     def test_compose_events(self):
         a, b = threading.Event(), threading.Event()
