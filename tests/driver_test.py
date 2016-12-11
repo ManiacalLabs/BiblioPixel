@@ -10,13 +10,14 @@ from bibliopixel import timedata
 
 
 def mock_open(self, fname, perm='r'):
-    pass #
+    pass
+
 
 class DriverTest(unittest.TestCase):
     COLORS_PY = [(0, 0, 0),
-                (1, 8, 64),
-                (2, 16, 128),
-                (3, 24, 192)]
+                 (1, 8, 64),
+                 (2, 16, 128),
+                 (3, 24, 192)]
 
     COLORS_TD = timedata.ColorList255(COLORS_PY)
 
@@ -36,7 +37,7 @@ class DriverTest(unittest.TestCase):
     def test_trivial(self):
         driver = DriverBase(num=4)
         for i in range(len(driver._buf)):
-           driver._buf[i] = 23  # randomize
+            driver._buf[i] = 23  # randomize
         self.assertTrue(all(driver._buf))
         driver.set_colors([(0, 0, 0)] * 4, 0)
         driver._render()

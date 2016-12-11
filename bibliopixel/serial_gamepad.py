@@ -1,5 +1,5 @@
 from distutils.version import LooseVersion
-from . util import d
+from . util import d, generate_header
 from . return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
 import log
@@ -11,8 +11,6 @@ except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
     log.error(error)
     raise ImportError(error)
-
-from distutils.version import LooseVersion
 
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
@@ -103,7 +101,7 @@ class SerialGamePad(BaseGamePad):
                 log.info(error)
                 raise SerialPadError(error)
 
-            packet = util.generate_header(CMDTYPE.INIT, 0)
+            packet = generate_header(CMDTYPE.INIT, 0)
             self._com.write(packet)
 
             resp = self._com.read(1)
@@ -121,7 +119,7 @@ class SerialGamePad(BaseGamePad):
     def getKeys(self):
         bits = 0
         try:
-            packet = util.generate_header(CMDTYPE.GET_BTNS, 0)
+            packet = generate_header(CMDTYPE.GET_BTNS, 0)
             self._com.write(packet)
             resp = self._com.read(1)
 
@@ -142,7 +140,7 @@ class SerialGamePad(BaseGamePad):
         for m in self._map:
             result[m] = (bits & (1 << index) > 0)
             index += 1
-        return util.d(result)
+        return d(result)
 
     def setLights(self, data):
         temp = [(0, 0, 0)] * len(data.keys())
@@ -154,7 +152,7 @@ class SerialGamePad(BaseGamePad):
         for l in temp:
             leds.extend(l)
 
-        packet = util.generate_header(CMDTYPE.SET_LEDS, len(leds))
+        packet = generate_header(CMDTYPE.SET_LEDS, len(leds))
         packet.extend(leds)
         self._com.write(packet)
         resp = self._com.read(1)
@@ -172,25 +170,3 @@ class SerialGamePad(BaseGamePad):
             if num >= count:
                 break
         self.setLights(data)
-
-# if __name__ == "__main__":
-#     import time
-#     pad = SerialGamePad(dev="", hardwareID="1B4F:9206")
-#     data = {
-#         "A": (255,0,0),
-#         "B": (0,255,0),
-#         "X": (0,0,255),
-#         "Y": (128,0,64),
-#         "RED":(255,0,0)
-#     }
-#     pad.setLights(data)
-#     try:
-#         count = 0
-#         while True:
-#             # print count
-#             count += 1
-#             print pad.getKeys()
-#             time.sleep(0.5)
-#     except KeyboardInterrupt:
-#         pad.setLightsOff(5)
-#         pad.__exit__(None, None, None)

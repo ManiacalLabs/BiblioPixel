@@ -59,6 +59,7 @@ def test_draw_circle3(benchmark):
 
 def test_fill_circle1(benchmark):
     matrix = make_matrix(width=16, height=16)
+
     def test():
         matrix.fillCircle(8, 8, 6, WHITE)
         expected = [

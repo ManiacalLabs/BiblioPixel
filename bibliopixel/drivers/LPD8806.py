@@ -2,6 +2,7 @@ from .. import gamma
 
 from . spi_driver_base import DriverSPIBase, ChannelOrder
 
+
 class DriverLPD8806(DriverSPIBase):
     """Main driver for LPD8806 based LED strips on devices like the Raspberry Pi
        and BeagleBone."""
@@ -21,6 +22,7 @@ class DriverLPD8806(DriverSPIBase):
 
     # LPD8806 requires gamma correction and only supports 7-bits per channel
     # running each value through gamma will fix all of this.
+
 
 MANIFEST = [
     {

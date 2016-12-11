@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 from bibliopixel import LEDBase, LEDStrip, LEDPOV, LEDMatrix, LEDCircle, mapGen, MultiMapBuilder, MatrixRotation
 from bibliopixel.drivers.serial_driver import LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError
@@ -21,11 +22,11 @@ types = [
 
 
 def O(msg):
-    print "\n" + msg
+    print("\n" + msg)
 
 
 def I(msg):
-    return raw_input("\n" + msg)
+    return input("\n" + msg)
 
 
 def get_int(msg, invalid=-1):
@@ -37,16 +38,17 @@ def get_int(msg, invalid=-1):
 
 
 def showSelectList(msg, values):
-    print "\n" + msg
+    print("\n" + msg)
     shift = len(str(len(values)))
     count = 0
     for v in values:
-        print "{}: {}".format(str(count).rjust(shift), v)
+        print("{}: {}".format(str(count).rjust(shift), v))
         count += 1
     return get_int("Choice: ")
 
+
 try:
-    print "Press Ctrl+C anytime to quit."
+    print("Press Ctrl+C anytime to quit.")
 
     O("Scanning for devices...")
 
@@ -96,11 +98,11 @@ try:
         driver = DriverSerial(
             t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
         O("Configure complete!")
-    except BiblioSerialError, e:
+    except BiblioSerialError as e:
         O("Error configuring device!")
 
 
 except KeyboardInterrupt:
     sys.exit(128 + signal.SIGINT)
-except ValueError, e:
+except ValueError as e:
     pass

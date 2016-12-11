@@ -1,5 +1,6 @@
 import glob, numbers, os, sys
 from . import colors, log, timedata
+from . led import LEDMatrix
 
 try:
     from PIL import Image, ImageSequence
@@ -53,7 +54,6 @@ def show_image(setter, width, height,
             setter(x, y, (r, g, b))
 
 
-
 def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
     if not isinstance(led, LEDMatrix):
@@ -75,7 +75,7 @@ def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Of
 
     def setter(x, y, pixel):
         if y >= 0 and x >= 0:
-            texture[y][x] = (r, g, b)
+            texture[y][x] = pixel
 
     return show_image(setter, led.width, led.height, imagePath, imageObj,
                       offset, bgcolor, brightness)
@@ -120,7 +120,7 @@ def resize(image, x, y, stretch=False, top=None, left=None, mode='RGB',
             resample = getattr(Image, resample.upper())
         except:
             raise ValueError("(1) Didn't understand resample=%s" % resample)
-        if not isinstance(resample, Number):
+        if not isinstance(resample, numbers.Number):
             raise ValueError("(2) Didn't understand resample=%s" % resample)
 
     size = x, y

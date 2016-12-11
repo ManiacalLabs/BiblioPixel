@@ -38,7 +38,6 @@ class DriverVisualizer(DriverNetwork):
                 suffix = "&"
                 exe_string = 'python3' if USE_PYTHON3 else 'python2.7'
 
-
             dname = os.path.dirname(os.path.dirname(os.path.dirname(
                 os.path.abspath(__file__))))
             script = os.path.join(dname, 'visualizer.py')
@@ -59,6 +58,7 @@ class DriverVisualizer(DriverNetwork):
             log.debug(command)
             os.system(command)
             time.sleep(0.5)
+
 
 MANIFEST = [
     {

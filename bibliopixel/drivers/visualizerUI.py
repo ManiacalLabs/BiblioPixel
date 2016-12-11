@@ -186,6 +186,7 @@ class VisualizerUI:
         self.layoutPixels()
         # self._master.after_idle(self.__handleResize)
 
+
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='BiblioPixel Visualizer')

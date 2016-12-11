@@ -506,7 +506,7 @@ class LEDPOV(LEDMatrix):
             def color(i):
                 return self._colors[(h + width * i) * 3]
             buf = [color(i) for i in range(self.height)]
-            self.drivers[0].update_colors()
+            self.drivers[0].set_colors(buf, 0)
             sendTime = (time.time() * 1000.0) - start
             if sleep:
                 time.sleep(max(0, (sleep - sendTime) / 1000.0))
@@ -626,6 +626,7 @@ class LEDCircle(LEDBase):
 
         for i in pixels:
             self._set_base(i, color)
+
 
 MANIFEST = [
     {

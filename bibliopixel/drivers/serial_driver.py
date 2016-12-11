@@ -57,6 +57,7 @@ class LEDTYPE:
     LPD1886 = 10
     P9813 = 11
 
+
 SPIChipsets = [
     LEDTYPE.LPD8806,
     LEDTYPE.WS2801,
@@ -290,7 +291,7 @@ class DriverSerial(DriverBase):
         if len(resp) == 0:
             DriverSerial._comError()
         if ord(resp) != RETURN_CODES.SUCCESS:
-            return_codes.print_error(ord(resp))
+            print_error(ord(resp))
 
         self._com.flushInput()
 

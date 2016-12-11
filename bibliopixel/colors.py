@@ -255,6 +255,7 @@ def hue2rgb_360(hue):
     else:
         raise ValueError("hue must be between 0 and 359")
 
+
 hsv2rgb = hsv2rgb_rainbow
 hue2rgb = hue2rgb_rainbow
 
@@ -335,6 +336,7 @@ def hue_helper360(pos, length, cycle_step):
 def wheel_helper(pos, length, cycle_step):
     """Helper for wheel_color that distributes colors over length and allows shifting position"""
     return wheel_color(((pos * WHEEL_MAX // length) + cycle_step) % WHEEL_MAX)
+
 
 Off = (0, 0, 0)
 Blue = (0, 0, 255)
