@@ -104,7 +104,7 @@ class LEDBase(object):
     def setBuffer(self, buf):
         """DEPRECATED!"""
         # https://stackoverflow.com/questions/1624883
-        self.set_colors(buf=zip(*(iter(buf),) * 3))
+        self.set_colors(buf=list(zip(*(iter(buf),) * 3)))
 
     # Set the master brightness for the LEDs 0 - 255
     def _do_set_brightness(self, bright):
@@ -235,7 +235,7 @@ def mapGen(width, height, serpentine=True, offset=0, rotation=MatrixRotation.ROT
                            offset for x in range(width)])
 
     for i in range(rotation):
-        result = zip(*result[::-1])
+        result = list(zip(*result[::-1]))
 
     if vert_flip:
         result = result[::-1]
@@ -318,7 +318,7 @@ class LEDMatrix(LEDBase):
 
         # apply rotation
         for i in range(rotation):
-            self.matrix_map = zip(*self.matrix_map[::-1])
+            self.matrix_map = list(zip(*self.matrix_map[::-1]))
 
         # apply flip
         if vert_flip:
@@ -349,6 +349,15 @@ class LEDMatrix(LEDBase):
             self.width = self.width / pw
             self.height = self.height / ph
             self.numLEDs = self.width * self.height
+
+        self.fonts = font.fonts
+
+    def loadFont(self, name, height, width, data):
+        self.fonts[name] = {
+            "data": data,
+            "height": height,
+            "width": width
+        }
 
     def setTexture(self, tex=None):
         if tex is None:
@@ -471,12 +480,13 @@ class LEDMatrix(LEDBase):
 
     fillTrangle = fillTriangle  # DEPRECATED!
 
-    def drawChar(self, x, y, c, color, bg, size, aa=False):
-        matrix.draw_char(self.set, x, y, c, color, bg, size, aa)
+    def drawChar(self, x, y, c, color, bg, aa=False, font=font.default_font, font_scale=1):
+        matrix.draw_char(self.fonts, self.set, self.width, self.height,
+                         x, y, c, color, bg, aa, font, font_scale)
 
-    def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, size=1, aa=False):
-        matrix.draw_text(self.set, text, self.width,
-                         self.height, x, y, color, bg, size, aa)
+    def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+        matrix.draw_text(self.fonts, self.set, text, self.width, self.height,
+                         x, y, color, bg, aa, font, font_scale)
 
 
 # Takes a matrix and displays it as individual columns over time
