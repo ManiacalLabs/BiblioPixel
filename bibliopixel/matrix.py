@@ -355,60 +355,54 @@ def fill_triangle(setter, x0, y0, x1, y1, x2, y2, color=None, aa=False):
             _draw_fast_hline(setter, a, y, b - a + 1, color, aa)
 
 
-def draw_char(setter, width, height, x, y, c, color, bg, size, aa=False):
-    if size > 0:
-        font_page = font.GLCDFONT
-        fw, fh = 6, 8
-    else:
-        font_page = font.TINYFONT
-        fw, fh = 4, 6
-        size = 1
+def draw_char(fonts, setter, width, height, x, y, c, color, bg, aa=False, font=font.default_font, font_scale=1):
+    assert font_scale >= 1, "font_scale must be >= 1"
+    f = fonts[font]
+    fh = f['height']
+    FONT = f['data']
 
     c = ord(c)  # make it the int value
-    # print size, chr(c), FONT[c]
-    for i in range(fw):
-        xPos = x + (i * size)
-        if ((xPos < width) and
-                (xPos + fw * size - 1) >= 0):
+    if c < f['bounds'][0] or c > f['bounds'][1]:
+        c_data = f['undef']
+    else:
+        c_data = FONT[c - f['bounds'][0]]
 
-            if i == fw - 1:
+    fw = len(c_data)
+    for i in range(fw + f['sep']):
+        xPos = x + (i * font_scale)
+        if ((xPos < width) and (xPos + fw * font_scale - 1) >= 0):
+            if i >= fw:
                 line = 0
             else:
-                line = font_page[c][i]
+                line = FONT[c][i]
             for j in range(fh):
-                yPos = y + (j * size)
-                if yPos < height and (yPos + fh * size - 1) >= 0:
+                yPos = y + (j * font_scale)
+                if ((yPos < height) and
+                        (yPos + fh * font_scale - 1) >= 0):
                     if line & 0x1:
-                        if size == 1:
+                        if font_scale == 1:
                             setter(xPos, yPos, color)
                         else:
-                            fill_rect(setter, xPos, yPos,
-                                      size, size, color, aa)
+                            fill_rect(setter, xPos, yPos, font_scale, font_scale, color, aa)
                     elif bg != color and bg is not None:
-                        if size == 1:
+                        if font_scale == 1:
                             setter(xPos, yPos, bg)
                         else:
-                            fill_rect(setter, xPos, yPos, size, size, bg, aa)
+                            fill_rect(setter, xPos, yPos, font_scale, font_scale, bg, aa)
                 line >>= 1
+    return fw + f['sep']
 
 
-def draw_text(setter, text, width, height, x=0, y=0, color=None, bg=colors.Off,
-              size=1, aa=False):
-    osize = size
-    if size > 0:
-        fw, fh = 6, 8
-    else:
-        fw, fh = 4, 6
-        size = 1
+def draw_text(fonts, setter, text, width, height, x=0, y=0, color=None, bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+    fh = fonts[font]['height']
     for c in text:
         if c == '\n':
-            pass
-            y += size * fh
+            y += font_scale * fh
             x = 0
         elif c == '\r':
             pass  # skip it
         else:
-            draw_char(setter, width, height, x, y, c, color, bg, osize, aa)
-            x += size * fw
+            fw = draw_char(fonts, setter, width, height, x, y, c, color, bg, aa, font, font_scale)
+            x += font_scale * fw
             if x >= width:
                 break
