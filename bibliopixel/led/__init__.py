@@ -1,2 +1,2 @@
-from . led import LEDBase, LEDStrip, MatrixRotation, mapGen, MultiMapBuilder
-from . led import LEDMatrix, LEDPOV, LEDCircle, MANIFEST
+from . led import LEDStrip, MatrixRotation, mapGen, MultiMapBuilder, LEDMatrix
+from . led import LEDPOV, LEDCircle, MANIFEST
