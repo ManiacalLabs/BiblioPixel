@@ -1,4 +1,4 @@
-from . led import LEDCircle
+from . circle import LEDCircle
 from . matrix import MatrixRotation, mapGen, MultiMapBuilder, LEDMatrix
 from . pov import LEDPOV
 from . strip import LEDStrip
