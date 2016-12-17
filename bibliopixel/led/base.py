@@ -1,6 +1,6 @@
 import time
 
-from .. import colors, timedata, update_thread
+from .. import colors, timedata, util
 
 
 class LEDBase(object):
@@ -31,7 +31,7 @@ class LEDBase(object):
         self._threadedUpdate = threadedUpdate
 
         if self._threadedUpdate:
-            self._updateThread = update_thread.UpdateThread(self.drivers)
+            self._updateThread = util.UpdateThread(self.drivers)
             self._updateThread.start()
 
         self._waitingBrightness = False
