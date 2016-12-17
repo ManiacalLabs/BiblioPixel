@@ -1,8 +1,8 @@
 import threading, time
 
-from . led import LEDMatrix, LEDStrip, LEDCircle
-from . import colors, log
-from . util import AttributeDict
+from .. led import LEDMatrix, LEDStrip, LEDCircle
+from .. import colors, log
+from .. util import AttributeDict
 
 
 class animThread(threading.Thread):
