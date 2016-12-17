@@ -1,6 +1,6 @@
 import random, threading, time, unittest
 
-from bibliopixel import double_buffer
+from bibliopixel.util import double_buffer
 
 
 class DoubleBufferTest(unittest.TestCase):

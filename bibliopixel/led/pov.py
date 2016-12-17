@@ -1,7 +1,5 @@
 import math, threading, time
 
-# from .. import colors, font, matrix, timedata, update_thread
-
 from . matrix import LEDMatrix, MatrixRotation
 
 
