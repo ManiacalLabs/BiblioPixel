@@ -115,32 +115,30 @@ def hsv2rgb_spectrum(hsv):
     return hsv2rgb_raw(((h * 192) >> 8, s, v))
 
 
-def _nscale8x3_video(r, g, b, scale):
-    nonzeroscale = 0
-    if scale != 0:
-        nonzeroscale = 1
-    if r != 0:
-        r = ((r * scale) >> 8) + nonzeroscale
-    if g != 0:
-        g = ((g * scale) >> 8) + nonzeroscale
-    if b != 0:
-        b = ((b * scale) >> 8) + nonzeroscale
-    return (r, g, b)
-
-
-def _scale8_video_LEAVING_R1_DIRTY(i, scale):
-    nonzeroscale = 0
-    if scale != 0:
-        nonzeroscale = 1
-    if i != 0:
-        i = ((i * scale) >> 8) + nonzeroscale
-    return i
-
-
 def hsv2rgb_rainbow(hsv):
     """Generates RGB values from HSV that have an even visual
     distribution.  Be careful as this method is only have as fast as
     hsv2rgb_spectrum."""
+
+    def nscale8x3_video(r, g, b, scale):
+        nonzeroscale = 0
+        if scale != 0:
+            nonzeroscale = 1
+        if r != 0:
+            r = ((r * scale) >> 8) + nonzeroscale
+        if g != 0:
+            g = ((g * scale) >> 8) + nonzeroscale
+        if b != 0:
+            b = ((b * scale) >> 8) + nonzeroscale
+        return (r, g, b)
+
+    def scale8_video_LEAVING_R1_DIRTY(i, scale):
+        nonzeroscale = 0
+        if scale != 0:
+            nonzeroscale = 1
+        if i != 0:
+            i = ((i * scale) >> 8) + nonzeroscale
+        return i
 
     h, s, v = hsv
     offset = h & 0x1F  # 0..31
@@ -190,7 +188,7 @@ def hsv2rgb_rainbow(hsv):
                 b = 85 - third
 
     if s != 255:
-        r, g, b = _nscale8x3_video(r, g, b, s)
+        r, g, b = nscale8x3_video(r, g, b, s)
         desat = 255 - s
         desat = (desat * desat) >> 8
         brightness_floor = desat
@@ -199,8 +197,8 @@ def hsv2rgb_rainbow(hsv):
         b = b + brightness_floor
 
     if v != 255:
-        v = _scale8_video_LEAVING_R1_DIRTY(v, v)
-        r, g, b = _nscale8x3_video(r, g, b, v)
+        v = scale8_video_LEAVING_R1_DIRTY(v, v)
+        r, g, b = nscale8x3_video(r, g, b, v)
 
     return (r, g, b)
 
