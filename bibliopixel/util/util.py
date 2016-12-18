@@ -9,16 +9,6 @@ def generate_header(cmd, size):
     return packet
 
 
-class AttributeDict(dict):
-    """A dict that exposes its values as attributes."""
-
-    def __getattr__(self, key):
-        return self[key]
-
-
-d = AttributeDict
-
-
 def tuple_add(a, b):
     return tuple(x + y for x, y in zip(a, b))
 
