@@ -6,16 +6,6 @@ from .. import colors
 from .. util import AttributeDict
 
 
-class OffAnim(BaseAnimation):
-
-    def __init__(self, led, timeout=10):
-        super(OffAnim, self).__init__(led)
-        self._internalDelay = timeout * 1000
-
-    def step(self, amt=1):
-        self._led.all_off()
-
-
 class BaseStripAnim(BaseAnimation):
 
     def __init__(self, led, start=0, end=-1):
