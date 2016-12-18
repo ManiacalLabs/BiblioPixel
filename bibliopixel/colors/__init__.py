@@ -119,13 +119,13 @@ def hsv2rgb_raw(hsv):
 
 
 def hsv2rgb_spectrum(hsv):
-    """Generates RGB values from  HSV values in line with a typical light spectrum"""
+    """Generates RGB values from HSV values in line with a typical light
+    spectrum."""
     h, s, v = hsv
     return hsv2rgb_raw(((h * 192) >> 8, s, v))
 
 
 def _nscale8x3_video(r, g, b, scale):
-    """Internal Use Only"""
     nonzeroscale = 0
     if scale != 0:
         nonzeroscale = 1
@@ -139,7 +139,6 @@ def _nscale8x3_video(r, g, b, scale):
 
 
 def _scale8_video_LEAVING_R1_DIRTY(i, scale):
-    """Internal Use Only"""
     nonzeroscale = 0
     if scale != 0:
         nonzeroscale = 1
@@ -149,9 +148,9 @@ def _scale8_video_LEAVING_R1_DIRTY(i, scale):
 
 
 def hsv2rgb_rainbow(hsv):
-    """Generates RGB values from HSV that have an even visual distribution.
-       Be careful as this method is only have as fast as hsv2rgb_spectrum.
-    """
+    """Generates RGB values from HSV that have an even visual
+    distribution.  Be careful as this method is only have as fast as
+    hsv2rgb_spectrum."""
 
     h, s, v = hsv
     offset = h & 0x1F  # 0..31
@@ -217,10 +216,9 @@ def hsv2rgb_rainbow(hsv):
 
 
 def hsv2rgb_360(hsv):
-    """
-    Python default hsv to rgb conversion for when hue values 0-359 are preferred.
-    Due to requiring float math, this method is slower than hsv2rgb_rainbow and hsv2rgb_spectrum.
-    """
+    """Python default hsv to rgb conversion for when hue values in the
+    range 0-359 are preferred.  Due to requiring float math, this method
+    is slower than hsv2rgb_rainbow and hsv2rgb_spectrum."""
 
     h, s, v = hsv
 
@@ -228,37 +226,37 @@ def hsv2rgb_360(hsv):
     return (int(r * 255.0), int(g * 255.0), int(b * 255.0))
 
 
-# pre-generated spectrums for the sake of speed
-hue_raw = [hsv2rgb_raw((hue, 255, 255)) for hue in range(256)]
-hue_rainbow = [hsv2rgb_rainbow((hue, 255, 255)) for hue in range(256)]
-hue_spectrum = [hsv2rgb_spectrum((hue, 255, 255)) for hue in range(256)]
-hue_360 = [hsv2rgb_360((hue, 1.0, 1.0)) for hue in range(360)]
+# pre-generated spectra for the sake of speed
+HUE_RAW = [hsv2rgb_raw((hue, 255, 255)) for hue in range(256)]
+HUE_RAINBOW = [hsv2rgb_rainbow((hue, 255, 255)) for hue in range(256)]
+HUE_SPECTRUM = [hsv2rgb_spectrum((hue, 255, 255)) for hue in range(256)]
+HUE_360 = [hsv2rgb_360((hue, 1.0, 1.0)) for hue in range(360)]
 
 
 def hue2rgb_raw(hue):
     if hue >= 0 or hue < 256:
-        return hue_raw[hue]
+        return HUE_RAW[hue]
     else:
         raise ValueError("hue must be between 0 and 255")
 
 
 def hue2rgb_rainbow(hue):
     if hue >= 0 or hue < 256:
-        return hue_rainbow[hue]
+        return HUE_RAINBOW[hue]
     else:
         raise ValueError("hue must be between 0 and 255")
 
 
 def hue2rgb_spectrum(hue):
     if hue >= 0 or hue < 256:
-        return hue_spectrum[hue]
+        return HUE_SPECTRUM[hue]
     else:
         raise ValueError("hue must be between 0 and 255")
 
 
 def hue2rgb_360(hue):
     if hue >= 0 or hue < 360:
-        return hue_360[hue]
+        return HUE_360[hue]
     else:
         raise ValueError("hue must be between 0 and 359")
 
@@ -301,7 +299,7 @@ def _gen_wheel():
     return (r, g, b)
 
 
-_wheel = _gen_wheel()
+_WHEEL = _gen_wheel()
 
 
 def wheel_color(position):
@@ -313,7 +311,7 @@ def wheel_color(position):
     if position > 384:
         position = 384
 
-    return _wheel[position]
+    return _WHEEL[position]
 
 
 def hue_gradient(start, stop, steps):
@@ -341,7 +339,8 @@ def hue_helper360(pos, length, cycle_step):
 
 
 def wheel_helper(pos, length, cycle_step):
-    """Helper for wheel_color that distributes colors over length and allows shifting position"""
+    """Helper for wheel_color that distributes colors over length and
+    allows shifting position."""
     return wheel_color(((pos * WHEEL_MAX // length) + cycle_step) % WHEEL_MAX)
 
 
