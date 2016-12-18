@@ -1,4 +1,5 @@
-from . animation import BaseStripAnim, BaseMatrixAnim
+from . strip import BaseStripAnim
+from . matrix import BaseMatrixAnim
 from .. import colors
 
 
