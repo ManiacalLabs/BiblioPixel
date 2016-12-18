@@ -109,8 +109,19 @@ class LEDBase(object):
     # Set the master brightness for the LEDs 0 - 255
     def _do_set_brightness(self, bright):
         self.waitForUpdate()
+        result = True
         for d in self.drivers:
-            d.set_brightness(bright)
+            if not d.set_brightness(bright):
+                result = False
+                break
+
+        # all or nothing, set them all back if False
+        if not result:
+            for d in self.drivers:
+                d.set_brightness(255)
+            self.masterBrightness = bright
+        else:
+            self.masterBrightness = 255
 
         self._waitingBrightnessValue = None
         self._waitingBrightness = False
