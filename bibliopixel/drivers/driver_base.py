@@ -97,7 +97,7 @@ class DriverBase(object):
         if brightness > 255 or brightness < 0:
             raise ValueError('Brightness not between 0 and 255: %s' % brightness)
         self._brightness = brightness
-        return True
+        return False  # Device does NOT support internal brightness control
 
     def _render_py(self, colors, pos, length=-1, output=None):
         fix, (r, g, b) = self.gamma.get, self.c_order
