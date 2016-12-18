@@ -46,6 +46,7 @@ More details here: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors
 """
 
 import colorsys, types, util
+from . wheel import wheel_color, wheel_helper
 
 
 def color_scale(color, level):
@@ -278,42 +279,6 @@ def hex2rgb(hex):
     return (r, g, b)
 
 
-WHEEL_MAX = 384
-
-
-def _gen_wheel():
-    for p in range(385):
-        if p < 128:
-            r = 127 - p % 128
-            g = p % 128
-            b = 0
-        elif p < 256:
-            g = 127 - p % 128
-            b = p % 128
-            r = 0
-        else:
-            b = 127 - p % 128
-            r = p % 128
-            g = 0
-
-    return (r, g, b)
-
-
-_WHEEL = _gen_wheel()
-
-
-def wheel_color(position):
-    """Get color from wheel value (0 - 384).
-    Provided for those used to using it from Adafruit libraries
-    """
-    if position < 0:
-        position = 0
-    if position > 384:
-        position = 384
-
-    return _WHEEL[position]
-
-
 def hue_gradient(start, stop, steps):
     assert (start >= 0 and start < 256) and (
         stop >= 0 and stop < 256), "hue must be between 0 and 255"
@@ -336,12 +301,6 @@ def hue_helper(pos, length, cycle_step):
 
 def hue_helper360(pos, length, cycle_step):
     return hue2rgb_360(((pos * 360 // length) + cycle_step) % 360)
-
-
-def wheel_helper(pos, length, cycle_step):
-    """Helper for wheel_color that distributes colors over length and
-    allows shifting position."""
-    return wheel_color(((pos * WHEEL_MAX // length) + cycle_step) % WHEEL_MAX)
 
 
 Off = (0, 0, 0)
