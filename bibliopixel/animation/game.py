@@ -1,42 +1,11 @@
-from . base import BaseAnimation
-from .. led import LEDMatrix, LEDStrip, LEDCircle
+from . matrix import BaseMatrixAnim
 from .. util import AttributeDict
-
-
-class BaseStripAnim(BaseAnimation):
-
-    def __init__(self, led, start=0, end=-1):
-        super(BaseStripAnim, self).__init__(led)
-
-        if not isinstance(led, LEDStrip):
-            raise RuntimeError("Must use LEDStrip with Strip Animations!")
-
-        self._start = max(start, 0)
-        self._end = end
-        if self._end < 0 or self._end >= self._led.numLEDs:
-            self._end = self._led.numLEDs - 1
-
-        self._size = self._end - self._start + 1
-
-
-class BaseMatrixAnim(BaseAnimation):
-
-    def __init__(self, led, width=0, height=0, startX=0, startY=0):
-        super(BaseMatrixAnim, self).__init__(led)
-        if not isinstance(led, LEDMatrix):
-            raise RuntimeError("Must use LEDMatrix with Matrix Animations!")
-
-        self.width = width or led.width
-        self.height = height or led.height
-
-        self.startX = startX
-        self.startY = startY
 
 
 class BaseGameAnim(BaseMatrixAnim):
 
     def __init__(self, led, inputDev):
-        super(BaseGameAnim, self).__init__(led)
+        super().__init__(led)
         self._input_dev = inputDev
         self._keys = None
         self._lastKeys = None
@@ -100,17 +69,3 @@ class BaseGameAnim(BaseMatrixAnim):
 
     def postStep(self, amt):
         self._speedStep += 1
-
-
-class BaseCircleAnim(BaseAnimation):
-
-    def __init__(self, led):
-        super(BaseCircleAnim, self).__init__(led)
-
-        if not isinstance(led, LEDCircle):
-            raise RuntimeError("Must use LEDCircle with Circle Animations!")
-
-        self.rings = led.rings
-        self.ringCount = led.ringCount
-        self.lastRing = led.lastRing
-        self.ringSteps = led.ringSteps
