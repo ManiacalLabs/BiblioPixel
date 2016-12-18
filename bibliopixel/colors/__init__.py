@@ -45,9 +45,7 @@ is also of the "constant apparent brightness" variety.
 More details here: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors
 """
 
-import colorsys
-import types
-import util
+import colorsys, types, util
 
 
 def color_scale(color, level):
@@ -57,13 +55,9 @@ def color_scale(color, level):
 
 def color_blend(a, b):
     """Performs a Screen blend on RGB color tuples, a and b"""
-    return (255 - (((255 - a[0]) * (255 - b[0])) >> 8), 255 - (((255 - a[1]) * (255 - b[1])) >> 8), 255 - (((255 - a[2]) * (255 - b[2])) >> 8))
-
-
-def gamma_correct(color, gamma):
-    # DEPRECATED
-    """Applies a gamma correction to an RGB color tuple"""
-    return (gamma[color[0]], gamma[color[1]], gamma[color[2]])
+    return (255 - (((255 - a[0]) * (255 - b[0])) >> 8),
+            255 - (((255 - a[1]) * (255 - b[1])) >> 8),
+            255 - (((255 - a[2]) * (255 - b[2])) >> 8))
 
 
 def hsv2rgb_raw(hsv):
