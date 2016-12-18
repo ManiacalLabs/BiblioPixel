@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+# command to install dependencies
+install:
+  - pip install -r test_requirements.txt
+# command to run tests
+script:
+  - python setup.py test
