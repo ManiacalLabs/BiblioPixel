@@ -32,4 +32,4 @@ def Renderer(**kwds):
     return enabled() and TIMEDATA.Renderer(**kwds).render
 
 
-log.info(message())
+log.debug(message())
