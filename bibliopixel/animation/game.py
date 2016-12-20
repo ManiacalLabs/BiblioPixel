@@ -64,8 +64,6 @@ class BaseGameAnim(BaseMatrixAnim):
                     cfg.inter |= val
         self._lastKeys = self._keys
 
-    def preStep(self, amt):
-        pass
-
-    def postStep(self, amt):
+    def step(self, amt):
+        super().step(amt)
         self._speedStep += 1

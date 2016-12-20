@@ -39,12 +39,6 @@ class BaseAnimation(object):
     def preRun(self, amt=1):
         self._led.all_off()
 
-    def preStep(self, amt=1):
-        pass
-
-    def postStep(self, amt=1):
-        pass
-
     def step(self, amt=1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
@@ -97,9 +91,7 @@ class BaseAnimation(object):
             start = self._msTime()
             if hasattr(self, "_input_dev"):
                 self._keys = self._input_dev.getKeys()
-            self.preStep(amt)
             self.step(amt)
-            self.postStep(amt)
             mid = self._msTime()
 
             if self._free_run:
