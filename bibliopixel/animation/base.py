@@ -133,7 +133,8 @@ class BaseAnimation(object):
                     "Frame: %sms / Update Max: %sms", stepTime, updateTime)
             else:
                 log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                          totalTime, int(1000 / max(totalTime, 1)), stepTime, updateTime)
+                          totalTime, int(1000 / max(totalTime, 1)), stepTime,
+                          updateTime)
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)
@@ -152,7 +153,9 @@ class BaseAnimation(object):
         if self._callback:
             self._callback(self)
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False, max_cycles=0, threaded=False, joinThread=False, callback=None, seconds=None):
+    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False,
+            max_cycles=0, threaded=False, joinThread=False, callback=None,
+            seconds=None):
 
         self._led._threadedAnim = self._threaded = threaded
         if self._threaded:
@@ -173,7 +176,8 @@ class BaseAnimation(object):
             if joinThread:
                 self._thread.join()
         else:
-            self._run(amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds)
+            self._run(
+                amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds)
 
     RUN_PARAMS = [{
         "id": "amt",
@@ -181,7 +185,8 @@ class BaseAnimation(object):
         "type": "int",
                 "min": 1,
                 "default": 1,
-                "help": "Amount to step animation by on each frame. May not be used on some animations."
+                "help": ("Amount to step animation by on each frame: "
+                         "perhaps ignored by some animation classes.")
     }, {
         "id": "fps",
         "label": "Framerate",
@@ -195,7 +200,7 @@ class BaseAnimation(object):
         "type": "int",
                 "default": None,
                 "min": 0,
-                "help": "Number of seconds to run animation for, based on framerate."
+                "help": "Number of seconds to run animation."
     }, {
         "id": "max_steps",
         "label": "Max Frames",
@@ -208,12 +213,13 @@ class BaseAnimation(object):
         "label": "Until Complete",
         "type": "bool",
                 "default": False,
-                "help": "Run until animation marks itself as complete. If supported."
+                "help": "Run until animation marks itself as complete."
     }, {
         "id": "max_cycles",
         "label": "Max Cycles",
         "type": "int",
                 "min": 1,
                 "default": 1,
-                "help": "If Until Complete is set, animation will repeat this many times."
+                "help": ("If Until Complete is set, animation will repeat "
+                         "this many times.")
     }, ]
