@@ -1,5 +1,4 @@
 import threading, time
-
 from .. import log
 
 
@@ -50,16 +49,24 @@ class BaseAnimation(object):
                 self._thread.join()
 
     def __enter__(self):
+        # DEPRECATED in favor of self.run_cleanup()
         return self
 
     def __exit__(self, type, value, traceback):
+        # DEPRECATED in favor of self.run_cleanup()
+        self.cleanup()
+
+    def cleanup(self):
         self.stopThread(wait=True)
         self._led.all_off()
         self._led.push_to_driver()
         self._led.waitForUpdate()
 
-    def cleanup(self):
-        return self.__exit__(None, None, None)
+    def run_cleanup(self, **kwds):
+        try:
+            self.run(**kwds)
+        finally:
+            self.cleanup()
 
     def stopped(self):
         return not (self._thread and self._thread.isAlive())
@@ -140,8 +147,7 @@ class BaseAnimation(object):
                     time.sleep(t)
             cur_step += 1
 
-        self.__exit__(None, None, None)
-
+        self.cleanup()
         if self._callback:
             self._callback(self)
 
