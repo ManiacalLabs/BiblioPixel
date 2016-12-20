@@ -10,7 +10,7 @@ class AnimationQueue(BaseAnimation):
         self.animIndex = 0
         self._internalDelay = 0  # never wait
         self.fps = None
-        self.untilComplete = False
+        self.until_complete = False
 
     # overriding to handle all the animations
     def stopThread(self, wait=False):
@@ -19,7 +19,7 @@ class AnimationQueue(BaseAnimation):
             a._stopEvent.set()
         super().stopThread(wait)
 
-    def addAnim(self, anim, amt=1, fps=None, max_steps=0, untilComplete=False,
+    def addAnim(self, anim, amt=1, fps=None, max_steps=0, until_complete=False,
                 max_cycles=0, seconds=None):
         a = (
             anim,
@@ -27,7 +27,7 @@ class AnimationQueue(BaseAnimation):
                 "amt": amt,
                 "fps": fps,
                 "max_steps": max_steps,
-                "untilComplete": untilComplete,
+                "until_complete": until_complete,
                 "max_cycles": max_cycles,
                 "seconds": seconds
             }
@@ -39,20 +39,20 @@ class AnimationQueue(BaseAnimation):
             raise Exception("Must provide at least one animation.")
         self.animIndex = -1
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False,
+    def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
             max_cycles=0, threaded=False, joinThread=False, callback=None,
             seconds=None):
         self.fps = fps
-        self.untilComplete = untilComplete
+        self.until_complete = until_complete
         super().run(amt=1, fps=None, sleep=None, max_steps=0,
-                    untilComplete=untilComplete,
+                    until_complete=until_complete,
                     max_cycles=0, threaded=threaded, joinThread=joinThread,
                     callback=callback, seconds=seconds)
 
     def step(self, amt=1):
         self.animIndex += 1
         if self.animIndex >= len(self.anims):
-            if self.untilComplete:
+            if self.until_complete:
                 self.animComplete = True
             else:
                 self.animIndex = 0
@@ -74,7 +74,7 @@ class AnimationQueue(BaseAnimation):
         'min': 1,
         'help': 'Default framerate to run all animations in queue.'
     }, {
-        'id': 'untilComplete',
+        'id': 'until_complete',
         'label': 'Until Complete',
         'type': 'bool',
         'default': False,
