@@ -71,7 +71,7 @@ class BaseAnimation(object):
     def stopped(self):
         return not (self._thread and self._thread.isAlive())
 
-    def _run(self, amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds):
+    def _run(self, amt, fps, sleep, max_steps, until_complete, max_cycles, seconds):
         self.preRun()
 
         # calculate sleep time base on desired Frames per Second
@@ -89,9 +89,9 @@ class BaseAnimation(object):
         self.animComplete = False
 
         while (not self._stopEvent.isSet() and
-               ((max_steps == 0 and not untilComplete) or
+               ((max_steps == 0 and not until_complete) or
                 (max_steps > 0 and cur_step < max_steps) or
-                (max_steps == 0 and untilComplete and not self.animComplete))):
+                (max_steps == 0 and until_complete and not self.animComplete))):
 
             self._timeRef = self._msTime()
 
@@ -151,7 +151,7 @@ class BaseAnimation(object):
         if self._callback:
             self._callback(self)
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, untilComplete=False,
+    def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
             max_cycles=0, threaded=False, joinThread=False, callback=None,
             seconds=None):
 
@@ -164,7 +164,7 @@ class BaseAnimation(object):
             args = {}
             l = locals()
             run_params = ["amt", "fps", "sleep",
-                          "max_steps", "untilComplete", "max_cycles", "seconds"]
+                          "max_steps", "until_complete", "max_cycles", "seconds"]
             for p in run_params:
                 if p in l:
                     args[p] = l[p]
@@ -175,7 +175,7 @@ class BaseAnimation(object):
                 self._thread.join()
         else:
             self._run(
-                amt, fps, sleep, max_steps, untilComplete, max_cycles, seconds)
+                amt, fps, sleep, max_steps, until_complete, max_cycles, seconds)
 
     RUN_PARAMS = [{
         "id": "amt",
@@ -207,7 +207,7 @@ class BaseAnimation(object):
                 "default": 0,
                 "help": "Total frames to run before stopping."
     }, {
-        "id": "untilComplete",
+        "id": "until_complete",
         "label": "Until Complete",
         "type": "bool",
                 "default": False,
