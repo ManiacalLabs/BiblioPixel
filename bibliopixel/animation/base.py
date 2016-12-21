@@ -2,20 +2,6 @@ import threading, time
 from .. import log
 
 
-class AnimThread(threading.Thread):
-
-    def __init__(self, do_run):
-        super().__init__()
-        self.setDaemon(True)
-        self.do_run = do_run
-
-    def run(self):
-        # TODO: no testpath exercises this code...
-        log.debug("Starting thread...")
-        self.do_run()
-        log.debug("Thread Complete")
-
-
 class BaseAnimation(object):
 
     def __init__(self, led):
@@ -165,7 +151,13 @@ class BaseAnimation(object):
                 amt, fps, sleep, max_steps, until_complete, max_cycles, seconds)
 
         if self._threaded:
-            self._thread = AnimThread(do_run)
+            def target():
+                # TODO: no testpath exercises this code...
+                log.debug('Starting thread...')
+                do_run()
+                log.debug('Thread Complete')
+
+            self._thread = threading.Thread(target=do_run, daemon=True)
             self._thread.start()
             if joinThread:
                 self._thread.join()
