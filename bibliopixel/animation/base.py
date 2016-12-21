@@ -4,15 +4,15 @@ from .. import log
 
 class AnimThread(threading.Thread):
 
-    def __init__(self, anim, args):
+    def __init__(self, do_run):
         super().__init__()
         self.setDaemon(True)
-        self._anim = anim
-        self._args = args
+        self.do_run = do_run
 
     def run(self):
+        # TODO: no testpath exercises this code...
         log.debug("Starting thread...")
-        self._anim._run(**self._args)
+        self.do_run()
         log.debug("Thread Complete")
 
 
@@ -160,22 +160,17 @@ class BaseAnimation(object):
             self._stopEvent.clear()
         self._callback = callback
 
-        if self._threaded:
-            args = {}
-            l = locals()
-            run_params = ["amt", "fps", "sleep",
-                          "max_steps", "until_complete", "max_cycles", "seconds"]
-            for p in run_params:
-                if p in l:
-                    args[p] = l[p]
+        def do_run():
+            self._run(
+                amt, fps, sleep, max_steps, until_complete, max_cycles, seconds)
 
-            self._thread = AnimThread(self, args)
+        if self._threaded:
+            self._thread = AnimThread(do_run)
             self._thread.start()
             if joinThread:
                 self._thread.join()
         else:
-            self._run(
-                amt, fps, sleep, max_steps, until_complete, max_cycles, seconds)
+            do_run()
 
     RUN_PARAMS = [{
         "id": "amt",
