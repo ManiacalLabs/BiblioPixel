@@ -10,7 +10,6 @@ class BaseAnimation(object):
         self._step = 0
         self._timeRef = 0
         self._internalDelay = None
-        self._threaded = False
         self._thread = None
         self._callback = None
         self._stopEvent = threading.Event()
@@ -127,7 +126,7 @@ class BaseAnimation(object):
                 if t == 0:
                     log.warning(
                         "Frame-time of %dms set, but took %dms!", sleep, diff)
-                if self._threaded:
+                if self._led._threadedAnim:
                     self._stopEvent.wait(t)
                 else:
                     time.sleep(t)
@@ -141,8 +140,8 @@ class BaseAnimation(object):
             max_cycles=0, threaded=False, joinThread=False, callback=None,
             seconds=None):
 
-        self._led._threadedAnim = self._threaded = threaded
-        if self._threaded:
+        self._led._threadedAnim = threaded
+        if self._led._threadedAnim:
             self._stopEvent.clear()
         self._callback = callback
 
@@ -150,7 +149,7 @@ class BaseAnimation(object):
             self._run(
                 amt, fps, sleep, max_steps, until_complete, max_cycles, seconds)
 
-        if self._threaded:
+        if self._led._threadedAnim:
             def target():
                 # TODO: no testpath exercises this code...
                 log.debug('Starting thread...')
