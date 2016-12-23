@@ -47,16 +47,11 @@ class BaseAnimation(object):
         self._led.push_to_driver()
         self._led.waitForUpdate()
 
-    def run_cleanup(self, **kwds):
-        try:
-            self.run(**kwds)
-        finally:
-            self.cleanup()
-
     def stopped(self):
         return not (self._thread and self._thread.isAlive())
 
-    def _run(self, amt, fps, sleep, max_steps, until_complete, max_cycles, seconds):
+    def _run(self, amt, fps, sleep, max_steps, until_complete,
+             max_cycles, seconds):
         self.preRun()
 
         # calculate sleep time base on desired Frames per Second
@@ -132,7 +127,6 @@ class BaseAnimation(object):
                     time.sleep(t)
             cur_step += 1
 
-        self.cleanup()
         self._callback and self._callback(self)
 
     def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
@@ -145,23 +139,26 @@ class BaseAnimation(object):
             self._stopEvent.clear()
         self._callback = callback
 
-        def do_run():
-            self._run(
-                amt, fps, sleep, max_steps, until_complete, max_cycles, seconds)
+        def run():
+            try:
+                self._run(amt, fps, sleep, max_steps, until_complete,
+                          max_cycles, seconds)
+            finally:
+                self.cleanup()
 
         if self._led._threadedAnim:
             def target():
                 # TODO: no testpath exercises this code...
                 log.debug('Starting thread...')
-                do_run()
+                run()
                 log.debug('Thread Complete')
 
-            self._thread = threading.Thread(target=do_run, daemon=True)
+            self._thread = threading.Thread(target=target, daemon=True)
             self._thread.start()
             if joinThread:
                 self._thread.join()
         else:
-            do_run()
+            run()
 
     RUN_PARAMS = [{
         "id": "amt",
