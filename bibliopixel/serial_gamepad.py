@@ -44,13 +44,14 @@ class SerialGamePad(BaseGamePad):
         if resp != RETURN_CODES.SUCCESS:
             print_error(resp, SerialPadError)
 
-    def close(self):
+    def cleanup(self):
         if self._com is not None:
             log.info("Closing connection to: %s", self.dev)
             self._com.close()
 
-    def __exit__(self, type, value, traceback):
-        self.close()
+    def close(self):
+        # DEPRECATED.
+        self.cleanup()
 
     @staticmethod
     def findSerialDevices(hardwareID="1B4F:9206"):

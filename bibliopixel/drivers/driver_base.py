@@ -54,14 +54,8 @@ class DriverBase(object):
     def _make_buf(self):
         return bytearray(self.bufByteCount())
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        pass
-
     def cleanup(self):
-        return self.__exit__(None, None, None)
+        pass
 
     def bufByteCount(self):
         return 3 * self.numLEDs

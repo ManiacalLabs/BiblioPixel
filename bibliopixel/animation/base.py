@@ -33,14 +33,6 @@ class BaseAnimation(object):
             if wait:
                 self._thread.join()
 
-    def __enter__(self):
-        # DEPRECATED in favor of self.run_cleanup()
-        return self
-
-    def __exit__(self, type, value, traceback):
-        # DEPRECATED in favor of self.run_cleanup()
-        self.cleanup()
-
     def cleanup(self):
         self.stopThread(wait=True)
         self._led.all_off()

@@ -8,12 +8,6 @@ class BaseGamePad(object):
     def getKeys(self):
         raise Exception("getKeys must be overriden!")
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        pass
-
     def close(self):
         pass
 
