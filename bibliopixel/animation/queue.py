@@ -35,8 +35,6 @@ class AnimationQueue(BaseAnimation):
         self.anims.append(a)
 
     def preRun(self, amt=1):
-        if len(self.anims) == 0:
-            raise Exception("Must provide at least one animation.")
         self.animIndex = -1
 
     def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
@@ -57,7 +55,7 @@ class AnimationQueue(BaseAnimation):
             else:
                 self.animIndex = 0
 
-        if not self.animComplete:
+        if not self.animComplete and self.anims:
             self.curAnim = self.anims[self.animIndex]
 
             anim, run = self.curAnim
