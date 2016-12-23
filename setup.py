@@ -4,13 +4,12 @@ import bibliopixel
 
 
 # from here: http://pytest.org/2.2.4/goodpractises.html
-# this and RunBenchmark are near identical
-# TODO: Find a way to combine these
 class RunTests(TestCommand):
+    DIRECTORY = 'tests'
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['tests']
+        self.test_args = [self.DIRECTORY]
         self.test_suite = True
 
     def run_tests(self):
@@ -19,17 +18,8 @@ class RunTests(TestCommand):
         pytest.main(self.test_args)
 
 
-class RunBenchmark(TestCommand):
-
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = ['benchmarks']
-        self.test_suite = True
-
-    def run_tests(self):
-        #  import here, cause outside the eggs aren't loaded
-        import pytest
-        pytest.main(self.test_args)
+class RunBenchmark(RunTests):
+    DIRECTORY = 'benchmarks'
 
 
 setup(
