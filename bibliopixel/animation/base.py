@@ -133,13 +133,13 @@ class BaseAnimation(object):
             cur_step += 1
 
         self.cleanup()
-        if self._callback:
-            self._callback(self)
+        self._callback and self._callback(self)
 
     def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
             max_cycles=0, threaded=False, joinThread=False, callback=None,
             seconds=None):
 
+        self._callback = callback
         self._led._threadedAnim = threaded
         if self._led._threadedAnim:
             self._stopEvent.clear()
