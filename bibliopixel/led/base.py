@@ -44,12 +44,6 @@ class LEDBase(object):
         """DEPRECATED - use self.push_to_driver()"""
         return self.push_to_driver()
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        return self.cleanup()
-
     def cleanup(self):
         pass
 

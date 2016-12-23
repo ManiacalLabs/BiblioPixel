@@ -116,11 +116,8 @@ class DriverSerial(DriverBase):
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._SPISpeed)
 
-    def __enter__(self):
-        pass
-
-    def __exit__(self, type, value, traceback):
-        if self._com is not None:
+    def cleanup(self):
+        if self._com:
             log.info("Closing connection to: %s", self.dev)
             self._com.close()
 
