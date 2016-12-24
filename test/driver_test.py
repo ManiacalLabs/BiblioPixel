@@ -2,6 +2,7 @@ import unittest
 
 from bibliopixel import gamma
 from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
+from bibliopixel.drivers.spi_driver_base import SPIInterface
 from bibliopixel.drivers.APA102 import DriverAPA102
 from bibliopixel.drivers.LPD8806 import DriverLPD8806
 from bibliopixel.drivers.WS2801 import DriverWS2801
@@ -9,8 +10,12 @@ from bibliopixel.drivers.WS2801 import DriverWS2801
 from bibliopixel import timedata
 
 
-def mock_open(self, fname, perm='r'):
+def mock_open(fname, perm='r'):
     pass
+
+
+def mock_exists(path):
+    return True
 
 
 class DriverTest(unittest.TestCase):
@@ -23,7 +28,7 @@ class DriverTest(unittest.TestCase):
 
     ALL_COLORS = COLORS_PY, COLORS_TD
 
-    SPD = dict(use_py_spi=False, open=mock_open)
+    SPD = dict(interface=SPIInterface.FILE, open=mock_open, exists=mock_exists)
 
     def do_test(self, driver, colors, expected):
         driver.set_colors(colors, 0)
@@ -69,8 +74,8 @@ class DriverTest(unittest.TestCase):
 
     def test_apa102(self):
         driver = DriverAPA102(num=4, **self.SPD)
-        expected = [0, 0, 0, 0, 255, 0, 0, 0, 255, 1, 8, 64,
-                    255, 2, 16, 128, 255, 3, 24, 192, 255, 0, 0, 0]
+        expected = [0, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 8, 255,
+                    0, 0, 46, 255, 0, 1, 125, 255, 0, 0, 0]
         self.do_test(driver, self.COLORS_PY, expected)
         # self.do_test(driver, self.COLORS_TD, expected) TODO
 

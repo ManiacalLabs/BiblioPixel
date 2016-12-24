@@ -1,18 +1,19 @@
-from . spi_driver_base import DriverSPIBase, ChannelOrder
+from . spi_driver_base import DriverSPIBase, ChannelOrder, SPIInterface
 import os
+from os.path import exists
 from .. import gamma
 
 
 class DriverWS2801(DriverSPIBase):
     """Main driver for WS2801 based LED strips on devices like the Raspberry Pi and BeagleBone"""
 
-    def __init__(self, num, c_order=ChannelOrder.RGB, use_py_spi=True,
-                 dev="/dev/spidev0.0", SPISpeed=1, open=open):
+    def __init__(self, num, c_order=ChannelOrder.RGB, interface=SPIInterface.PY_SPI,
+                 dev="/dev/spidev0.0", SPISpeed=1, open=open, exists=exists):
         if SPISpeed > 1 or SPISpeed <= 0:
             raise ValueError(
                 "WS2801 requires an SPI speed no greater than 1MHz or SPI speed was set <= 0")
-        super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
-                         SPISpeed=SPISpeed, open=open, gamma=gamma.WS2801)
+        super().__init__(num, c_order=c_order, interface=interface, dev=dev,
+                         SPISpeed=SPISpeed, gamma=gamma.WS2801, open=open, exists=exists)
 
 
 MANIFEST = [
@@ -56,11 +57,15 @@ MANIFEST = [
             "type": "str",
             "default": "/dev/spidev0.0",
         }, {
-            "id": "use_py_spi",
-            "label": "Use PySPI",
-            "type": "bool",
-            "default": True,
-            "group": "Advanced"
+            "id": "interface",
+            "label": "SPIInterface",
+            "type": "combo",
+            "options": {
+                0: "File",
+                1: "PySPI",
+                2: "PiGPIO",
+            },
+            "default": 1
         }]
     }
 ]
