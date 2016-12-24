@@ -3,9 +3,9 @@ from setuptools.command.test import test as TestCommand
 import bibliopixel
 
 
-# from here: http://pytest.org/2.2.4/goodpractises.html
+# From here: http://pytest.org/2.2.4/goodpractises.html
 class RunTests(TestCommand):
-    DIRECTORY = 'tests'
+    DIRECTORY = 'test'
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -13,7 +13,7 @@ class RunTests(TestCommand):
         self.test_suite = True
 
     def run_tests(self):
-        #  import here, cause outside the eggs aren't loaded
+        # Import here, because outside the eggs aren't loaded.
         import pytest
         errno = pytest.main(self.test_args)
         if errno:
@@ -21,7 +21,7 @@ class RunTests(TestCommand):
 
 
 class RunBenchmark(RunTests):
-    DIRECTORY = 'benchmarks'
+    DIRECTORY = 'benchmark'
 
 
 setup(
