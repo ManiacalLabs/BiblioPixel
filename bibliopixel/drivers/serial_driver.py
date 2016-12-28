@@ -80,12 +80,17 @@ class DriverSerial(DriverBase):
     deviceIDS = {}
     deviceVers = []
 
-    def __init__(self, type, num, dev="", c_order=ChannelOrder.RGB, SPISpeed=2, gamma=None, restart_timeout=3, deviceID=None, hardwareID="1D50:60AB"):
+    def __init__(self, type, num, dev="",
+                 c_order=ChannelOrder.RGB, SPISpeed=2,
+                 gamma=None, restart_timeout=3,
+                 deviceID=None, hardwareID="1D50:60AB",
+                 baudrate=115200):
         super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1
 
+        self.baudrate = baudrate
         self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
         self._com = None
@@ -182,7 +187,7 @@ class DriverSerial(DriverBase):
                              self.dev, devID, self.devVer)
 
             try:
-                self._com = serial.Serial(self.dev, timeout=5)
+                self._com = serial.Serial(self.dev, baudrate=self.baudrate, timeout=5)
             except serial.SerialException as e:
                 ports = DriverSerial.findSerialDevices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
@@ -220,12 +225,12 @@ class DriverSerial(DriverBase):
             raise e
 
     @staticmethod
-    def setDeviceID(dev, id):
+    def setDeviceID(dev, id, baudrate=115200):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
 
         try:
-            com = serial.Serial(dev, timeout=5)
+            com = serial.Serial(dev, baudrate=baudrate, timeout=5)
 
             packet = util.generate_header(CMDTYPE.SETID, 1)
             packet.append(id)
@@ -243,10 +248,10 @@ class DriverSerial(DriverBase):
             raise IOError("Problem connecting to serial device.")
 
     @staticmethod
-    def getDeviceID(dev):
+    def getDeviceID(dev, baudrate=115200):
         packet = util.generate_header(CMDTYPE.GETID, 0)
         try:
-            com = serial.Serial(dev, timeout=5)
+            com = serial.Serial(dev, baudrate=baudrate, timeout=5)
             com.write(packet)
             resp = ord(com.read(1))
             return resp
@@ -255,10 +260,10 @@ class DriverSerial(DriverBase):
             return -1
 
     @staticmethod
-    def getDeviceVer(dev):
+    def getDeviceVer(dev, baudrate=115200):
         packet = util.generate_header(CMDTYPE.GETVER, 0)
         try:
-            com = serial.Serial(dev, timeout=0.5)
+            com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
             com.write(packet)
             ver = 0
             resp = com.read(1)

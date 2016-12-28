@@ -1,6 +1,7 @@
 from .. import gamma
 
-from . spi_driver_base import DriverSPIBase, ChannelOrder
+from . spi_driver_base import DriverSPIBase, ChannelOrder, SPIInterface
+from os.path import exists
 
 
 class DriverLPD8806(DriverSPIBase):
@@ -9,11 +10,11 @@ class DriverLPD8806(DriverSPIBase):
 
     def __init__(self, num,
                  c_order=ChannelOrder.RGB,
-                 use_py_spi=True,
+                 interface=SPIInterface.PY_SPI,
                  dev="/dev/spidev0.0",
-                 SPISpeed=2, open=open):
-        super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
-                         SPISpeed=SPISpeed, open=open, gamma=gamma.LPD8806)
+                 SPISpeed=2, open=open, exists=exists):
+        super().__init__(num, c_order=c_order, interface=interface, dev=dev,
+                         SPISpeed=SPISpeed, gamma=gamma.LPD8806, open=open, exists=exists)
 
         # LPD8806 requires latch bytes at the end
         self._latchBytes = (self.numLEDs + 31) // 32
@@ -73,11 +74,15 @@ MANIFEST = [
             "max": 24,
             "group": "Advanced"
         }, {
-            "id": "use_py_spi",
-            "label": "Use PySPI",
-            "type": "bool",
-            "default": True,
-            "group": "Advanced"
+            "id": "interface",
+            "label": "SPIInterface",
+            "type": "combo",
+            "options": {
+                0: "File",
+                1: "PySPI",
+                2: "PiGPIO",
+            },
+            "default": 1
         }]
     }
 ]
