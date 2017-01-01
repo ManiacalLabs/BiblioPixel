@@ -1,8 +1,3 @@
-import json, unittest
-
-from bibliopixel.util import project
-
-PROJECT = """
 {
     "driver": {
         "typename": "bibliopixel.drivers.dummy_driver.DriverDummy",
@@ -21,12 +16,3 @@ PROJECT = """
         "max_steps": 5
     }
 }
-"""
-
-
-class ProjectTest(unittest.TestCase):
-    def test_simple(self):
-        project.run(PROJECT)
-
-    def test_file(self):
-        project.run('test/project.json')
