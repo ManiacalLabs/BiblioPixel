@@ -26,4 +26,7 @@ PROJECT = """
 
 class ProjectTest(unittest.TestCase):
     def test_simple(self):
-        project.Project(**json.loads(PROJECT)).run()
+        project.run(PROJECT)
+
+    def test_file(self):
+        project.run('test/project.json')
