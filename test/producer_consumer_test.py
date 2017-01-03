@@ -1,11 +1,11 @@
 import random, threading, time, unittest
 
-from bibliopixel.util import double_buffer
+from bibliopixel.util import producer_consumer
 
 
-class DoubleBufferTest(unittest.TestCase):
+class ProducerConsumerTest(unittest.TestCase):
     def test_all(self):
-        buffer = double_buffer.DoubleBuffer([], [])
+        buffer = producer_consumer.Queues([], [])
 
         counter = [0]
 
