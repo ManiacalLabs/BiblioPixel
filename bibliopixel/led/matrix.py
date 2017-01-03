@@ -73,11 +73,11 @@ class LEDMatrix(LEDBase):
         super().__init__(drivers, threadedUpdate, masterBrightness)
 
         if width == 0 and height == 0:
-            if len(self.driver) != 1:
+            if len(self.drivers) != 1:
                 raise TypeError(
                     "Must provide width and height if using multiple drivers!")
-            width = self.driver[0].width
-            height = self.driver[0].height
+            width = self.drivers[0].width
+            height = self.drivers[0].height
 
         self.width = width
         self.height = height
