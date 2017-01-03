@@ -1,12 +1,31 @@
 import sys
 from . importer import make_object
 from . read_dict import read_dict
+from .. led.multimap import MultiMapBuilder, mapGen
+
+
+def make_drivers(multimap=False, **kwds):
+    def multi(device_ids, width, height, serpentine=False, **kwds):
+        build = MultiMapBuilder()
+        drivers = []
+
+        for id in device_ids:
+            build.addRow(mapGen(width, height, serpentine=serpentine))
+            d = make_object(width=width, height=height, deviceID=id, **kwds)
+            drivers.append(d)
+
+        return drivers, build.map
+
+    return multi(**kwds) if multimap else ([make_object(**kwds)], None)
 
 
 class Project(object):
     def __init__(self, driver, led, animation, run):
-        self.drivers = [make_object(**driver)]
-        self.led = make_object(self.drivers, **led)
+        self.drivers, coordMap = make_drivers(**driver)
+        if coordMap:
+            self.led = make_object(self.drivers, coordMap=coordMap, **led)
+        else:
+            self.led = make_object(self.drivers, **led)
         self.animation = make_object(self.led, **animation)
         self.run = lambda: self.animation.run(**run)
 
