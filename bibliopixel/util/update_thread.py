@@ -1,9 +1,9 @@
 import threading
 
-from . import compose_events, task_thread
+from . import compose_events, threads
 
 
-class UpdateDriverThread(task_thread.LoopThread):
+class UpdateDriverThread(threads.Loop):
 
     def __init__(self, driver):
         super().__init__()
@@ -26,7 +26,7 @@ class UpdateDriverThread(task_thread.LoopThread):
     def sending(self):
         return self._wait.isSet()
 
-    def _loop(self):
+    def loop(self):
         self._wait.wait()
         self._updating.clear()
         self._driver.update_colors()
@@ -35,7 +35,7 @@ class UpdateDriverThread(task_thread.LoopThread):
         self._updating.set()
 
 
-class UpdateThread(task_thread.LoopThread):
+class UpdateThread(threads.Loop):
 
     def __init__(self, drivers):
         super().__init__()
@@ -59,7 +59,7 @@ class UpdateThread(task_thread.LoopThread):
         self._reading.clear()
         self._wait.set()
 
-    def _loop(self):
+    def loop(self):
         self._wait.wait()
         self._updated.wait()
 
