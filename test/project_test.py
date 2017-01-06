@@ -1,6 +1,8 @@
 import json, unittest
 
 from bibliopixel.util import project
+from . long_test import long_test
+
 
 PROJECT = """
 {
@@ -50,11 +52,14 @@ PROJECT_MULTI = """
 
 
 class ProjectTest(unittest.TestCase):
+    @long_test
     def test_simple(self):
         project.run(PROJECT)
 
+    @long_test
     def test_file(self):
         project.run('test/project.json')
 
+    @long_test
     def test_multi(self):
         project.run(PROJECT_MULTI)
