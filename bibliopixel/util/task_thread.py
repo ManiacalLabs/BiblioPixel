@@ -1,18 +1,5 @@
 import collections, threading
-
-
-class LoopThread(threading.Thread):
-    def __init__(self, loop=None, **kwds):
-        super().__init__(**kwds)
-        self.running = True
-        self._loop = loop or self._loop
-
-    def run(self):
-        while self.running:
-            self._loop()
-
-    def stop(self):
-        self.running = False
+from . import threads
 
 
 class Task(object):
@@ -29,7 +16,7 @@ class Task(object):
         next_task.event.set()
 
 
-class TaskThread(LoopThread):
+class TaskThread(threads.Loop):
     def __init__(self, producer_task, consumer_task, daemon=True, **kwds):
         super().__init__(daemon=daemon, **kwds)
         self.producer_task = producer_task
@@ -38,5 +25,5 @@ class TaskThread(LoopThread):
     def produce(self):
         self.producer_task.run(self.consumer_task)
 
-    def _loop(self):
+    def loop(self):
         self.consumer_task.run(self.producer_task)
