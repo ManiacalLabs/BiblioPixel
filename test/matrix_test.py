@@ -10,15 +10,10 @@ WHITE = (255, 255, 255)
 
 class BaseMatrixTest(unittest.TestCase):
 
-    def ColorList(self):
-        return color_list.color_list_maker(
-            shared_memory=self.shared_memory,
-            integer=self.integer)
-
     def make_matrix(self, width, height, **kwds):
         driver = DriverBase(num=width * height)
         return LEDMatrix(driver, width=width, height=height,
-                         ColorList=self.ColorList(),
+                         ColorList=self.maker.color_list,
                          **kwds)
 
     def assert_changed(self, matrix, expected):
@@ -179,18 +174,15 @@ class BaseMatrixTest(unittest.TestCase):
 
 
 class MatrixTest(BaseMatrixTest):
-    shared_memory = False
-    integer = False
+    maker = color_list.Maker()
 
 
 class SharedMatrixTest(BaseMatrixTest):
-    shared_memory = True
-    integer = False
+    maker = color_list.Maker(shared_memory=True)
 
 
 class SharedMatrixIntegerTest(BaseMatrixTest):
-    shared_memory = True
-    integer = True
+    maker = color_list.Maker(shared_memory=True, integer=True)
 
 
 del BaseMatrixTest  # http://stackoverflow.com/a/22836015/43839
