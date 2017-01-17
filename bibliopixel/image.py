@@ -1,5 +1,5 @@
 import glob, numbers, os, sys
-from . import colors, log, timedata
+from . import colors, log, color_list
 from . led import LEDMatrix
 
 try:
@@ -86,7 +86,7 @@ def convert_mode(image, mode='RGB'):
     return image if (image.mode == mode) else image.convert(mode=mode)
 
 
-def image_to_colorlist(image, container=timedata.ColorList255):
+def image_to_colorlist(image, container=color_list.ColorList):
     """Given a PIL.Image, returns a ColorList of its pixels."""
     return container(convert_mode(image).getdata())
 
