@@ -3,17 +3,35 @@ from multiprocessing.sharedctypes import RawArray
 from . import timedata
 
 
-def color_list_maker(integer=True, shared_memory=False, use_timedata=False):
-    if use_timedata:
-        assert timedata.enabled() and not shared_memory
-        return timedata.make_color_list
+# Note https://stackoverflow.com/questions/37705974/
 
-    if shared_memory:
-        number_type = ctypes.c_uint8 if integer else ctypes.c_float
-        return lambda size: RawArray(3 * number_type, size)
-
-    return lambda size: [(0, 0, 0)] * size
+BYTE, FLOAT = ctypes.c_uint8, ctypes.c_float
 
 
-ColorList = color_list_maker()
-Renderer = timedata.Renderer
+def shared_list_maker(type):
+    return lambda size: RawArray(type, size)
+
+
+def list_maker(size):
+    return [(0, 0, 0)] * size
+
+
+class Maker(object):
+    def __init__(self, integer=False, shared_memory=False, use_timedata=False):
+        self.renderer = timedata.Renderer
+
+        if shared_memory:
+            self.packet = shared_list_maker(BYTE)
+            number_type = BYTE if integer else FLOAT
+            self.color_list = shared_list_maker(3 * number_type)
+        else:
+            self.packet = bytearray
+            if use_timedata:
+                self.color_list = timedata.make_color_list
+            else:
+                self.color_list = list_maker
+
+
+MAKER = Maker()
+ColorList = MAKER.color_list
+Renderer = MAKER.renderer
