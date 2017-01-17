@@ -39,9 +39,6 @@ class TimedataVisualizer(DriverBase):
         window_desc.update(desc or {})
         self.window.set_desc(**window_desc)
 
-    def _make_buf(self):
-        pass
-
     def _compute_packet(self):
         self._buf = self.address if timedata.enabled() else self.memory
         self._render()
