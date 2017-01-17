@@ -1,11 +1,11 @@
-from .. import colors
+from .. import colors, color_list
 from . base import LEDBase
 
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1):
-        super().__init__(drivers, threadedUpdate, masterBrightness)
+    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1, ColorList=color_list.ColorList):
+        super().__init__(drivers, threadedUpdate, masterBrightness, ColorList)
 
         self.pixelWidth = pixelWidth
         if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:
