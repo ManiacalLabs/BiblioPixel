@@ -1,6 +1,6 @@
 import unittest
 
-from bibliopixel import color_list
+from bibliopixel import data_maker
 from bibliopixel.led import LEDMatrix
 from bibliopixel.drivers.driver_base import DriverBase
 
@@ -174,15 +174,15 @@ class BaseMatrixTest(unittest.TestCase):
 
 
 class MatrixTest(BaseMatrixTest):
-    maker = color_list.Maker()
+    maker = data_maker.Maker()
 
 
 class SharedMatrixTest(BaseMatrixTest):
-    maker = color_list.Maker(shared_memory=True)
+    maker = data_maker.Maker(shared_memory=True)
 
 
 class SharedMatrixIntegerTest(BaseMatrixTest):
-    maker = color_list.Maker(shared_memory=True, integer=True)
+    maker = data_maker.Maker(shared_memory=True, integer=True)
 
 
 del BaseMatrixTest  # http://stackoverflow.com/a/22836015/43839

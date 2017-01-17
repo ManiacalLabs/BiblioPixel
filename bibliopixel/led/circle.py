@@ -1,10 +1,10 @@
 from . base import LEDBase
-from .. import color_list
+from .. import data_maker
 
 
 class LEDCircle(LEDBase):
 
-    def __init__(self, drivers, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255, maker=color_list.MAKER):
+    def __init__(self, drivers, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255, maker=data_maker.MAKER):
         super().__init__(drivers, threadedUpdate, masterBrightness, maker)
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff

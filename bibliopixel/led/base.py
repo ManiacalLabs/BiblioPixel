@@ -1,12 +1,12 @@
 import time
 
-from .. import colors, color_list, util
+from .. import colors, data_maker, util
 
 
 class LEDBase(object):
 
     def __init__(self, drivers, threadedUpdate, masterBrightness,
-                 maker=color_list.MAKER):
+                 maker=data_maker.MAKER):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
 

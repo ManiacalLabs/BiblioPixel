@@ -1,13 +1,13 @@
 import math, threading, time
 
-from .. import colors, color_list, font, matrix
+from .. import colors, data_maker, font, matrix
 from . base import LEDBase
 from . multimap import MatrixRotation, mapGen, MultiMapBuilder
 
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), maker=color_list.MAKER):
+    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), maker=data_maker.MAKER):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
