@@ -28,6 +28,12 @@ def ColorList255(*arg):
         enabled()) else list(*arg)
 
 
+def make_color_list(size):
+    color_list = TIMEDATA.color.rgb.c255.ColorList()
+    color_list.resize(size)
+    return color_list
+
+
 def Renderer(**kwds):
     return enabled() and TIMEDATA.Renderer(**kwds).render
 
