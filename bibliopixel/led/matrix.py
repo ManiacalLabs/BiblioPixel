@@ -7,7 +7,7 @@ from . multimap import MatrixRotation, mapGen, MultiMapBuilder
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), ColorList=color_list.ColorList):
+    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), maker=color_list.MAKER):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -16,7 +16,7 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super().__init__(drivers, threadedUpdate, masterBrightness, ColorList)
+        super().__init__(drivers, threadedUpdate, masterBrightness, maker)
 
         if width == 0 and height == 0:
             if len(self.drivers) != 1:

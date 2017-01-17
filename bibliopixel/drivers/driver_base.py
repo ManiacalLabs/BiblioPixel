@@ -19,7 +19,7 @@ class DriverBase(object):
     """Base driver class to build other drivers from"""
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
-                 gamma=None):
+                 gamma=None, maker=color_list.MAKER):
         if num == 0:
             num = width * height
             if num == 0:
@@ -35,12 +35,12 @@ class DriverBase(object):
 
         self.width = width
         self.height = height
-        self._buf = bytearray(self.bufByteCount())
+        self._buf = maker.make_packet(self.bufByteCount())
 
         self._thread = None
         self.lastUpdate = 0
 
-        self._render_td = color_list.Renderer(
+        self._render_td = maker.renderer(
             gamma=gamma.gamma,
             offset=gamma.offset,
             permutation=self.perm,

@@ -4,8 +4,8 @@ from . base import LEDBase
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1, ColorList=color_list.ColorList):
-        super().__init__(drivers, threadedUpdate, masterBrightness, ColorList)
+    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1, maker=color_list.MAKER):
+        super().__init__(drivers, threadedUpdate, masterBrightness, maker)
 
         self.pixelWidth = pixelWidth
         if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:

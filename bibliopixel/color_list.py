@@ -21,11 +21,12 @@ class Maker(object):
         self.renderer = timedata.Renderer
 
         if shared_memory:
-            self.packet = shared_list_maker(BYTE)
+            self.make_packet = shared_list_maker(BYTE)
             number_type = BYTE if integer else FLOAT
             self.color_list = shared_list_maker(3 * number_type)
+
         else:
-            self.packet = bytearray
+            self.make_packet = bytearray
             if use_timedata:
                 self.color_list = timedata.make_color_list
             else:
