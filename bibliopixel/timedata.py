@@ -6,7 +6,7 @@ try:
 except:
     TIMEDATA = None
 
-ENABLED = '--disable_timedata' not in sys.argv
+ENABLED = '--enable_timedata' in sys.argv
 
 
 def enabled():

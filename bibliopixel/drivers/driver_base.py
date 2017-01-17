@@ -1,5 +1,5 @@
 from .. import gamma as _gamma
-from .. import timedata
+from .. import color_list
 
 import time
 
@@ -40,7 +40,7 @@ class DriverBase(object):
         self._thread = None
         self.lastUpdate = 0
 
-        self._render_td = timedata.Renderer(
+        self._render_td = color_list.Renderer(
             gamma=gamma.gamma,
             offset=gamma.offset,
             permutation=self.perm,

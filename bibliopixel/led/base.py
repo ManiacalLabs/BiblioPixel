@@ -1,6 +1,6 @@
 import time
 
-from .. import colors, timedata, util
+from .. import colors, color_list, util
 
 
 class LEDBase(object):
@@ -14,7 +14,7 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = timedata.ColorList255()
+        self._colors = color_list.ColorList()
         self.all_off()
         assert len(self._colors) == self.numLEDs
 

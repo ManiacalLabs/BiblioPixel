@@ -1,6 +1,6 @@
 import math, threading, time
 
-from .. import colors, font, matrix, timedata
+from .. import colors, font, matrix
 from . base import LEDBase
 from . multimap import MatrixRotation, mapGen, MultiMapBuilder
 
