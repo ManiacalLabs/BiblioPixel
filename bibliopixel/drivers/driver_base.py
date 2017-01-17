@@ -1,5 +1,5 @@
 from .. import gamma as _gamma
-from .. import color_list
+from .. import data_maker
 
 import time
 
@@ -19,7 +19,7 @@ class DriverBase(object):
     """Base driver class to build other drivers from"""
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
-                 gamma=None, maker=color_list.MAKER):
+                 gamma=None, maker=data_maker.MAKER):
         if num == 0:
             num = width * height
             if num == 0:

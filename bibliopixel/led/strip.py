@@ -1,10 +1,10 @@
-from .. import colors, color_list
+from .. import colors, data_maker
 from . base import LEDBase
 
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1, maker=color_list.MAKER):
+    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1, maker=data_maker.MAKER):
         super().__init__(drivers, threadedUpdate, masterBrightness, maker)
 
         self.pixelWidth = pixelWidth
