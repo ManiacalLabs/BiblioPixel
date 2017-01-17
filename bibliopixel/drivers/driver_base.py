@@ -35,7 +35,7 @@ class DriverBase(object):
 
         self.width = width
         self.height = height
-        self._buf = self._make_buf()
+        self._buf = bytearray(self.bufByteCount())
 
         self._thread = None
         self.lastUpdate = 0
@@ -50,9 +50,6 @@ class DriverBase(object):
     def set_colors(self, colors, pos):
         self._colors = colors
         self._pos = pos
-
-    def _make_buf(self):
-        return bytearray(self.bufByteCount())
 
     def cleanup(self):
         pass
