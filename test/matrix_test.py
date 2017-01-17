@@ -13,7 +13,7 @@ class BaseMatrixTest(unittest.TestCase):
     def make_matrix(self, width, height, **kwds):
         driver = DriverBase(num=width * height)
         return LEDMatrix(driver, width=width, height=height,
-                         ColorList=self.maker.color_list,
+                         maker=self.maker,
                          **kwds)
 
     def assert_changed(self, matrix, expected):

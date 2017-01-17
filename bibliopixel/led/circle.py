@@ -4,8 +4,8 @@ from .. import color_list
 
 class LEDCircle(LEDBase):
 
-    def __init__(self, drivers, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255, ColorList=color_list.ColorList):
-        super().__init__(drivers, threadedUpdate, masterBrightness, ColorList)
+    def __init__(self, drivers, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255, maker=color_list.MAKER):
+        super().__init__(drivers, threadedUpdate, masterBrightness, maker)
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff
         self._full_coords = False

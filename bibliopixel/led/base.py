@@ -6,7 +6,7 @@ from .. import colors, color_list, util
 class LEDBase(object):
 
     def __init__(self, drivers, threadedUpdate, masterBrightness,
-                 ColorList=color_list.ColorList):
+                 maker=color_list.MAKER):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
 
@@ -15,7 +15,7 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = ColorList(self.numLEDs)
+        self._colors = maker.color_list(self.numLEDs)
 
         pos = 0
         for d in self.drivers:
