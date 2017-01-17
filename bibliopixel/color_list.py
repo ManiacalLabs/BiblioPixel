@@ -1,12 +1,19 @@
+import ctypes, enum
+from multiprocessing.sharedctypes import RawArray
 from . import timedata
 
 
-def ColorList(n):
-    if timedata.enabled():
-        color_list = timedata.ColorList255()
-        color_list.resize(n)
-        return color_list
-    return [(0, 0, 0)] * n
+def color_list_maker(integer=True, shared_memory=False, use_timedata=False):
+    if use_timedata:
+        assert timedata.enabled() and not shared_memory
+        return timedata.make_color_list
+
+    if shared_memory:
+        number_type = ctypes.c_uint8 if integer else ctypes.c_float
+        return lambda size: RawArray(3 * number_type, size)
+
+    return lambda size: [(0, 0, 0)] * size
 
 
+ColorList = color_list_maker()
 Renderer = timedata.Renderer
