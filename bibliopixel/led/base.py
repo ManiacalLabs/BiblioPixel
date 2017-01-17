@@ -15,9 +15,7 @@ class LEDBase(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = ColorList()
-        self.all_off()
-        assert len(self._colors) == self.numLEDs
+        self._colors = ColorList(self.numLEDs)
 
         pos = 0
         for d in self.drivers:
