@@ -6,3 +6,5 @@ BiblioPixel.egg*
 .DS_STORE
 *.pyc
 .cache
+.coverage
+htmlcov
