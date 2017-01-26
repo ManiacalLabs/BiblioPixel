@@ -1,0 +1,11 @@
+# Configuration file for coverage.py
+
+[run]
+
+branch = True
+omit = /development/env/*,test/*
+
+[report]
+
+fail_under = 57
+# skip_covered = True
