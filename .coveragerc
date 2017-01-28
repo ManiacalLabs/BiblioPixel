@@ -3,9 +3,8 @@
 [run]
 
 branch = True
-omit = /development/env/*,test/*
+omit = test/*,*/site-packages/*
 
 [report]
 
-fail_under = 57
-# skip_covered = True
+fail_under = 50

@@ -1,6 +1,6 @@
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-import bibliopixel
+import bibliopixel, sys
 
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
@@ -24,10 +24,30 @@ class RunBenchmark(RunTests):
     DIRECTORY = 'benchmark'
 
 
+class RunCoverage(RunTests):
+    def run_tests(self):
+        import coverage
+        cov = coverage.Coverage(config_file=True)
+
+        cov.start()
+        super().run_tests()
+        cov.stop()
+
+        cov.report(file=sys.stdout)
+        coverage = cov.html_report(directory='htmlcov')
+        fail_under = cov.get_option('report:fail_under')
+        if coverage < fail_under:
+            print('ERROR: coverage %.2f%% was less than fail_under=%s%%' % (
+                  coverage, fail_under))
+            raise SystemExit(1)
+
+
 setup(
     name='BiblioPixel',
     version=bibliopixel.VERSION,
-    description='BiblioPixel is a pure python library for manipulating a wide variety of LED strip based displays, both in strip and matrix form.',
+    description=(
+        'BiblioPixel is a pure python library for manipulating a wide variety '
+        'of LED strip based displays, both in strip and matrix form.'),
     author='Adam Haile',
     author_email='adam@maniacallabs.com',
     url='http://github.com/maniacallabs/bibliopixel/',
@@ -41,7 +61,8 @@ setup(
     ],
     tests_require=['pytest'],
     cmdclass={
+        'benchmark': RunBenchmark,
+        'coverage': RunCoverage,
         'test': RunTests,
-        'benchmark': RunBenchmark
     }
 )
