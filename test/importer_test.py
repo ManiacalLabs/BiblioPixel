@@ -36,3 +36,9 @@ class ImporterTest(unittest.TestCase):
         self.assertEqual(import_symbol('bibliopixel.util.importer'), importer)
         self.assertEqual(import_symbol('bibliopixel.util.importer.import_symbol'),
                          import_symbol)
+
+    def test_make_object(self):
+        td = importer.make_object(5, 23, typename='datetime.timedelta',
+                                  milliseconds=235)
+        import datetime
+        self.assertEqual(td, datetime.timedelta(5, 23, milliseconds=235))

@@ -27,7 +27,7 @@ class Maker(object):
 
         else:
             self.make_packet = bytearray
-            if use_timedata:
+            if use_timedata:  # pragma: no cover
                 self.color_list = timedata.make_color_list
             else:
                 self.color_list = list_maker

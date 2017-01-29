@@ -6,5 +6,5 @@ def color_blend(a, b):
 
 
 def color_scale(color, level):
-    """Scale RGB tuple by level, 0 - 255"""
+    """Scale RGB tuple by level, 0 - 256"""
     return tuple([(i * level) >> 8 for i in list(color)])

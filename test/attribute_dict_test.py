@@ -31,3 +31,4 @@ class AttributeDictTest(unittest.TestCase):
         d.foo.baz = 'a'
         d.foo.bang = dict(a=1, b=2)
         self.assertIsInstance(d.foo.bang, AttributeDict)
+        self.assertNotEqual(d, d2)
