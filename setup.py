@@ -1,6 +1,6 @@
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-import bibliopixel, sys
+import sys
 
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
@@ -41,10 +41,11 @@ class RunCoverage(RunTests):
                   coverage, fail_under))
             raise SystemExit(1)
 
+VERSION = open('VERSION').read().strip()
 
 setup(
     name='BiblioPixel',
-    version=bibliopixel.VERSION,
+    version=VERSION,
     description=(
         'BiblioPixel is a pure python library for manipulating a wide variety '
         'of LED strip based displays, both in strip and matrix form.'),
