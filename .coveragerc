@@ -3,8 +3,9 @@
 [run]
 
 branch = True
-omit = test/*,*/site-packages/*
+include = bibliopixel/*/*.py, bibliopixel/*.py
 
 [report]
 
 fail_under = 50
+skip_covered = True

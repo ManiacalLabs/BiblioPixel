@@ -13,7 +13,7 @@ def _new_custom_logger(name='BiblioPixel',
     logger = logging.getLogger(name)
     formatter = logging.Formatter(fmt=fmt)
 
-    if len(logger.handlers) == 0:
+    if not logger.handlers:
         logger.setLevel(logging.INFO)
         h1 = logging.StreamHandler(sys.stdout)
         h1.setLevel(logging.DEBUG)
@@ -26,6 +26,9 @@ def _new_custom_logger(name='BiblioPixel',
 
         logger.addHandler(h1)
         logger.addHandler(h2)
+
+    else:  # pragma: no cover
+        pass
 
     return logger
 
