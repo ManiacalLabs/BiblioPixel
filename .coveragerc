@@ -3,7 +3,7 @@
 [run]
 
 branch = True
-omit = test/*,*/site-packages/*
+omit = setup.py,test/*,*/site-packages/*
 
 [report]
 
