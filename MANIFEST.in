@@ -1,0 +1,2 @@
+include bibliopixel/VERSION
+recursive-exclude test *

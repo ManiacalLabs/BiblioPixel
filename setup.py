@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
@@ -41,7 +41,14 @@ class RunCoverage(RunTests):
                   coverage, fail_under))
             raise SystemExit(1)
 
-VERSION = open('VERSION').read().strip()
+
+def _get_version():
+    from os.path import abspath, dirname, join
+    filename = join(dirname(abspath(__file__)), 'bibliopixel', 'VERSION')
+    return open(filename).read().strip()
+
+
+VERSION = _get_version()
 
 setup(
     name='BiblioPixel',
@@ -53,7 +60,7 @@ setup(
     author_email='adam@maniacallabs.com',
     url='http://github.com/maniacallabs/bibliopixel/',
     license='MIT',
-    packages=['bibliopixel', 'bibliopixel.drivers'],
+    packages=find_packages(exclude=['test']),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
@@ -65,5 +72,6 @@ setup(
         'benchmark': RunBenchmark,
         'coverage': RunCoverage,
         'test': RunTests,
-    }
+    },
+    include_package_data=True
 )
