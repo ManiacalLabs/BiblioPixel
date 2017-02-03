@@ -1,27 +1,26 @@
 from . base import LEDBase
 from .. import data_maker
+from . coord_map import gen_circle, calc_ring_steps, calc_ring_pixel_count
 
 
 class LEDCircle(LEDBase):
 
-    def __init__(self, drivers, rings, maxAngleDiff=0, rotation=0, threadedUpdate=False, masterBrightness=255, maker=data_maker.MAKER):
+    def __init__(self, drivers, rings=None, pixels_per=None,
+                 maxAngleDiff=0, rotation=0,
+                 threadedUpdate=False, masterBrightness=255, maker=data_maker.MAKER):
         super().__init__(drivers, threadedUpdate, masterBrightness, maker)
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff
-        self._full_coords = False
+        full_coords = False
         for r in self.rings:
-            self._full_coords |= (len(r) > 2)
-        self.ringCount = len(self.rings)
-        self.lastRing = self.ringCount - 1
-        self.ringSteps = []
-        num = 0
-        for r in self.rings:
-            if self._full_coords:
-                count = len(r)
-            else:
-                count = (r[1] - r[0] + 1)
-            self.ringSteps.append(360.0 / count)
-            num += count
+            full_coords |= (len(r) > 2)
+
+        if not full_coords:
+            self.rings, self.ringSteps = gen_circle(rings=self.rings, pixels_per=pixels_per)
+        else:
+            self.ringSteps = calc_ring_steps(self.rings)
+
+        num = calc_ring_pixel_count(self.rings)
 
         self.rotation = rotation
 
@@ -37,10 +36,7 @@ class LEDCircle(LEDBase):
         offset = int(round(angle / self.ringSteps[ring]))
 
         # wraps it back around
-        if self._full_coords:
-            length = len(self.rings[ring]) - 1
-        else:
-            length = self.rings[ring][1] - self.rings[ring][0]
+        length = len(self.rings[ring]) - 1
 
         if offset > length:
             offset = 0
@@ -58,10 +54,7 @@ class LEDCircle(LEDBase):
         if offset < 0:
             return offset
 
-        if self._full_coords:
-            return self.rings[ring][offset]
-        else:
-            return self.rings[ring][0] + offset
+        return self.rings[ring][offset]
 
     # Set single pixel to Color value
     def set(self, ring, angle, color):
@@ -92,15 +85,9 @@ class LEDCircle(LEDBase):
         def pixelRange(ring, start=0, stop=-1):
             r = self.rings[ring]
             if stop == -1:
-                if self._full_coords:
-                    stop = len(r) - 1
-                else:
-                    stop = r[1] - r[0]
+                stop = len(r) - 1
 
-            if self._full_coords:
-                return [r[i] for i in range(start, stop + 1)]
-            else:
-                return range(start + r[0], stop + r[0] + 1)
+            return [r[i] for i in range(start, stop + 1)]
 
         start = self.__genOffsetFromAngle(startAngle, ring)
         end = self.__genOffsetFromAngle(endAngle, ring)
