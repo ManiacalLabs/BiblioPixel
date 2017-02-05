@@ -34,6 +34,22 @@ def gen_matrix(dx, dy, serpentine=True, offset=0,
     return result
 
 
+def point_list_from_matrix(coord_map):
+    max_width = 0
+    for x in coord_map:
+        if len(x) > max_width:
+            max_width = len(x)
+
+    num = len(coord_map) * max_width
+    result = [None] * num
+
+    for y in range(len(coord_map)):
+        for x in range(len(coord_map[y])):
+            result[coord_map[y][x]] = [x, y, 0]
+
+    return result
+
+
 def gen_cube(dx, dy, dz, xy_serpentine=True, offset=0,
              xy_rotation=Rotation.ROTATE_0, z_rotation=Rotation.ROTATE_0,
              y_flip=False, z_flip=False):

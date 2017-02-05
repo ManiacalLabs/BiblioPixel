@@ -1,6 +1,6 @@
 from . base import LEDBase
 from .. import data_maker
-from . coord_map import gen_circle, calc_ring_steps, calc_ring_pixel_count
+from . coord_map import gen_circle, calc_ring_steps, calc_ring_pixel_count, point_list_from_rings
 
 
 class LEDCircle(LEDBase):
@@ -19,6 +19,8 @@ class LEDCircle(LEDBase):
             self.rings, self.ringSteps = gen_circle(rings=self.rings, pixels_per=pixels_per)
         else:
             self.ringSteps = calc_ring_steps(self.rings)
+
+        self.set_point_list(point_list_from_rings(self.rings))
 
         num = calc_ring_pixel_count(self.rings)
 

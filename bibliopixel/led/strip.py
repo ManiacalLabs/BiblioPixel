@@ -20,6 +20,8 @@ class LEDStrip(LEDBase):
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
 
+        self.set_point_list([[x, 0, 0] for x in range(self.numLEDs)])
+
     # Set single pixel to Color value
     def _set(self, pixel, color):
         """Set pixel to RGB color tuple"""

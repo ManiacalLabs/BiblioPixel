@@ -572,8 +572,9 @@ class WebSocket(object):
 
 class SimpleWebSocketServer(object):
 
-    def __init__(self, host, port, websocketclass, selectInterval=0.1):
+    def __init__(self, host, port, websocketclass, selectInterval=0.1, **kwargs):
         self.websocketclass = websocketclass
+        self.websock_kwargs = kwargs
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.serversocket.bind((host, port))
@@ -586,7 +587,7 @@ class SimpleWebSocketServer(object):
         return sock
 
     def _constructWebSocket(self, sock, address):
-        return self.websocketclass(self, sock, address)
+        return self.websocketclass(self, sock, address, **self.websock_kwargs)
 
     def close(self):
         self.serversocket.close()
@@ -668,30 +669,3 @@ class SimpleWebSocketServer(object):
                     client.handleClose()
                     del self.connections[failed]
                     self.listeners.remove(failed)
-
-
-class SimpleSSLWebSocketServer(SimpleWebSocketServer):
-
-    def __init__(self, host, port, websocketclass, certfile,
-                 keyfile, version=ssl.PROTOCOL_TLSv1, selectInterval=0.1):
-
-        SimpleWebSocketServer.__init__(self, host, port,
-                                       websocketclass, selectInterval)
-
-        self.context = ssl.SSLContext(version)
-        self.context.load_cert_chain(certfile, keyfile)
-
-    def close(self):
-        super(SimpleSSLWebSocketServer, self).close()
-
-    def _decorateSocket(self, sock):
-        sslsock = self.context.wrap_socket(sock, server_side=True)
-        return sslsock
-
-    def _constructWebSocket(self, sock, address):
-        ws = self.websocketclass(self, sock, address)
-        ws.usingssl = True
-        return ws
-
-    def serveforever(self):
-        super(SimpleSSLWebSocketServer, self).serveforever()

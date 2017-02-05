@@ -39,6 +39,10 @@ class LEDBase(object):
 
         self.set_brightness(masterBrightness)
 
+    def set_point_list(self, point_list):
+        for d in self.drivers:
+            d.set_point_list(point_list)
+
     def update(self):
         """DEPRECATED - use self.push_to_driver()"""
         return self.push_to_driver()
@@ -56,6 +60,12 @@ class LEDBase(object):
             if self.masterBrightness < 255:
                 color = ((c * self.masterBrightness) >> 8 for c in color)
             self._colors[pixel] = tuple(color)
+
+    def get_point_list(self):
+        result = []
+        for x in range(len(self.numLEDs)):
+            result.append([x, 0, 0])
+        return result
 
     def waitForUpdate(self):
         if self._threadedUpdate:

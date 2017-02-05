@@ -8,6 +8,7 @@ import sys
 import time
 import threading
 import uuid
+import struct
 from ... import log
 
 from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
@@ -15,21 +16,23 @@ from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 class VisWebSocket(WebSocket):
 
-    def __init__(self, *args, **kwargs):
-        super(VisWebSocket, self).__init__(*args, **kwargs)
-        self.kinect = None
-        self.oid = None
+    def __init__(self, *args, driver, point_list):
+        super(VisWebSocket, self).__init__(*args)
+        self.driver = driver
         self.connected = False
+        self.point_list = point_list
+        self.oid = None
 
     def handleConnected(self):
         log.debug(self.address, 'connected')
         self.connected = True
         # self.kinect = KinectFactory.create_kinect()
-        # self.oid = uuid.uuid1()
-        # self.kinect.add_observer(self.oid, self.send_depth)
+        self.oid = uuid.uuid1()
+        self.driver.add_websock(self.oid, self.send_pixels)
+        self.sendMessage(bytearray([0x00]) + self.point_list)
 
     def handleClose(self):
-        # self.kinect.remove_observer(self.oid)
+        self.driver.remove_websock(self.oid)
         self.connected = False
         log.debug(self.address, 'closed')
 
@@ -40,7 +43,7 @@ class VisWebSocket(WebSocket):
 
     def send_pixels(self, pixels):
         if self.connected:
-            self.sendMessage(pixels)
+            self.sendMessage(bytearray([0x01]) + pixels)
 
 
 class ws_thread(threading.Thread):
@@ -58,12 +61,38 @@ class ws_thread(threading.Thread):
 
 class DriverWebVis(DriverBase):
 
-    def __init__(self, num, port=6666):
+    def __init__(self, num, port=6666, point_list=None):
         super(DriverWebVis, self).__init__(num)
         self.port = port
-        self.server = SimpleWebSocketServer('0.0.0.0', self.port, VisWebSocket)
+        self.point_list = None
+        self.server = self.ws_thread = None
+        self.websocks = {}
+
+        if point_list:
+            self.set_point_list(point_list)
+
+    def __start_server(self):
+        self.server = SimpleWebSocketServer('0.0.0.0', self.port, VisWebSocket,
+                                            driver=self, point_list=self.point_list)
         self.ws_thread = ws_thread(self.server)
         self.ws_thread.start()
+
+    def set_point_list(self, point_list):
+        if self.ws_thread is None or (not self.ws_thread.is_alive()):
+            # flatten point_list
+            pl = [c for p in point_list for c in p]
+            print(pl)
+            self.point_list = bytearray(struct.pack('!%sH' % len(pl), *pl))
+            print(self.point_list)
+            print(type(self.point_list))
+            self.__start_server()
+
+    def add_websock(self, oid, send_pixels):
+        self.websocks[oid] = send_pixels
+
+    def remove_websock(self, oid):
+        if oid in self.websocks:
+            del self.websocks[oid]
 
     def cleanup(self):
         self.server.close()
@@ -73,4 +102,5 @@ class DriverWebVis(DriverBase):
 
     def _send_packet(self):
         print(self._buf)
-        # self.server.send_pixels(self._buf)
+        for ws in self.websocks.values():
+            ws(self._buf)

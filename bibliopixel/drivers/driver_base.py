@@ -33,6 +33,8 @@ class DriverBase(object):
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
 
+        self.point_list = None
+
         self.width = width
         self.height = height
         self._buf = maker.make_packet(self.bufByteCount())
@@ -46,6 +48,9 @@ class DriverBase(object):
             permutation=self.perm,
             min=gamma.lower_bound,
             max=255)
+
+    def set_point_list(self, point_list):
+        pass
 
     def set_colors(self, colors, pos):
         self._colors = colors

@@ -3,6 +3,7 @@ import math, threading, time
 from .. import colors, data_maker, font, matrix
 from . base import LEDBase
 from . multimap import MatrixRotation, mapGen, MultiMapBuilder
+from . coord_map import gen_cube, point_list_from_cube
 
 
 class LEDCube(LEDBase):
@@ -21,13 +22,15 @@ class LEDCube(LEDBase):
             raise TypeError("(x * y * z) MUST equal the total pixel count!")
 
         if coordMap:
-            self.matrix_map = coordMap
+            self.cube_map = coordMap
         # else:
         #     if len(self.drivers) == 1:
-        #         self.matrix_map = mapGen(self.width, self.height, serpentine)
+        #         self.cube_map = mapGen(self.width, self.height, serpentine)
         #     else:
         #         raise TypeError(
         #             "Must provide coordMap if using multiple drivers!")
+
+        self.set_point_list(point_list_from_cube(self.cube_map))
 
         self.texture = None
         self.set = self._setColor
@@ -48,9 +51,12 @@ class LEDCube(LEDBase):
         #     self.height = self.height / ph
         #     self.numLEDs = self.width * self.height
 
+    def get_point_list(self):
+        return point_list_from_cube(self.coord_map)
+
     def __setNormal(self, x, y, z, color):
         try:
-            pixel = self.matrix_map[z][y][x]
+            pixel = self.cube_map[z][y][x]
             self._set_base(pixel, color)
         except IndexError:
             pass
@@ -79,7 +85,7 @@ class LEDCube(LEDBase):
 
     def get(self, x, y, z):
         try:
-            pixel = self.matrix_map[z][y][x]
+            pixel = self.cube_map[z][y][x]
             return self._get_base(pixel)
         except IndexError:
             return 0, 0, 0

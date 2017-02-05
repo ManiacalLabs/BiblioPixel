@@ -2,12 +2,12 @@ import math, threading, time
 
 from .. import colors, data_maker, font, matrix
 from . base import LEDBase
-from . multimap import MatrixRotation, mapGen, MultiMapBuilder
+from . coord_map import Rotation, gen_matrix, point_list_from_matrix
 
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=MatrixRotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), maker=data_maker.MAKER):
+    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=Rotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), maker=data_maker.MAKER):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -46,18 +46,15 @@ class LEDMatrix(LEDBase):
             self.matrix_map = coordMap
         else:
             if len(self.drivers) == 1:
-                self.matrix_map = mapGen(self.width, self.height, serpentine)
+                self.matrix_map = gen_matrix(self.width, self.height,
+                                             serpentine=serpentine,
+                                             rotation=rotation,
+                                             y_flip=vert_flip)
             else:
                 raise TypeError(
                     "Must provide coordMap if using multiple drivers!")
 
-        # apply rotation
-        for i in range(rotation):
-            self.matrix_map = list(zip(*self.matrix_map[::-1]))
-
-        # apply flip
-        if vert_flip:
-            self.matrix_map = self.matrix_map[::-1]
+        self.set_point_list(point_list_from_matrix(self.matrix_map))
 
         # if 90 or 270 rotation dimensions need to be swapped so they match the
         # matrix rotation
@@ -86,6 +83,9 @@ class LEDMatrix(LEDBase):
             self.numLEDs = self.width * self.height
 
         self.fonts = font.fonts
+
+    def get_point_list(self):
+        return point_list_from_matrix(self.coord_map)
 
     def loadFont(self, name, height, width, data):
         self.fonts[name] = {

@@ -1,12 +1,12 @@
 import math, threading, time
 
-from . matrix import LEDMatrix, MatrixRotation
+from . matrix import LEDMatrix, Rotation
 
 
 # Takes a matrix and displays it as individual columns over time
 class LEDPOV(LEDMatrix):
 
-    def __init__(self, drivers, povHeight, width, rotation=MatrixRotation.ROTATE_0, vert_flip=False, threadedUpdate=False, masterBrightness=255):
+    def __init__(self, drivers, povHeight, width, rotation=Rotation.ROTATE_0, vert_flip=False, threadedUpdate=False, masterBrightness=255):
         self.numLEDs = povHeight * width
 
         super().__init__(drivers, width, povHeight, None,
