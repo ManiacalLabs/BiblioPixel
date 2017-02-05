@@ -1,5 +1,6 @@
-from . led import LEDCircle, LEDMatrix, LEDPOV, LEDStrip
+from . led import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
 from . led.multimap import MatrixRotation, MultiMapBuilder, mapGen
+from . led.coord_map import Rotation
 from . import animation, colors, font, gamma, led, log, util
 
 

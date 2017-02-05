@@ -81,10 +81,10 @@ class DriverWebVis(DriverBase):
         if self.ws_thread is None or (not self.ws_thread.is_alive()):
             # flatten point_list
             pl = [c for p in point_list for c in p]
-            print(pl)
+            # print(pl)
             self.point_list = bytearray(struct.pack('!%sH' % len(pl), *pl))
-            print(self.point_list)
-            print(type(self.point_list))
+            # print(self.point_list)
+            # print(type(self.point_list))
             self.__start_server()
 
     def add_websock(self, oid, send_pixels):
@@ -101,6 +101,6 @@ class DriverWebVis(DriverBase):
         self._render()
 
     def _send_packet(self):
-        print(self._buf)
+        # print(self._buf)
         for ws in self.websocks.values():
             ws(self._buf)
