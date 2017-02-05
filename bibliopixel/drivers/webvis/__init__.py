@@ -29,7 +29,7 @@ class VisWebSocket(WebSocket):
         # self.kinect = KinectFactory.create_kinect()
         self.oid = uuid.uuid1()
         self.driver.add_websock(self.oid, self.send_pixels)
-        self.sendMessage(bytearray([0x00]) + self.point_list)
+        self.sendMessage(bytearray([0x00, 0x00]) + self.point_list)
 
     def handleClose(self):
         self.driver.remove_websock(self.oid)
@@ -43,7 +43,7 @@ class VisWebSocket(WebSocket):
 
     def send_pixels(self, pixels):
         if self.connected:
-            self.sendMessage(bytearray([0x01]) + pixels)
+            self.sendMessage(bytearray([0x00, 0x01]) + pixels)
 
 
 class ws_thread(threading.Thread):
