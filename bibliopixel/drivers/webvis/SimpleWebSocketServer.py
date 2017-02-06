@@ -2,6 +2,7 @@
 The MIT License (MIT)
 Copyright (c) 2013 Dave P.
 '''
+# flake8: noqa
 import sys
 VER = sys.version_info[0]
 if VER >= 3:
@@ -24,8 +25,7 @@ from collections import deque
 from select import select
 
 __all__ = ['WebSocket',
-           'SimpleWebSocketServer',
-           'SimpleSSLWebSocketServer']
+           'SimpleWebSocketServer']
 
 
 def _check_unicode(val):

@@ -22,9 +22,10 @@ class VisWebSocket(WebSocket):
         self.connected = False
         self.point_list = point_list
         self.oid = None
+        log.debug('Server started...')
 
     def handleConnected(self):
-        log.debug(self.address, 'connected')
+        log.debug('Connected:{}'.format(self.address))
         self.connected = True
         # self.kinect = KinectFactory.create_kinect()
         self.oid = uuid.uuid1()
@@ -34,7 +35,7 @@ class VisWebSocket(WebSocket):
     def handleClose(self):
         self.driver.remove_websock(self.oid)
         self.connected = False
-        log.debug(self.address, 'closed')
+        log.debug('Closed:{}'.format(self.address))
 
     def handleMessage(self):
         # degs = int(float(self.data))
@@ -61,7 +62,7 @@ class ws_thread(threading.Thread):
 
 class DriverWebVis(DriverBase):
 
-    def __init__(self, num, port=6666, point_list=None):
+    def __init__(self, num, port=1337, point_list=None):
         super(DriverWebVis, self).__init__(num)
         self.port = port
         self.point_list = None
@@ -72,7 +73,9 @@ class DriverWebVis(DriverBase):
             self.set_point_list(point_list)
 
     def __start_server(self):
-        self.server = SimpleWebSocketServer('0.0.0.0', self.port, VisWebSocket,
+        log.debug('Starting server...')
+        print(self.port)
+        self.server = SimpleWebSocketServer('', self.port, VisWebSocket,
                                             driver=self, point_list=self.point_list)
         self.ws_thread = ws_thread(self.server)
         self.ws_thread.start()
@@ -81,8 +84,9 @@ class DriverWebVis(DriverBase):
         if self.ws_thread is None or (not self.ws_thread.is_alive()):
             # flatten point_list
             pl = [c for p in point_list for c in p]
+            print(pl)
             # print(pl)
-            self.point_list = bytearray(struct.pack('!%sH' % len(pl), *pl))
+            self.point_list = bytearray(struct.pack('<%sH' % len(pl), *pl))
             # print(self.point_list)
             # print(type(self.point_list))
             self.__start_server()
