@@ -135,6 +135,10 @@ def point_list_from_rings(rings, origin=(0, 0, 0), z_diff=0):
         raise ValueError('origin must be (x,y) or (x,y,z)')
 
     use_z = len(origin) == 3
+    if use_z:
+        ox, oy, oz = origin
+    else:
+        ox, oz = origin
 
     num = calc_ring_pixel_count(rings)
     steps = calc_ring_steps(rings)
@@ -146,12 +150,12 @@ def point_list_from_rings(rings, origin=(0, 0, 0), z_diff=0):
         step = steps[i]
         angle = 0.0
         for p in r:
-            radius = (len(r) * 3)
+            radius = (len(r) * 0.5)
             x, y = pointOnCircle(0, 0, radius, angle)
             if use_z:
-                points[p] = (x, y, z)
+                points[p] = (x + ox, y + oy, z + oz)
             else:
-                points[p] = (x, y)
+                points[p] = (x + ox, y + oy)
             angle += step
 
         z += z_diff

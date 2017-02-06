@@ -20,6 +20,9 @@ class LEDCircle(LEDBase):
         else:
             self.ringSteps = calc_ring_steps(self.rings)
 
+        self.ringCount = len(self.rings)
+        self.lastRing = self.ringCount - 1
+
         self.set_point_list(point_list_from_rings(self.rings))
 
         num = calc_ring_pixel_count(self.rings)

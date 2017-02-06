@@ -162,7 +162,7 @@ def hsv2rgb_360(hsv):
 
     h, s, v = hsv
 
-    r, g, b = colorsys.hsv_to_rgb(h // 360.0, s, v)
+    r, g, b = colorsys.hsv_to_rgb(h / 360.0, s, v)
     return (int(r * 255.0), int(g * 255.0), int(b * 255.0))
 
 
