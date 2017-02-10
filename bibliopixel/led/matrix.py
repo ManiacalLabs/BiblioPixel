@@ -1,13 +1,16 @@
 import math, threading, time
 
-from .. import colors, data_maker, font, matrix
+from .. import colors, data_maker, font, matrix, log
 from . base import LEDBase
-from . coord_map import Rotation, gen_matrix, point_list_from_matrix
+from . coord_map import Rotation, gen_matrix, layout_from_matrix
 
 
 class LEDMatrix(LEDBase):
 
-    def __init__(self, drivers, width=0, height=0, coordMap=None, rotation=Rotation.ROTATE_0, vert_flip=False, serpentine=True, threadedUpdate=False, masterBrightness=255, pixelSize=(1, 1), maker=data_maker.MAKER):
+    def __init__(self, drivers, width=0, height=0, coordMap=None,
+                 rotation=Rotation.ROTATE_0, vert_flip=False,
+                 threadedUpdate=False, masterBrightness=255,
+                 pixelSize=(1, 1), **kwargs):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
@@ -16,7 +19,8 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super().__init__(drivers, threadedUpdate, masterBrightness, maker)
+        super().__init__(drivers, threadedUpdate, masterBrightness,
+                         maker=kwargs.get('maker', data_maker.MAKER))
 
         if width == 0 and height == 0:
             if len(self.drivers) != 1:
@@ -46,15 +50,13 @@ class LEDMatrix(LEDBase):
             self.matrix_map = coordMap
         else:
             if len(self.drivers) == 1:
-                self.matrix_map = gen_matrix(self.width, self.height,
-                                             serpentine=serpentine,
-                                             rotation=rotation,
-                                             y_flip=vert_flip)
+                log.info('Auto generating coordinate map. Use gen_cube directly if more control needed.')
+                self.matrix_map = gen_matrix(self.width, self.height)
             else:
                 raise TypeError(
                     "Must provide coordMap if using multiple drivers!")
 
-        self.set_point_list(point_list_from_matrix(self.matrix_map))
+        self.set_layout(layout_from_matrix(self.matrix_map))
 
         # if 90 or 270 rotation dimensions need to be swapped so they match the
         # matrix rotation
@@ -84,8 +86,8 @@ class LEDMatrix(LEDBase):
 
         self.fonts = font.fonts
 
-    def get_point_list(self):
-        return point_list_from_matrix(self.coord_map)
+    def get_layout(self):
+        return layout_from_matrix(self.coord_map)
 
     def loadFont(self, name, height, width, data):
         self.fonts[name] = {

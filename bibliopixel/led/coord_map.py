@@ -34,7 +34,7 @@ def gen_matrix(dx, dy, serpentine=True, offset=0,
     return result
 
 
-def point_list_from_matrix(coord_map):
+def layout_from_matrix(coord_map):
     max_width = 0
     for x in coord_map:
         if len(x) > max_width:
@@ -67,7 +67,7 @@ def gen_cube(dx, dy, dz, xy_serpentine=True, offset=0,
     return result
 
 
-def point_list_from_cube(coord_map):
+def layout_from_cube(coord_map):
     num = 0
     dx, dy, dz = (0, 0, len(coord_map))
 
@@ -130,7 +130,7 @@ def gen_circle(rings=None, pixels_per=None, offset=0, invert=False):
         return (out_rings, calc_ring_steps(out_rings))
 
 
-def point_list_from_rings(rings, origin=(0, 0, 0), z_diff=0):
+def layout_from_rings(rings, origin=(0, 0, 0), z_diff=0):
     if len(origin) not in [2, 3]:
         raise ValueError('origin must be (x,y) or (x,y,z)')
 
