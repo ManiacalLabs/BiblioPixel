@@ -39,9 +39,9 @@ class LEDBase(object):
 
         self.set_brightness(masterBrightness)
 
-    def set_point_list(self, point_list):
+    def set_layout(self, layout):
         for d in self.drivers:
-            d.set_point_list(point_list)
+            d.set_layout(layout)
 
     def update(self):
         """DEPRECATED - use self.push_to_driver()"""
@@ -61,7 +61,7 @@ class LEDBase(object):
                 color = ((c * self.masterBrightness) >> 8 for c in color)
             self._colors[pixel] = tuple(color)
 
-    def get_point_list(self):
+    def get_layout(self):
         result = []
         for x in range(len(self.numLEDs)):
             result.append([x, 0, 0])

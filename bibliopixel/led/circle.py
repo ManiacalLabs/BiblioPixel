@@ -1,14 +1,15 @@
 from . base import LEDBase
 from .. import data_maker
-from . coord_map import gen_circle, calc_ring_steps, calc_ring_pixel_count, point_list_from_rings
+from . coord_map import gen_circle, calc_ring_steps, calc_ring_pixel_count, layout_from_rings
 
 
 class LEDCircle(LEDBase):
 
     def __init__(self, drivers, rings=None, pixels_per=None,
                  maxAngleDiff=0, rotation=0,
-                 threadedUpdate=False, masterBrightness=255, maker=data_maker.MAKER):
-        super().__init__(drivers, threadedUpdate, masterBrightness, maker)
+                 threadedUpdate=False, masterBrightness=255, **kwargs):
+        super().__init__(drivers, threadedUpdate, masterBrightness,
+                         maker=kwargs.get('maker', data_maker.MAKER))
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff
         full_coords = False
@@ -23,7 +24,7 @@ class LEDCircle(LEDBase):
         self.ringCount = len(self.rings)
         self.lastRing = self.ringCount - 1
 
-        self.set_point_list(point_list_from_rings(self.rings))
+        self.set_layout(layout_from_rings(self.rings))
 
         num = calc_ring_pixel_count(self.rings)
 

@@ -14,13 +14,13 @@ from ... import log
 from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 
-class VisWebSocket(WebSocket):
+class SimPixelWebSocket(WebSocket):
 
-    def __init__(self, *args, driver, point_list):
-        super(VisWebSocket, self).__init__(*args)
+    def __init__(self, *args, driver, layout):
+        super(SimPixelWebSocket, self).__init__(*args)
         self.driver = driver
         self.connected = False
-        self.point_list = point_list
+        self.layout = layout
         self.oid = None
         log.debug('Server started...')
 
@@ -30,7 +30,7 @@ class VisWebSocket(WebSocket):
         # self.kinect = KinectFactory.create_kinect()
         self.oid = uuid.uuid1()
         self.driver.add_websock(self.oid, self.send_pixels)
-        self.sendMessage(bytearray([0x00, 0x00]) + self.point_list)
+        self.sendMessage(bytearray([0x00, 0x00]) + self.layout)
 
     def handleClose(self):
         self.driver.remove_websock(self.oid)
@@ -61,36 +61,34 @@ class ws_thread(threading.Thread):
         log.debug('WebSocket Server closed')
 
 
-class DriverWebVis(DriverBase):
+class DriverSimPixel(DriverBase):
 
-    def __init__(self, num, port=1337, point_list=None):
-        super(DriverWebVis, self).__init__(num)
+    def __init__(self, num, port=1337, layout=None):
+        super(DriverSimPixel, self).__init__(num)
         self.port = port
-        self.point_list = None
+        self.layout = None
         self.server = self.ws_thread = None
         self.websocks = {}
 
-        if point_list:
-            print(point_list)
-            self.set_point_list(point_list)
+        if layout:
+            self.set_layout(layout)
 
     def __start_server(self):
         log.debug('Starting server...')
-        print(self.port)
-        self.server = SimpleWebSocketServer('', self.port, VisWebSocket,
-                                            driver=self, point_list=self.point_list,
+        self.server = SimpleWebSocketServer('', self.port, SimPixelWebSocket,
+                                            driver=self, layout=self.layout,
                                             selectInterval=0.001)
         self.ws_thread = ws_thread(self.server)
         self.ws_thread.start()
 
-    def set_point_list(self, point_list):
+    def set_layout(self, layout):
         if self.ws_thread is None or (not self.ws_thread.is_alive()):
-            # flatten point_list
-            pl = [c for p in point_list for c in p]
+            # flatten layout
+            pl = [c for p in layout for c in p]
             # print(pl)
-            self.point_list = bytearray(struct.pack('<%sh' % len(pl), *pl))
-            # print(self.point_list)
-            # print(type(self.point_list))
+            self.layout = bytearray(struct.pack('<%sh' % len(pl), *pl))
+            # print(self.layout)
+            # print(type(self.layout))
             self.__start_server()
 
     def add_websock(self, oid, send_pixels):

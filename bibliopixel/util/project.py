@@ -2,7 +2,8 @@ import sys
 from . importer import make_object
 from . read_dict import read_dict
 from .. import data_maker
-from .. led.multimap import MultiMapBuilder, mapGen
+from .. led.multimap import MultiMapBuilder
+from .. led.coord_map import gen_matrix
 
 
 def make_drivers(multimap=False, **kwds):
@@ -11,7 +12,7 @@ def make_drivers(multimap=False, **kwds):
         drivers = []
 
         for id in device_ids:
-            build.addRow(mapGen(width, height, serpentine=serpentine))
+            build.addRow(gen_matrix(width, height, serpentine=serpentine))
             d = make_object(width=width, height=height, deviceID=id, **kwds)
             drivers.append(d)
 

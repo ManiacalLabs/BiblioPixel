@@ -4,8 +4,10 @@ from . base import LEDBase
 
 class LEDStrip(LEDBase):
 
-    def __init__(self, drivers, threadedUpdate=False, masterBrightness=255, pixelWidth=1, maker=data_maker.MAKER):
-        super().__init__(drivers, threadedUpdate, masterBrightness, maker)
+    def __init__(self, drivers, threadedUpdate=False,
+                 masterBrightness=255, pixelWidth=1, **kwargs):
+        super().__init__(drivers, threadedUpdate, masterBrightness,
+                         maker=kwargs.get('maker', data_maker.MAKER))
 
         self.pixelWidth = pixelWidth
         if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:
@@ -20,7 +22,7 @@ class LEDStrip(LEDBase):
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
 
-        self.set_point_list([[x, 0, 0] for x in range(self.numLEDs)])
+        self.set_layout([[x, 0, 0] for x in range(self.numLEDs)])
 
     # Set single pixel to Color value
     def _set(self, pixel, color):

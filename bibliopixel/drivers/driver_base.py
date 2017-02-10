@@ -33,7 +33,7 @@ class DriverBase(object):
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
 
-        self.point_list = None
+        self.layout = None
 
         self.width = width
         self.height = height
@@ -49,7 +49,7 @@ class DriverBase(object):
             min=gamma.lower_bound,
             max=255)
 
-    def set_point_list(self, point_list):
+    def set_layout(self, layout):
         pass
 
     def set_colors(self, colors, pos):
