@@ -1,6 +1,6 @@
 import threading, unittest
 
-from bibliopixel.util import compose_events
+from bibliopixel.threads import compose_events
 
 
 class ComposeEventTest(unittest.TestCase):
