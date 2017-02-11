@@ -93,17 +93,7 @@ class BaseAnimation(object):
                     cycle_count += 1
                     self.animComplete = False
 
-            stepTime = int(mid - start)
-            if self._led.thread_strategy.enabled:
-                updateTime = int(self._led.lastThreadedUpdate())
-                log.debug(
-                    "Frame: %sms / Update Max: %sms", stepTime, updateTime)
-            else:
-                updateTime = int(now - mid)
-                totalTime = stepTime + updateTime
-                log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                          totalTime, int(1000 / max(totalTime, 1)), stepTime,
-                          updateTime)
+            self._led.thread_strategy.report_framerate(start, mid, now)
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)

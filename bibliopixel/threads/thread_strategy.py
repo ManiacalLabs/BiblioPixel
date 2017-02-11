@@ -1,3 +1,6 @@
+import time
+
+from .. import log
 from . import update_thread
 
 
@@ -50,3 +53,16 @@ class ThreadStrategy(object):
 
     def set_animation(self, animation):
         self.animation = animation
+
+    def report_framerate(self, start, mid, now):
+        stepTime = int(mid - start)
+        if self.enabled:
+            updateTime = int(self.led.lastThreadedUpdate())
+            log.debug(
+                "Frame: %sms / Update Max: %sms", stepTime, updateTime)
+        else:
+            updateTime = int(now - mid)
+            totalTime = stepTime + updateTime
+            log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
+                      totalTime, int(1000 / max(totalTime, 1)), stepTime,
+                      updateTime)
