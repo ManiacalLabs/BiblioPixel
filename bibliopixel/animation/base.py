@@ -44,7 +44,7 @@ class BaseAnimation(object):
 
     def _run(self, amt, fps, sleep, max_steps, until_complete,
              max_cycles, seconds):
-        self.preRun()
+        self.preRun(amt)
 
         # calculate sleep time base on desired Frames per Second
         if fps:
