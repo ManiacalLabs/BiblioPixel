@@ -6,6 +6,8 @@ class BaseAnimation(object):
 
     def __init__(self, led):
         self._led = led
+        led.thread_strategy.set_animation(self)
+
         self.animComplete = False
         self._step = 0
         self._timeRef = 0
