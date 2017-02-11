@@ -1,5 +1,8 @@
 from . led import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
-from . led.coord_map import Rotation, gen_matrix, gen_circle, gen_cube
+from . layout import Rotation
+from . layout.matrix import gen_matrix
+from . layout.circle import gen_circle
+from . layout.cube import gen_cube
 from . import animation, colors, font, gamma, led, log, util
 
 

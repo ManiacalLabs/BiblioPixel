@@ -21,7 +21,6 @@ class Strip(abc.ABC):
 
 def fill(strip, item, start=0, stop=None, step=1):
     """Fill a portion of a strip from start to stop by step with a given item.
-
     If stop is not given, it defaults to the length of the strip.
     """
     if stop is None:
@@ -29,3 +28,7 @@ def fill(strip, item, start=0, stop=None, step=1):
 
     for i in range(start, stop, step):
         strip[i] = item
+
+
+def gen_strip(num):
+    return [[x, 0, 0] for x in range(num)]

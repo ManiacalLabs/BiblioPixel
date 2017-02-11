@@ -1,5 +1,6 @@
 from .. import colors, data_maker
 from . base import LEDBase
+from .. layout.strip import gen_strip
 
 
 class LEDStrip(LEDBase):
@@ -22,7 +23,7 @@ class LEDStrip(LEDBase):
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
 
-        self.set_layout([[x, 0, 0] for x in range(self.numLEDs)])
+        self.set_layout(gen_strip(self.numLEDs))
 
     # Set single pixel to Color value
     def _set(self, pixel, color):

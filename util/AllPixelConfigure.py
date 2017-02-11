@@ -1,6 +1,5 @@
 from __future__ import print_function
 import sys
-from bibliopixel import LEDBase, LEDStrip, LEDPOV, LEDMatrix, LEDCircle, mapGen, MultiMapBuilder, Rotation
 from bibliopixel.drivers.serial_driver import LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError
 import signal
 
