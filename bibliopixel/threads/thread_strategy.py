@@ -29,7 +29,8 @@ class ThreadStrategy(object):
     def set_brightness(self, brightness):
         """Sets the master brightness scaling, 0 - 255
 
-        If the driver supports it the brightness will be sent to the receiver directly.
+        If the driver supports it the brightness will be sent to the receiver
+        directly.
         """
         if brightness > 255 or brightness < 0:
             raise ValueError('Brightness must be between 0 and 255')
@@ -46,3 +47,6 @@ class ThreadStrategy(object):
             self.led.do_set_brightness(self.waiting_brightness)
             self.waiting_brightness = None
         self.update_colors()
+
+    def set_animation(self, animation):
+        self.animation = animation
