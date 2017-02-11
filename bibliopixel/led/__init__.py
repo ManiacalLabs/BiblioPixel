@@ -1,10 +1,12 @@
 from . circle import LEDCircle
 from . matrix import LEDMatrix
 from . cube import LEDCube
-from . coord_map import Rotation, gen_matrix, gen_circle, gen_cube
 from . pov import LEDPOV
 from . strip import LEDStrip
-
+from .. layout import Rotation
+from .. layout.matrix import gen_matrix
+from .. layout.circle import gen_circle
+from .. layout.cube import gen_cube
 
 MANIFEST = [
     {

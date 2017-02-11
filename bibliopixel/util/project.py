@@ -3,7 +3,7 @@ from . importer import make_object
 from . read_dict import read_dict
 from .. import data_maker
 from .. led.multimap import MultiMapBuilder
-from .. led.coord_map import gen_matrix
+from .. layout import gen_matrix
 
 
 def make_drivers(multimap=False, **kwds):

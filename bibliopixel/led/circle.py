@@ -1,6 +1,6 @@
 from . base import LEDBase
 from .. import data_maker
-from . coord_map import gen_circle, calc_ring_steps, calc_ring_pixel_count, layout_from_rings
+from .. layout.circle import gen_circle, calc_ring_steps, calc_ring_pixel_count, layout_from_rings
 
 
 class LEDCircle(LEDBase):

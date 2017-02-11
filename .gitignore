@@ -9,3 +9,5 @@ BiblioPixel.egg*
 .cache
 .coverage
 htmlcov
+.eggs
+.cache
