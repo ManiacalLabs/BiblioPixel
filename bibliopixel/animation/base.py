@@ -92,14 +92,14 @@ class BaseAnimation(object):
                     self.animComplete = False
 
             stepTime = int(mid - start)
-            if self._led._threadedUpdate:
+            if self._led.thread_strategy.enabled:
                 updateTime = int(self._led.lastThreadedUpdate())
                 totalTime = updateTime
             else:
                 updateTime = int(now - mid)
                 totalTime = stepTime + updateTime
 
-            if self._led._threadedUpdate:
+            if self._led.thread_strategy.enabled:
                 log.debug(
                     "Frame: %sms / Update Max: %sms", stepTime, updateTime)
             else:
