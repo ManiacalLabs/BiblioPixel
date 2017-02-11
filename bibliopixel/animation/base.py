@@ -14,7 +14,7 @@ class BaseAnimation(object):
         self._callback = None
         self._stopEvent = threading.Event()
         self._stopEvent.clear()
-        self._led._threadedAnim = False
+        self._led.thread_strategy.animation_threads = False
         self._free_run = False
 
     def _msTime(self):
@@ -113,7 +113,7 @@ class BaseAnimation(object):
                 if t == 0:
                     log.warning(
                         "Frame-time of %dms set, but took %dms!", sleep, diff)
-                if self._led._threadedAnim:
+                if self._led.thread_strategy.animation_threads:
                     self._stopEvent.wait(t)
                 else:
                     time.sleep(t)
@@ -126,8 +126,8 @@ class BaseAnimation(object):
             seconds=None):
 
         self._callback = callback
-        self._led._threadedAnim = threaded
-        if self._led._threadedAnim:
+        self._led.thread_strategy.animation_threads = threaded
+        if self._led.thread_strategy.animation_threads:
             self._stopEvent.clear()
         self._callback = callback
 
@@ -138,7 +138,7 @@ class BaseAnimation(object):
             finally:
                 self.cleanup()
 
-        if self._led._threadedAnim:
+        if self._led.thread_strategy.animation_threads:
             def target():
                 # TODO: no testpath exercises this code...
                 log.debug('Starting thread...')

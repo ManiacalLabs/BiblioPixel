@@ -8,6 +8,7 @@ class ThreadStrategy(object):
     def __init__(self, enabled, drivers):
         self.enabled = enabled
         self.drivers = drivers
+        self.animation_threads = False
         if enabled:
             self.update_thread = update_thread.UpdateThread(drivers)
             self.update_thread.start()
@@ -55,7 +56,6 @@ class LEDBase(object):
 
         self._waitingBrightness = False
         self._waitingBrightnessValue = None
-        self._threadedAnim = False
 
         self.set_brightness(masterBrightness)
 
@@ -145,7 +145,7 @@ class LEDBase(object):
         if bright > 255 or bright < 0:
             raise ValueError('Brightness must be between 0 and 255')
 
-        if self._threadedAnim:
+        if self.thread_strategy.animation_threads:
             self._waitingBrightnessValue = bright
             self._waitingBrightness = True
         else:
