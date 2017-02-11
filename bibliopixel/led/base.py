@@ -28,10 +28,6 @@ class LEDBase(object):
         self._frameTotalTime = None
 
         self.thread_strategy = ThreadStrategy(threadedUpdate, self)
-
-        self._waitingBrightness = False
-        self._waitingBrightnessValue = None
-
         self.set_brightness(masterBrightness)
 
     def set_layout(self, layout):
@@ -64,10 +60,8 @@ class LEDBase(object):
 
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
-        self.thread_strategy.wait_for_update()
-        if self._waitingBrightness:
-            self.do_set_brightness(self._waitingBrightnessValue)
-        self.thread_strategy.update_colors()
+        # This is overridden elsewhere.
+        self.thread_strategy.push_to_driver()
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.drivers])
@@ -106,22 +100,8 @@ class LEDBase(object):
         else:
             self.masterBrightness = 255
 
-        self._waitingBrightnessValue = None
-        self._waitingBrightness = False
-
     def set_brightness(self, bright):
-        """Sets the master brightness scaling, 0 - 255
-
-        If the driver supports it the brightness will be sent to the receiver directly.
-        """
-        if bright > 255 or bright < 0:
-            raise ValueError('Brightness must be between 0 and 255')
-
-        if self.thread_strategy.animation_threads:
-            self._waitingBrightnessValue = bright
-            self._waitingBrightness = True
-        else:
-            self._do_set_brightness(bright)
+        self.thread_strategy.set_brightness(bright)
 
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
