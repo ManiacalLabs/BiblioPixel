@@ -6,7 +6,8 @@ class BaseAnimation(object):
 
     def __init__(self, led):
         self._led = led
-        led.thread_strategy.set_animation(self)
+        self.thread_strategy = led.thread_strategy
+        self.thread_strategy.set_animation(self)
 
         self.animComplete = False
         self._step = 0
@@ -16,7 +17,6 @@ class BaseAnimation(object):
         self._callback = None
         self._stopEvent = threading.Event()
         self._stopEvent.clear()
-        self._led.thread_strategy.animation_threads = False
         self._free_run = False
 
     def _msTime(self):
@@ -39,7 +39,7 @@ class BaseAnimation(object):
         self.stopThread(wait=True)
         self._led.all_off()
         self._led.push_to_driver()
-        self._led.thread_strategy.wait_for_update()
+        self.thread_strategy.wait_for_update()
 
     def stopped(self):
         return not (self._thread and self._thread.isAlive())
@@ -93,7 +93,7 @@ class BaseAnimation(object):
                     cycle_count += 1
                     self.animComplete = False
 
-            self._led.thread_strategy.report_framerate(start, mid, now)
+            self.thread_strategy.report_framerate(start, mid, now)
 
             if sleep:
                 diff = (self._msTime() - self._timeRef)
@@ -101,7 +101,7 @@ class BaseAnimation(object):
                 if t == 0:
                     log.warning(
                         "Frame-time of %dms set, but took %dms!", sleep, diff)
-                if self._led.thread_strategy.animation_threads:
+                if self.thread_strategy.animation_threads:
                     self._stopEvent.wait(t)
                 else:
                     time.sleep(t)
@@ -114,8 +114,8 @@ class BaseAnimation(object):
             seconds=None):
 
         self._callback = callback
-        self._led.thread_strategy.animation_threads = threaded
-        if self._led.thread_strategy.animation_threads:
+        self.thread_strategy.animation_threads = threaded
+        if self.thread_strategy.animation_threads:
             self._stopEvent.clear()
         self._callback = callback
 
@@ -126,7 +126,7 @@ class BaseAnimation(object):
             finally:
                 self.cleanup()
 
-        if self._led.thread_strategy.animation_threads:
+        if self.thread_strategy.animation_threads:
             def target():
                 # TODO: no testpath exercises this code...
                 log.debug('Starting thread...')
