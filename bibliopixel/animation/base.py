@@ -37,7 +37,7 @@ class BaseAnimation(object):
         self.stopThread(wait=True)
         self._led.all_off()
         self._led.push_to_driver()
-        self._led.waitForUpdate()
+        self._led.thread_strategy.wait_for_update()
 
     def stopped(self):
         return not (self._thread and self._thread.isAlive())

@@ -21,6 +21,11 @@ class ThreadStrategy(object):
             for d in self.drivers:
                 d.sync()
 
+    def wait_for_update(self):
+        if self.enabled:
+            while all([d._thread.sending() for d in self.drivers]):
+                time.sleep(0.000001)
+
 
 class LEDBase(object):
 
@@ -82,18 +87,13 @@ class LEDBase(object):
             result.append([x, 0, 0])
         return result
 
-    def waitForUpdate(self):
-        if self.thread_strategy.enabled:
-            while all([d._thread.sending() for d in self.drivers]):
-                time.sleep(0.000001)
-
     def doBrightness(self):
         if self._waitingBrightness:
             self.do_set_brightness(self._waitingBrightnessValue)
 
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
-        self.waitForUpdate()
+        self.thread_strategy.wait_for_update()
         self.doBrightness()
         self.thread_strategy.push_to_driver()
 
@@ -119,7 +119,7 @@ class LEDBase(object):
 
     # Set the master brightness for the LEDs 0 - 255
     def _do_set_brightness(self, bright):
-        self.waitForUpdate()
+        self.thread_strategy.wait_for_update()
         result = True
         for d in self.drivers:
             if not d.set_brightness(bright):
