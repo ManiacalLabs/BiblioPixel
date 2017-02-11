@@ -4,6 +4,24 @@ from .. import colors, data_maker, util
 from .. threads import update_thread
 
 
+class ThreadStrategy(object):
+    def __init__(self, enabled, drivers):
+        self.enabled = enabled
+        self.drivers = drivers
+        if enabled:
+            self.update_thread = update_thread.UpdateThread(drivers)
+            self.update_thread.start()
+
+    def push_to_driver(self):
+        if self.enabled:
+            self.update_thread.update_colors()
+        else:
+            for d in self.drivers:
+                d.update_colors()
+            for d in self.drivers:
+                d.sync()
+
+
 class LEDBase(object):
 
     def __init__(self, drivers, threadedUpdate, masterBrightness,
@@ -28,11 +46,7 @@ class LEDBase(object):
         self._frameGenTime = 0
         self._frameTotalTime = None
 
-        self._threadedUpdate = threadedUpdate
-
-        if self._threadedUpdate:
-            self._updateThread = update_thread.UpdateThread(self.drivers)
-            self._updateThread.start()
+        self.thread_strategy = ThreadStrategy(threadedUpdate, self.drivers)
 
         self._waitingBrightness = False
         self._waitingBrightnessValue = None
@@ -69,7 +83,7 @@ class LEDBase(object):
         return result
 
     def waitForUpdate(self):
-        if self._threadedUpdate:
+        if self.thread_strategy.enabled:
             while all([d._thread.sending() for d in self.drivers]):
                 time.sleep(0.000001)
 
@@ -81,14 +95,7 @@ class LEDBase(object):
         """Push the current pixel state to the driver"""
         self.waitForUpdate()
         self.doBrightness()
-
-        if self._threadedUpdate:
-            self._updateThread.update_colors()
-        else:
-            for d in self.drivers:
-                d.update_colors()
-            for d in self.drivers:
-                d.sync()
+        self.thread_strategy.push_to_driver()
 
     def lastThreadedUpdate(self):
         return max([d.lastUpdate for d in self.drivers])
