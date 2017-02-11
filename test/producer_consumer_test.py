@@ -1,6 +1,6 @@
 import random, threading, time, unittest
 
-from bibliopixel.util import producer_consumer
+from bibliopixel.threads import producer_consumer
 
 
 class ProducerConsumerTest(unittest.TestCase):
