@@ -62,14 +62,11 @@ class LEDBase(object):
             result.append([x, 0, 0])
         return result
 
-    def doBrightness(self):
-        if self._waitingBrightness:
-            self.do_set_brightness(self._waitingBrightnessValue)
-
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
         self.thread_strategy.wait_for_update()
-        self.doBrightness()
+        if self._waitingBrightness:
+            self.do_set_brightness(self._waitingBrightnessValue)
         self.thread_strategy.update_colors()
 
     def lastThreadedUpdate(self):
