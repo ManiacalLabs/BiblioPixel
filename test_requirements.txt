@@ -1,4 +1,6 @@
+pyserial>=2.7.0
 coverage
 flake8
+phue
 pytest
 Pillow>=2.4.0
