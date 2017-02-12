@@ -7,5 +7,5 @@ include = bibliopixel/*/*.py, bibliopixel/*.py
 
 [report]
 
-fail_under = 50
+fail_under = 35
 skip_covered = True
