@@ -16,7 +16,7 @@ class AnimationQueue(BaseAnimation):
     def stopThread(self, wait=False):
         for a, r in self.anims:
             # a bit of a hack. they aren't threaded, but stops them anyway
-            a._stopEvent.set()
+            a.thread_strategy.animation_stop_event.set()
         super().stopThread(wait)
 
     def addAnim(self, anim, amt=1, fps=None, max_steps=0, until_complete=False,
