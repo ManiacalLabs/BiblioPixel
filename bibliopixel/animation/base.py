@@ -42,13 +42,6 @@ class BaseAnimation(object):
     def _run(self):
         self.preRun(self.amt)
 
-        # calculate sleep time base on desired Frames per Second
-        if self.fps:
-            self.sleep_time = int(1000 / self.fps)
-
-        if self.seconds is not None:
-            self.max_steps = int((self.seconds * 1000) / self.sleep_time)
-
         initSleep = self.sleep_time
 
         self._step = 0
@@ -100,14 +93,21 @@ class BaseAnimation(object):
         assert max_cycles >= 0
 
         self.amt = amt
-        self.fps = fps
         self.sleep_time = sleep_time
         self.max_steps = max_steps
         self.until_complete = until_complete
         self.max_cycles = max_cycles
         self.threaded = threaded
         self.join_thread = join_thread
-        self.seconds = seconds
+
+        # calculate sleep time base on desired Frames per Second
+        assert not (sleep_time and fps)
+        if fps:
+            self.sleep_time = int(1000 / fps)
+
+        assert not (seconds and max_steps)
+        if seconds is not None:
+            self.max_steps = int((seconds * 1000) / self.sleep_time)
 
     def run(self, **kwds):
         self.set_run(**kwds)
