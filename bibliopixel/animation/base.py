@@ -14,8 +14,6 @@ class BaseAnimation(object):
         self._timeRef = 0
         self._internalDelay = None
         self._callback = None
-        self._stopEvent = threading.Event()
-        self._stopEvent.clear()
         self._free_run = False
 
     def _msTime(self):
@@ -29,7 +27,7 @@ class BaseAnimation(object):
 
     def stopThread(self, wait=False):
         if self.thread_strategy.animation_thread:
-            self._stopEvent.set()
+            self.thread_strategy.animation_stop_event.set()
 
             if wait:
                 self.thread_strategy.animation_thread.join()
@@ -61,7 +59,7 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        while (not self._stopEvent.isSet() and
+        while (not self.thread_strategy.animation_stop_event.isSet() and
                ((max_steps == 0 and not until_complete) or
                 (max_steps > 0 and cur_step < max_steps) or
                 (max_steps == 0 and until_complete and not self.animComplete))):
@@ -101,7 +99,7 @@ class BaseAnimation(object):
                     log.warning(
                         "Frame-time of %dms set, but took %dms!", sleep, diff)
                 if self.thread_strategy.use_animation_thread:
-                    self._stopEvent.wait(t)
+                    self.thread_strategy.animation_stop_event.wait(t)
                 else:
                     time.sleep(t)
             cur_step += 1
@@ -115,7 +113,7 @@ class BaseAnimation(object):
         self._callback = callback
         self.thread_strategy.use_animation_thread = threaded
         if self.thread_strategy.use_animation_thread:
-            self._stopEvent.clear()
+            self.thread_strategy.animation_stop_event.clear()
         self._callback = callback
 
         def run():

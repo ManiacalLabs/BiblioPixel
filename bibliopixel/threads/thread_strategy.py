@@ -1,4 +1,4 @@
-import time
+import threading, time
 
 from .. import log
 from . import update_thread
@@ -10,6 +10,8 @@ class ThreadStrategy(object):
         self.led = led
         self.use_animation_thread = False
         self.animation_thread = None
+        self.animation_stop_event = threading.Event()
+
         self.waiting_brightness = None
 
         if enabled:
