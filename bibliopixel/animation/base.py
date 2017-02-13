@@ -13,7 +13,6 @@ class BaseAnimation(object):
         self._step = 0
         self._timeRef = 0
         self._internalDelay = None
-        self._callback = None
         self._free_run = False
 
     def _msTime(self):
@@ -91,11 +90,9 @@ class BaseAnimation(object):
                 self.thread_strategy.animation_wait(t)
             cur_step += 1
 
-        self._callback and self._callback(self)
-
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
-            max_cycles=0, threaded=False, joinThread=False, callback=None,
-            seconds=None):
+    def run(self, amt=1, fps=None, sleep=None, max_steps=0,
+            until_complete=False, max_cycles=0, threaded=False,
+            joinThread=False, seconds=None):
 
         def run():
             try:
@@ -104,7 +101,6 @@ class BaseAnimation(object):
             finally:
                 self.cleanup()
 
-        self._callback = callback
         self.thread_strategy.run_animation(run, threaded, joinThread)
 
     RUN_PARAMS = [{
