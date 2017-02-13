@@ -31,9 +31,6 @@ class BaseAnimation(object):
         self._led.push_to_driver()
         self.thread_strategy.wait_for_update()
 
-    def stopped(self):
-        return not (self.thread_strategy.animation_thread and self.thread_strategy.animation_thread.isAlive())
-
     def _run(self, amt, fps, sleep, max_steps, until_complete,
              max_cycles, seconds):
         self.preRun(amt)
