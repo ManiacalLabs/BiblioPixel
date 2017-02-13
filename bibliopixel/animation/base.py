@@ -25,15 +25,8 @@ class BaseAnimation(object):
     def step(self, amt=1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
-    def stopThread(self, wait=False):
-        if self.thread_strategy.animation_thread:
-            self.thread_strategy.animation_stop_event.set()
-
-            if wait:
-                self.thread_strategy.animation_thread.join()
-
     def cleanup(self):
-        self.stopThread(wait=True)
+        self.thread_strategy.stop_animation_thread(wait=True)
         self._led.all_off()
         self._led.push_to_driver()
         self.thread_strategy.wait_for_update()
