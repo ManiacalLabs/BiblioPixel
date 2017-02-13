@@ -65,5 +65,5 @@ class BaseGameAnim(BaseMatrixAnim):
         self._lastKeys = self._keys
 
     def step(self, amt):
-        super().step(amt)
+        self._keys = self._input_dev.getKeys()
         self._speedStep += 1

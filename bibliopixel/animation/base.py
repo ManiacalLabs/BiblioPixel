@@ -61,8 +61,6 @@ class BaseAnimation(object):
             self._timeRef = self._msTime()
 
             start = self._msTime()
-            if hasattr(self, "_input_dev"):
-                self._keys = self._input_dev.getKeys()
             self.step(amt)
             mid = self._msTime()
 
