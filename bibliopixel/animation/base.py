@@ -52,8 +52,10 @@ class BaseAnimation(object):
             if self.thread_strategy.animation_stop_event.isSet():
                 return False
 
+            if max_steps > 0:
+                return cur_step < max_steps
+
             return ((max_steps == 0 and not until_complete) or
-                    (max_steps > 0 and cur_step < max_steps) or
                     (max_steps == 0 and until_complete and
                      not self.animComplete))
 
@@ -95,9 +97,11 @@ class BaseAnimation(object):
                 self.thread_strategy.animation_wait(t)
             cur_step += 1
 
-    def run(self, amt=1, fps=None, sleep_time=None, max_steps=0,
+    def run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
             until_complete=False, max_cycles=0, threaded=False,
             joinThread=False, seconds=None):
+        assert max_steps >= 0
+        assert sleep_time >= 0
 
         def run():
             try:
