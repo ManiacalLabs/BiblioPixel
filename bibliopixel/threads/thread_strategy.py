@@ -76,3 +76,6 @@ class ThreadStrategy(object):
 
             if wait:
                 self.animation_thread.join()
+
+    def animation_stopped(self):
+        return not (self.animation_thread and self.animation_thread.isAlive())
