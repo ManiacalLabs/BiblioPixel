@@ -95,7 +95,7 @@ class BaseAnimation(object):
 
     def run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
             until_complete=False, max_cycles=0, threaded=False,
-            joinThread=False, seconds=None):
+            join_thread=False, seconds=None):
         assert max_steps >= 0
         assert sleep_time >= 0
 
@@ -106,7 +106,7 @@ class BaseAnimation(object):
             finally:
                 self.cleanup()
 
-        self.thread_strategy.run_animation(run, threaded, joinThread)
+        self.thread_strategy.run_animation(run, threaded, join_thread)
 
     RUN_PARAMS = [{
         "id": "amt",
