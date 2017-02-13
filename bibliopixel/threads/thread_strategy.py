@@ -85,3 +85,21 @@ class ThreadStrategy(object):
             self.animation_stop_event.wait(t)
         else:
             time.sleep(t)
+
+    def run_animation(self, run, threaded, join_thread):
+        self.use_animation_thread = threaded
+        if self.use_animation_thread:
+            self.animation_stop_event.clear()
+
+            def target():
+                # TODO: no testpath exercises this code...
+                log.debug('Starting thread...')
+                run()
+                log.debug('Thread Complete')
+
+            self.animation_thread = threading.Thread(target=target, daemon=True)
+            self.animation_thread.start()
+            if join_thread:
+                self.animation_thread.join()
+        else:
+            run()

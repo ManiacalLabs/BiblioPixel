@@ -105,22 +105,7 @@ class BaseAnimation(object):
                 self.cleanup()
 
         self._callback = callback
-        self.thread_strategy.use_animation_thread = threaded
-
-        if self.thread_strategy.use_animation_thread:
-            self.thread_strategy.animation_stop_event.clear()
-            def target():
-                # TODO: no testpath exercises this code...
-                log.debug('Starting thread...')
-                run()
-                log.debug('Thread Complete')
-
-            self.thread_strategy.animation_thread = threading.Thread(target=target, daemon=True)
-            self.thread_strategy.animation_thread.start()
-            if joinThread:
-                self.thread_strategy.animation_thread.join()
-        else:
-            run()
+        self.thread_strategy.run_animation(run, threaded, joinThread)
 
     RUN_PARAMS = [{
         "id": "amt",
