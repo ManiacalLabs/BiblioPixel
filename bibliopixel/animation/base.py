@@ -49,11 +49,13 @@ class BaseAnimation(object):
         self.animComplete = False
 
         def is_running():
-            return (not self.thread_strategy.animation_stop_event.isSet() and
-                    ((max_steps == 0 and not until_complete) or
-                     (max_steps > 0 and cur_step < max_steps) or
-                     (max_steps == 0 and until_complete and
-                      not self.animComplete)))
+            if self.thread_strategy.animation_stop_event.isSet():
+                return False
+
+            return ((max_steps == 0 and not until_complete) or
+                    (max_steps > 0 and cur_step < max_steps) or
+                    (max_steps == 0 and until_complete and
+                     not self.animComplete))
 
         while is_running():
             self._timeRef = self._msTime()
