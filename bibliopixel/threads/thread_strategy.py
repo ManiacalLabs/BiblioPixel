@@ -69,3 +69,10 @@ class ThreadStrategy(object):
             log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
                       totalTime, int(1000 / max(totalTime, 1)), stepTime,
                       updateTime)
+
+    def stop_animation_thread(self, wait=False):
+        if self.animation_thread:
+            self.animation_stop_event.set()
+
+            if wait:
+                self.animation_thread.join()
