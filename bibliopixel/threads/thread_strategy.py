@@ -9,6 +9,7 @@ class ThreadStrategy(object):
         self.enabled = enabled
         self.led = led
         self.use_animation_thread = False
+        self.animation_thread = None
         self.waiting_brightness = None
 
         if enabled:

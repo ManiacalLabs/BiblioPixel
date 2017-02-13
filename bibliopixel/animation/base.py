@@ -13,7 +13,6 @@ class BaseAnimation(object):
         self._step = 0
         self._timeRef = 0
         self._internalDelay = None
-        self._thread = None
         self._callback = None
         self._stopEvent = threading.Event()
         self._stopEvent.clear()
@@ -29,11 +28,11 @@ class BaseAnimation(object):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def stopThread(self, wait=False):
-        if self._thread:
+        if self.thread_strategy.animation_thread:
             self._stopEvent.set()
 
             if wait:
-                self._thread.join()
+                self.thread_strategy.animation_thread.join()
 
     def cleanup(self):
         self.stopThread(wait=True)
@@ -42,7 +41,7 @@ class BaseAnimation(object):
         self.thread_strategy.wait_for_update()
 
     def stopped(self):
-        return not (self._thread and self._thread.isAlive())
+        return not (self.thread_strategy.animation_thread and self.thread_strategy.animation_thread.isAlive())
 
     def _run(self, amt, fps, sleep, max_steps, until_complete,
              max_cycles, seconds):
@@ -133,10 +132,10 @@ class BaseAnimation(object):
                 run()
                 log.debug('Thread Complete')
 
-            self._thread = threading.Thread(target=target, daemon=True)
-            self._thread.start()
+            self.thread_strategy.animation_thread = threading.Thread(target=target, daemon=True)
+            self.thread_strategy.animation_thread.start()
             if joinThread:
-                self._thread.join()
+                self.thread_strategy.animation_thread.join()
         else:
             run()
 
