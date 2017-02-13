@@ -79,3 +79,9 @@ class ThreadStrategy(object):
 
     def animation_stopped(self):
         return not (self.animation_thread and self.animation_thread.isAlive())
+
+    def animation_wait(self, t):
+        if self.use_animation_thread:
+            self.animation_stop_event.wait(t)
+        else:
+            time.sleep(t)
