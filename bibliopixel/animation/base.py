@@ -30,18 +30,18 @@ class BaseAnimation(object):
         self._led.push_to_driver()
         self.thread_strategy.wait_for_update()
 
-    def _run(self, amt, fps, sleep, max_steps, until_complete,
+    def _run(self, amt, fps, sleep_time, max_steps, until_complete,
              max_cycles, seconds):
         self.preRun(amt)
 
         # calculate sleep time base on desired Frames per Second
         if fps:
-            sleep = int(1000 / fps)
+            sleep_time = int(1000 / fps)
 
         if seconds is not None:
-            max_steps = int((seconds * 1000) / sleep)
+            max_steps = int((seconds * 1000) / sleep_time)
 
-        initSleep = sleep
+        initSleep = sleep_time
 
         self._step = 0
         cur_step = 0
@@ -62,14 +62,14 @@ class BaseAnimation(object):
             mid = self._msTime()
 
             if self._free_run:
-                sleep = None
+                sleep_time = None
             elif self._internalDelay:
-                sleep = self._internalDelay
+                sleep_time = self._internalDelay
             elif initSleep:
-                sleep = initSleep
+                sleep_time = initSleep
 
             self._led._frameGenTime = int(mid - start)
-            self._led._frameTotalTime = sleep
+            self._led._frameTotalTime = sleep_time
 
             self._led.push_to_driver()
             now = self._msTime()
@@ -81,22 +81,22 @@ class BaseAnimation(object):
 
             self.thread_strategy.report_framerate(start, mid, now)
 
-            if sleep:
+            if sleep_time:
                 diff = (self._msTime() - self._timeRef)
-                t = max(0, (sleep - diff) / 1000.0)
+                t = max(0, (sleep_time - diff) / 1000.0)
                 if t == 0:
                     log.warning(
-                        "Frame-time of %dms set, but took %dms!", sleep, diff)
+                        "Frame-time of %dms set, but took %dms!", sleep_time, diff)
                 self.thread_strategy.animation_wait(t)
             cur_step += 1
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0,
+    def run(self, amt=1, fps=None, sleep_time=None, max_steps=0,
             until_complete=False, max_cycles=0, threaded=False,
             joinThread=False, seconds=None):
 
         def run():
             try:
-                self._run(amt, fps, sleep, max_steps, until_complete,
+                self._run(amt, fps, sleep_time, max_steps, until_complete,
                           max_cycles, seconds)
             finally:
                 self.cleanup()
