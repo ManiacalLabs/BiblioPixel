@@ -8,7 +8,7 @@ class ThreadStrategy(object):
     def __init__(self, enabled, led):
         self.enabled = enabled
         self.led = led
-        self.animation_threads = False
+        self.use_animation_thread = False
         self.waiting_brightness = None
 
         if enabled:
@@ -38,7 +38,7 @@ class ThreadStrategy(object):
         if brightness > 255 or brightness < 0:
             raise ValueError('Brightness must be between 0 and 255')
 
-        if self.animation_threads:
+        if self.use_animation_thread:
             self.waiting_brightness = brightness
         else:
             self.led._do_set_brightness(brightness)
