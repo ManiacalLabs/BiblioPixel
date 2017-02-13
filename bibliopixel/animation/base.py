@@ -30,18 +30,17 @@ class BaseAnimation(object):
         self._led.push_to_driver()
         self.thread_strategy.wait_for_update()
 
-    def _run(self, amt, fps, sleep_time, max_steps, until_complete,
-             max_cycles, seconds):
-        self.preRun(amt)
+    def _run(self):
+        self.preRun(self.amt)
 
         # calculate sleep time base on desired Frames per Second
-        if fps:
-            sleep_time = int(1000 / fps)
+        if self.fps:
+            self.sleep_time = int(1000 / self.fps)
 
-        if seconds is not None:
-            max_steps = int((seconds * 1000) / sleep_time)
+        if self.seconds is not None:
+            self.max_steps = int((self.seconds * 1000) / self.sleep_time)
 
-        initSleep = sleep_time
+        initSleep = self.sleep_time
 
         self._step = 0
         cur_step = 0
@@ -52,61 +51,74 @@ class BaseAnimation(object):
             if self.thread_strategy.animation_stop_event.isSet():
                 return False
 
-            if max_steps:
-                return cur_step < max_steps
+            if self.max_steps:
+                return cur_step < self.max_steps
 
-            return not (until_complete and self.animComplete)
+            return not (self.until_complete and self.animComplete)
 
         while is_running():
             self._timeRef = self._msTime()
 
             start = self._msTime()
-            self.step(amt)
+            self.step(self.amt)
             mid = self._msTime()
 
             if self._free_run:
-                sleep_time = None
+                self.sleep_time = None
             elif self._internalDelay:
-                sleep_time = self._internalDelay
+                self.sleep_time = self._internalDelay
             elif initSleep:
-                sleep_time = initSleep
+                self.sleep_time = initSleep
 
             self._led._frameGenTime = int(mid - start)
-            self._led._frameTotalTime = sleep_time
+            self._led._frameTotalTime = self.sleep_time
 
             self._led.push_to_driver()
             now = self._msTime()
 
-            if self.animComplete and max_cycles > 0:
-                if cycle_count < max_cycles - 1:
+            if self.animComplete and self.max_cycles > 0:
+                if cycle_count < self.max_cycles - 1:
                     cycle_count += 1
                     self.animComplete = False
 
             self.thread_strategy.report_framerate(start, mid, now)
 
-            if sleep_time:
+            if self.sleep_time:
                 diff = (self._msTime() - self._timeRef)
-                t = max(0, (sleep_time - diff) / 1000.0)
+                t = max(0, (self.sleep_time - diff) / 1000.0)
                 if t == 0:
                     log.warning(
-                        "Frame-time of %dms set, but took %dms!", sleep_time, diff)
+                        "Frame-time of %dms set, but took %dms!", self.sleep_time, diff)
                 self.thread_strategy.animation_wait(t)
             cur_step += 1
 
-    def run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
-            until_complete=False, max_cycles=0, threaded=False,
-            join_thread=False, seconds=None):
+    def set_run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
+                until_complete=False, max_cycles=0, threaded=False,
+                join_thread=False, seconds=None):
         assert max_steps >= 0
         assert sleep_time >= 0
+        assert max_cycles >= 0
+
+        self.amt = amt
+        self.fps = fps
+        self.sleep_time = sleep_time
+        self.max_steps = max_steps
+        self.until_complete = until_complete
+        self.max_cycles = max_cycles
+        self.threaded = threaded
+        self.join_thread = join_thread
+        self.seconds = seconds
+
+    def run(self, **kwds):
+        self.set_run(**kwds)
 
         def run():
             try:
-                self._run(amt, fps, sleep_time, max_steps, until_complete,
-                          max_cycles, seconds)
+                self._run()
             finally:
                 self.cleanup()
 
-        self.thread_strategy.run_animation(run, threaded, join_thread)
+        self.thread_strategy.run_animation(run, self.threaded, self.join_thread)
 
     RUN_PARAMS = [{
         "id": "amt",
