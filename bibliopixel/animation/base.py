@@ -30,6 +30,15 @@ class BaseAnimation(object):
         self._led.push_to_driver()
         self.thread_strategy.wait_for_update()
 
+    def is_running(self, cur_step):
+        if self.thread_strategy.animation_stop_event.isSet():
+            return False
+
+        if self.max_steps:
+            return cur_step < self.max_steps
+
+        return not (self.until_complete and self.animComplete)
+
     def _run(self):
         self.preRun(self.amt)
 
@@ -47,16 +56,7 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        def is_running():
-            if self.thread_strategy.animation_stop_event.isSet():
-                return False
-
-            if self.max_steps:
-                return cur_step < self.max_steps
-
-            return not (self.until_complete and self.animComplete)
-
-        while is_running():
+        while self.is_running(cur_step):
             self._timeRef = self._msTime()
 
             start = self._msTime()
