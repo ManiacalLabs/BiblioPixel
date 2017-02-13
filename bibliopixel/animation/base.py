@@ -52,12 +52,10 @@ class BaseAnimation(object):
             if self.thread_strategy.animation_stop_event.isSet():
                 return False
 
-            if max_steps > 0:
+            if max_steps:
                 return cur_step < max_steps
 
-            return ((max_steps == 0 and not until_complete) or
-                    (max_steps == 0 and until_complete and
-                     not self.animComplete))
+            return not (until_complete and self.animComplete)
 
         while is_running():
             self._timeRef = self._msTime()
