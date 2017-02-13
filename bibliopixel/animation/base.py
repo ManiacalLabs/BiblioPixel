@@ -48,11 +48,14 @@ class BaseAnimation(object):
         cycle_count = 0
         self.animComplete = False
 
-        while (not self.thread_strategy.animation_stop_event.isSet() and
-               ((max_steps == 0 and not until_complete) or
-                (max_steps > 0 and cur_step < max_steps) or
-                (max_steps == 0 and until_complete and not self.animComplete))):
+        def is_running():
+            return (not self.thread_strategy.animation_stop_event.isSet() and
+                    ((max_steps == 0 and not until_complete) or
+                     (max_steps > 0 and cur_step < max_steps) or
+                     (max_steps == 0 and until_complete and
+                      not self.animComplete)))
 
+        while is_running():
             self._timeRef = self._msTime()
 
             start = self._msTime()
