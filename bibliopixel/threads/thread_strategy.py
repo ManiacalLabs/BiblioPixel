@@ -5,6 +5,14 @@ from . import update_thread
 
 
 class ThreadStrategy(object):
+    """
+    ThreadStrategy handles threading - and eventually multiprocessing - for
+    BaseAnimation and LEDBase.
+
+    It would be better if this were two separate classes but some functionality
+    requires information from both sides... I mark these with an XXX below.
+    """
+
     def __init__(self, use_update_thread, led):
         self.use_update_thread = use_update_thread
         self.use_animation_thread = False
@@ -38,6 +46,8 @@ class ThreadStrategy(object):
         If the driver supports it the brightness will be sent to the receiver
         directly.
         """
+        # XXX: This is called from the LED's update cycle, but uses animation
+        # thread information.
         if brightness > 255 or brightness < 0:
             raise ValueError('Brightness must be between 0 and 255')
 
@@ -58,6 +68,8 @@ class ThreadStrategy(object):
         self.animation = animation
 
     def report_framerate(self, start, mid, now):
+        # XXX: this is called from the animation's update cycle, but uses LED
+        # thread information.
         stepTime = int(mid - start)
         if self.use_update_thread:
             updateTime = int(self.led.lastThreadedUpdate())
