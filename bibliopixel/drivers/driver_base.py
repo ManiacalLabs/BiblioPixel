@@ -103,5 +103,6 @@ class DriverBase(object):
         return output
 
     def _render(self):
-        r = (hasattr(self._colors, 'indexer') and self._render_td) or self._render_py
-        self._buf = r(self._colors, self._pos, self.numLEDs, self._buf)
+        is_timedata = hasattr(self._colors, 'indexer')
+        render = self._render_td if is_timedata else self._render_py
+        self._buf = render(self._colors, self._pos, self.numLEDs, self._buf)
