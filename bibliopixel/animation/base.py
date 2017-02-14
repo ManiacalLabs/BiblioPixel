@@ -42,8 +42,6 @@ class BaseAnimation(object):
     def _run(self):
         self.preRun(self.amt)
 
-        initSleep = self.sleep_time
-
         self._step = 0
         cur_step = 0
         cycle_count = 0
@@ -55,13 +53,6 @@ class BaseAnimation(object):
             start = self._msTime()
             self.step(self.amt)
             mid = self._msTime()
-
-            if self._free_run:
-                self.sleep_time = None
-            elif self._internalDelay:
-                self.sleep_time = self._internalDelay
-            elif initSleep:
-                self.sleep_time = initSleep
 
             self._led._frameGenTime = int(mid - start)
             self._led._frameTotalTime = self.sleep_time
@@ -108,6 +99,11 @@ class BaseAnimation(object):
         assert not (seconds and max_steps)
         if seconds is not None:
             self.max_steps = int((seconds * 1000.0) / self.sleep_time)
+
+        if self._free_run:
+            self.sleep_time = None
+        elif self._internalDelay:
+            self.sleep_time = self._internalDelay
 
     def run(self, **kwds):
         self.set_run(**kwds)
