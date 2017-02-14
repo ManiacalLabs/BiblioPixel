@@ -23,7 +23,6 @@ class DriverHue(DriverBase):
         self._bridge = Bridge(ip)
         self._bridge.connect()
         self._transitionTime = 0
-        self._brightness = 254
 
         if nameMap:
             self._lights = self._bridge.get_light_objects('name')
@@ -62,7 +61,7 @@ class DriverHue(DriverBase):
     def _send_packet(self):
         for i in range(len(self._ids)):
             h, s = self._rgb2hs(self._colors[i + self._pos])
-            bri = self._brightness
+            bri = min(254, self._brightness)
             if s == 0:
                 bri = 0
 
