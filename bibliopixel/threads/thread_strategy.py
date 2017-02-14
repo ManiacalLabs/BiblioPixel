@@ -50,7 +50,7 @@ class ThreadStrategy(object):
         """Push the current pixel state to the driver"""
         self.wait_for_update()
         if self.waiting_brightness is not None:
-            self.led.do_set_brightness(self.waiting_brightness)
+            self.led._do_set_brightness(self.waiting_brightness)
             self.waiting_brightness = None
         self.update_colors()
 
