@@ -67,7 +67,7 @@ class ThreadStrategy(object):
             updateTime = int(now - mid)
             totalTime = stepTime + updateTime
             log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                      totalTime, int(1000 / max(totalTime, 1)), stepTime,
+                      totalTime, int(1000.0 / max(totalTime, 1)), stepTime,
                       updateTime)
 
     def stop_animation_thread(self, wait=False):

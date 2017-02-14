@@ -103,11 +103,11 @@ class BaseAnimation(object):
         # calculate sleep time base on desired Frames per Second
         assert not (sleep_time and fps)
         if fps:
-            self.sleep_time = int(1000 / fps)
+            self.sleep_time = int(1000.0 / fps)
 
         assert not (seconds and max_steps)
         if seconds is not None:
-            self.max_steps = int((seconds * 1000) / self.sleep_time)
+            self.max_steps = int((seconds * 1000.0) / self.sleep_time)
 
     def run(self, **kwds):
         self.set_run(**kwds)
