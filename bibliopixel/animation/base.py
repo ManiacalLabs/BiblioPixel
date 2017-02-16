@@ -1,13 +1,13 @@
 import threading, time
 from .. import log
+from .. threads.thread_strategy import AnimationThreading
 
 
 class BaseAnimation(object):
 
     def __init__(self, led):
         self._led = led
-        self.thread_strategy = led.thread_strategy
-        self.thread_strategy.set_animation(self)
+        self.threading = AnimationThreading(self)
 
         self.animComplete = False
         self._step = 0
@@ -25,13 +25,13 @@ class BaseAnimation(object):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def cleanup(self):
-        self.thread_strategy.stop_animation_thread(wait=True)
+        self.threading.stop_animation_thread(wait=True)
         self._led.all_off()
         self._led.push_to_driver()
-        self.thread_strategy.wait_for_update()
+        self._led.threading.wait_for_update()
 
     def is_running(self, cur_step):
-        if self.thread_strategy.animation_stop_event.isSet():
+        if self.threading.animation_stop_event.isSet():
             return False
 
         if self.max_steps:
@@ -65,7 +65,7 @@ class BaseAnimation(object):
                     cycle_count += 1
                     self.animComplete = False
 
-            self.thread_strategy.report_framerate(start, mid, now)
+            self.threading.report_framerate(start, mid, now)
 
             if self.sleep_time:
                 diff = (self._msTime() - self._timeRef)
@@ -73,7 +73,7 @@ class BaseAnimation(object):
                 if t == 0:
                     log.warning(
                         "Frame-time of %dms set, but took %dms!", self.sleep_time, diff)
-                self.thread_strategy.animation_wait(t)
+                self.threading.animation_wait(t)
             cur_step += 1
 
     def set_run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
@@ -114,7 +114,7 @@ class BaseAnimation(object):
             finally:
                 self.cleanup()
 
-        self.thread_strategy.run_animation(run, self.threaded, self.join_thread)
+        self.threading.run_animation(run, self.threaded, self.join_thread)
 
     RUN_PARAMS = [{
         "id": "amt",
