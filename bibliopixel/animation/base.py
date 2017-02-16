@@ -1,6 +1,6 @@
 import threading, time
 from .. import log
-from .. threads.thread_strategy import AnimationThreading
+from .. threads.animation_threading import AnimationThreading
 
 
 class BaseAnimation(object):
