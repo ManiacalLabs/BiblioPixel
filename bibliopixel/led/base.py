@@ -59,7 +59,7 @@ class LEDBase(object):
         # This is overridden elsewhere.
         self.thread_strategy.push_to_driver()
 
-    def lastThreadedUpdate(self):
+    def lastDriverUpdate(self):
         return max([d.lastUpdate for d in self.drivers])
 
     # use with caution!

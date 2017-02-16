@@ -65,7 +65,8 @@ class BaseAnimation(object):
                     cycle_count += 1
                     self.animComplete = False
 
-            self.thread_strategy.report_framerate(start, mid, now)
+            self.thread_strategy.report_framerate(
+                start, mid, now, self._led.lastDriverUpdate())
 
             if self.sleep_time:
                 diff = (self._msTime() - self._timeRef)
