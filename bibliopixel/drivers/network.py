@@ -56,8 +56,7 @@ class DriverNetwork(DriverBase):
             log.error(error)
             raise IOError(error)
 
-    def set_brightness(self, brightness):
-        super().set_brightness(brightness)
+    def set_device_brightness(self, brightness):
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         s = self._connect()

@@ -9,7 +9,7 @@ class LEDMatrix(LEDBase):
 
     def __init__(self, drivers, width=0, height=0, coordMap=None,
                  rotation=Rotation.ROTATE_0, vert_flip=False,
-                 threadedUpdate=False, masterBrightness=255,
+                 threadedUpdate=False, brightness=255,
                  pixelSize=(1, 1), **kwargs):
         """Main class for matricies.
         driver - instance that inherits from DriverBase
@@ -19,7 +19,7 @@ class LEDMatrix(LEDBase):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super().__init__(drivers, threadedUpdate, masterBrightness,
+        super().__init__(drivers, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
 
         if width == 0 and height == 0:

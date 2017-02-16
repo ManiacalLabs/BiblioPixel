@@ -56,9 +56,12 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
                 res = self.request.recv(1)
                 bright = ord(res)
                 result = RETURN_CODES.ERROR_UNSUPPORTED
-                if self.server.setBrightness:
-                    if self.server.setBrightness(bright):
+                if self.server.set_brightness:
+                    if self.server.set_brightness(bright):
                         result = RETURN_CODES.SUCCESS
+                    else:
+                        # Try again.
+                        self.server.set_brightness(bright)
 
                 packet = bytearray()
                 packet.append(result)
@@ -72,7 +75,7 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
 
 class ThreadedDataServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     update = None
-    setBrightness = None
+    set_brightness = None
     hasFrame = None
 
 
@@ -84,7 +87,7 @@ class NetworkReceiver:
         SocketServer.TCPServer.allow_reuse_address = True
         self._server = ThreadedDataServer(self.address, ThreadedDataHandler)
         self._server.update = self.update
-        self._server.setBrightness = self._led.set_brightness
+        self._server.set_brightness = self._led.set_brightness
 
     def start(self, join=False):
         self._t = threading.Thread(target=self._server.serve_forever)

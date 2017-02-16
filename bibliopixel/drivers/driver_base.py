@@ -1,7 +1,6 @@
 from .. import gamma as _gamma
 from .. import data_maker
-
-import time
+import threading, time
 
 
 class ChannelOrder:
@@ -16,15 +15,21 @@ class ChannelOrder:
 
 
 class DriverBase(object):
-    """Base driver class to build other drivers from"""
+    """Base driver class to build other drivers from."""
+
+    # If set_device_brightness is not empty, it's a method that allows you
+    # to directly set the brightness for the device.
+    #
+    # If it is empty, then the brightness is used as a scale factor in rendering
+    # the pixels.
+    set_device_brightness = None
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
                  gamma=None, maker=data_maker.MAKER):
         if num == 0:
             num = width * height
             if num == 0:
-                raise ValueError(
-                    "Either num or width and height must be provided!")
+                raise ValueError("Either num, or width and height are needed!")
 
         self.numLEDs = num
         gamma = gamma or _gamma.DEFAULT
@@ -48,6 +53,10 @@ class DriverBase(object):
             permutation=self.perm,
             min=gamma.lower_bound,
             max=255)
+
+        self.brightness_lock = threading.Lock()
+        self._brightness = 255
+        self.set_brightness(255)
 
     def set_layout(self, layout):
         pass
@@ -83,6 +92,16 @@ class DriverBase(object):
         if self._thread:
             start = time.time() * 1000.0
 
+        with self.brightness_lock:
+            # Swap in a new brightness.
+            brightness, self._waiting_brightness = (
+                self._waiting_brightness, None)
+
+        if brightness is not None:
+            self._brightness = brightness
+            if self.set_device_brightness:
+                self.set_device_brightness(brightness)
+
         self._compute_packet()
         self._send_packet()
 
@@ -90,13 +109,11 @@ class DriverBase(object):
             self.lastUpdate = (time.time() * 1000.0) - start
 
     def set_brightness(self, brightness):
-        if brightness > 255 or brightness < 0:
-            raise ValueError('Brightness not between 0 and 255: %s' % brightness)
-        self._brightness = brightness
-        return False  # Device does NOT support internal brightness control
+        with self.brightness_lock:
+            self._waiting_brightness = brightness
 
-    def _render_py(self, colors, pos, length, output):
-        fix, (r, g, b) = self.gamma.get, self.c_order
+    def _render_py(self, colors, pos, length, output, level):
+        fix, (r, g, b) = self.gamma.get, (int(level) * i for i in self.c_order)
         for i in range(length):
             c = tuple(int(x) for x in colors[i + pos])
             output[i * 3:(i + 1) * 3] = fix(c[r]), fix(c[g]), fix(c[b])
@@ -104,4 +121,9 @@ class DriverBase(object):
 
     def _render(self):
         render = self._render_td or self._render_py
-        self._buf = render(self._colors, self._pos, self.numLEDs, self._buf)
+        if self.set_device_brightness:
+            level = 1.0
+        else:
+            level = self._brightness / 255.0
+        self._buf = render(
+            self._colors, self._pos, self.numLEDs, self._buf, level)
