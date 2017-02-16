@@ -35,8 +35,6 @@ from bibliopixel.drivers import (
     serial_driver,
     spi_driver_base,
     # timedata_visualizer,
-    visualizer,
-    visualizerUI,
 )
 
 
