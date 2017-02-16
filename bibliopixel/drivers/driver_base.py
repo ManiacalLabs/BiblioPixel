@@ -44,7 +44,6 @@ class DriverBase(object):
         self.height = height
         self._buf = maker.make_packet(self.bufByteCount())
 
-        self._thread = None
         self.lastUpdate = 0
 
         self._render_td = maker.renderer(
@@ -89,8 +88,7 @@ class DriverBase(object):
         pass
 
     def update_colors(self):
-        if self._thread:
-            start = time.time() * 1000.0
+        start = time.time() * 1000.0
 
         with self.brightness_lock:
             # Swap in a new brightness.
@@ -105,8 +103,7 @@ class DriverBase(object):
         self._compute_packet()
         self._send_packet()
 
-        if self._thread:
-            self.lastUpdate = (time.time() * 1000.0) - start
+        self.lastUpdate = (time.time() * 1000.0) - start
 
     def set_brightness(self, brightness):
         with self.brightness_lock:
