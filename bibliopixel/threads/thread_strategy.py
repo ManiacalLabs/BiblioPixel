@@ -43,17 +43,13 @@ class ThreadStrategy(object):
     def set_animation(self, animation):
         self.animation = animation
 
-    def report_framerate(self, start, mid, now, driver_update_time):
+    def report_framerate(self, start, mid, now):
         stepTime = int(mid - start)
-        if self.use_update_thread:
-            log.debug("Frame: %sms / Update Max: %sms",
-                      stepTime, int(driver_update_time))
-        else:
-            render_duration = int(now - mid)
-            totalTime = stepTime + render_duration
-            log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                      totalTime, int(1000.0 / max(totalTime, 1)), stepTime,
-                      render_duration)
+        render_duration = int(now - mid)
+        totalTime = stepTime + render_duration
+        fps = int(1000.0 / max(totalTime, 1))
+        log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
+                  totalTime, fps, stepTime, render_duration)
 
     def stop_animation_thread(self, wait=False):
         if self.animation_thread:
