@@ -26,9 +26,7 @@ class BaseAnimation(object):
 
     def cleanup(self):
         self.threading.stop_animation_thread(wait=True)
-        self._led.all_off()
-        self._led.push_to_driver()
-        self._led.threading.wait_for_update()
+        self._led.cleanup()
 
     def is_running(self, cur_step):
         if self.threading.animation_stop_event.isSet():
