@@ -9,8 +9,8 @@ from .. import log
 class LEDCube(LEDBase):
 
     def __init__(self, drivers, x, y, z, coordMap=None,
-                 threadedUpdate=False, masterBrightness=255, **kwargs):
-        super().__init__(drivers, threadedUpdate, masterBrightness,
+                 threadedUpdate=False, brightness=255, **kwargs):
+        super().__init__(drivers, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
 
         self.x = x

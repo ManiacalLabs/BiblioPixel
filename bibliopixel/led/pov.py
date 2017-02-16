@@ -8,11 +8,11 @@ class LEDPOV(LEDMatrix):
 
     def __init__(self, drivers, povHeight, width, rotation=Rotation.ROTATE_0,
                  vert_flip=False, threadedUpdate=False,
-                 masterBrightness=255, **kwargs):
+                 brightness=255, **kwargs):
         self.numLEDs = povHeight * width
 
         super().__init__(drivers, width, povHeight, None,
-                         rotation, vert_flip, threadedUpdate, masterBrightness,
+                         rotation, vert_flip, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
 
     # This is the magic. Overriding the normal push_to_driver() method

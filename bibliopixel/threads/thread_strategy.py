@@ -20,8 +20,6 @@ class ThreadStrategy(object):
         self.animation_thread = None
         self.animation_stop_event = threading.Event()
 
-        self.waiting_brightness = None
-
         if use_update_thread:
             self.update_thread = update_thread.UpdateThread(led.drivers)
             self.update_thread.start()
@@ -46,22 +44,15 @@ class ThreadStrategy(object):
         If the driver supports it the brightness will be sent to the receiver
         directly.
         """
-        # XXX: This is called from the LED's update cycle, but uses animation
-        # thread information.
         if brightness > 255 or brightness < 0:
             raise ValueError('Brightness must be between 0 and 255')
 
-        if self.use_animation_thread:
-            self.waiting_brightness = brightness
-        else:
-            self.led._do_set_brightness(brightness)
+        for d in self.led.drivers:
+            d.set_brightness(brightness)
 
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
         self.wait_for_update()
-        if self.waiting_brightness is not None:
-            self.led._do_set_brightness(self.waiting_brightness)
-            self.waiting_brightness = None
         self.update_colors()
 
     def set_animation(self, animation):

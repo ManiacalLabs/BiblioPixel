@@ -6,8 +6,8 @@ from .. layout.strip import gen_strip
 class LEDStrip(LEDBase):
 
     def __init__(self, drivers, threadedUpdate=False,
-                 masterBrightness=255, pixelWidth=1, **kwargs):
-        super().__init__(drivers, threadedUpdate, masterBrightness,
+                 brightness=255, pixelWidth=1, **kwargs):
+        super().__init__(drivers, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
 
         self.pixelWidth = pixelWidth

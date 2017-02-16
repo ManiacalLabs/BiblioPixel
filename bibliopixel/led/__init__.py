@@ -22,7 +22,7 @@ MANIFEST = [
                 "default": False,
                 "help": "Enable to run display updates on a separate thread, which can improve speed."
         }, {
-            "id": "masterBrightness",
+            "id": "brightness",
             "label": "Master Brightness",
             "type": "int",
             "min": 1,
@@ -90,7 +90,7 @@ MANIFEST = [
             "default": False,
             "help": "Enable to run display updates on a separate thread, which can improve speed."
         }, {
-            "id": "masterBrightness",
+            "id": "brightness",
             "label": "Master Brightness",
             "type": "int",
             "min": 1,

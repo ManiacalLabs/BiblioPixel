@@ -7,8 +7,8 @@ class LEDCircle(LEDBase):
 
     def __init__(self, drivers, rings=None, pixels_per=None,
                  maxAngleDiff=0, rotation=0,
-                 threadedUpdate=False, masterBrightness=255, **kwargs):
-        super().__init__(drivers, threadedUpdate, masterBrightness,
+                 threadedUpdate=False, brightness=255, **kwargs):
+        super().__init__(drivers, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff

@@ -5,7 +5,7 @@ from .. threads.thread_strategy import ThreadStrategy
 
 class LEDBase(object):
 
-    def __init__(self, drivers, threadedUpdate, masterBrightness,
+    def __init__(self, drivers, threadedUpdate, brightness,
                  maker=data_maker.MAKER):
         """Base LED class. Use LEDStrip or LEDMatrix instead!"""
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
@@ -22,13 +22,11 @@ class LEDBase(object):
             d.set_colors(self._colors, pos)
             pos += d.numLEDs
 
-        self.masterBrightness = 255
-
         self._frameGenTime = 0
         self._frameTotalTime = None
 
         self.thread_strategy = ThreadStrategy(threadedUpdate, self)
-        self.set_brightness(masterBrightness)
+        self.set_brightness(brightness)
 
     def set_layout(self, layout):
         for d in self.drivers:
@@ -48,8 +46,6 @@ class LEDBase(object):
 
     def _set_base(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
-            if self.masterBrightness < 255:
-                color = ((c * self.masterBrightness) >> 8 for c in color)
             self._colors[pixel] = tuple(color)
 
     def get_layout(self):
@@ -83,25 +79,9 @@ class LEDBase(object):
         # https://stackoverflow.com/questions/1624883
         self.set_colors(buf=list(zip(*(iter(buf),) * 3)))
 
-    # Set the master brightness for the LEDs 0 - 255
-    def _do_set_brightness(self, bright):
-        self.thread_strategy.wait_for_update()
-        result = True
+    def set_brightness(self, brightness):
         for d in self.drivers:
-            if not d.set_brightness(bright):
-                result = False
-                break
-
-        # all or nothing, set them all back if False
-        if not result:
-            for d in self.drivers:
-                d.set_brightness(255)
-            self.masterBrightness = bright
-        else:
-            self.masterBrightness = 255
-
-    def set_brightness(self, bright):
-        self.thread_strategy.set_brightness(bright)
+            d.set_brightness(brightness)
 
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):
