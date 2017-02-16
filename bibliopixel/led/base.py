@@ -1,6 +1,6 @@
 import time
 from .. import colors, data_maker, util
-from .. threads.thread_strategy import ThreadStrategy
+from .. threads.thread_strategy import UpdateThreading
 
 
 class LEDBase(object):
@@ -25,7 +25,7 @@ class LEDBase(object):
         self._frameGenTime = 0
         self._frameTotalTime = None
 
-        self.thread_strategy = ThreadStrategy(threadedUpdate, self)
+        self.threading = UpdateThreading(threadedUpdate, self)
         self.set_brightness(brightness)
 
     def set_layout(self, layout):
@@ -57,7 +57,7 @@ class LEDBase(object):
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
         # This is overridden elsewhere.
-        self.thread_strategy.push_to_driver()
+        self.threading.push_to_driver()
 
     def lastDriverUpdate(self):
         return max([d.lastUpdate for d in self.drivers])

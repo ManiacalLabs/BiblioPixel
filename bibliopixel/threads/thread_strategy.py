@@ -4,18 +4,15 @@ from .. import log
 from . import update_thread
 
 
-class ThreadStrategy(object):
+class UpdateThreading(object):
     """
-    ThreadStrategy handles threading - and eventually multiprocessing - for
-    BaseAnimation and LEDBase.
+    UpdateThreading handles threading - and eventually multiprocessing - for
+    LEDBase.
     """
 
     def __init__(self, use_update_thread, led):
         self.use_update_thread = use_update_thread
-        self.use_animation_thread = False
         self.led = led
-        self.animation_thread = None
-        self.animation_stop_event = threading.Event()
 
         if use_update_thread:
             self.update_thread = update_thread.UpdateThread(led.drivers)
@@ -40,8 +37,17 @@ class ThreadStrategy(object):
         self.wait_for_update()
         self.update_colors()
 
-    def set_animation(self, animation):
+
+class AnimationThreading(object):
+    """
+    AnimationThreading handles threading - and eventually multiprocessing - for
+    BaseAnimation.
+    """
+
+    def __init__(self, animation):
         self.animation = animation
+        self.animation_stop_event = threading.Event()
+        self.animation_thread = None
 
     def report_framerate(self, start, mid, now):
         stepTime = int(mid - start)
