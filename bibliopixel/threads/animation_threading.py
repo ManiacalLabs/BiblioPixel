@@ -1,41 +1,5 @@
 import threading, time
-
 from .. import log
-from . import update_thread
-
-
-class UpdateThreading(object):
-    """
-    UpdateThreading handles threading - and eventually multiprocessing - for
-    LEDBase.
-    """
-
-    def __init__(self, use_update_thread, led):
-        self.use_update_thread = use_update_thread
-        self.led = led
-
-        if use_update_thread:
-            self.update_thread = update_thread.UpdateThread(led.drivers)
-            self.update_thread.start()
-
-    def update_colors(self):
-        if self.use_update_thread:
-            self.update_thread.update_colors()
-        else:
-            for d in self.led.drivers:
-                d.update_colors()
-            for d in self.led.drivers:
-                d.sync()
-
-    def wait_for_update(self):
-        if self.use_update_thread:
-            while all([d._thread.sending() for d in self.led.drivers]):
-                time.sleep(0.000001)
-
-    def push_to_driver(self):
-        """Push the current pixel state to the driver"""
-        self.wait_for_update()
-        self.update_colors()
 
 
 class AnimationThreading(object):
