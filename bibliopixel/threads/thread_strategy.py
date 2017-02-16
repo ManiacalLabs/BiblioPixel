@@ -58,20 +58,17 @@ class ThreadStrategy(object):
     def set_animation(self, animation):
         self.animation = animation
 
-    def report_framerate(self, start, mid, now):
-        # XXX: this is called from the animation's update cycle, but uses LED
-        # thread information.
+    def report_framerate(self, start, mid, now, driver_update_time):
         stepTime = int(mid - start)
         if self.use_update_thread:
-            updateTime = int(self.led.lastThreadedUpdate())
-            log.debug(
-                "Frame: %sms / Update Max: %sms", stepTime, updateTime)
+            log.debug("Frame: %sms / Update Max: %sms",
+                      stepTime, int(driver_update_time))
         else:
-            updateTime = int(now - mid)
-            totalTime = stepTime + updateTime
+            render_duration = int(now - mid)
+            totalTime = stepTime + render_duration
             log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
                       totalTime, int(1000.0 / max(totalTime, 1)), stepTime,
-                      updateTime)
+                      render_duration)
 
     def stop_animation_thread(self, wait=False):
         if self.animation_thread:
