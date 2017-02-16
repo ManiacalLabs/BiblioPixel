@@ -95,7 +95,7 @@ class DriverBase(object):
         self._brightness = brightness
         return False  # Device does NOT support internal brightness control
 
-    def _render_py(self, colors, pos, length=-1, output=None):
+    def _render_py(self, colors, pos, length, output):
         fix, (r, g, b) = self.gamma.get, self.c_order
         for i in range(length):
             c = tuple(int(x) for x in colors[i + pos])
@@ -103,6 +103,5 @@ class DriverBase(object):
         return output
 
     def _render(self):
-        is_timedata = hasattr(self._colors, 'indexer')
-        render = self._render_td if is_timedata else self._render_py
+        render = self._render_td or self._render_py
         self._buf = render(self._colors, self._pos, self.numLEDs, self._buf)
