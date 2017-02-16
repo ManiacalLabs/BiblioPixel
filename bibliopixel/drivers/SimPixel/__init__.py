@@ -27,7 +27,6 @@ class SimPixelWebSocket(WebSocket):
     def handleConnected(self):
         log.debug('Connected:{}'.format(self.address))
         self.connected = True
-        # self.kinect = KinectFactory.create_kinect()
         self.oid = uuid.uuid1()
         self.driver.add_websock(self.oid, self.send_pixels)
         self.sendMessage(bytearray([0x00, 0x00]) + self.layout)
@@ -38,27 +37,11 @@ class SimPixelWebSocket(WebSocket):
         log.debug('Closed:{}'.format(self.address))
 
     def handleMessage(self):
-        # degs = int(float(self.data))
-        # self.kinect.set_tilt(degs)
         pass
 
     def send_pixels(self, pixels):
         if self.connected:
             self.sendMessage(bytearray([0x00, 0x01]) + pixels)
-            # print(time.time())
-
-
-class ws_thread(threading.Thread):
-    def __init__(self, server):
-        super(ws_thread, self).__init__()
-        self.server = server
-
-    def run(self):
-        try:
-            self.server.serveforever()
-        except:
-            pass
-        log.debug('WebSocket Server closed')
 
 
 class DriverSimPixel(DriverBase):
@@ -67,7 +50,7 @@ class DriverSimPixel(DriverBase):
         super(DriverSimPixel, self).__init__(num)
         self.port = port
         self.layout = None
-        self.server = self.ws_thread = None
+        self.server = self.thread = None
         self.websocks = {}
 
         if layout:
@@ -75,20 +58,25 @@ class DriverSimPixel(DriverBase):
 
     def __start_server(self):
         log.debug('Starting server...')
-        self.server = SimpleWebSocketServer('', self.port, SimPixelWebSocket,
-                                            driver=self, layout=self.layout,
-                                            selectInterval=0.001)
-        self.ws_thread = ws_thread(self.server)
-        self.ws_thread.start()
+        self.server = SimpleWebSocketServer(
+            '', self.port, SimPixelWebSocket,
+            driver=self, layout=self.layout, selectInterval=0.001)
+
+        self.thread = threading.Thread(target=self._serve_forever, daemon=True)
+        self.thread.start()
+
+    def _serve_forever(self):
+        try:
+            self.server.serveforever()
+        except:
+            pass
+        log.debug('WebSocket Server closed')
 
     def set_layout(self, layout):
-        if self.ws_thread is None or (not self.ws_thread.is_alive()):
+        if not (self.thread and self.thread.is_alive()):
             # flatten layout
             pl = [c for p in layout for c in p]
-            # print(pl)
             self.layout = bytearray(struct.pack('<%sh' % len(pl), *pl))
-            # print(self.layout)
-            # print(type(self.layout))
             self.__start_server()
 
     def add_websock(self, oid, send_pixels):
@@ -105,6 +93,5 @@ class DriverSimPixel(DriverBase):
         self._render()
 
     def _send_packet(self):
-        # print(self._buf)
         for ws in self.websocks.values():
             ws(self._buf)
