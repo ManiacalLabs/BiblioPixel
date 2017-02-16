@@ -37,7 +37,9 @@ class LEDBase(object):
         return self.push_to_driver()
 
     def cleanup(self):
-        pass
+        self.all_off()
+        self.push_to_driver()
+        self.threading.wait_for_update()
 
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
@@ -58,9 +60,6 @@ class LEDBase(object):
         """Push the current pixel state to the driver"""
         # This is overridden elsewhere.
         self.threading.push_to_driver()
-
-    def lastDriverUpdate(self):
-        return max([d.lastUpdate for d in self.drivers])
 
     # use with caution!
     def set_colors(self, buf):
