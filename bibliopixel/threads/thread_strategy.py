@@ -8,9 +8,6 @@ class ThreadStrategy(object):
     """
     ThreadStrategy handles threading - and eventually multiprocessing - for
     BaseAnimation and LEDBase.
-
-    It would be better if this were two separate classes but some functionality
-    requires information from both sides... I mark these with an XXX below.
     """
 
     def __init__(self, use_update_thread, led):
@@ -37,18 +34,6 @@ class ThreadStrategy(object):
         if self.use_update_thread:
             while all([d._thread.sending() for d in self.led.drivers]):
                 time.sleep(0.000001)
-
-    def set_brightness(self, brightness):
-        """Sets the master brightness scaling, 0 - 255
-
-        If the driver supports it the brightness will be sent to the receiver
-        directly.
-        """
-        if brightness > 255 or brightness < 0:
-            raise ValueError('Brightness must be between 0 and 255')
-
-        for d in self.led.drivers:
-            d.set_brightness(brightness)
 
     def push_to_driver(self):
         """Push the current pixel state to the driver"""
