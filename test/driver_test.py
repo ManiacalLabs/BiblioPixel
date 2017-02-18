@@ -5,6 +5,7 @@ from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
 from bibliopixel.drivers.APA102 import DriverAPA102
 from bibliopixel.drivers.LPD8806 import DriverLPD8806
 from bibliopixel.drivers.WS2801 import DriverWS2801
+from bibliopixel.drivers.spi_driver_base import SpiDummyInterface
 
 from bibliopixel import timedata
 
@@ -23,7 +24,7 @@ class DriverTest(unittest.TestCase):
 
     ALL_COLORS = COLORS_PY, COLORS_TD
 
-    SPD = dict(use_py_spi=False, open=mock_open)
+    SPD = dict(interface=SpiDummyInterface)
 
     def do_test(self, driver, colors, expected):
         driver.set_colors(colors, 0)

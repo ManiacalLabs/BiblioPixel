@@ -1,19 +1,17 @@
-from . spi_driver_base import DriverSPIBase, ChannelOrder
+from . spi_driver_base import DriverSPIBase, ChannelOrder, SpiPyDevInterface
 
 
 class DriverAPA102(DriverSPIBase):
     """Main driver for APA102 based LED strips on devices like the Raspberry Pi and BeagleBone"""
 
-    def __init__(self, num, c_order=ChannelOrder.RGB, use_py_spi=True,
-                 dev="/dev/spidev0.0", SPISpeed=2, open=open):
-        super().__init__(num, c_order=c_order, use_py_spi=use_py_spi, dev=dev,
-                         SPISpeed=SPISpeed, open=open)
+    def __init__(self, num, c_order=ChannelOrder.RGB, **kwargs):
+        super(DriverAPA102, self).__init__(num, c_order=c_order, **kwargs)
 
         # APA102 requires latch bytes at the end
         self._latchBytes = (int(num / 64.0) + 1)
 
     def _render(self):
-        super()._render()
+        super(DriverAPA102, self)._render()
         newBuf = [0xFF] * (self.bufByteCount() + self.numLEDs)
         newBuf[1::4] = self._buf[0::3]
         newBuf[2::4] = self._buf[1::3]
@@ -71,10 +69,10 @@ MANIFEST = [
             "max": 24,
             "group": "Advanced"
         }, {
-            "id": "use_py_spi",
-            "label": "Use PySPI",
-            "type": "bool",
-            "default": True,
+            "id": "interface",
+            "label": "SPI interface",
+            "type": "class",
+            "default": SpiPyDevInterface,
             "group": "Advanced"
         }]
     }
