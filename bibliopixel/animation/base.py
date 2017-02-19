@@ -25,11 +25,11 @@ class BaseAnimation(object):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def cleanup(self):
-        self.threading.stop_animation_thread(wait=True)
+        self.threading.stop_thread(wait=True)
         self._led.cleanup()
 
     def is_running(self, cur_step):
-        if self.threading.animation_stop_event.isSet():
+        if self.threading.stop_event.isSet():
             return False
 
         if self.max_steps:
@@ -71,7 +71,7 @@ class BaseAnimation(object):
                 if t == 0:
                     log.warning(
                         "Frame-time of %dms set, but took %dms!", self.sleep_time, diff)
-                self.threading.animation_wait(t)
+                self.threading.wait(t)
             cur_step += 1
 
     def set_run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
