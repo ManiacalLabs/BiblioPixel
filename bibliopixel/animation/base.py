@@ -7,8 +7,6 @@ class BaseAnimation(object):
 
     def __init__(self, led):
         self._led = led
-        self.threading = AnimationThreading(self)
-
         self.animComplete = False
         self._step = 0
         self._timeRef = 0
@@ -75,8 +73,7 @@ class BaseAnimation(object):
             cur_step += 1
 
     def set_run(self, amt=1, fps=None, sleep_time=0, max_steps=0,
-                until_complete=False, max_cycles=0, threaded=False,
-                join_thread=False, seconds=None):
+                until_complete=False, max_cycles=0, seconds=None):
         assert max_steps >= 0
         assert sleep_time >= 0
         assert max_cycles >= 0
@@ -86,8 +83,6 @@ class BaseAnimation(object):
         self.max_steps = max_steps
         self.until_complete = until_complete
         self.max_cycles = max_cycles
-        self.threaded = threaded
-        self.join_thread = join_thread
 
         # calculate sleep time base on desired Frames per Second
         assert not (sleep_time and fps)
@@ -103,7 +98,7 @@ class BaseAnimation(object):
         elif self._internalDelay:
             self.sleep_time = self._internalDelay
 
-    def run(self, **kwds):
+    def run(self, threaded=False, join_thread=False, **kwds):
         self.set_run(**kwds)
 
         def run():
@@ -112,7 +107,8 @@ class BaseAnimation(object):
             finally:
                 self.cleanup()
 
-        self.threading.run_animation(run, self.threaded, self.join_thread)
+        self.threading = AnimationThreading(self, threaded, join_thread)
+        self.threading.run_animation(run)
 
     RUN_PARAMS = [{
         "id": "amt",
