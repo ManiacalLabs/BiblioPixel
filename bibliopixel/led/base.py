@@ -1,6 +1,6 @@
 import time
 from .. import colors, data_maker, util
-from .. threads.update_thread import UpdateThreading
+from .. threads.update_threading import UpdateThreading
 
 
 class LEDBase(object):
