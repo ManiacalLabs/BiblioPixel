@@ -218,7 +218,8 @@ class DriverSerial(DriverBase):
             return ord(resp)
 
         except serial.SerialException as e:
-            error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
+            error = ("Unable to connect to the device. Please check that "
+                     "it is connected and the correct port is selected.")
             log.error(traceback.format_exc())
             log.error(error)
             raise e
@@ -305,14 +306,16 @@ class DriverSerial(DriverBase):
         self._packet.extend(self._buf)
         self._packet.extend([0] * self._bufPad)
 
-    def _sync(self):
+    def _send_sync(self):
         self._com.write(self._sync_packet)
 
 
 class DriverTeensySmartMatrix(DriverSerial):
-    def __init__(self, width, height, dev="", deviceID=None, hardwareID="16C0:0483"):
-        super(DriverTeensySmartMatrix, self).__init__(type=LEDTYPE.GENERIC, num=width * height, deviceID=deviceID, hardwareID=hardwareID)
-        self.sync = self._sync
+    def __init__(self, width, height, dev="", deviceID=None,
+                 hardwareID="16C0:0483"):
+        super().__init__(type=LEDTYPE.GENERIC, num=width * height,
+                         deviceID=deviceID, hardwareID=hardwareID)
+        self.sync = self._send_sync
 
 
 MANIFEST = [

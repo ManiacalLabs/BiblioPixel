@@ -71,6 +71,15 @@ class DriverBase(object):
         return 3 * self.numLEDs
 
     def sync(self):
+        """
+
+        The sync() method is called after the entire frame has been
+        sent to the device to indicate that it may now be displayed.
+
+        This is particularly useful when there are multiple drivers comprising
+        one display which all need to display the next frame at exactly the same
+        time.
+        """
         pass
 
     def _compute_packet(self):
