@@ -1,7 +1,7 @@
 import webbrowser
 
 from bibliopixel.drivers.SimPixel import DriverSimPixel
-from bibliopixel import LEDMatrix
+from bibliopixel import LEDCircle, LEDMatrix, layout
 
 SIMPIXEL_URL = 'http://beta.simpixel.io'
 IMPORT_ERROR_TEXT = """
@@ -12,22 +12,49 @@ https://github.com/ManiacalLabs/BiblioPixelAnimations
 """
 
 
+def bloom(args):
+    driver = DriverSimPixel(args.width * args.height)
+    led = LEDMatrix(driver, width=args.width, height=args.height)
+
+    from BiblioPixelAnimations.matrix.bloom import Bloom
+    return Bloom(led)
+
+
+def circle(args):
+    pixels_per = [1, 4, 8, 12, 18, 24, 32, 40, 52, 64]
+    rings, steps = layout.gen_circle(pixels_per=pixels_per)
+    points = layout.layout_from_rings(rings, origin=(200, 200, 0), z_diff=8)
+    driver = DriverSimPixel(sum(pixels_per), layout=points)
+    led = LEDCircle(driver, rings=rings, maxAngleDiff=0)
+
+    from BiblioPixelAnimations.circle.bloom import Bloom
+    return Bloom(led)
+
+
+DEMO_TABLE = {f.__name__: f for f in (bloom, circle, )}
+
+
 def run(args):
     try:
-        from BiblioPixelAnimations.matrix.bloom import Bloom
-    except ImportError:
-        raise ValueError(IMPORT_ERROR_TEXT)
+        demo = DEMO_TABLE[args.name]
+    except KeyError:
+        raise KeyError('Unknown command %s' % args.name)
+    try:
+        anim = demo(args)
+    except ImportError as e:
+        if 'BiblioPixelAnimations' in e.msg:
+            e.msg += IMPORT_ERROR_TEXT
+        raise
 
-    driver = DriverSimPixel(args.x * args.y)
-    led = LEDMatrix(driver, width=args.x, height=args.y)
-    anim = Bloom(led)
+    if not args.no_simpixel:
+        webbrowser.open(SIMPIXEL_URL, new=0, autoraise=True)
 
-    webbrowser.open(SIMPIXEL_URL, new=0, autoraise=True)
     anim.run()
 
 
 def set_parser(parser):
     parser.set_defaults(run=run)
     parser.add_argument('-name', default='bloom')
-    parser.add_argument('-x', default=32, type=int)
-    parser.add_argument('-y', default=32, type=int)
+    parser.add_argument('-width', default=32, type=int)
+    parser.add_argument('-height', default=32, type=int)
+    parser.add_argument('-no_simpixel', action='store_true')
