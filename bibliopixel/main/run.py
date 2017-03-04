@@ -19,9 +19,7 @@ DEFAULT_PROJECT = """
 
     "animation": {
         "typename": "BiblioPixelAnimations.matrix.bloom.Bloom"
-    },
-
-    "run": {}
+    }
 }
 
 """
