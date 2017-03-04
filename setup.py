@@ -2,6 +2,11 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
+if sys.version_info.major != 3:
+    print('BiblioPixel v3 is no longer supported on Python 2!')
+    print('If you need Python2 support please insteall BiblioPixel v2')
+    print('pip install "bibliopixel<3.0"')
+
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
 class RunTests(TestCommand):
@@ -73,5 +78,13 @@ setup(
         'coverage': RunCoverage,
         'test': RunTests,
     },
-    include_package_data=True
+    include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'bibliopixel = bibliopixel.main.main:main'
+        ]
+    },
+    install_requires=[
+        'BiblioPixelAnimations'
+    ]
 )
