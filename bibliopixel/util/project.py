@@ -22,7 +22,7 @@ def make_drivers(multimap=False, **kwds):
 
 
 class Project(object):
-    def __init__(self, driver, led, animation, run, maker=None):
+    def __init__(self, driver, led, animation, run=None, maker=None):
         self.maker = data_maker.Maker(**(maker or {}))
         self.drivers, coordMap = make_drivers(maker=self.maker, **driver)
         if coordMap:
@@ -32,7 +32,7 @@ class Project(object):
             self.led = make_object(self.drivers, maker=self.maker, **led)
 
         self.animation = make_object(self.led, **animation)
-        self.run = lambda: self.animation.run(**run)
+        self.run = lambda: self.animation.run(**(run or {}))
 
 
 def run(data):
