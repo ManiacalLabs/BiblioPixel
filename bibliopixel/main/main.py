@@ -3,7 +3,7 @@ from .. util.importer import import_symbol
 
 __all__ = ['main']
 
-COMMANDS = 'demo',  # 'device', 'network', 'run', 'settings'
+COMMANDS = ('demo', 'run',)  # 'device', 'network', 'settings'
 MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
 
 
@@ -17,7 +17,8 @@ def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
     for name, module in MODULES.items():
-        subparser = subparsers.add_parser(name)
+        # TODO: we should add help text in these two steps.
+        subparser = subparsers.add_parser(name, help=module.HELP)
         module.set_parser(subparser)
 
     args = parser.parse_args()
