@@ -4,29 +4,9 @@ HELP = """
 Run a project description file.
 """
 
-DEFAULT_PROJECT = """
-{
-    "driver": {
-        "typename": "bibliopixel.drivers.SimPixel.DriverSimPixel",
-        "num": 1024
-    },
-
-    "led": {
-        "typename": "bibliopixel.led.matrix.LEDMatrix",
-        "width": 32,
-        "height": 32
-    },
-
-    "animation": {
-        "typename": "BiblioPixelAnimations.matrix.bloom.Bloom"
-    }
-}
-
-"""
-
 
 def run(args):
-    data = open(args.name).read() if args.name else DEFAULT_PROJECT
+    data = args.name and open(args.name).read() or {}
     project.run(data)
 
 

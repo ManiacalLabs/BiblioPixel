@@ -21,8 +21,28 @@ def make_drivers(multimap=False, **kwds):
     return multi(**kwds) if multimap else ([make_object(**kwds)], None)
 
 
+DEFAULT_DRIVER = {
+    'typename': 'bibliopixel.drivers.SimPixel.DriverSimPixel',
+    'num': 1024
+}
+
+DEFAULT_LED = {
+    'typename': 'bibliopixel.led.matrix.LEDMatrix',
+    'width': 32,
+    'height': 32,
+}
+
+DEFAULT_ANIMATION = {
+    'typename': 'BiblioPixelAnimations.matrix.bloom.Bloom'
+}
+
+
 class Project(object):
-    def __init__(self, driver, led, animation, run=None, maker=None):
+    def __init__(self,
+                 driver=DEFAULT_DRIVER,
+                 led=DEFAULT_LED,
+                 animation=DEFAULT_ANIMATION,
+                 run=None, maker=None):
         self.maker = data_maker.Maker(**(maker or {}))
         self.drivers, coordMap = make_drivers(maker=self.maker, **driver)
         if coordMap:
