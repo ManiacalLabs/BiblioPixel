@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from .. driver_base import DriverBase, ChannelOrder
+from .. driver_base import DriverBase
 
 import logging
 import signal
@@ -46,8 +46,8 @@ class SimPixelWebSocket(WebSocket):
 
 class DriverSimPixel(DriverBase):
 
-    def __init__(self, num, port=1337, layout=None):
-        super(DriverSimPixel, self).__init__(num)
+    def __init__(self, num, port=1337, layout=None, **kwds):
+        super(DriverSimPixel, self).__init__(num, **kwds)
         self.port = port
         self.layout = None
         self.server = self.thread = None

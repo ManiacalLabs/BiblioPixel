@@ -3,6 +3,13 @@ import webbrowser
 from bibliopixel.drivers.SimPixel import DriverSimPixel
 from bibliopixel import LEDCircle, LEDMatrix, layout
 
+HELP = """
+Run a demo.  For the list of possible demos, type
+
+  $ bibliopixel demo list
+
+"""
+
 SIMPIXEL_URL = 'http://beta.simpixel.io'
 IMPORT_ERROR_TEXT = """
 Please install the BiblioPixelAnimations library from here:
@@ -31,7 +38,15 @@ def circle(args):
     return Bloom(led)
 
 
-DEMO_TABLE = {f.__name__: f for f in (bloom, circle, )}
+def list_demos(args):
+    print('Demos are', *sorted(DEMO_TABLE.keys()))
+
+
+DEMO_TABLE = {
+    'bloom': bloom,
+    'circle': circle,
+    'list': list_demos,
+    }
 
 
 def run(args):
@@ -54,7 +69,7 @@ def run(args):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.add_argument('-name', default='bloom')
+    parser.add_argument('name', nargs='?', default='bloom')
     parser.add_argument('-width', default=32, type=int)
     parser.add_argument('-height', default=32, type=int)
     parser.add_argument('-no_simpixel', action='store_true')
