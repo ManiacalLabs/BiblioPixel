@@ -46,7 +46,7 @@ DEMO_TABLE = {
     'bloom': bloom,
     'circle': circle,
     'list': list_demos,
-    }
+}
 
 
 def run(args):
