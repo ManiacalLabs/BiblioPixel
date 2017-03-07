@@ -44,7 +44,9 @@ class LEDMatrix(LEDBase):
                     "No width or height passed but the number of LEDs is not a perfect square")
 
         if self.width * self.height != self.numLEDs:
-            raise TypeError("width * height MUST equal the total pixel count!")
+            raise ValueError('width * height MUST equal total pixel count!'
+                             ' %s * %s != %s'
+                             % (self.width, self.height, self.numLEDs))
 
         if coordMap:
             self.matrix_map = coordMap
