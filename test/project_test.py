@@ -37,7 +37,8 @@ PROJECT_MULTI = """
     },
 
     "led": {
-        "typename": "bibliopixel.led.matrix.LEDMatrix"
+        "typename": "bibliopixel.led.matrix.LEDMatrix",
+        "width": 128
     },
 
     "animation": {
