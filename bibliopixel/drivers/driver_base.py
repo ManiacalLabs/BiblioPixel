@@ -110,17 +110,12 @@ class DriverBase(object):
         with self.brightness_lock:
             self._waiting_brightness = brightness
 
-    def _renderer(self, colors, pos, length, output, level):
-        fix, (r, g, b) = self.gamma.get, (int(level) * i for i in self.c_order)
-        for i in range(length):
-            c = tuple(int(x) for x in colors[i + pos])
-            output[i * 3:(i + 1) * 3] = fix(c[r]), fix(c[g]), fix(c[b])
-        return output
-
     def _render(self):
         if self.set_device_brightness:
             level = 1.0
         else:
             level = self._brightness / 255.0
-        self._buf = self._renderer(
-            self._colors, self._pos, self.numLEDs, self._buf, level)
+        gam, (r, g, b) = self.gamma.get, (int(level) * i for i in self.c_order)
+        for i in range(self.numLEDs):
+            c = [int(x) for x in self._colors[i + self._pos]]
+            self._buf[i * 3:(i + 1) * 3] = gam(c[r]), gam(c[g]), gam(c[b])
