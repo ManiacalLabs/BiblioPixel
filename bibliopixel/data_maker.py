@@ -1,7 +1,5 @@
 import ctypes, enum
 from multiprocessing.sharedctypes import RawArray
-from . import timedata
-
 
 # Note https://stackoverflow.com/questions/37705974/
 
@@ -17,9 +15,7 @@ def list_maker(size):
 
 
 class Maker(object):
-    def __init__(self, integer=False, shared_memory=False, use_timedata=False):
-        self.renderer = timedata.Renderer
-
+    def __init__(self, integer=False, shared_memory=False):
         if shared_memory:
             self.make_packet = shared_list_maker(BYTE)
             number_type = BYTE if integer else FLOAT
@@ -27,12 +23,8 @@ class Maker(object):
 
         else:
             self.make_packet = bytearray
-            if use_timedata:  # pragma: no cover
-                self.color_list = timedata.make_color_list
-            else:
-                self.color_list = list_maker
+            self.color_list = list_maker
 
 
 MAKER = Maker()
 ColorList = MAKER.color_list
-Renderer = MAKER.renderer
