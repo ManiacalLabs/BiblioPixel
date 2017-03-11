@@ -46,12 +46,14 @@ class DriverBase(object):
 
         self.lastUpdate = 0
 
-        self._render_td = maker.renderer(
+        renderer = maker.renderer(
             gamma=gamma.gamma,
             offset=gamma.offset,
             permutation=self.perm,
             min=gamma.lower_bound,
             max=255)
+        if renderer:
+            self._renderer = renderer
 
         self.brightness_lock = threading.Lock()
         self._brightness = 255
@@ -118,7 +120,7 @@ class DriverBase(object):
         with self.brightness_lock:
             self._waiting_brightness = brightness
 
-    def _render_py(self, colors, pos, length, output, level):
+    def _renderer(self, colors, pos, length, output, level):
         fix, (r, g, b) = self.gamma.get, (int(level) * i for i in self.c_order)
         for i in range(length):
             c = tuple(int(x) for x in colors[i + pos])
@@ -126,10 +128,9 @@ class DriverBase(object):
         return output
 
     def _render(self):
-        render = self._render_td or self._render_py
         if self.set_device_brightness:
             level = 1.0
         else:
             level = self._brightness / 255.0
-        self._buf = render(
+        self._buf = self._renderer(
             self._colors, self._pos, self.numLEDs, self._buf, level)
