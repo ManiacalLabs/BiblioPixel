@@ -7,7 +7,7 @@ class DriverDummy(DriverBase):
 
     def __init__(self, num, delay=0, **_):
         """delay: time to wait in milliseconds to simulate actual hardware interface time"""
-        super(DriverDummy, self).__init__(num)
+        super().__init__(num)
         self._delay = delay
 
     # Push new data to strand

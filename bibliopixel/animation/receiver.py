@@ -18,7 +18,7 @@ HOST_MAP = {
 
 class BaseReceiver(BaseAnimation):
     def __init__(self, led):
-        super(BaseReceiver, self).__init__(led)
+        super().__init__(led)
         name = type(self._led).__name__
         if name in HOST_MAP:
             self.host_type = HOST_MAP[name]

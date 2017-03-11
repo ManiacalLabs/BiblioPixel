@@ -17,7 +17,7 @@ class DriverImageSequence(DriverBase):
 
     def __init__(self, num=0, width=0, height=0, pixelSize=10):
         """delay: time to wait in milliseconds to simulate actual hardware interface time"""
-        super(DriverImageSequence, self).__init__(num, width, height)
+        super().__init__(num, width, height)
         self._pixelSize = pixelSize
         self._images = []
 
