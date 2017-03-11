@@ -16,7 +16,6 @@ from bibliopixel import (
     matrix,
     return_codes,
     # serial_gamepad,
-    timedata,
     util,
 )
 

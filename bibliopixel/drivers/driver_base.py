@@ -45,16 +45,6 @@ class DriverBase(object):
         self._buf = maker.make_packet(self.bufByteCount())
 
         self.lastUpdate = 0
-
-        renderer = maker.renderer(
-            gamma=gamma.gamma,
-            offset=gamma.offset,
-            permutation=self.perm,
-            min=gamma.lower_bound,
-            max=255)
-        if renderer:
-            self._renderer = renderer
-
         self.brightness_lock = threading.Lock()
         self._brightness = 255
         self.set_brightness(255)
