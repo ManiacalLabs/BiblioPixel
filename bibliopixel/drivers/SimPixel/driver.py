@@ -1,23 +1,13 @@
-#!/usr/bin/env python
-# encoding: utf-8
-from .. driver_base import DriverBase
-
-import logging
-import signal
-import sys
-import time
-import threading
-import uuid
-import struct
+import struct, threading, uuid
 from ... import log
-
+from .. driver_base import DriverBase
 from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 
 class SimPixelWebSocket(WebSocket):
 
     def __init__(self, *args, driver, layout):
-        super(SimPixelWebSocket, self).__init__(*args)
+        super().__init__(*args)
         self.driver = driver
         self.connected = False
         self.layout = layout
@@ -47,10 +37,9 @@ class SimPixelWebSocket(WebSocket):
 class DriverSimPixel(DriverBase):
 
     def __init__(self, num, port=1337, layout=None, **kwds):
-        super(DriverSimPixel, self).__init__(num, **kwds)
+        super().__init__(num, **kwds)
         self.port = port
-        self.layout = None
-        self.server = self.thread = None
+        self.layout = self.server = self.thread = None
         self.websocks = {}
 
         if layout:
@@ -83,8 +72,10 @@ class DriverSimPixel(DriverBase):
         self.websocks[oid] = send_pixels
 
     def remove_websock(self, oid):
-        if oid in self.websocks:
+        try:
             del self.websocks[oid]
+        except KeyError:
+            pass
 
     def cleanup(self):
         self.server.close()
