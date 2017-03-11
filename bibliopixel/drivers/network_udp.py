@@ -15,7 +15,7 @@ class DriverNetworkUDP(DriverBase):
     """Driver for communicating with another device on the network."""
 
     def __init__(self, num=0, width=0, height=0, host="localhost", broadcast=False, port=3142, broadcast_interface=''):
-        super(DriverNetworkUDP, self).__init__(num, width, height)
+        super().__init__(num, width, height)
 
         self._host = host
         self._port = port

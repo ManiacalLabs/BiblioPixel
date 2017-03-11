@@ -85,7 +85,7 @@ class DriverSerial(DriverBase):
                  gamma=None, restart_timeout=3,
                  deviceID=None, hardwareID="1D50:60AB",
                  baudrate=921600):
-        super(DriverSerial, self).__init__(num, c_order=c_order, gamma=gamma)
+        super().__init__(num, c_order=c_order, gamma=gamma)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1

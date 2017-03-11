@@ -34,7 +34,7 @@ class SerialGamePad(BaseGamePad):
     foundDevices = []
 
     def __init__(self, btn_map=["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID="1B4F:9206"):
-        super(SerialGamePad, self).__init__()
+        super().__init__()
         self._map = btn_map
         self._hardwareID = hardwareID
         self._com = None
