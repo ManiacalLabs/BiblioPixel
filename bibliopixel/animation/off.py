@@ -6,7 +6,7 @@ class OffAnim(BaseAnimation):
 
     def __init__(self, led, timeout=10):
         super().__init__(led)
-        self._internalDelay = timeout * 1000.0
+        self._internalDelay = timeout
 
     def step(self, amt=1):
         self._led.all_off()

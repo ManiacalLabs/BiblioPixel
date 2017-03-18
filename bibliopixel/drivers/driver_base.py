@@ -89,7 +89,7 @@ class DriverBase(object):
         pass
 
     def update_colors(self):
-        start = time.time() * 1000.0
+        start = time.time()
 
         with self.brightness_lock:
             # Swap in a new brightness.
@@ -104,7 +104,7 @@ class DriverBase(object):
         self._compute_packet()
         self._send_packet()
 
-        self.lastUpdate = (time.time() * 1000.0) - start
+        self.lastUpdate = time.time() - start
 
     def set_brightness(self, brightness):
         with self.brightness_lock:

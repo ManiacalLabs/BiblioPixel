@@ -19,14 +19,13 @@ class AnimationThreading(object):
         stepTime = int(mid - start)
         render_duration = int(now - mid)
         totalTime = stepTime + render_duration
-        fps = int(1000.0 / max(totalTime, 1))
+        fps = int(1.0 / max(totalTime, 1))
         log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
                   totalTime, fps, stepTime, render_duration)
 
     def stop_thread(self, wait=False):
         if self.thread:
             self.stop_event.set()
-
             if wait:
                 self.thread.join()
 
