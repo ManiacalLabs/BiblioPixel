@@ -5,19 +5,20 @@ from .. led.multimap import MultiMapBuilder
 from .. layout import gen_matrix
 
 
+def multi_drivers(device_ids, width, height, serpentine=False, **kwds):
+    build = MultiMapBuilder()
+    drivers = []
+
+    for id in device_ids:
+        build.addRow(gen_matrix(width, height, serpentine=serpentine))
+        d = make_object(width=width, height=height, deviceID=id, **kwds)
+        drivers.append(d)
+
+    return drivers, build.map
+
+
 def make_drivers(multimap=False, **kwds):
-    def multi(device_ids, width, height, serpentine=False, **kwds):
-        build = MultiMapBuilder()
-        drivers = []
-
-        for id in device_ids:
-            build.addRow(gen_matrix(width, height, serpentine=serpentine))
-            d = make_object(width=width, height=height, deviceID=id, **kwds)
-            drivers.append(d)
-
-        return drivers, build.map
-
-    return multi(**kwds) if multimap else ([make_object(**kwds)], None)
+    return multi_drivers(**kwds) if multimap else ([make_object(**kwds)], None)
 
 
 DEFAULTS = {
@@ -54,6 +55,7 @@ def apply_defaults(desc):
 
 class Project(object):
     def __init__(self, driver, led, animation, run, maker):
+        self.run_arguments = run
         self.maker = data_maker.Maker(**maker)
         self.drivers, coordMap = make_drivers(maker=self.maker, **driver)
         if coordMap:
@@ -63,10 +65,12 @@ class Project(object):
             self.led = make_object(self.drivers, maker=self.maker, **led)
 
         self.animation = make_object(self.led, **animation)
-        self.run = lambda: self.animation.run(**run)
+
+    def run(self):
+        return self.animation.run(**self.run_arguments)
 
 
-def run(desc):
+def make(desc):
     if isinstance(desc, str):
         try:
             desc = open(desc).read()
@@ -75,7 +79,11 @@ def run(desc):
         desc = json.loads(desc)
 
     desc = apply_defaults(desc)
-    return Project(**desc).run()
+    return Project(**desc)
+
+
+def run(desc):
+    return make(desc).run()
 
 
 if __name__ == '__main__':
