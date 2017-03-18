@@ -7,6 +7,6 @@ If the system environment variable SKIP_LONG_TESTS is set, tests decorated
 with @long_test will not be run.
 """
 
-SKIP_LONG_TESTS = os.getenv('SKIP_LONG_TESTS', None) is not None
+SKIP_LONG_TESTS = os.getenv('SKIP_LONG_TESTS', '').lower().startswith('t')
 
 long_test = unittest.skipIf(SKIP_LONG_TESTS, 'Long tests skipped.')
