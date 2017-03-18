@@ -7,7 +7,7 @@ class StripChannelTest(BaseStripAnim):
 
     def __init__(self, led):
         super().__init__(led)
-        self._internalDelay = 500
+        self._internalDelay = 0.500
         self.colors = [colors.Red, colors.Green, colors.Blue, colors.White]
 
     def step(self, amt=1):
@@ -29,7 +29,7 @@ class MatrixChannelTest(BaseMatrixAnim):
 
     def __init__(self, led):
         super().__init__(led, 0, 0)
-        self._internalDelay = 500
+        self._internalDelay = 0.500
         self.colors = [colors.Red, colors.Green, colors.Blue, colors.White]
 
     def step(self, amt=1):
@@ -51,7 +51,7 @@ class MatrixCalibrationTest(BaseMatrixAnim):
 
     def __init__(self, led):
         super().__init__(led, 0, 0)
-        self._internalDelay = 500
+        self._internalDelay = 0.500
         self.colors = [colors.Red, colors.Green, colors.Green,
                        colors.Blue, colors.Blue, colors.Blue]
 

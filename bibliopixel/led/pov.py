@@ -28,13 +28,13 @@ class LEDPOV(LEDMatrix):
 
         width = self.width
         for h in range(width):
-            start = time.time() * 1000.0
+            start = time.time()
 
             def color(i):
                 return self._colors[(h + width * i) * 3]
             # TODO: Figure out what line below needs to do
             # buf = [color(i) for i in range(self.height)]
             self.drivers[0].update_colors()
-            sendTime = (time.time() * 1000.0) - start
+            sendTime = time.time() - start
             if sleep:
-                time.sleep(max(0, (sleep - sendTime) / 1000.0))
+                time.sleep(max(0, sleep - sendTime))

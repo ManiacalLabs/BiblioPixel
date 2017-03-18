@@ -14,7 +14,7 @@ class BaseAnimation(object):
         self._free_run = False
 
     def _msTime(self):
-        return time.time() * 1000.0
+        return time.time()
 
     def preRun(self, amt=1):
         self._led.all_off()
@@ -65,10 +65,10 @@ class BaseAnimation(object):
 
             if self.sleep_time:
                 diff = (self._msTime() - self._timeRef)
-                t = max(0, (self.sleep_time - diff) / 1000.0)
+                t = max(0, self.sleep_time - diff)
                 if t == 0:
-                    log.warning(
-                        "Frame-time of %dms set, but took %dms!", self.sleep_time, diff)
+                    log.warning('Frame-time of %dms set, but took %dms!',
+                                self.sleep_time, diff)
                 self.threading.wait(t)
             cur_step += 1
 
@@ -77,6 +77,8 @@ class BaseAnimation(object):
         assert max_steps >= 0
         assert sleep_time >= 0
         assert max_cycles >= 0
+        assert not (sleep_time and fps)
+        assert not (seconds and max_steps)
 
         self.amt = amt
         self.sleep_time = sleep_time
@@ -84,14 +86,11 @@ class BaseAnimation(object):
         self.until_complete = until_complete
         self.max_cycles = max_cycles
 
-        # calculate sleep time base on desired Frames per Second
-        assert not (sleep_time and fps)
         if fps:
-            self.sleep_time = int(1000.0 / fps)
+            self.sleep_time = 1 / fps
 
-        assert not (seconds and max_steps)
         if seconds is not None:
-            self.max_steps = int((seconds * 1000.0) / self.sleep_time)
+            self.max_steps = int(seconds / self.sleep_time)
 
         if self._free_run:
             self.sleep_time = None
