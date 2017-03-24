@@ -1,4 +1,4 @@
-from bibliopixel.util import project
+from bibliopixel.project import project
 
 HELP = """
 Run a project description file.
