@@ -1,4 +1,5 @@
-import sys, copy, json
+import sys, json
+from . defaults import apply_defaults, DEFAULTS
 from .. util.importer import make_object
 from .. import data_maker
 from .. led.multimap import MultiMapBuilder
@@ -19,38 +20,6 @@ def multi_drivers(device_ids, width, height, serpentine=False, **kwds):
 
 def make_drivers(multimap=False, **kwds):
     return multi_drivers(**kwds) if multimap else ([make_object(**kwds)], None)
-
-
-DEFAULTS = {
-    'driver': {
-        'typename': 'bibliopixel.drivers.SimPixel.DriverSimPixel',
-        'num': 1024
-    },
-
-    'led': {
-        'typename': 'bibliopixel.led.matrix.LEDMatrix',
-        'width': 32,
-        'height': 32,
-    },
-
-    'animation': {
-        'typename': 'BiblioPixelAnimations.matrix.bloom.Bloom'
-    },
-
-    'run': {},
-    'maker': {},
-}
-
-
-def apply_defaults(desc):
-    result = copy.deepcopy(DEFAULTS)
-    for k, v in desc.items():
-        if isinstance(v, str):
-            result[k]['typename'] = v
-        else:
-            result[k].update(v)
-
-    return result
 
 
 class Project(object):
