@@ -1,6 +1,6 @@
 import json, unittest
 
-from bibliopixel.util import project
+from bibliopixel.project import project
 from . long_test import long_test
 
 
