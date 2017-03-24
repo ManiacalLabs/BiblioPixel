@@ -2,44 +2,40 @@ import sys, json
 from . defaults import apply_defaults, DEFAULTS
 from .. util.importer import make_object
 from .. import data_maker
-from .. led.multimap import MultiMapBuilder
 from .. layout import gen_matrix
+from .. led.multimap import MultiMapBuilder
 
 
-def multi_drivers(device_ids, width, height, serpentine=False, **kwds):
-    build = MultiMapBuilder()
+def make_animation(driver, led, animation, maker):
+    maker = data_maker.Maker(**maker)
     drivers = []
 
-    for id in device_ids:
-        build.addRow(gen_matrix(width, height, serpentine=serpentine))
-        d = make_object(width=width, height=height, deviceID=id, **kwds)
-        drivers.append(d)
+    def multi_drivers(device_ids, width, height, serpentine=False, **kwds):
+        build = MultiMapBuilder()
 
-    return drivers, build.map
+        for id in device_ids:
+            build.addRow(gen_matrix(width, height, serpentine=serpentine))
+            d = make_object(width=width, height=height, deviceID=id, **kwds)
+            drivers.append(d)
 
+        return build.map
 
-def make_drivers(multimap=False, **kwds):
-    return multi_drivers(**kwds) if multimap else ([make_object(**kwds)], None)
+    def make_drivers(multimap=False, **kwds):
+        if multimap:
+            return multi_drivers(**kwds)
 
+        drivers.append(make_object(**kwds))
 
-class Project(object):
-    def __init__(self, driver, led, animation, run, maker):
-        self.run_arguments = run
-        self.maker = data_maker.Maker(**maker)
-        self.drivers, coordMap = make_drivers(maker=self.maker, **driver)
-        if coordMap:
-            self.led = make_object(
-                self.drivers, coordMap=coordMap, maker=self.maker, **led)
-        else:
-            self.led = make_object(self.drivers, maker=self.maker, **led)
-
-        self.animation = make_object(self.led, **animation)
-
-    def run(self):
-        return self.animation.run(**self.run_arguments)
+    coordMap = make_drivers(maker=maker, **driver)
+    led = make_object(drivers, coordMap=coordMap, maker=maker, **led)
+    return make_object(led, **animation)
 
 
-def make(desc):
+def run_animation(run, **kwds):
+    make_animation(**kwds).run(**run)
+
+
+def fix_desc(desc):
     if isinstance(desc, str):
         try:
             desc = open(desc).read()
@@ -47,12 +43,11 @@ def make(desc):
             pass
         desc = json.loads(desc)
 
-    desc = apply_defaults(desc)
-    return Project(**desc)
+    return apply_defaults(desc)
 
 
 def run(desc):
-    return make(desc).run()
+    run_animation(**fix_desc(desc))
 
 
 if __name__ == '__main__':
