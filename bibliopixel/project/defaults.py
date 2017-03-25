@@ -20,6 +20,8 @@ DEFAULTS = {
     'run': {},
 }
 
+SECTIONS = tuple(sorted(DEFAULTS.keys()))
+
 
 def apply_defaults(desc):
     result = copy.deepcopy(DEFAULTS)

@@ -49,7 +49,7 @@ DEMO_TABLE = {
 }
 
 
-def run(args):
+def run(args, settings):
     try:
         demo = DEMO_TABLE[args.name]
     except KeyError:
