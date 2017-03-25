@@ -1,7 +1,7 @@
 import io, json, unittest
 from .mock import mock_open
 
-from bibliopixel.util import datafile
+from bibliopixel.util.datafile import load_config, DataFile
 
 DEFAULTS = {
     'a': {'foo': 0, 'bang': 0, 'burt': 0},
@@ -26,25 +26,25 @@ class DatafileTest(unittest.TestCase):
     def test_reader_writer_json(self):
         context = {'test.json': JSON_TEST}
         mopen = mock_open(context)
-        reader, writer = datafile.reader_writer('test.json', open=mopen)
-
-        self.assertEqual(reader(), {'a': {'foo': 'bar', 'bang': 1}})
-        d = {'bang': {'hi': 'there'}}
-        writer(d)
-        self.assertEqual(json.loads(context['test.json']), d)
+        datafile = DataFile('test.json', open=mopen)
+        datafile.read()
+        self.assertEqual(datafile.data, {'a': {'foo': 'bar', 'bang': 1}})
+        datafile.data = {'bang': {'hi': 'there'}}
+        datafile.write()
+        self.assertEqual(json.loads(context['test.json']), datafile.data)
 
     def test_reader_writer_config(self):
         context = {'.test': CONFIG_TEST}
         mopen = mock_open(context)
-        reader, writer = datafile.reader_writer('.test', open=mopen)
-        result = {
-            'DEFAULT': {},
-            'a': {'foo': 'bar', 'bang': '1'},
-        }
-        self.assertEqual(reader(), result)
+        datafile = DataFile('.test', open=mopen)
+        datafile.read()
 
-        d = {'bang': {'hi': 'there'}}
-        writer(d)
+        result = {'a': {'foo': 'bar', 'bang': '1'}}
+        self.assertEqual(datafile.data, result)
+
+        datafile.data = {'bang': {'hi': 'there'}}
+        datafile.write()
+
         fp = io.StringIO(context['.test'])
-        config = datafile.read_config(fp)
-        self.assertEqual(config, dict(d, DEFAULT={}))
+        config = load_config(fp)
+        self.assertEqual(config, datafile.data)

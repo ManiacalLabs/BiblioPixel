@@ -1,16 +1,16 @@
 import configparser, json
 
 
-def read_config(fp):
+def load_config(fp):
     interpolation = configparser.ExtendedInterpolation()
     parser = configparser.ConfigParser(interpolation=interpolation)
 
     parser.read_file(fp)
 
-    return {k: dict(v) for k, v in parser.items()}
+    return {k: dict(v) for k, v in parser.items() if dict(v)}
 
 
-def write_config(data, fp):
+def dump_config(data, fp):
     parser = configparser.ConfigParser()
     for k, v in data.items():
         parser[k] = v
@@ -18,21 +18,25 @@ def write_config(data, fp):
     parser.write(fp)
 
 
-def reader_writer(filename, is_json=None, open=open):
-    if is_json is None:
-        is_json = filename.endswith('.json')
+class DataFile(object):
+    def __init__(self, filename, is_json=None, open=open):
+        self.filename = filename
 
-    read = json.load if is_json else read_config
-    write = json.dump if is_json else write_config
+        if is_json is None:
+            is_json = filename.endswith('.json')
 
-    def reader():
+        self.load = json.load if is_json else load_config
+        self.dump = json.dump if is_json else dump_config
+        self.open = open
+        self.data = {}
+
+    def read(self):
         try:
-            fp = open(filename)
+            fp = self.open(self.filename)
         except FileNotFoundError:
-            return {}
-        return read(fp)
+            self.data = {}
+        else:
+            self.data = self.load(fp)
 
-    def writer(data):
-        return write(data, open(filename, 'w'))
-
-    return reader, writer
+    def write(self):
+        self.dump(self.data, self.open(self.filename, 'w'))
