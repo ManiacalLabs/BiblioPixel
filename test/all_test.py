@@ -1,6 +1,6 @@
 import unittest
-
 import bibliopixel
+from bibliopixel.main import demo, main, run, set, show
 
 from bibliopixel import (
     animation,

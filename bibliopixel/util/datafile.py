@@ -29,6 +29,7 @@ class DataFile(object):
         self.dump = json.dump if is_json else dump_config
         self.open = open
         self.data = {}
+        self.read()
 
     def read(self):
         try:
