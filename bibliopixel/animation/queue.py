@@ -63,18 +63,3 @@ class AnimationQueue(BaseAnimation):
 
             run['fps'] = run.get('fps') or self.fps
             anim.run(**(run))
-
-    RUN_PARAMS = [{
-        'id': 'fps',
-        'label': 'Default Framerate',
-        'type': 'int',
-        'default': None,
-        'min': 1,
-        'help': 'Default framerate to run all animations in queue.'
-    }, {
-        'id': 'until_complete',
-        'label': 'Until Complete',
-        'type': 'bool',
-        'default': False,
-        'help': 'Run until animation marks itself as complete. If supported.'
-    }]
