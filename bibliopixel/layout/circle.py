@@ -1,4 +1,5 @@
 from .. util import pointOnCircle
+import math
 
 
 def calc_ring_pixel_count(rings):
@@ -59,17 +60,19 @@ def layout_from_rings(rings, origin=(0, 0, 0), z_diff=0):
 
     points = [None] * num
     z = 0
+
     for i in range(len(rings)):
         r = rings[i]
         step = steps[i]
         angle = 0.0
         for p in r:
-            radius = (len(r) * 0.5)
+            radius = (len(r) - 1) * math.pi
             x, y = pointOnCircle(0, 0, radius, angle)
             if use_z:
                 points[p] = (x + ox, y + oy, z + oz)
             else:
                 points[p] = (x + ox, y + oy)
+
             angle += step
 
         z += z_diff
