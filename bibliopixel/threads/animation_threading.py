@@ -16,12 +16,13 @@ class AnimationThreading(object):
         self.thread = None
 
     def report_framerate(self, start, mid, now):
-        stepTime = int(mid - start)
-        render_duration = int(now - mid)
+        stepTime = mid - start
+        render_duration = now - mid
         totalTime = stepTime + render_duration
-        fps = int(1.0 / max(totalTime, 1))
+        fps = int(1.0 / max(totalTime, 0.001))
         log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                  totalTime, fps, stepTime, render_duration)
+                  round(1000 * totalTime), fps, round(1000 * stepTime),
+                  round(1000 * render_duration))
 
     def stop_thread(self, wait=False):
         if self.thread:
