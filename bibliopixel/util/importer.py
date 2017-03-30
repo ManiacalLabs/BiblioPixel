@@ -18,9 +18,6 @@ def import_symbol(typename, package=None):
                 return getattr(namespace, typename)
             except AttributeError:
                 pass
-        raise e
-
-    except:
         raise
 
 
