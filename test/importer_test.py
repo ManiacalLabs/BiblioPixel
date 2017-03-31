@@ -1,8 +1,7 @@
 import unittest
 
-from bibliopixel.util import importer
-
-import_symbol = importer.import_symbol
+from bibliopixel.project.importer import import_symbol, make_object
+from bibliopixel.project import importer
 
 
 class ImporterTest(unittest.TestCase):
@@ -33,12 +32,13 @@ class ImporterTest(unittest.TestCase):
             import_symbol('bibliopixel.log12')
 
     def test_longer(self):
-        self.assertEqual(import_symbol('bibliopixel.util.importer'), importer)
-        self.assertEqual(import_symbol('bibliopixel.util.importer.import_symbol'),
-                         import_symbol)
+        self.assertEqual(
+            import_symbol('bibliopixel.project.importer'), importer)
+        self.assertEqual(
+            import_symbol('bibliopixel.project.importer.import_symbol'),
+            import_symbol)
 
     def test_make_object(self):
-        td = importer.make_object(5, 23, typename='datetime.timedelta',
-                                  milliseconds=235)
+        td = make_object(5, 23, typename='datetime.timedelta', milliseconds=35)
         import datetime
-        self.assertEqual(td, datetime.timedelta(5, 23, milliseconds=235))
+        self.assertEqual(td, datetime.timedelta(5, 23, milliseconds=35))

@@ -1,6 +1,6 @@
 import sys, json
 from . defaults import apply_defaults, DEFAULTS
-from .. util.importer import make_object
+from . importer import make_object
 from .. import data_maker
 from .. layout import gen_matrix
 from .. led.multimap import MultiMapBuilder

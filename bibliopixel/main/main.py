@@ -1,6 +1,6 @@
 import argparse, os, sys
 from .. import log
-from .. util.importer import import_symbol
+from .. project.importer import import_symbol
 from .. project.settings_file import SettingsFile
 
 __all__ = ['main']

@@ -19,8 +19,3 @@ def import_symbol(typename, package=None):
             except AttributeError:
                 pass
         raise
-
-
-def make_object(*args, typename, package=None, **kwds):
-    """Make an object from a symbol."""
-    return import_symbol(typename, package)(*args, **kwds)
