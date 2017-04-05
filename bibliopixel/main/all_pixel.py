@@ -1,8 +1,8 @@
-import sys
-from bibliopixel.drivers.serial import (
+import signal, sys
+from ..drivers.serial import (
     LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError, DEVICES)
-import signal
 
+HELP = """Configure the AllPixel lighting module."""
 
 types = [
     [LEDTYPE.GENERIC, "GENERIC"],
@@ -47,7 +47,7 @@ def showSelectList(msg, values):
     return get_int("Choice: ")
 
 
-def run():
+def run(args, settings):
     try:
         print("Press Ctrl+C anytime to quit.")
 
@@ -91,10 +91,8 @@ def run():
 
         O(details + "\n")
 
-        driver = None
         try:
-            driver = DriverSerial(
-                t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
+            DriverSerial(t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
             O("Configure complete!")
         except BiblioSerialError as e:
             O("Error configuring device!")
@@ -105,4 +103,5 @@ def run():
         pass
 
 
-run()
+def set_parser(parser):
+    parser.set_defaults(run=run)
