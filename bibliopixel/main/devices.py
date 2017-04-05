@@ -1,16 +1,18 @@
 from __future__ import print_function
-from bibliopixel.drivers.serial import DriverSerial, DEVICES
+from ..drivers.serial import DriverSerial, DEVICES
 
 CONNECT_MESSAGE = """
 Connect just one Serial device (AllPixel) and press enter..."""
 
+HELP = """Find serial devices."""
 
-def run():
+
+def run(args, settings):
     run = True
     print("Press Ctrl+C any time to exit.")
     try:
         while run:
-            ignored = input(CONNECT_MESSAGE)
+            input(CONNECT_MESSAGE)
             ports = DEVICES.findSerialDevices()
             if len(ports):
                 try:
@@ -40,4 +42,5 @@ def run():
         pass
 
 
-run()
+def set_parser(parser):
+    parser.set_defaults(run=run)

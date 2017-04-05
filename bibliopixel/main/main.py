@@ -5,7 +5,7 @@ from .. project.settings_file import SettingsFile
 
 __all__ = ['main']
 
-COMMANDS = ('demo', 'run', 'set', 'show',)  # 'network'
+COMMANDS = ('all_pixel', 'devices', 'demo', 'run', 'set', 'show')
 MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
 DOTFILE_DEFAULT = '~/.bibliopixel'
 LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
