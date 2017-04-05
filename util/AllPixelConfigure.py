@@ -1,6 +1,6 @@
 from __future__ import print_function
 import sys
-from bibliopixel.drivers.serial_driver import LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError
+from bibliopixel.drivers.serial import LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError
 import signal
 
 types = [

@@ -31,7 +31,7 @@ from bibliopixel.drivers import (
     network,
     network_receiver,
     network_udp,
-    serial_driver,
+    serial,
     spi_driver_base,
     # timedata_visualizer,
 )
