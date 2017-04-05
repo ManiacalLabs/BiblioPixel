@@ -1,31 +1,16 @@
 import os, sys, time, traceback
 
-from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
+from . devices import Devices, serial
 from .. driver_base import DriverBase, ChannelOrder
 from ... import gamma, log, util
 from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
 
-try:
-    import serial
-    import serial.tools.list_ports
-except ImportError as e:
-    error = "Please install pyserial 2.7+! pip install pyserial"
-    log.error(error)
-    raise ImportError(error)
-
-if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
-    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
-        serial.VERSION)
-    log.error(error)
-    raise ImportError(error)
+DEVICES = Devices()
 
 
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
-    foundDevices = []
-    deviceIDS = {}
-    deviceVers = []
 
     def __init__(self, type, num, dev="",
                  c_order=ChannelOrder.RGB, SPISpeed=2,
@@ -72,40 +57,18 @@ class DriverSerial(DriverBase):
             log.info("Closing connection to: %s", self.dev)
             self._com.close()
 
-    @staticmethod
-    def findSerialDevices(hardwareID="1D50:60AB", baudrate=921600):
-        hardwareID = "(?i)" + hardwareID  # forces case insensitive
-        if len(DriverSerial.foundDevices) == 0:
-            DriverSerial.foundDevices = []
-            DriverSerial.deviceIDS = {}
-            for port in serial.tools.list_ports.grep(hardwareID):
-                id = DriverSerial.getDeviceID(port[0], baudrate)
-                ver = DriverSerial.getDeviceVer(port[0], baudrate)
-                if id >= 0:
-                    DriverSerial.deviceIDS[id] = port[0]
-                    DriverSerial.foundDevices.append(port[0])
-                    DriverSerial.deviceVers.append(ver)
-
-        return DriverSerial.foundDevices
-
-    @staticmethod
-    def _comError():
-        error = "There was an unknown error communicating with the device."
-        log.error(error)
-        raise IOError(error)
-
     def _connect(self, baudrate):
         try:
             if(self.dev == "" or self.dev is None):
-                DriverSerial.findSerialDevices(self._hardwareID, baudrate)
+                DEVICES.findSerialDevices(self._hardwareID, baudrate)
 
                 if self.deviceID is not None:
-                    if self.deviceID in DriverSerial.deviceIDS:
-                        self.dev = DriverSerial.deviceIDS[self.deviceID]
+                    if self.deviceID in DEVICES.deviceIDS:
+                        self.dev = DEVICES.deviceIDS[self.deviceID]
                         self.devVer = 0
                         try:
-                            i = DriverSerial.foundDevices.index(self.dev)
-                            self.devVer = DriverSerial.deviceVers[i]
+                            i = DEVICES.foundDevices.index(self.dev)
+                            self.devVer = DEVICES.deviceVers[i]
                         except:
                             pass
                         log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
@@ -116,17 +79,17 @@ class DriverSerial(DriverBase):
                             self.deviceID)
                         log.error(error)
                         raise ValueError(error)
-                elif len(DriverSerial.foundDevices) > 0:
-                    self.dev = DriverSerial.foundDevices[0]
+                elif len(DEVICES.foundDevices) > 0:
+                    self.dev = DEVICES.foundDevices[0]
                     self.devVer = 0
                     try:
-                        i = DriverSerial.foundDevices.index(self.dev)
-                        self.devVer = DriverSerial.deviceVers[i]
+                        i = DEVICES.foundDevices.index(self.dev)
+                        self.devVer = DEVICES.deviceVers[i]
                     except:
                         pass
                     devID = -1
-                    for id in DriverSerial.deviceIDS:
-                        if DriverSerial.deviceIDS[id] == self.dev:
+                    for id in DEVICES.deviceIDS:
+                        if DEVICES.deviceIDS[id] == self.dev:
                             devID = id
 
                     log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
@@ -135,7 +98,7 @@ class DriverSerial(DriverBase):
             try:
                 self._com = serial.Serial(self.dev, baudrate=baudrate, timeout=5)
             except serial.SerialException as e:
-                ports = DriverSerial.findSerialDevices(self._hardwareID, baudrate)
+                ports = DEVICES.findSerialDevices(self._hardwareID, baudrate)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \
@@ -160,7 +123,7 @@ class DriverSerial(DriverBase):
 
             resp = self._com.read(1)
             if len(resp) == 0:
-                DriverSerial._comError()
+                DEVICES.error()
 
             return ord(resp)
 
@@ -170,58 +133,6 @@ class DriverSerial(DriverBase):
             log.error(traceback.format_exc())
             log.error(error)
             raise e
-
-    @staticmethod
-    def setDeviceID(dev, id, baudrate=921600):
-        if id < 0 or id > 255:
-            raise ValueError("ID must be an unsigned byte!")
-
-        try:
-            com = serial.Serial(dev, baudrate=baudrate, timeout=5)
-
-            packet = util.generate_header(CMDTYPE.SETID, 1)
-            packet.append(id)
-            com.write(packet)
-
-            resp = com.read(1)
-            if len(resp) == 0:
-                DriverSerial._comError()
-            else:
-                if ord(resp) != RETURN_CODES.SUCCESS:
-                    print_error(ord(resp))
-
-        except serial.SerialException:
-            log.error("Problem connecting to serial device.")
-            raise IOError("Problem connecting to serial device.")
-
-    @staticmethod
-    def getDeviceID(dev, baudrate=921600):
-        packet = util.generate_header(CMDTYPE.GETID, 0)
-        try:
-            com = serial.Serial(dev, baudrate=baudrate, timeout=5)
-            com.write(packet)
-            resp = ord(com.read(1))
-            return resp
-        except serial.SerialException:
-            log.error("Problem connecting to serial device.")
-            return -1
-
-    @staticmethod
-    def getDeviceVer(dev, baudrate=921600):
-        packet = util.generate_header(CMDTYPE.GETVER, 0)
-        try:
-            com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
-            com.write(packet)
-            ver = 0
-            resp = com.read(1)
-            if len(resp) > 0:
-                resp = ord(resp)
-                if resp == RETURN_CODES.SUCCESS:
-                    ver = ord(com.read(1))
-            return ver
-        except serial.SerialException:
-            log.error("Problem connecting to serial device.")
-            return 0
 
     def set_brightness(self, brightness):
         super().set_brightness(brightness)
@@ -238,7 +149,7 @@ class DriverSerial(DriverBase):
 
         resp = self._com.read(1)
         if len(resp) == 0:
-            DriverSerial._comError()
+            DEVICES.error()
         if ord(resp) != RETURN_CODES.SUCCESS:
             print_error(ord(resp))
 
