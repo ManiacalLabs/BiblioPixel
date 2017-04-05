@@ -1,6 +1,6 @@
 from __future__ import print_function
 import sys
-from bibliopixel.drivers.serial_driver import DriverSerial
+from bibliopixel.drivers.serial import DriverSerial
 
 run = True
 print("Press Ctrl+C any time to exit.")
