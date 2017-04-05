@@ -1,7 +1,8 @@
-from __future__ import print_function
 import sys
-from bibliopixel.drivers.serial import LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError
+from bibliopixel.drivers.serial import (
+    LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError, DEVICES)
 import signal
+
 
 types = [
     [LEDTYPE.GENERIC, "GENERIC"],
@@ -46,62 +47,62 @@ def showSelectList(msg, values):
     return get_int("Choice: ")
 
 
-try:
-    print("Press Ctrl+C anytime to quit.")
-
-    O("Scanning for devices...")
-
-    DriverSerial.foundDevices = []
-    devs = DriverSerial.findSerialDevices()
-
-    d = ""
-    if len(devs) == 0:
-        I("No devices found! Please connect one and press any key...")
-        raise ValueError()
-    elif len(devs) > 1:
-        d = showSelectList("Select device:", devs)
-        if d < 0 or d >= len(devs):
-            O("Invalid choice!")
-            raise ValueError()
-        d = devs[d]
-    else:
-        d = devs[0]
-
-    t = showSelectList("Choose LED Type", [v[1] for v in types])
-    if t < 0 or t >= len(types):
-        O("Invalid choice!")
-        raise ValueError()
-    t = types[t]
-
-    num = get_int("Number of LEDs: ", invalid=0)
-    if num <= 0:
-        O("Invalid choice!")
-        raise ValueError()
-
-    spi = 2
-    useSPI = t[0] in SPIChipsets
-    if useSPI:
-        spi = get_int("SPI Speed (1-24): ", invalid=0)
-        if spi <= 0:
-            O("Invalid choice!")
-            raise ValueError()
-
-    details = "Device: {}\nLED Type: {}\nNum LEDs: {}".format(d, t[1], num)
-    if useSPI:
-        details += "\nSPI Speed: {}".format(spi)
-
-    O(details + "\n")
-
-    driver = None
+def run():
     try:
-        driver = DriverSerial(
-            t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
-        O("Configure complete!")
-    except BiblioSerialError as e:
-        O("Error configuring device!")
+        print("Press Ctrl+C anytime to quit.")
+
+        O("Scanning for devices...")
+        devs = DEVICES.findSerialDevices()
+        d = ""
+        if len(devs) == 0:
+            I("No devices found! Please connect one and press any key...")
+            raise ValueError()
+        elif len(devs) > 1:
+            d = showSelectList("Select device:", devs)
+            if d < 0 or d >= len(devs):
+                O("Invalid choice!")
+                raise ValueError()
+            d = devs[d]
+        else:
+            d = devs[0]
+
+        t = showSelectList("Choose LED Type", [v[1] for v in types])
+        if t < 0 or t >= len(types):
+            O("Invalid choice!")
+            raise ValueError()
+        t = types[t]
+
+        num = get_int("Number of LEDs: ", invalid=0)
+        if num <= 0:
+            O("Invalid choice!")
+            raise ValueError()
+
+        spi = 2
+        useSPI = t[0] in SPIChipsets
+        if useSPI:
+            spi = get_int("SPI Speed (1-24): ", invalid=0)
+            if spi <= 0:
+                O("Invalid choice!")
+                raise ValueError()
+
+        details = "Device: {}\nLED Type: {}\nNum LEDs: {}".format(d, t[1], num)
+        if useSPI:
+            details += "\nSPI Speed: {}".format(spi)
+
+        O(details + "\n")
+
+        driver = None
+        try:
+            driver = DriverSerial(
+                t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
+            O("Configure complete!")
+        except BiblioSerialError as e:
+            O("Error configuring device!")
+
+    except KeyboardInterrupt:
+        sys.exit(128 + signal.SIGINT)
+    except ValueError as e:
+        pass
 
 
-except KeyboardInterrupt:
-    sys.exit(128 + signal.SIGINT)
-except ValueError as e:
-    pass
+run()
