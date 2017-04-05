@@ -10,7 +10,7 @@ Run a demo.  For the list of possible demos, type
 
 """
 
-SIMPIXEL_URL = 'http://beta.simpixel.io'
+DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
 IMPORT_ERROR_TEXT = """
 Please install the BiblioPixelAnimations library from here:
 
@@ -61,8 +61,8 @@ def run(args, settings):
             e.msg += IMPORT_ERROR_TEXT
         raise
 
-    if not args.no_simpixel:
-        webbrowser.open(SIMPIXEL_URL, new=0, autoraise=True)
+    if not args.simpixel.startswith('no'):
+        webbrowser.open(args.simpixel, new=0, autoraise=True)
 
     anim.run()
 
@@ -72,4 +72,4 @@ def set_parser(parser):
     parser.add_argument('name', nargs='?', default='bloom')
     parser.add_argument('-width', default=32, type=int)
     parser.add_argument('-height', default=32, type=int)
-    parser.add_argument('-no_simpixel', action='store_true')
+    parser.add_argument('-simpixel', default=DEFAULT_SIMPIXEL_URL)
