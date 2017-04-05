@@ -1,4 +1,4 @@
-import ctypes, enum
+import ctypes
 from multiprocessing.sharedctypes import RawArray
 
 # Note https://stackoverflow.com/questions/37705974/
