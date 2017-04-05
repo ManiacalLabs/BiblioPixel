@@ -70,6 +70,6 @@ def run(args, settings):
 def set_parser(parser):
     parser.set_defaults(run=run)
     parser.add_argument('name', nargs='?', default='bloom')
-    parser.add_argument('-width', default=32, type=int)
-    parser.add_argument('-height', default=32, type=int)
-    parser.add_argument('-simpixel', default=DEFAULT_SIMPIXEL_URL)
+    parser.add_argument('--width', default=32, type=int)
+    parser.add_argument('--height', default=32, type=int)
+    parser.add_argument('--simpixel', default=DEFAULT_SIMPIXEL_URL)
