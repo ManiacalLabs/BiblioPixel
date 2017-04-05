@@ -1,1 +1,2 @@
-from . driver import LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError
+from . driver import DriverSerial, BiblioSerialError
+from . codes import LEDTYPE, SPIChipsets
