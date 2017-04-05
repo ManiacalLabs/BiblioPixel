@@ -13,10 +13,10 @@ def run(args, settings):
     try:
         while run:
             input(CONNECT_MESSAGE)
-            ports = DEVICES.findSerialDevices()
+            ports = DEVICES.find_serial_devices()
             if len(ports):
                 try:
-                    id = DEVICES.getDeviceID(ports[0])
+                    id = DEVICES.get_device_id(ports[0])
                     print("Device ID of {}: {}".format(ports[0], id))
                     newID = input("Input new ID (enter to skip): ")
                     if newID != '':
@@ -26,8 +26,8 @@ def run(args, settings):
                                 raise ValueError()
 
                             try:
-                                DEVICES.setDeviceID(ports[0], newID)
-                                id = DEVICES.getDeviceID(ports[0])
+                                DEVICES.set_device_id(ports[0], newID)
+                                id = DEVICES.get_device_id(ports[0])
                                 print("Device ID set to: %s" % id)
                             except:
                                 pass
