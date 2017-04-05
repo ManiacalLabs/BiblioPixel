@@ -1,13 +1,10 @@
+import os, sys, time, traceback
+
+from distutils.version import LooseVersion
+from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from .. driver_base import DriverBase, ChannelOrder
-
-import sys
-import time
-import os
-import traceback
-
 from ... import gamma, log, util
 from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
-from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 
 try:
     import serial
@@ -16,8 +13,6 @@ except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
     log.error(error)
     raise ImportError(error)
-
-from distutils.version import LooseVersion
 
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
     error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
