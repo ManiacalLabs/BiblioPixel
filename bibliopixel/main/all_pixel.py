@@ -52,7 +52,7 @@ def run(args, settings):
         print("Press Ctrl+C anytime to quit.")
 
         O("Scanning for devices...")
-        devs = DEVICES.findSerialDevices()
+        devs = DEVICES.find_serial_devices()
         d = ""
         if len(devs) == 0:
             I("No devices found! Please connect one and press any key...")

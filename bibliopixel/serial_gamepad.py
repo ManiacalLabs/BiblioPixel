@@ -31,7 +31,7 @@ class SerialPadError(Exception):
 
 
 class SerialGamePad(BaseGamePad):
-    foundDevices = []
+    found_devices = []
 
     def __init__(self, btn_map=["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID="1B4F:9206"):
         super().__init__()
@@ -54,14 +54,14 @@ class SerialGamePad(BaseGamePad):
         self.cleanup()
 
     @staticmethod
-    def findSerialDevices(hardwareID="1B4F:9206"):
+    def find_serial_devices(hardwareID="1B4F:9206"):
         hardwareID = "(?i)" + hardwareID  # forces case insensitive
-        if len(SerialGamePad.foundDevices) == 0:
-            SerialGamePad.foundDevices = []
+        if len(SerialGamePad.found_devices) == 0:
+            SerialGamePad.found_devices = []
             for port in serial.tools.list_ports.grep(hardwareID):
-                SerialGamePad.foundDevices.append(port[0])
+                SerialGamePad.found_devices.append(port[0])
 
-        return SerialGamePad.foundDevices
+        return SerialGamePad.found_devices
 
     @staticmethod
     def _printError(error):
@@ -85,16 +85,16 @@ class SerialGamePad(BaseGamePad):
     def _connect(self):
         try:
             if(self.dev == ""):
-                SerialGamePad.findSerialDevices(self._hardwareID)
+                SerialGamePad.find_serial_devices(self._hardwareID)
 
-                if len(SerialGamePad.foundDevices) > 0:
-                    self.dev = SerialGamePad.foundDevices[0]
+                if len(SerialGamePad.found_devices) > 0:
+                    self.dev = SerialGamePad.found_devices[0]
                     log.info("Using COM Port: %s", self.dev)
 
             try:
                 self._com = serial.Serial(self.dev, timeout=5)
             except serial.SerialException as e:
-                ports = SerialGamePad.findSerialDevices(self._hardwareID)
+                ports = SerialGamePad.find_serial_devices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \

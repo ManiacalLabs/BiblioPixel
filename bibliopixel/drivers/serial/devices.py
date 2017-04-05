@@ -22,31 +22,31 @@ class Devices(object):
     """Manage a list of serial devices."""
 
     def __init__(self):
-        self.foundDevices = []
-        self.deviceIDS = {}
-        self.deviceVers = []
+        self.found_devices = []
+        self.device_ids = {}
+        self.device_versions = []
 
-    def findSerialDevices(self, hardwareID="1D50:60AB", baudrate=921600):
+    def find_serial_devices(self, hardwareID="1D50:60AB", baudrate=921600):
         hardwareID = "(?i)" + hardwareID  # forces case insensitive
-        if len(self.foundDevices) == 0:
-            self.foundDevices = []
-            self.deviceIDS = {}
+        if len(self.found_devices) == 0:
+            self.found_devices = []
+            self.device_ids = {}
             for port in serial.tools.list_ports.grep(hardwareID):
-                id = self.getDeviceID(port[0], baudrate)
-                ver = self.getDeviceVer(port[0], baudrate)
+                id = self.get_device_id(port[0], baudrate)
+                ver = self.get_device_version(port[0], baudrate)
                 if id >= 0:
-                    self.deviceIDS[id] = port[0]
-                    self.foundDevices.append(port[0])
-                    self.deviceVers.append(ver)
+                    self.device_ids[id] = port[0]
+                    self.found_devices.append(port[0])
+                    self.device_versions.append(ver)
 
-        return self.foundDevices
+        return self.found_devices
 
     def error(self):
         error = "There was an unknown error communicating with the device."
         log.error(error)
         raise IOError(error)
 
-    def setDeviceID(self, dev, id, baudrate=921600):
+    def set_device_id(self, dev, id, baudrate=921600):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
 
@@ -68,7 +68,7 @@ class Devices(object):
             log.error("Problem connecting to serial device.")
             raise IOError("Problem connecting to serial device.")
 
-    def getDeviceID(self, dev, baudrate=921600):
+    def get_device_id(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETID, 0)
         try:
             com = serial.Serial(dev, baudrate=baudrate, timeout=5)
@@ -79,7 +79,7 @@ class Devices(object):
             log.error("Problem connecting to serial device.")
             return -1
 
-    def getDeviceVer(self, dev, baudrate=921600):
+    def get_device_version(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETVER, 0)
         try:
             com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)

@@ -28,7 +28,7 @@ class DriverSerial(DriverBase):
         self._type = type
         self._bufPad = 0
         self.dev = dev
-        self.devVer = 0
+        self.device_version = 0
         self.deviceID = deviceID
         self._sync_packet = util.generate_header(CMDTYPE.SYNC, 0)
 
@@ -60,45 +60,45 @@ class DriverSerial(DriverBase):
     def _connect(self, baudrate):
         try:
             if(self.dev == "" or self.dev is None):
-                DEVICES.findSerialDevices(self._hardwareID, baudrate)
+                DEVICES.find_serial_devices(self._hardwareID, baudrate)
 
                 if self.deviceID is not None:
-                    if self.deviceID in DEVICES.deviceIDS:
-                        self.dev = DEVICES.deviceIDS[self.deviceID]
-                        self.devVer = 0
+                    if self.deviceID in DEVICES.device_ids:
+                        self.dev = DEVICES.device_ids[self.deviceID]
+                        self.device_version = 0
                         try:
-                            i = DEVICES.foundDevices.index(self.dev)
-                            self.devVer = DEVICES.deviceVers[i]
+                            i = DEVICES.found_devices.index(self.dev)
+                            self.device_version = DEVICES.device_versions[i]
                         except:
                             pass
                         log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
-                                 self.dev, self.deviceID, self.devVer)
+                                 self.dev, self.deviceID, self.device_version)
 
                     if self.dev == "" or self.dev is None:
                         error = "Unable to find device with ID: {}".format(
                             self.deviceID)
                         log.error(error)
                         raise ValueError(error)
-                elif len(DEVICES.foundDevices) > 0:
-                    self.dev = DEVICES.foundDevices[0]
-                    self.devVer = 0
+                elif len(DEVICES.found_devices) > 0:
+                    self.dev = DEVICES.found_devices[0]
+                    self.device_version = 0
                     try:
-                        i = DEVICES.foundDevices.index(self.dev)
-                        self.devVer = DEVICES.deviceVers[i]
+                        i = DEVICES.found_devices.index(self.dev)
+                        self.device_version = DEVICES.device_versions[i]
                     except:
                         pass
                     devID = -1
-                    for id in DEVICES.deviceIDS:
-                        if DEVICES.deviceIDS[id] == self.dev:
+                    for id in DEVICES.device_ids:
+                        if DEVICES.device_ids[id] == self.dev:
                             devID = id
 
                     log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
-                             self.dev, devID, self.devVer)
+                             self.dev, devID, self.device_version)
 
             try:
                 self._com = serial.Serial(self.dev, baudrate=baudrate, timeout=5)
             except serial.SerialException as e:
-                ports = DEVICES.findSerialDevices(self._hardwareID, baudrate)
+                ports = DEVICES.find_serial_devices(self._hardwareID, baudrate)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \
@@ -110,7 +110,7 @@ class DriverSerial(DriverBase):
             packet.append(self._type)  # set strip type
             byteCount = self.bufByteCount()
             if self._type in BufferChipsets:
-                if self._type == LEDTYPE.APA102 and self.devVer >= 2:
+                if self._type == LEDTYPE.APA102 and self.device_version >= 2:
                     pass
                 else:
                     self._bufPad = BufferChipsets[self._type](self.numLEDs) * 3
