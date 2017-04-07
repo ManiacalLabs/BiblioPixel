@@ -57,41 +57,40 @@ class DriverSerial(DriverBase):
 
     def _connect(self):
         try:
-            if(self.dev == "" or self.dev is None):
-                self.devices.find_serial_devices()
+            self.devices.find_serial_devices()
 
-                if self.deviceID is not None:
-                    if self.deviceID in self.devices.device_ids:
-                        self.dev = self.devices.device_ids[self.deviceID]
-                        self.device_version = 0
-                        try:
-                            i = self.devices.found_devices.index(self.dev)
-                            self.device_version = self.devices.device_versions[i]
-                        except:
-                            pass
-                        log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
-                                 self.dev, self.deviceID, self.device_version)
-
-                    if self.dev == "" or self.dev is None:
-                        error = "Unable to find device with ID: {}".format(
-                            self.deviceID)
-                        log.error(error)
-                        raise ValueError(error)
-                elif len(self.devices.found_devices) > 0:
-                    self.dev = self.devices.found_devices[0]
+            if self.deviceID is not None:
+                if self.deviceID in self.devices.device_ids:
+                    self.dev = self.devices.device_ids[self.deviceID]
                     self.device_version = 0
                     try:
                         i = self.devices.found_devices.index(self.dev)
                         self.device_version = self.devices.device_versions[i]
                     except:
                         pass
-                    devID = -1
-                    for id in self.devices.device_ids:
-                        if self.devices.device_ids[id] == self.dev:
-                            devID = id
-
                     log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
-                             self.dev, devID, self.device_version)
+                             self.dev, self.deviceID, self.device_version)
+
+                if self.dev == "" or self.dev is None:
+                    error = "Unable to find device with ID: {}".format(
+                        self.deviceID)
+                    log.error(error)
+                    raise ValueError(error)
+            elif len(self.devices.found_devices) > 0:
+                self.dev = self.devices.found_devices[0]
+                self.device_version = 0
+                try:
+                    i = self.devices.found_devices.index(self.dev)
+                    self.device_version = self.devices.device_versions[i]
+                except:
+                    pass
+                devID = -1
+                for id in self.devices.device_ids:
+                    if self.devices.device_ids[id] == self.dev:
+                        devID = id
+
+                log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
+                         self.dev, devID, self.device_version)
 
             try:
                 self._com = serial.Serial(self.dev, baudrate=self.devices.baudrate, timeout=5)
