@@ -21,23 +21,23 @@ if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
 class Devices(object):
     """Manage a list of serial devices."""
 
-    def __init__(self):
+    def __init__(self, hardware_id, baudrate):
+        self.hardware_id = hardware_id
+        self.baudrate = baudrate
+
+    def find_serial_devices(self):
         self.found_devices = []
         self.device_ids = {}
         self.device_versions = []
+        hardware_id = "(?i)" + self.hardware_id  # forces case insensitive
 
-    def find_serial_devices(self, hardwareID="1D50:60AB", baudrate=921600):
-        hardwareID = "(?i)" + hardwareID  # forces case insensitive
-        if len(self.found_devices) == 0:
-            self.found_devices = []
-            self.device_ids = {}
-            for port in serial.tools.list_ports.grep(hardwareID):
-                id = self.get_device_id(port[0], baudrate)
-                ver = self.get_device_version(port[0], baudrate)
-                if id >= 0:
-                    self.device_ids[id] = port[0]
-                    self.found_devices.append(port[0])
-                    self.device_versions.append(ver)
+        for port in serial.tools.list_ports.grep(hardware_id):
+            id = self.get_device_id(port[0], self.baudrate)
+            ver = self.get_device_version(port[0], self.baudrate)
+            if id >= 0:
+                self.device_ids[id] = port[0]
+                self.found_devices.append(port[0])
+                self.device_versions.append(ver)
 
         return self.found_devices
 
