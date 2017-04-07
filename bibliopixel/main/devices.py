@@ -1,5 +1,5 @@
 from __future__ import print_function
-from ..drivers.serial import DriverSerial, DEVICES
+from ..drivers.serial import DriverSerial, Devices
 
 CONNECT_MESSAGE = """
 Connect just one Serial device (AllPixel) and press enter..."""
@@ -13,10 +13,11 @@ def run(args, settings):
     try:
         while run:
             input(CONNECT_MESSAGE)
-            ports = DEVICES.find_serial_devices()
+            devices = Devices()
+            ports = devices.find_serial_devices()
             if len(ports):
                 try:
-                    id = DEVICES.get_device_id(ports[0])
+                    id = devices.get_device_id(ports[0])
                     print("Device ID of {}: {}".format(ports[0], id))
                     newID = input("Input new ID (enter to skip): ")
                     if newID != '':
@@ -26,8 +27,8 @@ def run(args, settings):
                                 raise ValueError()
 
                             try:
-                                DEVICES.set_device_id(ports[0], newID)
-                                id = DEVICES.get_device_id(ports[0])
+                                devices.set_device_id(ports[0], newID)
+                                id = devices.get_device_id(ports[0])
                                 print("Device ID set to: %s" % id)
                             except:
                                 pass

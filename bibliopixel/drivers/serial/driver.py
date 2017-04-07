@@ -6,8 +6,6 @@ from .. driver_base import DriverBase, ChannelOrder
 from ... import log, util
 from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
 
-DEVICES = Devices()
-
 
 class DriverSerial(DriverBase):
     """Main driver for Serial based LED strips"""
@@ -18,11 +16,11 @@ class DriverSerial(DriverBase):
                  deviceID=None, hardwareID="1D50:60AB",
                  baudrate=921600):
         super().__init__(num, c_order=c_order, gamma=gamma)
+        self.devices = Devices(hardwareID, baudrate)
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1
 
-        self._hardwareID = hardwareID
         self._SPISpeed = SPISpeed
         self._com = None
         self._type = type
@@ -35,13 +33,13 @@ class DriverSerial(DriverBase):
         if self.deviceID is not None and (self.deviceID < 0 or self.deviceID > 255):
             raise ValueError("deviceID must be between 0 and 255")
 
-        resp = self._connect(baudrate)
+        resp = self._connect()
         if resp == RETURN_CODES.REBOOT:  # reboot needed
             log.info(
                 "Reconfigure and reboot needed, waiting for controller to restart...")
             self._com.close()
             time.sleep(restart_timeout)
-            resp = self._connect(baudrate)
+            resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
                 print_error(resp)
             else:
@@ -57,18 +55,18 @@ class DriverSerial(DriverBase):
             log.info("Closing connection to: %s", self.dev)
             self._com.close()
 
-    def _connect(self, baudrate):
+    def _connect(self):
         try:
             if(self.dev == "" or self.dev is None):
-                DEVICES.find_serial_devices(self._hardwareID, baudrate)
+                self.devices.find_serial_devices()
 
                 if self.deviceID is not None:
-                    if self.deviceID in DEVICES.device_ids:
-                        self.dev = DEVICES.device_ids[self.deviceID]
+                    if self.deviceID in self.devices.device_ids:
+                        self.dev = self.devices.device_ids[self.deviceID]
                         self.device_version = 0
                         try:
-                            i = DEVICES.found_devices.index(self.dev)
-                            self.device_version = DEVICES.device_versions[i]
+                            i = self.devices.found_devices.index(self.dev)
+                            self.device_version = self.devices.device_versions[i]
                         except:
                             pass
                         log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
@@ -79,26 +77,26 @@ class DriverSerial(DriverBase):
                             self.deviceID)
                         log.error(error)
                         raise ValueError(error)
-                elif len(DEVICES.found_devices) > 0:
-                    self.dev = DEVICES.found_devices[0]
+                elif len(self.devices.found_devices) > 0:
+                    self.dev = self.devices.found_devices[0]
                     self.device_version = 0
                     try:
-                        i = DEVICES.found_devices.index(self.dev)
-                        self.device_version = DEVICES.device_versions[i]
+                        i = self.devices.found_devices.index(self.dev)
+                        self.device_version = self.devices.device_versions[i]
                     except:
                         pass
                     devID = -1
-                    for id in DEVICES.device_ids:
-                        if DEVICES.device_ids[id] == self.dev:
+                    for id in self.devices.device_ids:
+                        if self.devices.device_ids[id] == self.dev:
                             devID = id
 
                     log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
                              self.dev, devID, self.device_version)
 
             try:
-                self._com = serial.Serial(self.dev, baudrate=baudrate, timeout=5)
+                self._com = serial.Serial(self.dev, baudrate=self.devices.baudrate, timeout=5)
             except serial.SerialException as e:
-                ports = DEVICES.find_serial_devices(self._hardwareID, baudrate)
+                ports = self.devices.find_serial_devices()
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \
@@ -123,7 +121,7 @@ class DriverSerial(DriverBase):
 
             resp = self._com.read(1)
             if len(resp) == 0:
-                DEVICES.error()
+                self.devices.error()
 
             return ord(resp)
 
@@ -149,7 +147,7 @@ class DriverSerial(DriverBase):
 
         resp = self._com.read(1)
         if len(resp) == 0:
-            DEVICES.error()
+            self.devices.error()
         if ord(resp) != RETURN_CODES.SUCCESS:
             print_error(ord(resp))
 

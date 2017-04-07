@@ -1,6 +1,6 @@
 import signal, sys
 from ..drivers.serial import (
-    LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError, DEVICES)
+    LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError, Devices)
 
 HELP = """Configure the AllPixel lighting module."""
 
@@ -52,7 +52,7 @@ def run(args, settings):
         print("Press Ctrl+C anytime to quit.")
 
         O("Scanning for devices...")
-        devs = DEVICES.find_serial_devices()
+        devs = Devices().find_serial_devices()
         d = ""
         if len(devs) == 0:
             I("No devices found! Please connect one and press any key...")
