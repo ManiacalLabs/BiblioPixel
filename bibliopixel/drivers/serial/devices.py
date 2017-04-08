@@ -4,8 +4,8 @@ from ... return_codes import RETURN_CODES, print_error
 from ... import log, util
 
 try:
-    import serial
-    import serial.tools.list_ports
+    import serial, serial.tools
+
 except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
     log.error(error)
@@ -32,7 +32,7 @@ class Devices(object):
         for ports in serial.tools.list_ports.grep(hardware_id):
             port = ports[0]
             id = self.get_device_id(port, self.baudrate)
-            ver = self.get_device_version(port, self.baudrate)
+            ver = self._get_device_version(port, self.baudrate)
             if len(ports) > 1:
                 log.debug('Multi-port device %s:%s:%s with %s ports found',
                           self.hardware_id, id, ver, len(ports))
@@ -71,47 +71,33 @@ class Devices(object):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
 
-        try:
-            com = serial.Serial(dev, baudrate=baudrate, timeout=5)
+        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
 
-            packet = util.generate_header(CMDTYPE.SETID, 1)
-            packet.append(id)
-            com.write(packet)
+        packet = util.generate_header(CMDTYPE.SETID, 1)
+        packet.append(id)
+        com.write(packet)
 
-            resp = com.read(1)
-            if len(resp) == 0:
-                self.error()
-            else:
-                if ord(resp) != RETURN_CODES.SUCCESS:
-                    print_error(ord(resp))
-
-        except serial.SerialException:
-            log.error("Problem connecting to serial device.")
-            raise IOError("Problem connecting to serial device.")
+        resp = com.read(1)
+        if len(resp) == 0:
+            self.error()
+        elif ord(resp) != RETURN_CODES.SUCCESS:
+            print_error(ord(resp))
 
     def get_device_id(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETID, 0)
-        try:
-            com = serial.Serial(dev, baudrate=baudrate, timeout=5)
-            com.write(packet)
-            resp = ord(com.read(1))
-            return resp
-        except serial.SerialException:
-            log.error("Problem connecting to serial device.")
-            return -1
+        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
+        com.write(packet)
+        resp = ord(com.read(1))
+        return resp
 
-    def get_device_version(self, dev, baudrate=921600):
+    def _get_device_version(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETVER, 0)
-        try:
-            com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
-            com.write(packet)
-            ver = 0
-            resp = com.read(1)
-            if len(resp) > 0:
-                resp = ord(resp)
-                if resp == RETURN_CODES.SUCCESS:
-                    ver = ord(com.read(1))
-            return ver
-        except serial.SerialException:
-            log.error("Problem connecting to serial device.")
-            return 0
+        com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
+        com.write(packet)
+        ver = 0
+        resp = com.read(1)
+        if len(resp) > 0:
+            resp = ord(resp)
+            if resp == RETURN_CODES.SUCCESS:
+                ver = ord(com.read(1))
+        return ver
