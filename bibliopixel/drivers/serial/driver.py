@@ -99,7 +99,7 @@ class DriverSerial(DriverBase):
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
                     error = "Invalid port specified. Try using one of: \n" + \
-                        "\n".join(ports)
+                        "\n".join(ports.values())
                 log.info(error)
                 raise BiblioSerialError(error)
 
