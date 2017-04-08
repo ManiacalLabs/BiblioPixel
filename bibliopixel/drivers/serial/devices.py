@@ -26,18 +26,27 @@ class Devices(object):
         self.baudrate = baudrate
 
     def find_serial_devices(self):
+        self.devices = {}
         self.found_devices = []
         self.device_ids = {}
         self.device_versions = []
         hardware_id = "(?i)" + self.hardware_id  # forces case insensitive
 
-        for port in serial.tools.list_ports.grep(hardware_id):
-            id = self.get_device_id(port[0], self.baudrate)
-            ver = self.get_device_version(port[0], self.baudrate)
-            if id >= 0:
-                self.device_ids[id] = port[0]
-                self.found_devices.append(port[0])
+        for ports in serial.tools.list_ports.grep(hardware_id):
+            port = ports[0]
+            id = self.get_device_id(port, self.baudrate)
+            ver = self.get_device_version(port, self.baudrate)
+            if len(ports) > 1:
+                log.debug('Multi-port device %s:%s:%s with %s ports found',
+                          self.hardware_id, id, ver, len(ports))
+            if id < 0:
+                log.debug('Serial device %s:%s:%s with id %s < 0',
+                          self.hardware_id, id, ver)
+            else:
+                self.device_ids[id] = port
+                self.found_devices.append(port)
                 self.device_versions.append(ver)
+                self.devices[id] = port, ver
 
         return self.found_devices
 
