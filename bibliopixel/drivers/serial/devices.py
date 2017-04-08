@@ -50,6 +50,24 @@ class Devices(object):
 
         return self.devices
 
+    def get_device(self, id=None):
+        if id is None:
+            if not self.devices:
+                raise ValueError('No default device for %s' % self.hardware_id)
+            id, (device, version) = sorted(self.devices.items())[0]
+
+        elif id in self.devices:
+            device, version = self.devices[id]
+
+        else:
+            error = 'Unable to find device with ID %s' % self.deviceID
+            log.error(error)
+            raise ValueError(error)
+
+        log.info("Using COM Port: %s, Device ID: %s, Device Ver: %s",
+                 device, id, version)
+        return id, device, version
+
     def error(self):
         error = "There was an unknown error communicating with the device."
         log.error(error)
