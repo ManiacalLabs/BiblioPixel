@@ -48,7 +48,7 @@ class Devices(object):
                 self.device_versions.append(ver)
                 self.devices[id] = port, ver
 
-        return self.found_devices
+        return self.devices
 
     def error(self):
         error = "There was an unknown error communicating with the device."

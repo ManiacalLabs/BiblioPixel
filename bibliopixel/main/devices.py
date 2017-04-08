@@ -15,31 +15,33 @@ def run(args, settings):
             input(CONNECT_MESSAGE)
             devices = Devices()
             ports = devices.find_serial_devices()
-            if len(ports):
-                try:
-                    id = devices.get_device_id(ports[0])
-                    print("Device ID of {}: {}".format(ports[0], id))
-                    newID = input("Input new ID (enter to skip): ")
-                    if newID != '':
-                        try:
-                            newID = int(newID)
-                            if newID < 0 or newID > 255:
-                                raise ValueError()
-
-                            try:
-                                devices.set_device_id(ports[0], newID)
-                                id = devices.get_device_id(ports[0])
-                                print("Device ID set to: %s" % id)
-                            except:
-                                pass
-                        except ValueError:
-                            print("Please enter a number between 0 and 255.")
-                except Exception as e:
-                    print(e)
-            else:
+            if not ports:
                 print("No serial devices found. Please connect one.")
+                continue
 
-    except:
+            try:
+                port = sorted(ports.items())[0][1]
+                id = devices.get_device_id(port)
+                print("Device ID of {}: {}".format(port, id))
+                newID = input("Input new ID (enter to skip): ")
+                if newID != '':
+                    try:
+                        newID = int(newID)
+                        if newID < 0 or newID > 255:
+                            raise ValueError()
+
+                        try:
+                            devices.set_device_id(port, newID)
+                            id = devices.get_device_id(port)
+                            print("Device ID set to: %s" % id)
+                        except:
+                            pass
+                    except ValueError:
+                        print("Please enter a number between 0 and 255.")
+            except Exception as e:
+                print(e)
+
+    except KeyboardInterrupt:
         pass
 
 

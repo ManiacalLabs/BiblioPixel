@@ -52,19 +52,19 @@ def run(args, settings):
         print("Press Ctrl+C anytime to quit.")
 
         O("Scanning for devices...")
-        devs = Devices().find_serial_devices()
+        devs = sorted(Devices().find_serial_devices().items())
         d = ""
-        if len(devs) == 0:
+        if not devs:
             I("No devices found! Please connect one and press any key...")
             raise ValueError()
-        elif len(devs) > 1:
+        if len(devs) == 1:
+            d = devs[0][1]
+        else:
             d = showSelectList("Select device:", devs)
             if d < 0 or d >= len(devs):
                 O("Invalid choice!")
                 raise ValueError()
-            d = devs[d]
-        else:
-            d = devs[0]
+            d = devs[d][1]
 
         t = showSelectList("Choose LED Type", [v[1] for v in types])
         if t < 0 or t >= len(types):
