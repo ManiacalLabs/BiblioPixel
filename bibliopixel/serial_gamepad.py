@@ -31,7 +31,7 @@ class SerialPadError(Exception):
 
 
 class SerialGamePad(BaseGamePad):
-    found_devices = []
+    devices = []
 
     def __init__(self, btn_map=["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID="1B4F:9206"):
         super().__init__()
@@ -56,12 +56,12 @@ class SerialGamePad(BaseGamePad):
     @staticmethod
     def find_serial_devices(hardwareID="1B4F:9206"):
         hardwareID = "(?i)" + hardwareID  # forces case insensitive
-        if len(SerialGamePad.found_devices) == 0:
-            SerialGamePad.found_devices = []
+        if len(SerialGamePad.devices) == 0:
+            SerialGamePad.devices = []
             for port in serial.tools.list_ports.grep(hardwareID):
-                SerialGamePad.found_devices.append(port[0])
+                SerialGamePad.devices.append(port[0])
 
-        return SerialGamePad.found_devices
+        return SerialGamePad.devices
 
     @staticmethod
     def _printError(error):
@@ -87,8 +87,8 @@ class SerialGamePad(BaseGamePad):
             if(self.dev == ""):
                 SerialGamePad.find_serial_devices(self._hardwareID)
 
-                if len(SerialGamePad.found_devices) > 0:
-                    self.dev = SerialGamePad.found_devices[0]
+                if len(SerialGamePad.devices) > 0:
+                    self.dev = SerialGamePad.devices[0]
                     log.info("Using COM Port: %s", self.dev)
 
             try:
