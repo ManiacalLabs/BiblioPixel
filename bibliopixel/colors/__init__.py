@@ -47,7 +47,7 @@ More details here: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors
 
 from . arithmetic import color_blend, color_scale
 from . hue import hsv2rgb_spectrum, hsv2rgb_rainbow, hsv2rgb_360
-from . hue import hsv2rgb, hue2rgb, hex2rgb, hue_gradient
+from . hue import hsv2rgb, hue2rgb, hex2rgb, hue_gradient, hue2rgb_360
 from . hue import hue_helper, hue_helper360
 from . wheel import wheel_color, wheel_helper
 

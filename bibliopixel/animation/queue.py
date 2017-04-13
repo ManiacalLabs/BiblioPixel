@@ -37,15 +37,14 @@ class AnimationQueue(BaseAnimation):
     def preRun(self, amt=1):
         self.animIndex = -1
 
-    def run(self, amt=1, fps=None, sleep=None, max_steps=0, until_complete=False,
-            max_cycles=0, threaded=False, joinThread=False, callback=None,
-            seconds=None):
+    def run(self, amt=1, fps=None, sleep_time=0, max_steps=0, until_complete=False,
+            max_cycles=0, threaded=False, join_thread=False, seconds=None):
         self.fps = fps
         self.until_complete = until_complete
-        super().run(amt=1, fps=None, sleep=None, max_steps=0,
-                    until_complete=until_complete,
-                    max_cycles=0, threaded=threaded, joinThread=joinThread,
-                    callback=callback, seconds=seconds)
+        super().set_run(amt=1, fps=None, sleep_time=0, max_steps=0,
+                        until_complete=until_complete,
+                        max_cycles=0, seconds=seconds)
+        super().run(threaded=threaded, join_thread=join_thread)
 
     def step(self, amt=1):
         self.animIndex += 1
@@ -59,7 +58,7 @@ class AnimationQueue(BaseAnimation):
             self.curAnim = self.anims[self.animIndex]
 
             anim, run = self.curAnim
-            run.update(threaded=False, joinThread=False, callback=None)
+            run.update(threaded=False, join_thread=False)
 
             run['fps'] = run.get('fps') or self.fps
             anim.run(**(run))
