@@ -52,7 +52,7 @@ class LEDMatrix(LEDBase):
             self.matrix_map = coordMap
         else:
             if len(self.drivers) == 1:
-                log.info('Auto generating coordinate map. Use gen_cube directly if more control needed.')
+                log.info('Auto generating coordinate map. Use gen_matrix directly if more control needed.')
                 self.matrix_map = gen_matrix(self.width, self.height)
             else:
                 raise TypeError(

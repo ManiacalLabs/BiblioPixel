@@ -2,6 +2,7 @@ import webbrowser
 
 from bibliopixel.drivers.SimPixel import DriverSimPixel
 from bibliopixel import LEDCircle, LEDMatrix, layout
+from bibliopixel.animation import AnimationQueue
 
 HELP = """
 Run a demo.  For the list of possible demos, type
@@ -19,12 +20,26 @@ https://github.com/ManiacalLabs/BiblioPixelAnimations
 """
 
 
-def bloom(args):
+def matrix(args):
     driver = DriverSimPixel(args.width * args.height)
     led = LEDMatrix(driver, width=args.width, height=args.height)
 
+    anim = AnimationQueue(led, anims=None)
+
+    from BiblioPixelAnimations.matrix.MatrixRain import MatrixRainBow
+    anim.addAnim(MatrixRainBow(led), amt=1, fps=20, seconds=8)
+
+    from BiblioPixelAnimations.matrix.Text import ScrollText
+    anim.addAnim(ScrollText(led, 'BiblioPixel Demo', xPos=args.width, font_scale=4),
+                 amt=1, fps=30, until_complete=True)
+
     from BiblioPixelAnimations.matrix.bloom import Bloom
-    return Bloom(led)
+    anim.addAnim(Bloom(led), amt=3, fps=60, seconds=8)
+
+    from BiblioPixelAnimations.matrix.circlepop import CirclePop
+    anim.addAnim(CirclePop(led), amt=1, fps=30, seconds=8)
+
+    return anim
 
 
 def circle(args):
@@ -34,26 +49,25 @@ def circle(args):
     driver = DriverSimPixel(sum(pixels_per), layout=points)
     led = LEDCircle(driver, rings=rings, maxAngleDiff=0)
 
-    from BiblioPixelAnimations.circle.bloom import Bloom
-    return Bloom(led)
-
-
-def list_demos(args):
-    print('Demos are', *sorted(DEMO_TABLE.keys()))
+    from BiblioPixelAnimations.circle.bloom import CircleBloom
+    return CircleBloom(led)
 
 
 DEMO_TABLE = {
-    'bloom': bloom,
+    'matrix': matrix,
     'circle': circle,
-    'list': list_demos,
 }
 
 
 def run(args, settings):
     try:
-        demo = DEMO_TABLE[args.name]
+        if args.name == 'list':
+            print('Available demos are:\n  ' + '\n  '.join(sorted(DEMO_TABLE.keys())))
+            return
+        else:
+            demo = DEMO_TABLE[args.name]
     except KeyError:
-        raise KeyError('Unknown command %s' % args.name)
+        raise KeyError('Unknown demo %s' % args.name)
     try:
         anim = demo(args)
     except ImportError as e:
@@ -69,7 +83,7 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.add_argument('name', nargs='?', default='bloom')
+    parser.add_argument('name', nargs='?', default='matrix')
     parser.add_argument('--width', default=32, type=int)
     parser.add_argument('--height', default=32, type=int)
     parser.add_argument('--simpixel', default=DEFAULT_SIMPIXEL_URL)
