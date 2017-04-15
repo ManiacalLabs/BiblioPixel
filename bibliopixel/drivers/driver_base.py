@@ -115,7 +115,7 @@ class DriverBase(object):
             level = 1.0
         else:
             level = self._brightness / 255.0
-        gam, (r, g, b) = self.gamma.get, (int(level) * i for i in self.c_order)
+        gam, (r, g, b) = self.gamma.get, self.c_order
         for i in range(self.numLEDs):
-            c = [int(x) for x in self._colors[i + self._pos]]
+            c = [int(level * x) for x in self._colors[i + self._pos]]
             self._buf[i * 3:(i + 1) * 3] = gam(c[r]), gam(c[g]), gam(c[b])
