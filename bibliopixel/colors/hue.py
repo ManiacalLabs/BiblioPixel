@@ -175,28 +175,28 @@ HUE_360 = [hsv2rgb_360((hue, 1.0, 1.0)) for hue in range(360)]
 
 def hue2rgb_raw(hue):
     if hue >= 0 or hue < 256:
-        return HUE_RAW[hue]
+        return HUE_RAW[int(hue)]
     else:
         raise ValueError("hue must be between 0 and 255")
 
 
 def hue2rgb_rainbow(hue):
     if hue >= 0 or hue < 256:
-        return HUE_RAINBOW[hue]
+        return HUE_RAINBOW[int(hue)]
     else:
         raise ValueError("hue must be between 0 and 255")
 
 
 def hue2rgb_spectrum(hue):
     if hue >= 0 or hue < 256:
-        return HUE_SPECTRUM[hue]
+        return HUE_SPECTRUM[int(hue)]
     else:
         raise ValueError("hue must be between 0 and 255")
 
 
 def hue2rgb_360(hue):
     if hue >= 0 or hue < 360:
-        return HUE_360[hue]
+        return HUE_360[int(hue)]
     else:
         raise ValueError("hue must be between 0 and 359")
 
