@@ -3,6 +3,7 @@ import webbrowser
 from bibliopixel.drivers.SimPixel import DriverSimPixel
 from bibliopixel import LEDCircle, LEDMatrix, layout
 from bibliopixel.animation import AnimationQueue
+from bibliopixel.project import project
 
 HELP = """
 Run a demo.  For the list of possible demos, type
@@ -18,6 +19,41 @@ Please install the BiblioPixelAnimations library from here:
 https://github.com/ManiacalLabs/BiblioPixelAnimations
 
 """
+
+BLOOM = {
+    'driver': {
+        'typename': 'bibliopixel.drivers.SimPixel.driver.DriverSimPixel',
+        'num': 0
+    },
+
+    'led': {
+        'typename': 'bibliopixel.led.matrix.LEDMatrix',
+        'width': 0,
+        'height': 0,
+    },
+
+    'animation': {
+        'typename': 'BiblioPixelAnimations.matrix.bloom.Bloom'
+    },
+}
+
+
+def make_runnable(demo, args):
+    if callable(demo):
+        return demo(args).run
+
+    if 'driver' in demo:
+        if not demo['driver'].get('num'):
+            demo['driver']['num'] = args.width * args.height
+
+    if 'led' in demo:
+        led = demo['led']
+        if 'width' in led:
+            led['width'] = led['width'] or args.width
+        if 'height' in led:
+            led['height'] = led['height'] or args.height
+
+    return project.make_runnable(**demo)
 
 
 def matrix(args):
@@ -54,22 +90,25 @@ def circle(args):
 
 
 DEMO_TABLE = {
+    'bloom': BLOOM,
     'matrix': matrix,
     'circle': circle,
 }
 
 
 def run(args, settings):
+    if args.name == 'list':
+        print('Available demos are:\n  ' +
+              '\n  '.join(sorted(DEMO_TABLE.keys())))
+        return
+
     try:
-        if args.name == 'list':
-            print('Available demos are:\n  ' + '\n  '.join(sorted(DEMO_TABLE.keys())))
-            return
-        else:
-            demo = DEMO_TABLE[args.name]
+        demo = DEMO_TABLE[args.name]
     except KeyError:
         raise KeyError('Unknown demo %s' % args.name)
+
     try:
-        anim = demo(args)
+        runnable = make_runnable(demo, args)
     except ImportError as e:
         if 'BiblioPixelAnimations' in e.msg:
             e.msg += IMPORT_ERROR_TEXT
@@ -78,7 +117,7 @@ def run(args, settings):
     if not args.simpixel.startswith('no'):
         webbrowser.open(args.simpixel, new=0, autoraise=True)
 
-    anim.run()
+    runnable()
 
 
 def set_parser(parser):

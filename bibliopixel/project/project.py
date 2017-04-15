@@ -6,8 +6,8 @@ from .. layout import gen_matrix
 from .. led.multimap import MultiMapBuilder
 
 
-def make_animation(driver, led, animation, maker):
-    maker = data_maker.Maker(**maker)
+def make_animation(driver, led, animation, maker=None):
+    maker = data_maker.Maker(**(maker or {}))
     drivers = []
 
     def multi_drivers(device_ids, width, height, serpentine=False, **kwds):
@@ -31,8 +31,9 @@ def make_animation(driver, led, animation, maker):
     return make_object(led, **animation)
 
 
-def run_animation(run, **kwds):
-    make_animation(**kwds).run(**run)
+def make_runnable(run=None, **kwds):
+    animation = make_animation(**kwds)
+    return lambda: animation.run(**(run or {}))
 
 
 def fix_desc(desc):
@@ -47,7 +48,7 @@ def fix_desc(desc):
 
 
 def run(desc):
-    run_animation(**fix_desc(desc))
+    make_runnable(**fix_desc(desc))()
 
 
 if __name__ == '__main__':
