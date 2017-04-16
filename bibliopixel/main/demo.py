@@ -2,7 +2,7 @@ import webbrowser
 
 from bibliopixel.drivers.SimPixel import DriverSimPixel
 from bibliopixel import LEDCircle, LEDMatrix, layout
-from bibliopixel.animation import AnimationQueue
+from bibliopixel.animation import Sequence
 from bibliopixel.project import project
 
 HELP = """
@@ -60,7 +60,7 @@ def matrix(args):
     driver = DriverSimPixel(args.width * args.height)
     led = LEDMatrix(driver, width=args.width, height=args.height)
 
-    anim = AnimationQueue(led, anims=None)
+    anim = Sequence(led, anims=None)
 
     from BiblioPixelAnimations.matrix.MatrixRain import MatrixRainBow
     anim.addAnim(MatrixRainBow(led), amt=1, fps=20, seconds=8)
