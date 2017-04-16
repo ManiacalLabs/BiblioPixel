@@ -45,3 +45,23 @@ class ImporterTest(unittest.TestCase):
 
     def test_aliasing(self):
         import_symbol('bibliopixel.drivers.SimPixel.DriverSimPixel')
+
+    def test_exception_unknown(self):
+        with self.assertRaises(ImportError) as cm:
+            import_symbol('nonexistent')
+        e = str(cm.exception)
+        self.assertFalse('pip install' in e)
+        self.assertTrue('No module named \'nonexistent\'' in e)
+
+    def test_exception_known(self):
+        try:
+            # Patch in a known, "fake" module.
+            importer.INSTALL_NAMES['nonexistent'] = 'pynone'
+            with self.assertRaises(ImportError) as cm:
+                import_symbol('nonexistent')
+            e = str(cm.exception)
+            self.assertTrue('pip install pynone' in e)
+            self.assertTrue('No module named \'nonexistent\'' in e)
+
+        finally:
+            importer.INSTALL_NAMES.pop('nonexistent')
