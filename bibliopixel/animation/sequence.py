@@ -1,7 +1,7 @@
 from . base import BaseAnimation
 
 
-class AnimationQueue(BaseAnimation):
+class Sequence(BaseAnimation):
 
     def __init__(self, led, anims=None):
         super().__init__(led)
