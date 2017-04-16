@@ -78,6 +78,28 @@ PROJECT_SHARED = """
 """
 
 
+PROJECT_SIM = """
+{
+    "driver": {
+        "typename": "bibliopixel.drivers.SimPixel.DriverSimPixel",
+        "num": 12
+    },
+
+    "led": {
+        "typename": "bibliopixel.led.strip.LEDStrip"
+    },
+
+    "animation": {
+        "typename": "bibliopixel.animation.tests.StripChannelTest"
+    },
+
+    "run": {
+        "max_steps": 2
+    }
+}
+"""
+
+
 class ProjectTest(unittest.TestCase):
     @long_test
     def test_simple(self):
@@ -94,3 +116,7 @@ class ProjectTest(unittest.TestCase):
     @long_test
     def test_shared(self):
         project.run(PROJECT_SHARED)
+
+    @long_test
+    def test_sim(self):
+        project.run(PROJECT_SIM)
