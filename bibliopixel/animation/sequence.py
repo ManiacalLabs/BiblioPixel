@@ -37,15 +37,6 @@ class Sequence(BaseAnimation):
     def preRun(self, amt=1):
         self.animIndex = -1
 
-    def run(self, amt=1, fps=None, sleep_time=0, max_steps=0, until_complete=False,
-            max_cycles=0, threaded=False, join_thread=False, seconds=None):
-        self.fps = fps
-        self.until_complete = until_complete
-        super().set_run(amt=1, fps=None, sleep_time=0, max_steps=0,
-                        until_complete=until_complete,
-                        max_cycles=0, seconds=seconds)
-        super().run(threaded=threaded, join_thread=join_thread)
-
     def step(self, amt=1):
         self.animIndex += 1
         if self.animIndex >= len(self.anims):

@@ -81,6 +81,7 @@ class BaseAnimation(object):
         assert not (seconds and max_steps)
 
         self.amt = amt
+        self.fps = fps
         self.sleep_time = sleep_time
         self.max_steps = max_steps
         self.until_complete = until_complete
