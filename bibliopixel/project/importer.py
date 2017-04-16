@@ -45,9 +45,13 @@ def import_symbol(typename, package=None):
         return result
     except ImportError as e:
         root_module = typename.split('.')[0]
-        install_name = INSTALL_NAMES.get(root_module, root_module)
-        msg = MISSING_MESSAGE % (root_module, install_name)
-        e.msg = msg + e.msg
+        install_name = INSTALL_NAMES.get(root_module)
+        if install_name:
+            try:
+                __import__(root_module)
+            except ImportError:
+                msg = MISSING_MESSAGE % (root_module, install_name)
+                e.msg = msg + e.msg
         raise
 
 
