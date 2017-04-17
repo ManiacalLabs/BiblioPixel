@@ -1,4 +1,5 @@
 import sys, json
+from . aliases import resolve_aliases
 from . defaults import apply_defaults, DEFAULTS
 from . importer import make_object, import_symbol
 from .. import data_maker
@@ -47,9 +48,12 @@ def make_animation(animation, **kwds):
     return anim
 
 
-def make_runnable(run=None, **kwds):
-    animation = make_animation(**kwds)
-    return lambda: animation.run(**(run or {}))
+def make_runnable(**kwds):
+    def make(run=None, **kwds):
+        animation = make_animation(**kwds)
+        return lambda: animation.run(**(run or {}))
+
+    return make(**resolve_aliases(kwds))
 
 
 def fix_desc(desc):
