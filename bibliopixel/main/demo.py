@@ -38,6 +38,63 @@ BLOOM = {
 }
 
 
+MATRIX_PROJECT = {
+    'driver': {
+        'typename': 'bibliopixel.drivers.SimPixel.driver.DriverSimPixel',
+        'num': 0
+    },
+
+    'led': {
+        'typename': 'bibliopixel.led.matrix.LEDMatrix',
+        'width': 0,
+        'height': 0,
+    },
+
+    'animation': {
+        'typename': 'bibliopixel.animation.Sequence',
+        'animations': [
+            {
+                'typename':
+                    'BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow',
+                'run': {
+                    'amt': 1,
+                    'fps': 20,
+                    'seconds': 8,
+                },
+            },
+            {
+                'typename': 'BiblioPixelAnimations.matrix.Text.ScrollText',
+                'xPos': 32,
+                'font_scale': 4,
+                'text': 'BiblioPixel Demo',
+                'run': {
+                    'amt': 1,
+                    'fps': 30,
+                    'seconds': 8,
+                    'until_complete': True,
+                },
+            },
+            {
+                'typename': 'BiblioPixelAnimations.matrix.bloom.Bloom',
+                'run': {
+                    'amt': 3,
+                    'fps': 60,
+                    'seconds': 8,
+                },
+            },
+            {
+                'typename': 'BiblioPixelAnimations.matrix.circlepop.CirclePop',
+                'run': {
+                    'amt': 1,
+                    'fps': 30,
+                    'seconds': 8,
+                },
+            },
+        ],
+    },
+}
+
+
 def make_runnable(demo, args):
     if callable(demo):
         return demo(args).run
@@ -63,17 +120,18 @@ def matrix(args):
     anim = Sequence(led, anims=None)
 
     from BiblioPixelAnimations.matrix.MatrixRain import MatrixRainBow
-    anim.addAnim(MatrixRainBow(led), amt=1, fps=20, seconds=8)
+    anim.add_animation(MatrixRainBow(led), amt=1, fps=20, seconds=8)
 
     from BiblioPixelAnimations.matrix.Text import ScrollText
-    anim.addAnim(ScrollText(led, 'BiblioPixel Demo', xPos=args.width, font_scale=4),
-                 amt=1, fps=30, until_complete=True)
+    anim.add_animation(
+        ScrollText(led, 'BiblioPixel Demo', xPos=args.width, font_scale=4),
+        amt=1, fps=30, until_complete=True)
 
     from BiblioPixelAnimations.matrix.bloom import Bloom
-    anim.addAnim(Bloom(led), amt=3, fps=60, seconds=8)
+    anim.add_animation(Bloom(led), amt=3, fps=60, seconds=8)
 
     from BiblioPixelAnimations.matrix.circlepop import CirclePop
-    anim.addAnim(CirclePop(led), amt=1, fps=30, seconds=8)
+    anim.add_animation(CirclePop(led), amt=1, fps=30, seconds=8)
 
     return anim
 
@@ -91,8 +149,9 @@ def circle(args):
 
 DEMO_TABLE = {
     'bloom': BLOOM,
-    'matrix': matrix,
     'circle': circle,
+    'matrix': matrix,
+    'matrix_project': MATRIX_PROJECT,
 }
 
 

@@ -2,6 +2,7 @@ from . base import BaseAnimation
 
 
 class Sequence(BaseAnimation):
+    IS_SEQUENCE = True
 
     def __init__(self, led, anims=None):
         super().__init__(led)
@@ -19,8 +20,8 @@ class Sequence(BaseAnimation):
             a.thread_strategy.stop_event.set()
         self.thread_strategy.stop_thread(wait)
 
-    def addAnim(self, anim, amt=1, fps=None, max_steps=0, until_complete=False,
-                max_cycles=0, seconds=None):
+    def add_animation(self, anim, amt=1, fps=None, max_steps=0,
+                      until_complete=False, max_cycles=0, seconds=None):
         a = (
             anim,
             {
@@ -52,4 +53,4 @@ class Sequence(BaseAnimation):
             run.update(threaded=False, join_thread=False)
 
             run['fps'] = run.get('fps') or self.fps
-            anim.run(**(run))
+            anim.run(**run)
