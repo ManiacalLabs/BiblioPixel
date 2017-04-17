@@ -7,18 +7,12 @@ from . long_test import long_test
 PROJECT = """
 {
     "driver": {
-        "typename": "bibliopixel.drivers.dummy_driver.DriverDummy",
+        "typename": "dummy",
         "num": 12
     },
 
-    "led": {
-        "typename": "bibliopixel.led.strip.LEDStrip"
-    },
-
-    "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest"
-    },
-
+    "led": "strip",
+    "animation": "strip_test",
     "run": {
         "max_steps": 2
     }
@@ -28,7 +22,7 @@ PROJECT = """
 PROJECT_MULTI = """
 {
     "driver": {
-        "typename": "bibliopixel.drivers.dummy_driver.DriverDummy",
+        "typename": "dummy",
         "multi": true,
         "width": 128,
         "height": 32,
@@ -37,13 +31,11 @@ PROJECT_MULTI = """
     },
 
     "led": {
-        "typename": "bibliopixel.led.matrix.LEDMatrix",
+        "typename": "matrix",
         "width": 128
     },
 
-    "animation": {
-        "typename": "bibliopixel.animation.tests.MatrixChannelTest"
-    },
+    "animation": "matrix_test",
 
     "run": {
         "max_steps": 2
@@ -55,18 +47,12 @@ PROJECT_MULTI = """
 PROJECT_SHARED = """
 {
     "driver": {
-        "typename": "bibliopixel.drivers.dummy_driver.DriverDummy",
+        "typename": "dummy",
         "num": 12
     },
 
-    "led": {
-        "typename": "bibliopixel.led.strip.LEDStrip"
-    },
-
-    "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest"
-    },
-
+    "led": "strip",
+    "animation": "strip_test",
     "run": {
         "max_steps": 2
     },

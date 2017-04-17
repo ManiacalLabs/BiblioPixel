@@ -22,12 +22,12 @@ https://github.com/ManiacalLabs/BiblioPixelAnimations
 
 BLOOM = {
     'driver': {
-        'typename': 'bibliopixel.drivers.SimPixel.driver.DriverSimPixel',
+        'typename': 'simpixel',
         'num': 0
     },
 
     'led': {
-        'typename': 'bibliopixel.led.matrix.LEDMatrix',
+        'typename': 'matrix',
         'width': 0,
         'height': 0,
     },
@@ -40,22 +40,22 @@ BLOOM = {
 
 MATRIX_PROJECT = {
     'driver': {
-        'typename': 'bibliopixel.drivers.SimPixel.driver.DriverSimPixel',
+        'typename': 'simpixel',
         'num': 0
     },
 
     'led': {
-        'typename': 'bibliopixel.led.matrix.LEDMatrix',
+        'typename': 'matrix',
         'width': 0,
         'height': 0,
     },
 
     'animation': {
-        'typename': 'bibliopixel.animation.Sequence',
+        'typename': 'sequence',
         'animations': [
             {
                 'typename':
-                    'BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow',
+                'BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow',
                 'run': {
                     'amt': 1,
                     'fps': 20,
