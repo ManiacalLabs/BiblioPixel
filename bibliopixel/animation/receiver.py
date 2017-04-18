@@ -17,6 +17,8 @@ HOST_MAP = {
 
 
 class BaseReceiver(BaseAnimation):
+    free_run = True
+
     def __init__(self, led):
         super().__init__(led)
         name = type(self._led).__name__
@@ -25,7 +27,6 @@ class BaseReceiver(BaseAnimation):
         else:
             raise ValueError('led must be of type {}'.format(', '.join(HOST_MAP.keys())))
 
-        self._free_run = True
         self._hold_for_data = threading.Event()
         self._stop_event = threading.Event()
         self._stop_event.clear()
