@@ -4,16 +4,16 @@ from . base import BaseAnimation
 class Sequence(BaseAnimation):
     IS_SEQUENCE = True
 
-    def __init__(self, led, anims=None):
+    def __init__(self, led, animations=None):
         super().__init__(led)
-        self.anims = anims or []
-        self.curAnim = None
-        self.animIndex = 0
-        self._internalDelay = 0  # never wait
+        self.animations = animations or []
+        self.current_animation = None
+        self.index = 0
+        self.internal_delay = 0  # never wait
 
     # overriding to handle all the animations
     def stopThread(self, wait=False):
-        for a, r in self.anims:
+        for a, r in self.animations:
             # a bit of a hack. they aren't threaded, but stops them anyway
             a.thread_strategy.stop_event.set()
         self.thread_strategy.stop_thread(wait)
@@ -31,23 +31,23 @@ class Sequence(BaseAnimation):
                 "seconds": seconds
             }
         )
-        self.anims.append(a)
+        self.animations.append(a)
 
     def preRun(self, amt=1):
-        self.animIndex = -1
+        self.index = -1
 
     def step(self, amt=1):
-        self.animIndex += 1
-        if self.animIndex >= len(self.anims):
+        self.index += 1
+        if self.index >= len(self.animations):
             if self.runner.until_complete:
-                self.animComplete = True
+                self.completed = True
             else:
-                self.animIndex = 0
+                self.index = 0
 
-        if not self.animComplete and self.anims:
-            self.curAnim = self.anims[self.animIndex]
+        if not self.completed and self.animations:
+            self.current_animation = self.animations[self.index]
 
-            anim, run = self.curAnim
+            anim, run = self.current_animation
             run.update(threaded=False, join_thread=False)
 
             run['fps'] = run.get('fps') or self.runner.fps
