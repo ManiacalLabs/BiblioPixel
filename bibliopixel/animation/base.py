@@ -66,18 +66,14 @@ class BaseAnimation(object):
         self.cur_step += 1
 
     def _run(self):
-        self.preRun(self.runner.amt)
-
-        while self._is_running():
-            self._run_once()
+        try:
+            self.preRun(self.runner.amt)
+            while self._is_running():
+                self._run_once()
+        finally:
+            self.cleanup()
 
     def run(self, **kwds):
-        def run():
-            try:
-                self._run()
-            finally:
-                self.cleanup()
-
         self.runner = Runner(**kwds)
 
         self._step = 0
@@ -92,5 +88,5 @@ class BaseAnimation(object):
         else:
             self.sleep_time = self.runner.sleep_time
 
-        self.threading = AnimationThreading(self.runner)
-        self.threading.run_animation(run)
+        self.threading = AnimationThreading(self.runner, self._run)
+        self.threading.start()
