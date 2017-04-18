@@ -27,65 +27,65 @@ class BaseAnimation(object):
         self.threading.stop_thread(wait=True)
         self._led.cleanup()
 
-    def _is_running(self, cur_step, runner):
+    def _is_running(self):
         if self.threading.stop_event.isSet():
             return False
 
-        if runner.max_steps:
-            return cur_step < runner.max_steps
+        if self.runner.max_steps:
+            return self.cur_step < self.runner.max_steps
 
-        return not (runner.until_complete and self.animComplete)
+        return not (self.runner.until_complete and self.animComplete)
 
-    def _run(self, runner):
+    def _run(self):
         if self.free_run:
-            sleep_time = None
+            self.sleep_time = None
         elif self._internalDelay:
-            sleep_time = self._internalDelay
+            self.sleep_time = self._internalDelay
         else:
-            sleep_time = runner.sleep_time
+            self.sleep_time = self.runner.sleep_time
 
-        self.preRun(runner.amt)
+        self.preRun(self.runner.amt)
 
         self._step = 0
-        cur_step = 0
-        cycle_count = 0
+        self.cur_step = 0
+        self.cycle_count = 0
         self.animComplete = False
 
-        while self._is_running(cur_step, runner):
+        while self._is_running():
             self._timeRef = self._msTime()
 
-            start = self._msTime()
-            self.step(runner.amt)
-            mid = self._msTime()
+            self.start = self._msTime()
+            self.step(self.runner.amt)
+            self.mid = self._msTime()
 
-            self._led.frame_render_time = int(mid - start)
-            self._led.animation_sleep_time = sleep_time or 0
+            self._led.frame_render_time = int(self.mid - self.start)
+            self._led.animation_sleep_time = self.sleep_time or 0
 
             self._led.push_to_driver()
-            now = self._msTime()
+            self.now = self._msTime()
 
-            if self.animComplete and runner.max_cycles > 0:
-                if cycle_count < runner.max_cycles - 1:
-                    cycle_count += 1
+            if self.animComplete and self.runner.max_cycles > 0:
+                if self.cycle_count < self.runner.max_cycles - 1:
+                    self.cycle_count += 1
                     self.animComplete = False
 
-            self.threading.report_framerate(start, mid, now)
+            self.threading.report_framerate(self.start, self.mid, self.now)
 
-            if sleep_time:
+            if self.sleep_time:
                 diff = (self._msTime() - self._timeRef)
-                t = max(0, sleep_time - diff)
+                t = max(0, self.sleep_time - diff)
                 if t == 0:
                     log.warning('Frame-time of %dms set, but took %dms!',
-                                sleep_time, diff)
+                                self.sleep_time, diff)
                 self.threading.wait(t)
-            cur_step += 1
+            self.cur_step += 1
 
     def run(self, **kwds):
         self.runner = Runner(**kwds)
 
         def run():
             try:
-                self._run(self.runner)
+                self._run()
             finally:
                 self.cleanup()
 
