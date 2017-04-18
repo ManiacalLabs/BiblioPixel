@@ -8,8 +8,9 @@ class AnimationThreading(object):
     BaseAnimation.
     """
 
-    def __init__(self, runner):
+    def __init__(self, runner, run):
         self.runner = runner
+        self.run = run
         self.stop_event = threading.Event()
         self.thread = None
 
@@ -31,26 +32,26 @@ class AnimationThreading(object):
     def stopped(self):
         return not (self.thread and self.thread.isAlive())
 
+    def target(self):
+        # TODO: no testpath exercises this code...
+        log.debug('Starting thread...')
+        self.run()
+        log.debug('Thread Complete')
+
     def wait(self, t):
         if self.runner.threaded:
             self.stop_event.wait(t)
         else:
             time.sleep(t)
 
-    def run_animation(self, run):
+    def start(self):
         if not self.runner.threaded:
-            run()
+            self.run()
             return
-
-        def target():
-            # TODO: no testpath exercises this code...
-            log.debug('Starting thread...')
-            run()
-            log.debug('Thread Complete')
 
         self.stop_event.clear()
 
-        self.thread = threading.Thread(target=target, daemon=True)
+        self.thread = threading.Thread(target=self.target, daemon=True)
         self.thread.start()
 
         if self.runner.join_thread:
