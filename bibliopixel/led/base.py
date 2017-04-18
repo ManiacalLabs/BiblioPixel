@@ -22,8 +22,8 @@ class LEDBase(object):
             d.set_colors(self._colors, pos)
             pos += d.numLEDs
 
-        self._frameGenTime = 0
-        self._frameTotalTime = None
+        self.frame_render_time = 0
+        self.animation_sleep_time = None
 
         self.threading = UpdateThreading(threadedUpdate, self)
         self.set_brightness(brightness)
