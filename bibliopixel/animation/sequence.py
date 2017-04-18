@@ -10,8 +10,6 @@ class Sequence(BaseAnimation):
         self.curAnim = None
         self.animIndex = 0
         self._internalDelay = 0  # never wait
-        self.fps = None
-        self.until_complete = False
 
     # overriding to handle all the animations
     def stopThread(self, wait=False):
@@ -41,7 +39,7 @@ class Sequence(BaseAnimation):
     def step(self, amt=1):
         self.animIndex += 1
         if self.animIndex >= len(self.anims):
-            if self.until_complete:
+            if self.runner.until_complete:
                 self.animComplete = True
             else:
                 self.animIndex = 0
@@ -52,5 +50,5 @@ class Sequence(BaseAnimation):
             anim, run = self.curAnim
             run.update(threaded=False, join_thread=False)
 
-            run['fps'] = run.get('fps') or self.fps
+            run['fps'] = run.get('fps') or self.runner.fps
             anim.run(**run)
