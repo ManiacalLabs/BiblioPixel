@@ -1,5 +1,3 @@
-from ..drivers.serial import DriverSerial, Devices, serial
-
 CONNECT_MESSAGE = """
 Connect just one Serial device (AllPixel) and press enter..."""
 
@@ -7,6 +5,10 @@ HELP = """Find serial devices."""
 
 
 def run(args, settings):
+    from ..drivers.serial.driver import DriverSerial
+    from ..drivers.serial.devices import Devices
+    import serial
+
     run = True
     print("Press Ctrl+C any time to exit.")
     try:
