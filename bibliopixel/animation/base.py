@@ -9,10 +9,10 @@ class BaseAnimation(object):
 
     def __init__(self, led):
         self._led = led
-        self.animComplete = False
+        self.completed = False
         self._step = 0
-        self._timeRef = 0
-        self._internalDelay = None
+        self.start = 0
+        self.internal_delay = None
 
     def _msTime(self):
         return time.time()
@@ -34,11 +34,9 @@ class BaseAnimation(object):
         if self.runner.max_steps:
             return self.cur_step < self.runner.max_steps
 
-        return not (self.runner.until_complete and self.animComplete)
+        return not (self.runner.until_complete and self.completed)
 
     def _run_once(self):
-        self._timeRef = self._msTime()
-
         self.start = self._msTime()
         self.step(self.runner.amt)
         self.mid = self._msTime()
@@ -49,15 +47,15 @@ class BaseAnimation(object):
         self._led.push_to_driver()
         self.now = self._msTime()
 
-        if self.animComplete and self.runner.max_cycles > 0:
+        if self.completed and self.runner.max_cycles > 0:
             if self.cycle_count < self.runner.max_cycles - 1:
                 self.cycle_count += 1
-                self.animComplete = False
+                self.completed = False
 
         self.threading.report_framerate(self.start, self.mid, self.now)
 
         if self.sleep_time:
-            diff = (self._msTime() - self._timeRef)
+            diff = (self._msTime() - self.start)
             t = max(0, self.sleep_time - diff)
             if t == 0:
                 log.warning('Frame-time of %dms set, but took %dms!',
@@ -79,12 +77,12 @@ class BaseAnimation(object):
         self._step = 0
         self.cur_step = 0
         self.cycle_count = 0
-        self.animComplete = False
+        self.completed = False
 
         if self.free_run:
             self.sleep_time = None
-        elif self._internalDelay:
-            self.sleep_time = self._internalDelay
+        elif self.internal_delay:
+            self.sleep_time = self.internal_delay
         else:
             self.sleep_time = self.runner.sleep_time
 

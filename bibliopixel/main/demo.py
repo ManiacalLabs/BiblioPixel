@@ -117,7 +117,7 @@ def matrix(args):
     driver = DriverSimPixel(args.width * args.height)
     led = LEDMatrix(driver, width=args.width, height=args.height)
 
-    anim = Sequence(led, anims=None)
+    anim = Sequence(led)
 
     from BiblioPixelAnimations.matrix.MatrixRain import MatrixRainBow
     anim.add_animation(MatrixRainBow(led), amt=1, fps=20, seconds=8)
