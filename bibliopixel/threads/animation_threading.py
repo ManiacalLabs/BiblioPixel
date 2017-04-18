@@ -8,10 +8,8 @@ class AnimationThreading(object):
     BaseAnimation.
     """
 
-    def __init__(self, animation, threaded, join_thread):
-        self.animation = animation
-        self.threaded = threaded
-        self.join_thread = join_thread
+    def __init__(self, runner):
+        self.runner = runner
         self.stop_event = threading.Event()
         self.thread = None
 
@@ -34,13 +32,13 @@ class AnimationThreading(object):
         return not (self.thread and self.thread.isAlive())
 
     def wait(self, t):
-        if self.threaded:
+        if self.runner.threaded:
             self.stop_event.wait(t)
         else:
             time.sleep(t)
 
     def run_animation(self, run):
-        if not self.threaded:
+        if not self.runner.threaded:
             run()
             return
 
@@ -55,6 +53,6 @@ class AnimationThreading(object):
         self.thread = threading.Thread(target=target, daemon=True)
         self.thread.start()
 
-        if self.join_thread:
+        if self.runner.join_thread:
             # TODO: why would you do this rather than disable threading?
             self.thread.join()
