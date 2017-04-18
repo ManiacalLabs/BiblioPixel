@@ -4,6 +4,7 @@ from .. threads.animation_threading import AnimationThreading
 
 
 class BaseAnimation(object):
+    free_run = False
 
     def __init__(self, led):
         self._led = led
@@ -11,7 +12,6 @@ class BaseAnimation(object):
         self._step = 0
         self._timeRef = 0
         self._internalDelay = None
-        self._free_run = False
 
     def _msTime(self):
         return time.time()
@@ -50,8 +50,8 @@ class BaseAnimation(object):
             self.step(self.amt)
             mid = self._msTime()
 
-            self._led._frameGenTime = int(mid - start)
-            self._led._frameTotalTime = self.sleep_time
+            self._led.frame_render_time = int(mid - start)
+            self._led.animation_sleep_time = self.sleep_time or 0
 
             self._led.push_to_driver()
             now = self._msTime()
@@ -93,7 +93,7 @@ class BaseAnimation(object):
         if seconds is not None:
             self.max_steps = int(seconds / self.sleep_time)
 
-        if self._free_run:
+        if self.free_run:
             self.sleep_time = None
         elif self._internalDelay:
             self.sleep_time = self._internalDelay
