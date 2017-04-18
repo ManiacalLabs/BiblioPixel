@@ -1,6 +1,6 @@
 import signal, sys
-from ..drivers.serial import (
-    LEDTYPE, DriverSerial, SPIChipsets, BiblioSerialError, Devices)
+from ..drivers.serial.codes import LEDTYPE
+from ..return_codes import BiblioSerialError
 
 HELP = """Configure the AllPixel lighting module."""
 
@@ -48,6 +48,10 @@ def showSelectList(msg, values):
 
 
 def run(args, settings):
+    from ..drivers.serial.driver import DriverSerial
+    from ..drivers.serial.devices import Devices
+    from ..drivers.serial.codes import SPIChipsets
+
     try:
         print("Press Ctrl+C anytime to quit.")
 
