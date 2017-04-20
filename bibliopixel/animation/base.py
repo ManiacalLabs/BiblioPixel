@@ -11,11 +11,7 @@ class BaseAnimation(object):
         self._led = led
         self.completed = False
         self._step = 0
-        self.start = 0
         self.internal_delay = None
-
-    def _msTime(self):
-        return time.time()
 
     def preRun(self, amt=1):
         self._led.all_off()
@@ -37,25 +33,31 @@ class BaseAnimation(object):
         return not (self.runner.until_complete and self.completed)
 
     def _run_once(self):
-        self.start = self._msTime()
+        timestamps = []
+
+        def stamp():
+            timestamps.append(time.time())
+
+        stamp()
+
         self.step(self.runner.amt)
-        self.mid = self._msTime()
 
-        self._led.frame_render_time = int(self.mid - self.start)
-        self._led.animation_sleep_time = self.sleep_time or 0
+        stamp()
 
+        self._led.frame_render_time = timestamps[1] - timestamps[0]
         self._led.push_to_driver()
-        self.now = self._msTime()
+
+        stamp()
 
         if self.completed and self.runner.max_cycles > 0:
             if self.cycle_count < self.runner.max_cycles - 1:
                 self.cycle_count += 1
                 self.completed = False
 
-        self.threading.report_framerate(self.start, self.mid, self.now)
+        self.threading.report_framerate(timestamps)
 
         if self.sleep_time:
-            diff = (self._msTime() - self.start)
+            diff = timestamps[-1] - timestamps[0]
             t = max(0, self.sleep_time - diff)
             if t == 0:
                 log.warning('Frame-time of %dms set, but took %dms!',
@@ -85,6 +87,7 @@ class BaseAnimation(object):
             self.sleep_time = self.internal_delay
         else:
             self.sleep_time = self.runner.sleep_time
+        self._led.animation_sleep_time = self.sleep_time or 0
 
         self.threading = AnimationThreading(self.runner, self._run)
         self.threading.start()
