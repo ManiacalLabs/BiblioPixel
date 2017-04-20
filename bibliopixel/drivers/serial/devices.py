@@ -33,7 +33,7 @@ class Devices(object):
             port = ports[0]
             id = self.get_device_id(port, self.baudrate)
             ver = self._get_device_version(port, self.baudrate)
-            if isinstance(ports, list) and len(ports) > 1:
+            if getattr(ports, '__len__', lambda: 0)():
                 log.debug('Multi-port device %s:%s:%s with %s ports found',
                           self.hardware_id, id, ver, len(ports))
             if id < 0:
