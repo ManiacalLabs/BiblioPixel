@@ -9,8 +9,6 @@ class BaseAnimation(object):
 
     def __init__(self, led):
         self._led = led
-        self.completed = False
-        self._step = 0
         self.internal_delay = None
 
     def preRun(self, amt=1):
@@ -32,7 +30,7 @@ class BaseAnimation(object):
 
         return not (self.runner.until_complete and self.completed)
 
-    def _run_once(self):
+    def _run_one_frame(self):
         timestamps = []
 
         def stamp():
@@ -49,37 +47,32 @@ class BaseAnimation(object):
 
         stamp()
 
+        _report_framerate(timestamps)
+
+        self.cur_step += 1
         if self.completed and self.runner.max_cycles > 0:
             if self.cycle_count < self.runner.max_cycles - 1:
                 self.cycle_count += 1
                 self.completed = False
 
-        self.threading.report_framerate(timestamps)
+        stamp()
 
-        if self.sleep_time:
-            diff = timestamps[-1] - timestamps[0]
-            t = max(0, self.sleep_time - diff)
-            if t == 0:
-                log.warning('Frame-time of %dms set, but took %dms!',
-                            self.sleep_time, diff)
-            self.threading.wait(t)
-        self.cur_step += 1
+        self.threading.wait(self.sleep_time, timestamps)
 
     def _run(self):
         try:
             self.preRun(self.runner.amt)
             while self._is_running():
-                self._run_once()
+                self._run_one_frame()
         finally:
             self.cleanup()
 
-    def run(self, **kwds):
-        self.runner = Runner(**kwds)
-
+    def set_runner(self, runner):
+        self.runner = runner
+        self.completed = False
         self._step = 0
         self.cur_step = 0
         self.cycle_count = 0
-        self.completed = False
 
         if self.free_run:
             self.sleep_time = None
@@ -90,4 +83,19 @@ class BaseAnimation(object):
         self._led.animation_sleep_time = self.sleep_time or 0
 
         self.threading = AnimationThreading(self.runner, self._run)
-        self.threading.start()
+        self.start = self.threading.start
+
+    def run(self, **kwds):
+        # DEPRECATED
+        self.set_runner(Runner(**kwds))
+        self.start()
+
+
+def _report_framerate(timestamps):
+    total_time = timestamps[-1] - timestamps[0]
+    fps = int(1.0 / max(total_time, 0.001))
+    log.debug("%dms/%dfps / Frame: %dms / Update: %dms",
+              1000 * total_time,
+              fps,
+              1000 * (timestamps[1] - timestamps[0]),
+              1000 * (timestamps[2] - timestamps[1]))
