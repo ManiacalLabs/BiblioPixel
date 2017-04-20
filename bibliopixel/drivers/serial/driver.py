@@ -50,6 +50,8 @@ class DriverSerial(DriverBase):
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._SPISpeed)
 
+        self.set_device_brightness = self.set_brightness
+
     def cleanup(self):
         if self._com:
             log.info("Closing connection to: %s", self.dev)
@@ -126,7 +128,6 @@ class DriverSerial(DriverBase):
         self._packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
 
         self._render()
-
         self._packet.extend(self._buf)
         self._packet.extend([0] * self._bufPad)
 
