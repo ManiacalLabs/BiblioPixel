@@ -14,14 +14,14 @@ class AnimationThreading(object):
         self.stop_event = threading.Event()
         self.thread = None
 
-    def report_framerate(self, start, mid, now):
-        stepTime = mid - start
-        render_duration = now - mid
-        totalTime = stepTime + render_duration
-        fps = int(1.0 / max(totalTime, 0.001))
-        log.debug("%sms/%sfps / Frame: %sms / Update: %sms",
-                  round(1000 * totalTime), fps, round(1000 * stepTime),
-                  round(1000 * render_duration))
+    def report_framerate(self, timestamps):
+        total_time = timestamps[-1] - timestamps[0]
+        fps = int(1.0 / max(total_time, 0.001))
+        log.debug("%dms/%dfps / Frame: %dms / Update: %dms",
+                  1000 * total_time,
+                  fps,
+                  1000 * (timestamps[1] - timestamps[0]),
+                  1000 * (timestamps[2] - timestamps[1]))
 
     def stop_thread(self, wait=False):
         if self.thread:
