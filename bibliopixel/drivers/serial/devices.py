@@ -4,7 +4,7 @@ from ... return_codes import RETURN_CODES, print_error
 from ... import log, util
 
 try:
-    import serial, serial.tools
+    import serial, serial.tools.list_ports
 
 except ImportError as e:
     error = "Please install pyserial 2.7+! pip install pyserial"
@@ -33,7 +33,7 @@ class Devices(object):
             port = ports[0]
             id = self.get_device_id(port, self.baudrate)
             ver = self._get_device_version(port, self.baudrate)
-            if len(ports) > 1:
+            if isinstance(ports, list) and len(ports) > 1:
                 log.debug('Multi-port device %s:%s:%s with %s ports found',
                           self.hardware_id, id, ver, len(ports))
             if id < 0:

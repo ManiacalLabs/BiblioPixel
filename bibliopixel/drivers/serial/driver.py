@@ -13,7 +13,7 @@ class DriverSerial(DriverBase):
     def __init__(self, type, num, dev="",
                  c_order=ChannelOrder.RGB, SPISpeed=2,
                  gamma=None, restart_timeout=3,
-                 deviceID=None, hardwareID="1D50:60AB",
+                 device_id=None, hardwareID="1D50:60AB",
                  baudrate=921600):
         super().__init__(num, c_order=c_order, gamma=gamma)
         self.devices = Devices(hardwareID, baudrate)
@@ -27,11 +27,11 @@ class DriverSerial(DriverBase):
         self._bufPad = 0
         self.dev = dev
         self.device_version = 0
-        self.deviceID = deviceID
+        self.device_id = device_id
         self._sync_packet = util.generate_header(CMDTYPE.SYNC, 0)
 
-        if self.deviceID is not None and (self.deviceID < 0 or self.deviceID > 255):
-            raise ValueError("deviceID must be between 0 and 255")
+        if self.device_id is not None and (self.device_id < 0 or self.device_id > 255):
+            raise ValueError("device_id must be between 0 and 255")
 
         resp = self._connect()
         if resp == RETURN_CODES.REBOOT:  # reboot needed
@@ -135,8 +135,8 @@ class DriverSerial(DriverBase):
 
 
 class DriverTeensySmartMatrix(DriverSerial):
-    def __init__(self, width, height, dev="", deviceID=None,
+    def __init__(self, width, height, dev="", device_id=None,
                  hardwareID="16C0:0483"):
         super().__init__(type=LEDTYPE.GENERIC, num=width * height,
-                         deviceID=deviceID, hardwareID=hardwareID)
+                         device_id=device_id, hardwareID=hardwareID)
         self.sync = self._send_sync
