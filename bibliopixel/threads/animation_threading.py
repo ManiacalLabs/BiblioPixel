@@ -14,15 +14,6 @@ class AnimationThreading(object):
         self.stop_event = threading.Event()
         self.thread = None
 
-    def report_framerate(self, timestamps):
-        total_time = timestamps[-1] - timestamps[0]
-        fps = int(1.0 / max(total_time, 0.001))
-        log.debug("%dms/%dfps / Frame: %dms / Update: %dms",
-                  1000 * total_time,
-                  fps,
-                  1000 * (timestamps[1] - timestamps[0]),
-                  1000 * (timestamps[2] - timestamps[1]))
-
     def stop_thread(self, wait=False):
         if self.thread:
             self.stop_event.set()
@@ -38,11 +29,20 @@ class AnimationThreading(object):
         self.run()
         log.debug('Thread Complete')
 
-    def wait(self, t):
-        if self.runner.threaded:
-            self.stop_event.wait(t)
+    def wait(self, wait_time, timestamps):
+        if not wait_time:
+            return
+
+        elapsed_time = timestamps[-1] - timestamps[0]
+        if elapsed_time > wait_time:
+            log.warning('Frame-time of %dms set, but took %dms!',
+                        1000 * wait_time, 1000 * elapsed_time)
+
+        elif self.runner.threaded:
+            self.stop_event.wait(wait_time - elapsed_time)
+
         else:
-            time.sleep(t)
+            time.sleep(wait_time - elapsed_time)
 
     def start(self):
         if not self.runner.threaded:
