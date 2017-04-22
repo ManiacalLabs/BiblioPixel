@@ -82,8 +82,9 @@ class BaseAnimation(object):
             self.sleep_time = self.runner.sleep_time
         self._led.animation_sleep_time = self.sleep_time or 0
 
+    def start(self):
         self.threading = AnimationThreading(self.runner, self._run)
-        self.start = self.threading.start
+        self.threading.start()
 
     def run(self, **kwds):
         # DEPRECATED
