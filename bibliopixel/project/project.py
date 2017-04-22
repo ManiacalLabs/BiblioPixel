@@ -53,22 +53,18 @@ def make_runnable(**kwds):
         animation = make_animation(**kwds)
         return lambda: animation.run(**(run or {}))
 
-    return make(**resolve_aliases(kwds))
+    return make(**apply_defaults(kwds))
 
 
-def fix_desc(desc):
-    if isinstance(desc, str):
-        try:
-            desc = open(desc).read()
-        except:
-            pass
-        desc = json.loads(desc)
-
-    return apply_defaults(desc)
+def read_json(s):
+    try:
+        return json.load(open(s))
+    except:
+        return json.loads(s)
 
 
-def run(desc):
-    make_runnable(**fix_desc(desc))()
+def run(s):
+    make_runnable(**read_json(s))()
 
 
 if __name__ == '__main__':
