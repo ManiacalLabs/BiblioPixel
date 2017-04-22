@@ -1,5 +1,7 @@
 import copy
 
+from . aliases import resolve_aliases
+
 DEFAULTS = {
     'driver': {
         'typename': 'bibliopixel.drivers.SimPixel.DriverSimPixel',
@@ -23,12 +25,14 @@ DEFAULTS = {
 SECTIONS = tuple(sorted(DEFAULTS.keys()))
 
 
-def apply_defaults(desc):
-    result = copy.deepcopy(DEFAULTS)
-    for k, v in desc.items():
-        if isinstance(v, str):
-            result[k]['typename'] = v
-        else:
+def merge(default, *others):
+    result = copy.deepcopy(default)
+    for o in others:
+        for k, v in o.items():
             result[k].update(v)
 
     return result
+
+
+def apply_defaults(desc):
+    return merge(DEFAULTS, resolve_aliases(desc))
