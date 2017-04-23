@@ -11,6 +11,14 @@ class AliasTest(unittest.TestCase):
         d = {'led': {'typename': 'bibliopixel.led.circle.LEDCircle'}}
         self.assertEqual(resolve_aliases(d), d)
 
+    def test_exception(self):
+        with self.assertRaises(ImportError) as e:
+            self.assertEqual(resolve_aliases({'led': {'typename': 'wombat'}}),
+                             {'led': {'typename': 'wombat'}})
+        self.assertTrue("No module named 'wombat'" in e.exception.msg)
+        self.assertTrue('pip' not in e.exception.msg)
+        self.assertTrue('install' not in e.exception.msg)
+
     def test_resolve(self):
         d = {'led': {'typename': 'bibliopixel.led.circle.LEDCircle'}}
         self.assertEqual(resolve_aliases({'led': 'circle'}), d)
