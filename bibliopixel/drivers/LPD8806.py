@@ -1,6 +1,6 @@
 from .. import gamma
-
-from . spi_driver_base import DriverSPIBase, ChannelOrder
+from . channel_order import ChannelOrder
+from . spi_driver_base import DriverSPIBase
 
 
 class DriverLPD8806(DriverSPIBase):
