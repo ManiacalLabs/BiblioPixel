@@ -1,7 +1,7 @@
 import os, sys, time, traceback
 
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
-from . devices import Devices, serial
+from . devices import Devices
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... import log, util
@@ -18,6 +18,7 @@ class DriverSerial(DriverBase):
                  baudrate=921600):
         super().__init__(num, c_order=c_order, gamma=gamma)
         self.devices = Devices(hardwareID, baudrate)
+        self.serial = self.devices.serial
 
         if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
             SPISpeed = 1
@@ -64,9 +65,9 @@ class DriverSerial(DriverBase):
             idv = self.devices.get_device(self.device_id)
             self.device_id, self.dev, self.device_version = idv
             try:
-                self._com = serial.Serial(
+                self._com = self.serial.Serial(
                     self.dev, baudrate=self.devices.baudrate, timeout=5)
-            except serial.SerialException as e:
+            except self.serial.SerialException as e:
                 ports = self.devices.devices.values()
                 error = "Invalid port specified. No COM ports available."
                 if ports:
@@ -96,7 +97,7 @@ class DriverSerial(DriverBase):
 
             return ord(resp)
 
-        except serial.SerialException as e:
+        except self.serial.SerialException as e:
             error = ("Unable to connect to the device. Please check that "
                      "it is connected and the correct port is selected.")
             log.error(traceback.format_exc())

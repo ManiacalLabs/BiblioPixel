@@ -2,20 +2,7 @@ from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from ... return_codes import RETURN_CODES, print_error
 from ... import log, util
-
-try:
-    import serial, serial.tools.list_ports
-
-except ImportError as e:
-    error = "Please install pyserial 2.7+! pip install pyserial"
-    log.error(error)
-    raise ImportError(error)
-
-if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
-    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
-        serial.VERSION)
-    log.error(error)
-    raise ImportError(error)
+from ... project.importer import import_symbol
 
 
 class Devices(object):
@@ -24,12 +11,14 @@ class Devices(object):
     def __init__(self, hardware_id, baudrate):
         self.hardware_id = hardware_id
         self.baudrate = baudrate
+        self.serial = import_symbol('serial')
+        self.list_ports = import_symbol('serial.tools.list_ports')
 
     def find_serial_devices(self):
         self.devices = {}
         hardware_id = "(?i)" + self.hardware_id  # forces case insensitive
 
-        for ports in serial.tools.list_ports.grep(hardware_id):
+        for ports in self.list_ports.grep(hardware_id):
             port = ports[0]
             id = self.get_device_id(port, self.baudrate)
             ver = self._get_device_version(port, self.baudrate)
@@ -71,7 +60,7 @@ class Devices(object):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
 
-        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
+        com = self.serial.Serial(dev, baudrate=baudrate, timeout=5)
 
         packet = util.generate_header(CMDTYPE.SETID, 1)
         packet.append(id)
@@ -85,14 +74,14 @@ class Devices(object):
 
     def get_device_id(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETID, 0)
-        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
+        com = self.serial.Serial(dev, baudrate=baudrate, timeout=5)
         com.write(packet)
         resp = ord(com.read(1))
         return resp
 
     def _get_device_version(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETVER, 0)
-        com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
+        com = self.serial.Serial(dev, baudrate=baudrate, timeout=0.5)
         com.write(packet)
         ver = 0
         resp = com.read(1)
