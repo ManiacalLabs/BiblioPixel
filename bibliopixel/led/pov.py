@@ -20,11 +20,12 @@ class LEDPOV(LEDMatrix):
     # frameTime (ms)
     def push_to_driver(self, frameTime=None):
         if frameTime:
-            self._frameTotalTime = frameTime
+            self.animation_sleep_time = frameTime
 
         sleep = None
-        if self._frameTotalTime:
-            sleep = (self._frameTotalTime - self._frameGenTime) / self.width
+        if self.animation_sleep_time:
+            sleep = (self.animation_sleep_time -
+                     self.frame_render_time) / self.width
 
         width = self.width
         for h in range(width):
