@@ -20,14 +20,16 @@ def no_command(*_):
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
-    for name, module in MODULES.items():
+    for name, module in sorted(MODULES.items()):
         subparser = subparsers.add_parser(name, help=module.HELP)
         module.set_parser(subparser)
     parser.add_argument('--loglevel', choices=LOG_LEVELS, default='info')
     parser.add_argument('--settings',
                         help='Filename for settings', default=DOTFILE_DEFAULT)
 
-    args = parser.parse_args()
+    args = ['--help' if i == 'help' else i for i in sys.argv[1:]]
+    args = parser.parse_args(args)
+
     log.set_log_level(args.loglevel)
     settings = SettingsFile(os.path.expanduser(args.settings), True)
 
