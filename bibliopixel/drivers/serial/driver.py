@@ -2,7 +2,8 @@ import os, sys, time, traceback
 
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from . devices import Devices, serial
-from .. driver_base import DriverBase, ChannelOrder
+from .. channel_order import ChannelOrder
+from .. driver_base import DriverBase
 from ... import log, util
 from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
 

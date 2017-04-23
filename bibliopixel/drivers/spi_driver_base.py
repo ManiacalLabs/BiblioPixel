@@ -1,5 +1,6 @@
 import os, sys, time
-from . driver_base import DriverBase, ChannelOrder
+from . channel_order import ChannelOrder
+from . driver_base import DriverBase
 from .. import log
 
 

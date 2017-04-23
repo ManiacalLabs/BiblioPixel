@@ -1,17 +1,7 @@
+from . channel_order import ChannelOrder
 from .. import gamma as _gamma
 from .. import data_maker
 import threading, time
-
-
-class ChannelOrder:
-    RGB = 0, 1, 2
-    RBG = 0, 2, 1
-    GRB = 1, 0, 2
-    GBR = 1, 2, 0
-    BRG = 2, 0, 1
-    BGR = 2, 1, 0
-
-    ORDERS = RGB, RBG, GRB, GBR, BRG, BGR
 
 
 class DriverBase(object):
