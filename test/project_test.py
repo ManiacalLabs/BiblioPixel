@@ -1,7 +1,7 @@
 import json, unittest
 
 from bibliopixel.project import project
-from . long_test import long_test
+from . mark_tests import long_test
 
 
 PROJECT = """

@@ -8,5 +8,7 @@ with @long_test will not be run.
 """
 
 SKIP_LONG_TESTS = os.getenv('SKIP_LONG_TESTS', '').lower().startswith('t')
+RUN_SERIAL_TESTS = os.getenv('RUN_SERIAL_TESTS', '').lower().startswith('t')
 
 long_test = unittest.skipIf(SKIP_LONG_TESTS, 'Long tests skipped.')
+serial_test = unittest.skipIf(not RUN_SERIAL_TESTS, 'Serial tests skipped.')
