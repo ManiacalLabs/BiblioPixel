@@ -13,6 +13,7 @@ class AnimationThreading(object):
         self.run = run
         self.stop_event = threading.Event()
         self.thread = None
+        self.frame_overrun = False
 
     def stop_thread(self, wait=False):
         if self.thread:
@@ -35,8 +36,10 @@ class AnimationThreading(object):
 
         elapsed_time = timestamps[-1] - timestamps[0]
         if elapsed_time > wait_time:
-            log.warning('Frame-time of %dms set, but took %dms!',
-                        1000 * wait_time, 1000 * elapsed_time)
+            logger = log.debug if self.frame_overrun else log.warning
+            logger('Frame-time of %dms set, but took %dms!',
+                   1000 * wait_time, 1000 * elapsed_time)
+            self.frame_overrun = True
 
         elif self.runner.threaded:
             self.stop_event.wait(wait_time - elapsed_time)
