@@ -1,4 +1,4 @@
-from . base import BaseAnimation
+from . animation import BaseAnimation
 from .. import log
 import threading
 

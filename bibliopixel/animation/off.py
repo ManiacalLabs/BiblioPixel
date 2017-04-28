@@ -1,4 +1,4 @@
-from . base import BaseAnimation
+from . animation import BaseAnimation
 
 
 class OffAnim(BaseAnimation):

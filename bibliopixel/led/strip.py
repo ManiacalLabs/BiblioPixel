@@ -1,5 +1,5 @@
 from .. import colors, data_maker
-from . base import LEDBase
+from . led import LEDBase
 from .. layout.strip import gen_strip
 
 
