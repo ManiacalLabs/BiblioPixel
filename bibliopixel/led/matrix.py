@@ -1,7 +1,7 @@
 import math, threading, time
 
 from .. import colors, data_maker, font, matrix, log
-from . base import LEDBase
+from . led import LEDBase
 from .. layout.matrix import Rotation, gen_matrix, layout_from_matrix
 
 
