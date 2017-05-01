@@ -1,8 +1,8 @@
 import unittest
-from bibliopixel.project.settings_file import get_setting
+from bibliopixel.project.preset_library import get_setting
 
 
-class SettingTest(unittest.TestCase):
+class PresetLibraryTest(unittest.TestCase):
     def test_all(self):
         section = {
             'a': {'foo': 1, 'bar': 2},
