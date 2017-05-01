@@ -1,13 +1,13 @@
 import argparse, os, sys
 from .. import log
 from .. project.importer import import_symbol
-from .. project.settings_file import SettingsFile
+from .. project.preset_library import PresetLibrary
 
 __all__ = ['main']
 
 COMMANDS = ('all_pixel', 'devices', 'demo', 'run', 'set', 'show')
 MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
-DOTFILE_DEFAULT = '~/.bibliopixel'
+PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
 
 
@@ -25,13 +25,14 @@ def main():
         module.set_parser(subparser)
     parser.add_argument('--loglevel', choices=LOG_LEVELS, default='info')
     parser.add_argument('--settings',
-                        help='Filename for settings', default=DOTFILE_DEFAULT)
+                        help='Filename for settings',
+                        default=PRESET_LIBRARY_DEFAULT)
 
     args = ['--help' if i == 'help' else i for i in sys.argv[1:]]
     args = parser.parse_args(args)
 
     log.set_log_level(args.loglevel)
-    settings = SettingsFile(os.path.expanduser(args.settings), True)
+    settings = PresetLibrary(os.path.expanduser(args.settings), True)
 
     run = getattr(args, 'run', no_command)
     sys.exit(run(args, settings) or 0)

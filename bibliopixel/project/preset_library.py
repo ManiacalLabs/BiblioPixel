@@ -3,18 +3,17 @@ import copy
 from ..util.datafile import DataFile
 
 """
-The BP settings file is a dotfile with four sections:
+The BP preset library is a JSON file with five named sections:
 
-    driver, led, animation, run.
+    project, driver, led, animation, run.
 
-Each section is a dictionary mapping setting names to settings dictionaries.
+Each section is a dictionary that maps a name to a dictionary called a "preset".
 
-The setting named "default" is used if none is specified, or the system default
-if no setting named "default" exists.
+For each section, a special preset named "default" is used if none is specified,
+or the system default is used if no preset named "default" exists.
 
-If a settings dictionary has the entry "extends" then it extends and overrides
-another setting in the same dictionary.  The extends feature is transitive
-but cannot be used recursively.
+If a library preset has a key "extends" then it extends and overrides
+another setting in the same section.
 """
 
 
@@ -37,7 +36,7 @@ def get_setting(section, name):
     return setting
 
 
-class SettingsFile(DataFile):
+class PresetLibrary(DataFile):
     def _section(self, section):
         return self.data.setdefault(section, {})
 
