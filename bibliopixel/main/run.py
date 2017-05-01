@@ -1,4 +1,5 @@
 from bibliopixel.project import project
+from bibliopixel.util import opener
 
 HELP = """
 Run a project description file.
@@ -6,7 +7,7 @@ Run a project description file.
 
 
 def run(args, settings):
-    data = args.name and open(args.name).read() or {}
+    data = args.name and opener.opener(args.name).read() or {}
     project.run(data)
 
 

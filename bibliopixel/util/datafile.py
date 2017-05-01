@@ -1,4 +1,5 @@
 import configparser, json
+from . import opener
 
 
 def load_config(fp):
@@ -19,7 +20,7 @@ def dump_config(data, fp):
 
 
 class DataFile(object):
-    def __init__(self, filename, is_json=None, open=open):
+    def __init__(self, filename, is_json=None, open=opener.opener):
         self.filename = filename
 
         if is_json is None:

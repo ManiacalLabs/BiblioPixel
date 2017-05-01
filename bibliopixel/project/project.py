@@ -1,10 +1,11 @@
-import sys, json
+import json, os, sys
 from . aliases import resolve_aliases
 from . defaults import apply_defaults, DEFAULTS
 from . importer import make_object, import_symbol
 from .. import data_maker
 from .. layout import gen_matrix
 from .. led.multimap import MultiMapBuilder
+from .. util import opener
 
 
 def make_led(driver, led, maker=None):
@@ -58,7 +59,7 @@ def make_runnable(**kwds):
 
 def read_json(s):
     try:
-        return json.load(open(s))
+        return json.load(opener.opener(s))
     except:
         return json.loads(s)
 
