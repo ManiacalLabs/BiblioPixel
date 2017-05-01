@@ -1,4 +1,4 @@
-import webbrowser
+import random, webbrowser
 
 from bibliopixel.drivers.SimPixel import DriverSimPixel
 from bibliopixel import LEDCircle, LEDMatrix, layout
@@ -155,11 +155,19 @@ DEMO_TABLE = {
 }
 
 
+def usage():
+    print('Available demos are:', *sorted(DEMO_TABLE.keys()))
+
+
 def run(args, settings):
     if args.name == 'list':
-        print('Available demos are:\n  ' +
-              '\n  '.join(sorted(DEMO_TABLE.keys())))
+        usage()
         return
+
+    if not args.name:
+        usage()
+        args.name = random.choice(list(DEMO_TABLE))
+        print('Selected', args.name)
 
     try:
         demo = DEMO_TABLE[args.name]
@@ -181,7 +189,7 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.add_argument('name', nargs='?', default='matrix')
+    parser.add_argument('name', nargs='?', default='')
     parser.add_argument('--width', default=32, type=int)
     parser.add_argument('--height', default=32, type=int)
     parser.add_argument('--simpixel', default=DEFAULT_SIMPIXEL_URL)
