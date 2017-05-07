@@ -64,8 +64,8 @@ MATRIX_PROJECT = {
             },
             {
                 'typename': 'BiblioPixelAnimations.matrix.Text.ScrollText',
-                'xPos': 32,
-                'font_scale': 4,
+                'xPos': 16,
+                'font_scale': 2,
                 'text': 'BiblioPixel Demo',
                 'run': {
                     'amt': 1,
@@ -94,23 +94,41 @@ MATRIX_PROJECT = {
     },
 }
 
+CUBE_PROJECT = {
+    'driver': {
+        'typename': 'simpixel',
+        'num': 0
+    },
 
-def make_runnable(demo, args):
-    if callable(demo):
-        return demo(args).run
+    'led': {
+        'typename': 'cube',
+        'x': 0,
+        'y': 0,
+        'z': 0
+    },
 
-    if 'driver' in demo:
-        if not demo['driver'].get('num'):
-            demo['driver']['num'] = args.width * args.height
-
-    if 'led' in demo:
-        led = demo['led']
-        if 'width' in led:
-            led['width'] = led['width'] or args.width
-        if 'height' in led:
-            led['height'] = led['height'] or args.height
-
-    return project.make_runnable(**demo)
+    'animation': {
+        'typename': 'sequence',
+        'animations': [
+            {
+                'typename': 'BiblioPixelAnimations.cube.Rain.RainBow',
+                'run': {
+                    'amt': 1,
+                    'fps': 10,
+                    'seconds': 8
+                },
+            },
+            {
+                'typename': 'BiblioPixelAnimations.cube.bloom.CubeBloom',
+                'run': {
+                    'amt': 6,
+                    'fps': 20,
+                    'seconds': 8,
+                },
+            }
+        ],
+    },
+}
 
 
 def matrix(args):
@@ -124,7 +142,7 @@ def matrix(args):
 
     from BiblioPixelAnimations.matrix.Text import ScrollText
     anim.add_animation(
-        ScrollText(led, 'BiblioPixel Demo', xPos=args.width, font_scale=4),
+        ScrollText(led, 'BiblioPixel Demo', xPos=args.width, font_scale=2),
         amt=1, fps=30, until_complete=True)
 
     from BiblioPixelAnimations.matrix.bloom import Bloom
@@ -147,10 +165,38 @@ def circle(args):
     return CircleBloom(led)
 
 
+def make_runnable(demo, args):
+    if callable(demo):
+        return demo(args).run
+
+    if 'driver' in demo:
+        if not demo['driver'].get('num'):
+            if 'led' in demo and demo['led']['typename'] == 'cube':
+                demo['driver']['num'] = args.width * args.height * args.depth
+            else:
+                demo['driver']['num'] = args.width * args.height
+
+    if 'led' in demo:
+        led = demo['led']
+        if 'width' in led:
+            led['width'] = led['width'] or args.width
+        if 'x' in led:
+            led['x'] = led['x'] or args.width
+        if 'height' in led:
+            led['height'] = led['height'] or args.height
+        if 'y' in led:
+            led['y'] = led['y'] or args.height
+        if 'z' in led:
+            led['z'] = led['z'] or args.depth
+
+    return project.make_runnable(**demo)
+
+
 DEMO_TABLE = {
     'bloom': BLOOM,
     'circle': circle,
     'matrix': matrix,
+    'cube': CUBE_PROJECT,
     'matrix_project': MATRIX_PROJECT,
 }
 
@@ -190,6 +236,7 @@ def run(args, settings):
 def set_parser(parser):
     parser.set_defaults(run=run)
     parser.add_argument('name', nargs='?', default='')
-    parser.add_argument('--width', default=32, type=int)
-    parser.add_argument('--height', default=32, type=int)
+    parser.add_argument('--width', default=16, type=int)
+    parser.add_argument('--height', default=16, type=int)
+    parser.add_argument('--depth', default=16, type=int)
     parser.add_argument('--simpixel', default=DEFAULT_SIMPIXEL_URL)
