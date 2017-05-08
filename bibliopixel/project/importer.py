@@ -2,7 +2,11 @@ from ..util import importer
 from distutils.version import LooseVersion
 
 MINIMUM_VERSIONS = {'serial': '2.7'}
-INSTALL_NAMES = {'serial': 'pyserial'}
+
+INSTALL_NAMES = {
+    'serial': 'pyserial',
+    'BiblioPixelAnimations': 'BiblioPixelAnimations',
+}
 
 VERSION_MESSAGE = """
 You have version %s of module '%s' but you need version %s.

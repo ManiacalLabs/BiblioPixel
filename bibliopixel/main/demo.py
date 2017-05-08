@@ -13,12 +13,6 @@ Run a demo.  For the list of possible demos, type
 """
 
 DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
-IMPORT_ERROR_TEXT = """
-Please install the BiblioPixelAnimations library from here:
-
-https://github.com/ManiacalLabs/BiblioPixelAnimations
-
-"""
 
 BLOOM = {
     'driver': {
@@ -220,13 +214,7 @@ def run(args, settings):
     except KeyError:
         raise KeyError('Unknown demo %s' % args.name)
 
-    try:
-        runnable = make_runnable(demo, args)
-    except ImportError as e:
-        if 'BiblioPixelAnimations' in e.msg:
-            e.msg += IMPORT_ERROR_TEXT
-        raise
-
+    runnable = make_runnable(demo, args)
     if not args.simpixel.startswith('no'):
         webbrowser.open(args.simpixel, new=0, autoraise=True)
 
