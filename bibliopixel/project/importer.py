@@ -4,8 +4,9 @@ from distutils.version import LooseVersion
 MINIMUM_VERSIONS = {'serial': '2.7'}
 
 INSTALL_NAMES = {
-    'serial': 'pyserial',
     'BiblioPixelAnimations': 'BiblioPixelAnimations',
+    'noise': 'pynoise',
+    'serial': 'pyserial',
 }
 
 VERSION_MESSAGE = """
