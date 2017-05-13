@@ -1,7 +1,7 @@
 import unittest
 
 from bibliopixel import data_maker
-from bibliopixel.led import LEDMatrix
+from bibliopixel.led import Matrix
 from bibliopixel.drivers.driver_base import DriverBase
 
 
@@ -12,9 +12,8 @@ class BaseMatrixTest(unittest.TestCase):
 
     def make_matrix(self, width, height, **kwds):
         driver = DriverBase(num=width * height)
-        return LEDMatrix(driver, width=width, height=height,
-                         maker=self.maker,
-                         **kwds)
+        return Matrix(
+            driver, width=width, height=height, maker=self.maker, **kwds)
 
     def assert_changed(self, matrix, expected):
         changed = [i for i, c in enumerate(matrix._colors) if c[0]]

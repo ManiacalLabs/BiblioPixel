@@ -9,7 +9,7 @@ DEFAULTS = {
     },
 
     'led': {
-        'typename': 'bibliopixel.led.matrix.LEDMatrix',
+        'typename': 'bibliopixel.led.matrix.Matrix',
         'width': 32,
         'height': 32,
     },

@@ -1,20 +1,27 @@
-from . circle import LEDCircle
-from . matrix import LEDMatrix
-from . cube import LEDCube
-from . pov import LEDPOV
-from . strip import LEDStrip
+from . circle import Circle
+from . matrix import Matrix
+from . cube import Cube
+from . pov import POV
+from . strip import Strip
 from .. layout import Rotation
 from .. layout.matrix import gen_matrix
 from .. layout.circle import gen_circle
 from .. layout.cube import gen_cube
 
+# These are DEPRECATED
+from . circle import LEDCircle
+from . cube import LEDCube
+from . matrix import LEDMatrix
+from . pov import LEDPOV
+from . strip import LEDStrip
+
 MANIFEST = [
     {
         "id": "strip",
-        "class": LEDStrip,
+        "class": Strip,
         "type": "controller",
         "control_type": "strip",
-        "display": "LEDStrip",
+        "display": "Strip",
         "params": [{
                 "id": "threadedUpdate",
                 "label": "Threaded Update",
@@ -41,10 +48,10 @@ MANIFEST = [
     },
     {
         "id": "matrix",
-        "class": LEDMatrix,
+        "class": Matrix,
         "type": "controller",
         "control_type": "matrix",
-        "display": "LEDMatrix",
+        "display": "Matrix",
         "params": [{
                 "id": "width",
                 "label": "Width",

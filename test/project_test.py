@@ -72,7 +72,7 @@ PROJECT_SIM = """
     },
 
     "led": {
-        "typename": "bibliopixel.led.strip.LEDStrip"
+        "typename": "bibliopixel.led.strip.Strip"
     },
 
     "animation": {

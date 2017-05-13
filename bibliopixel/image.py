@@ -1,6 +1,6 @@
 import glob, numbers, os, sys
 from . import colors, log
-from . led import LEDMatrix
+from . led import Matrix
 
 try:
     from PIL import Image, ImageSequence
@@ -56,8 +56,8 @@ def show_image(setter, width, height,
 
 def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
-    if not isinstance(led, LEDMatrix):
-        raise RuntimeError("Must use LEDMatrix with showImage!")
+    if not isinstance(led, Matrix):
+        raise RuntimeError("Must use Matrix with showImage!")
 
     led.all_off()
 
@@ -68,8 +68,8 @@ def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Of
 def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
 
-    if not isinstance(led, LEDMatrix):
-        raise RuntimeError("Must use LEDMatrix with loadImage!")
+    if not isinstance(led, Matrix):
+        raise RuntimeError("Must use Matrix with loadImage!")
 
     texture = [[colors.Off for x in range(led.width)] for y in range(led.height)]
 

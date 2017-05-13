@@ -1,5 +1,5 @@
 from . animation import BaseAnimation
-from .. led import LEDStrip
+from .. led import Strip
 
 
 class BaseStripAnim(BaseAnimation):
@@ -7,8 +7,8 @@ class BaseStripAnim(BaseAnimation):
     def __init__(self, led, start=0, end=-1):
         super().__init__(led)
 
-        if not isinstance(led, LEDStrip):
-            raise RuntimeError("Must use LEDStrip with Strip Animations!")
+        if not isinstance(led, Strip):
+            raise RuntimeError("Must use Strip with Strip Animations!")
 
         self._start = max(start, 0)
         self._end = end

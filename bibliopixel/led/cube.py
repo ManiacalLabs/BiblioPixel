@@ -6,7 +6,7 @@ from .. layout.cube import gen_cube, layout_from_cube
 from .. import log
 
 
-class LEDCube(LEDBase):
+class Cube(LEDBase):
 
     def __init__(self, drivers, x, y, z, coordMap=None,
                  threadedUpdate=False, brightness=255, **kwargs):
@@ -55,3 +55,7 @@ class LEDCube(LEDBase):
     def setRGB(self, x, y, z, r, g, b):
         color = (r, g, b)
         self._set(x, y, z, color)
+
+
+# This is DEPRECATED
+LEDCube = Cube

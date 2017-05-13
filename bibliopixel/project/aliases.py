@@ -15,11 +15,11 @@ ALIASES = {
     },
 
     'led': {
-        'circle': 'bibliopixel.led.circle.LEDCircle',
-        'cube': 'bibliopixel.led.cube.LEDCube',
-        'matrix': 'bibliopixel.led.matrix.LEDMatrix',
-        'pov': 'bibliopixel.led.pov.LEDPOV',
-        'strip': 'bibliopixel.led.strip.LEDStrip',
+        'circle': 'bibliopixel.led.circle.Circle',
+        'cube': 'bibliopixel.led.cube.Cube',
+        'matrix': 'bibliopixel.led.matrix.Matrix',
+        'pov': 'bibliopixel.led.pov.POV',
+        'strip': 'bibliopixel.led.strip.Strip',
     },
 
     'animation': {

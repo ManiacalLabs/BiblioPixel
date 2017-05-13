@@ -3,7 +3,7 @@ from . led import LEDBase
 from .. layout.strip import gen_strip
 
 
-class LEDStrip(LEDBase):
+class Strip(LEDBase):
 
     def __init__(self, drivers, threadedUpdate=False,
                  brightness=255, pixelWidth=1, **kwargs):
@@ -53,3 +53,7 @@ class LEDStrip(LEDBase):
     def setOff(self, pixel):
         """Set single pixel off"""
         self.set(pixel, (0, 0, 0))
+
+
+# This is DEPRECATED
+LEDStrip = Strip
