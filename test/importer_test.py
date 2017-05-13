@@ -44,7 +44,7 @@ class ImporterTest(unittest.TestCase):
         self.assertEqual(td, datetime.timedelta(5, 23, milliseconds=35))
 
     def test_aliasing(self):
-        import_symbol('bibliopixel.drivers.SimPixel.DriverSimPixel')
+        import_symbol('bibliopixel.drivers.SimPixel.SimPixel')
 
     def test_exception_unknown(self):
         with self.assertRaises(ImportError) as cm:

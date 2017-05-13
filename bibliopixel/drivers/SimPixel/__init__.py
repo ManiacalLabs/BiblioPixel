@@ -1,1 +1,1 @@
-from . driver import DriverSimPixel
+from . driver import SimPixel

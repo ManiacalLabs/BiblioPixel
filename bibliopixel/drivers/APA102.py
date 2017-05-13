@@ -2,7 +2,7 @@ from . channel_order import ChannelOrder
 from . spi_driver_base import DriverSPIBase
 
 
-class DriverAPA102(DriverSPIBase):
+class APA102(DriverSPIBase):
     """Main driver for APA102 based LED strips on devices like the Raspberry Pi and BeagleBone"""
 
     def __init__(self, num, c_order=ChannelOrder.RGB, use_py_spi=True,
@@ -23,10 +23,13 @@ class DriverAPA102(DriverSPIBase):
         self._buf.extend([0xFF, 0, 0, 0] * self._latchBytes)
 
 
+# This is DEPRECATED.
+DriverAPA102 = APA102
+
 MANIFEST = [
     {
         "id": "APA102",
-        "class": DriverAPA102,
+        "class": APA102,
         "type": "driver",
         "display": "APA102 (SPI Native)",
         "desc": "Interface with APA102 strips over a native SPI port (Pi, BeagleBone, etc.)",

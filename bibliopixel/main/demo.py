@@ -1,6 +1,6 @@
 import random, webbrowser
 
-from bibliopixel.drivers.SimPixel import DriverSimPixel
+from bibliopixel.drivers.SimPixel import SimPixel
 from bibliopixel import Circle, Matrix, layout
 from bibliopixel.animation import Sequence
 from bibliopixel.project import project
@@ -126,7 +126,7 @@ CUBE_PROJECT = {
 
 
 def matrix(args):
-    driver = DriverSimPixel(args.width * args.height)
+    driver = SimPixel(args.width * args.height)
     led = Matrix(driver, width=args.width, height=args.height)
 
     anim = Sequence(led)
@@ -152,7 +152,7 @@ def circle(args):
     pixels_per = [1, 4, 8, 12, 18, 24, 32, 40, 52, 64]
     rings, steps = layout.gen_circle(pixels_per=pixels_per)
     points = layout.layout_from_rings(rings, origin=(200, 200, 0), z_diff=8)
-    driver = DriverSimPixel(sum(pixels_per), layout=points)
+    driver = SimPixel(sum(pixels_per), layout=points)
     led = Circle(driver, rings=rings, maxAngleDiff=0)
 
     from BiblioPixelAnimations.circle.bloom import CircleBloom

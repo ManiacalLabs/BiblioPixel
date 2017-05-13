@@ -2,9 +2,9 @@ import unittest
 
 from bibliopixel import gamma
 from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
-from bibliopixel.drivers.APA102 import DriverAPA102
-from bibliopixel.drivers.LPD8806 import DriverLPD8806
-from bibliopixel.drivers.WS2801 import DriverWS2801
+from bibliopixel.drivers.APA102 import APA102
+from bibliopixel.drivers.LPD8806 import LPD8806
+from bibliopixel.drivers.WS2801 import WS2801
 
 
 def mock_open(self, fname, perm='r'):
@@ -54,18 +54,18 @@ class DriverTest(unittest.TestCase):
         self.do_test(driver, expected)
 
     def test_apa102(self):
-        driver = DriverAPA102(num=4, **self.SPD)
+        driver = APA102(num=4, **self.SPD)
         expected = [0, 0, 0, 0, 255, 0, 0, 0, 255, 1, 8, 64,
                     255, 2, 16, 128, 255, 3, 24, 192, 255, 0, 0, 0]
         self.do_test(driver, expected)
 
     def test_lpd8806(self):
-        driver = DriverLPD8806(num=4, **self.SPD)
+        driver = LPD8806(num=4, **self.SPD)
         expected = [
             128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190, 0]
         self.do_test(driver, expected)
 
     def test_ws2801(self):
-        driver = DriverWS2801(num=4, **self.SPD)
+        driver = WS2801(num=4, **self.SPD)
         expected = [0, 0, 0, 0, 0, 8, 0, 0, 45, 0, 0, 125]
         self.do_test(driver, expected)

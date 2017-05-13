@@ -11,7 +11,7 @@ except:
 import colorsys
 
 
-class DriverHue(DriverBase):
+class Hue(DriverBase):
 
     def __init__(self, num, ip, nameMap=None):
         super().__init__(num)
@@ -68,3 +68,7 @@ class DriverHue(DriverBase):
             cmd = {'on': s != 0, 'bri': bri, 'hue': h, 'saturation': s,
                    'transitiontime': self._transitionTime}
             self._bridge.set_light(self._ids[i], cmd)
+
+
+# This is DEPRECATED.
+DriverHue = Hue

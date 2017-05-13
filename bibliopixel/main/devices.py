@@ -5,7 +5,7 @@ HELP = """Find serial devices."""
 
 
 def run(args, settings):
-    from ..drivers.serial.driver import DriverSerial
+    from ..drivers.serial.driver import Serial
     from ..drivers.serial.devices import Devices
     import serial
 

@@ -1,6 +1,6 @@
 {
     "driver": {
-        "typename": "bibliopixel.drivers.dummy_driver.DriverDummy",
+        "typename": "bibliopixel.drivers.dummy_driver.Dummy",
         "num": 12
     },
 

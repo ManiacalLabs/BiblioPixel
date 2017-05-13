@@ -3,7 +3,7 @@ from . channel_order import ChannelOrder
 from . spi_driver_base import DriverSPIBase
 
 
-class DriverLPD8806(DriverSPIBase):
+class LPD8806(DriverSPIBase):
     """Main driver for LPD8806 based LED strips on devices like the Raspberry Pi
        and BeagleBone."""
 
@@ -24,10 +24,13 @@ class DriverLPD8806(DriverSPIBase):
     # running each value through gamma will fix all of this.
 
 
+# This is DEPRECATED.
+DriverLPD8806 = LPD8806
+
 MANIFEST = [
     {
         "id": "LPD8806",
-        "class": DriverLPD8806,
+        "class": LPD8806,
         "type": "driver",
         "display": "LPD8806 (SPI Native)",
         "desc": "Interface with LPD8806 strips over a native SPI port (Pi, BeagleBone, etc.)",

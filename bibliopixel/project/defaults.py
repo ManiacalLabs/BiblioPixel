@@ -4,7 +4,7 @@ from . aliases import resolve_aliases
 
 DEFAULTS = {
     'driver': {
-        'typename': 'bibliopixel.drivers.SimPixel.DriverSimPixel',
+        'typename': 'bibliopixel.drivers.SimPixel.SimPixel',
         'num': 1024
     },
 

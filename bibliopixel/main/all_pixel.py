@@ -48,7 +48,7 @@ def showSelectList(msg, values):
 
 
 def run(args, settings):
-    from ..drivers.serial.driver import DriverSerial
+    from ..drivers.serial.driver import Serial
     from ..drivers.serial.devices import Devices
     from ..drivers.serial.codes import SPIChipsets
 
@@ -96,7 +96,7 @@ def run(args, settings):
         O(details + "\n")
 
         try:
-            DriverSerial(t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
+            Serial(t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
             O("Configure complete!")
         except BiblioSerialError as e:
             O("Error configuring device!")

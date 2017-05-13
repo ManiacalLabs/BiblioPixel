@@ -1,10 +1,10 @@
 from ... import gamma
-from . driver import DriverSerial, DriverTeensySmartMatrix
+from . driver import Serial, TeensySmartMatrix
 
 MANIFEST = [
     {
         "id": "serial",
-        "class": DriverSerial,
+        "class": Serial,
         "type": "driver",
         "display": "Serial (AllPixel)",
         "desc": "Interface with USB Serial devices that support the AllPixel protocol.",
@@ -113,7 +113,7 @@ MANIFEST = [
     },
     {
         "id": "teensysmartmatrix",
-        "class": DriverTeensySmartMatrix,
+        "class": TeensySmartMatrix,
         "type": "driver",
         "display": "Teensy SmartMatrix",
         "desc": "Interface with Teensy SmartMatrix Controller.",
