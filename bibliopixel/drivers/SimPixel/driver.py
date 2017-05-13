@@ -4,7 +4,7 @@ from .. driver_base import DriverBase
 from . import websocket
 
 
-class DriverSimPixel(DriverBase):
+class SimPixel(DriverBase):
 
     def __init__(self, num, port=1337, layout=None, **kwds):
         super().__init__(num, **kwds)
@@ -54,3 +54,7 @@ class DriverSimPixel(DriverBase):
     def _send_packet(self):
         for ws in self.websocks.values():
             ws(self._buf)
+
+
+# This is DEPRECATED.
+DriverSimPixel = SimPixel

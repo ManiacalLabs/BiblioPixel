@@ -67,7 +67,7 @@ PROJECT_SHARED = """
 PROJECT_SIM = """
 {
     "driver": {
-        "typename": "bibliopixel.drivers.SimPixel.DriverSimPixel",
+        "typename": "bibliopixel.drivers.SimPixel.SimPixel",
         "num": 12
     },
 

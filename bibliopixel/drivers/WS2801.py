@@ -4,7 +4,7 @@ import os
 from .. import gamma
 
 
-class DriverWS2801(DriverSPIBase):
+class WS2801(DriverSPIBase):
     """Main driver for WS2801 based LED strips on devices like the Raspberry Pi and BeagleBone"""
 
     def __init__(self, num, c_order=ChannelOrder.RGB, use_py_spi=True,
@@ -16,10 +16,13 @@ class DriverWS2801(DriverSPIBase):
                          SPISpeed=SPISpeed, open=open, gamma=gamma.WS2801)
 
 
+# This is DEPRECATED.
+DriverWS2801 = WS2801
+
 MANIFEST = [
     {
         "id": "WS2801",
-        "class": DriverWS2801,
+        "class": WS2801,
         "type": "driver",
         "display": "WS2801 (SPI Native)",
         "desc": "Interface with WS2801 strips over a native SPI port (Pi, BeagleBone, etc.)",

@@ -11,7 +11,7 @@ class CMDTYPE:
     BRIGHTNESS = 3
 
 
-class DriverNetwork(DriverBase):
+class Network(DriverBase):
     """Driver for communicating with another device on the network."""
 
     def __init__(self, num=0, width=0, height=0, host="localhost", port=3142):
@@ -65,10 +65,13 @@ class DriverNetwork(DriverBase):
         return resp == RETURN_CODES.SUCCESS
 
 
+# This is DEPRECATED.
+DriverNetwork = Network
+
 MANIFEST = [
     {
         "id": "network",
-        "class": DriverNetwork,
+        "class": Network,
         "type": "driver",
         "display": "Network",
         "desc": "Sends pixel data over the network to a reciever.",

@@ -2,7 +2,7 @@ from . driver_base import DriverBase
 import time
 
 
-class DriverDummy(DriverBase):
+class Dummy(DriverBase):
     """For Testing: Provides no ouput, just a valid interface"""
 
     def __init__(self, num, delay=0, **_):
@@ -16,3 +16,7 @@ class DriverDummy(DriverBase):
             time.sleep(self._delay)
         else:
             pass
+
+
+# This is DEPRECATED.
+DriverDummy = Dummy

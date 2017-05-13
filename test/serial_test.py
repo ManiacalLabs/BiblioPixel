@@ -10,7 +10,7 @@ class SerialTest(unittest.TestCase):
 
         from bibliopixel import Strip
         from bibliopixel.drivers.channel_order import ChannelOrder
-        from bibliopixel.drivers.serial import DriverSerial, LEDTYPE
+        from bibliopixel.drivers.serial import Serial, LEDTYPE
         from bibliopixel.drivers.serial.devices import Devices
         from bibliopixel.animation import StripChannelTest
 
@@ -46,8 +46,8 @@ class SerialTest(unittest.TestCase):
         log.info('Device version for: ' + first_dev)
         log.info(devs._get_device_version(first_dev))
 
-        driver = DriverSerial(LEDTYPE.APA102, 600, SPISpeed=4,
-                              c_order=ChannelOrder.RGB)
+        driver = Serial(
+            LEDTYPE.APA102, 600, SPISpeed=4, c_order=ChannelOrder.RGB)
         led = Strip(driver)
 
         for b in range(7, 256, 8):

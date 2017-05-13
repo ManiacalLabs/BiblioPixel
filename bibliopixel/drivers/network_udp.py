@@ -11,7 +11,7 @@ class CMDTYPE:
     BRIGHTNESS = 3
 
 
-class DriverNetworkUDP(DriverBase):
+class NetworkUDP(DriverBase):
     """Driver for communicating with another device on the network."""
 
     def __init__(self, num=0, width=0, height=0, host="localhost", broadcast=False, port=3142, broadcast_interface=''):

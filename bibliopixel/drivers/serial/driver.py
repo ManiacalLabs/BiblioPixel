@@ -8,7 +8,7 @@ from ... import log, util
 from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
 
 
-class DriverSerial(DriverBase):
+class Serial(DriverBase):
     """Main driver for Serial based LED strips"""
 
     def __init__(self, type, num, dev="",
@@ -137,9 +137,17 @@ class DriverSerial(DriverBase):
         self._com.write(self._sync_packet)
 
 
-class DriverTeensySmartMatrix(DriverSerial):
+# This is DEPRECATED.
+DriverSerial = Serial
+
+
+class TeensySmartMatrix(Serial):
     def __init__(self, width, height, dev="", device_id=None,
                  hardwareID="16C0:0483"):
         super().__init__(type=LEDTYPE.GENERIC, num=width * height,
                          device_id=device_id, hardwareID=hardwareID)
         self.sync = self._send_sync
+
+
+# This is DEPRECATED.
+DriverTeensySmartMatrix = TeensySmartMatrix
