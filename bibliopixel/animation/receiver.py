@@ -1,18 +1,21 @@
 from . animation import BaseAnimation
 from .. import log
 import threading
+from enum import IntEnum
 
 
-class HOST_TYPE:
+class HOST_TYPE(IntEnum):
     STRIP = 1
     MATRIX = 2
     CIRCLE = 3
+    CUBE = 4
 
 
 HOST_MAP = {
     'Strip': HOST_TYPE.STRIP,
     'Matrix': HOST_TYPE.MATRIX,
-    'Circle': HOST_TYPE.CIRCLE
+    'Circle': HOST_TYPE.CIRCLE,
+    'Cube': HOST_TYPE.CUBE,
 }
 
 
@@ -22,11 +25,11 @@ class BaseReceiver(BaseAnimation):
     def __init__(self, led):
         super().__init__(led)
         name = type(self._led).__name__
-        if name in HOST_MAP:
-            self.host_type = HOST_MAP[name]
-        else:
-            raise ValueError('led must be of type {}'.format(', '.join(HOST_MAP.keys())))
 
+        if name not in HOST_MAP:
+            raise ValueError('led must be of type' + ', '.join(HOST_MAP))
+
+        self.host_type = HOST_MAP[name]
         self._hold_for_data = threading.Event()
         self._stop_event = threading.Event()
         self._stop_event.clear()
