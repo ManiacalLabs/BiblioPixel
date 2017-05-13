@@ -8,7 +8,7 @@ class AliasTest(unittest.TestCase):
 
     def test_simple(self):
         self.assertEqual(resolve_aliases({'led': {}}), {'led': {}})
-        d = {'led': {'typename': 'bibliopixel.led.circle.LEDCircle'}}
+        d = {'led': {'typename': 'bibliopixel.led.circle.Circle'}}
         self.assertEqual(resolve_aliases(d), d)
 
     def test_exception(self):
@@ -20,7 +20,7 @@ class AliasTest(unittest.TestCase):
         self.assertTrue('install' not in e.exception.msg)
 
     def test_resolve(self):
-        d = {'led': {'typename': 'bibliopixel.led.circle.LEDCircle'}}
+        d = {'led': {'typename': 'bibliopixel.led.circle.Circle'}}
         self.assertEqual(resolve_aliases({'led': 'circle'}), d)
         self.assertEqual(resolve_aliases({'led': {'typename': 'circle'}}), d)
 

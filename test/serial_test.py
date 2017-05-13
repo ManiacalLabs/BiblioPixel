@@ -8,7 +8,7 @@ class SerialTest(unittest.TestCase):
         # Code taken from
         # https://gist.github.com/adammhaile/1b43fdde6ae6cbbd35560c68a9b90beb
 
-        from bibliopixel import LEDStrip
+        from bibliopixel import Strip
         from bibliopixel.drivers.channel_order import ChannelOrder
         from bibliopixel.drivers.serial import DriverSerial, LEDTYPE
         from bibliopixel.drivers.serial.devices import Devices
@@ -48,7 +48,7 @@ class SerialTest(unittest.TestCase):
 
         driver = DriverSerial(LEDTYPE.APA102, 600, SPISpeed=4,
                               c_order=ChannelOrder.RGB)
-        led = LEDStrip(driver)
+        led = Strip(driver)
 
         for b in range(7, 256, 8):
             log.info('Set brightness ' + str(b))

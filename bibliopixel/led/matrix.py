@@ -5,7 +5,7 @@ from . led import LEDBase
 from .. layout.matrix import Rotation, gen_matrix, layout_from_matrix
 
 
-class LEDMatrix(LEDBase):
+class Matrix(LEDBase):
 
     def __init__(self, drivers, width=0, height=0, coordMap=None,
                  rotation=Rotation.ROTATE_0, vert_flip=False,
@@ -226,3 +226,7 @@ class LEDMatrix(LEDBase):
     def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
         matrix.draw_text(self.fonts, self.set, text, self.width, self.height,
                          x, y, color, bg, aa, font, font_scale)
+
+
+# This is DEPRECATED
+LEDMatrix = Matrix

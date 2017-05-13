@@ -1,10 +1,10 @@
 import math, threading, time
 from .. import data_maker
-from . matrix import LEDMatrix, Rotation
+from . matrix import Matrix, Rotation
 
 
 # Takes a matrix and displays it as individual columns over time
-class LEDPOV(LEDMatrix):
+class POV(Matrix):
 
     def __init__(self, drivers, povHeight, width, rotation=Rotation.ROTATE_0,
                  vert_flip=False, threadedUpdate=False,
@@ -39,3 +39,7 @@ class LEDPOV(LEDMatrix):
             sendTime = time.time() - start
             if sleep:
                 time.sleep(max(0, sleep - sendTime))
+
+
+# This is DEPRECATED
+LEDPOV = POV

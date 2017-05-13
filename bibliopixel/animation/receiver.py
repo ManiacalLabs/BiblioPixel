@@ -10,9 +10,9 @@ class HOST_TYPE:
 
 
 HOST_MAP = {
-    'LEDStrip': HOST_TYPE.STRIP,
-    'LEDMatrix': HOST_TYPE.MATRIX,
-    'LEDCircle': HOST_TYPE.CIRCLE
+    'Strip': HOST_TYPE.STRIP,
+    'Matrix': HOST_TYPE.MATRIX,
+    'Circle': HOST_TYPE.CIRCLE
 }
 
 

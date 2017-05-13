@@ -7,7 +7,7 @@ class LEDBase(object):
 
     def __init__(self, drivers, threadedUpdate, brightness,
                  maker=data_maker.MAKER):
-        """Base LED class. Use LEDStrip or LEDMatrix instead!"""
+        """Base LED class. Use Strip or Matrix instead!"""
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
 
         if not hasattr(self, 'numLEDs'):

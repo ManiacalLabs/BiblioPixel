@@ -3,7 +3,7 @@ from .. import data_maker
 from .. layout.circle import gen_circle, calc_ring_steps, calc_ring_pixel_count, layout_from_rings
 
 
-class LEDCircle(LEDBase):
+class Circle(LEDBase):
 
     def __init__(self, drivers, rings=None, pixels_per=None,
                  maxAngleDiff=0, rotation=0,
@@ -109,3 +109,7 @@ class LEDCircle(LEDBase):
 
         for i in pixels:
             self._set_base(i, color)
+
+
+# This is DEPRECATED
+LEDCircle = Circle
