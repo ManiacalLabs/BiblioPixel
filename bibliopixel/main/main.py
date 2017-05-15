@@ -25,6 +25,9 @@ def main():
         subparser = subparsers.add_parser(name, help=module.HELP)
         module.set_parser(subparser)
     parser.add_argument('--loglevel', choices=LOG_LEVELS, default='info')
+    parser.add_argument('--path', default=None,
+                        help='A list of directories, separated by colons, '
+                        'which are added to the end of `sys.path`')
     if ENABLE_PRESETS:
         parser.add_argument('--presets',
                             help='Filename for presets',
@@ -38,4 +41,6 @@ def main():
         os.path.expanduser(args.presets), True)
 
     run = getattr(args, 'run', no_command)
+    if args.path:
+        sys.path.extend(args.path.split(':'))
     sys.exit(run(args, presets) or 0)
