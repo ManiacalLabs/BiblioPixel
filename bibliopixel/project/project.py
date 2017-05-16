@@ -49,12 +49,29 @@ def make_animation(animation, **kwds):
     return anim
 
 
-def make_runnable(**kwds):
+def raw_make_runnable(**kwds):
     def make(run=None, **kwds):
         animation = make_animation(**kwds)
         return lambda: animation.run(**(run or {}))
 
     return make(**apply_defaults(kwds))
+
+
+def make_runnable(*, path=None, **kwds):
+    if not path:
+        return raw_make_runnable(**kwds)
+
+    try:
+        path = path.split(':')
+    except:
+        pass
+    sys.path, old_path = sys.path + path, sys.path
+
+    try:
+        return raw_make_runnable(**kwds)
+    finally:
+        if path:
+            sys.path = old_path
 
 
 def read_json(s):

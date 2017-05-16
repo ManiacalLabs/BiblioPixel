@@ -24,20 +24,23 @@ Example of a project file.
 
         "run": {
             "max_steps": 5
-        }
+        },
+
+        "path": "/development/BiblioPixelAnimations"
     }
 
 Details
 ----
 
-A project is a JSON object with four named sections.
+A project is a JSON object with five named sections.
 
   * driver: identifies the hardware driving the LED and its characteristics.
   * led: represents the geometric layout of the LEDs in one or more drivers.
   * animation: a program that changes the LEDs over time.
   * run: time settings for the animation.
+  * path: a list of directories to add to the PYTHONPATH
 
-Each section is a JSON object.
+The first four sections are JSON objects.
 
 The `driver`, `led` and `animation` sections describe how to create the
 BiblioPixel `Driver`, `LED` or `Animation` object for your project.
@@ -48,11 +51,17 @@ of object that's being constructed.
 The remaining entries correspond to the arguments to the constructor for that
 type.
 
-The `run` section is different - its entries are used to call the `run()` method
-on the `Animation`.
+The `run` section's entries are used to call the `run()` method on the
+`Animation`.
+
+The `path` section is either a list of directories to be added to `sys.path`,
+or it's a single string, which is a list of directories joined by `:` which are
+to be added to `sys.path`.
+
 
 So the example above corresponds to the following code:
 
+    sys.path.append('/development/BiblioPixelAnimations')
     driver = bibliopixel.drivers.SimPixel.DriverSimPixel(num=12)
     led = bibliopixel.led.strip.LEDStrip(driver)
     animation = bibliopixel.animation.tests.StripChannelTest(led)
