@@ -56,7 +56,7 @@ def run(args, settings):
         print("Press Ctrl+C anytime to quit.")
 
         O("Scanning for devices...")
-        devs = sorted(Devices().find_serial_devices().items())
+        devs = sorted(Devices(args.hardware_id, args.baud).find_serial_devices().items())
         d = ""
         if not devs:
             I("No devices found! Please connect one and press any key...")
@@ -109,3 +109,5 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
+    parser.add_argument('--hardware-id', default='1D50:60AB', type=str)
+    parser.add_argument('--baud', default=921600, type=int)
