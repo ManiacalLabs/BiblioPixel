@@ -15,13 +15,13 @@ def run(args, settings):
         while run:
             try:
                 input(CONNECT_MESSAGE)
-                devices = Devices()
+                devices = Devices(args.hardware_id, args.baud)
                 ports = devices.find_serial_devices()
                 if not ports:
                     print("No serial devices found. Please connect one.")
                     continue
 
-                port = sorted(ports.items())[0][1]
+                port = sorted(ports.items())[0][1][0]
                 id = devices.get_device_id(port)
                 print("Device ID of {}: {}".format(port, id))
                 newID = input("Input new ID (enter to skip): ")
@@ -48,3 +48,5 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
+    parser.add_argument('--hardware-id', default='1D50:60AB', type=str)
+    parser.add_argument('--baud', default=921600, type=int)
