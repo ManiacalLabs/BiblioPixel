@@ -6,17 +6,19 @@ from .. import log
 try:
     import PIL
     from PIL import Image, ImageDraw
-
-except ImportError as e:
-    error = "Please install Python Imaging Library: pip install pillow"
-    log.error(error)
-    raise ImportError(error)
+except:
+    Image, ImageDraw = None, None
 
 
 class ImageSequence(DriverBase):
 
     def __init__(self, num=0, width=0, height=0, pixelSize=10):
         """delay: time to wait in milliseconds to simulate actual hardware interface time"""
+        if not Image:
+            error = "Please install Python Imaging Library: pip install pillow"
+            log.error(error)
+            raise ImportError(error)
+
         super().__init__(num, width, height)
         self._pixelSize = pixelSize
         self._images = []

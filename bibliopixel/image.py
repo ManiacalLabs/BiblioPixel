@@ -4,8 +4,8 @@ from . led import Matrix
 
 try:
     from PIL import Image, ImageSequence
-except ImportError as e:
-    Image, ImageSequence = None
+except:
+    Image, ImageSequence = None, None
 
 
 def show_image(setter, width, height,
@@ -109,12 +109,14 @@ def crop(image, top_offset=0, left_offset=0, bottom_offset=0, right_offset=0):
 
 
 def resize(image, x, y, stretch=False, top=None, left=None, mode='RGB',
-           resample=Image.ANTIALIAS):
+           resample=None):
     """Return an image resized."""
     if x <= 0:
         raise ValueError('x must be greater than zero')
     if y <= 0:
         raise ValueError('y must be greater than zero')
+
+    resample = Image.ANTIALIAS if resample is None else resample
     if not isinstance(resample, numbers.Number):
         try:
             resample = getattr(Image, resample.upper())
