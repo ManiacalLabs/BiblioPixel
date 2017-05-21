@@ -194,9 +194,11 @@ DEMO_TABLE = {
     'matrix_project': MATRIX_PROJECT,
 }
 
+DEMO_OPTS = sorted(DEMO_TABLE.keys())
+
 
 def usage():
-    print('Available demos are:', *sorted(DEMO_TABLE.keys()))
+    print('Available demos are: {}'.format(', '.join(DEMO_OPTS)))
 
 
 def run(args, settings):
@@ -223,8 +225,14 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.add_argument('name', nargs='?', default='')
-    parser.add_argument('--width', default=16, type=int)
-    parser.add_argument('--height', default=16, type=int)
-    parser.add_argument('--depth', default=16, type=int)
-    parser.add_argument('--simpixel', default=DEFAULT_SIMPIXEL_URL)
+    parser.description = 'Run demo in SimPixel'
+    parser.add_argument('name', nargs='?', default='',
+                        help='Name of demo to run. Options are: {}'.format(', '.join(DEMO_OPTS)))
+    parser.add_argument('--width', default=16, type=int,
+                        help='X dimension of display')
+    parser.add_argument('--height', default=16, type=int,
+                        help='Y dimension of display')
+    parser.add_argument('--depth', default=16, type=int,
+                        help='Z dimension of dipslay. Only used for Cube demos.')
+    parser.add_argument('--simpixel', default=DEFAULT_SIMPIXEL_URL,
+                        help='URL of SimPixel to use if not http://SimPixel.io')

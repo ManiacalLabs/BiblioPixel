@@ -14,7 +14,7 @@ ENABLE_PRESETS = False
 
 def no_command(*_):
     print('ERROR: No command entered')
-    print('Valid:', *COMMANDS)
+    print('Valid:', ', '.join(COMMANDS))
     return -1
 
 
