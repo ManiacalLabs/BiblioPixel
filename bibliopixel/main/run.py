@@ -13,4 +13,5 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.add_argument('name', nargs='?')
+    parser.description = 'Run specified BiblioPixel config from file'
+    parser.add_argument('name', nargs='?', help='Path to config json file')

@@ -48,5 +48,8 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.add_argument('--hardware-id', default='1D50:60AB', type=str)
-    parser.add_argument('--baud', default=921600, type=int)
+    parser.description = 'Update Serial Device IDs'
+    parser.add_argument('--hardware-id', default='1D50:60AB',
+                        help='USB Vendor ID : Product ID of device. Defaults to VID:PID for AllPixel')
+    parser.add_argument('--baud', default=921600, type=int,
+                        help='Serial baud rate.')
