@@ -1,5 +1,5 @@
-import threading, time
-from .runner import Runner
+import contextlib, threading, time
+from . runner import Runner
 from .. import log
 from .. threads.animation_threading import AnimationThreading
 
@@ -21,7 +21,7 @@ class BaseAnimation(object):
         self.threading.stop_thread(wait=True)
         self._led.cleanup()
 
-    def _is_running(self):
+    def is_running(self):
         if self.threading.stop_event.isSet():
             return False
 
@@ -30,7 +30,7 @@ class BaseAnimation(object):
 
         return not (self.runner.until_complete and self.completed)
 
-    def _run_one_frame(self):
+    def run_one_frame(self):
         timestamps = []
 
         def stamp():
@@ -59,13 +59,18 @@ class BaseAnimation(object):
 
         self.threading.wait(self.sleep_time, timestamps)
 
-    def _run(self):
+    @contextlib.contextmanager
+    def run_context(self):
+        self.preRun(self.runner.amt)
         try:
-            self.preRun(self.runner.amt)
-            while self._is_running():
-                self._run_one_frame()
+            yield
         finally:
             self.cleanup()
+
+    def run_all_frames(self):
+        with self.run_context():
+            while self.is_running():
+                self.run_one_frame()
 
     def set_runner(self, runner):
         self.runner = runner
@@ -83,7 +88,7 @@ class BaseAnimation(object):
         self._led.animation_sleep_time = self.sleep_time or 0
 
     def start(self):
-        self.threading = AnimationThreading(self.runner, self._run)
+        self.threading = AnimationThreading(self.runner, self.run_all_frames)
         self.threading.start()
 
     def run(self, **kwds):
