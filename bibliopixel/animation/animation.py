@@ -61,6 +61,11 @@ class BaseAnimation(object):
 
     @contextlib.contextmanager
     def run_context(self):
+        self.completed = False
+        self._step = 0
+        self.cur_step = 0
+        self.cycle_count = 0
+
         if self.free_run:
             self.sleep_time = None
         elif self.internal_delay:
@@ -82,13 +87,9 @@ class BaseAnimation(object):
 
     def set_runner(self, runner):
         self.runner = runner
-        self.completed = False
-        self._step = 0
-        self.cur_step = 0
-        self.cycle_count = 0
+        self.threading = AnimationThreading(self.runner, self.run_all_frames)
 
     def start(self):
-        self.threading = AnimationThreading(self.runner, self.run_all_frames)
         self.threading.start()
 
     def run(self, **kwds):

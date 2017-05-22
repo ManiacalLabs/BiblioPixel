@@ -1,7 +1,7 @@
 import json, os, sys
-from . aliases import resolve_aliases
-from . defaults import apply_defaults, DEFAULTS
-from . importer import make_object, import_symbol
+from . import defaults
+from . importer import make_object
+from .. animation import runner
 from .. import data_maker
 from .. layout import gen_matrix
 from .. led.multimap import MultiMapBuilder
@@ -32,57 +32,39 @@ def make_led(driver, led, maker=None):
     return make_object(drivers, coordMap=coordMap, maker=maker, **led)
 
 
-def make_animation(animation, **kwds):
+def make_animation(led, animation, run=None):
+    animation = make_object(led, **animation)
+    animation.set_runner(runner.Runner(**(run or {})))
+    return animation
+
+
+def project_to_animation(*, path=None, **project):
+    if path:
+        try:
+            path = path.split(':')
+        except:
+            pass
+        sys.path.extend(path)
+
+    kwds = defaults.apply_defaults(project)
+    animation = kwds.pop('animation', {})
+    run = kwds.pop('run', {})
     led = make_led(**kwds)
-    animation_type = import_symbol(animation.get('typename'))
-    if not getattr(animation_type, 'IS_SEQUENCE', False):
-        return make_object(led, **animation)
-
-    anim = animation_type(led)
-
-    def add(run=None, **kwds):
-        anim.add_animation(make_object(led, **kwds), **(run or {}))
-
-    for a in animation.get('animations', ()):
-        add(**a)
-
-    return anim
+    return make_animation(led, animation, run)
 
 
-def raw_make_runnable(**kwds):
-    def make(run=None, **kwds):
-        animation = make_animation(**kwds)
-        return lambda: animation.run(**(run or {}))
-
-    return make(**apply_defaults(kwds))
-
-
-def make_runnable(*, path=None, **kwds):
-    if not path:
-        return raw_make_runnable(**kwds)
-
-    try:
-        path = path.split(':')
-    except:
-        pass
-    sys.path, old_path = sys.path + path, sys.path
-
-    try:
-        return raw_make_runnable(**kwds)
-    finally:
-        if path:
-            sys.path = old_path
-
-
-def read_json(s):
-    try:
-        return json.load(opener.opener(s))
-    except:
-        return json.loads(s)
+def project_to_runnable(project):
+    return project_to_animation(**project).start
 
 
 def run(s):
-    make_runnable(**read_json(s))()
+    try:
+        project = json.load(opener.opener(s))
+    except:
+        project = json.loads(s)
+
+    runnable = project_to_runnable(project)
+    runnable()
 
 
 if __name__ == '__main__':

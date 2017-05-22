@@ -34,23 +34,20 @@ ALIASES = {
 }
 
 
+def fill_typename(desc, key):
+    if isinstance(desc, str):
+        return fill_typename({'typename': desc}, key)
+
+    typename = desc.get('typename')
+    if typename:
+        desc['typename'] = ALIASES[key].get(typename, typename)
+
+    return desc
+
+
 def resolve_aliases(project):
-    def replace(item, key, aliases):
-        if isinstance(item[key], str):
-            item[key] = {'typename': item[key]}
-        if 'typename' not in item[key]:
-            return
-        typename = item[key].get('typename')
-        typename = aliases.get(typename, typename)
-        item[key]['typename'] = typename
-        typeclass = import_symbol(typename)
-        if getattr(typeclass, 'IS_SEQUENCE', False):
-            animations = item[key].get('animations', [])
-            for i in range(len(animations)):
-                replace(animations, i, aliases)
-
     result = copy.deepcopy(project)
-    for key, aliases in ALIASES.items():
-        (key in result) and replace(result, key, aliases)
-
+    for key in ALIASES:
+        if key in result:
+            result[key] = fill_typename(result[key], key)
     return result
