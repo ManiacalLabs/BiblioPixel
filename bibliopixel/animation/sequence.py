@@ -1,13 +1,21 @@
-from . animation import BaseAnimation
+from .. project import aliases, project
+from . import animation, runner
 
 
-class Sequence(BaseAnimation):
-    IS_SEQUENCE = True
-
+class Sequence(animation.BaseAnimation):
     def __init__(self, led, animations=None):
+        def make_animation(a):
+            if isinstance(a, str):
+                desc = {'animation': a[0]}
+            elif isinstance(a, dict):
+                desc = a
+            else:
+                desc = {'animation': a[0], 'run': a[1]}
+            desc = aliases.resolve_aliases(desc)
+            return project.make_animation(led=led, **desc)
+
         super().__init__(led)
-        self.animations = animations or []
-        self.current_animation = None
+        self.animations = [make_animation(i) for i in animations or []]
         self.index = 0
         self.internal_delay = 0  # never wait
 
@@ -18,23 +26,17 @@ class Sequence(BaseAnimation):
             a.thread_strategy.stop_event.set()
         self.thread_strategy.stop_thread(wait)
 
-    def add_animation(self, anim, amt=1, fps=None, max_steps=0,
-                      until_complete=False, max_cycles=0, seconds=None):
-        a = (
-            anim,
-            {
-                "amt": amt,
-                "fps": fps,
-                "max_steps": max_steps,
-                "until_complete": until_complete,
-                "max_cycles": max_cycles,
-                "seconds": seconds
-            }
-        )
-        self.animations.append(a)
+    def add_animation(self, anim, **kwds):
+        # DEPRECATED.
+        anim.set_runner(runner.Runner(**kwds))
+        self.animations.append(anim)
 
     def preRun(self, amt=1):
         self.index = -1
+
+    @property
+    def current_animation(self):
+        return self.animations[self.index]
 
     def step(self, amt=1):
         self.index += 1
@@ -45,10 +47,4 @@ class Sequence(BaseAnimation):
                 self.index = 0
 
         if not self.completed and self.animations:
-            self.current_animation = self.animations[self.index]
-
-            anim, run = self.current_animation
-            run.update(threaded=False, join_thread=False)
-
-            run['fps'] = run.get('fps') or self.runner.fps
-            anim.run(**run)
+            self.current_animation.run_all_frames()

@@ -48,7 +48,7 @@ MATRIX_PROJECT = {
         'typename': 'sequence',
         'animations': [
             {
-                'typename':
+                'animation':
                 'BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow',
                 'run': {
                     'amt': 1,
@@ -57,10 +57,12 @@ MATRIX_PROJECT = {
                 },
             },
             {
-                'typename': 'BiblioPixelAnimations.matrix.Text.ScrollText',
-                'xPos': 16,
-                'font_scale': 2,
-                'text': 'BiblioPixel Demo',
+                'animation': {
+                    'typename': 'BiblioPixelAnimations.matrix.Text.ScrollText',
+                    'xPos': 16,
+                    'font_scale': 2,
+                    'text': 'BiblioPixel Demo'
+                },
                 'run': {
                     'amt': 1,
                     'fps': 30,
@@ -69,7 +71,7 @@ MATRIX_PROJECT = {
                 },
             },
             {
-                'typename': 'BiblioPixelAnimations.matrix.bloom.Bloom',
+                'animation': 'BiblioPixelAnimations.matrix.bloom.Bloom',
                 'run': {
                     'amt': 3,
                     'fps': 60,
@@ -77,7 +79,7 @@ MATRIX_PROJECT = {
                 },
             },
             {
-                'typename': 'BiblioPixelAnimations.matrix.circlepop.CirclePop',
+                'animation': 'BiblioPixelAnimations.matrix.circlepop.CirclePop',
                 'run': {
                     'amt': 1,
                     'fps': 30,
@@ -183,7 +185,7 @@ def make_runnable(demo, args):
         if 'z' in led:
             led['z'] = led['z'] or args.depth
 
-    return project.make_runnable(**demo)
+    return project.project_to_runnable(demo)
 
 
 DEMO_TABLE = {
