@@ -61,6 +61,14 @@ class BaseAnimation(object):
 
     @contextlib.contextmanager
     def run_context(self):
+        if self.free_run:
+            self.sleep_time = None
+        elif self.internal_delay:
+            self.sleep_time = self.internal_delay
+        else:
+            self.sleep_time = self.runner.sleep_time
+        self._led.animation_sleep_time = self.sleep_time or 0
+
         self.preRun(self.runner.amt)
         try:
             yield
@@ -78,14 +86,6 @@ class BaseAnimation(object):
         self._step = 0
         self.cur_step = 0
         self.cycle_count = 0
-
-        if self.free_run:
-            self.sleep_time = None
-        elif self.internal_delay:
-            self.sleep_time = self.internal_delay
-        else:
-            self.sleep_time = self.runner.sleep_time
-        self._led.animation_sleep_time = self.sleep_time or 0
 
     def start(self):
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
