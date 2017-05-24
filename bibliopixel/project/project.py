@@ -57,6 +57,7 @@ def project_to_runnable(project):
     return project_to_animation(**project).start
 
 
-def run(s):
-    runnable = project_to_runnable(files.read_json(s))
+def run(s, is_filename=True):
+    project = files.read_json(s, is_filename)
+    runnable = project_to_runnable(project)
     runnable()
