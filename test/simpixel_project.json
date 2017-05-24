@@ -1,0 +1,57 @@
+{
+    "driver": {
+        "typename": "simpixel",
+        "num": 1024
+    },
+
+    "led": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "animations": [
+            {
+                "animation":
+                "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
+                "run": {
+                    "amt": 1,
+                    "fps": 20,
+                    "seconds": 8
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.Text.ScrollText",
+                    "xPos": 16,
+                    "font_scale": 2,
+                    "text": "BiblioPixel Demo"
+                },
+                "run": {
+                    "amt": 1,
+                    "fps": 30,
+                    "seconds": 8,
+                    "until_complete": true
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.matrix.bloom.Bloom",
+                "run": {
+                    "amt": 3,
+                    "fps": 60,
+                    "seconds": 8
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.matrix.circlepop.CirclePop",
+                "run": {
+                    "amt": 1,
+                    "fps": 30,
+                    "seconds": 8
+                }
+            }
+        ]
+    }
+}

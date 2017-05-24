@@ -89,7 +89,7 @@ PROJECT_SIM = """
 class ProjectTest(unittest.TestCase):
     @long_test
     def test_simple(self):
-        project.run(PROJECT)
+        project.run(PROJECT, False)
 
     @long_test
     def test_file(self):
@@ -97,12 +97,12 @@ class ProjectTest(unittest.TestCase):
 
     @long_test
     def test_multi(self):
-        project.run(PROJECT_MULTI)
+        project.run(PROJECT_MULTI, False)
 
     @long_test
     def test_shared(self):
-        project.run(PROJECT_SHARED)
+        project.run(PROJECT_SHARED, False)
 
     @long_test
     def test_sim(self):
-        project.run(PROJECT_SIM)
+        project.run(PROJECT_SIM, False)
