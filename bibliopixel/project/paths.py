@@ -1,4 +1,4 @@
-import os, subprocess, sys
+import os, shutil, subprocess, sys
 from .. util import files
 
 GIT_INTRO = '//git/'
@@ -78,3 +78,7 @@ def resolve_paths(paths):
 
 def extend_sys_path(paths):
     sys.path.extend(resolve_paths(paths))
+
+
+def clear_cache():
+    shutil.rmtree(CACHE_FILES, ignore_errors=True)
