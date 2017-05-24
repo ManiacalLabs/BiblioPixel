@@ -42,5 +42,5 @@ def main():
         os.path.expanduser(args.presets), True)
 
     run = getattr(args, 'run', no_command)
-    paths.extend_paths(args.path)
+    paths.extend_sys_path(args.path)
     sys.exit(run(args, presets) or 0)

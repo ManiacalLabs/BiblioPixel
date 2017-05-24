@@ -39,7 +39,7 @@ def make_animation(led, animation, run=None):
 
 
 def project_to_animation(*, path=None, **project):
-    paths.extend_paths(path)
+    paths.extend_sys_path(path)
 
     kwds = defaults.apply_defaults(project)
     animation = kwds.pop('animation', {})
