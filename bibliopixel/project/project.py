@@ -1,5 +1,5 @@
 import json, os, sys
-from . import defaults
+from . import defaults, paths
 from . importer import make_object
 from .. animation import runner
 from .. import data_maker
@@ -39,12 +39,7 @@ def make_animation(led, animation, run=None):
 
 
 def project_to_animation(*, path=None, **project):
-    if path:
-        try:
-            path = path.split(':')
-        except:
-            pass
-        sys.path.extend(path)
+    paths.extend_paths(path)
 
     kwds = defaults.apply_defaults(project)
     animation = kwds.pop('animation', {})

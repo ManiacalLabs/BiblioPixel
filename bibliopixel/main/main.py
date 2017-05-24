@@ -1,6 +1,7 @@
 import argparse, os, sys
 from .. import log
 from .. project.importer import import_symbol
+from .. project import paths
 from .. project.preset_library import PresetLibrary
 
 __all__ = ['main']
@@ -41,6 +42,5 @@ def main():
         os.path.expanduser(args.presets), True)
 
     run = getattr(args, 'run', no_command)
-    if args.path:
-        sys.path.extend(args.path.split(':'))
+    paths.extend_paths(args.path)
     sys.exit(run(args, presets) or 0)
