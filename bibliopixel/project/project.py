@@ -5,7 +5,7 @@ from .. animation import runner
 from .. import data_maker
 from .. layout import gen_matrix
 from .. led.multimap import MultiMapBuilder
-from .. util import opener
+from .. util import files
 
 
 def make_led(driver, led, maker=None):
@@ -59,7 +59,7 @@ def project_to_runnable(project):
 
 def run(s):
     try:
-        project = json.load(opener.opener(s))
+        project = json.load(files.opener(s))
     except:
         project = json.loads(s)
 
