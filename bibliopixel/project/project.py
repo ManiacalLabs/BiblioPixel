@@ -58,14 +58,5 @@ def project_to_runnable(project):
 
 
 def run(s):
-    try:
-        project = json.load(files.opener(s))
-    except:
-        project = json.loads(s)
-
-    runnable = project_to_runnable(project)
+    runnable = project_to_runnable(files.read_json(s))
     runnable()
-
-
-if __name__ == '__main__':
-    run(*sys.argv[1:])
