@@ -1,4 +1,4 @@
-import json, os.path
+import contextlib, json, os.path, shutil
 
 GITHUB_BASE = 'github.com'
 GITHUB_RAW = 'raw.githubusercontent.com'
@@ -46,4 +46,16 @@ def read_json(s, is_filename=True):
         return json.loads(data)
     except ValueError as e:
         e.args = ['%s\nin filename %s' % (e.args[0], s)]
+        raise
+
+
+@contextlib.contextmanager
+def remove_on_failure(dirname, remove=True):
+    """Tries to create and fill a directory, removes it on failure."""
+    os.makedirs(dirname)
+    try:
+        yield
+    except:
+        if remove:
+            shutil.rmtree(dirname)
         raise
