@@ -35,15 +35,13 @@ def commit_id_to_path(base, branch='master', commit=None, transport='https'):
 
     if os.path.exists(path):
         if not commit:
-            git.pull(path)
+            git.pull(path, branch)
 
     else:
         with files.remove_on_failure(path):
             provider, user, project = base.split('/')
             url = CHECKOUT_ADDRESS[transport].format(**locals())
-            git.clone(url, branch, path)
-            if commit:
-                git.reset(commit, path)
+            git.clone(url, branch, path, commit)
 
     return path
 
