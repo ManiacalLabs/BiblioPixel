@@ -1,5 +1,6 @@
 import os, shutil, subprocess, sys
 from .. util import files
+from . import git
 
 GIT_INTRO = '//git/'
 CACHE_FILES = os.path.expanduser('~/.bibliopixel_py')
@@ -8,14 +9,6 @@ CHECKOUT_ADDRESS = {
     'git': 'git@{provider}:{user}/{project}.git',
     'https': 'https://{provider}/{user}/{project}.git',
 }
-
-
-def execute(*cmd, **kwds):
-    try:
-        return subprocess.check_output(cmd, **kwds)
-    except Exception as e:
-        raise ValueError('Couldn\'t execute "%s", errorcode=%s' % (
-                         ' '.join(cmd), getattr(e, 'returncode', None)))
 
 
 def split_query(url):
@@ -42,15 +35,15 @@ def commit_id_to_path(base, branch='master', commit=None, transport='https'):
 
     if os.path.exists(path):
         if not commit:
-            execute('git', 'pull', cwd=path)
+            git.pull(path)
 
     else:
         with files.remove_on_failure(path):
             provider, user, project = base.split('/')
             url = CHECKOUT_ADDRESS[transport].format(**locals())
-            execute('git', 'clone', url, '-b', branch, path)
+            git.clone(url, branch, path)
             if commit:
-                execute('git', 'reset', '--hard', commit, cwd=path)
+                git.reset(commit, path)
 
     return path
 
