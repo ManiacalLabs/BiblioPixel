@@ -107,7 +107,7 @@ CUBE_PROJECT = {
         'typename': 'sequence',
         'animations': [
             {
-                'typename': 'BiblioPixelAnimations.cube.Rain.RainBow',
+                'animation': 'BiblioPixelAnimations.cube.Rain.RainBow',
                 'run': {
                     'amt': 1,
                     'fps': 10,
@@ -115,7 +115,7 @@ CUBE_PROJECT = {
                 },
             },
             {
-                'typename': 'BiblioPixelAnimations.cube.bloom.CubeBloom',
+                'animation': 'BiblioPixelAnimations.cube.bloom.CubeBloom',
                 'run': {
                     'amt': 6,
                     'fps': 20,
