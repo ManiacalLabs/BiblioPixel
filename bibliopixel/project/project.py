@@ -1,5 +1,5 @@
-import json, os, sys
-from . import defaults, paths
+import gitty, json, os, sys
+from . import defaults
 from . importer import make_object
 from .. animation import runner
 from .. import data_maker
@@ -39,7 +39,7 @@ def make_animation(led, animation, run=None):
 
 
 def project_to_animation(*, path=None, **project):
-    paths.extend_sys_path(path)
+    gitty.sys_path.extend(path)
 
     kwds = defaults.apply_defaults(project)
     animation = kwds.pop('animation', {})

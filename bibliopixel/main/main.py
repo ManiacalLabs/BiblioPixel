@@ -1,12 +1,11 @@
-import argparse, os, sys
+import argparse, gitty, os, sys
 from .. import log
 from .. project.importer import import_symbol
-from .. project import paths
 from .. project.preset_library import PresetLibrary
 
 __all__ = ['main']
 
-COMMANDS = ('all_pixel', 'devices', 'demo', 'run')  # 'set', 'show')
+COMMANDS = ('all_pixel', 'clear_cache', 'devices', 'demo', 'run')
 MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
@@ -42,5 +41,5 @@ def main():
         os.path.expanduser(args.presets), True)
 
     run = getattr(args, 'run', no_command)
-    paths.extend_sys_path(args.path)
+    gitty.sys_path.extend(args.path)
     sys.exit(run(args, presets) or 0)
