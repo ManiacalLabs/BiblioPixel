@@ -1,4 +1,4 @@
-from bibliopixel.project import paths
+import gitty
 
 HELP = """
 Clear the git repository library cache.
@@ -6,7 +6,7 @@ Clear the git repository library cache.
 
 
 def run(args, settings):
-    paths.clear_cache()
+    gitty.clear_library_cache()
 
 
 def set_parser(parser):

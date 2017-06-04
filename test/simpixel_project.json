@@ -1,4 +1,6 @@
 {
+    "path": "//git/github.com/ManiacalLabs/BiblioPixelAnimations",
+
     "driver": {
         "typename": "simpixel",
         "num": 1024
