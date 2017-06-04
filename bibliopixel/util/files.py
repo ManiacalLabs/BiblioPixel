@@ -1,21 +1,4 @@
-import contextlib, json, os.path, shutil
-
-GITHUB_BASE = 'github.com'
-GITHUB_RAW = 'raw.githubusercontent.com'
-
-
-def munge_url(url):
-    if not (url.endswith('.json') and ('://%s/' % GITHUB_BASE) in url):
-        return url
-
-    parts = url.split('/')
-    assert parts[0] in 'https:', 'http:'
-    assert not parts[1]
-    assert parts[2] == GITHUB_BASE
-    assert parts[5] == 'blob'
-    parts[2] = GITHUB_RAW
-    parts.pop(5)
-    return '/'.join(parts)
+import contextlib, gitty, json, os.path, shutil
 
 
 def opener(fname, mode='r', *args, **kwds):
@@ -30,7 +13,7 @@ def opener(fname, mode='r', *args, **kwds):
         return open(os.path.expanduser(fname), mode, *args, **kwds)
 
     assert not (set(mode) & set('wax')), 'Cannot write to remote file ' + fname
-    url = munge_url(fname)
+    url = gitty.raw.raw(fname)
     response = requests.get(url)
     if response.ok:
         response.read = lambda: response.text
