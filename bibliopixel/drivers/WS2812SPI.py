@@ -50,6 +50,7 @@ MANIFEST = [
             "type": "int",
             "default": 1,
             "min": 1,
+            "max": 455,
             "help": "Total pixels in display."
         }]
     }
