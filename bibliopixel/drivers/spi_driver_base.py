@@ -53,7 +53,7 @@ class DriverSPIBase(DriverBase):
 
         # permissions check
         try:
-            self.open(self.dev)
+            self._open(self.dev)
         except IOError as e:
             if e.errno == 13:
                 error(CANT_FIND_ERROR)
