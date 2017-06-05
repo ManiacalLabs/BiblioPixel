@@ -2,7 +2,7 @@ from . spi_driver_base import DriverSPIBase, ChannelOrder
 from .. import gamma as _gamma
 
 
-class DriverWS2812SPI(DriverSPIBase):
+class WS281XSPI(DriverSPIBase):
     """
     SPI driver for WS2812(b) based LED strips on devices like
     Raspberry Pi, OrangePi, BeagleBone,..
@@ -40,7 +40,7 @@ class DriverWS2812SPI(DriverSPIBase):
 MANIFEST = [
     {
         "id": "WS2812SPI",
-        "class": DriverWS2812SPI,
+        "class": WS281XSPI,
         "type": "driver",
         "display": "WS2812 (SPI)",
         "desc": "Interface with WS2812 / WS2812B strips over a native SPI port (Pi, BeagleBone, etc.)",
