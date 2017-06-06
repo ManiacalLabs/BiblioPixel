@@ -4,3 +4,4 @@ flake8
 phue
 pytest
 Pillow>=2.4.0
+gitty
