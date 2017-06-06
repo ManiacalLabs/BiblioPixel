@@ -1,11 +1,23 @@
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
+from sys import version_info as vi
 
-if sys.version_info.major != 3:
-    print('BiblioPixel v3 is no longer supported on Python 2!')
-    print('If you need Python2 support please insteall BiblioPixel v2')
-    print('pip install "bibliopixel<3.0"')
+if vi.major != 3:
+    ver = '{}.{}.{}'.format(vi.major, vi.minor, vi.micro)
+    error = (
+        'INSTALLATION ERROR!\n'
+        'BiblioPixel v3 requires Python 3.4+ and you are using {}!\n'
+        'If you absolutely require using Python 2, '
+        'please install BiblioPixel v2.x using:\n'
+        '> pip install "bibliopixel<3.0"'
+        '\n'
+        'However, we highly recommend using the latest BiblioPixel '
+        '(v3+) with Python 3.4+\n'
+        '\n'
+    )
+    print(error.format(ver))
+    sys.exit(1)
 
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
@@ -67,9 +79,9 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['test']),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
     tests_require=['pytest'],
