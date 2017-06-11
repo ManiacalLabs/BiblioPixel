@@ -39,23 +39,3 @@ class WS281XSPI(DriverSPIBase):
             buf2.append(tmp & 0xff)
 
         self._packet = buf2
-
-
-MANIFEST = [
-    {
-        "id": "WS2812SPI",
-        "class": WS281XSPI,
-        "type": "driver",
-        "display": "WS2812 (SPI)",
-        "desc": "Interface with WS2812 / WS2812B strips over a native SPI port (Pi, BeagleBone, etc.)",
-        "params": [{
-            "id": "num",
-            "label": "# Pixels",
-            "type": "int",
-            "default": 1,
-            "min": 1,
-            "max": 455,
-            "help": "Total pixels in display."
-        }]
-    }
-]
