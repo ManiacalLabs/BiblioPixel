@@ -2,13 +2,10 @@ import unittest
 
 from bibliopixel import gamma
 from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
+from bibliopixel.drivers.spi_driver_base import SpiDummyInterface
 from bibliopixel.drivers.APA102 import APA102
 from bibliopixel.drivers.LPD8806 import LPD8806
 from bibliopixel.drivers.WS2801 import WS2801
-
-
-def mock_open(self, fname, perm='r'):
-    pass
 
 
 class DriverTest(unittest.TestCase):
@@ -17,7 +14,7 @@ class DriverTest(unittest.TestCase):
               (2, 16, 128),
               (3, 24, 192)]
 
-    SPD = dict(use_py_spi=False, open=mock_open)
+    SPD = dict(interface=SpiDummyInterface)
 
     def do_test(self, driver, expected):
         driver.set_colors(self.COLORS, 0)
