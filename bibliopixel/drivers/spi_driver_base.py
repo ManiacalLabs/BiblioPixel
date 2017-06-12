@@ -45,9 +45,9 @@ class SpiFileInterface(SpiBaseInterface):
             error(CANT_IMPORT_FCNTL_ERROR)
         self._spi = open(self._dev, 'wb')
 
-        self.speed = self._spi_speed
-        self.bits_per_word = 8
-        log.info('file io spi speed @ %.1f MHz, %d bits per word', self.speed / 1e6, self.bits_per_word)
+        self._set_speed(self._spi_speed)
+        self._set_bits_per_word(8)
+        log.info('file io spi speed @ %.1f MHz, %d bits per word', self._spi_speed / 1e6, self._bits_per_word)
 
     def _ioctl(self, command, buffer):
         self._fcntl.ioctl(self._spi, IOC_WRITE + command, buffer)
@@ -56,29 +56,19 @@ class SpiFileInterface(SpiBaseInterface):
     def _set_speed(self, speed):
         buffer = struct.pack(">I", int(speed * 1e9))  # unint32
         self._ioctl(IOC_MAX_SPEED_HZ, buffer)
-        self._speed = struct.unpack(">I", buffer)[0] / 1000
-
-    def _get_speed(self):
-        return self._speed
-
-    speed = property(_get_speed, _set_speed)
+        self._spi_speed = struct.unpack(">I", buffer)[0] / 1000
 
     def _set_bits_per_word(self, bits):
         buffer = struct.pack("B", bits)  # uint8
         self._ioctl(IOC_BITS_PER_WORD, buffer)
         self._bits_per_word = int.from_bytes(buffer, byteorder='big')
 
-    def _get_bits_per_word(self):
-        return self._bits_per_word
-
-    bits_per_word = property(_get_bits_per_word, _set_bits_per_word)
-
     def send_packet(self, data):
-        self._set_speed(self._spi_speed)  # set speed again if other program changed it
         package_size = 4032  # bit smaller than 4096 because of headers
         for i in range(int(math.ceil(len(data) / package_size))):
             start = i * package_size
             end = (i + 1) * package_size
+            # @TODO instant of write use ioctrl with SPI_IOC_WR_MODE
             self._spi.write(data[start:end])
             self._spi.flush()
 
