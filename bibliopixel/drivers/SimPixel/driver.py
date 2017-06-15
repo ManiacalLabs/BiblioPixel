@@ -1,7 +1,13 @@
-import struct, threading, uuid
+import errno, struct, threading, uuid
 from ... import log
 from .. driver_base import DriverBase
 from . import websocket
+
+ADDRESS_IN_USE_ERROR = """
+
+Port {0} on your machine is already in use.
+Perhaps BiblioPixel is already running on your machine?
+"""
 
 
 class SimPixel(DriverBase):
@@ -18,7 +24,15 @@ class SimPixel(DriverBase):
     def __start_server(self):
         log.debug('Starting server...')
         desc = dict(driver=self, layout=self.layout, selectInterval=0.001)
-        self.server = websocket.Server('', self.port, websocket.Client, **desc)
+        try:
+            self.server = websocket.Server(
+                '', self.port, websocket.Client, **desc)
+        except OSError as e:
+            if e.errno == errno.EADDRINUSE:
+                e.strerror += ADDRESS_IN_USE_ERROR.format(self.port)
+                e.args = (e.errno, e.strerror)
+            raise
+
         self.thread = threading.Thread(target=self._serve_forever, daemon=True)
         self.thread.start()
 
