@@ -1,6 +1,7 @@
 import random, webbrowser
 
 from . demo_table import DEMO_TABLE
+from . import run as _run
 from .. project import project
 
 HELP = """
@@ -38,7 +39,8 @@ def make_runnable(demo, args):
         if 'z' in led:
             led['z'] = led['z'] or args.depth
 
-    return project.project_to_runnable(demo)
+    defaults = _run.get_project_default_arguments(args)
+    return project.project_to_runnable(demo, defaults)
 
 
 def usage():
@@ -90,3 +92,5 @@ def set_parser(parser):
     parser.add_argument(
         '--simpixel', default=DEFAULT_SIMPIXEL_URL,
         help='URL for SimPixel program.')
+
+    _run.add_project_default_arguments(parser)
