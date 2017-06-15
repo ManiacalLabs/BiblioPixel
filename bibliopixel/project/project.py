@@ -6,6 +6,7 @@ from .. import data_maker
 from .. layout import gen_matrix
 from .. led.multimap import MultiMapBuilder
 from .. util import files
+from .. drivers.serial import codes
 
 
 def make_led(driver, led, maker=None):
@@ -48,11 +49,41 @@ def project_to_animation(*, path=None, **project):
     return make_animation(led, animation, run)
 
 
-def project_to_runnable(project):
+def apply_defaults(project, defaults):
+    # TODO: consolidate with bp.project.defaults.
+    for k, v in defaults.items():
+        if k == 'ledtype' or not v:
+            continue
+
+        if k not in project:
+            project[k] = v
+
+        else:
+            existing = project[k]
+            if 'typename' not in existing:
+                try:
+                    existing['typename'] = v
+                except:
+                    pass
+
+    ledtype = defaults.get('ledtype')
+    if ledtype:
+        ledtype = codes.make_ledtype(ledtype)
+        if 'led' not in project:
+            project['led'] = {}
+
+        if 'type' not in project['led']:
+            project['led']['type'] = ledtype
+            # The field in LED should probably be renamed "ledtype" to be
+            # consistent across the whole system.
+
+
+def project_to_runnable(project, defaults=None):
+    apply_defaults(project, defaults or {})
     return project_to_animation(**project).start
 
 
-def run(s, is_filename=True):
+def run(s, is_filename=True, defaults=None):
     project = files.read_json(s, is_filename)
-    runnable = project_to_runnable(project)
+    runnable = project_to_runnable(project, defaults)
     runnable()
