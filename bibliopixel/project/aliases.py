@@ -10,6 +10,7 @@ ALIASES = {
         'lpd8806': 'bibliopixel.drivers.LPD8806.LPD8806',
         'network': 'bibliopixel.drivers.network.Network',
         'network_udp': 'bibliopixel.drivers.network.NetworkUDP',
+        'serial': 'bibliopixel.drivers.serial.Serial',
         'simpixel': 'bibliopixel.drivers.SimPixel.SimPixel',
         'ws2801': 'bibliopixel.drivers.WS2801.WS2801',
     },
