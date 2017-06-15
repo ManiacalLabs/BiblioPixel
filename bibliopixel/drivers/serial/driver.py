@@ -1,6 +1,6 @@
 import os, sys, time, traceback
 
-from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
+from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets, make_ledtype
 from . devices import Devices
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
@@ -25,7 +25,7 @@ class Serial(DriverBase):
 
         self._SPISpeed = SPISpeed
         self._com = None
-        self._type = type
+        self._type = make_ledtype(type)
         self._bufPad = 0
         self.dev = dev
         self.device_version = 0
