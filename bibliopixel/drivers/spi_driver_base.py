@@ -1,6 +1,5 @@
 import math
 import os
-import struct
 from . channel_order import ChannelOrder
 from . driver_base import DriverBase
 from .. import log
@@ -20,16 +19,6 @@ class SpiBaseInterface(object):
         return data
 
 
-# partial source @see https://armbedded.taskit.de/node/318
-# @see <linux/spi/spidev.h>
-# hex numbers from good old strace(1)
-IOC_READ = 0x40000000
-IOC_WRITE = 0x40000000
-
-IOC_BITS_PER_WORD = 0x00016b03
-IOC_MAX_SPEED_HZ = 0x00046b04
-
-
 class SpiFileInterface(SpiBaseInterface):
     """ using os open/write to send data"""
 
@@ -38,39 +27,41 @@ class SpiFileInterface(SpiBaseInterface):
         if not os.path.exists(self._dev):
             error(CANT_FIND_ERROR)
 
-        try:
-            import fcntl
-            self._fcntl = fcntl
-        except ImportError:
-            error(CANT_IMPORT_FCNTL_ERROR)
         self._spi = open(self._dev, 'wb')
 
-        self._set_speed(self._spi_speed)
-        self._set_bits_per_word(8)
-        log.info('file io spi speed @ %.1f MHz, %d bits per word', self._spi_speed / 1e6, self._bits_per_word)
-
-    def _ioctl(self, command, buffer):
-        self._fcntl.ioctl(self._spi, IOC_WRITE + command, buffer)
-        self._fcntl.ioctl(self._spi, IOC_READ + command, buffer)
-
-    def _set_speed(self, speed):
-        buffer = struct.pack(">I", int(speed * 1e9))  # unint32
-        self._ioctl(IOC_MAX_SPEED_HZ, buffer)
-        self._spi_speed = struct.unpack(">I", buffer)[0] / 1000
-
-    def _set_bits_per_word(self, bits):
-        buffer = struct.pack("B", bits)  # uint8
-        self._ioctl(IOC_BITS_PER_WORD, buffer)
-        self._bits_per_word = int.from_bytes(buffer, byteorder='big')
+        log.info('file io spi dev {:s}'.format(self._dev))
 
     def send_packet(self, data):
         package_size = 4032  # bit smaller than 4096 because of headers
         for i in range(int(math.ceil(len(data) / package_size))):
             start = i * package_size
             end = (i + 1) * package_size
-            # @TODO instant of write use ioctrl with SPI_IOC_WR_MODE
             self._spi.write(data[start:end])
             self._spi.flush()
+
+
+class SpiPeripheryInterface(SpiBaseInterface):
+    """ using `python-periphery` to send data"""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if not os.path.exists(self._dev):
+            error(CANT_FIND_ERROR)
+
+        try:
+            from periphery import SPI
+            self._spi = SPI(self._dev, 0, self._spi_speed*1e6)
+        except ImportError:
+            error(CANT_IMPORT_PERIPHERY_ERROR)
+
+        log.info('periphery spi dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed/1e6))
+
+    def send_packet(self, data):
+        package_size = 4032  # bit smaller than 4096 because of headers
+        for i in range(int(math.ceil(len(data) / package_size))):
+            start = i * package_size
+            end = (i + 1) * package_size
+            self._spi.transfer(data[start:end])
 
 
 class SpiPyDevInterface(SpiBaseInterface):
@@ -105,7 +96,7 @@ class SpiPyDevInterface(SpiBaseInterface):
             error(CANT_IMPORT_SPIDEV_ERROR)
         self._spi.open(self._device_id, self._device_cs)
         self._spi.max_speed_hz = int(self._spi_speed * 1e6)
-        log.info('py-spidev speed @ %.1f MHz', self._spi.max_speed_hz / 1e6)
+        log.info('py-spidev dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed_hz / 1e6))
 
     def send_packet(self, data):
         self._spi.xfer2(list(data))
@@ -122,7 +113,7 @@ class SpiDummyInterface(SpiBaseInterface):
 class DriverSPIBase(DriverBase):
     """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
 
-    def __init__(self, num, c_order=ChannelOrder.GRB, interface=SpiFileInterface,
+    def __init__(self, num, c_order=ChannelOrder.GRB, interface=SpiPeripheryInterface,
                  dev='/dev/spidev0.0', spi_speed=2, gamma=None):
         super().__init__(num, c_order=c_order, gamma=gamma)
 
@@ -144,7 +135,7 @@ Please see
 for details.
 """
 
-CANT_FIND_ERROR = """Cannot find SPI device `spidev`.
+CANT_FIND_ERROR = """Cannot find SPI device.
 Please see
 
     https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup
@@ -152,16 +143,19 @@ Please see
 for details.
 """
 
-CANT_IMPORT_FCNTL_ERROR = """Cannot find SPI device `fcntl`
-Please see
+CANT_IMPORT_PERIPHERY_ERROR = """
+Unable to import periphery. Please install:
+    pip install python-periphery
 
+Please see
     https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup
 
 for details.
 """
 
-BAD_FORMAT_ERROR = (
-    'When using py-spidev, `dev` must be in the format /dev/spidev*.*')
+BAD_FORMAT_ERROR = """
+When using py-spidev, `dev` must be in the format /dev/spidev*.*
+"""
 
 CANT_IMPORT_SPIDEV_ERROR = """
 Unable to import spidev. Please install:

@@ -1,6 +1,5 @@
 from . spi_driver_base import DriverSPIBase, ChannelOrder
 from .. import gamma as _gamma
-from .. import log
 
 
 class WS281XSPI(DriverSPIBase):
@@ -9,10 +8,9 @@ class WS281XSPI(DriverSPIBase):
     Raspberry Pi, OrangePi, BeagleBone,..
     """
 
-    def __init__(self, num, **kwargs):
+    def __init__(self, num, spi_speed=3.2, **kwargs):
         # WS281x need a base clock of ~1MHz with the encoding we need 3 times this clock
-        # After testing 3.2 looks like a good value
-        spi_speed = 3.2
+        # After testing 3.0 to 3.2 looks like a good value
         super().__init__(num, c_order=ChannelOrder.GRB, spi_speed=spi_speed,
                          gamma=_gamma.WS2812, **kwargs)
 
