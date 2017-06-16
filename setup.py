@@ -69,6 +69,9 @@ def _get_version():
 
 VERSION = _get_version()
 
+with open('requirements.txt') as f:
+    REQUIRED = f.read().splitlines()
+
 setup(
     name='BiblioPixel',
     version=VERSION,
@@ -98,7 +101,5 @@ setup(
             'bibliopixel = bibliopixel.main.main:main'
         ]
     },
-    install_requires=[
-        'BiblioPixelAnimations'
-    ]
+    install_requires=REQUIRED
 )
