@@ -45,7 +45,7 @@ def gen_circle(rings=None, pixels_per=None, offset=0, invert=False):
         return (out_rings, calc_ring_steps(out_rings))
 
 
-def layout_from_rings(rings, origin=(0, 0, 0), z_diff=0):
+def layout_from_rings(rings, origin=(0, 0, 0), z_diff=0, radii=None):
     if len(origin) not in [2, 3]:
         raise ValueError('origin must be (x,y) or (x,y,z)')
 
@@ -66,7 +66,10 @@ def layout_from_rings(rings, origin=(0, 0, 0), z_diff=0):
         step = steps[i]
         angle = 0.0
         for p in r:
-            radius = (len(r) - 1) * math.pi
+            if radii:
+                radius = radii[i]
+            else:
+                radius = (len(r) - 1) * math.pi
             x, y = pointOnCircle(0, 0, radius, angle)
             if use_z:
                 points[p] = (x + ox, y + oy, z + oz)
