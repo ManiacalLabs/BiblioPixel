@@ -50,11 +50,12 @@ class SpiPeripheryInterface(SpiBaseInterface):
 
         try:
             from periphery import SPI
-            self._spi = SPI(self._dev, 0, self._spi_speed*1e6)
+            self._spi = SPI(self._dev, 0, self._spi_speed * 1e6)
         except ImportError:
             error(CANT_IMPORT_PERIPHERY_ERROR)
 
-        log.info('periphery spi dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed/1e6))
+        log.info('periphery spi dev {:s} speed @ {:.2f} MHz'.format(
+            self._dev, self._spi.max_speed / 1e6))
 
     def send_packet(self, data):
         package_size = 4032  # bit smaller than 4096 because of headers
@@ -96,7 +97,8 @@ class SpiPyDevInterface(SpiBaseInterface):
             error(CANT_IMPORT_SPIDEV_ERROR)
         self._spi.open(self._device_id, self._device_cs)
         self._spi.max_speed_hz = int(self._spi_speed * 1e6)
-        log.info('py-spidev dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed_hz / 1e6))
+        log.info(
+            'py-spidev dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed_hz / 1e6))
 
     def send_packet(self, data):
         self._spi.xfer2(list(data))
@@ -113,7 +115,7 @@ class SpiDummyInterface(SpiBaseInterface):
 class DriverSPIBase(DriverBase):
     """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
 
-    def __init__(self, num, c_order=ChannelOrder.GRB, interface=SpiPeripheryInterface,
+    def __init__(self, num, c_order=ChannelOrder.GRB, interface=SpiFileInterface,
                  dev='/dev/spidev0.0', spi_speed=2, gamma=None):
         super().__init__(num, c_order=c_order, gamma=gamma)
 
