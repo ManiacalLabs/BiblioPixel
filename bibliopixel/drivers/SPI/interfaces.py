@@ -1,8 +1,8 @@
-import math
 import os
-from . channel_order import ChannelOrder
-from . driver_base import DriverBase
-from .. import log
+import math
+from enum import IntEnum
+from . import errors
+from ... import log
 
 
 class SpiBaseInterface(object):
@@ -18,6 +18,11 @@ class SpiBaseInterface(object):
     def compute_packet(self, data):
         return data
 
+    def error(self, text):
+        msg = 'Error with dev: {}, spi_speed: {} - {}'.format(self._dev, self._spi_speed, text)
+        log.error(msg)
+        raise IOError(msg)
+
 
 class SpiFileInterface(SpiBaseInterface):
     """ using os open/write to send data"""
@@ -25,7 +30,7 @@ class SpiFileInterface(SpiBaseInterface):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if not os.path.exists(self._dev):
-            error(CANT_FIND_ERROR)
+            self.error(errors.CANT_FIND_ERROR)
 
         self._spi = open(self._dev, 'wb')
 
@@ -46,13 +51,13 @@ class SpiPeripheryInterface(SpiBaseInterface):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if not os.path.exists(self._dev):
-            error(CANT_FIND_ERROR)
+            self.error(errors.CANT_FIND_ERROR)
 
         try:
             from periphery import SPI
             self._spi = SPI(self._dev, 0, self._spi_speed * 1e6)
         except ImportError:
-            error(CANT_IMPORT_PERIPHERY_ERROR)
+            self.error(errors.CANT_IMPORT_PERIPHERY_ERROR)
 
         log.info('periphery spi dev {:s} speed @ {:.2f} MHz'.format(
             self._dev, self._spi.max_speed / 1e6))
@@ -76,17 +81,17 @@ class SpiPyDevInterface(SpiBaseInterface):
         try:
             self._device_id, self._device_cs = ids
         except:
-            error(BAD_FORMAT_ERROR)
+            self.error(errors.BAD_FORMAT_ERROR)
 
         if not os.path.exists(self._dev):
-            error(CANT_FIND_ERROR)
+            self.error(errors.CANT_FIND_ERROR)
         # permissions check
         try:
             fd = open(self._dev, 'r')
             fd.close()
         except IOError as e:
             if e.errno == 13:
-                error(PERMISSION_ERROR)
+                self.error(errors.PERMISSION_ERROR)
             else:
                 raise e
         # import spidev and cache error
@@ -94,7 +99,7 @@ class SpiPyDevInterface(SpiBaseInterface):
             import spidev
             self._spi = spidev.SpiDev()
         except ImportError:
-            error(CANT_IMPORT_SPIDEV_ERROR)
+            self.error(errors.CANT_IMPORT_SPIDEV_ERROR)
         self._spi.open(self._device_id, self._device_cs)
         self._spi.max_speed_hz = int(self._spi_speed * 1e6)
         log.info(
@@ -112,60 +117,16 @@ class SpiDummyInterface(SpiBaseInterface):
         pass
 
 
-class DriverSPIBase(DriverBase):
-    """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
-
-    def __init__(self, num, c_order=ChannelOrder.GRB, interface=SpiFileInterface,
-                 dev='/dev/spidev0.0', spi_speed=2, gamma=None):
-        super().__init__(num, c_order=c_order, gamma=gamma)
-
-        self._interface = interface(dev=dev, spi_speed=spi_speed)
-
-    def _send_packet(self):
-        self._interface.send_packet(self._packet)
-
-    def _compute_packet(self):
-        self._render()
-        self._packet = self._interface.compute_packet(self._buf)
+_SPI_INTERFACES = [
+    SpiFileInterface,
+    SpiPyDevInterface,
+    SpiPeripheryInterface,
+    SpiDummyInterface
+]
 
 
-PERMISSION_ERROR = """Cannot access SPI device.
-Please see
-
-    https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup
-
-for details.
-"""
-
-CANT_FIND_ERROR = """Cannot find SPI device.
-Please see
-
-    https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup
-
-for details.
-"""
-
-CANT_IMPORT_PERIPHERY_ERROR = """
-Unable to import periphery. Please install:
-    pip install python-periphery
-
-Please see
-    https://github.com/maniacallabs/bibliopixel/wiki/SPI-Setup
-
-for details.
-"""
-
-BAD_FORMAT_ERROR = """
-When using py-spidev, `dev` must be in the format /dev/spidev*.*
-"""
-
-CANT_IMPORT_SPIDEV_ERROR = """
-Unable to import spidev. Please install:
-
-    pip install spidev
-"""
-
-
-def error(text):
-    log.error(text)
-    raise IOError(text)
+class SPI_INTERFACES(IntEnum):
+    FILE = 0
+    PYDEV = 1
+    PERIPHERY = 2
+    DUMMY = 3

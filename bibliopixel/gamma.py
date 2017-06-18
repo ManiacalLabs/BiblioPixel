@@ -17,7 +17,7 @@ class Gamma(object):
 # From https://github.com/scottjgibson/PixelPi/blob/master/pixelpi.py
 APA102 = Gamma(gamma=2.5, offset=0.5)
 WS2801 = SM16716 = Gamma(gamma=2.5)
-DEFAULT = Gamma()
+NONE = DEFAULT = Gamma()  # For when you need no correction
 
 # From http://rgb-123.com/ws2812-color-output/
 WS2812B = NEOPIXEL = WS2812 = Gamma(gamma=1 / 0.45)

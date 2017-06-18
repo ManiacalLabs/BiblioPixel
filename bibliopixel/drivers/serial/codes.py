@@ -34,12 +34,6 @@ class LEDTYPE(IntEnum):
     P9813 = 11
 
 
-def make_ledtype(s):
-    if isinstance(s, int):
-        return s
-    return getattr(LEDTYPE, s.upper())
-
-
 SPIChipsets = [
     LEDTYPE.LPD8806,
     LEDTYPE.WS2801,

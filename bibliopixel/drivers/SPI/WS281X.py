@@ -1,18 +1,26 @@
-from . spi_driver_base import DriverSPIBase, ChannelOrder
-from .. import gamma as _gamma
+from .. channel_order import ChannelOrder
+from . base import SPIBase
+from ... import gamma as _gamma
+from . import interfaces
 
 
-class WS281XSPI(DriverSPIBase):
+MAX_PIXELS = 455
+
+
+class WS281XSPI(SPIBase):
     """
     SPI driver for WS2812(b) based LED strips on devices like
     Raspberry Pi, OrangePi, BeagleBone,..
     """
 
-    def __init__(self, num, spi_speed=3.2, **kwargs):
+    def __init__(self, num, gamma=_gamma.WS2812, spi_speed=3.2, **kwargs):
         # WS281x need a base clock of ~1MHz with the encoding we need 3 times this clock
         # After testing 3.0 to 3.2 looks like a good value
-        super().__init__(num, c_order=ChannelOrder.GRB, spi_speed=spi_speed,
-                         gamma=_gamma.WS2812, **kwargs)
+        super().__init__(num, gamma=gamma, spi_speed=spi_speed, **kwargs)
+        if isinstance(self._interface, interfaces.SpiFileInterface):
+            raise ValueError('SPI File interface is unsupported by WS281X')
+        if num > MAX_PIXELS:
+            raise ValueError('WS2812X SPI driver only supports {} pixels max.'.format(MAX_PIXELS))
 
     # WS2812 requires gamma correction so we run it through gamma as the
     # channels are ordered
@@ -21,6 +29,7 @@ class WS281XSPI(DriverSPIBase):
     # 0b0  -> 0b100
     # 0b1  -> 0b110
     def _compute_packet(self):
+        # self._render()
         super()._compute_packet()
 
         # buffer for result

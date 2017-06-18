@@ -20,10 +20,8 @@ from bibliopixel import (
 )
 
 from bibliopixel.drivers import (
-    APA102,
-    LPD8806,
+    SPI,
     # SimPixel,
-    WS2801,
     driver_base,
     dummy_driver,
     hue,
@@ -32,7 +30,6 @@ from bibliopixel.drivers import (
     network_receiver,
     network_udp,
     serial,
-    spi_driver_base,
     # timedata_visualizer,
 )
 

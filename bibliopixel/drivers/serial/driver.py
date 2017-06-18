@@ -1,10 +1,11 @@
 import os, sys, time, traceback
 
-from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets, make_ledtype
+from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from . devices import Devices
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... import log, util
+from ... util.enum import resolve_enum
 from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
 
 
@@ -25,7 +26,7 @@ class Serial(DriverBase):
 
         self._SPISpeed = SPISpeed
         self._com = None
-        self._type = make_ledtype(type)
+        self._type = resolve_enum(LEDTYPE, type)
         self._bufPad = 0
         self.dev = dev
         self.device_version = 0

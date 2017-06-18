@@ -68,7 +68,6 @@ def apply_defaults(project, defaults):
 
     ledtype = defaults.get('ledtype')
     if ledtype:
-        ledtype = codes.make_ledtype(ledtype)
         if 'led' not in project:
             project['led'] = {}
 

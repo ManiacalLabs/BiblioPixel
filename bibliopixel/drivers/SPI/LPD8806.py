@@ -1,16 +1,14 @@
-from .. import gamma
-from . channel_order import ChannelOrder
-from . spi_driver_base import DriverSPIBase
+from ... import gamma
+from .. channel_order import ChannelOrder
+from . base import SPIBase
 
 
-class LPD8806(DriverSPIBase):
+class LPD8806(SPIBase):
     """Main driver for LPD8806 based LED strips on devices like the Raspberry Pi
        and BeagleBone."""
 
-    def __init__(self, num,
-                 c_order=ChannelOrder.RGB,
-                 spi_speed=2, gamma=gamma.LPD8806, **kwargs):
-        super().__init__(num, c_order=c_order, spi_speed=spi_speed, gamma=gamma, **kwargs)
+    def __init__(self, num, gamma=gamma.LPD8806, **kwargs):
+        super().__init__(num, gamma=gamma, **kwargs)
 
         # LPD8806 requires latch bytes at the end
         self._latchBytes = (self.numLEDs + 31) // 32

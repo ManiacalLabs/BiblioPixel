@@ -2,10 +2,7 @@ import unittest
 
 from bibliopixel import gamma
 from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
-from bibliopixel.drivers.spi_driver_base import SpiDummyInterface
-from bibliopixel.drivers.APA102 import APA102
-from bibliopixel.drivers.LPD8806 import LPD8806
-from bibliopixel.drivers.WS2801 import WS2801
+from bibliopixel.drivers.SPI import SPI, SPI_INTERFACES
 
 
 class DriverTest(unittest.TestCase):
@@ -14,7 +11,7 @@ class DriverTest(unittest.TestCase):
               (2, 16, 128),
               (3, 24, 192)]
 
-    SPD = dict(interface=SpiDummyInterface)
+    SPD = dict(interface=SPI_INTERFACES.DUMMY)
 
     def do_test(self, driver, expected):
         driver.set_colors(self.COLORS, 0)
@@ -51,18 +48,17 @@ class DriverTest(unittest.TestCase):
         self.do_test(driver, expected)
 
     def test_apa102(self):
-        driver = APA102(num=4, **self.SPD)
-        expected = [0, 0, 0, 0, 255, 0, 0, 0, 255, 1, 8, 64,
-                    255, 2, 16, 128, 255, 3, 24, 192, 255, 0, 0, 0]
+        driver = SPI(type='APA102', num=4, **self.SPD)
+        expected = [0, 0, 0, 0, 0, 8, 0, 0, 46, 0, 1, 125]
         self.do_test(driver, expected)
 
     def test_lpd8806(self):
-        driver = LPD8806(num=4, **self.SPD)
+        driver = SPI(type='LPD8806', num=4, **self.SPD)
         expected = [
             128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190, 0]
         self.do_test(driver, expected)
 
     def test_ws2801(self):
-        driver = WS2801(num=4, **self.SPD)
+        driver = SPI(type='WS2801', num=4, **self.SPD)
         expected = [0, 0, 0, 0, 0, 8, 0, 0, 45, 0, 0, 125]
         self.do_test(driver, expected)
