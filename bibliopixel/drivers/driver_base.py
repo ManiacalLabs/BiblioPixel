@@ -37,6 +37,7 @@ class DriverBase(object):
         self.lastUpdate = 0
         self.brightness_lock = threading.Lock()
         self._brightness = 255
+        self._waiting_brightness = None
 
     def set_layout(self, layout):
         pass
