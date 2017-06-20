@@ -7,7 +7,7 @@ from . import interfaces
 MAX_PIXELS = 455
 
 
-class WS281XSPI(SPIBase):
+class WS281X(SPIBase):
     """
     SPI driver for WS2812(b) based LED strips on devices like
     Raspberry Pi, OrangePi, BeagleBone,..

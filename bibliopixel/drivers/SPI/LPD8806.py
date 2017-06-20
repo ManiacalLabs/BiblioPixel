@@ -17,7 +17,3 @@ class LPD8806(SPIBase):
 
     # LPD8806 requires gamma correction and only supports 7-bits per channel
     # running each value through gamma will fix all of this.
-
-
-# This is DEPRECATED.
-DriverLPD8806 = LPD8806
