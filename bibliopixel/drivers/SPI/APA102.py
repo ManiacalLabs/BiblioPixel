@@ -22,7 +22,3 @@ class APA102(SPIBase):
         newBuf = [0, 0, 0, 0] + newBuf
         newBuf.extend(self._latch_bytes)
         self._packet = newBuf
-
-
-# This is DEPRECATED.
-DriverAPA102 = APA102

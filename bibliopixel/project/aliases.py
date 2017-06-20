@@ -3,16 +3,19 @@ from .importer import import_symbol
 
 ALIASES = {
     'driver': {
-        'apa102': 'bibliopixel.drivers.APA102.APA102',
+        'apa102': 'bibliopixel.drivers.API.APA102.APA102',
         'dummy': 'bibliopixel.drivers.dummy_driver.Dummy',
         'hue': 'bibliopixel.drivers.hue.Hue',
         'image': 'bibliopixel.drivers.image_sequence.ImageSequence',
-        'lpd8806': 'bibliopixel.drivers.LPD8806.LPD8806',
+        'lpd8806': 'bibliopixel.drivers.API.LPD8806.LPD8806',
         'network': 'bibliopixel.drivers.network.Network',
         'network_udp': 'bibliopixel.drivers.network.NetworkUDP',
         'serial': 'bibliopixel.drivers.serial.Serial',
         'simpixel': 'bibliopixel.drivers.SimPixel.SimPixel',
-        'ws2801': 'bibliopixel.drivers.WS2801.WS2801',
+        'ws281x': 'bibliopixel.drivers.API.WS281X.WS281X',
+        'ws2801': 'bibliopixel.drivers.API.WS2801.WS2801',
+        'spi': 'bibliopixel.drivers.SPI.SPI',
+        'pi_ws281x': 'bibliopixel.drivers.PiWS281X.PiWS281X'
     },
 
     'led': {

@@ -11,7 +11,3 @@ class WS2801(SPIBase):
             raise ValueError(
                 'WS2801 requires an SPI speed of 1MHz but was set to {}MHz'.format(spi_speed))
         super().__init__(num, gamma=gamma, spi_speed=spi_speed, **kwargs)
-
-
-# This is DEPRECATED.
-DriverWS2801 = WS2801
