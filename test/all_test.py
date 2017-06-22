@@ -10,7 +10,6 @@ from bibliopixel import (
     gamepad,
     gamma,
     image,
-    layout,
     led,
     log,
     matrix,
@@ -18,6 +17,8 @@ from bibliopixel import (
     # serial_gamepad,
     util,
 )
+
+from bibliopixel.layout import geometry
 
 from bibliopixel.drivers import (
     SPI,

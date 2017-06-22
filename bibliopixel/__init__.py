@@ -1,8 +1,8 @@
 from . led import Circle, Matrix, POV, Strip, Cube
-from . layout import Rotation
-from . layout.matrix import gen_matrix
-from . layout.circle import gen_circle
-from . layout.cube import gen_cube
+from . layout.geometry import Rotation
+from . layout.geometry.matrix import gen_matrix
+from . layout.geometry.circle import gen_circle
+from . layout.geometry.cube import gen_cube
 from . import animation, colors, font, gamma, led, log, util
 
 # These are DEPRECATED
