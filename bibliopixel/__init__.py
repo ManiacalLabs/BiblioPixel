@@ -1,12 +1,12 @@
-from . led import Circle, Matrix, POV, Strip, Cube
+from . layout import Circle, Matrix, POV, Strip, Cube
 from . layout.geometry import Rotation
 from . layout.geometry.matrix import gen_matrix
 from . layout.geometry.circle import gen_circle
 from . layout.geometry.cube import gen_cube
-from . import animation, colors, font, gamma, led, log, util
+from . import animation, colors, font, gamma, layout, log, util
 
 # These are DEPRECATED
-from . led import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
+from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
 
 
 def _get_version():

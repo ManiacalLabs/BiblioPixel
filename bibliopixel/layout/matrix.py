@@ -2,8 +2,7 @@ import math, threading, time
 
 from .. import colors, data_maker, font, matrix, log
 from . led import LEDBase
-from .. layout.geometry.matrix import (
-    Rotation, gen_matrix, pixel_positions_from_matrix)
+from . geometry.matrix import Rotation, gen_matrix, pixel_positions_from_matrix
 
 
 class Matrix(LEDBase):

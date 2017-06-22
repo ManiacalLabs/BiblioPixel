@@ -1,6 +1,6 @@
 import unittest
 
-from bibliopixel.led.strip import Strip
+from bibliopixel.layout.strip import Strip
 from bibliopixel.drivers.dummy_driver import Dummy
 
 

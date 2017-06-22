@@ -1,5 +1,5 @@
 from . animation import BaseAnimation
-from .. led import Cube
+from .. layout import Cube
 
 
 class BaseCubeAnim(BaseAnimation):

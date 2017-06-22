@@ -1,6 +1,6 @@
 import glob, numbers, os, sys
 from . import colors, log
-from . led import Matrix
+from . layout import Matrix
 
 try:
     from PIL import Image, ImageSequence

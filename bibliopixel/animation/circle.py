@@ -1,5 +1,5 @@
 from . animation import BaseAnimation
-from .. led import Circle
+from .. layout import Circle
 
 
 class BaseCircleAnim(BaseAnimation):
