@@ -1,5 +1,5 @@
 from . animation import BaseAnimation
-from .. led import Matrix
+from .. layout import Matrix
 
 
 class BaseMatrixAnim(BaseAnimation):

@@ -1,5 +1,5 @@
 from . animation import BaseAnimation
-from .. led import Strip
+from .. layout import Strip
 
 
 class BaseStripAnim(BaseAnimation):

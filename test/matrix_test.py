@@ -1,7 +1,7 @@
 import unittest
 
 from bibliopixel import data_maker
-from bibliopixel.led import Matrix
+from bibliopixel.layout import Matrix
 from bibliopixel.drivers.driver_base import DriverBase
 
 

@@ -10,7 +10,7 @@ from bibliopixel import (
     gamepad,
     gamma,
     image,
-    led,
+    layout,
     log,
     matrix,
     return_codes,

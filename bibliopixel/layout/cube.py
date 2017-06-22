@@ -1,9 +1,8 @@
 import math, threading, time
 
-from .. import colors, data_maker, font, matrix
+from .. import colors, data_maker, font, log, matrix
 from . led import LEDBase
-from .. layout.geometry.cube import gen_cube, pixel_positions_from_cube
-from .. import log
+from . geometry.cube import gen_cube, pixel_positions_from_cube
 
 
 class Cube(LEDBase):

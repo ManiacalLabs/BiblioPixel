@@ -1,6 +1,6 @@
 from . led import LEDBase
 from .. import data_maker
-from .. layout.geometry.circle import (
+from . geometry.circle import (
     gen_circle, calc_ring_steps, calc_ring_pixel_count,
     pixel_positions_from_rings)
 

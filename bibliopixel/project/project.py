@@ -4,7 +4,7 @@ from . importer import make_object
 from .. animation import runner
 from .. import data_maker
 from .. layout.geometry import gen_matrix
-from .. led.multimap import MultiMapBuilder
+from .. layout.multimap import MultiMapBuilder
 from .. util import files
 from .. drivers.serial import codes
 
