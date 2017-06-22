@@ -45,7 +45,7 @@ def gen_circle(rings=None, pixels_per=None, offset=0, invert=False):
         return (out_rings, calc_ring_steps(out_rings))
 
 
-def layout_from_rings(rings, origin=(0, 0, 0), z_diff=0, radii=None):
+def pixel_positions_from_rings(rings, origin=(0, 0, 0), z_diff=0, radii=None):
     if len(origin) not in [2, 3]:
         raise ValueError('origin must be (x,y) or (x,y,z)')
 

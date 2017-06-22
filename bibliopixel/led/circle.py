@@ -1,7 +1,8 @@
 from . led import LEDBase
 from .. import data_maker
 from .. layout.geometry.circle import (
-    gen_circle, calc_ring_steps, calc_ring_pixel_count, layout_from_rings)
+    gen_circle, calc_ring_steps, calc_ring_pixel_count,
+    pixel_positions_from_rings)
 
 
 class Circle(LEDBase):
@@ -18,14 +19,15 @@ class Circle(LEDBase):
             full_coords |= (len(r) > 2)
 
         if not full_coords:
-            self.rings, self.ringSteps = gen_circle(rings=self.rings, pixels_per=pixels_per)
+            self.rings, self.ringSteps = gen_circle(
+                rings=self.rings, pixels_per=pixels_per)
         else:
             self.ringSteps = calc_ring_steps(self.rings)
 
         self.ringCount = len(self.rings)
         self.lastRing = self.ringCount - 1
 
-        self.set_layout(layout_from_rings(self.rings))
+        self.set_pixel_positions(pixel_positions_from_rings(self.rings))
 
         num = calc_ring_pixel_count(self.rings)
 

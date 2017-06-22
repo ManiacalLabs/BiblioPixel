@@ -7,11 +7,11 @@ Server = SimpleWebSocketServer
 
 class Client(WebSocket):
 
-    def __init__(self, *args, driver, layout):
+    def __init__(self, *args, driver, pixel_positions):
         super().__init__(*args)
         self.driver = driver
         self.connected = False
-        self.layout = layout
+        self.pixel_positions = pixel_positions
         self.oid = None
         log.debug('Server started...')
 
@@ -20,7 +20,7 @@ class Client(WebSocket):
         self.connected = True
         self.oid = uuid.uuid1()
         self.driver.add_websock(self.oid, self.send_pixels)
-        self.sendMessage(bytearray([0x00, 0x00]) + self.layout)
+        self.sendMessage(bytearray([0x00, 0x00]) + self.pixel_positions)
 
     def handleClose(self):
         self.driver.remove_websock(self.oid)

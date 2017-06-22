@@ -2,7 +2,7 @@ import math, threading, time
 
 from .. import colors, data_maker, font, matrix
 from . led import LEDBase
-from .. layout.geometry.cube import gen_cube, layout_from_cube
+from .. layout.geometry.cube import gen_cube, pixel_positions_from_cube
 from .. import log
 
 
@@ -29,10 +29,10 @@ class Cube(LEDBase):
             else:
                 raise TypeError("Must provide coordMap if using multiple drivers!")
 
-        self.set_layout(layout_from_cube(self.cube_map))
+        self.set_pixel_positions(pixel_positions_from_cube(self.cube_map))
 
-    def get_layout(self):
-        return layout_from_cube(self.coord_map)
+    def get_pixel_positions(self):
+        return pixel_positions_from_cube(self.coord_map)
 
     def set(self, x, y, z, color):
         try:

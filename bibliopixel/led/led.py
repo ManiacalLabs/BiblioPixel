@@ -28,9 +28,9 @@ class LEDBase(object):
         self.threading = UpdateThreading(threadedUpdate, self)
         self.set_brightness(brightness)
 
-    def set_layout(self, layout):
+    def set_pixel_positions(self, pixel_positions):
         for d in self.drivers:
-            d.set_layout(layout)
+            d.set_pixel_positions(pixel_positions)
 
     def update(self):
         """DEPRECATED - use self.push_to_driver()"""
@@ -50,7 +50,7 @@ class LEDBase(object):
         if pixel >= 0 and pixel < self.numLEDs:
             self._colors[pixel] = tuple(color)
 
-    def get_layout(self):
+    def get_pixel_positions(self):
         result = []
         for x in range(len(self.numLEDs)):
             result.append([x, 0, 0])
