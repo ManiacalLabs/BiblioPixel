@@ -28,7 +28,7 @@ class DriverBase(object):
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
 
-        self.layout = None
+        self.pixel_positions = None
 
         self.width = width
         self.height = height
@@ -39,7 +39,7 @@ class DriverBase(object):
         self._brightness = 255
         self._waiting_brightness = None
 
-    def set_layout(self, layout):
+    def set_pixel_positions(self, pixel_positions):
         pass
 
     def set_colors(self, colors, pos):

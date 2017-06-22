@@ -19,7 +19,7 @@ def gen_cube(dx, dy, dz, xy_serpentine=True, offset=0,
     return result
 
 
-def layout_from_cube(coord_map):
+def pixel_positions_from_cube(coord_map):
     num = 0
     dx, dy, dz = (0, 0, len(coord_map))
 

@@ -142,7 +142,8 @@ def matrix(args):
 def circle(args):
     pixels_per = [1, 4, 8, 12, 18, 24, 32, 40, 52, 64]
     rings, steps = geometry.gen_circle(pixels_per=pixels_per)
-    points = geometry.layout_from_rings(rings, origin=(200, 200, 0), z_diff=8)
+    points = geometry.pixel_positions_from_rings(
+        rings, origin=(200, 200, 0), z_diff=8)
     driver = SimPixel(sum(pixels_per), layout=points)
     led = Circle(driver, rings=rings, maxAngleDiff=0)
 

@@ -61,7 +61,7 @@ def gen_matrix(dx, dy, serpentine=True, offset=0,
     return result
 
 
-def layout_from_matrix(coord_map):
+def pixel_positions_from_matrix(coord_map):
     max_width = 0
     for x in coord_map:
         if len(x) > max_width:

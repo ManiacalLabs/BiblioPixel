@@ -2,7 +2,8 @@ import math, threading, time
 
 from .. import colors, data_maker, font, matrix, log
 from . led import LEDBase
-from .. layout.geometry.matrix import Rotation, gen_matrix, layout_from_matrix
+from .. layout.geometry.matrix import (
+    Rotation, gen_matrix, pixel_positions_from_matrix)
 
 
 class Matrix(LEDBase):
@@ -58,7 +59,7 @@ class Matrix(LEDBase):
                 raise TypeError(
                     "Must provide coordMap if using multiple drivers!")
 
-        self.set_layout(layout_from_matrix(self.matrix_map))
+        self.set_pixel_positions(pixel_positions_from_matrix(self.matrix_map))
 
         # if 90 or 270 rotation dimensions need to be swapped so they match the
         # matrix rotation
@@ -88,8 +89,8 @@ class Matrix(LEDBase):
 
         self.fonts = font.fonts
 
-    def get_layout(self):
-        return layout_from_matrix(self.coord_map)
+    def get_pixel_positions(self):
+        return pixel_positions_from_matrix(self.coord_map)
 
     def loadFont(self, name, height, width, data):
         self.fonts[name] = {
