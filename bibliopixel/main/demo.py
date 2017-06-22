@@ -21,23 +21,23 @@ def make_runnable(demo, args):
 
     if 'driver' in demo:
         if not demo['driver'].get('num'):
-            if 'led' in demo and demo['led']['typename'] == 'cube':
+            if 'layout' in demo and demo['layout']['typename'] == 'cube':
                 demo['driver']['num'] = args.width * args.height * args.depth
             else:
                 demo['driver']['num'] = args.width * args.height
 
-    if 'led' in demo:
-        led = demo['led']
-        if 'width' in led:
-            led['width'] = led['width'] or args.width
-        if 'x' in led:
-            led['x'] = led['x'] or args.width
-        if 'height' in led:
-            led['height'] = led['height'] or args.height
-        if 'y' in led:
-            led['y'] = led['y'] or args.height
-        if 'z' in led:
-            led['z'] = led['z'] or args.depth
+    if 'layout' in demo:
+        layout = demo['layout']
+        if 'width' in layout:
+            layout['width'] = layout['width'] or args.width
+        if 'x' in layout:
+            layout['x'] = layout['x'] or args.width
+        if 'height' in layout:
+            layout['height'] = layout['height'] or args.height
+        if 'y' in layout:
+            layout['y'] = layout['y'] or args.height
+        if 'z' in layout:
+            layout['z'] = layout['z'] or args.depth
 
     defaults = _run.get_project_default_arguments(args)
     return project.project_to_runnable(demo, defaults)

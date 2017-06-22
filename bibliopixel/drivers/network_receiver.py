@@ -81,13 +81,13 @@ class ThreadedDataServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 
 class NetworkReceiver:
 
-    def __init__(self, led, port=3142, interface='0.0.0.0'):
-        self._led = led
+    def __init__(self, layout, port=3142, interface='0.0.0.0'):
+        self.layout = layout
         self.address = (interface, port)
         SocketServer.TCPServer.allow_reuse_address = True
         self._server = ThreadedDataServer(self.address, ThreadedDataHandler)
         self._server.update = self.update
-        self._server.set_brightness = self._led.set_brightness
+        self._server.set_brightness = self.layout.set_brightness
 
     def start(self, join=False):
         self._t = threading.Thread(target=self._server.serve_forever)
@@ -104,5 +104,5 @@ class NetworkReceiver:
         # self._t.join()
 
     def update(self, data):
-        self._led.setBuffer(list(data))
-        self._led.push_to_driver()
+        self.layout.setBuffer(list(data))
+        self.layout.push_to_driver()

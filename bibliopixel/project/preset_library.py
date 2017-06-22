@@ -5,7 +5,7 @@ from ..util.datafile import DataFile
 """
 The BP preset library is a JSON file with five named sections:
 
-    project, driver, led, animation, run.
+    project, driver, layout, animation, run.
 
 Each section is a dictionary that maps a name to a dictionary called a "preset".
 

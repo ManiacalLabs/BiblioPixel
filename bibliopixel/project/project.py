@@ -9,7 +9,7 @@ from .. util import files
 from .. drivers.serial import codes
 
 
-def make_led(driver, led, maker=None):
+def make_layout(driver, layout, maker=None):
     maker = data_maker.Maker(**(maker or {}))
     drivers = []
 
@@ -30,11 +30,11 @@ def make_led(driver, led, maker=None):
         drivers.append(make_object(**kwds))
 
     coordMap = make_drivers(maker=maker, **driver)
-    return make_object(drivers, coordMap=coordMap, maker=maker, **led)
+    return make_object(drivers, coordMap=coordMap, maker=maker, **layout)
 
 
-def make_animation(led, animation, run=None):
-    animation = make_object(led, **animation)
+def make_animation(layout, animation, run=None):
+    animation = make_object(layout, **animation)
     animation.set_runner(runner.Runner(**(run or {})))
     return animation
 
@@ -45,8 +45,8 @@ def project_to_animation(*, path=None, **project):
     kwds = defaults.apply_defaults(project)
     animation = kwds.pop('animation', {})
     run = kwds.pop('run', {})
-    led = make_led(**kwds)
-    return make_animation(led, animation, run)
+    layout = make_layout(**kwds)
+    return make_animation(layout, animation, run)
 
 
 def apply_defaults(project, defaults):
@@ -68,12 +68,12 @@ def apply_defaults(project, defaults):
 
     ledtype = defaults.get('ledtype')
     if ledtype:
-        if 'led' not in project:
-            project['led'] = {}
+        if 'layout' not in project:
+            project['layout'] = {}
 
-        if 'type' not in project['led']:
-            project['led']['type'] = ledtype
-            # The field in LED should probably be renamed "ledtype" to be
+        if 'type' not in project['layout']:
+            project['layout']['type'] = ledtype
+            # The field in LAYOUT should probably be renamed "ledtype" to be
             # consistent across the whole system.
 
 

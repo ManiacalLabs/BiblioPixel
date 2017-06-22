@@ -75,13 +75,13 @@ class NoThreading(object):
     """
     """
 
-    def __init__(self, led):
-        self.led = led
+    def __init__(self, layout):
+        self.layout = layout
 
     def update_colors(self):
-        for d in self.led.drivers:
+        for d in self.layout.drivers:
             d.update_colors()
-        for d in self.led.drivers:
+        for d in self.layout.drivers:
             d.sync()
 
     def wait_for_update(self):
@@ -94,22 +94,22 @@ class NoThreading(object):
 
 
 class UseThreading(NoThreading):
-    def __init__(self, led):
-        self.led = led
-        self.update_thread = UpdateThread(led.drivers)
+    def __init__(self, layout):
+        self.layout = layout
+        self.update_thread = UpdateThread(layout.drivers)
         self.update_thread.start()
 
     def update_colors(self):
         self.update_thread.update_colors()
 
     def wait_for_update(self):
-        while all([d._thread.sending() for d in self.led.drivers]):
+        while all([d._thread.sending() for d in self.layout.drivers]):
             time.sleep(0.000001)
 
 
-def UpdateThreading(enable, led):
+def UpdateThreading(enable, layout):
     """
     UpdateThreading handles threading - and eventually multiprocessing - for
-    LEDBase.
+    Layout.
     """
-    return (UseThreading if enable else NoThreading)(led)
+    return (UseThreading if enable else NoThreading)(layout)

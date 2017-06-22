@@ -1,11 +1,11 @@
 import math, threading, time
 
 from .. import colors, data_maker, font, matrix, log
-from . led import LEDBase
+from . layout import Layout
 from . geometry.matrix import Rotation, gen_matrix, pixel_positions_from_matrix
 
 
-class Matrix(LEDBase):
+class Matrix(Layout):
 
     def __init__(self, drivers, width=0, height=0, coordMap=None,
                  rotation=Rotation.ROTATE_0, vert_flip=False,

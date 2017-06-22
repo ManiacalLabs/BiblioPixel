@@ -9,7 +9,7 @@ BLOOM = {
         'num': 0
     },
 
-    'led': {
+    'layout': {
         'typename': 'matrix',
         'width': 0,
         'height': 0,
@@ -27,7 +27,7 @@ MATRIX_PROJECT = {
         'num': 0
     },
 
-    'led': {
+    'layout': {
         'typename': 'matrix',
         'width': 0,
         'height': 0,
@@ -85,7 +85,7 @@ CUBE_PROJECT = {
         'num': 0
     },
 
-    'led': {
+    'layout': {
         'typename': 'cube',
         'x': 0,
         'y': 0,
@@ -118,23 +118,23 @@ CUBE_PROJECT = {
 
 def matrix(args):
     driver = SimPixel(args.width * args.height)
-    led = Matrix(driver, width=args.width, height=args.height)
+    layout = Matrix(driver, width=args.width, height=args.height)
 
-    anim = Sequence(led)
+    anim = Sequence(layout)
 
     from BiblioPixelAnimations.matrix.MatrixRain import MatrixRainBow
-    anim.add_animation(MatrixRainBow(led), amt=1, fps=20, seconds=8)
+    anim.add_animation(MatrixRainBow(layout), amt=1, fps=20, seconds=8)
 
     from BiblioPixelAnimations.matrix.Text import ScrollText
     anim.add_animation(
-        ScrollText(led, 'BiblioPixel Demo', xPos=args.width, font_scale=2),
+        ScrollText(layout, 'BiblioPixel Demo', xPos=args.width, font_scale=2),
         amt=1, fps=30, until_complete=True)
 
     from BiblioPixelAnimations.matrix.bloom import Bloom
-    anim.add_animation(Bloom(led), amt=3, fps=60, seconds=8)
+    anim.add_animation(Bloom(layout), amt=3, fps=60, seconds=8)
 
     from BiblioPixelAnimations.matrix.circlepop import CirclePop
-    anim.add_animation(CirclePop(led), amt=1, fps=30, seconds=8)
+    anim.add_animation(CirclePop(layout), amt=1, fps=30, seconds=8)
 
     return anim
 
@@ -145,10 +145,10 @@ def circle(args):
     points = geometry.pixel_positions_from_rings(
         rings, origin=(200, 200, 0), z_diff=8)
     driver = SimPixel(sum(pixels_per), layout=points)
-    led = Circle(driver, rings=rings, maxAngleDiff=0)
+    layout = Circle(driver, rings=rings, maxAngleDiff=0)
 
     from BiblioPixelAnimations.circle.bloom import CircleBloom
-    return CircleBloom(led)
+    return CircleBloom(layout)
 
 
 DEMO_TABLE = {

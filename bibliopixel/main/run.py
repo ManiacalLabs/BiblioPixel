@@ -12,8 +12,8 @@ def add_project_default_arguments(parser):
         help='Default driver type if no driver is specified')
 
     parser.add_argument(
-        '-l', '--led', default=None,
-        help='Default LED class if no LED is specified')
+        '-l', '--layout', default=None,
+        help='Default LAYOUT class if no LAYOUT is specified')
 
     parser.add_argument(
         '-t', '--ledtype', default=None,
@@ -27,7 +27,7 @@ def add_project_default_arguments(parser):
 def get_project_default_arguments(args):
     return {
         'driver': args.driver,
-        'led': args.led,
+        'layout': args.layout,
         'animation': args.animation,
         'ledtype': args.ledtype,
     }

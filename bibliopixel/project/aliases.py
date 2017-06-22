@@ -18,7 +18,7 @@ ALIASES = {
         'pi_ws281x': 'bibliopixel.drivers.PiWS281X.PiWS281X'
     },
 
-    'led': {
+    'layout': {
         'circle': 'bibliopixel.layout.circle.Circle',
         'cube': 'bibliopixel.layout.cube.Cube',
         'matrix': 'bibliopixel.layout.matrix.Matrix',

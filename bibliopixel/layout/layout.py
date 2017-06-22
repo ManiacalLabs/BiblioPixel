@@ -3,7 +3,7 @@ from .. import colors, data_maker, util
 from .. threads.update_threading import UpdateThreading
 
 
-class LEDBase(object):
+class Layout(object):
 
     def __init__(self, drivers, threadedUpdate, brightness,
                  maker=data_maker.MAKER):

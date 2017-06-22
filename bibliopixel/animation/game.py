@@ -4,8 +4,8 @@ from .. util import AttributeDict
 
 class BaseGameAnim(BaseMatrixAnim):
 
-    def __init__(self, led, inputDev):
-        super().__init__(led)
+    def __init__(self, layout, inputDev):
+        super().__init__(layout)
         self._input_dev = inputDev
         self._keys = None
         self._lastKeys = None
