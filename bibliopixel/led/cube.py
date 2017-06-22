@@ -2,7 +2,7 @@ import math, threading, time
 
 from .. import colors, data_maker, font, matrix
 from . led import LEDBase
-from .. layout.cube import gen_cube, layout_from_cube
+from .. layout.geometry.cube import gen_cube, layout_from_cube
 from .. import log
 
 

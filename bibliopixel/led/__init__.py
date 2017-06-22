@@ -3,10 +3,10 @@ from . matrix import Matrix
 from . cube import Cube
 from . pov import POV
 from . strip import Strip
-from .. layout import Rotation
-from .. layout.matrix import gen_matrix
-from .. layout.circle import gen_circle
-from .. layout.cube import gen_cube
+from .. layout.geometry import Rotation
+from .. layout.geometry.matrix import gen_matrix
+from .. layout.geometry.circle import gen_circle
+from .. layout.geometry.cube import gen_cube
 
 # These are DEPRECATED
 from . circle import LEDCircle

@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.layout import matrix
+from bibliopixel.layout.geometry import matrix
 
 
 class MatrixTest(unittest.TestCase):

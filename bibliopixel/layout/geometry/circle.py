@@ -1,4 +1,4 @@
-from .. util import pointOnCircle
+from ... util import pointOnCircle
 import math
 
 
