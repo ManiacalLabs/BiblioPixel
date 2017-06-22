@@ -14,7 +14,7 @@ BiblioPixel projects are in JSON.  Each project is an object with four named
 values called "sections".
 
   * driver: identifies the hardware driving the LED and its characteristics.
-  * led: represents the geometric layout of the LEDs in one or more drivers.
+  * layout: represents the geometric layout of the LEDs in one or more drivers.
   * animation: a program that changes the LEDs over time.
   * run: time settings for the animation.
 
@@ -24,7 +24,7 @@ default values.
 
 THE SETTINGS FILE
 
-The Settings File lets you reuse sections (driver, led, animation or run)
+The Settings File lets you reuse sections (driver, layout, animation or run)
 between projects.
 
 For each section, there's a list of

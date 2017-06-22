@@ -1,11 +1,11 @@
 import math, threading, time
 
 from .. import colors, data_maker, font, log, matrix
-from . led import LEDBase
+from . layout import Layout
 from . geometry.cube import gen_cube, pixel_positions_from_cube
 
 
-class Cube(LEDBase):
+class Cube(Layout):
 
     def __init__(self, drivers, x, y, z, coordMap=None,
                  threadedUpdate=False, brightness=255, **kwargs):

@@ -4,7 +4,7 @@
         "num": 12
     },
 
-    "led": {
+    "layout": {
         "typename": "bibliopixel.layout.strip.Strip"
     },
 

@@ -3,7 +3,7 @@ from . import animation, runner
 
 
 class Sequence(animation.BaseAnimation):
-    def __init__(self, led, animations=None):
+    def __init__(self, layout, animations=None):
         def make_animation(a):
             if isinstance(a, str):
                 desc = {'animation': a[0]}
@@ -12,9 +12,9 @@ class Sequence(animation.BaseAnimation):
             else:
                 desc = {'animation': a[0], 'run': a[1]}
             desc = aliases.resolve_aliases(desc)
-            return project.make_animation(led=led, **desc)
+            return project.make_animation(layout=layout, **desc)
 
-        super().__init__(led)
+        super().__init__(layout)
         self.animations = [make_animation(i) for i in animations or []]
         self.index = 0
         self.internal_delay = 0  # never wait

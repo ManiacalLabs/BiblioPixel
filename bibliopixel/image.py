@@ -54,30 +54,30 @@ def show_image(setter, width, height,
             setter(x, y, (r, g, b))
 
 
-def showImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
+def showImage(layout, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
-    if not isinstance(led, Matrix):
+    if not isinstance(layout, Matrix):
         raise RuntimeError("Must use Matrix with showImage!")
 
-    led.all_off()
+    layout.all_off()
 
-    return show_image(led.set, led.width, led.height, imagePath, imageObj,
+    return show_image(layout.set, layout.width, layout.height, imagePath, imageObj,
                       offset, bgcolor, brightness)
 
 
-def loadImage(led, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
+def loadImage(layout, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors.Off, brightness=255):
     """Display an image on the matrix"""
 
-    if not isinstance(led, Matrix):
+    if not isinstance(layout, Matrix):
         raise RuntimeError("Must use Matrix with loadImage!")
 
-    texture = [[colors.Off for x in range(led.width)] for y in range(led.height)]
+    texture = [[colors.Off for x in range(layout.width)] for y in range(layout.height)]
 
     def setter(x, y, pixel):
         if y >= 0 and x >= 0:
             texture[y][x] = pixel
 
-    return show_image(setter, led.width, led.height, imagePath, imageObj,
+    return show_image(setter, layout.width, layout.height, imagePath, imageObj,
                       offset, bgcolor, brightness)
 
 

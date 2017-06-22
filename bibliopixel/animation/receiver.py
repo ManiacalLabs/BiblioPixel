@@ -22,12 +22,12 @@ HOST_MAP = {
 class BaseReceiver(BaseAnimation):
     free_run = True
 
-    def __init__(self, led):
-        super().__init__(led)
-        name = type(self._led).__name__
+    def __init__(self, layout):
+        super().__init__(layout)
+        name = type(self.layout).__name__
 
         if name not in HOST_MAP:
-            raise ValueError('led must be of type' + ', '.join(HOST_MAP))
+            raise ValueError('layout must be of type' + ', '.join(HOST_MAP))
 
         self.host_type = HOST_MAP[name]
         self._hold_for_data = threading.Event()
@@ -36,7 +36,7 @@ class BaseReceiver(BaseAnimation):
         self._recv_thread_obj = None
 
     def preRun(self, amt=1):
-        self._led.all_off()
+        self.layout.all_off()
         self.start()
 
     def start(self):

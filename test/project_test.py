@@ -11,7 +11,7 @@ PROJECT = """
         "num": 12
     },
 
-    "led": "strip",
+    "layout": "strip",
     "animation": "strip_test",
     "run": {
         "max_steps": 2
@@ -30,7 +30,7 @@ PROJECT_MULTI = """
         "device_ids": [10, 11, 12]
     },
 
-    "led": {
+    "layout": {
         "typename": "matrix",
         "width": 128
     },
@@ -51,7 +51,7 @@ PROJECT_SHARED = """
         "num": 12
     },
 
-    "led": "strip",
+    "layout": "strip",
     "animation": "strip_test",
     "run": {
         "max_steps": 2
@@ -71,7 +71,7 @@ PROJECT_SIM = """
         "num": 12
     },
 
-    "led": {
+    "layout": {
         "typename": "bibliopixel.layout.strip.Strip"
     },
 

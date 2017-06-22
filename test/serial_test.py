@@ -48,19 +48,19 @@ class SerialTest(unittest.TestCase):
 
         driver = Serial(
             LEDTYPE.APA102, 600, SPISpeed=4, c_order=ChannelOrder.RGB)
-        led = Strip(driver)
+        layout = Strip(driver)
 
         for b in range(7, 256, 8):
             log.info('Set brightness ' + str(b))
-            led.set_brightness(b)
+            layout.set_brightness(b)
             time.sleep(0.25)
 
         log.info('Run StripChannelTest')
-        anim = StripChannelTest(led)
+        anim = StripChannelTest(layout)
 
         anim.run(amt=1, max_steps=8)
 
-        led.all_off()
-        led.update()
+        layout.all_off()
+        layout.update()
 
         print("Test Complete!")

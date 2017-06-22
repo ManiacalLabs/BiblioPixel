@@ -1,9 +1,9 @@
 from .. import colors, data_maker
-from . led import LEDBase
+from . layout import Layout
 from . geometry.strip import gen_strip
 
 
-class Strip(LEDBase):
+class Strip(Layout):
 
     def __init__(self, drivers, threadedUpdate=False,
                  brightness=255, pixelWidth=1, **kwargs):

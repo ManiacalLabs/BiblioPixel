@@ -4,9 +4,10 @@ from .. layout import Cube
 
 class BaseCubeAnim(BaseAnimation):
 
-    def __init__(self, led):
-        super().__init__(led)
-        if not isinstance(led, Cube):  # pragma: no cover
-            raise RuntimeError("Must use Cube with Matrix Animations!")
+    def __init__(self, layout):
+        super().__init__(layout)
+        if not isinstance(layout, Cube):  # pragma: no cover
+            raise RuntimeError('Must use bibliopixel.layout.Cube with ' +
+                               'Cube Animations!')
 
-        self.x, self.y, self.z = led.x, led.y, led.z
+        self.x, self.y, self.z = layout.x, layout.y, layout.z

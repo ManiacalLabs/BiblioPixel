@@ -4,13 +4,14 @@ from .. layout import Circle
 
 class BaseCircleAnim(BaseAnimation):
 
-    def __init__(self, led):
-        super().__init__(led)
+    def __init__(self, layout):
+        super().__init__(layout)
 
-        if not isinstance(led, Circle):
-            raise RuntimeError("Must use Circle with Circle Animations!")
+        if not isinstance(layout, Circle):
+            raise RuntimeError('Must use bibliopixel.layout.Circle with ' +
+                               'Circle Animations!')
 
-        self.rings = led.rings
-        self.ringCount = led.ringCount
-        self.lastRing = led.lastRing
-        self.ringSteps = led.ringSteps
+        self.rings = layout.rings
+        self.ringCount = layout.ringCount
+        self.lastRing = layout.lastRing
+        self.ringSteps = layout.ringSteps

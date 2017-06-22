@@ -7,19 +7,28 @@ from .. threads.animation_threading import AnimationThreading
 class BaseAnimation(object):
     free_run = False
 
-    def __init__(self, led):
-        self._led = led
+    def __init__(self, layout):
+        self.layout = layout
         self.internal_delay = None
 
+    @property
+    def _led(self):
+        """Many BiblioPixelAnimations use the "protected" variable _led."""
+        return self.layout
+
+    @_led.setter
+    def _led(self, layout):
+        self.layout = layout
+
     def preRun(self, amt=1):
-        self._led.all_off()
+        self.layout.all_off()
 
     def step(self, amt=1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
     def cleanup(self):
         self.threading.stop_thread(wait=True)
-        self._led.cleanup()
+        self.layout.cleanup()
 
     def is_running(self):
         if self.threading.stop_event.isSet():
@@ -42,8 +51,8 @@ class BaseAnimation(object):
 
         stamp()
 
-        self._led.frame_render_time = timestamps[1] - timestamps[0]
-        self._led.push_to_driver()
+        self.layout.frame_render_time = timestamps[1] - timestamps[0]
+        self.layout.push_to_driver()
 
         stamp()
 
@@ -72,7 +81,7 @@ class BaseAnimation(object):
             self.sleep_time = self.internal_delay
         else:
             self.sleep_time = self.runner.sleep_time
-        self._led.animation_sleep_time = self.sleep_time or 0
+        self.layout.animation_sleep_time = self.sleep_time or 0
 
         self.preRun(self.runner.amt)
         try:

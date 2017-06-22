@@ -1,11 +1,11 @@
-from . led import LEDBase
+from . layout import Layout
 from .. import data_maker
 from . geometry.circle import (
     gen_circle, calc_ring_steps, calc_ring_pixel_count,
     pixel_positions_from_rings)
 
 
-class Circle(LEDBase):
+class Circle(Layout):
 
     def __init__(self, drivers, rings=[], pixels_per=None,
                  maxAngleDiff=0, rotation=0,
