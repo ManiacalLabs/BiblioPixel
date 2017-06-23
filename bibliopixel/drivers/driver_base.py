@@ -25,6 +25,9 @@ class DriverBase(object):
         gamma = gamma or _gamma.DEFAULT
         self.gamma = gamma
 
+        if isinstance(c_order, str):
+            c_order = ChannelOrder.make(c_order)
+
         self.c_order = c_order
         self.perm = ChannelOrder.ORDERS.index(c_order)
 

@@ -13,8 +13,8 @@ import colorsys
 
 class Hue(DriverBase):
 
-    def __init__(self, num, ip, nameMap=None):
-        super().__init__(num)
+    def __init__(self, num, ip, nameMap=None, **kwds):
+        super().__init__(num, **kwds)
 
         if nameMap and len(nameMap) != self.numLEDs:
             raise ValueError(

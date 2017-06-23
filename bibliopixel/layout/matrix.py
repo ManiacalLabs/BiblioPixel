@@ -9,6 +9,7 @@ class Matrix(Layout):
 
     def __init__(self, drivers, width=0, height=0, coordMap=None,
                  rotation=Rotation.ROTATE_0, vert_flip=False,
+                 serpentine=True,
                  threadedUpdate=False, brightness=255,
                  pixelSize=(1, 1), **kwargs):
         """Main class for matricies.
@@ -53,7 +54,10 @@ class Matrix(Layout):
         else:
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use gen_matrix directly if more control needed.')
-                self.matrix_map = gen_matrix(self.width, self.height)
+                self.matrix_map = gen_matrix(self.width, self.height,
+                                             serpentine=serpentine,
+                                             rotation=rotation,
+                                             y_flip=vert_flip)
             else:
                 raise TypeError(
                     "Must provide coordMap if using multiple drivers!")

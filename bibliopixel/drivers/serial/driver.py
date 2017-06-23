@@ -16,8 +16,8 @@ class Serial(DriverBase):
                  c_order=ChannelOrder.RGB, SPISpeed=2,
                  gamma=None, restart_timeout=3,
                  device_id=None, hardwareID="1D50:60AB",
-                 baudrate=921600):
-        super().__init__(num, c_order=c_order, gamma=gamma)
+                 baudrate=921600, **kwds):
+        super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.devices = Devices(hardwareID, baudrate)
         self.serial = self.devices.serial
 
