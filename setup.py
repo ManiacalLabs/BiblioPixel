@@ -96,10 +96,6 @@ setup(
         'test': RunTests,
     },
     include_package_data=True,
-    entry_points={
-        'console_scripts': [
-            'bibliopixel = bibliopixel.main.main:main'
-        ]
-    },
+    scripts=['bin/bibliopixel'],
     install_requires=REQUIRED
 )
