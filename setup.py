@@ -96,6 +96,6 @@ setup(
         'test': RunTests,
     },
     include_package_data=True,
-    scripts=['bin/bibliopixel'],
+    scripts=['scripts/bibliopixel'],
     install_requires=REQUIRED
 )
