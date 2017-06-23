@@ -1,19 +1,18 @@
 language: python
 python:
-  - "3.4"
-  - "3.5"
-# command to install dependencies
+- '3.4'
+- '3.5'
 install:
-  - pip install -r test_requirements.txt
-# command to run tests
+- pip install -r test_requirements.txt
 script:
-  - python setup.py coverage
+- python setup.py coverage
 deploy:
   provider: pypi
   skip_cleanup: true
   user: ManiacalLabs
   password:
-    secure: gtzpSBgf+Tr8hz7MdSFnVzEu0NqsmSlSCpNJMPp0EqQckLt5MKkR7buHsvKEg2fBmTgohSPAu5wWEmIzNyi+90yR3CPaAGeAEQ4oMPjsW+PPL4hldg/wP+1hc9YeHWTw+r3k0Xo03Jm7/zHgCuIbfX9GoBhk7RGiOktVpuIM9NErt4ZvQ4QQtoH8CxE/aw2z6tzmCfWJbKgM/j9QvJjavOVqVp0wDAar1tWAq3G/Kgz/seWs7kJipHlSsNFdsw2nM6k2Y1quOq423ylvNjNeZnlZR+lsoYBX3jwqjJxDM0avpNpQIIr/ooY6cfoEuo6dGyoWLZxVRs25QYTJJ6I7mGRbjyiv8myRGLFNh3fpNGhSPecyZoeFjKJ0SlfUqJzUdVzkrf/EoY3bnWJp2Z+fgG+4jByivtAkwyHxnl2Y2tTCuxCP2NJSfhsUCHAt1HJCu5C5GH2UGDhopabPZPXyZsLuBIYMv2jfj4exqVZJzdeHqDv4DXNMkhUYE/4AqBS1GA3AFKdKjWFR1ZD95jOWvox0wGYWbOGTGE3ZSNQDtQMxH2Epj7H6wln2koehlU1k49ig6G2mdYivizdxeC2/B2uR/qPRXJpavAg8p7wBqBx7Z7+ai3ykJX1qi4QLO6VFb3uG1WVu095dYA475hpy/rjmVDeOQJlSUwl/S/gyHjM=
+    secure: "JnYRoQqID4nareQqAO2kOkq203FLjVLpN5ncWrsykuttOQK6KJXbuYJZTT65RJzO6iMfnz8YV/fzvL9c18po/pyxtEwTB2Ac9fdwjlHmOXthkt3uxAA7O89yr5kulwmMZ/sCb9QRI00kuA9dE8wEfmyLt5cF11Y5Qw1R8XGSzS+MKpO5nXA6jRg9VCXhkDKfZC3s+4Xm2K35xWwVit07DnAdhrqPW3hyDtSFFVd5cBPtHWzJbg6VNfPx7DRWe26wa/DExzPP9iz0Dv4DWew1rHKcFA5Y7PHxEKaL200lZig4W7Tg4ASpQwZP7fGO+NWPnfX9GZBMYN3z9FzziWzg+Q+DzUsbmobGuGQoIHbpEEYkHcIyb+KwN7J9GiUHqznjHu792aUsRfTasINNMzIXzf8ahfbIYiZfxyriF0elZDbWG9O4Avb15P6tBuOsDYdurEcN3BdLmnepTj2edotVK/7mSMhjVZEWBDhffMpStskt0CqFiUYb9MZgdLDr+cmLCYx9d36RE0Q8nv8oAd5naZ3ccwv+ZJiGBWv5YyhpkrIHQbH185DHV7bFBJkx87ck28t4cC8FKLi+Ry60MBJTD3DT93jdDVmysqV453ipaCX3akYOuLJINmBJHSxU+eRqAqnTY8ZMBjClZBwOxq0Xp7BZoWEGJhvjTvR1xd+RYys="
   on:
     repo: ManiacalLabs/BiblioPixel
+    python: 3.4
     tags: true
