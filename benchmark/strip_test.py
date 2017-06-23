@@ -2,7 +2,7 @@ import pytest
 import pytest_benchmark
 
 from bibliopixel.drivers.driver_base import DriverBase
-from bibliopixel import LEDStrip
+from bibliopixel.layout import Strip
 
 
 PIXEL_COUNT = 1000
@@ -11,7 +11,7 @@ PIXEL_COUNT = 1000
 @pytest.fixture(scope="module")
 def led():
     driver = DriverBase(num=PIXEL_COUNT)
-    return LEDStrip(driver)
+    return Strip(driver)
 
 
 def test_fill(led, benchmark):

@@ -1,6 +1,6 @@
 import pytest
 
-from bibliopixel.led import LEDMatrix
+from bibliopixel.layout import Matrix
 from bibliopixel.drivers.driver_base import DriverBase
 
 WHITE = (255, 255, 255)
@@ -8,7 +8,7 @@ WHITE = (255, 255, 255)
 
 def make_matrix(width, height, **kwds):
     driver = DriverBase(num=width * height)
-    return LEDMatrix(driver, width=width, height=height, **kwds)
+    return Matrix(driver, width=width, height=height, **kwds)
 
 
 def assert_changed(matrix, expected):
