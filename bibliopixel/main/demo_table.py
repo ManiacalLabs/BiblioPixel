@@ -18,6 +18,11 @@ BLOOM = {
     'animation': {
         'typename': 'BiblioPixelAnimations.matrix.bloom.Bloom'
     },
+
+    'run': {
+        'amt': 6,
+        'fps': 30
+    }
 }
 
 
@@ -54,7 +59,7 @@ MATRIX_PROJECT = {
                 },
                 'run': {
                     'amt': 1,
-                    'fps': 30,
+                    'fps': 20,
                     'seconds': 8,
                     'until_complete': True,
                 },
@@ -71,7 +76,7 @@ MATRIX_PROJECT = {
                 'animation': 'BiblioPixelAnimations.matrix.circlepop.CirclePop',
                 'run': {
                     'amt': 1,
-                    'fps': 30,
+                    'fps': 15,
                     'seconds': 8,
                 },
             },
@@ -95,6 +100,18 @@ CUBE_PROJECT = {
     'animation': {
         'typename': 'sequence',
         'animations': [
+            {
+                'animation': {
+                    'typename': 'BiblioPixelAnimations.cube.wave_spiral.WaveSpiral',
+                    'dir': False,
+                    'offset': 6
+                },
+                'run': {
+                    'amt': 1,
+                    'fps': 15,
+                    'seconds': 8
+                },
+            },
             {
                 'animation': 'BiblioPixelAnimations.cube.Rain.RainBow',
                 'run': {
@@ -128,13 +145,13 @@ def matrix(args):
     from BiblioPixelAnimations.matrix.Text import ScrollText
     anim.add_animation(
         ScrollText(layout, 'BiblioPixel Demo', xPos=args.width, font_scale=2),
-        amt=1, fps=30, until_complete=True)
+        amt=1, fps=20, until_complete=True)
 
     from BiblioPixelAnimations.matrix.bloom import Bloom
     anim.add_animation(Bloom(layout), amt=3, fps=60, seconds=8)
 
     from BiblioPixelAnimations.matrix.circlepop import CirclePop
-    anim.add_animation(CirclePop(layout), amt=1, fps=30, seconds=8)
+    anim.add_animation(CirclePop(layout), amt=1, fps=15, seconds=8)
 
     return anim
 
@@ -143,12 +160,20 @@ def circle(args):
     pixels_per = [1, 4, 8, 12, 18, 24, 32, 40, 52, 64]
     rings, steps = geometry.gen_circle(pixels_per=pixels_per)
     points = geometry.pixel_positions_from_rings(
-        rings, origin=(200, 200, 0), z_diff=8)
-    driver = SimPixel(sum(pixels_per), layout=points)
+        rings, origin=(200, 200, 0), z_diff=16)
+    driver = SimPixel(sum(pixels_per), pixel_positions=points)
     layout = Circle(driver, rings=rings, maxAngleDiff=0)
+    anim = Sequence(layout)
 
     from BiblioPixelAnimations.circle.bloom import CircleBloom
-    return CircleBloom(layout)
+    from BiblioPixelAnimations.circle.swirl import Swirl
+    from BiblioPixelAnimations.circle.hyperspace import HyperspaceRainbow
+
+    anim.add_animation(CircleBloom(layout), amt=3, fps=30, seconds=8)
+    anim.add_animation(Swirl(layout, angle=4), amt=6, fps=15, seconds=8)
+    anim.add_animation(HyperspaceRainbow(layout), fps=15, seconds=8)
+
+    return anim
 
 
 DEMO_TABLE = {
