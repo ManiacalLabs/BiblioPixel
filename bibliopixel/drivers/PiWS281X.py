@@ -29,7 +29,8 @@ class PiWS281X(DriverBase):
     Driver for controlling WS281X LEDs via the rpi_ws281x C-extension.
     Only supported on the Raspberry Pi 2 & 3
     """
-    def __init__(self, num, gamma=gamma.NEOPIXEL, c_order=ChannelOrder.RGB, gpio=18, ledFreqHz=800000, ledDma=5, ledInvert=False):
+    def __init__(self, num, gamma=gamma.NEOPIXEL, c_order=ChannelOrder.RGB, gpio=18,
+                 ledFreqHz=800000, ledDma=5, ledInvert=False, **kwds):
         """
         num - Number of LED pixels.
         gpio - GPIO pin connected to the pixels (must support PWM! GPIO 13 or 18 (pins 33 or 12) on RPi 3).
@@ -37,7 +38,7 @@ class PiWS281X(DriverBase):
         ledDma - DMA channel to use for generating signal (Between 1 and 14)
         ledInvert - True to invert the signal (when using NPN transistor level shift)
         """
-        super().__init__(num, c_order=c_order, gamma=gamma)
+        super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.gamma = gamma
         self._strip = Adafruit_NeoPixel(num, gpio, ledFreqHz,
                                         ledDma, ledInvert, 255, 0, 0x081000)

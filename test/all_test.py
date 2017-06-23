@@ -26,7 +26,6 @@ from bibliopixel.drivers import (
     driver_base,
     dummy_driver,
     hue,
-    image_sequence,
     network,
     network_receiver,
     network_udp,

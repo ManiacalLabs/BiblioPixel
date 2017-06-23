@@ -14,8 +14,8 @@ class CMDTYPE:
 class Network(DriverBase):
     """Driver for communicating with another device on the network."""
 
-    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142):
-        super().__init__(num, width, height)
+    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142, **kwds):
+        super().__init__(num, width, height, **kwds)
 
         self._host = host
         self._port = port
