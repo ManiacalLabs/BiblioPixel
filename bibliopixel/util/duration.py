@@ -28,7 +28,8 @@ SI_PREFIXES = (
 
 SI_SCALES = dict(
     [(p[1], p[0]) for p in SI_PREFIXES] +
-    [(p[2], p[0]) for p in SI_PREFIXES])
+    [(p[2], p[0]) for p in SI_PREFIXES] +
+    [['u', 10 ** -9]])  # Cheat to allow usec
 
 UNITS = {
     'week': 7 * 24 * 60 * 60,

@@ -1,13 +1,13 @@
 import unittest
 
-from bibliopixel.project.types import make
+from bibliopixel.project.types import make, defaults
 from bibliopixel import colors, gamma
 from bibliopixel.drivers import channel_order
 
 
 class TypesBaseTest(unittest.TestCase):
     def make(self, name, c, result=None):
-        component = make.component({name: c})
+        component = make.component({name: c}, field_types=defaults.FIELD_TYPES)
         if result is not None:
             self.assertEquals(component, {name: result})
         return component
@@ -17,7 +17,7 @@ class ColorTypesTest(TypesBaseTest):
     def test_unchanged(self):
         for p in {}, {'a': {}}, {'a': {'b': 'c'}}:
             self.assertEqual(make.project(p, {}), p)
-            self.assertEqual(make.project(p), p)
+            self.assertEqual(make.project(p, defaults.FIELD_TYPES), p)
 
     def test_color_names(self):
         # Test every color.
@@ -117,23 +117,23 @@ class ChannelOrderTypesTest(TypesBaseTest):
         def test(i, *cases):
             expected = channel_order.ChannelOrder.ORDERS[i]
             for case in cases:
-                actual = self.make('channel_order', case)['channel_order']
+                actual = self.make('c_order', case)['c_order']
                 self.assertIs(expected, actual)
 
         test(0, 'rgb', (0, 1, 2), [0, 1, 2], '012')
         test(5, 'bgr', (2, 1, 0), [2, 1, 0], 'b1R')
 
         with self.assertRaises(IndexError):
-            self.make('channel_order', -1)
+            self.make('c_order', -1)
 
         with self.assertRaises(IndexError):
-            self.make('channel_order', 6)
+            self.make('c_order', 6)
 
         with self.assertRaises(KeyError):
-            self.make('channel_order', 'NONE')
+            self.make('c_order', 'NONE')
 
         with self.assertRaises(ValueError):
-            self.make('channel_order', 'RGG')
+            self.make('c_order', 'RGG')
 
         with self.assertRaises(ValueError):
-            self.make('channel_order', None)
+            self.make('c_order', None)

@@ -5,9 +5,14 @@ import time
 class Dummy(DriverBase):
     """For Testing: Provides no ouput, just a valid interface"""
 
-    def __init__(self, num, delay=0, **_):
-        """delay: time to wait in seconds to simulate actual hardware interface time"""
+    def __init__(self, num, delay=0, **kwds):
+        """
+        Args
+            delay: time to wait in seconds to simulate actual hardware
+            interface time
+        """
         super().__init__(num)
+        self._kwds = kwds
         self._delay = delay
 
     # Push new data to strand
