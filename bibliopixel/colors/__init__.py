@@ -196,3 +196,6 @@ MediumAquamarine = (102, 205, 170)
 Gold = (255, 215, 0)
 Orchid = (218, 112, 214)
 OldLace = (253, 245, 230)
+
+# COLORS is a dictionary of lowercase color names to color values.
+COLORS = {k.lower(): v for k, v in locals().items() if k.istitle()}
