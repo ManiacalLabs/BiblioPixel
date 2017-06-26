@@ -1,6 +1,7 @@
 import unittest
 
-from bibliopixel.project.types import make, color, duration, gamma, ledtype
+from bibliopixel.project.types import (
+    make, color, duration, gamma, ledtype, channel_order)
 from bibliopixel import colors
 
 
@@ -109,3 +110,30 @@ class GammaTypesTest(TypesBaseTest):
 
         with self.assertRaises(ValueError):
             self.make('gamma', None)
+
+
+class ChannelOrderTypesTest(TypesBaseTest):
+    def test_some(self):
+        def test(i, *cases):
+            expected = channel_order.ChannelOrder.ORDERS[i]
+            for case in cases:
+                actual = self.make('channel_order', case)['channel_order']
+                self.assertIs(expected, actual)
+
+        test(0, 'rgb', (0, 1, 2), [0, 1, 2], '012')
+        test(5, 'bgr', (2, 1, 0), [2, 1, 0], 'b1R')
+
+        with self.assertRaises(IndexError):
+            self.make('channel_order', -1)
+
+        with self.assertRaises(IndexError):
+            self.make('channel_order', 6)
+
+        with self.assertRaises(KeyError):
+            self.make('channel_order', 'NONE')
+
+        with self.assertRaises(ValueError):
+            self.make('channel_order', 'RGG')
+
+        with self.assertRaises(ValueError):
+            self.make('channel_order', None)
