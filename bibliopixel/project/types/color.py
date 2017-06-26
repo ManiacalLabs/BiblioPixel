@@ -1,4 +1,4 @@
-import functools
+import functools, numbers
 from ... import colors
 
 USAGE = """A Color can be initialized with:
@@ -32,8 +32,7 @@ def _(c):
     return make(tuple(c))
 
 
-@make.register(int)
-@make.register(float)
+@make.register(numbers.Number)
 def _(c):
     if not (0 <= c <= 255):
         raise ValueError('All components must be between 0 and 255', USAGE)

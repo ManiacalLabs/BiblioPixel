@@ -1,9 +1,9 @@
 import unittest
-from bibliopixel.project.types import make, color
+from bibliopixel.project.types import make, color, duration
 from bibliopixel import colors
 
 
-class TypesTest(unittest.TestCase):
+class ColorTypesTest(unittest.TestCase):
     def test_unchanged(self):
         for p in {}, {'a': {}}, {'a': {'b': 'c'}}:
             self.assertEqual(make.project(p, {}), p)
@@ -67,3 +67,16 @@ class TypesTest(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.make_color((1, 2, 3, 4))
+
+
+class DurationTypesTest(unittest.TestCase):
+    def make_duration(self, t, result=None):
+        component = make.component({'duration': t}, {'duration': duration})
+        if result is not None:
+            self.assertEquals(component, {'duration': result})
+
+    def test_some(self):
+        self.make_duration('1', 1)
+        self.make_duration('1s', 1)
+        self.make_duration('2.5s', 2.5)
+        self.make_duration('10 mins, 2.5s', 602.5)
