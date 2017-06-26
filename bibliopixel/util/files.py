@@ -22,16 +22,6 @@ def opener(fname, mode='r', *args, **kwds):
     raise IOError('%s: Can\'t open URL %s' % (response.status_code, url))
 
 
-def read_json(s, is_filename=True):
-    data = opener(s).read() if is_filename else s
-
-    try:
-        return json.loads(data)
-    except ValueError as e:
-        e.args = ['%s\nin filename %s' % (e.args[0], s)]
-        raise
-
-
 @contextlib.contextmanager
 def remove_on_failure(dirname, remove=True):
     """Tries to create and fill a directory, removes it on failure."""

@@ -40,7 +40,7 @@ def make_runnable(demo, args):
             layout['z'] = layout['z'] or args.depth
 
     defaults = _run.get_project_default_arguments(args)
-    return project.project_to_runnable(demo, defaults)
+    return project.project_to_animation(project=demo, defaults=defaults).start
 
 
 def usage():

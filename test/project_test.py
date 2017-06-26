@@ -1,7 +1,9 @@
 import json, unittest
 
-from bibliopixel.project import project
-from . mark_tests import long_test
+from bibliopixel.main import run
+from bibliopixel import gamma
+from bibliopixel.drivers.serial import codes
+from . mark_tests import SKIP_LONG_TESTS
 
 
 PROJECT = """
@@ -9,6 +11,29 @@ PROJECT = """
     "driver": {
         "typename": "dummy",
         "num": 12
+    },
+
+    "layout": "strip",
+    "animation": "strip_test",
+    "run": {
+        "max_steps": 2
+    }
+}
+"""
+
+PROJECT_TYPES = """
+{
+    "driver": {
+        "typename": "dummy",
+        "num": 12,
+
+        "c_order": "GBR",
+        "color": "green",
+        "duration": "1 hour, 2 minutes",
+        "gamma": "APA102",
+        "ledtype": "WS2812",
+        "time": "35ks",
+        "type": "GENERIC"
     },
 
     "layout": "strip",
@@ -86,23 +111,36 @@ PROJECT_SIM = """
 """
 
 
+def start(name, is_json=True):
+    animation = run.project_to_animation(name, is_json, None)
+    if not SKIP_LONG_TESTS:
+        animation.start()
+    return animation
+
+
 class ProjectTest(unittest.TestCase):
-    @long_test
     def test_simple(self):
-        project.run(PROJECT, False)
+        start(PROJECT)
 
-    @long_test
+    def test_types(self):
+        animation = start(PROJECT_TYPES)
+        kwds = animation.layout.drivers[0]._kwds
+        self.assertEquals(kwds['c_order'], (1, 2, 0))
+        self.assertEquals(kwds['color'], (0, 255, 0))
+        self.assertEquals(kwds['duration'], 3720)
+        self.assertEquals(kwds['gamma'], gamma.APA102)
+        self.assertEquals(kwds['ledtype'], codes.LEDTYPE.WS2812)
+        self.assertEquals(kwds['time'], 35000)
+        self.assertEquals(kwds['type'], codes.LEDTYPE.GENERIC)
+
     def test_file(self):
-        project.run('test/project.json')
+        start('test/project.json', False)
 
-    @long_test
     def test_multi(self):
-        project.run(PROJECT_MULTI, False)
+        start(PROJECT_MULTI)
 
-    @long_test
     def test_shared(self):
-        project.run(PROJECT_SHARED, False)
+        start(PROJECT_SHARED)
 
-    @long_test
     def test_sim(self):
-        project.run(PROJECT_SIM, False)
+        start(PROJECT_SIM)

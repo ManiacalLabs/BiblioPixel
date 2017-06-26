@@ -1,5 +1,7 @@
+import json
 from .. project import project
 from .. import log
+from .. util import files
 
 HELP = """
 Run a project description file.
@@ -33,10 +35,20 @@ def get_project_default_arguments(args):
     }
 
 
+def project_to_animation(name, is_json, defaults):
+    data = name if is_json else files.opener(name).read()
+    try:
+        desc = json.loads(data)
+    except ValueError as e:
+        e.args += tuple(['in %s' % name])
+        raise
+    return project.project_to_animation(desc, defaults)
+
+
 def run(args, settings):
     if args.name:
         defaults = get_project_default_arguments(args)
-        project.run(args.name, not args.json, defaults)
+        project_to_animation(args.name, args.json, defaults).start()
 
 
 def set_parser(parser):

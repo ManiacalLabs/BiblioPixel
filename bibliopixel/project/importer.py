@@ -1,3 +1,4 @@
+from .types import make
 from ..util import importer
 from distutils.version import LooseVersion
 
@@ -60,6 +61,11 @@ def import_symbol(typename, package=None):
         raise
 
 
-def make_object(*args, typename, package=None, **kwds):
+def make_object(*args, typename, package=None, field_types=None, **kwds):
     """Make an object from a symbol."""
-    return import_symbol(typename, package)(*args, **kwds)
+    symbol = import_symbol(typename, package)
+    if hasattr(symbol, 'FIELD_TYPES'):
+        field_types = symbol.FIELD_TYPES
+
+    kwds = make.component(kwds, field_types)
+    return symbol(*args, **kwds)
