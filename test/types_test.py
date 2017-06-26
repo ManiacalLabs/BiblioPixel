@@ -1,13 +1,13 @@
 import unittest
 
-from bibliopixel.project.types import (
-    make, color, duration, gamma, ledtype, channel_order)
-from bibliopixel import colors
+from bibliopixel.project.types import make
+from bibliopixel import colors, gamma
+from bibliopixel.drivers import channel_order
 
 
 class TypesBaseTest(unittest.TestCase):
     def make(self, name, c, result=None):
-        component = make.component({name: c}, {name: globals()[name]})
+        component = make.component({name: c})
         if result is not None:
             self.assertEquals(component, {name: result})
         return component
@@ -17,7 +17,7 @@ class ColorTypesTest(TypesBaseTest):
     def test_unchanged(self):
         for p in {}, {'a': {}}, {'a': {'b': 'c'}}:
             self.assertEqual(make.project(p, {}), p)
-            self.assertEqual(make.project(p, {'color': color}), p)
+            self.assertEqual(make.project(p), p)
 
     def test_color_names(self):
         # Test every color.
@@ -96,14 +96,14 @@ class LEDTYPETypesTest(TypesBaseTest):
 
 class GammaTypesTest(TypesBaseTest):
     def test_some(self):
-        self.make('gamma', 'LPD8806', gamma.gamma.LPD8806)
-        self.make('gamma', 'DEFAULT', gamma.gamma.DEFAULT)
+        self.make('gamma', 'LPD8806', gamma.LPD8806)
+        self.make('gamma', 'DEFAULT', gamma.DEFAULT)
 
         gam = self.make('gamma', {'gamma': 2.5, 'offset': 0.5})
-        self.assertEquals(gam['gamma'].table, gamma.gamma.APA102.table)
+        self.assertEquals(gam['gamma'].table, gamma.APA102.table)
 
         gam = self.make('gamma', [2.5, 0.5, 128])
-        self.assertEquals(gam['gamma'].table, gamma.gamma.LPD8806.table)
+        self.assertEquals(gam['gamma'].table, gamma.LPD8806.table)
 
         with self.assertRaises(TypeError):
             self.make('gamma', [0, 1, 2, 3])
