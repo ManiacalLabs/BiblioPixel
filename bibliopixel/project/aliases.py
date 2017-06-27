@@ -4,6 +4,7 @@ from .importer import import_symbol
 ALIASES = {
     'driver': {
         'apa102': 'bibliopixel.drivers.API.APA102.APA102',
+        'sk9822': 'bibliopixel.drivers.API.APA102.APA102',
         'dummy': 'bibliopixel.drivers.dummy_driver.Dummy',
         'hue': 'bibliopixel.drivers.hue.Hue',
         'image': 'bibliopixel.drivers.image_sequence.ImageSequence',
