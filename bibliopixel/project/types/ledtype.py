@@ -1,9 +1,9 @@
 import functools
-from ...drivers.serial import codes
+from ...drivers.ledtype import LEDTYPE
 
 USAGE = """An LEDTYPE is represented by a string.
 
-Possible LEDTYPEs are """ + ', '.join(codes.LEDTYPE.__members__)
+Possible LEDTYPEs are """ + ', '.join(LEDTYPE.__members__)
 
 
 @functools.singledispatch
@@ -13,4 +13,4 @@ def make(c):
 
 @make.register(str)
 def _(c):
-    return codes.LEDTYPE[c]
+    return LEDTYPE[c]

@@ -12,8 +12,8 @@ from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
 class Serial(DriverBase):
     """Main driver for Serial based LED strips"""
 
-    def __init__(self, type, num, dev="",
-                 c_order=ChannelOrder.RGB, SPISpeed=2,
+    def __init__(self, ledtype, num, dev="",
+                 c_order=ChannelOrder.RGB, spi_speed=2,
                  gamma=None, restart_timeout=3,
                  device_id=None, hardwareID="1D50:60AB",
                  baudrate=921600, **kwds):
@@ -21,12 +21,12 @@ class Serial(DriverBase):
         self.devices = Devices(hardwareID, baudrate)
         self.serial = self.devices.serial
 
-        if SPISpeed < 1 or SPISpeed > 24 or not (type in SPIChipsets):
-            SPISpeed = 1
+        if spi_speed < 1 or spi_speed > 24 or not (type in SPIChipsets):
+            spi_speed = 1
 
-        self._SPISpeed = SPISpeed
+        self._spi_speed = spi_speed
         self._com = None
-        self._type = resolve_enum(LEDTYPE, type)
+        self._type = resolve_enum(LEDTYPE, ledtype)
         self._bufPad = 0
         self.dev = dev
         self.device_version = 0
@@ -51,7 +51,7 @@ class Serial(DriverBase):
             print_error(resp)
 
         if type in SPIChipsets:
-            log.info("Using SPI Speed: %sMHz", self._SPISpeed)
+            log.info("Using SPI Speed: %sMHz", self._spi_speed)
 
         self.set_device_brightness = self.set_brightness
 
@@ -89,7 +89,7 @@ class Serial(DriverBase):
 
             packet.append(byteCount & 0xFF)  # set 1st byte of byteCount
             packet.append(byteCount >> 8)  # set 2nd byte of byteCount
-            packet.append(self._SPISpeed)
+            packet.append(self._spi_speed)
             self._com.write(packet)
 
             resp = self._com.read(1)

@@ -1,2 +1,2 @@
-from . driver import SPI, SPI_LEDTYPE
+from . driver import SPI, LEDTYPE
 from . interfaces import SPI_INTERFACES
