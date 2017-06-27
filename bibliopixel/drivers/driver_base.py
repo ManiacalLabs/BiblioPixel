@@ -21,6 +21,8 @@ class DriverBase(object):
             if num == 0:
                 raise ValueError("Either num, or width and height are needed!")
 
+        self.maker = maker
+
         self.numLEDs = num
         gamma = gamma or _gamma.DEFAULT
         self.gamma = gamma

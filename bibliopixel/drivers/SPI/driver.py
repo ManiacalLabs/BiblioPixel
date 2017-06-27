@@ -13,6 +13,7 @@ from . WS2801 import WS2801
 class SPI_LEDTYPE(IntEnum):
     APA102 = 0
     DOTSTAR = 0
+    SK9822 = 0
     WS2801 = 1
     WS281X = 2
     WS2812 = 2
