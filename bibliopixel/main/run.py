@@ -36,6 +36,7 @@ def get_project_default_arguments(args):
 
 
 def project_to_animation(name, is_json, defaults):
+    log.info('Processing project file...')
     data = name if is_json else files.opener(name).read()
     try:
         desc = json.loads(data)

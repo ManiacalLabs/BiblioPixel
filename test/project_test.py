@@ -2,7 +2,7 @@ import json, unittest
 
 from bibliopixel.main import run
 from bibliopixel import gamma
-from bibliopixel.drivers.serial import codes
+from bibliopixel.drivers.ledtype import LEDTYPE
 from . mark_tests import SKIP_LONG_TESTS
 
 
@@ -31,9 +31,8 @@ PROJECT_TYPES = """
         "color": "green",
         "duration": "1 hour, 2 minutes",
         "gamma": "APA102",
-        "ledtype": "WS2812",
         "time": "35ks",
-        "type": "GENERIC"
+        "ledtype": "GENERIC"
     },
 
     "layout": "strip",
@@ -129,9 +128,8 @@ class ProjectTest(unittest.TestCase):
         self.assertEquals(kwds['color'], (0, 255, 0))
         self.assertEquals(kwds['duration'], 3720)
         self.assertEquals(kwds['gamma'], gamma.APA102)
-        self.assertEquals(kwds['ledtype'], codes.LEDTYPE.WS2812)
         self.assertEquals(kwds['time'], 35000)
-        self.assertEquals(kwds['type'], codes.LEDTYPE.GENERIC)
+        self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
 
     def test_file(self):
         start('test/project.json', False)

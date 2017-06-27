@@ -7,5 +7,5 @@ FIELD_TYPES = {
     'gamma': gamma,
     'ledtype': ledtype,
     'time': duration,
-    'type': ledtype,
+    'ledtype': ledtype,
 }

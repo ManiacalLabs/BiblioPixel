@@ -1,4 +1,5 @@
 from enum import IntEnum
+from .. ledtype import LEDTYPE
 
 
 class CMDTYPE(IntEnum):
@@ -9,29 +10,6 @@ class CMDTYPE(IntEnum):
     SETID = 5
     GETVER = 6
     SYNC = 7
-
-
-class LEDTYPE(IntEnum):
-    GENERIC = 0  # Use if the serial device only supports one chipset
-    LPD8806 = 1
-    WS2801 = 2
-    # These are all the same
-    WS2811 = 3
-    WS2812 = 3
-    WS2812B = 3
-    NEOPIXEL = 3
-    APA104 = 3
-    # 400khz variant of above
-    WS2811_400 = 4
-
-    TM1809 = 5
-    TM1804 = 5
-    TM1803 = 6
-    UCS1903 = 7
-    SM16716 = 8
-    APA102 = 9
-    LPD1886 = 10
-    P9813 = 11
 
 
 SPIChipsets = [
