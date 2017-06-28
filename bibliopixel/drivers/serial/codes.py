@@ -3,7 +3,7 @@ from .. ledtype import LEDTYPE
 
 
 class CMDTYPE(IntEnum):
-    SETUP_DATA = 1  # config data (LED type, SPI speed, num LEDs)
+    SETUP_DATA = 1  # config data (LEDTYPE, SPI speed, num LEDs)
     PIXEL_DATA = 2  # raw pixel data will be sent as [R1,G1,B1,R2,G2,B2,...]
     BRIGHTNESS = 3  # data will be single 0-255 brightness value, length must be 0x00,0x01
     GETID = 4

@@ -21,19 +21,19 @@ class Serial(DriverBase):
         self.devices = Devices(hardwareID, baudrate)
         self.serial = self.devices.serial
 
-        if spi_speed < 1 or spi_speed > 24 or not (type in SPIChipsets):
+        if not (1 <= spi_speed <= 24 and ledtype in SPIChipsets):
             spi_speed = 1
 
         self._spi_speed = spi_speed
         self._com = None
-        self._type = resolve_enum(LEDTYPE, ledtype)
+        self._ledtype = resolve_enum(LEDTYPE, ledtype)
         self._bufPad = 0
         self.dev = dev
         self.device_version = 0
         self.device_id = device_id
         self._sync_packet = util.generate_header(CMDTYPE.SYNC, 0)
 
-        if self.device_id is not None and (self.device_id < 0 or self.device_id > 255):
+        if self.device_id is not None and not (0 <= self.device_id <= 255):
             raise ValueError("device_id must be between 0 and 255")
 
         resp = self._connect()
@@ -78,13 +78,14 @@ class Serial(DriverBase):
                 raise BiblioSerialError(error)
 
             packet = util.generate_header(CMDTYPE.SETUP_DATA, 4)
-            packet.append(self._type)  # set strip type
+            packet.append(self._ledtype)  # set strip type
             byteCount = self.bufByteCount()
-            if self._type in BufferChipsets:
-                if self._type == LEDTYPE.APA102 and self.device_version >= 2:
+            if self._ledtype in BufferChipsets:
+                if self._ledtype == LEDTYPE.APA102 and self.device_version >= 2:
                     pass
                 else:
-                    self._bufPad = BufferChipsets[self._type](self.numLEDs) * 3
+                    self._bufPad = BufferChipsets[
+                        self._ledtype](self.numLEDs) * 3
                     byteCount += self._bufPad
 
             packet.append(byteCount & 0xFF)  # set 1st byte of byteCount
@@ -145,7 +146,7 @@ DriverSerial = Serial
 class TeensySmartMatrix(Serial):
     def __init__(self, width, height, dev="", device_id=None,
                  hardwareID="16C0:0483"):
-        super().__init__(type=LEDTYPE.GENERIC, num=width * height,
+        super().__init__(ledtype=LEDTYPE.GENERIC, num=width * height,
                          device_id=device_id, hardwareID=hardwareID)
         self.sync = self._send_sync
 
