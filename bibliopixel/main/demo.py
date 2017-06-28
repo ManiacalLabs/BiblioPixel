@@ -1,6 +1,7 @@
-import random, webbrowser
+import random
 
 from . demo_table import DEMO_TABLE
+from . import simpixel
 from . import run as _run
 from .. project import project
 
@@ -11,7 +12,6 @@ Run a demo.  For the list of possible demos, type
 
 """
 
-DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
 DEMO_OPTS = ', '.join(sorted(DEMO_TABLE.keys()))
 
 
@@ -63,9 +63,7 @@ def run(args, settings):
         raise KeyError('Unknown demo %s' % args.name)
 
     runnable = make_runnable(demo, args)
-    if not args.simpixel.startswith('no'):
-        webbrowser.open(args.simpixel, new=0, autoraise=True)
-
+    simpixel.open_simpixel(args.simpixel)
     runnable()
 
 
@@ -90,7 +88,6 @@ def set_parser(parser):
         help='Z dimension of display. Only used for Cube demos.')
 
     parser.add_argument(
-        '--simpixel', default=DEFAULT_SIMPIXEL_URL,
-        help='URL for SimPixel program.')
+        '--simpixel', '-s', default=None, help='URL for SimPixel program.')
 
     _run.add_project_default_arguments(parser)
