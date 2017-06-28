@@ -29,5 +29,5 @@ class BiblioSerialError(Exception):
 
 def print_error(error, exception_class=BiblioSerialError):
     msg = RETURN_CODE_ERRORS.get(error, 'Unknown error occured.')
-    log.error('%s: %s', msg)
+    log.error('%s: %s', error, msg)
     raise exception_class(msg)
