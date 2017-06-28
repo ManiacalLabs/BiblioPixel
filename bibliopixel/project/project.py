@@ -72,13 +72,8 @@ def _apply_defaults(project, defaults):
 
     ledtype = defaults.get('ledtype')
     if ledtype:
-        if 'layout' not in project:
-            project['layout'] = {}
-
-        if 'type' not in project['layout']:
-            project['layout']['type'] = ledtype
-            # The field in LAYOUT should probably be renamed "ledtype" to be
-            # consistent across the whole system.
+        if 'ledtype' not in project['driver']:
+            project['driver']['ledtype'] = ledtype
 
 
 def project_to_animation(project, defaults=None):
