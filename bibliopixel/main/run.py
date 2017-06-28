@@ -1,4 +1,5 @@
 import json
+from . import simpixel
 from .. project import project
 from .. import log
 from .. util import files
@@ -47,9 +48,15 @@ def project_to_animation(name, is_json, defaults):
 
 
 def run(args, settings):
+    if args.simpixel:
+        simpixel.open_simpixel(args.simpixel)
+    elif args.s:
+        simpixel.open_simpixel()
+
     if args.name:
         defaults = get_project_default_arguments(args)
-        project_to_animation(args.name, args.json, defaults).start()
+        animation = project_to_animation(args.name, args.json, defaults)
+        animation.start()
 
 
 def set_parser(parser):
@@ -64,5 +71,9 @@ def set_parser(parser):
     parser.add_argument(
         '-j', '--json', action='store_true',
         help='Enter JSON directly as a command line argument.')
+
+    parser.add_argument(
+        '-s', action='store_true', help='Run SimPixel at the default URL')
+    parser.add_argument('--simpixel', help='Run SimPixel at a specific URL')
 
     add_project_default_arguments(parser)
