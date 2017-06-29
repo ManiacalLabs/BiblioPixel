@@ -26,6 +26,12 @@ LOGLEVEL_HELP = """\
 Set what level of events to log. Higher log levels print less."""
 
 
+VERBOSE_HELP = """\
+If this is set, then errors are reported with a full stack trace.
+If not set, just the exception message is printed.
+"""
+
+
 def no_command(*_):
     print('ERROR: No command entered')
     print('Valid:', ', '.join(COMMANDS))
@@ -35,13 +41,16 @@ def no_command(*_):
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
+
     for name, module in sorted(MODULES.items()):
         subparser = subparsers.add_parser(name, help=module.HELP)
         module.set_parser(subparser)
-    parser.add_argument('--loglevel', choices=LOG_LEVELS, default='info',
-                        help=LOGLEVEL_HELP)
-    parser.add_argument('--path', default=None,
-                        help=PATH_HELP)
+
+    parser.add_argument(
+        '--loglevel', choices=LOG_LEVELS, default='info', help=LOGLEVEL_HELP)
+    parser.add_argument('--path', default=None, help=PATH_HELP)
+    parser.add_argument('--verbose', '-v', action='store_true')
+
     if ENABLE_PRESETS:
         parser.add_argument('--presets', help='Filename for presets',
                             default=PRESET_LIBRARY_DEFAULT)
@@ -49,10 +58,19 @@ def main():
     args = ['--help' if i == 'help' else i for i in sys.argv[1:]]
     args = parser.parse_args(args)
 
-    log.set_log_level(args.loglevel)
-    presets = ENABLE_PRESETS and PresetLibrary(
-        os.path.expanduser(args.presets), True)
+    try:
+        log.set_log_level(args.loglevel)
+        presets = ENABLE_PRESETS and PresetLibrary(
+            os.path.expanduser(args.presets), True)
 
-    run = getattr(args, 'run', no_command)
-    gitty.sys_path.extend(args.path)
-    sys.exit(run(args, presets) or 0)
+        run = getattr(args, 'run', no_command)
+        gitty.sys_path.extend(args.path)
+        result = run(args, presets) or 0
+    except Exception as e:
+        if args.verbose:
+            raise
+        print('ERROR:', e.args[0], file=sys.stderr)
+        print(*e.args[1:], sep='\n', file=sys.stderr)
+        result = getattr(e, 'errorcode', -1)
+
+    sys.exit(result)
