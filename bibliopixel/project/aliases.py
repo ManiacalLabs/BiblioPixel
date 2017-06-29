@@ -52,7 +52,7 @@ def resolve(*dicts):
 
             typename = value.get('typename')
             if typename and key in ALIASES:
-                value['typename'] = ALIASES[key].get(typename, typename)
+                value['typename'] = ALIASES[key].get(typename.lower(), typename)
 
             result.setdefault(key, {}).update(**value)
 
