@@ -111,7 +111,7 @@ PROJECT_SIM = """
 
 
 def start(name, is_json=True):
-    animation = run.project_to_animation(name, is_json, None)
+    animation = run.make_animation(name, is_json, None)
     if not SKIP_LONG_TESTS:
         animation.start()
     return animation

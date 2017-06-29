@@ -33,26 +33,27 @@ ALIASES = {
         'bibliopixel.animation.tests.MatrixCalibrationTest',
         'matrix_test': 'bibliopixel.animation.tests.MatrixChannelTest',
         'receiver': 'bibliopixel.animation.receiver.BaseReceiver',
+
+
         'sequence': 'bibliopixel.animation.Sequence',
         'strip_test': 'bibliopixel.animation.tests.StripChannelTest',
     },
 }
 
 
-def fill_typename(desc, key):
-    if isinstance(desc, str):
-        return fill_typename({'typename': desc}, key)
+def resolve(*dicts):
+    """Resolve aliases and merge.  Evaluation proceeds from left to right."""
+    result = {}
 
-    typename = desc.get('typename')
-    if typename:
-        desc['typename'] = ALIASES[key].get(typename, typename)
+    for d in dicts:
+        for key, value in d.items():
+            if isinstance(value, str):
+                value = {'typename': value}
 
-    return desc
+            typename = value.get('typename')
+            if typename and key in ALIASES:
+                value['typename'] = ALIASES[key].get(typename, typename)
 
+            result.setdefault(key, {}).update(**value)
 
-def resolve_aliases(project):
-    result = copy.deepcopy(project)
-    for key in ALIASES:
-        if key in result:
-            result[key] = fill_typename(result[key], key)
     return result

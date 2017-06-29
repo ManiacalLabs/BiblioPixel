@@ -1,5 +1,5 @@
 import json
-from . import simpixel
+from . import simpixel, arguments
 from .. project import project
 from .. import log
 from .. util import files
@@ -9,34 +9,7 @@ Run a project description file.
 """
 
 
-def add_project_default_arguments(parser):
-    parser.add_argument(
-        '-d', '--driver', default=None,
-        help='Default driver type if no driver is specified')
-
-    parser.add_argument(
-        '-l', '--layout', default=None,
-        help='Default LAYOUT class if no LAYOUT is specified')
-
-    parser.add_argument(
-        '-t', '--ledtype', default=None,
-        help='Default LED type if no LED type is specified')
-
-    parser.add_argument(
-        '-a', '--animation', default=None,
-        help='Default animation type if no animation is specified')
-
-
-def get_project_default_arguments(args):
-    return {
-        'driver': args.driver,
-        'layout': args.layout,
-        'animation': args.animation,
-        'ledtype': args.ledtype,
-    }
-
-
-def project_to_animation(name, is_json, defaults):
+def make_animation(name, is_json, defaults):
     log.info('Processing project file...')
     data = name if is_json else files.opener(name).read()
     try:
@@ -54,14 +27,16 @@ def run(args, settings):
         simpixel.open_simpixel()
 
     if args.name:
-        defaults = get_project_default_arguments(args)
-        animation = project_to_animation(args.name, args.json, defaults)
+        defaults = arguments.get_dict(args)
+        animation = make_animation(args.name, args.json, defaults)
         animation.start()
 
 
 def set_parser(parser):
     parser.set_defaults(run=run)
     parser.description = 'Run specified BiblioPixel project from file or URL.'
+
+    arguments.add_to_parser(parser)
 
     parser.add_argument(
         'name', nargs='?',
@@ -71,9 +46,3 @@ def set_parser(parser):
     parser.add_argument(
         '-j', '--json', action='store_true',
         help='Enter JSON directly as a command line argument.')
-
-    parser.add_argument(
-        '-s', action='store_true', help='Run SimPixel at the default URL')
-    parser.add_argument('--simpixel', help='Run SimPixel at a specific URL')
-
-    add_project_default_arguments(parser)

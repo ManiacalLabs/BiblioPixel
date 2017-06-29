@@ -1,8 +1,6 @@
 import random
 
-from . demo_table import DEMO_TABLE
-from . import simpixel
-from . import run as _run
+from . import arguments, demo_table, simpixel
 from .. project import project
 
 HELP = """
@@ -12,7 +10,7 @@ Run a demo.  For the list of possible demos, type
 
 """
 
-DEMO_OPTS = ', '.join(sorted(DEMO_TABLE.keys()))
+DEMO_OPTS = ', '.join(sorted(demo_table.DEMO_TABLE.keys()))
 
 
 def make_runnable(demo, args):
@@ -39,8 +37,8 @@ def make_runnable(demo, args):
         if 'z' in layout:
             layout['z'] = layout['z'] or args.depth
 
-    defaults = _run.get_project_default_arguments(args)
-    return project.project_to_animation(project=demo, defaults=defaults).start
+    defaults = arguments.get_dict(args)
+    return project.project_to_animation(demo, defaults).start
 
 
 def usage():
@@ -54,11 +52,11 @@ def run(args, settings):
 
     if not args.name:
         usage()
-        args.name = random.choice(list(DEMO_TABLE))
+        args.name = random.choice(list(demo_table.DEMO_TABLE))
         print('Randomly selected', args.name)
 
     try:
-        demo = DEMO_TABLE[args.name]
+        demo = demo_table.DEMO_TABLE[args.name]
     except KeyError:
         raise KeyError('Unknown demo %s' % args.name)
 
@@ -71,6 +69,7 @@ def set_parser(parser):
     parser.set_defaults(run=run)
     parser.description = 'Run demo in SimPixel'
 
+    arguments.add_to_parser(parser)
     parser.add_argument(
         'name', nargs='?', default='',
         help='Name of demo to run. Options are: {}'.format(DEMO_OPTS))
@@ -86,8 +85,3 @@ def set_parser(parser):
     parser.add_argument(
         '--depth', default=16, type=int,
         help='Z dimension of display. Only used for Cube demos.')
-
-    parser.add_argument(
-        '--simpixel', '-s', default=None, help='URL for SimPixel program.')
-
-    _run.add_project_default_arguments(parser)

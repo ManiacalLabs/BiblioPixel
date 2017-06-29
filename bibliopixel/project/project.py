@@ -1,12 +1,11 @@
-import gitty, json, os, sys
-from . import defaults, importer
+import gitty, sys
+from . import aliases, importer
 from . types.defaults import FIELD_TYPES
 from .. animation import runner
 from .. import data_maker
 from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
-from .. drivers.serial import codes
 
 
 def _make_object(*args, field_types=FIELD_TYPES, **kwds):
@@ -43,39 +42,12 @@ def make_animation(layout, animation, run=None):
     return animation
 
 
-def _make_project(path=None, **project):
+def _make_project(path=None, animation=None, run=None, **kwds):
     gitty.sys_path.extend(path)
-
-    kwds = defaults.apply_defaults(project)
-    animation = kwds.pop('animation', {})
-    run = kwds.pop('run', {})
     layout = _make_layout(**kwds)
-    return make_animation(layout, animation, run)
+    return make_animation(layout, animation or {}, run or {})
 
 
-def _apply_defaults(project, defaults):
-    # TODO: consolidate with bp.project.defaults.
-    for k, v in defaults.items():
-        if k == 'ledtype' or not v:
-            continue
-
-        if k not in project:
-            project[k] = v
-
-        else:
-            existing = project[k]
-            if 'typename' not in existing:
-                try:
-                    existing['typename'] = v
-                except:
-                    pass
-
-    ledtype = defaults.get('ledtype')
-    if ledtype:
-        if 'ledtype' not in project['driver']:
-            project['driver']['ledtype'] = ledtype
-
-
-def project_to_animation(project, defaults=None):
-    _apply_defaults(project, defaults or {})
+def project_to_animation(desc, default):
+    project = aliases.resolve(default or {}, desc)
     return _make_project(**project)
