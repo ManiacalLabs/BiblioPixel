@@ -23,15 +23,8 @@ class Matrix(Layout):
         super().__init__(drivers, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
 
-        if width == 0 and height == 0:
-            if len(self.drivers) != 1:
-                raise TypeError(
-                    "Must provide width and height if using multiple drivers!")
-            width = self.drivers[0].width
-            height = self.drivers[0].height
-
-        self.width = width
-        self.height = height
+        self.width = width or getattr(self.drivers[0], 'width') or 32
+        self.height = height or getattr(self.drivers[0], 'height') or 32
         self.pixelSize = pixelSize
         pw, ph = self.pixelSize
 
@@ -44,9 +37,9 @@ class Matrix(Layout):
                 raise TypeError(
                     "No width or height passed but the number of LEDs is not a perfect square")
 
-        if self.width * self.height != self.numLEDs:
-            raise ValueError('width * height MUST equal total pixel count!'
-                             ' %s * %s != %s'
+        if self.width * self.height > self.numLEDs:
+            raise ValueError('width * height cannot exceed total pixel count!'
+                             ' %s * %s > %s'
                              % (self.width, self.height, self.numLEDs))
 
         if coordMap:

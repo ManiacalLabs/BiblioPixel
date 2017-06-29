@@ -12,7 +12,7 @@ Perhaps BiblioPixel is already running on your machine?
 
 class SimPixel(DriverBase):
 
-    def __init__(self, num, port=1337, pixel_positions=None, **kwds):
+    def __init__(self, num=1024, port=1337, pixel_positions=None, **kwds):
         """
         Args:
             num:  number of LEDs being visualizer.
