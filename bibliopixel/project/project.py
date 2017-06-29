@@ -40,7 +40,7 @@ def make_animation(layout, animation, run=None):
     try:
         animation = _make_object(layout, **animation)
     except ImportError:
-        raise ValueError('Could not load animation class %s' %
+        raise ValueError('Could not load animation class "%s"' %
                          animation.get('typename'))
     animation.set_runner(runner.Runner(**(run or {})))
     return animation
