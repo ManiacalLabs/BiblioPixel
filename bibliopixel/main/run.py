@@ -9,15 +9,17 @@ Run a project description file.
 """
 
 
-def make_animation(name, is_json, defaults):
-    log.info('Processing project file...')
-    data = name if is_json else files.opener(name).read()
-    try:
-        desc = json.loads(data)
-    except ValueError as e:
-        e.args += tuple(['in %s' % name])
-        raise
-    return project.project_to_animation(desc, defaults)
+def make_animation(name, is_json, default):
+    if name:
+        data = name if is_json else files.opener(name).read()
+        try:
+            desc = json.loads(data)
+        except ValueError as e:
+            e.args += tuple(['in %s' % name])
+            raise
+    else:
+        desc = {}
+    return project.project_to_animation(desc, default)
 
 
 def run(args, settings):
@@ -26,10 +28,9 @@ def run(args, settings):
     elif args.s:
         simpixel.open_simpixel()
 
-    if args.name:
-        defaults = arguments.get_dict(args)
-        animation = make_animation(args.name, args.json, defaults)
-        animation.start()
+    default = arguments.get_dict(args)
+    animation = make_animation(args.name, args.json, default)
+    animation.start()
 
 
 def set_parser(parser):
