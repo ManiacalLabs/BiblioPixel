@@ -1,6 +1,9 @@
+import json
 from .. project import project
 
 """Common command line arguments for run and demo."""
+
+COMPONENTS = 'driver', 'layout', 'animation'
 
 
 def add_to_parser(parser):
@@ -27,11 +30,17 @@ def add_to_parser(parser):
 
 
 def get_dict(args):
-    result = {}
-    for name in 'driver', 'layout', 'animation':
+    def get_value(name):
         value = args and getattr(args, name)
-        result[name] = {'typename': value} if value else {}
+        if not value:
+            return {}
 
+        if '{' in value:
+            return json.loads(value)
+
+        return {'typename': value}
+
+    result = {name: get_value(name) for name in COMPONENTS}
     if args and args.ledtype:
         result['driver']['ledtype'] = args.ledtype
 
