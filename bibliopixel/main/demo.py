@@ -37,8 +37,7 @@ def make_runnable(demo, args):
         if 'z' in layout:
             layout['z'] = layout['z'] or args.depth
 
-    defaults = arguments.get_dict(args)
-    return project.project_to_animation(demo, defaults).start
+    return arguments.make_animation(args, demo).start
 
 
 def usage():

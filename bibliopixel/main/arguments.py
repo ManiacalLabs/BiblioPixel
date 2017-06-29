@@ -1,3 +1,5 @@
+from .. project import project
+
 """Common command line arguments for run and demo."""
 
 
@@ -27,11 +29,14 @@ def add_to_parser(parser):
 def get_dict(args):
     result = {}
     for name in 'driver', 'layout', 'animation':
-        value = getattr(args, name)
-        if value:
-            result[name] = value
+        value = args and getattr(args, name)
+        result[name] = {'typename': value} if value else {}
 
-    if args.ledtype:
-        result.setdefault('driver', {})['ledtype'] = args.ledtype
+    if args and args.ledtype:
+        result['driver']['ledtype'] = args.ledtype
 
     return result
+
+
+def make_animation(args, desc):
+    return project.project_to_animation(desc, get_dict(args))
