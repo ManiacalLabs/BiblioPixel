@@ -1,9 +1,10 @@
 import json
-from ..project.defaults import SECTIONS
 
 HELP = """
 Set bibliopixel values
 """
+
+SECTIONS = 'transport', 'driver', 'layout', 'animation', 'run', 'path'
 
 
 def run(args, settings):

@@ -1,5 +1,3 @@
-from ..project.defaults import SECTIONS
-
 HELP = """
 Show bibliopixel settings.
 """
