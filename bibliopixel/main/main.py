@@ -25,11 +25,23 @@ for more information.
 LOGLEVEL_HELP = """\
 Set what level of events to log. Higher log levels print less."""
 
-
 VERBOSE_HELP = """\
 If this is set, then errors are reported with a full stack trace.
 If not set, just the exception message is printed.
 """
+
+
+def _get_version():
+    from os.path import abspath, dirname, join
+    filename = join(dirname(dirname(dirname(abspath(
+        __file__)))), 'bibliopixel', 'VERSION')
+    return open(filename).read().strip()
+
+
+VERSION = _get_version()
+VERSION_HELP = """\
+Print the current version number of BiblioPixel (%s).
+""" % VERSION
 
 
 def no_command(*_):
@@ -49,14 +61,26 @@ def main():
     parser.add_argument(
         '--loglevel', choices=LOG_LEVELS, default='info', help=LOGLEVEL_HELP)
     parser.add_argument('--path', default=None, help=PATH_HELP)
-    parser.add_argument('--verbose', '-v', action='store_true')
+    parser.add_argument(
+        '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
+
+    parser.add_argument('--version', action='store_true', help=VERSION_HELP)
 
     if ENABLE_PRESETS:
         parser.add_argument('--presets', help='Filename for presets',
                             default=PRESET_LIBRARY_DEFAULT)
+    argv = ['--help' if i == 'help' else i for i in sys.argv[1:]]
 
-    args = ['--help' if i == 'help' else i for i in sys.argv[1:]]
-    args = parser.parse_args(args)
+    try:
+        argv.remove('--version')
+    except:
+        pass
+    else:
+        print('BiblioPixel version %s' % VERSION)
+        if not argv:
+            return
+
+    args = parser.parse_args(argv)
 
     try:
         log.set_log_level(args.loglevel)
@@ -66,6 +90,7 @@ def main():
         run = getattr(args, 'run', no_command)
         gitty.sys_path.extend(args.path)
         result = run(args, presets) or 0
+
     except Exception as e:
         if args.verbose:
             raise
