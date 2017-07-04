@@ -30,12 +30,14 @@ class ColorTypesTest(TypesBaseTest):
     def test_color_numbers(self):
         for i in range(256):
             self.make('color', i, (i, i, i))
+            self.make('color', str(i), (i, i, i))
 
         for c in [0, 0, 0], [127, 128, 255], [4, 200, 77]:
             self.make('color', c, tuple(c))
 
         for c in (0, 0, 0), (127, 128, 255), (4, 200, 77):
             self.make('color', c, c)
+            self.make('color', str(c), c)
 
     def test_errors(self):
         with self.assertRaises(ValueError):
@@ -48,13 +50,7 @@ class ColorTypesTest(TypesBaseTest):
             self.make('color', '')
 
         with self.assertRaises(ValueError):
-            self.make('color', '255')
-
-        with self.assertRaises(ValueError):
             self.make('color', '[0, 0, 0]')
-
-        with self.assertRaises(ValueError):
-            self.make('color', '(0, 0, 0)')
 
         with self.assertRaises(ValueError):
             self.make('color', 'dog')
