@@ -1,6 +1,7 @@
 # "Classic" colors from BP3.0.
 
 Off = (0, 0, 0)
+On = (255, 255, 255)
 Blue = (0, 0, 255)
 Pink = (255, 192, 203)
 Honeydew = (240, 255, 240)
@@ -144,6 +145,3 @@ MediumAquamarine = (102, 205, 170)
 Gold = (255, 215, 0)
 Orchid = (218, 112, 214)
 OldLace = (253, 245, 230)
-
-# COLORS is a dictionary of lowercase color names to color values.
-COLORS = {k.lower(): v for k, v in locals().items() if k.istitle()}
