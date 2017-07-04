@@ -44,26 +44,39 @@ TO_COLOR = {k.replace(' ', ''): v for k, v in COLOR_DICT.items()}
 
 
 def name_to_color(name):
-    if name.startswith('(') and name.endswith(')'):
-        name = name[1:-1]
+    def to_int(s):
+        s = s.strip()
+        try:
+            if s.startswith('0x'):
+                return int(s[2:], 16)
+            return int(s)
+        except:
+            raise ValueError("Don't understand number " + s)
 
-    try:
-        color = tuple(int(i) for i in name.split(','))
-    except:
-        pass
+    name = name.lower()
+    if ',' in name:
+        if name.startswith('(') and name.endswith(')'):
+            name = name[1:-1]
+
+        parts = name.split(',')
+        if len(parts) != 3:
+            raise ValueError('Colors must have three components')
+
+        color = tuple(to_int(p) for p in parts)
+
+    elif name.startswith('0x'):
+        color = _to_triplet(int(name, 16))
+
     else:
-        if len(color) == 3:
-            return color
+        try:
+            color = TO_COLOR[name.replace(' ', '').lower()]
+        except:
+            raise ValueError('Unknown color name %s' % name)
 
-        if len(color) == 1:
-            return color[0], color[0], color[0]
+    if not all(0 <= i <= 255 for i in color):
+        raise ValueError('Component out of range: %s' % color)
 
-        raise ValueError('Colors must have three components')
-
-    try:
-        return TO_COLOR[name.replace(' ', '').lower()]
-    except:
-        raise ValueError('Unknown color name')
+    return color
 
 
 def color_to_name(color):
@@ -71,6 +84,12 @@ def color_to_name(color):
         return TO_NAME[tuple(color)]
     except:
         return str(tuple(color))
+
+
+def toggle(s):
+    """Toggle between a name and a tuple representation."""
+    c = name_to_color(s)
+    return color_to_name(c) if ',' in s else str(c)
 
 
 class Colors(object):

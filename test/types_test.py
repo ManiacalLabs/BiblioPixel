@@ -29,8 +29,7 @@ class ColorTypesTest(TypesBaseTest):
 
     def test_color_numbers(self):
         for i in range(256):
-            self.make('color', i, (i, i, i))
-            self.make('color', str(i), (i, i, i))
+            self.make('color', hex(0x10101 * i), (i, i, i))
 
         for c in [0, 0, 0], [127, 128, 255], [4, 200, 77]:
             self.make('color', c, tuple(c))

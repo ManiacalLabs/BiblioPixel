@@ -44,4 +44,4 @@ def _(c):
     try:
         return colors.COLORS[c.lower()]
     except:
-        raise ValueError("Don't understand color name", USAGE)
+        raise ValueError("Don't understand color name", c, USAGE)
