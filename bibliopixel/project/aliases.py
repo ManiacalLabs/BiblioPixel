@@ -33,8 +33,6 @@ ALIASES = {
         'bibliopixel.animation.tests.MatrixCalibrationTest',
         'matrix_test': 'bibliopixel.animation.tests.MatrixChannelTest',
         'receiver': 'bibliopixel.animation.receiver.BaseReceiver',
-
-
         'sequence': 'bibliopixel.animation.Sequence',
         'strip_test': 'bibliopixel.animation.tests.StripChannelTest',
     },
@@ -43,17 +41,23 @@ ALIASES = {
 
 def resolve(*dicts):
     """Resolve aliases and merge.  Evaluation proceeds from left to right."""
+    def resolve(key, value):
+        if isinstance(value, str):
+            value = {'typename': value}
+
+        typename = value.get('typename')
+        if typename and key in ALIASES:
+            value['typename'] = ALIASES[key].get(typename.lower(), typename)
+
+        return value
+
     result = {}
 
     for d in dicts:
         for key, value in d.items():
-            if isinstance(value, str):
-                value = {'typename': value}
-
-            typename = value.get('typename')
-            if typename and key in ALIASES:
-                value['typename'] = ALIASES[key].get(typename.lower(), typename)
-
-            result.setdefault(key, {}).update(**value)
+            if key == 'drivers':
+                result['drivers'] = [resolve('driver', d) for d in value]
+            else:
+                result.setdefault(key, {}).update(**resolve(key, value))
 
     return result

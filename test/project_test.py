@@ -47,12 +47,16 @@ PROJECT_MULTI = """
 {
     "driver": {
         "typename": "dummy",
-        "multi": true,
         "width": 128,
         "height": 32,
-        "num": 4096,
-        "device_ids": [10, 11, 12]
+        "num": 4096
     },
+
+    "drivers": [
+        {"device_id": 10},
+        {"device_id": 11},
+        {"device_id": 12}
+    ],
 
     "layout": {
         "typename": "matrix",
@@ -118,6 +122,10 @@ def start(name, is_json=True):
 
 
 class ProjectTest(unittest.TestCase):
+    def test_bad_json(self):
+        with self.assertRaises(ValueError):
+            start('{]')
+
     def test_simple(self):
         start(PROJECT)
 
@@ -135,7 +143,14 @@ class ProjectTest(unittest.TestCase):
         start('test/project.json', False)
 
     def test_multi(self):
-        start(PROJECT_MULTI)
+        animation = start(PROJECT_MULTI)
+        k = [d._kwds for d in animation.layout.drivers]
+        self.assertEquals(k[0]['width'], 128)
+        self.assertEquals(k[1]['width'], 128)
+        self.assertEquals(k[2]['width'], 128)
+        self.assertEquals(k[0]['device_id'], 10)
+        self.assertEquals(k[1]['device_id'], 11)
+        self.assertEquals(k[2]['device_id'], 12)
 
     def test_shared(self):
         start(PROJECT_SHARED)
