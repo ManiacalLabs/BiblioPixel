@@ -5,7 +5,8 @@ from .. project.preset_library import PresetLibrary
 
 __all__ = ['main']
 
-COMMANDS = ('all_pixel', 'clear_cache', 'devices', 'demo', 'run')
+COMMANDS = ('all_pixel', 'clear_cache', 'color', 'devices', 'demo', 'run')
+
 MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')

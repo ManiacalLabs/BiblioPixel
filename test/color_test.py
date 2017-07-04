@@ -47,9 +47,17 @@ class ClassicTest(unittest.TestCase):
 
 
 class NamesTest(unittest.TestCase):
-    def test_classic(self):
+    def test_colors(self):
         self.assertEquals(names.COLORS.red, (255, 0, 0))
         self.assertEquals(names.COLORS.OFF, (0, 0, 0))
         self.assertEquals(names.COLORS['o n'], (255, 255, 255))
         self.assertEquals(names.COLORS((0, 0, 0)), 'black')
         self.assertEquals(names.COLORS((0x8a, 0x36, 0x0f)), 'burnt sienna')
+
+    def test_toggle(self):
+        self.assertEquals(names.toggle('red'), '(255, 0, 0)')
+        self.assertEquals(names.toggle('(255, 0, 0)'), 'red')
+        self.assertEquals(names.toggle('OFF'), '(0, 0, 0)')
+        self.assertEquals(names.toggle('o n'), '(255, 255, 255)')
+        self.assertEquals(names.toggle('(0, 0, 0)'), 'black')
+        self.assertEquals(names.toggle('(0x8a, 0x36, 0x0f)'), 'burnt sienna')
