@@ -12,28 +12,30 @@ def _make_object(*args, field_types=FIELD_TYPES, **kwds):
     return importer.make_object(*args, field_types=field_types, **kwds)
 
 
-def _make_layout(driver, layout, maker=None):
-    maker = data_maker.Maker(**(maker or {}))
-    drivers = []
+def _make_layout(layout, driver=None, drivers=None, maker=None):
+    if driver is None and drivers is None:
+        raise ValueError('Projects has no driver or drivers section')
 
-    def multi_drivers(device_ids, width, height, serpentine=False, **kwds):
+    if drivers is None:
+        drivers = [_make_object(**driver)]
+        coord_map = None
+
+    else:
         build = MultiMapBuilder()
 
-        for id in device_ids:
-            build.addRow(gen_matrix(width, height, serpentine=serpentine))
-            d = _make_object(width=width, height=height, deviceID=id, **kwds)
-            drivers.append(d)
+        def make_driver(width, height, matrix=None, **kwds):
+            build.addRow(gen_matrix(width, height, **(matrix or {})))
+            return _make_object(width=width, height=height, **kwds)
 
-        return build.map
+        if driver:
+            # driver is a default for each driver.
+            drivers = [dict(driver, **d) for d in drivers]
 
-    def make_drivers(multimap=False, **kwds):
-        if multimap:
-            return multi_drivers(**kwds)
+        drivers = [make_driver(**d) for d in drivers]
+        coord_map = build.map
 
-        drivers.append(_make_object(**kwds))
-
-    coordMap = make_drivers(maker=maker, **driver)
-    return _make_object(drivers, coordMap=coordMap, maker=maker, **layout)
+    maker = data_maker.Maker(**(maker or {}))
+    return _make_object(drivers, coordMap=coord_map, maker=maker, **layout)
 
 
 def make_animation(layout, animation, run=None):
