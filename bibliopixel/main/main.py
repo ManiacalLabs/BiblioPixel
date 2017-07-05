@@ -53,23 +53,27 @@ def no_command(*_):
 
 def main():
     parser = argparse.ArgumentParser()
+    flags = set()
+
+    def add(*args, **kwds):
+        flags.update(args)
+        parser.add_argument(*args, **kwds)
+
     subparsers = parser.add_subparsers()
 
     for name, module in sorted(MODULES.items()):
         subparser = subparsers.add_parser(name, help=module.HELP)
         module.set_parser(subparser)
 
-    parser.add_argument(
-        '--loglevel', choices=LOG_LEVELS, default='info', help=LOGLEVEL_HELP)
-    parser.add_argument('--path', default=None, help=PATH_HELP)
-    parser.add_argument(
-        '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
-
-    parser.add_argument('--version', action='store_true', help=VERSION_HELP)
+    add('--loglevel', choices=LOG_LEVELS, default='info', help=LOGLEVEL_HELP)
+    add('--path', default=None, help=PATH_HELP)
+    add('--verbose', '-v', action='store_true', help=VERBOSE_HELP)
+    add('--version', action='store_true', help=VERSION_HELP)
 
     if ENABLE_PRESETS:
-        parser.add_argument('--presets', help='Filename for presets',
-                            default=PRESET_LIBRARY_DEFAULT)
+        add('--presets', help='Filename for presets',
+            default=PRESET_LIBRARY_DEFAULT)
+
     argv = ['--help' if i == 'help' else i for i in sys.argv[1:]]
 
     try:
@@ -81,7 +85,13 @@ def main():
         if not argv:
             return
 
-    args = parser.parse_args(argv)
+    # Move global flags to the start.
+    ok, removed = [], []
+
+    for a in argv:
+        (removed if a.split('=')[0] in flags else ok).append(a)
+
+    args = parser.parse_args(removed + ok)
 
     try:
         log.set_log_level(args.loglevel)
