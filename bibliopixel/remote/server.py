@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from werkzeug.serving import run_simple
 import threading
 import queue
+import os
 
 
 def fail(msg='Error'):
@@ -20,11 +21,14 @@ def success(data=None, msg='OK'):
     }
 
 
-class BiblioPixelRemoteServer():
+class RemoteServer():
     def __init__(self, q_send, q_recv):
         self.__server_thread = None
         self.__recv_thread = None
-        self.app = Flask('BP Remote', static_url_path='/static')
+        cdir = os.path.dirname(os.path.realpath(__file__))
+        static_dir = os.path.join(cdir, 'static')
+        print(static_dir)
+        self.app = Flask('BP Remote', static_folder=static_dir)
         self._set_routes()
         self.q_send = q_send
         self.q_recv = q_recv
@@ -42,6 +46,7 @@ class BiblioPixelRemoteServer():
             print('Recv: {}'.format(obj))
 
     def index(self):
+        # return "Test"
         return self.app.send_static_file('index.html')
 
     def run_animation(self, animation):
@@ -64,10 +69,11 @@ class BiblioPixelRemoteServer():
         self.q_send.put({'req': request, 'data': data})
         return jsonify(self.__get_resp())
 
-    def run(self):
-        run_simple('0.0.0.0', 5000, self.app, threaded=True)
+    def run(self, external_access, port, ):
+        host_ip = '0.0.0.0' if external_access else 'localhost'
+        run_simple(host_ip, port, self.app, threaded=True)
 
 
-def run_server(q_send, q_recv):
-    server = BiblioPixelRemoteServer(q_recv, q_send)
-    server.run()
+def run_server(external_access, port, q_send, q_recv):
+    server = RemoteServer(q_recv, q_send)
+    server.run(external_access, port)

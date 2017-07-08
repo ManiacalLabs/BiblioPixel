@@ -54,11 +54,17 @@ def make_remote(layout, remote):
     if not animations or len(animations) == 0:
         raise ValueError('Must specify `animations` for remote.')
 
-    anim_list = {}
+    anim_list = []
     for anim in animations:
         run = anim.get('run', {})
         run['threaded'] = True  # Remote anims must be threaded, maybe a little hacky?
-        anim_list[anim['display']] = make_animation(layout, anim['animation'], anim.get('run', None))
+        anim_obj = dict(anim)
+        anim_obj['animation'] = make_animation(layout, anim['animation'], anim.get('run', None))
+        del anim_obj['run']  # no longer need this
+        anim_list.append(anim_obj)
+
+    base_config = dict(remote)
+    del base_config['animations']
 
     default = remote.get('default', None)
     if default and default not in anim_list.keys():
@@ -67,7 +73,9 @@ def make_remote(layout, remote):
     elif default is None:
         default = make_animation(layout, OFF_ANIM, {'threaded': True})
 
-    rc = control.RemoteControl(anim_list, default)
+    base_config['default'] = default
+
+    rc = control.RemoteControl(base_config, anim_list)
     return rc
 
 

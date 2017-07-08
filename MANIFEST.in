@@ -1,6 +1,7 @@
 include bibliopixel/VERSION
 include scripts/*
 include requirements.txt
+include bibliopixel/remote/static/*
 recursive-exclude test *
 recursive-exclude bin *
 recursive-exclude build *

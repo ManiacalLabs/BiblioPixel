@@ -6,21 +6,60 @@ from .. import log
 
 
 DEFAULT_OFF = '**OFF**'
+DEFAULT_ANIM_CONFIG = {
+    'bgcolor': '#00ff00',
+    'font_color': '#ffffff',
+    'display': None
+}
 
 
 class RemoteControl():
-    def __init__(self, animations, default=None):
+    def __init__(self, base_config, animations):
+        # These start with the defaults
+        self.config = {
+            'title': 'BiblioPixel Remote',
+            'bgcolor': '#000000',
+            'external_access': False,
+            'port': 5000
+        }
+
+        self.config.update(base_config)
+
+        self.ui_config = {
+            'bgcolor': self.config['bgcolor'],
+            'title': self.config['title']
+        }
+
         self.q_send = multiprocessing.Queue()
         self.q_recv = multiprocessing.Queue()
-        self.server = multiprocessing.Process(target=server.run_server,
-                                              args=(self.q_send, self.q_recv))
 
-        if not isinstance(animations, dict):
-            raise ValueError('animations must be a dict!')
+        server_args = (
+            self.config['external_access'],
+            self.config['port'],
+            self.q_send,
+            self.q_recv
+        )
+
+        self.server = multiprocessing.Process(target=server.run_server,
+                                              args=server_args)
+
+        if not isinstance(animations, list):
+            raise ValueError('animations must be a list!')
 
         self.current_animation_name = None
         self.current_animation_obj = None
         self.animations = animations
+        self.animation_objs = {}
+        anim_list = []
+        for anim in self.animations:
+            anim_cfg = dict(DEFAULT_ANIM_CONFIG)
+            anim_cfg.update(anim)
+            if anim_cfg['display'] is None:
+                anim_cfg['display'] = anim['name']
+            self.animation_objs[anim['name']] = anim_cfg['animation']
+            del anim_cfg['animation']  # no longer need here
+            anim_list.append(anim_cfg)
+        self.animations = anim_list
 
         self.handlers = {}
         # TODO: More pythonic way to do this?
@@ -28,9 +67,9 @@ class RemoteControl():
             if name.startswith('handler_'):
                 self.handlers[name.replace('handler_', '')] = method
 
-        self.default = default
+        self.default = base_config['default']
         if issubclass(type(self.default), BaseAnimation):
-            self.animations[DEFAULT_OFF] = self.default
+            self.animation_objs[DEFAULT_OFF] = self.default
             self.default = DEFAULT_OFF
 
     def cleanup(self):
@@ -55,11 +94,11 @@ class RemoteControl():
     def __run_anim(self, name):
         log.info('Running animation: {}'.format(name))
         self.current_animation_name = name
-        self.current_animation_obj = self.animations[name]
+        self.current_animation_obj = self.animation_objs[name]
         self.current_animation_obj.start()
 
     def handler_run_animation(self, name):
-        if name not in self.animations:
+        if name not in self.animation_objs:
             return False, 'Invalid animation name: {}'.format(name)
         else:
             self.__start_anim(name)
@@ -69,10 +108,8 @@ class RemoteControl():
         self.__stop_anim(run_default=True)
         return True, None
 
-    def handler_get_animations(self, data):
-        lst = list(self.animations.keys())
-        lst.remove(DEFAULT_OFF)
-        return True, list(lst)
+    def handler_get_config(self, data):
+        return True, list(self.animations)
 
     def start(self):
         self.__start_default()
