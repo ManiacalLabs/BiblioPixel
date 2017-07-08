@@ -68,7 +68,7 @@ def set_parser(parser):
     parser.set_defaults(run=run)
     parser.description = 'Run demo in SimPixel'
 
-    common_flags.add_to_parser(parser)
+    common_flags.add_project_flags(parser)
     parser.add_argument(
         'name', nargs='?', default='',
         help='Name of demo to run. Options are: {}'.format(DEMO_OPTS))

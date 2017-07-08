@@ -6,7 +6,7 @@ from .. project import project
 COMPONENTS = 'driver', 'layout', 'animation'
 
 
-def add_to_parser(parser):
+def add_project_flags(parser):
     parser.add_argument(
         '-d', '--driver', default='simpixel',
         help='Default driver type if no driver is specified')
@@ -29,7 +29,7 @@ def add_to_parser(parser):
     parser.add_argument('--simpixel', help='Run SimPixel at a specific URL')
 
 
-def get_dict(args):
+def make_animation(args, desc):
     def get_value(name):
         value = args and getattr(args, name)
         if not value:
@@ -40,12 +40,8 @@ def get_dict(args):
 
         return {'typename': value}
 
-    result = {name: get_value(name) for name in COMPONENTS}
+    project_flags = {name: get_value(name) for name in COMPONENTS}
     if args and args.ledtype:
-        result['driver']['ledtype'] = args.ledtype
+        project_flags['driver']['ledtype'] = args.ledtype
 
-    return result
-
-
-def make_animation(args, desc):
-    return project.project_to_animation(desc, get_dict(args))
+    return project.project_to_animation(desc, project_flags)

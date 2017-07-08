@@ -37,7 +37,7 @@ def set_parser(parser):
     parser.set_defaults(run=run)
     parser.description = 'Run specified BiblioPixel project from file or URL.'
 
-    common_flags.add_to_parser(parser)
+    common_flags.add_project_flags(parser)
 
     parser.add_argument(
         'name', nargs='?',
