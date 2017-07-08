@@ -26,9 +26,16 @@ class BaseAnimation(object):
     def step(self, amt=1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
-    def cleanup(self):
-        self.threading.stop_thread(wait=True)
-        self.layout.cleanup()
+    def cleanup(self, clean_layout=True):
+        # if current thread is animation thread this was called
+        # by the context manager and thread is therefore already stopped
+        if self.threading.thread != threading.current_thread():
+            self.threading.stop_thread(wait=True)
+        # Some cases we may not want to clear the screen
+        # Like with the remote, it would flash between anims
+        if clean_layout:
+            self.layout.cleanup()
+        self.cleanup_ran = True
 
     def is_running(self):
         if self.threading.stop_event.isSet():

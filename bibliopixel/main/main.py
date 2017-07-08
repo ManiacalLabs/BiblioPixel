@@ -45,7 +45,6 @@ def main():
 
         run = getattr(args, 'run', no_command)
         result = run(args, presets) or 0
-
     except Exception as e:
         if args.verbose:
             raise

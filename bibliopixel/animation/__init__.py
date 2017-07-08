@@ -1,3 +1,4 @@
+from . animation import BaseAnimation
 from . circle import BaseCircleAnim
 from . game import BaseGameAnim
 from . matrix import BaseMatrixAnim

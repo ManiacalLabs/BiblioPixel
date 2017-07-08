@@ -31,7 +31,12 @@ def run(args, settings):
         simpixel.open_simpixel(args.simpixel)
     elif args.s:
         simpixel.open_simpixel()
-    make_animation(args.name, args.json, args).start()
+    task = make_animation(args.name, args.json, args)
+    try:
+        task.start()
+    except KeyboardInterrupt:
+        print('\nTermination requested by user.')
+        task.cleanup()
 
 
 def set_parser(parser):
