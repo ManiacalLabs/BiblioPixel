@@ -1,4 +1,4 @@
-import json
+import gitty, json
 from . import common_flags, simpixel
 from .. import log
 from .. util import files
@@ -26,6 +26,7 @@ def make_animation(name, is_json, args):
 
 
 def run(args, settings):
+    gitty.sys_path.extend(args.path)
     if args.simpixel:
         simpixel.open_simpixel(args.simpixel)
     elif args.s:

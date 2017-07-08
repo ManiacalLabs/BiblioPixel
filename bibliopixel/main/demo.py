@@ -1,4 +1,4 @@
-import random
+import gitty, random
 
 from . import common_flags, demo_table, simpixel
 from .. project import project
@@ -48,6 +48,8 @@ def run(args, settings):
     if args.name == 'list':
         usage()
         return
+
+    gitty.sys_path.extend(args.path)
 
     if not args.name:
         usage()
