@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from werkzeug.serving import run_simple
 import threading
 import queue
@@ -35,6 +35,7 @@ class RemoteServer():
 
     def _set_routes(self):
         self.app.route('/')(self.index)
+        self.app.route('/<path:path>')(self.static_files)
         self.app.route('/run_animation/<string:animation>')(self.run_animation)
         self.app.route('/stop')(self.stop_animation)
         self.app.route('/api/<string:request>')(self.api)
@@ -49,6 +50,9 @@ class RemoteServer():
         # return "Test"
         return self.app.send_static_file('index.html')
 
+    def static_files(self, path):
+        return self.app.send_static_file(path)
+
     def run_animation(self, animation):
         resp = self.api('run_animation', data=animation)
         return resp
@@ -60,7 +64,10 @@ class RemoteServer():
     def __get_resp(self):
         try:
             status, data = self.q_recv.get(timeout=5)
-            return success(data=data)
+            if status:
+                return success(data=data)
+            else:
+                return fail(msg=data)
         except queue.Empty:
             return fail(msg='Timeout waiting for response.')
 

@@ -67,10 +67,7 @@ def make_remote(layout, remote):
     del base_config['animations']
 
     default = remote.get('default', None)
-    if default and default not in anim_list.keys():
-        raise ValueError(('`{}` is not a valid default! '
-                          'It must be one of the configured animation names.').format(default))
-    elif default is None:
+    if default is None:
         default = make_animation(layout, OFF_ANIM, {'threaded': True})
 
     base_config['default'] = default

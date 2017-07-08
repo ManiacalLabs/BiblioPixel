@@ -19,6 +19,7 @@ class RemoteControl():
         self.config = {
             'title': 'BiblioPixel Remote',
             'bgcolor': '#000000',
+            'font_color': '#ffffff',
             'external_access': False,
             'port': 5000
         }
@@ -54,7 +55,7 @@ class RemoteControl():
         for anim in self.animations:
             anim_cfg = dict(DEFAULT_ANIM_CONFIG)
             anim_cfg.update(anim)
-            if anim_cfg['display'] is None:
+            if not anim_cfg['display']:
                 anim_cfg['display'] = anim['name']
             self.animation_objs[anim['name']] = anim_cfg['animation']
             del anim_cfg['animation']  # no longer need here
@@ -71,6 +72,10 @@ class RemoteControl():
         if issubclass(type(self.default), BaseAnimation):
             self.animation_objs[DEFAULT_OFF] = self.default
             self.default = DEFAULT_OFF
+
+        if self.default not in self.animation_objs:
+            raise ValueError(('`{}` is not a valid default! '
+                              'It must be one of the configured animation names.').format(self.default))
 
     def cleanup(self):
         self.q_recv.close()
@@ -109,7 +114,11 @@ class RemoteControl():
         return True, None
 
     def handler_get_config(self, data):
-        return True, list(self.animations)
+        resp = {
+            'ui': self.ui_config,
+            'animations': list(self.animations)
+        }
+        return True, resp
 
     def start(self):
         self.__start_default()

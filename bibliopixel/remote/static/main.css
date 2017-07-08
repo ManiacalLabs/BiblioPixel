@@ -1,0 +1,62 @@
+html {
+    font-family: overpass-mono;
+}
+
+body {
+    margin: 0;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#main_body {
+    min-width: 320px;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#title {
+    width: 100%;
+    font-size: 2.5rem;
+    margin: 0;
+    /*background-color: green;*/
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+}
+
+#button_list {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.btn {
+    font-size: 2rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+}
+
+.btn:hover {
+    opacity: 0.5;
+}
+
+.btn:active {
+    opacity: 1.0;
+    background-color: green;
+}
