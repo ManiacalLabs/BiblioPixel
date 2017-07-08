@@ -1,6 +1,6 @@
 import random
 
-from . import arguments, demo_table, simpixel
+from . import common_flags, demo_table, simpixel
 from .. project import project
 
 HELP = """
@@ -37,7 +37,7 @@ def make_runnable(demo, args):
         if 'z' in layout:
             layout['z'] = layout['z'] or args.depth
 
-    return arguments.make_animation(args, demo).start
+    return common_flags.make_animation(args, demo).start
 
 
 def usage():
@@ -68,7 +68,7 @@ def set_parser(parser):
     parser.set_defaults(run=run)
     parser.description = 'Run demo in SimPixel'
 
-    arguments.add_to_parser(parser)
+    common_flags.add_to_parser(parser)
     parser.add_argument(
         'name', nargs='?', default='',
         help='Name of demo to run. Options are: {}'.format(DEMO_OPTS))
