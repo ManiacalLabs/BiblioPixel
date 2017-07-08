@@ -1,5 +1,5 @@
 import json
-from . import simpixel, arguments
+from . import common_flags, simpixel
 from .. import log
 from .. util import files
 
@@ -22,7 +22,7 @@ def make_desc(name, is_json):
 
 def make_animation(name, is_json, args):
     desc = make_desc(name, is_json)
-    return arguments.make_animation(args, desc)
+    return common_flags.make_animation(args, desc)
 
 
 def run(args, settings):
@@ -37,7 +37,7 @@ def set_parser(parser):
     parser.set_defaults(run=run)
     parser.description = 'Run specified BiblioPixel project from file or URL.'
 
-    arguments.add_to_parser(parser)
+    common_flags.add_to_parser(parser)
 
     parser.add_argument(
         'name', nargs='?',
