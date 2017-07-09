@@ -46,14 +46,15 @@ More details here: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors
 """
 
 from . arithmetic import color_blend, color_scale
-from . hue import hsv2rgb_spectrum, hsv2rgb_rainbow, hsv2rgb_360
-from . hue import hsv2rgb, hue2rgb, hue_gradient, hue2rgb_360
-from . hue import hue_helper, hue_helper360
+from . conversions import hsv2rgb_spectrum, hsv2rgb_rainbow, hsv2rgb_360
+from . conversions import hsv2rgb, hue2rgb, hue_gradient, hue2rgb_360
+from . conversions import hue_helper, hue_helper360
 from . wheel import wheel_color, wheel_helper
 from . names import COLORS
 
-# DEPRECATED
+# DEPRECATED methods and module name
 hex2rgb = COLORS.__getitem__
+from . import conversions as hue
 
 # Legacy color names.  DEPRECATED
 from . classic import *  # noqa: F403
