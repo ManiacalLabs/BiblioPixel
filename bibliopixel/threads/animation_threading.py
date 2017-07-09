@@ -16,10 +16,10 @@ class AnimationThreading(object):
         self.frame_overrun = False
 
     def stop_thread(self, wait=False):
-        if self.thread:
-            self.stop_event.set()
-            if wait:
-                self.thread.join()
+        # run regardless of threaded, used to stop sequences
+        self.stop_event.set()
+        if self.thread and wait:
+            self.thread.join()
 
     def stopped(self):
         return not (self.thread and self.thread.isAlive())
@@ -48,11 +48,11 @@ class AnimationThreading(object):
             time.sleep(wait_time - elapsed_time)
 
     def start(self):
+        self.stop_event.clear()
+
         if not self.runner.threaded:
             self.run()
             return
-
-        self.stop_event.clear()
 
         self.thread = threading.Thread(target=self.target, daemon=True)
         self.thread.start()

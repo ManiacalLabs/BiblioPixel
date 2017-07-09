@@ -59,12 +59,12 @@ def make_remote(layout, remote):
         run = anim.get('run', {})
         run['threaded'] = True  # Remote anims must be threaded, maybe a little hacky?
         anim_obj = dict(anim)
-        anim_obj['animation'] = make_animation(layout, anim['animation'], anim.get('run', None))
-        del anim_obj['run']  # no longer need this
+        anim_obj['animation'] = make_animation(layout, anim['animation'], run)
+        anim_obj.pop('run', None)  # no longer need this
         anim_list.append(anim_obj)
 
     base_config = dict(remote)
-    del base_config['animations']
+    base_config.pop('animations', None)
 
     default = remote.get('default', None)
     if default is None:

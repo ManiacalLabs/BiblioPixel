@@ -27,7 +27,6 @@ class RemoteServer():
         self.__recv_thread = None
         cdir = os.path.dirname(os.path.realpath(__file__))
         static_dir = os.path.join(cdir, 'static')
-        print(static_dir)
         self.app = Flask('BP Remote', static_folder=static_dir)
         self._set_routes()
         self.q_send = q_send
@@ -41,13 +40,7 @@ class RemoteServer():
         self.app.route('/api/<string:request>')(self.api)
         self.app.route('/api/<string:request>/<data>')(self.api)
 
-    def __recv(self):
-        while True:
-            obj = self.q_recv.get()
-            print('Recv: {}'.format(obj))
-
     def index(self):
-        # return "Test"
         return self.app.send_static_file('index.html')
 
     def static_files(self, path):

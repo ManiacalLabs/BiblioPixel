@@ -11,20 +11,21 @@ class Sequence(animation.BaseAnimation):
                 desc = a
             else:
                 desc = {'animation': a[0], 'run': a[1]}
-            desc = aliases.resolve_aliases(desc)
+            desc = aliases.resolve(desc)
+            # desc['run']['threaded'] = True
             return project.make_animation(layout=layout, **desc)
 
         super().__init__(layout)
+
         self.animations = [make_animation(i) for i in animations or []]
         self.index = 0
         self.internal_delay = 0  # never wait
 
     # overriding to handle all the animations
-    def stopThread(self, wait=False):
-        for a, r in self.animations:
-            # a bit of a hack. they aren't threaded, but stops them anyway
-            a.thread_strategy.stop_event.set()
-        self.thread_strategy.stop_thread(wait)
+    def cleanup(self, clean_layout=True):
+        for a in self.animations:
+            a.cleanup()
+        super().cleanup(clean_layout)
 
     def add_animation(self, anim, **kwds):
         # DEPRECATED.
@@ -47,4 +48,4 @@ class Sequence(animation.BaseAnimation):
                 self.index = 0
 
         if not self.completed and self.animations:
-            self.current_animation.run_all_frames()
+            self.current_animation.start()

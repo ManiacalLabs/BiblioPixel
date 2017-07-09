@@ -5,7 +5,7 @@ from . import server
 from .. import log
 
 
-DEFAULT_OFF = '**OFF**'
+DEFAULT_OFF = 'OFF_ANIM'
 DEFAULT_ANIM_CONFIG = {
     'bgcolor': '#00ff00',
     'font_color': '#ffffff',
@@ -57,7 +57,8 @@ class RemoteControl():
             anim_cfg.update(anim)
             if not anim_cfg['display']:
                 anim_cfg['display'] = anim['name']
-            self.animation_objs[anim['name']] = anim_cfg['animation']
+            anim_cfg['name'] = ''.join(e for e in anim['name'] if e.isalnum())
+            self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
             del anim_cfg['animation']  # no longer need here
             anim_list.append(anim_cfg)
         self.animations = anim_list

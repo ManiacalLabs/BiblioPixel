@@ -35,7 +35,6 @@ class BaseAnimation(object):
         # Like with the remote, it would flash between anims
         if clean_layout:
             self.layout.cleanup()
-        self.cleanup_ran = True
 
     def is_running(self):
         if self.threading.stop_event.isSet():
