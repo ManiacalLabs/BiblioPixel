@@ -61,3 +61,6 @@ class NamesTest(unittest.TestCase):
         self.assertEquals(names.toggle('o n'), '(255, 255, 255)')
         self.assertEquals(names.toggle('(0, 0, 0)'), 'black')
         self.assertEquals(names.toggle('(0x8a, 0x36, 0x0f)'), 'burnt sienna')
+
+        self.assertEquals(names.toggle('#8a360f'), 'burnt sienna')
+        self.assertEquals(names.toggle('0x8a360f'), 'burnt sienna')

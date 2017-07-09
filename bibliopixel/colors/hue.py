@@ -205,19 +205,6 @@ hsv2rgb = hsv2rgb_rainbow
 hue2rgb = hue2rgb_rainbow
 
 
-def hex2rgb(hex):
-    """Helper for converting RGB and RGBA hex values to Color"""
-    hex = hex.strip('#')
-    if len(hex) == 6:
-        split = (hex[0:2], hex[2:4], hex[4:6])
-    else:
-        raise ValueError('Must pass in a 6 character hex value!')
-
-    r, g, b = [int(x, 16) for x in split]
-
-    return (r, g, b)
-
-
 def hue_gradient(start, stop, steps):
     assert (start >= 0 and start < 256) and (
         stop >= 0 and stop < 256), "hue must be between 0 and 255"

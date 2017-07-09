@@ -34,6 +34,15 @@ def _classic_pairs():
             yield key, getattr(classic, name)
 
 
+def _from_number(s):
+    s = s.strip()
+    for prefix in '0x', '#':
+        if s.startswith(prefix):
+            return int(s[len(prefix):], 16)
+
+    return int(s)
+
+
 JUCE_COLORS = {k: _to_triplet(v) for k, v in juce.COLORS.items()}
 CLASSIC_COLORS = dict(_classic_pairs())
 COLOR_DICT = dict(CLASSIC_COLORS, **JUCE_COLORS)
@@ -44,34 +53,26 @@ TO_COLOR = {k.replace(' ', ''): v for k, v in COLOR_DICT.items()}
 
 
 def name_to_color(name):
-    def to_int(s):
-        s = s.strip()
+    def to_color(name):
+        name = name.lower()
+        if ',' in name:
+            if name.startswith('(') and name.endswith(')'):
+                name = name[1:-1]
+
+            r, g, b = name.split(',')
+            return _from_number(r), _from_number(g), _from_number(b)
+
         try:
-            if s.startswith('0x'):
-                return int(s[2:], 16)
-            return int(s)
+            n = _from_number(name)
         except:
-            raise ValueError("Don't understand number " + s)
+            return TO_COLOR[name.replace(' ', '').lower()]
 
-    name = name.lower()
-    if ',' in name:
-        if name.startswith('(') and name.endswith(')'):
-            name = name[1:-1]
+        return _to_triplet(n)
 
-        parts = name.split(',')
-        if len(parts) != 3:
-            raise ValueError('Colors must have three components')
-
-        color = tuple(to_int(p) for p in parts)
-
-    elif name.startswith('0x'):
-        color = _to_triplet(int(name, 16))
-
-    else:
-        try:
-            color = TO_COLOR[name.replace(' ', '').lower()]
-        except:
-            raise ValueError('Unknown color name %s' % name)
+    try:
+        color = to_color(name)
+    except:
+        raise ValueError('Unknown color name %s' % name)
 
     if not all(0 <= i <= 255 for i in color):
         raise ValueError('Component out of range: %s' % color)
@@ -88,8 +89,9 @@ def color_to_name(color):
 
 def toggle(s):
     """Toggle between a name and a tuple representation."""
+    is_numeric = ',' in s or s.startswith('0x') or s.startswith('#')
     c = name_to_color(s)
-    return color_to_name(c) if ',' in s else str(c)
+    return color_to_name(c) if is_numeric else str(c)
 
 
 class Colors(object):
