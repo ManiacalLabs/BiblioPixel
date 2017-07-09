@@ -42,6 +42,6 @@ def _(c):
 @make.register(str)
 def _(c):
     try:
-        return colors.COLORS[c.lower()]
+        return colors.COLORS[c]
     except:
         raise ValueError("Don't understand color name", c, USAGE)
