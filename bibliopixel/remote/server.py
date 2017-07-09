@@ -26,7 +26,8 @@ class RemoteServer():
         self.__server_thread = None
         self.__recv_thread = None
         cdir = os.path.dirname(os.path.realpath(__file__))
-        static_dir = os.path.join(cdir, 'static')
+        static_dir = os.path.abspath(os.path.join(cdir, '../../ui/web_remote'))
+        print(static_dir)
         self.app = Flask('BP Remote', static_folder=static_dir)
         self._set_routes()
         self.q_send = q_send

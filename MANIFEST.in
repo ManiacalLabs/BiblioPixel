@@ -1,7 +1,7 @@
 include bibliopixel/VERSION
 include scripts/*
+recursive-include ui *
 include requirements.txt
-include bibliopixel/remote/static/*
 recursive-exclude test *
 recursive-exclude bin *
 recursive-exclude build *
