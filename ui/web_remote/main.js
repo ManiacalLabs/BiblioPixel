@@ -24,8 +24,14 @@ function call_api(path, success, error) {
 function show_loading(){ $('body').addClass('loading'); }
 function hide_loading(){ $('body').removeClass('loading'); }
 
-function api_error(data){
-    console.error(data);
+function api_error(msg){
+    $('#overlay_text').html(msg);
+    $('#overlay').css("display", "block");
+    console.error(msg);
+}
+
+function dissmiss_error(){
+    $('#overlay').css("display", "none");
 }
 
 function do_fail(msg){
@@ -76,10 +82,14 @@ function do_main(){
                 console.log(config.animations[i]);
                 add_button(config.animations[i], run_animation);
             }
+
+            document.getElementById('overlay').addEventListener('click', dissmiss_error);
+
             hide_loading();
         }
         else{
-            do_fail(resp.msg);
+            hide_loading();
+            api_error(resp.msg + '<br />Check the server or try reloading');
         }
     };
 

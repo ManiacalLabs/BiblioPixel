@@ -3,6 +3,11 @@ from werkzeug.serving import run_simple
 import threading
 import queue
 import os
+import logging
+from .. import log
+
+werk_log = logging.getLogger('werkzeug')
+werk_log.setLevel(logging.ERROR)
 
 
 def fail(msg='Error'):
@@ -77,4 +82,10 @@ class RemoteServer():
 
 def run_server(external_access, port, q_send, q_recv):
     server = RemoteServer(q_recv, q_send)
+    local_url = 'Local: http://localhost:{}'.format(port)
+    ext_url = 'External: http://<system_ip>:{}'.format(port)
+    msg = 'Remote UI Server available at:\n' + local_url
+    if external_access:
+        msg += ('\n' + ext_url)
+    log.info(msg)
     server.run(external_access, port)
