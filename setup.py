@@ -128,7 +128,7 @@ setup(
     author_email='adam@maniacallabs.com',
     url='http://github.com/maniacallabs/bibliopixel/',
     license='MIT',
-    packages=find_packages(exclude=['test']),
+    packages=find_packages(exclude=['test']) + ['ui', 'scripts'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',

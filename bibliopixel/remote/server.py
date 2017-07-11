@@ -6,8 +6,10 @@ import os
 import logging
 from .. import log
 
-werk_log = logging.getLogger('werkzeug')
-werk_log.setLevel(logging.ERROR)
+# I want to keep this to supress the "Running on" message
+# But then it also swallows 404 erros and such in the console :(
+# werk_log = logging.getLogger('werkzeug')
+# werk_log.setLevel(logging.ERROR)
 
 
 def fail(msg='Error'):
