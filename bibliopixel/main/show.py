@@ -1,4 +1,4 @@
-HELP = """
+"""
 Show bibliopixel settings.
 """
 

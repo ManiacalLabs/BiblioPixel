@@ -1,9 +1,9 @@
-import json
-from .. colors import names
-
-HELP = """
+"""
 Converts its arguments between color names and color tuples.
 """
+
+import json
+from .. colors import names
 
 
 def run(args, settings):

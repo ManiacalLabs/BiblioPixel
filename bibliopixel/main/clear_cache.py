@@ -1,8 +1,7 @@
-import gitty
-
-HELP = """
+"""
 Clear the git repository library cache.
 """
+import gitty
 
 
 def run(args, settings):
@@ -11,4 +10,3 @@ def run(args, settings):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.description = HELP

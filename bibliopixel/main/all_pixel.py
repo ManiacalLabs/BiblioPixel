@@ -1,8 +1,10 @@
+"""
+Configure the AllPixel lighting module.
+"""
+
 import signal, sys
 from ..drivers.serial.codes import LEDTYPE
 from ..return_codes import BiblioSerialError
-
-HELP = 'Configure the AllPixel lighting module.'
 
 types = [
     [LEDTYPE.GENERIC, 'GENERIC'],
