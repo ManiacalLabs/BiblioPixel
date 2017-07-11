@@ -1,6 +1,7 @@
 import multiprocessing
 import inspect
 from .. animation import BaseAnimation
+from .. animation.animation import COMPLETE_REASON
 from . import server
 from .. import log
 
@@ -58,6 +59,7 @@ class RemoteControl():
             if not anim_cfg['display']:
                 anim_cfg['display'] = anim['name']
             anim_cfg['name'] = ''.join(e for e in anim['name'] if e.isalnum())
+            anim_cfg['animation'].complete_callback = self.complete_callback
             self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
             del anim_cfg['animation']  # no longer need here
             anim_list.append(anim_cfg)
@@ -82,6 +84,10 @@ class RemoteControl():
         self.q_recv.close()
         self.q_send.close()
         self.server.terminate()
+
+    def complete_callback(self, reason):
+        if reason != COMPLETE_REASON.CANCELED:
+            self.__start_default()
 
     def __start_default(self):
         if self.default:
