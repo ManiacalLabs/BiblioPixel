@@ -20,7 +20,7 @@ def main():
     subparsers = parser.add_subparsers()
 
     for name, module in sorted(MODULES.items()):
-        subparser = subparsers.add_parser(name, help=module.HELP)
+        subparser = subparsers.add_parser(name, help=module.__doc__)
         module.set_parser(subparser)
 
     common_flags.add_common_flags(parser)

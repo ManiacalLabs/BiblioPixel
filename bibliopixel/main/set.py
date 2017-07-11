@@ -1,6 +1,6 @@
 import json
 
-HELP = """
+"""
 Set bibliopixel values
 """
 

@@ -1,14 +1,14 @@
-import gitty, random
-
-from . import common_flags, demo_table, simpixel
-from .. project import project
-
-HELP = """
+"""
 Run a demo.  For the list of possible demos, type
 
   $ bibliopixel demo list
 
 """
+
+import gitty, random
+
+from . import common_flags, demo_table, simpixel
+from .. project import project
 
 DEMO_OPTS = ', '.join(sorted(demo_table.DEMO_TABLE.keys()))
 

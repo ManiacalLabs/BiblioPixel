@@ -1,7 +1,7 @@
+"""Find serial devices."""
+
 CONNECT_MESSAGE = """
 Connect just one Serial device (AllPixel) and press enter..."""
-
-HELP = """Find serial devices."""
 
 
 def run(args, settings):
