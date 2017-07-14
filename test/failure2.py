@@ -1,0 +1,2 @@
+class Failure(object):
+    pass
