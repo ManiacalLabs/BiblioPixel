@@ -12,7 +12,6 @@ class Sequence(animation.BaseAnimation):
             else:
                 desc = {'animation': a[0], 'run': a[1]}
             desc = aliases.resolve(desc)
-            # desc['run']['threaded'] = True
             return project.make_animation(layout=layout, **desc)
 
         super().__init__(layout)
@@ -48,4 +47,4 @@ class Sequence(animation.BaseAnimation):
                 self.index = 0
 
         if not self.completed and self.animations:
-            self.current_animation.start()
+            self.current_animation.run_all_frames()

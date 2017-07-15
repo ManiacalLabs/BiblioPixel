@@ -5,36 +5,19 @@ import queue
 import os
 import logging
 from .. import log
+import sys
 
-# I want to keep this to supress the "Running on" message
-# But then it also swallows 404 erros and such in the console :(
-# werk_log = logging.getLogger('werkzeug')
-# werk_log.setLevel(logging.ERROR)
-
-
-def fail(msg='Error'):
-    return {
-        'status': False,
-        'msg': msg,
-        'data': None
-    }
+if '--verbose' not in sys.argv:
+    werk_log = logging.getLogger('werkzeug')
+    werk_log.setLevel(logging.ERROR)
 
 
-def success(data=None, msg='OK'):
-    return {
-        'status': True,
-        'msg': msg,
-        'data': data
-    }
-
-
-class RemoteServer():
+class RemoteServer:
     def __init__(self, q_send, q_recv):
         self.__server_thread = None
         self.__recv_thread = None
         cdir = os.path.dirname(os.path.realpath(__file__))
         static_dir = os.path.abspath(os.path.join(cdir, '../../ui/web_remote'))
-        print(static_dir)
         self.app = Flask('BP Remote', static_folder=static_dir)
         self._set_routes()
         self.q_send = q_send
@@ -55,29 +38,28 @@ class RemoteServer():
         return self.app.send_static_file(path)
 
     def run_animation(self, animation):
-        resp = self.api('run_animation', data=animation)
-        return resp
+        return self.api('run_animation', data=animation)
 
     def stop_animation(self):
-        resp = self.api('stop_animation')
-        return resp
+        return self.api('stop_animation')
 
     def __get_resp(self):
         try:
             status, data = self.q_recv.get(timeout=5)
-            if status:
-                return success(data=data)
-            else:
-                return fail(msg=data)
+            return {
+                'status': status,
+                'msg': 'OK' if status else data,
+                'data': data if status else None,
+            }
         except queue.Empty:
-            return fail(msg='Timeout waiting for response.')
+            return {'status': False, 'msg': 'Timeout waiting for response.', 'data': None}
 
     def api(self, request, data=None):
         request = request.lower()
         self.q_send.put({'req': request, 'data': data})
         return jsonify(self.__get_resp())
 
-    def run(self, external_access, port, ):
+    def run(self, external_access, port):
         host_ip = '0.0.0.0' if external_access else 'localhost'
         run_simple(host_ip, port, self.app, threaded=True)
 

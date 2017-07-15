@@ -8,4 +8,3 @@ from . sequence import Sequence
 from . strip import BaseStripAnim
 from . receiver import BaseReceiver
 from . tests import StripChannelTest, MatrixChannelTest, MatrixCalibrationTest
-from . animation import COMPLETE_REASON

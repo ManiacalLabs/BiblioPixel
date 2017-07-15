@@ -50,8 +50,8 @@ def make_remote(layout, remote):
         'typename': 'bibliopixel.animation.off.OffAnim'
     }
 
-    animations = remote.get('animations', None)
-    if not animations or len(animations) == 0:
+    animations = remote.get('animations')
+    if not animations:
         raise ValueError('Must specify `animations` for remote.')
 
     anim_list = []
@@ -66,11 +66,7 @@ def make_remote(layout, remote):
     base_config = dict(remote)
     base_config.pop('animations', None)
 
-    default = remote.get('default', None)
-    if default is None:
-        default = make_animation(layout, OFF_ANIM, {'threaded': True})
-
-    base_config['default'] = default
+    base_config['default'] = remote.get('default') or make_animation(layout, OFF_ANIM, {'threaded': True})
 
     rc = control.RemoteControl(base_config, anim_list)
     return rc
@@ -81,8 +77,8 @@ def _make_project(path=None, remote=None, animation=None, run=None, **kwds):
     layout = _make_layout(**kwds)
     if remote:
         return make_remote(layout, remote)
-    else:
-        return make_animation(layout, animation or {}, run or {})
+
+    return make_animation(layout, animation or {}, run or {})
 
 
 def project_to_animation(desc, default):
