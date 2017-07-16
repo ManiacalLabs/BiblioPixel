@@ -1,7 +1,7 @@
 import multiprocessing
 import inspect
 from .. animation import BaseAnimation
-from .. animation.animation import State
+from .. animation.animation import STATE
 from . import server
 from .. import log
 
@@ -86,7 +86,7 @@ class RemoteControl:
         self.server.terminate()
 
     def on_completion(self, reason):
-        if reason != State.Canceled:
+        if reason != STATE.canceled:
             self.start_default()
 
     def start_default(self):

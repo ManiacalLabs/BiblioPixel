@@ -5,12 +5,12 @@ from .. threads.animation_threading import AnimationThreading
 from enum import IntEnum
 
 
-class State(IntEnum):
-    Ready = 0
-    Running = 1
-    Complete = 2
-    Canceled = 3
-    MaxSteps = 4
+class STATE(IntEnum):
+    ready = 0
+    running = 1
+    complete = 2
+    canceled = 3
+    max_steps = 4
 
 
 class BaseAnimation(object):
@@ -20,7 +20,7 @@ class BaseAnimation(object):
         self.layout = layout
         self.internal_delay = None
         self.on_completion = None
-        self.state = State.Ready
+        self.state = STATE.ready
 
     @property
     def _led(self):
@@ -34,12 +34,14 @@ class BaseAnimation(object):
     @property
     def completed(self):
         """Many BiblioPixelAnimations use the old `completed` variable."""
-        return self.state == State.Complete
+        return self.state == STATE.complete
 
     @completed.setter
     def completed(self, state):
         if state:
-            self.state = State.Complete
+            self.state = STATE.complete
+        else:
+            self.state = STATE.running
 
     def preRun(self, amt=1):
         self.layout.all_off()
@@ -59,12 +61,12 @@ class BaseAnimation(object):
 
     def compute_state(self):
         if self.threading.stop_event.isSet():
-            self.state = State.Canceled
+            self.state = STATE.canceled
         elif self.runner.max_steps and not (self.cur_step < self.runner.max_steps):
-            self.state = State.MaxSteps
-        elif (not self.runner.until_complete and self.state == State.Complete):
-            # Ingore State.Complete if until_complete is Falsef
-            self.state = State.Running
+            self.state = STATE.max_steps
+        elif (not self.runner.until_complete and self.state == STATE.complete):
+            # Ingore STATE.complete if until_complete is False
+            self.state = STATE.running
 
     def run_one_frame(self):
         timestamps = []
@@ -86,10 +88,10 @@ class BaseAnimation(object):
         _report_framerate(timestamps)
 
         self.cur_step += 1
-        if self.state == State.Complete and self.runner.max_cycles > 0:
+        if self.state == STATE.complete and self.runner.max_cycles > 0:
             if self.cycle_count < self.runner.max_cycles - 1:
                 self.cycle_count += 1
-                self.state = State.Running
+                self.state = STATE.running
 
         stamp()
 
@@ -99,7 +101,7 @@ class BaseAnimation(object):
 
     @contextlib.contextmanager
     def run_context(self):
-        self.state = State.Running
+        self.state = STATE.running
         self._step = 0
         self.cur_step = 0
         self.cycle_count = 0
@@ -118,14 +120,13 @@ class BaseAnimation(object):
         finally:
             self.cleanup()
 
-        if self.on_completion:
-            self.on_completion(self.state)
+        self.on_completion and self.on_completion(self.state)
 
-        self.state = State.Ready
+        self.state = STATE.ready
 
     def run_all_frames(self):
         with self.run_context():
-            while self.state == State.Running:
+            while self.state == STATE.running:
                 self.run_one_frame()
 
     def set_runner(self, runner):
