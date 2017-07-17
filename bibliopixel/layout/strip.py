@@ -6,7 +6,7 @@ from . geometry.strip import gen_strip
 class Strip(Layout):
 
     def __init__(self, drivers, threadedUpdate=False,
-                 brightness=255, pixelWidth=1, **kwargs):
+                 brightness=255, pixelWidth=1, coordMap=None, **kwargs):
         super().__init__(drivers, threadedUpdate, brightness,
                          maker=kwargs.get('maker', data_maker.MAKER))
 
@@ -23,17 +23,29 @@ class Strip(Layout):
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
 
+        self.coordMap = coordMap
+        if self.coordMap:
+            if len(self.coordMap) != self.numLEDs:
+                raise ValueError('coordMap length must equal total number of pixels!')
+            self.set_base = self._set_strip_mapped
+        else:
+            self.set_base = self._set_base
+
         self.set_pixel_positions(gen_strip(self.numLEDs))
+
+    def _set_strip_mapped(self, pixel, color):
+        pixel = self.coordMap[pixel]
+        self._set_base(pixel, color)
 
     # Set single pixel to Color value
     def _set(self, pixel, color):
         """Set pixel to RGB color tuple"""
-        self._set_base(pixel, color)
+        self.set_base(pixel, color)
 
     def _setScaled(self, pixel, color):
         start = pixel * self.pixelWidth
         for p in range(start, start + self.pixelWidth):
-            self._set_base(p, color)
+            self.set_base(p, color)
 
     def get(self, pixel):
         """Get RGB color tuple of color at index pixel"""

@@ -7,6 +7,7 @@ from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
 from .. remote import control
+import copy
 
 
 def _make_object(*args, field_types=FIELD_TYPES, **kwds):
@@ -17,10 +18,12 @@ def _make_layout(layout, driver=None, drivers=None, maker=None):
     if driver is None and drivers is None:
         raise ValueError('Projects has no driver or drivers section')
 
+    _layout = copy.deepcopy(layout)
+    coord_map = _layout.get('coordMap', None)
+    _layout.pop('coordMap', None)
+
     if drivers is None:
         drivers = [_make_object(**driver)]
-        coord_map = None
-
     else:
         build = MultiMapBuilder()
 
@@ -33,10 +36,10 @@ def _make_layout(layout, driver=None, drivers=None, maker=None):
             drivers = [dict(driver, **d) for d in drivers]
 
         drivers = [make_driver(**d) for d in drivers]
-        coord_map = build.map
+        coord_map = coord_map or build.map
 
     maker = data_maker.Maker(**(maker or {}))
-    return _make_object(drivers, coordMap=coord_map, maker=maker, **layout)
+    return _make_object(drivers, coordMap=coord_map, maker=maker, **_layout)
 
 
 def make_animation(layout, animation, run=None):
