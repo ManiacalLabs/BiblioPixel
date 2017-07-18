@@ -177,11 +177,11 @@ class MatrixTest(BaseMatrixTest):
 
 
 class SharedMatrixTest(BaseMatrixTest):
-    maker = data_maker.Maker(shared_memory=True)
+    maker = data_maker.Maker(shared_memory=True, floating=True)
 
 
 class SharedMatrixIntegerTest(BaseMatrixTest):
-    maker = data_maker.Maker(shared_memory=True, integer=True)
+    maker = data_maker.Maker(shared_memory=True, floating=False)
 
 
 del BaseMatrixTest  # http://stackoverflow.com/a/22836015/43839

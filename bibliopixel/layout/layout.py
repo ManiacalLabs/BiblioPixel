@@ -15,7 +15,7 @@ class Layout(object):
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = maker.color_list(self.numLEDs)
+        self._colors = maker[1](self.numLEDs)
 
         pos = 0
         for d in self.drivers:
