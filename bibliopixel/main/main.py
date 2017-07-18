@@ -6,7 +6,8 @@ from .. project.preset_library import PresetLibrary
 
 __all__ = ['main']
 COMMANDS = (
-    'all_pixel', 'clear_cache', 'color', 'devices', 'demo', 'run', 'update')
+    'all_pixel', 'clear_cache', 'color', 'devices', 'demo', 'midi',
+    'run', 'update')
 MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
 
 
