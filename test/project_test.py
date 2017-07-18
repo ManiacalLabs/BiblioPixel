@@ -92,6 +92,26 @@ PROJECT_SHARED = """
 """
 
 
+PROJECT_NUMPY = """
+{
+    "driver": {
+        "typename": "dummy",
+        "num": 12
+    },
+
+    "layout": "strip",
+    "animation": "strip_test",
+    "run": {
+        "max_steps": 2
+    },
+
+    "maker": {
+        "use_numpy": true
+    }
+}
+"""
+
+
 PROJECT_SIM = """
 {
     "driver": {
@@ -207,6 +227,9 @@ class ProjectTest(unittest.TestCase):
 
     def test_shared(self):
         start(PROJECT_SHARED)
+
+    def test_numpy(self):
+        start(PROJECT_NUMPY)
 
     def test_sim(self):
         start(PROJECT_SIM)

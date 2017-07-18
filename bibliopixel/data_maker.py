@@ -3,28 +3,33 @@ from multiprocessing.sharedctypes import RawArray
 
 # Note https://stackoverflow.com/questions/37705974/
 
-BYTE, FLOAT = ctypes.c_uint8, ctypes.c_float
+USE_NUMPY = False
 
 
-def shared_list_maker(type):
-    return lambda size: RawArray(type, size)
+def Maker(floating=None, shared_memory=False, use_numpy=USE_NUMPY):
+    def list_maker(size):
+        return [(0, 0, 0)] * size
 
+    if not (shared_memory or use_numpy):
+        assert not floating
+        return bytearray, list_maker
 
-def list_maker(size):
-    return [(0, 0, 0)] * size
+    byte_type, float_type = ctypes.c_uint8, ctypes.c_float
+    floating = (not shared_memory) if (floating is None) else floating
+    number_type = float_type if floating else byte_type
 
+    if shared_memory:
+        def shared_list_maker(type):
+            return lambda size: RawArray(type, size)
 
-class Maker(object):
-    def __init__(self, integer=False, shared_memory=False):
-        if shared_memory:
-            self.make_packet = shared_list_maker(BYTE)
-            number_type = BYTE if integer else FLOAT
-            self.color_list = shared_list_maker(3 * number_type)
+        return shared_list_maker(byte_type), shared_list_maker(3 * number_type)
 
-        else:
-            self.make_packet = bytearray
-            self.color_list = list_maker
+    def numpy_list_maker(size):
+        import numpy
+        return numpy.array(list_maker(size), dtype=number_type)
+
+    return bytearray, numpy_list_maker
 
 
 MAKER = Maker()
-ColorList = MAKER.color_list
+ColorList = MAKER[1]

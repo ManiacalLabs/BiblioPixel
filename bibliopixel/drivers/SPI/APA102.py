@@ -18,8 +18,8 @@ class APA102(SPIBase):
         self._pixel_stop = self._start_frame + self._pixel_bytes
         self._reset_frame = 4  # for SK9822 [0, 0, 0, 0]
         self._end_frame = (num // 2) + 1
-        self._packet = self.maker.make_packet(self._start_frame + self._pixel_bytes +
-                                              self._reset_frame + self._end_frame)
+        self._packet = self.make_packet(self._start_frame + self._pixel_bytes +
+                                        self._reset_frame + self._end_frame)
 
         self.set_device_brightness(0xFF)  # required to setup _packet
 
