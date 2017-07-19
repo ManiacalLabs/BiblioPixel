@@ -42,7 +42,8 @@ var STOP_CONFIG =       {
     'bgcolor': '#ff0000',
     'display': 'STOP',
     'font_color': '#ffffff',
-    'name': 'OFF_ANIM'
+    'name': 'OFF_ANIM',
+    'valid': true
 };
 
 function show_btn_loading(id){
@@ -62,9 +63,11 @@ function add_button(config, click_func){
     $(div).html(config.display);
     $(div).attr('display', config.display);
     div.id = 'button_' + config.name;
-    div.addEventListener('click', function(){
-        click_func(config.name, $(this).attr('id'))
-    });
+    if(config.valid){
+        div.addEventListener('click', function(){
+            click_func(config.name, $(this).attr('id'))
+        });
+    }
     $('#button_list').append(div);
 }
 

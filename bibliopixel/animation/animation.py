@@ -68,11 +68,22 @@ class BaseAnimation(object):
             # Ingore STATE.complete if until_complete is False
             self.state = STATE.running
 
+    def check_delay(self):
+        if self.free_run:
+            self.sleep_time = None
+        elif self.internal_delay:
+            self.sleep_time = self.internal_delay
+        else:
+            self.sleep_time = self.runner.sleep_time
+        self.layout.animation_sleep_time = self.sleep_time or 0
+
     def run_one_frame(self):
         timestamps = []
 
         def stamp():
             timestamps.append(time.time())
+
+        self.check_delay()
 
         stamp()
 
@@ -106,13 +117,7 @@ class BaseAnimation(object):
         self.cur_step = 0
         self.cycle_count = 0
 
-        if self.free_run:
-            self.sleep_time = None
-        elif self.internal_delay:
-            self.sleep_time = self.internal_delay
-        else:
-            self.sleep_time = self.runner.sleep_time
-        self.layout.animation_sleep_time = self.sleep_time or 0
+        self.check_delay()
 
         self.preRun(self.runner.amt)
         try:

@@ -10,7 +10,8 @@ DEFAULT_OFF = 'OFF_ANIM'
 DEFAULT_ANIM_CONFIG = {
     'bgcolor': '#00ff00',
     'font_color': '#ffffff',
-    'display': None
+    'display': None,
+    'valid': True
 }
 
 DEFAULT_SERVER_CONFIG = {
@@ -57,10 +58,17 @@ class RemoteControl:
             anim_cfg = dict(DEFAULT_ANIM_CONFIG)
             anim_cfg.update(anim)
             if not anim_cfg['display']:
-                anim_cfg['display'] = anim['name']
+                anim_cfg['display'] = anim_cfg['name']
             anim_cfg['name'] = ''.join(e for e in anim['name'] if e.isalnum())
-            anim_cfg['animation'].on_completion = self.on_completion
-            self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
+
+            if anim_cfg['animation'] is None:
+                anim_cfg['display'] = 'LOAD FAILED: ' + anim_cfg['display']
+                anim_cfg['valid'] = False
+                anim_cfg['bgcolor'] = 'rgb(16, 16, 16)'
+            else:
+                anim_cfg['animation'].on_completion = self.on_completion
+                self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
+
             del anim_cfg['animation']  # no longer need here
             anim_list.append(anim_cfg)
         self.animations = anim_list

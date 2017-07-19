@@ -8,6 +8,8 @@ from .. layout.multimap import MultiMapBuilder
 from .. util import files
 from .. remote import control
 import copy
+from .. import log
+import traceback
 
 
 def _make_object(*args, field_types=FIELD_TYPES, **kwds):
@@ -62,7 +64,11 @@ def make_remote(layout, remote):
         run = anim.get('run', {})
         run['threaded'] = True  # Remote anims must be threaded, maybe a little hacky?
         anim_obj = dict(anim)
-        anim_obj['animation'] = make_animation(layout, anim['animation'], run)
+        try:
+            anim_obj['animation'] = make_animation(layout, anim['animation'], run)
+        except:
+            log.error(traceback.format_exc())
+            anim_obj['animation'] = None
         anim_obj.pop('run', None)  # no longer need this
         anim_list.append(anim_obj)
 

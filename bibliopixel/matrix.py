@@ -370,7 +370,7 @@ def draw_char(fonts, setter, width, height, x, y, c, color, bg, aa=False, font=f
     fw = len(c_data)
     for i in range(fw + f['sep']):
         xPos = x + (i * font_scale)
-        if ((xPos < width) and (xPos + fw * font_scale - 1) >= 0):
+        if ((xPos < width) and (xPos + fw * font_scale - 1) >= 0) and (xPos >= 0):
             if i >= fw:
                 line = 0
             else:

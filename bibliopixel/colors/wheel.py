@@ -2,6 +2,7 @@ WHEEL_MAX = 384
 
 
 def _gen_wheel():
+    result = []
     for p in range(385):
         if p < 128:
             r = 127 - p % 128
@@ -15,8 +16,9 @@ def _gen_wheel():
             b = 127 - p % 128
             r = p % 128
             g = 0
+        result.append((r, g, b))
 
-    return r, g, b
+    return result
 
 
 _WHEEL = _gen_wheel()

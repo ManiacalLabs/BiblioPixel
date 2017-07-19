@@ -77,8 +77,10 @@ def loadImage(layout, imagePath="", imageObj=None, offset=(0, 0), bgcolor=colors
         if y >= 0 and x >= 0:
             texture[y][x] = pixel
 
-    return show_image(setter, layout.width, layout.height, imagePath, imageObj,
-                      offset, bgcolor, brightness)
+    show_image(setter, layout.width, layout.height, imagePath, imageObj,
+               offset, bgcolor, brightness)
+
+    return texture
 
 
 def convert_mode(image, mode='RGB'):
