@@ -31,7 +31,7 @@ class Sequence(animation.BaseAnimation):
         anim.set_runner(runner.Runner(**kwds))
         self.animations.append(anim)
 
-    def preRun(self, amt=1):
+    def pre_run(self):
         self.index = -1
 
     @property

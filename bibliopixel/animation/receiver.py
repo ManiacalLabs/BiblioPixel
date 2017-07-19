@@ -35,8 +35,7 @@ class BaseReceiver(BaseAnimation):
         self._stop_event.clear()
         self._recv_thread_obj = None
 
-    def preRun(self, amt=1):
-        self.layout.all_off()
+    def pre_run(self):
         self.start()
 
     def start(self):

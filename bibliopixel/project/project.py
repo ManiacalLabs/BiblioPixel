@@ -66,9 +66,11 @@ def make_remote(layout, remote):
         anim_obj = dict(anim)
         try:
             anim_obj['animation'] = make_animation(layout, anim['animation'], run)
+            anim_obj['loaded'] = True
         except:
             log.error(traceback.format_exc())
             anim_obj['animation'] = None
+            anim_obj['loaded'] = False
         anim_obj.pop('run', None)  # no longer need this
         anim_list.append(anim_obj)
 

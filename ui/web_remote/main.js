@@ -55,7 +55,7 @@ function hide_btn_loading(id){
     $('#' + id).html(display);
 }
 
-function add_button(config, click_func){
+function add_button(config, click_func, dest='#button_list'){
     var div = document.createElement('div');
     div.className = 'btn';
     div.style.background = config.bgcolor;
@@ -68,7 +68,7 @@ function add_button(config, click_func){
             click_func(config.name, $(this).attr('id'))
         });
     }
-    $('#button_list').append(div);
+    $(dest).append(div);
 }
 
 function do_main(){
@@ -78,7 +78,7 @@ function do_main(){
 
             document.body.style.background = config.ui.bgcolor;
             document.body.style.color = config.ui.font_color;
-            $('#Title').text(config.ui.title);
+            $('#title').text(config.ui.title);
             document.title = config.ui.title;
             add_button(STOP_CONFIG, stop_animation);
             for(i=0; i < config.animations.length; i++){

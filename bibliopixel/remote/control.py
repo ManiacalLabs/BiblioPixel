@@ -61,15 +61,18 @@ class RemoteControl:
                 anim_cfg['display'] = anim_cfg['name']
             anim_cfg['name'] = ''.join(e for e in anim['name'] if e.isalnum())
 
-            if anim_cfg['animation'] is None:
-                anim_cfg['display'] = 'LOAD FAILED: ' + anim_cfg['display']
-                anim_cfg['valid'] = False
-                anim_cfg['bgcolor'] = 'rgb(16, 16, 16)'
-            else:
+            if anim_cfg['loaded']:
                 anim_cfg['animation'].on_completion = self.on_completion
                 self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
+            else:
+                anim_cfg['display'] = 'LOAD FAILED: ' + anim_cfg['display']
+                anim_cfg['valid'] = False
+                anim_cfg['bgcolor'] = 'rgb(48, 48, 48)'
 
-            del anim_cfg['animation']  # no longer need here
+            # no longer need here
+            del anim_cfg['animation']
+            del anim_cfg['loaded']
+
             anim_list.append(anim_cfg)
         self.animations = anim_list
 

@@ -43,8 +43,8 @@ class BaseAnimation(object):
         else:
             self.state = STATE.running
 
-    def preRun(self, amt=1):
-        self.layout.all_off()
+    def pre_run(self):
+        pass
 
     def step(self, amt=1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
@@ -119,7 +119,7 @@ class BaseAnimation(object):
 
         self.check_delay()
 
-        self.preRun(self.runner.amt)
+        self.pre_run()
         try:
             yield
         finally:
