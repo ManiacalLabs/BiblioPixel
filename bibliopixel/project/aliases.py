@@ -41,7 +41,7 @@ ALIASES = {
 
 def resolve(*dicts):
     """Resolve aliases and merge.  Evaluation proceeds from left to right."""
-    def resolve(key, value):
+    def resolver(key, value):
         if isinstance(value, str):
             value = {'typename': value}
 
@@ -56,8 +56,8 @@ def resolve(*dicts):
     for d in dicts:
         for key, value in d.items():
             if key == 'drivers':
-                result['drivers'] = [resolve('driver', d) for d in value]
+                result['drivers'] = [resolver('driver', d) for d in value]
             else:
-                result.setdefault(key, {}).update(**resolve(key, value))
+                result.setdefault(key, {}).update(**resolver(key, value))
 
     return result
