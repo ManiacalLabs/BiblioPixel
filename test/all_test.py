@@ -1,6 +1,8 @@
 import unittest
 import bibliopixel
+from bibliopixel.layout import geometry
 from bibliopixel.main import demo, main, run, set, show
+from bibliopixel.remote import server
 
 from bibliopixel import (
     animation,
@@ -18,8 +20,6 @@ from bibliopixel import (
     util,
 )
 
-from bibliopixel.layout import geometry
-
 from bibliopixel.drivers import (
     SPI,
     # SimPixel,
@@ -30,7 +30,6 @@ from bibliopixel.drivers import (
     network_receiver,
     network_udp,
     serial,
-    # timedata_visualizer,
 )
 
 
