@@ -11,6 +11,8 @@ import copy
 from .. import log
 import traceback
 
+RESERVED_PROPERTIES = 'name', 'parent_data'
+
 
 def _make_object(*args, field_types=FIELD_TYPES, **kwds):
     return importer.make_object(*args, field_types=field_types, **kwds)
@@ -45,7 +47,13 @@ def _make_layout(layout, driver=None, drivers=None, maker=None):
 
 
 def make_animation(layout, animation, run=None):
+    reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
     animation = _make_object(layout, **animation)
+
+    # Add the reserved properties back in.
+    for k, v in reserved.items():
+        (v is not None) and setattr(animation, k, v)
+
     animation.set_runner(runner.Runner(**(run or {})))
     return animation
 
