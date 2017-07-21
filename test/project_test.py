@@ -124,7 +124,9 @@ PROJECT_SIM = """
     },
 
     "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest"
+        "typename": "bibliopixel.animation.tests.StripChannelTest",
+        "name": "test name",
+        "parent_data": {"title": "test title"}
     },
 
     "run": {
@@ -232,7 +234,9 @@ class ProjectTest(unittest.TestCase):
         start(PROJECT_NUMPY)
 
     def test_sim(self):
-        start(PROJECT_SIM)
+        animation = start(PROJECT_SIM)
+        self.assertEquals(animation.name, 'test name')
+        self.assertEquals(animation.parent_data, {'title': 'test title'})
 
     def test_failure1(self):
         with self.assertRaises(ImportError) as e:
