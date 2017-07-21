@@ -4,23 +4,12 @@ from . import animation, runner
 
 class Collection(animation.BaseAnimation):
     def __init__(self, layout, animations=None):
-        def make_animation(a):
-            if isinstance(a, str):
-                desc = {'animation': a[0]}
-            elif isinstance(a, dict):
-                desc = a
-            else:
-                desc = {'animation': a[0], 'run': a[1]}
-            desc = aliases.resolve(desc)
-            return project.make_animation(layout=layout, **desc)
-
         super().__init__(layout)
-
-        self.animations = [make_animation(i) for i in animations or []]
+        self.animations = [self._make_animation(i) for i in animations or []]
         self.index = 0
         self.internal_delay = 0  # never wait
 
-    # overriding to handle all the animations
+    # Override to handle all the animations
     def cleanup(self, clean_layout=True):
         for a in self.animations:
             a.cleanup()
@@ -37,3 +26,13 @@ class Collection(animation.BaseAnimation):
     @property
     def current_animation(self):
         return self.animations[self.index]
+
+    def _make_animation(self, a):
+        if isinstance(a, str):
+            desc = {'animation': a[0]}
+        elif isinstance(a, dict):
+            desc = a
+        else:
+            desc = {'animation': a[0], 'run': a[1]}
+        desc = aliases.resolve(desc)
+        return project.make_animation(layout=self.layout, **desc)
