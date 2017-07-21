@@ -28,10 +28,8 @@ class Collection(animation.BaseAnimation):
         return self.animations[self.index]
 
     def _make_animation(self, a):
-        if isinstance(a, str):
-            desc = {'animation': a[0]}
-        elif isinstance(a, dict):
-            desc = a
+        if isinstance(a, (str, dict)):
+            desc = {'animation': a}
         else:
             desc = {'animation': a[0], 'run': a[1]}
         desc = aliases.resolve(desc)

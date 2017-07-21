@@ -5,7 +5,7 @@ import time
 class Dummy(DriverBase):
     """For Testing: Provides no ouput, just a valid interface"""
 
-    def __init__(self, num, delay=0, **kwds):
+    def __init__(self, num=1024, delay=0, **kwds):
         """
         Args
             delay: time to wait in seconds to simulate actual hardware

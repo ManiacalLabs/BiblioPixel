@@ -11,7 +11,7 @@ import copy
 from .. import log
 import traceback
 
-RESERVED_PROPERTIES = 'name', 'parent_data'
+RESERVED_PROPERTIES = 'name', 'data'
 
 
 def _make_object(*args, field_types=FIELD_TYPES, **kwds):
@@ -22,9 +22,7 @@ def _make_layout(layout, driver=None, drivers=None, maker=None):
     if driver is None and drivers is None:
         raise ValueError('Projects has no driver or drivers section')
 
-    _layout = copy.deepcopy(layout)
-    coord_map = _layout.get('coordMap', None)
-    _layout.pop('coordMap', None)
+    coord_map = layout.pop('coordMap', None)
 
     if drivers is None:
         drivers = [_make_object(**driver)]
@@ -43,7 +41,7 @@ def _make_layout(layout, driver=None, drivers=None, maker=None):
         coord_map = coord_map or build.map
 
     maker = data_maker.Maker(**(maker or {}))
-    return _make_object(drivers, coordMap=coord_map, maker=maker, **_layout)
+    return _make_object(drivers, coordMap=coord_map, maker=maker, **layout)
 
 
 def make_animation(layout, animation, run=None):

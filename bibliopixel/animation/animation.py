@@ -16,7 +16,7 @@ class STATE(IntEnum):
 class BaseAnimation(object):
     free_run = False
     name = ''
-    parent_data = None
+    data = None
 
     def __init__(self, layout):
         self.layout = layout
