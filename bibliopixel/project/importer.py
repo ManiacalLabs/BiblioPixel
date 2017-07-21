@@ -6,6 +6,7 @@ MINIMUM_VERSIONS = {'serial': '2.7'}
 
 INSTALL_NAMES = {
     'BiblioPixelAnimations': 'BiblioPixelAnimations',
+    'flask': 'flask',
     'noise': 'noise',
     'serial': 'pyserial',
 }
