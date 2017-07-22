@@ -102,11 +102,9 @@ class RemoteControl:
     def _start_default(self):
         self._run_anim(self.default)
 
-    def _stop_anim(self, run_default=False):
+    def _stop_anim(self):
         if self.current_animation_obj:
             self.current_animation_obj.cleanup(clean_layout=False)
-        if run_default:
-            self._start_default()
 
     def _start_anim(self, name):
         self._stop_anim()
@@ -127,7 +125,8 @@ class RemoteControl:
         return True, None
 
     def stop_animation(self, data):
-        self._stop_anim(run_default=True)
+        self._stop_anim()
+        self._start_default()
         return True, None
 
     def get_config(self, data):
