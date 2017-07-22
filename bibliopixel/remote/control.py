@@ -22,6 +22,10 @@ DEFAULT_SERVER_CONFIG = {
     'port': 5000
 }
 
+BAD_DEFAULT_ERROR = """\
+`{}` is not a valid default!
+It must be one of the configured animation names."""
+
 
 class RemoteControl:
     def __init__(self, config, animations):
@@ -66,8 +70,7 @@ class RemoteControl:
             self.default = DEFAULT_OFF
 
         if self.default not in self.animation_objs:
-            raise ValueError(('`{}` is not a valid default! '
-                              'It must be one of the configured animation names.').format(self.default))
+            raise ValueError(BAD_DEFAULT_ERROR.format(self.default))
 
     def _load_animation(self, anim):
         anim_cfg = dict(DEFAULT_ANIM_CONFIG, **anim)
@@ -97,32 +100,29 @@ class RemoteControl:
 
     def on_completion(self, reason):
         if reason != STATE.canceled:
-            self._start_default()
+            self.stop_animation()
 
-    def _run_anim(self, name=None):
+    # API Handlers
+    def run_animation(self, name=None):
+        if name is None:
+            name = self.default
+
+        if name not in self.animation_objs:
+            return False, 'Invalid animation name: {}'.format(name)
+
         if self.current_animation_obj:
             self.current_animation_obj.cleanup(clean_layout=False)
             self.current_animation_obj = None
-
-        if name is None:
-            name = self.default
 
         log.info('Running animation: {}'.format(name))
         self.current_animation_name = name
         self.current_animation_obj = self.animation_objs[name]
         self.current_animation_obj.start()
 
-    # API Handlers
-    def run_animation(self, name):
-        if name not in self.animation_objs:
-            return False, 'Invalid animation name: {}'.format(name)
-
-        self._run_anim(name)
         return True, None
 
     def stop_animation(self, data):
-        self._run_anim()
-        return True, None
+        return self.run_animation()
 
     def get_config(self, data):
         resp = {
@@ -132,7 +132,7 @@ class RemoteControl:
         return True, resp
 
     def start(self):
-        self._run_anim()
+        self.run_animation()
         self.server.start()
         while True:
             recv = self.q_recv.get()
