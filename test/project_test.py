@@ -149,6 +149,13 @@ PROJECT_SEQUENCE = """
                 "typename": "matrix_test",
                 "name": "mt",
                 "data": {"title": "test title"}
+            },
+            {
+                "animation": {
+                    "typename": "matrix_test",
+                    "name": "mt2",
+                    "data": {"title": "test title"}
+                }
             }
         ]
     }
@@ -252,7 +259,7 @@ class ProjectTest(unittest.TestCase):
 
     def test_sequence(self):
         animation = make(PROJECT_SEQUENCE, run_start=False)
-        self.assertEquals(len(animation.animations), 2)
+        self.assertEquals(len(animation.animations), 3)
         animation = animation.animations[1]
         self.assertEquals(animation.name, 'mt')
 
