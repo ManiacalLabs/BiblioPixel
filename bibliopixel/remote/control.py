@@ -91,30 +91,29 @@ class RemoteControl:
             raise ValueError(('`{}` is not a valid default! '
                               'It must be one of the configured animation names.').format(self.default))
 
-    def cleanup(self):
+    def cleanup(self, clean_layout=True):
         self.q_recv.close()
         self.q_send.close()
         self.server.terminate()
 
     def on_completion(self, reason):
         if reason != STATE.canceled:
-            self.start_default()
+            self._start_default()
 
-    def start_default(self):
-        if self.default:
-            self.run_anim(self.default)
+    def _start_default(self):
+        self._run_anim(self.default)
 
-    def stop_anim(self, run_default=False):
+    def _stop_anim(self, run_default=False):
         if self.current_animation_obj:
             self.current_animation_obj.cleanup(clean_layout=False)
         if run_default:
-            self.start_default()
+            self._start_default()
 
-    def start_anim(self, name):
-        self.stop_anim()
-        self.run_anim(name)
+    def _start_anim(self, name):
+        self._stop_anim()
+        self._run_anim(name)
 
-    def run_anim(self, name):
+    def _run_anim(self, name):
         log.info('Running animation: {}'.format(name))
         self.current_animation_name = name
         self.current_animation_obj = self.animation_objs[name]
@@ -125,11 +124,11 @@ class RemoteControl:
         if name not in self.animation_objs:
             return False, 'Invalid animation name: {}'.format(name)
 
-        self.start_anim(name)
+        self._start_anim(name)
         return True, None
 
     def stop_animation(self, data):
-        self.stop_anim(run_default=True)
+        self._stop_anim(run_default=True)
         return True, None
 
     def get_config(self, data):
@@ -140,7 +139,7 @@ class RemoteControl:
         return True, resp
 
     def start(self):
-        self.start_default()
+        self._start_default()
         self.server.start()
         while True:
             recv = self.q_recv.get()
