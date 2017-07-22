@@ -99,9 +99,6 @@ class RemoteControl:
         if reason != STATE.canceled:
             self._start_default()
 
-    def _start_default(self):
-        self._run_anim(self.default)
-
     def _stop_anim(self):
         if self.current_animation_obj:
             self.current_animation_obj.cleanup(clean_layout=False)
@@ -110,7 +107,10 @@ class RemoteControl:
         self._stop_anim()
         self._run_anim(name)
 
-    def _run_anim(self, name):
+    def _run_anim(self, name=None):
+        if name is None:
+            name = self.default
+
         log.info('Running animation: {}'.format(name))
         self.current_animation_name = name
         self.current_animation_obj = self.animation_objs[name]
@@ -126,7 +126,7 @@ class RemoteControl:
 
     def stop_animation(self, data):
         self._stop_anim()
-        self._start_default()
+        self._run_anim()
         return True, None
 
     def get_config(self, data):
@@ -137,7 +137,7 @@ class RemoteControl:
         return True, resp
 
     def start(self):
-        self._start_default()
+        self._run_anim()
         self.server.start()
         while True:
             recv = self.q_recv.get()
