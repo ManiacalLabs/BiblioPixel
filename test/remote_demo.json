@@ -1,0 +1,101 @@
+{
+    "driver": {
+        "typename": "simpixel",
+        "num": 256
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 16,
+        "height": 16
+    },
+
+    "remote": {
+        "external_access": true,
+        "port": 5000,
+        "title": "Test Remote",
+        "bgcolor": "linear-gradient(to bottom, #f36926, black)",
+        "animations": [
+            {
+                "name": "Bloom",
+                "bgcolor": "orange",
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.bloom.Bloom"
+                },
+                "run": {
+                    "amt": 6,
+                    "fps": 30
+                }
+            },
+            {
+                "name": "Simplex Noise",
+                "bgcolor": "purple",
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.perlin_simplex.PerlinSimplex",
+                    "freq": 16
+                },
+                "run": {
+                    "fps": 30
+                }
+            },
+            {
+                "name": "pinwheel",
+                "display": "Whirling Rainbow",
+                "bgcolor": "linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet)",
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel"
+                },
+                "run": {
+                    "amt": 3,
+                    "fps": 30
+                }
+            },
+            {
+                "name": "Mainframe",
+                "bgcolor": "blue",
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.Mainframe.Mainframe",
+                    "color": [0, 255, 0]
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "name": "Sequence",
+                "bgcolor": "green",
+                "font_color": "black",
+                "animation": {
+                    "typename": "bibliopixel.animation.Sequence",
+                    "animations": [
+                        {
+                            "animation": "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
+                            "run": {
+                                "amt": 1,
+                                "fps": 20,
+                                "seconds": 8
+                            }
+                        },
+                        {
+                            "animation": "BiblioPixelAnimations.matrix.bloom.Bloom",
+                            "run": {
+                                "amt": 3,
+                                "fps": 60,
+                                "seconds": 8
+                            }
+                        },
+                        {
+                            "animation": "BiblioPixelAnimations.matrix.circlepop.CirclePop",
+                            "run": {
+                                "amt": 1,
+                                "fps": 15,
+                                "seconds": 8
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "default": null
+    }
+}
