@@ -45,7 +45,6 @@ class RemoteControl:
 
         self.server = multiprocessing.Process(target=server.run_server,
                                               args=server_args)
-
         if not isinstance(animations, list):
             raise ValueError('animations must be a list!')
 
@@ -53,28 +52,7 @@ class RemoteControl:
         self.current_animation_obj = None
         self.animations = animations
         self.animation_objs = {}
-        anim_list = []
-        for anim in self.animations:
-            anim_cfg = dict(DEFAULT_ANIM_CONFIG)
-            anim_cfg.update(anim)
-            if not anim_cfg['display']:
-                anim_cfg['display'] = anim_cfg['name']
-            anim_cfg['name'] = ''.join(e for e in anim['name'] if e.isalnum())
-
-            if anim_cfg['loaded']:
-                anim_cfg['animation'].on_completion = self.on_completion
-                self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
-            else:
-                anim_cfg['display'] = 'LOAD FAILED: ' + anim_cfg['display']
-                anim_cfg['valid'] = False
-                anim_cfg['bgcolor'] = 'rgb(48, 48, 48)'
-
-            # no longer need here
-            del anim_cfg['animation']
-            del anim_cfg['loaded']
-
-            anim_list.append(anim_cfg)
-        self.animations = anim_list
+        self.animations = [self._load_animation(a) for a in self.animations]
 
         self.handlers = {
             'run_animation': self.run_animation,
@@ -90,6 +68,27 @@ class RemoteControl:
         if self.default not in self.animation_objs:
             raise ValueError(('`{}` is not a valid default! '
                               'It must be one of the configured animation names.').format(self.default))
+
+    def _load_animation(self, anim):
+        anim_cfg = dict(DEFAULT_ANIM_CONFIG, **anim)
+
+        if not anim_cfg['display']:
+            anim_cfg['display'] = anim_cfg['name']
+        anim_cfg['name'] = ''.join(e for e in anim['name'] if e.isalnum())
+
+        if anim_cfg['loaded']:
+            anim_cfg['animation'].on_completion = self.on_completion
+            self.animation_objs[anim_cfg['name']] = anim_cfg['animation']
+        else:
+            anim_cfg['display'] = 'LOAD FAILED: ' + anim_cfg['display']
+            anim_cfg['valid'] = False
+            anim_cfg['bgcolor'] = 'rgb(48, 48, 48)'
+
+        # no longer need here
+        del anim_cfg['animation']
+        del anim_cfg['loaded']
+
+        return anim_cfg
 
     def cleanup(self, clean_layout=True):
         self.q_recv.close()
