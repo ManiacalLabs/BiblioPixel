@@ -99,15 +99,11 @@ class RemoteControl:
         if reason != STATE.canceled:
             self._start_default()
 
-    def _stop_anim(self):
+    def _run_anim(self, name=None):
         if self.current_animation_obj:
             self.current_animation_obj.cleanup(clean_layout=False)
+            self.current_animation_obj = None
 
-    def _start_anim(self, name):
-        self._stop_anim()
-        self._run_anim(name)
-
-    def _run_anim(self, name=None):
         if name is None:
             name = self.default
 
@@ -121,11 +117,10 @@ class RemoteControl:
         if name not in self.animation_objs:
             return False, 'Invalid animation name: {}'.format(name)
 
-        self._start_anim(name)
+        self._run_anim(name)
         return True, None
 
     def stop_animation(self, data):
-        self._stop_anim()
         self._run_anim()
         return True, None
 
