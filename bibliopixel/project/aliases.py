@@ -29,6 +29,7 @@ ALIASES = {
 
     'animation': {
         'off': 'bibliopixel.animation.off.OffAnim',
+        'remote': 'bibliopixel.remote.control.RemoteControl',
         'matrix_calibration':
         'bibliopixel.animation.tests.MatrixCalibrationTest',
         'matrix_test': 'bibliopixel.animation.tests.MatrixChannelTest',
