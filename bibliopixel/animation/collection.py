@@ -14,7 +14,8 @@ class Collection(animation.BaseAnimation):
     # Override to handle all the animations
     def cleanup(self, clean_layout=True):
         for a in self.animations:
-            a.cleanup()
+            if a:
+                a.cleanup()
         super().cleanup(clean_layout)
 
     def add_animation(self, anim, **kwds):

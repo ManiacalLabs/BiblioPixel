@@ -52,14 +52,21 @@ class RemoteControl(collection.Collection):
         self.name_map = {}
         self.anim_cfgs = []
         for i, anim in enumerate(self.animations):
-            name = animations[i]['animation']['name']  # if failed to load anim will be None
-            animations[i]['animation']['data']['valid'] = (anim is not None)
+            adesc = animations[i]['animation']
+            name = adesc['name']  # if failed to load anim will be None
+            if anim is None:
+                adesc['data']['valid'] = False
+                adesc['data']['display'] = 'LOAD FAILED: ' + adesc['data']['display']
+                adesc['data']['bgcolor'] = 'rgb(48, 48, 48)'
+                adesc['data']['font_color'] = 'white'
+
             if name in self.name_map:
                 raise ValueError('Cannot have multiple animations with the same name: ' + name)
             self.name_map[name] = anim and i
             self.anim_cfgs.append(animations[i]['animation']['data'])
             self.anim_cfgs[-1]['name'] = name
-            anim.on_completion = self.on_completion
+            if anim:
+                anim.on_completion = self.on_completion
 
         if default is None:
             self.default = DEFAULT_OFF
