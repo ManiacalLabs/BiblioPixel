@@ -27,7 +27,7 @@ class Collection(animation.BaseAnimation):
 
     @property
     def current_animation(self):
-        if self.index >= 0:
+        if (0 <= self.index < len(self.animations)):
             return self.animations[self.index]
         else:
             return None
