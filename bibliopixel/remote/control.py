@@ -9,7 +9,6 @@ DEFAULT_OFF = 'OFF_ANIM'
 DEFAULT_ANIM_CONFIG = {
     'bgcolor': '#00ff00',
     'font_color': '#ffffff',
-    'display': None,
     'valid': True
 }
 
@@ -25,6 +24,10 @@ BAD_DEFAULT_ERROR = """\
 It must be one of the configured animation names."""
 
 
+def normalize_name(name):
+    return ''.join('_' if e is ' ' else e for e in name if e.isalnum() or e is ' ')
+
+
 class RemoteControl(collection.Collection):
     def __init__(self, layout, animations,
                  external_access=False, port=5000,
@@ -34,34 +37,34 @@ class RemoteControl(collection.Collection):
         self.internal_delay = 0  # never wait
 
         # normalize name and display first
-        for anim in animations:
-            anim['animation']['data'] = dict(DEFAULT_ANIM_CONFIG, **anim['animation'].get('data', {}))
-            if not anim['animation'].get('name'):
-                raise ValueError('All animations require the `name` parameter: {}'.format(anim['animation']))
-            if not anim['animation']['data'].get('display'):
-                anim['animation']['data']['display'] = anim['animation']['name']
-            anim['animation']['name'] = ''.join(e for e in anim['animation']['name'] if e.isalnum())
+        for i, anim in enumerate(animations):
+            adesc = anim['animation']
+            adesc['data'] = dict(DEFAULT_ANIM_CONFIG, **adesc.get('data', {}))
+            if not adesc.get('name'):
+                log.error('All animations should have the `name` parameter: {}'.format(adesc))
+                adesc['name'] = str(i)
+            adesc['data']['display'] = adesc['data'].get('display', adesc['name'])
+            adesc['name'] = normalize_name(adesc['name'])
             anim['run'] = anim.get('run', {})
             anim['run']['threaded'] = True  # threaded required
         super().__init__(layout, animations, True)
 
         self.name_map = {}
         self.anim_cfgs = []
-        for i in range(len(self.animations)):
-            anim = self.animations[i]
+        for i, anim in enumerate(self.animations):
             name = animations[i]['animation']['name']  # if failed to load anim will be None
             animations[i]['animation']['data']['valid'] = (anim is not None)
             if name in self.name_map:
                 raise ValueError('Cannot have multiple animations with the same name: ' + name)
-            self.name_map[name] = None if anim is None else i
+            self.name_map[name] = anim and i
             self.anim_cfgs.append(animations[i]['animation']['data'])
-            self.anim_cfgs[len(self.anim_cfgs) - 1]['name'] = name
+            self.anim_cfgs[-1]['name'] = name
             anim.on_completion = self.on_completion
 
         if default is None:
             self.default = DEFAULT_OFF
         else:
-            self.default = ''.join(e for e in default if e.isalnum())
+            self.default = normalize_name(default)
             self.name_map[DEFAULT_OFF] = self.name_map[self.default]
             if self.default is None:
                 self.default = DEFAULT_OFF
