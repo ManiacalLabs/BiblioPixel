@@ -15,7 +15,7 @@ class STATE(IntEnum):
 
 class BaseAnimation(object):
     free_run = False
-    name = ''
+    name = None
     data = None
 
     def __init__(self, layout):
@@ -115,6 +115,7 @@ class BaseAnimation(object):
     @contextlib.contextmanager
     def run_context(self):
         self.state = STATE.running
+        self.threading.stop_event.clear()
         self._step = 0
         self.cur_step = 0
         self.cycle_count = 0

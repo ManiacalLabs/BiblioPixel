@@ -9,18 +9,22 @@
         "width": 16,
         "height": 16
     },
-
-    "remote": {
+    "animation": {
+        "typename": "remote",
         "external_access": true,
         "port": 5000,
         "title": "Test Remote",
         "bgcolor": "linear-gradient(to bottom, #f36926, black)",
+        "default": null,
         "animations": [
             {
-                "name": "Bloom",
-                "bgcolor": "orange",
                 "animation": {
-                    "typename": "BiblioPixelAnimations.matrix.bloom.Bloom"
+                    "typename": "BiblioPixelAnimations.matrix.bloom.Bloom",
+                    "name": "Bloom",
+                    "data": {
+                        "bgcolor": "purple",
+                        "font_color": "white"
+                    }
                 },
                 "run": {
                     "amt": 6,
@@ -28,10 +32,13 @@
                 }
             },
             {
-                "name": "Simplex Noise",
-                "bgcolor": "purple",
                 "animation": {
                     "typename": "BiblioPixelAnimations.matrix.perlin_simplex.PerlinSimplex",
+                    "name": "Simplex Noise",
+                    "data": {
+                        "bgcolor": "yellow",
+                        "font_color": "black"
+                    },
                     "freq": 16
                 },
                 "run": {
@@ -39,11 +46,13 @@
                 }
             },
             {
-                "name": "pinwheel",
-                "display": "Whirling Rainbow",
-                "bgcolor": "linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet)",
                 "animation": {
-                    "typename": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel"
+                    "typename": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel",
+                    "name": "pinwheel",
+                    "data": {
+                        "display": "Whirling Rainbow",
+                        "bgcolor": "linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet)"
+                    }
                 },
                 "run": {
                     "amt": 3,
@@ -51,10 +60,12 @@
                 }
             },
             {
-                "name": "Mainframe",
-                "bgcolor": "blue",
                 "animation": {
                     "typename": "BiblioPixelAnimations.matrix.Mainframe.Mainframe",
+                    "name": "Mainframe",
+                    "data": {
+                        "bgcolor": "blue"
+                    },
                     "color": [0, 255, 0]
                 },
                 "run": {
@@ -62,11 +73,9 @@
                 }
             },
             {
-                "name": "Sequence",
-                "bgcolor": "green",
-                "font_color": "black",
                 "animation": {
                     "typename": "bibliopixel.animation.Sequence",
+                    "name": "Sequence",
                     "animations": [
                         {
                             "animation": "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
@@ -95,7 +104,6 @@
                     ]
                 }
             }
-        ],
-        "default": null
+        ]
     }
 }

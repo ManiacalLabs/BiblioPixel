@@ -1,11 +1,13 @@
 from .. project import aliases, project
 from . import animation, runner
+import traceback
+from .. import log
 
 
 class Collection(animation.BaseAnimation):
-    def __init__(self, layout, animations=None):
+    def __init__(self, layout, animations=None, no_fail=False):
         super().__init__(layout)
-        self.animations = [self._make_animation(i) for i in animations or []]
+        self.animations = [self._make_animation(i, no_fail) for i in animations or []]
         self.index = 0
         self.internal_delay = 0  # never wait
 
@@ -25,9 +27,12 @@ class Collection(animation.BaseAnimation):
 
     @property
     def current_animation(self):
-        return self.animations[self.index]
+        if self.index >= 0:
+            return self.animations[self.index]
+        else:
+            return None
 
-    def _make_animation(self, a):
+    def _make_animation(self, a, no_fail=False):
         if isinstance(a, str):
             desc = {'animation': a}
         elif isinstance(a, dict):
@@ -40,4 +45,8 @@ class Collection(animation.BaseAnimation):
         else:
             desc = {'animation': a[0], 'run': a[1]}
         desc = aliases.resolve(desc)
-        return project.make_animation(layout=self.layout, **desc)
+        try:
+            return project.make_animation(layout=self.layout, **desc)
+        except:
+            log.error(traceback.format_exc())
+            return None

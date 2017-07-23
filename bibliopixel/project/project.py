@@ -6,7 +6,6 @@ from .. import data_maker
 from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
-from .. remote import control
 import copy
 from .. import log
 import traceback
@@ -56,44 +55,9 @@ def make_animation(layout, animation, run=None):
     return animation
 
 
-def make_remote(layout, remote):
-    OFF_ANIM = {
-        'typename': 'bibliopixel.animation.off.OffAnim'
-    }
-
-    animations = remote.get('animations')
-    if not animations:
-        raise ValueError('Must specify `animations` for remote.')
-
-    anim_list = []
-    for anim in animations:
-        run = anim.get('run', {})
-        run['threaded'] = True  # Remote anims must be threaded, maybe a little hacky?
-        anim_obj = dict(anim)
-        try:
-            anim_obj['animation'] = make_animation(layout, anim['animation'], run)
-            anim_obj['loaded'] = True
-        except:
-            log.error(traceback.format_exc())
-            anim_obj['animation'] = None
-            anim_obj['loaded'] = False
-        anim_obj.pop('run', None)  # no longer need this
-        anim_list.append(anim_obj)
-
-    base_config = dict(remote)
-    base_config.pop('animations', None)
-
-    base_config['default'] = remote.get('default') or make_animation(layout, OFF_ANIM, {'threaded': True})
-
-    rc = control.RemoteControl(base_config, anim_list)
-    return rc
-
-
-def _make_project(path=None, remote=None, animation=None, run=None, **kwds):
+def _make_project(path=None, animation=None, run=None, **kwds):
     gitty.sys_path.extend(path)
     layout = _make_layout(**kwds)
-    if remote:
-        return make_remote(layout, remote)
 
     return make_animation(layout, animation or {}, run or {})
 
