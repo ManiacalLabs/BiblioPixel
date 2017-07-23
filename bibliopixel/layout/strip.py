@@ -34,8 +34,9 @@ class Strip(Layout):
         self.set_pixel_positions(gen_strip(self.numLEDs))
 
     def _set_strip_mapped(self, pixel, color):
-        pixel = self.coordMap[pixel]
-        self._set_base(pixel, color)
+        if pixel >= 0 and pixel < self.numLEDs:
+            pixel = self.coordMap[pixel]
+            self._set_base(pixel, color)
 
     # Set single pixel to Color value
     def _set(self, pixel, color):
