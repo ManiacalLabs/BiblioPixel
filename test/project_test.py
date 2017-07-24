@@ -116,7 +116,8 @@ PROJECT_SIM = """
 {
     "driver": {
         "typename": "bibliopixel.drivers.SimPixel.SimPixel",
-        "num": 12
+        "num": 12,
+        "port": 1338
     },
 
     "layout": {

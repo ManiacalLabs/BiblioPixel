@@ -3,6 +3,7 @@
 
     "driver": {
         "typename": "simpixel",
+        "port": 1338,
         "num": 1024
     },
 
