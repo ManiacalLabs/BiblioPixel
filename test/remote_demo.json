@@ -1,7 +1,8 @@
 {
     "driver": {
         "typename": "simpixel",
-        "num": 256
+        "num": 256,
+        "port": 1338
     },
 
     "layout": {
