@@ -22,9 +22,8 @@ def main():
 
     for name, module in sorted(MODULES.items()):
         subparser = subparsers.add_parser(name, help=module.__doc__)
+        common_flags.add_common_flags(subparser)
         module.set_parser(subparser)
-
-    common_flags.add_common_flags(parser)
 
     argv = ['--help' if i == 'help' else i for i in sys.argv[1:]]
 
@@ -36,6 +35,10 @@ def main():
         print('BiblioPixel version %s' % common_flags.VERSION)
         if not argv:
             return
+
+    if argv[0].startswith('-'):
+        print('bibliopixel: error: command line flags must appear at the end.')
+
     args = parser.parse_args(argv)
 
     try:
