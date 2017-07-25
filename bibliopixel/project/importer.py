@@ -11,6 +11,9 @@ INSTALL_NAMES = {
     'serial': 'pyserial',
 }
 
+NON_WINDOWS_LIBRARIES = set(['fcntl'])
+NON_WINDOWS_MESSAGE = 'The library %s is not available for Windows'
+
 VERSION_MESSAGE = """
 You have version %s of module '%s' but you need version %s.
 
@@ -52,6 +55,10 @@ def import_symbol(typename, package=None):
         return result
     except ImportError as e:
         root_module = typename.split('.')[0]
+        if root_module in NON_WINDOWS_LIBRARIES:
+            e.msg = (NON_WINDOWS_MESSAGE % root_module) + e.msg
+            raise
+
         install_name = INSTALL_NAMES.get(root_module)
         if install_name:
             try:
