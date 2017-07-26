@@ -1,5 +1,5 @@
 from . channel_order import ChannelOrder
-from .. import gamma as _gamma
+from .. colors import gamma as _gamma
 from .. import data_maker
 import threading, time
 

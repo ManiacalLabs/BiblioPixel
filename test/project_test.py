@@ -1,7 +1,7 @@
 import json, unittest
 
 from bibliopixel.main import run
-from bibliopixel import gamma
+from bibliopixel.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
 from . mark_tests import SKIP_LONG_TESTS
 
