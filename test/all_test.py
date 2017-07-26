@@ -1,9 +1,9 @@
 import unittest
+
 import bibliopixel
-from bibliopixel.layout import geometry
-from bibliopixel.project import data_maker
-from bibliopixel.main import demo, main, run, set, show
-from bibliopixel.remote import server
+import bibliopixel.layout.geometry
+import bibliopixel.project.data_maker
+import bibliopixel.remote.server
 
 from bibliopixel import (
     animation,
@@ -33,6 +33,23 @@ from bibliopixel.drivers import (
     network_udp,
     return_codes,
     serial,
+)
+
+from bibliopixel.main import (
+    all_pixel,
+    clear_cache,
+    color,
+    common_flags,
+    demo,
+    demo_table,
+    devices,
+    help,
+    main,
+    run,
+    set,
+    show,
+    simpixel,
+    update,
 )
 
 
