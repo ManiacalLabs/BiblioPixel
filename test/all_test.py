@@ -15,7 +15,6 @@ from bibliopixel import (
     layout,
     log,
     matrix,
-    return_codes,
     # serial_gamepad,
     util,
 )
@@ -29,6 +28,7 @@ from bibliopixel.drivers import (
     network,
     network_receiver,
     network_udp,
+    return_codes,
     serial,
 )
 

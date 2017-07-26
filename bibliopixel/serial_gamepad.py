@@ -1,6 +1,6 @@
 from distutils.version import LooseVersion
 from . util import AttributeDict, generate_header
-from . return_codes import RETURN_CODES, print_error
+from . drivers.return_codes import RETURN_CODES, print_error
 from gamepad import BaseGamePad
 import log
 
