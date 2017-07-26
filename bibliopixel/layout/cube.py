@@ -1,6 +1,6 @@
 import math, threading, time
 
-from .. import colors, font, matrix
+from .. import colors, font
 from .. util import log
 from . layout import Layout
 from . geometry.cube import gen_cube, pixel_positions_from_cube
