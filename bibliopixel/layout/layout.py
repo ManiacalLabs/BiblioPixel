@@ -1,5 +1,6 @@
 import time
-from .. import colors, data_maker, util
+from .. import colors, util
+from .. project import data_maker
 from .. threads.update_threading import UpdateThreading
 
 

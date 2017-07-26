@@ -2,7 +2,7 @@ import gitty, sys
 from . import aliases, importer
 from . types.defaults import FIELD_TYPES
 from .. animation import runner
-from .. import data_maker
+from .. project import data_maker
 from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
