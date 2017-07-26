@@ -1,8 +1,7 @@
 from distutils.version import LooseVersion
-from . util import AttributeDict, generate_header
-from . drivers.return_codes import RETURN_CODES, print_error
-from gamepad import BaseGamePad
-import log
+from .. util import AttributeDict, generate_header, log
+from .. drivers.return_codes import RETURN_CODES, print_error
+from . gamepad import BaseGamePad
 
 try:
     import serial

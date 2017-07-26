@@ -9,14 +9,17 @@ from bibliopixel import (
     animation,
     colors,
     font,
-    gamepad,
     gamma,
     image,
     layout,
     log,
     matrix,
-    # serial_gamepad,
     util,
+)
+
+from bibliopixel.controllers import (
+    gamepad,
+    # serial_gamepad,
 )
 
 from bibliopixel.drivers import (
