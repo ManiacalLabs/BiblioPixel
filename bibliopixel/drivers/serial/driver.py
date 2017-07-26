@@ -4,7 +4,7 @@ from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from . devices import Devices
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
-from ... import log, util
+from ... util import log, util
 from ... util.enum import resolve_enum
 from ... drivers.return_codes import RETURN_CODES, print_error, BiblioSerialError
 

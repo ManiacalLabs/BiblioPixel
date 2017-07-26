@@ -1,5 +1,5 @@
 import uuid
-from ... import log
+from ... util import log
 from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 Server = SimpleWebSocketServer

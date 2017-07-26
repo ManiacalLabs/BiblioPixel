@@ -1,7 +1,7 @@
 from .. project import aliases, project
 from . import animation, runner
 import traceback
-from .. import log
+from .. util import log
 
 
 class Collection(animation.BaseAnimation):

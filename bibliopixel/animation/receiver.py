@@ -1,5 +1,5 @@
 from . animation import BaseAnimation
-from .. import log
+from .. util import log
 import threading
 from enum import IntEnum
 

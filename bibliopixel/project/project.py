@@ -7,7 +7,7 @@ from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
 import copy
-from .. import log
+from .. util import log
 import traceback
 
 RESERVED_PROPERTIES = 'name', 'data'
