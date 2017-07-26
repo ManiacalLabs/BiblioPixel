@@ -6,7 +6,7 @@ from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... import log, util
 from ... util.enum import resolve_enum
-from ... return_codes import RETURN_CODES, print_error, BiblioSerialError
+from ... drivers.return_codes import RETURN_CODES, print_error, BiblioSerialError
 
 
 class Serial(DriverBase):

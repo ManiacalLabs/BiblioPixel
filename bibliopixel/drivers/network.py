@@ -2,7 +2,7 @@ import socket, sys, time, os
 
 from . driver_base import DriverBase
 from .. import log, util
-from .. return_codes import RETURN_CODES
+from .. drivers.return_codes import RETURN_CODES
 
 
 class CMDTYPE:

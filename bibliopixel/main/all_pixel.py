@@ -3,8 +3,8 @@ Configure the AllPixel lighting module.
 """
 
 import signal, sys
-from ..drivers.serial.codes import LEDTYPE
-from ..return_codes import BiblioSerialError
+from .. drivers.serial.codes import LEDTYPE
+from .. drivers.return_codes import BiblioSerialError
 
 types = [
     [LEDTYPE.GENERIC, 'GENERIC'],
