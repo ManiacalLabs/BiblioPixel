@@ -1,6 +1,6 @@
 import math, threading, time
 
-from .. import colors, data_maker, font, matrix, log
+from .. import colors, font, matrix, log
 from . layout import Layout
 from . geometry.matrix import Rotation, gen_matrix, pixel_positions_from_matrix
 
@@ -20,8 +20,7 @@ class Matrix(Layout):
         rotation - how to rotate when generating the map. Not used if coordMap specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
-        super().__init__(drivers, threadedUpdate, brightness,
-                         maker=kwargs.get('maker', data_maker.MAKER))
+        super().__init__(drivers, threadedUpdate, brightness, **kwargs)
 
         self.width = width or getattr(self.drivers[0], 'width') or 32
         self.height = height or getattr(self.drivers[0], 'height') or 32

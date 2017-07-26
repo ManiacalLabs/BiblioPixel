@@ -1,4 +1,4 @@
-from .. import colors, data_maker
+from .. import colors
 from . layout import Layout
 from . geometry.strip import gen_strip
 
@@ -7,8 +7,7 @@ class Strip(Layout):
 
     def __init__(self, drivers, threadedUpdate=False,
                  brightness=255, pixelWidth=1, coordMap=None, **kwargs):
-        super().__init__(drivers, threadedUpdate, brightness,
-                         maker=kwargs.get('maker', data_maker.MAKER))
+        super().__init__(drivers, threadedUpdate, brightness, **kwargs)
 
         self.pixelWidth = pixelWidth
         if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:
