@@ -1,4 +1,4 @@
-from .. import log
+from .. util import log
 
 
 class RETURN_CODES:

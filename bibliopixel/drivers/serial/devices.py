@@ -1,7 +1,7 @@
 from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from ... drivers.return_codes import RETURN_CODES, print_error
-from ... import log, util
+from ... util import log, util
 from ... project.importer import import_symbol
 
 

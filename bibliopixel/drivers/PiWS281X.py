@@ -2,7 +2,7 @@
 
 from . channel_order import ChannelOrder
 from . driver_base import DriverBase
-from .. import log
+from .. util import log
 from .. colors import gamma
 
 try:

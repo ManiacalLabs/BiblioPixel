@@ -4,7 +4,7 @@ Run a project description file.
 
 import json, os
 from . import common_flags, simpixel
-from .. import log
+from .. util import log
 from .. util import files
 
 

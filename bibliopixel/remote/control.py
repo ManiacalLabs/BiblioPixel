@@ -2,7 +2,7 @@ import multiprocessing
 from .. animation.animation import STATE
 from .. animation import collection
 from . import server
-from .. import log
+from .. util import log
 
 
 DEFAULT_OFF = 'OFF_ANIM'

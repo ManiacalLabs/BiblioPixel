@@ -1,7 +1,7 @@
 import socket, sys, time, os
 
 from . driver_base import DriverBase
-from .. import log, util
+from .. util import log, util
 from .. drivers.return_codes import RETURN_CODES
 
 

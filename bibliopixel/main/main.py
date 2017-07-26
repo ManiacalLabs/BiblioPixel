@@ -1,6 +1,6 @@
 import argparse, os, sys
 from . import common_flags
-from .. import log
+from .. util import log
 from .. project.importer import import_symbol
 from .. project.preset_library import PresetLibrary
 
