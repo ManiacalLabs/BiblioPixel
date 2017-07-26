@@ -1,5 +1,4 @@
 from . layout import Layout
-from .. import data_maker
 from . geometry.circle import (
     gen_circle, calc_ring_steps, calc_ring_pixel_count,
     pixel_positions_from_rings)
@@ -10,8 +9,7 @@ class Circle(Layout):
     def __init__(self, drivers, rings=[], pixels_per=None,
                  maxAngleDiff=0, rotation=0,
                  threadedUpdate=False, brightness=255, **kwargs):
-        super().__init__(drivers, threadedUpdate, brightness,
-                         maker=kwargs.get('maker', data_maker.MAKER))
+        super().__init__(drivers, threadedUpdate, brightness, **kwargs)
         self.rings = rings
         self.maxAngleDiff = maxAngleDiff
         full_coords = False

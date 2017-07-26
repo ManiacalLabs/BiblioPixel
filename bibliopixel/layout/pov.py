@@ -1,5 +1,4 @@
 import math, threading, time
-from .. import data_maker
 from . matrix import Matrix, Rotation
 
 
@@ -13,7 +12,7 @@ class POV(Matrix):
 
         super().__init__(drivers, width, povHeight, None,
                          rotation, vert_flip, threadedUpdate, brightness,
-                         maker=kwargs.get('maker', data_maker.MAKER))
+                         **kwargs)
 
     # This is the magic. Overriding the normal push_to_driver() method
     # It will automatically break up the frame into columns spread over
