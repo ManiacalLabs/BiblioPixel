@@ -3,7 +3,7 @@
 from . channel_order import ChannelOrder
 from . driver_base import DriverBase
 from .. import log
-from .. import gamma
+from .. colors import gamma
 
 try:
     from neopixel import Adafruit_NeoPixel, Color as NeoColor
