@@ -12,6 +12,7 @@ from . project import data_maker
 
 # These are DEPRECATED
 from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
+from . layout import matrix_drawing as matrix
 
 
 def _get_version():
