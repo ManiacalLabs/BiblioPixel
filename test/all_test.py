@@ -1,13 +1,13 @@
 import unittest
 import bibliopixel
 from bibliopixel.layout import geometry
+from bibliopixel.project import data_maker
 from bibliopixel.main import demo, main, run, set, show
 from bibliopixel.remote import server
 
 from bibliopixel import (
     animation,
     colors,
-    data_maker,
     font,
     gamepad,
     gamma,

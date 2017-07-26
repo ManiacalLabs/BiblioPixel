@@ -1,6 +1,6 @@
 import ctypes
 from multiprocessing.sharedctypes import RawArray
-from . import log
+from .. import log
 
 try:
     import numpy

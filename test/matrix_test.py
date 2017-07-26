@@ -1,6 +1,6 @@
 import unittest
 
-from bibliopixel import data_maker
+from bibliopixel.project import data_maker
 from bibliopixel.layout import Matrix
 from bibliopixel.drivers.driver_base import DriverBase
 
