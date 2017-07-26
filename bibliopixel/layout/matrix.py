@@ -1,8 +1,9 @@
 import math, threading, time
 
-from .. import colors, font
+from .. import colors
 from .. util import log
 from . import matrix_drawing as matrix
+from . import font
 from . layout import Layout
 from . geometry.matrix import Rotation, gen_matrix, pixel_positions_from_matrix
 

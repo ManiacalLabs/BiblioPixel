@@ -1,9 +1,9 @@
-from . layout import Circle, Matrix, POV, Strip, Cube
+from . layout import Circle, Matrix, POV, Strip, Cube, font
 from . layout.geometry import Rotation
 from . layout.geometry.matrix import gen_matrix
 from . layout.geometry.circle import gen_circle
 from . layout.geometry.cube import gen_cube
-from . import animation, colors, font, layout, util
+from . import animation, colors, layout, util
 from . util import log
 
 from . colors import gamma

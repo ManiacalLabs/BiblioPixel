@@ -1,6 +1,7 @@
 import unittest
 
 import bibliopixel
+import bibliopixel.layout.font
 import bibliopixel.layout.geometry
 import bibliopixel.project.data_maker
 import bibliopixel.remote.server
@@ -8,7 +9,6 @@ import bibliopixel.remote.server
 from bibliopixel import (
     animation,
     colors,
-    font,
     gamma,
     image,
     layout,
