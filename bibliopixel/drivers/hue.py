@@ -1,5 +1,5 @@
 from . driver_base import DriverBase
-from .. import log
+from .. util import log
 
 try:
     from phue import Bridge

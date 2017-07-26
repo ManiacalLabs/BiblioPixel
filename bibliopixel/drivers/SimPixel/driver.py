@@ -1,5 +1,5 @@
 import errno, struct, threading, uuid
-from ... import log
+from ... util import log
 from .. driver_base import DriverBase
 from . import websocket
 

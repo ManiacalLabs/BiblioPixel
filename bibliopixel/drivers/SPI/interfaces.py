@@ -2,7 +2,7 @@ import os
 import math
 from enum import IntEnum
 from . import errors
-from ... import log
+from ... util import log
 
 
 class SpiBaseInterface(object):

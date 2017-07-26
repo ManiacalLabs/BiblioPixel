@@ -1,5 +1,5 @@
 import logging, os, queue, sys
-from .. import log
+from .. util import log
 
 MESSAGE = """\
 Remote UI Server available at: {1}
