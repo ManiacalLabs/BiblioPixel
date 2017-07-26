@@ -1,59 +1,51 @@
-import unittest
+import importlib, os, unittest
 
-import bibliopixel
-import bibliopixel.layout.font
-import bibliopixel.layout.geometry
-import bibliopixel.project.data_maker
-import bibliopixel.remote.server
-import bibliopixel.util.image
+BLACKLIST = ['bibliopixel.drivers.PiWS281X']
 
-from bibliopixel import (
-    animation,
-    colors,
-    gamma,
-    layout,
-    log,
-    matrix,
-    util,
-)
 
-from bibliopixel.controllers import (
-    gamepad,
-    # serial_gamepad,
-)
+def split_all(path):
+    result = []
+    old_path = None
+    while path != old_path:
+        (path, tail), old_path = os.path.split(path), path
+        tail and result.insert(0, tail)
+    return result
 
-from bibliopixel.drivers import (
-    SPI,
-    # SimPixel,
-    driver_base,
-    dummy_driver,
-    hue,
-    network,
-    network_receiver,
-    network_udp,
-    return_codes,
-    serial,
-)
 
-from bibliopixel.main import (
-    all_pixel,
-    clear_cache,
-    color,
-    common_flags,
-    demo,
-    demo_table,
-    devices,
-    help,
-    main,
-    run,
-    set,
-    show,
-    simpixel,
-    update,
-)
+def get_imports():
+    bp_root = os.path.dirname(os.path.dirname(__file__))
+    python_root = os.path.join(bp_root, 'bibliopixel')
+    for directory, sub_folders, files in os.walk(python_root):
+        if '__' in directory:
+            continue
+
+        relative = os.path.relpath(directory, python_root)
+        if relative == '.':
+            root_import = 'bibliopixel'
+        else:
+            root_import = 'bibliopixel.' + '.'.join(split_all(relative))
+
+        yield root_import
+
+        for f in files:
+            if f.endswith('.py') and '__' not in f:
+                yield '%s.%s' % (root_import, f[:-3])
 
 
 class ImportAllTest(unittest.TestCase):
     def test_all(self):
-        # We pass just by successfully importing everything above.
-        pass
+        failures = []
+        for name in get_imports():
+            if name in BLACKLIST:
+                continue
+
+            try:
+                importlib.import_module(name)
+            except:
+                failures.append(name)
+        self.assertEqual(failures, [])
+
+        with open('/tmp/imports.txt', 'w') as f:
+            for name in get_imports():
+                f.write(name)
+                f.write('\n')
