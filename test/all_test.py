@@ -5,12 +5,12 @@ import bibliopixel.layout.font
 import bibliopixel.layout.geometry
 import bibliopixel.project.data_maker
 import bibliopixel.remote.server
+import bibliopixel.util.image
 
 from bibliopixel import (
     animation,
     colors,
     gamma,
-    image,
     layout,
     log,
     matrix,
