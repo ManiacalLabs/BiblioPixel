@@ -1,6 +1,6 @@
 from . channel_order import ChannelOrder
 from .. colors import gamma as _gamma
-from .. import data_maker
+from .. project import data_maker
 import threading, time
 
 
