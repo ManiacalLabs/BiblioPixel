@@ -1,5 +1,6 @@
 import math
-from .. import colors, font
+from .. import colors
+from . import font
 
 ##########################################################################
 # Drawing Functions
