@@ -1,6 +1,6 @@
 import math, threading, time
 
-from .. import colors, data_maker, font, log, matrix
+from .. import colors, font, log, matrix
 from . layout import Layout
 from . geometry.cube import gen_cube, pixel_positions_from_cube
 
@@ -9,9 +9,7 @@ class Cube(Layout):
 
     def __init__(self, drivers, x, y, z, coordMap=None,
                  threadedUpdate=False, brightness=255, **kwargs):
-        super().__init__(drivers, threadedUpdate, brightness,
-                         maker=kwargs.get('maker', data_maker.MAKER))
-
+        super().__init__(drivers, threadedUpdate, brightness, **kwargs)
         self.x = x
         self.y = y
         self.z = z

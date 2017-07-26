@@ -1,6 +1,5 @@
 from ... colors import gamma
 from .. channel_order import ChannelOrder
-from ... import data_maker
 from . base import SPIBase
 
 
