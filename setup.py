@@ -124,6 +124,7 @@ setup(
     description=(
         'BiblioPixel is a pure python library for manipulating a wide variety '
         'of LED strip based displays, both in strip and matrix form.'),
+    long_description=open('README.md').read(),
     author='Adam Haile',
     author_email='adam@maniacallabs.com',
     url='http://github.com/maniacallabs/bibliopixel/',
