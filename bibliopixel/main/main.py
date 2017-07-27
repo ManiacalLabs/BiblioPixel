@@ -1,4 +1,4 @@
-import argparse, gitty, os, sys
+import argparse, os, sys
 from . import common_flags
 from .. import log
 from .. project.importer import import_symbol
