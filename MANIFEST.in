@@ -2,6 +2,7 @@ include bibliopixel/VERSION
 include scripts/*
 recursive-include ui *
 include requirements.txt
+include README.md
 recursive-exclude test *
 recursive-exclude bin *
 recursive-exclude build *
