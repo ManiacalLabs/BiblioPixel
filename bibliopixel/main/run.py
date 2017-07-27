@@ -2,7 +2,7 @@
 Run a project description file.
 """
 
-import gitty, json
+import json, os
 from . import common_flags, simpixel
 from .. import log
 from .. util import files
@@ -26,7 +26,7 @@ def make_animation(name, is_json, args):
 
 
 def run(args, settings):
-    gitty.sys_path.extend(args.path)
+    common_flags.extend_path(args)
     if args.simpixel:
         simpixel.open_simpixel(args.simpixel)
     elif args.s:

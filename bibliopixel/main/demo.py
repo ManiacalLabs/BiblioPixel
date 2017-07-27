@@ -5,7 +5,7 @@ Run a demo.  For the list of possible demos, type
 
 """
 
-import gitty, random
+import random
 
 from . import common_flags, demo_table, simpixel
 from .. project import project
@@ -49,7 +49,7 @@ def run(args, settings):
         usage()
         return
 
-    gitty.sys_path.extend(args.path)
+    common_flags.extend_path(args)
 
     if not args.name:
         usage()

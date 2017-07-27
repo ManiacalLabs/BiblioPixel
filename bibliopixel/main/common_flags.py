@@ -1,4 +1,4 @@
-import json
+import gitty, json, os
 from .. project import project
 
 """Common command line arguments for run and demo."""
@@ -105,3 +105,10 @@ def make_animation(args, desc):
         project_flags['maker'] = {'use_numpy': True}
 
     return project.project_to_animation(desc, project_flags)
+
+
+def extend_path(args):
+    path = os.getcwd()
+    if args.path:
+        path += ':' + args.path
+    gitty.sys_path.extend(path)
