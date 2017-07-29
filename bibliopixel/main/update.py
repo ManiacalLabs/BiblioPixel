@@ -5,7 +5,7 @@ Update BiblioPixel's dependencies.
 import os, sys, subprocess
 
 
-def run(args, settings):
+def run(args):
     root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     code = 0
 

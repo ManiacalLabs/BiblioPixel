@@ -2,7 +2,6 @@ import argparse, os, sys
 from . import common_flags
 from .. util import log
 from .. project.importer import import_symbol
-from .. project.preset_library import PresetLibrary
 
 __all__ = ['main']
 COMMANDS = (
@@ -43,11 +42,8 @@ def main():
 
     try:
         log.set_log_level(args.loglevel)
-        presets = common_flags.ENABLE_PRESETS and PresetLibrary(
-            os.path.expanduser(args.presets), True)
-
         run = getattr(args, 'run', no_command)
-        result = run(args, presets) or 0
+        result = run(args) or 0
     except Exception as e:
         if args.verbose:
             raise

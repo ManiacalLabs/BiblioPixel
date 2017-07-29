@@ -44,7 +44,7 @@ def usage():
     print('Available demos are: {}'.format(DEMO_OPTS))
 
 
-def run(args, settings):
+def run(args):
     if args.name == 'list':
         usage()
         return
