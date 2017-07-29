@@ -55,13 +55,13 @@ def make_animation(layout, animation, run=None):
     return animation
 
 
-def _make_project(path=None, animation=None, run=None, **kwds):
-    gitty.sys_path.extend(path)
-    layout = _make_layout(**kwds)
-
-    return make_animation(layout, animation or {}, run or {})
-
-
 def project_to_animation(desc, default):
     project = aliases.resolve(default or {}, desc)
-    return _make_project(**project)
+
+    animation = project.pop('animation', {})
+    run = project.pop('run', {})
+    path = project.pop('path', '')
+
+    gitty.sys_path.extend(path)
+    layout = _make_layout(**project)
+    return make_animation(layout, animation, run)

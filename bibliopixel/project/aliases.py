@@ -45,6 +45,8 @@ def resolve(*dicts):
     def resolver(key, value):
         if isinstance(value, str):
             value = {'typename': value}
+        else:
+            value = copy.deepcopy(value)
 
         typename = value.get('typename')
         if typename and key in ALIASES:
