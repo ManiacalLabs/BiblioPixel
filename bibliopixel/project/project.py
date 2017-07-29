@@ -1,41 +1,31 @@
-import gitty, sys
+import copy, gitty, sys
 from . import aliases, importer
 from .. animation import runner
 from .. project import data_maker
 from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
-import copy
 from .. util import log
-import traceback
 
 RESERVED_PROPERTIES = 'name', 'data'
 
 
-def _make_layout(layout, driver=None, drivers=None, maker=None):
-    if driver is None and drivers is None:
-        raise ValueError('Projects has no driver or drivers section')
+def _make_drivers_and_coord_map(driver, drivers, maker):
+    if not drivers:
+        return [importer.make_object(maker=maker, **driver)], None
 
-    coord_map = layout.pop('coordMap', None)
+    if driver:
+        # driver is a default for each driver.
+        drivers = [dict(driver, **d) for d in drivers]
 
-    if drivers is None:
-        drivers = [importer.make_object(**driver)]
-    else:
-        build = MultiMapBuilder()
+    build = MultiMapBuilder()
 
-        def make_driver(width, height, matrix=None, **kwds):
-            build.addRow(gen_matrix(width, height, **(matrix or {})))
-            return importer.make_object(width=width, height=height, **kwds)
+    def make_driver(width, height, matrix=None, **kwds):
+        build.addRow(gen_matrix(width, height, **(matrix or {})))
+        return importer.make_object(
+            width=width, height=height, maker=maker, **kwds)
 
-        if driver:
-            # driver is a default for each driver.
-            drivers = [dict(driver, **d) for d in drivers]
-
-        drivers = [make_driver(**d) for d in drivers]
-        coord_map = coord_map or build.map
-
-    maker = data_maker.Maker(**(maker or {}))
-    return importer.make_object(drivers, coordMap=coord_map, maker=maker, **layout)
+    return [make_driver(**d) for d in drivers], build.map
 
 
 def make_animation(layout, animation, run=None):
@@ -53,10 +43,32 @@ def make_animation(layout, animation, run=None):
 def project_to_animation(desc, default):
     project = aliases.resolve(default or {}, desc)
 
-    animation = project.pop('animation', {})
-    run = project.pop('run', {})
-    path = project.pop('path', '')
+    animation = project.pop('animation', None)
+    driver = project.pop('driver', None)
+    drivers = project.pop('drivers', None)
+    layout = project.pop('layout', None)
+    maker = project.pop('maker', None)
+    path = project.pop('path', None)
+    run = project.pop('run', None)
 
-    gitty.sys_path.extend(path)
-    layout = _make_layout(**project)
-    return make_animation(layout, animation, run)
+    if project:
+        log.error('Did not understand sections %s', project)
+
+    if not animation:
+        raise ValueError('animation was not specified in project')
+
+    if not layout:
+        raise ValueError('layout was not specified in project')
+
+    if not (driver or drivers):
+        raise ValueError('Projects has neither driver nor drivers sections')
+
+    gitty.sys_path.extend(path or '')
+    maker = data_maker.Maker(**(maker or {}))
+
+    drivers, coord_map = _make_drivers_and_coord_map(driver, drivers, maker)
+    coord_map = layout.pop('coordMap', None) or coord_map
+    layout_object = importer.make_object(
+        drivers, coordMap=coord_map, maker=maker, **layout)
+
+    return make_animation(layout_object, animation, run)
