@@ -1,6 +1,8 @@
-from .types import make
-from ..util import importer
+from . types import make
+from . types.defaults import FIELD_TYPES
+from .. util import importer
 from distutils.version import LooseVersion
+
 
 MINIMUM_VERSIONS = {'serial': '2.7'}
 
@@ -68,5 +70,5 @@ def make_object(*args, typename, package=None, field_types=None, **kwds):
     if hasattr(symbol, 'FIELD_TYPES'):
         field_types = symbol.FIELD_TYPES
 
-    kwds = make.component(kwds, field_types)
+    kwds = make.component(kwds, field_types or FIELD_TYPES)
     return symbol(*args, **kwds)
