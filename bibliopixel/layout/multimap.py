@@ -8,6 +8,24 @@ class MultiMapBuilder:
         self.offset = 0
         self.make_object = make_object
 
+    def make_drivers(self, driver, drivers):
+        if not drivers:
+            return [self.make_object(**driver)]
+
+        if driver:
+            # driver is a default for each driver.
+            drivers = [dict(driver, **d) for d in drivers]
+
+        return [self._make_driver(**d) for d in drivers]
+
+    def _make_driver(self, width, height, matrix=None, **kwds):
+        row = gen_matrix(width, height, **(matrix or {}))
+        for y, row_entry in enumerate(row):
+            self.map.append([i + self.offset for i in row_entry])
+
+        self.offset += len(row) * len(row[0])
+        return self.make_object(width=width, height=height, **kwds)
+
     def addRow(self, *maps):
         # DEPRECATED
         yOff = len(self.map)
@@ -28,21 +46,3 @@ class MultiMapBuilder:
                 self.map[y + yOff] += [i + offsets[x] for i in maps[x][y]]
 
         self.offset = offsets[len(offsets) - 1]
-
-    def _make_driver(self, width, height, matrix=None, **kwds):
-        row = gen_matrix(width, height, **(matrix or {}))
-        for y, row_entry in enumerate(row):
-            self.map.append([i + self.offset for i in row_entry])
-
-        self.offset += len(row) * len(row[0])
-        return self.make_object(width=width, height=height, **kwds)
-
-    def make_drivers(self, driver, drivers):
-        if not drivers:
-            return [self.make_object(**driver)]
-
-        if driver:
-            # driver is a default for each driver.
-            drivers = [dict(driver, **d) for d in drivers]
-
-        return [self._make_driver(**d) for d in drivers]
