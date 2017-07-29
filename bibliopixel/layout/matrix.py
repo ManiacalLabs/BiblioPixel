@@ -10,7 +10,7 @@ from . geometry.matrix import Rotation, gen_matrix, pixel_positions_from_matrix
 
 class Matrix(Layout):
 
-    def __init__(self, drivers, width=0, height=0, coordMap=None,
+    def __init__(self, drivers, width=0, height=0, coord_map=None,
                  rotation=Rotation.ROTATE_0, vert_flip=False,
                  serpentine=True,
                  threadedUpdate=False, brightness=255,
@@ -19,8 +19,8 @@ class Matrix(Layout):
         driver - instance that inherits from DriverBase
         width - X axis size of matrix
         height - Y axis size of matrix
-        coordMap - a 2D matrix defining the X,Y to strip index mapping. Not needed in most cases
-        rotation - how to rotate when generating the map. Not used if coordMap specified
+        coord_map - a 2D matrix defining the X,Y to strip index mapping. Not needed in most cases
+        rotation - how to rotate when generating the map. Not used if coord_map specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
@@ -44,8 +44,8 @@ class Matrix(Layout):
                              ' %s * %s > %s'
                              % (self.width, self.height, self.numLEDs))
 
-        if coordMap:
-            self.matrix_map = coordMap
+        if coord_map:
+            self.matrix_map = coord_map
         else:
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use gen_matrix directly if more control needed.')
@@ -55,7 +55,7 @@ class Matrix(Layout):
                                              y_flip=vert_flip)
             else:
                 raise TypeError(
-                    "Must provide coordMap if using multiple drivers!")
+                    "Must provide coord_map if using multiple drivers!")
 
         self.set_pixel_positions(pixel_positions_from_matrix(self.matrix_map))
 

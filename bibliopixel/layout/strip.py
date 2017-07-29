@@ -6,7 +6,7 @@ from . geometry.strip import gen_strip
 class Strip(Layout):
 
     def __init__(self, drivers, threadedUpdate=False,
-                 brightness=255, pixelWidth=1, coordMap=None, **kwargs):
+                 brightness=255, pixelWidth=1, coord_map=None, **kwargs):
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
 
         self.pixelWidth = pixelWidth
@@ -22,10 +22,10 @@ class Strip(Layout):
             self.set = self._setScaled
             self.numLEDs = self.numLEDs / self.pixelWidth
 
-        self.coordMap = coordMap
-        if self.coordMap:
-            if len(self.coordMap) != self.numLEDs:
-                raise ValueError('coordMap length must equal total number of pixels!')
+        self.coord_map = coord_map
+        if self.coord_map:
+            if len(self.coord_map) != self.numLEDs:
+                raise ValueError('coord_map length must equal total number of pixels!')
             self.set_base = self._set_strip_mapped
         else:
             self.set_base = self._set_base
@@ -34,7 +34,7 @@ class Strip(Layout):
 
     def _set_strip_mapped(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
-            pixel = self.coordMap[pixel]
+            pixel = self.coord_map[pixel]
             self._set_base(pixel, color)
 
     # Set single pixel to Color value
