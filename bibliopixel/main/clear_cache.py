@@ -4,7 +4,7 @@ Clear the git repository library cache.
 import gitty
 
 
-def run(args, settings):
+def run(args):
     gitty.clear_library_cache()
 
 

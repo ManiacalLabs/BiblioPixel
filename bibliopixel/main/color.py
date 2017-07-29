@@ -6,7 +6,7 @@ import json
 from .. colors import names
 
 
-def run(args, settings):
+def run(args):
     if args.list:
         print(*sorted(names.COLOR_DICT.items()), sep='\n')
 

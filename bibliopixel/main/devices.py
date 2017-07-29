@@ -4,7 +4,7 @@ CONNECT_MESSAGE = """
 Connect just one Serial device (AllPixel) and press enter..."""
 
 
-def run(args, settings):
+def run(args):
     from ..drivers.serial.driver import Serial
     from ..drivers.serial.devices import Devices
     import serial

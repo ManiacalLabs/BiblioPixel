@@ -49,7 +49,7 @@ def showSelectList(msg, values):
     return get_int('Choice: ')
 
 
-def run(args, settings):
+def run(args):
     from ..drivers.serial.driver import Serial
     from ..drivers.serial.devices import Devices
     from ..drivers.serial.codes import SPIChipsets
