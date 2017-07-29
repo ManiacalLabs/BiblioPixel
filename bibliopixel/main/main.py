@@ -15,17 +15,8 @@ def no_command(*_):
     return -1
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers()
-
-    for name, module in sorted(MODULES.items()):
-        subparser = subparsers.add_parser(name, help=module.__doc__)
-        common_flags.add_common_flags(subparser)
-        module.set_parser(subparser)
-
-    argv = ['--help' if i == 'help' else i for i in sys.argv[1:]]
-
+def get_args(argv=sys.argv):
+    argv = ['--help' if i == 'help' else i for i in argv[1:]]
     try:
         argv.remove('--version')
     except:
@@ -35,13 +26,25 @@ def main():
         if not argv:
             return
 
-    if argv[0].startswith('-'):
+    if argv and argv[0].startswith('-'):
         print('bibliopixel: error: command line flags must appear at the end.')
 
-    args = parser.parse_args(argv)
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers()
+
+    for name, module in sorted(MODULES.items()):
+        subparser = subparsers.add_parser(name, help=module.__doc__)
+        common_flags.add_common_flags(subparser)
+        module.set_parser(subparser)
+
+    return parser.parse_args(argv)
+
+
+def main():
+    args = get_args()
+    log.set_log_level(args.loglevel)
 
     try:
-        log.set_log_level(args.loglevel)
         run = getattr(args, 'run', no_command)
         result = run(args) or 0
     except Exception as e:
