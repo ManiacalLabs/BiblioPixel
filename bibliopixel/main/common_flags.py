@@ -88,7 +88,7 @@ def add_project_flags(parser):
 
 def make_animation(args, desc):
     def get_value(name):
-        value = args and getattr(args, name)
+        value = getattr(args, name)
         if not value:
             return {}
 
@@ -98,10 +98,10 @@ def make_animation(args, desc):
         return {'typename': value}
 
     project_flags = {name: get_value(name) for name in COMPONENTS}
-    if args and args.ledtype:
+    if args.ledtype:
         project_flags['driver']['ledtype'] = args.ledtype
 
-    if args and args.numpy:
+    if args.numpy:
         project_flags['maker'] = {'use_numpy': True}
 
     return project.project_to_animation(desc, project_flags)
