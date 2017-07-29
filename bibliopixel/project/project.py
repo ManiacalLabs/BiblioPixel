@@ -47,7 +47,7 @@ def project_to_animation(desc, default):
     gitty.sys_path.extend(path or '')
     maker = data_maker.Maker(**(maker or {}))
     make_object = functools.partial(importer.make_object, maker=maker)
-    coord_map = layout.pop('coordMap', None)
+    coord_map = layout.pop('coord_map', None)
 
     if not drivers:
         driver_objects = [make_object(**driver)]
@@ -60,5 +60,5 @@ def project_to_animation(desc, default):
         driver_objects = [build.make_driver(**d) for d in drivers]
         coord_map = coord_map or build.map
 
-    layout_object = make_object(driver_objects, coordMap=coord_map, **layout)
+    layout_object = make_object(driver_objects, coord_map=coord_map, **layout)
     return make_animation(layout_object, animation, run)

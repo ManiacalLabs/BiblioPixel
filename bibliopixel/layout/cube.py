@@ -9,7 +9,7 @@ from . geometry.cube import gen_cube, pixel_positions_from_cube
 
 class Cube(Layout):
 
-    def __init__(self, drivers, x, y, z, coordMap=None,
+    def __init__(self, drivers, x, y, z, coord_map=None,
                  threadedUpdate=False, brightness=255, **kwargs):
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
         self.x = x
@@ -19,14 +19,14 @@ class Cube(Layout):
         if self.x * self.y * self.z != self.numLEDs:
             raise TypeError("(x * y * z) MUST equal the total pixel count!")
 
-        if coordMap:
-            self.cube_map = coordMap
+        if coord_map:
+            self.cube_map = coord_map
         else:
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use gen_cube directly if more control needed.')
                 self.cube_map = gen_cube(x, y, z)
             else:
-                raise TypeError("Must provide coordMap if using multiple drivers!")
+                raise TypeError("Must provide coord_map if using multiple drivers!")
 
         self.set_pixel_positions(pixel_positions_from_cube(self.cube_map))
 
