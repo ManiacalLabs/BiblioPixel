@@ -1,8 +1,12 @@
-class MultiMapBuilder(object):
+from . geometry import gen_matrix
 
-    def __init__(self):
+
+class MultiMapBuilder:
+
+    def __init__(self, make_object):
         self.map = []
         self.offset = 0
+        self.make_object = make_object
 
     def addRow(self, *maps):
         yOff = len(self.map)
@@ -23,3 +27,7 @@ class MultiMapBuilder(object):
                 self.map[y + yOff] += [i + offsets[x] for i in maps[x][y]]
 
         self.offset = offsets[len(offsets) - 1]
+
+    def make_driver(self, width, height, matrix=None, **kwds):
+        self.addRow(gen_matrix(width, height, **(matrix or {})))
+        return self.make_object(width=width, height=height, **kwds)
