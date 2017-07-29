@@ -7,6 +7,10 @@ from .. util import log
 
 RESERVED_PROPERTIES = 'name', 'data'
 
+ISNT_GIT_PATH_ERROR = """\
+Because the --external flag is set, all paths most start with //git so that
+they are external.  Your path was %s."""
+
 
 def make_animation(layout, animation, run=None):
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
@@ -20,7 +24,17 @@ def make_animation(layout, animation, run=None):
     return animation
 
 
-def project_to_animation(desc, default):
+def extend_path(path, external=False):
+    if not path:
+        return
+
+    if external and not all(x.startswith('//git/') for x in path.split(':')):
+        raise ValueError(ISNT_GIT_PATH_ERROR % path)
+
+    gitty.sys_path.extend(path)
+
+
+def project_to_animation(desc, default, external=False):
     project = aliases.resolve(default or {}, desc)
 
     animation = project.pop('animation', None)
@@ -43,7 +57,7 @@ def project_to_animation(desc, default):
     if not (driver or drivers):
         raise ValueError('Projects has neither driver nor drivers sections')
 
-    gitty.sys_path.extend(path or '')
+    extend_path(path, external)
     maker = data_maker.Maker(**(maker or {}))
     make_object = functools.partial(importer.make_object, maker=maker)
 
