@@ -29,14 +29,12 @@ class MultiMapBuilder:
 
         self.offset = offsets[len(offsets) - 1]
 
-    def _add_one_row(self, row):
+    def _make_driver(self, width, height, matrix=None, **kwds):
+        row = gen_matrix(width, height, **(matrix or {}))
         for y, row_entry in enumerate(row):
             self.map.append([i + self.offset for i in row_entry])
 
         self.offset += len(row) * len(row[0])
-
-    def _make_driver(self, width, height, matrix=None, **kwds):
-        self._add_one_row(gen_matrix(width, height, **(matrix or {})))
         return self.make_object(width=width, height=height, **kwds)
 
     def make_drivers(self, driver, drivers):
