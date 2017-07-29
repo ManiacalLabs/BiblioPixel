@@ -138,7 +138,7 @@ class BaseAnimation(object):
                 self.run_one_frame()
 
     def set_runner(self, runner):
-        self.runner = runner
+        self.runner = Runner(**(runner or {}))
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
 
     def start(self):
@@ -146,7 +146,7 @@ class BaseAnimation(object):
 
     def run(self, **kwds):
         # DEPRECATED
-        self.set_runner(Runner(**kwds))
+        self.set_runner(kwds)
         self.start()
 
 

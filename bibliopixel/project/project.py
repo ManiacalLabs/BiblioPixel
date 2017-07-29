@@ -1,6 +1,5 @@
 import copy, gitty, functools, sys
 from . import aliases, importer
-from .. animation import runner
 from .. project import data_maker
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
@@ -17,7 +16,7 @@ def make_animation(layout, animation, run=None):
     for k, v in reserved.items():
         (v is not None) and setattr(animation, k, v)
 
-    animation.set_runner(runner.Runner(**(run or {})))
+    animation.set_runner(run)
     return animation
 
 

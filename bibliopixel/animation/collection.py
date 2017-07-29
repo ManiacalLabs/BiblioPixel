@@ -1,5 +1,5 @@
 from .. project import aliases, project
-from . import animation, runner
+from . import animation
 import copy, traceback
 from .. util import log
 
@@ -20,7 +20,7 @@ class Collection(animation.BaseAnimation):
 
     def add_animation(self, anim, **kwds):
         # DEPRECATED.
-        anim.set_runner(runner.Runner(**kwds))
+        anim.set_runner(kwds)
         self.animations.append(anim)
 
     def pre_run(self):
