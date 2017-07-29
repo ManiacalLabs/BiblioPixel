@@ -20,29 +20,29 @@ class Cube(Layout):
             raise TypeError("(x * y * z) MUST equal the total pixel count!")
 
         if coord_map:
-            self.cube_map = coord_map
+            self.coord_map = coord_map
         else:
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use gen_cube directly if more control needed.')
-                self.cube_map = gen_cube(x, y, z)
+                self.coord_map = gen_cube(x, y, z)
             else:
                 raise TypeError("Must provide coord_map if using multiple drivers!")
 
-        self.set_pixel_positions(pixel_positions_from_cube(self.cube_map))
+        self.set_pixel_positions(pixel_positions_from_cube(self.coord_map))
 
     def get_pixel_positions(self):
         return pixel_positions_from_cube(self.coord_map)
 
     def set(self, x, y, z, color):
         try:
-            pixel = self.cube_map[z][y][x]
+            pixel = self.coord_map[z][y][x]
             self._set_base(pixel, color)
         except IndexError:
             pass
 
     def get(self, x, y, z):
         try:
-            pixel = self.cube_map[z][y][x]
+            pixel = self.coord_map[z][y][x]
             return self._get_base(pixel)
         except IndexError:
             return 0, 0, 0

@@ -45,19 +45,19 @@ class Matrix(Layout):
                              % (self.width, self.height, self.numLEDs))
 
         if coord_map:
-            self.matrix_map = coord_map
+            self.coord_map = coord_map
         else:
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use gen_matrix directly if more control needed.')
-                self.matrix_map = gen_matrix(self.width, self.height,
-                                             serpentine=serpentine,
-                                             rotation=rotation,
-                                             y_flip=vert_flip)
+                self.coord_map = gen_matrix(self.width, self.height,
+                                            serpentine=serpentine,
+                                            rotation=rotation,
+                                            y_flip=vert_flip)
             else:
                 raise TypeError(
                     "Must provide coord_map if using multiple drivers!")
 
-        self.set_pixel_positions(pixel_positions_from_matrix(self.matrix_map))
+        self.set_pixel_positions(pixel_positions_from_matrix(self.coord_map))
 
         # if 90 or 270 rotation dimensions need to be swapped so they match the
         # matrix rotation
@@ -120,7 +120,7 @@ class Matrix(Layout):
 
     def __setNormal(self, x, y, color):
         try:
-            pixel = self.matrix_map[y][x]
+            pixel = self.coord_map[y][x]
             self._set_base(pixel, color)
         except IndexError:
             pass
@@ -149,7 +149,7 @@ class Matrix(Layout):
 
     def get(self, x, y):
         try:
-            pixel = self.matrix_map[y][x]
+            pixel = self.coord_map[y][x]
             return self._get_base(pixel)
         except IndexError:
             return 0, 0, 0
