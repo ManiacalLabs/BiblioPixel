@@ -1,4 +1,4 @@
-import copy, gitty, sys
+import copy, gitty, functools, sys
 from . import aliases, importer
 from .. animation import runner
 from .. project import data_maker
@@ -10,9 +10,9 @@ from .. util import log
 RESERVED_PROPERTIES = 'name', 'data'
 
 
-def _make_drivers_and_coord_map(driver, drivers, maker):
+def _make_drivers_and_coord_map(driver, drivers, make_object):
     if not drivers:
-        return [importer.make_object(maker=maker, **driver)], None
+        return [make_object(**driver)], None
 
     if driver:
         # driver is a default for each driver.
@@ -22,8 +22,7 @@ def _make_drivers_and_coord_map(driver, drivers, maker):
 
     def make_driver(width, height, matrix=None, **kwds):
         build.addRow(gen_matrix(width, height, **(matrix or {})))
-        return importer.make_object(
-            width=width, height=height, maker=maker, **kwds)
+        return make_object(width=width, height=height, **kwds)
 
     return [make_driver(**d) for d in drivers], build.map
 
@@ -65,10 +64,10 @@ def project_to_animation(desc, default):
 
     gitty.sys_path.extend(path or '')
     maker = data_maker.Maker(**(maker or {}))
+    make_object = functools.partial(importer.make_object, maker=maker)
 
-    drivers, coord_map = _make_drivers_and_coord_map(driver, drivers, maker)
+    drivers, coord_map = _make_drivers_and_coord_map(
+        driver, drivers, make_object)
     coord_map = layout.pop('coordMap', None) or coord_map
-    layout_object = importer.make_object(
-        drivers, coordMap=coord_map, maker=maker, **layout)
-
+    layout_object = make_object(drivers, coordMap=coord_map, **layout)
     return make_animation(layout_object, animation, run)
