@@ -9,6 +9,7 @@ class MultiMapBuilder:
         self.make_object = make_object
 
     def addRow(self, *maps):
+        # DEPRECATED
         yOff = len(self.map)
         lengths = [len(m) for m in maps]
         h = max(lengths)
@@ -28,6 +29,12 @@ class MultiMapBuilder:
 
         self.offset = offsets[len(offsets) - 1]
 
+    def add_one_row(self, row):
+        for y, row_entry in enumerate(row):
+            self.map.append([i + self.offset for i in row_entry])
+
+        self.offset += len(row) * len(row[0])
+
     def make_driver(self, width, height, matrix=None, **kwds):
-        self.addRow(gen_matrix(width, height, **(matrix or {})))
+        self.add_one_row(gen_matrix(width, height, **(matrix or {})))
         return self.make_object(width=width, height=height, **kwds)
