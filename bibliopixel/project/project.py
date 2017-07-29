@@ -47,18 +47,9 @@ def project_to_animation(desc, default):
     gitty.sys_path.extend(path or '')
     maker = data_maker.Maker(**(maker or {}))
     make_object = functools.partial(importer.make_object, maker=maker)
-    coord_map = layout.pop('coord_map', None)
 
-    if not drivers:
-        driver_objects = [make_object(**driver)]
-    else:
-        if driver:
-            # driver is a default for each driver.
-            drivers = [dict(driver, **d) for d in drivers]
-
-        build = MultiMapBuilder(make_object)
-        driver_objects = [build.make_driver(**d) for d in drivers]
-        coord_map = coord_map or build.map
-
+    builder = MultiMapBuilder(make_object)
+    driver_objects = builder.make_drivers(driver, drivers)
+    coord_map = layout.pop('coord_map', builder.map or None)
     layout_object = make_object(driver_objects, coord_map=coord_map, **layout)
     return make_animation(layout_object, animation, run)
