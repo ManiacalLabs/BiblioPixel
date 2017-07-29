@@ -1,6 +1,6 @@
 from .. project import aliases, project
 from . import animation, runner
-import traceback
+import copy, traceback
 from .. util import log
 
 
@@ -34,6 +34,8 @@ class Collection(animation.BaseAnimation):
             return None
 
     def _make_animation(self, a, no_fail=False):
+        a = copy.deepcopy(a)
+
         if isinstance(a, str):
             desc = {'animation': a}
         elif isinstance(a, dict):
