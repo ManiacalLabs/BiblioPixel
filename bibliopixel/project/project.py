@@ -9,18 +9,6 @@ from .. util import log
 RESERVED_PROPERTIES = 'name', 'data'
 
 
-def _make_drivers_and_coord_map(driver, drivers, make_object):
-    if not drivers:
-        return [make_object(**driver)], None
-
-    if driver:
-        # driver is a default for each driver.
-        drivers = [dict(driver, **d) for d in drivers]
-
-    build = MultiMapBuilder(make_object)
-    return [build.make_driver(**d) for d in drivers], build.map
-
-
 def make_animation(layout, animation, run=None):
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
     animation = importer.make_object(layout, **animation)
@@ -59,9 +47,18 @@ def project_to_animation(desc, default):
     gitty.sys_path.extend(path or '')
     maker = data_maker.Maker(**(maker or {}))
     make_object = functools.partial(importer.make_object, maker=maker)
+    coord_map = layout.pop('coordMap', None)
 
-    drivers, coord_map = _make_drivers_and_coord_map(
-        driver, drivers, make_object)
-    coord_map = layout.pop('coordMap', None) or coord_map
-    layout_object = make_object(drivers, coordMap=coord_map, **layout)
+    if not drivers:
+        driver_objects = [make_object(**driver)]
+    else:
+        if driver:
+            # driver is a default for each driver.
+            drivers = [dict(driver, **d) for d in drivers]
+
+        build = MultiMapBuilder(make_object)
+        driver_objects = [build.make_driver(**d) for d in drivers]
+        coord_map = coord_map or build.map
+
+    layout_object = make_object(driver_objects, coordMap=coord_map, **layout)
     return make_animation(layout_object, animation, run)
