@@ -21,15 +21,6 @@ values called "sections".
 Any of these sections can be omitted, in which case BiblioPixel uses the
 default values.
 
-
-THE SETTINGS FILE
-
-The Settings File lets you reuse sections (driver, layout, animation or run)
-between projects.
-
-For each section, there's a list of
---
-
 For more information, see
   https://github.com/ManiacalLabs/BiblioPixel/blob/master/README.md
 
@@ -38,5 +29,3 @@ For more information, see
 
 LOGLEVEL = """\
 """
-
-SETTINGS = 'The location of the settings file.'

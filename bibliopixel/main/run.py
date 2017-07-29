@@ -25,7 +25,7 @@ def make_animation(name, is_json, args):
     return common_flags.make_animation(args, desc)
 
 
-def run(args, settings):
+def run(args):
     common_flags.extend_path(args)
     if args.simpixel:
         simpixel.open_simpixel(args.simpixel)
