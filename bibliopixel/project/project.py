@@ -2,7 +2,6 @@ import copy, gitty, functools, sys
 from . import aliases, importer
 from .. animation import runner
 from .. project import data_maker
-from .. layout.geometry import gen_matrix
 from .. layout.multimap import MultiMapBuilder
 from .. util import files
 from .. util import log
@@ -18,13 +17,8 @@ def _make_drivers_and_coord_map(driver, drivers, make_object):
         # driver is a default for each driver.
         drivers = [dict(driver, **d) for d in drivers]
 
-    build = MultiMapBuilder()
-
-    def make_driver(width, height, matrix=None, **kwds):
-        build.addRow(gen_matrix(width, height, **(matrix or {})))
-        return make_object(width=width, height=height, **kwds)
-
-    return [make_driver(**d) for d in drivers], build.map
+    build = MultiMapBuilder(make_object)
+    return [build.make_driver(**d) for d in drivers], build.map
 
 
 def make_animation(layout, animation, run=None):
