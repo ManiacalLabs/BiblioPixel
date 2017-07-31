@@ -13,7 +13,7 @@ def split_all(path):
 
 
 def get_imports():
-    bp_root = os.path.dirname(os.path.dirname(__file__))
+    bp_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     python_root = os.path.join(bp_root, 'bibliopixel')
     for directory, sub_folders, files in os.walk(python_root):
         if '__' in directory:

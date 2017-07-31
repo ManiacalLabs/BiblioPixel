@@ -1,5 +1,5 @@
 import io, json, unittest
-from test.mock import mock_open
+from .. mock import mock_open
 
 from bibliopixel.util.datafile import DataFile
 
