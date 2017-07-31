@@ -1,5 +1,5 @@
 import unittest
-from test.mark_tests import serial_test
+from ..mark_tests import serial_test
 
 
 class SerialTest(unittest.TestCase):

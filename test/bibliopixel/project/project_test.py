@@ -3,7 +3,7 @@ import json, unittest
 from bibliopixel.main import main, run
 from bibliopixel.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
-from test.mark_tests import SKIP_LONG_TESTS
+from ..mark_tests import SKIP_LONG_TESTS
 
 
 PROJECT = """
@@ -166,7 +166,7 @@ PROJECT_SEQUENCE = """
 PROJECT_FAILURE1 = """
 {
     "driver": {
-        "typename": "test.failure.Failure",
+        "typename": "test.bibliopixel.failure.Failure",
         "num": 12
     },
 
@@ -184,7 +184,7 @@ PROJECT_FAILURE1 = """
 PROJECT_FAILURE2 = """
 {
     "driver": {
-        "typename": "test.failure2.NON_EXISTENT",
+        "typename": "test.bibliopixel.failure2.NON_EXISTENT",
         "num": 12
     },
 
@@ -281,7 +281,8 @@ class ProjectTest(unittest.TestCase):
     def test_failure2(self):
         with self.assertRaises(ImportError) as e:
             make(PROJECT_FAILURE2)
-        self.assertEquals(e.exception.name, 'test.failure2.NON_EXISTENT')
+        self.assertEquals(e.exception.name,
+                          'test.bibliopixel.failure2.NON_EXISTENT')
 
     def test_failure3(self):
         with self.assertRaises(ImportError) as e:
