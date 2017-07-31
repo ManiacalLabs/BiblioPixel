@@ -1,9 +1,9 @@
 #### For usage details, check the [Wiki](https://github.com/ManiacalLabs/BiblioPixel/wiki)!
-#### If you still need support, please post on the [BiblioPixel User Group](https://groups.google.com/forum/#!forum/bibliopixel-users)
+#### If you still need support, please post on the [Maniacal Labs User Group](https://groups.google.com/d/forum/maniacal-labs-users)
 
 For easy hardware interfacing, check out the BiblioPixel supported [AllPixel](http://maniacallabs.com/AllPixel).
 
-Do you have an animation you would like to share? Submit to our [animation repository](https://github.com/ManiacalLabs/BiblioPixelAnimations) or post it to [our BiblioPixel User Group](https://groups.google.com/forum/#!forum/bibliopixel-users).
+Do you have an animation you would like to share? Submit to our [animation repository](https://github.com/ManiacalLabs/BiblioPixelAnimations) or post it to [our Maniacal Labs User Group](https://groups.google.com/d/forum/maniacal-labs-users).
 
 Overview
 ====
