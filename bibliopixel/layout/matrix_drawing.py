@@ -1,5 +1,6 @@
 import math
 from .. import colors
+from .. util import log
 from . import font
 
 ##########################################################################
@@ -357,7 +358,9 @@ def fill_triangle(setter, x0, y0, x1, y1, x2, y2, color=None, aa=False):
 
 
 def draw_char(fonts, setter, width, height, x, y, c, color, bg, aa=False, font=font.default_font, font_scale=1):
-    assert font_scale >= 1, "font_scale must be >= 1"
+    if font_scale < 1:
+        log.error('font_scale %s must be >= 1', font_scale)
+        font_scale = 1
     f = fonts[font]
     fh = f['height']
     FONT = f['data']
