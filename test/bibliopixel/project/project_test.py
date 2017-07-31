@@ -3,7 +3,7 @@ import json, unittest
 from bibliopixel.main import main, run
 from bibliopixel.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
-from . mark_tests import SKIP_LONG_TESTS
+from test.mark_tests import SKIP_LONG_TESTS
 
 
 PROJECT = """
@@ -244,7 +244,7 @@ class ProjectTest(unittest.TestCase):
         self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
 
     def test_file(self):
-        make('test/project.json', False)
+        make('test/bibliopixel/project/project.json', False)
 
     def test_multi(self):
         animation = make(PROJECT_MULTI)
