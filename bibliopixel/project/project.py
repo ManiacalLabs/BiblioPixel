@@ -15,14 +15,15 @@ Your path was %s."""
 def make_animation(layout, animation, run=None):
     animation = aliases.resolve(animation)
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
-    animation = importer.make_object(layout, **animation)
+    animation_obj = importer.make_object(layout, **animation)
 
     # Add the reserved properties back in.
     for k, v in reserved.items():
-        (v is not None) and setattr(animation, k, v)
+        animation[k] = v
+        (v is not None) and setattr(animation_obj, k, v)
 
-    animation.set_runner(run)
-    return animation
+    animation_obj.set_runner(run)
+    return animation_obj
 
 
 def extend_path(path):

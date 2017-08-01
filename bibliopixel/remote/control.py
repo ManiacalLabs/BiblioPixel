@@ -2,7 +2,10 @@ import multiprocessing
 from .. animation.animation import STATE
 from .. animation import collection
 from . import server
+from . import trigger_process
 from .. util import log
+from .. util import importer
+import copy
 
 
 DEFAULT_OFF = 'OFF_ANIM'
@@ -32,7 +35,8 @@ class RemoteControl(collection.Collection):
     def __init__(self, layout, animations,
                  external_access=False, port=5000,
                  title='BiblioPixel Remote', bgcolor='black',
-                 font_color='white', default=None):
+                 font_color='white', default=None,
+                 triggers=[]):
 
         self.internal_delay = 0  # never wait
 
@@ -47,10 +51,12 @@ class RemoteControl(collection.Collection):
             adesc['name'] = normalize_name(adesc['name'])
             anim['run'] = anim.get('run', {})
             anim['run']['threaded'] = True  # threaded required
-        super().__init__(layout, animations, True)
+
+        super().__init__(layout, copy.deepcopy(animations), True)
 
         self.name_map = {}
         self.anim_cfgs = []
+
         for i, anim in enumerate(self.animations):
             adesc = animations[i]['animation']
             name = adesc['name']  # if failed to load anim will be None
@@ -88,13 +94,16 @@ class RemoteControl(collection.Collection):
             'title': title
         }
 
-        self.q_send = multiprocessing.Queue()
         self.q_recv = multiprocessing.Queue()
+
+        self.send_queues = {
+            'RemoteServer': multiprocessing.Queue()
+        }
 
         server_args = (
             external_access,
             port,
-            self.q_send,
+            self.send_queues['RemoteServer'],
             self.q_recv
         )
 
@@ -104,13 +113,32 @@ class RemoteControl(collection.Collection):
         self.handlers = {
             'run_animation': self.run_animation,
             'stop_animation': self.stop_animation,
-            'get_config': self.get_config
+            'get_config': self.get_config,
+            'trigger_animation': self.run_animation
         }
+
+        self.trigger_procs = {}
+        self.triggers = {}
+        for trigger in triggers:
+            typename = trigger.pop('typename')
+            if typename:
+                importer.import_symbol(typename)  # attempt early to fail early
+                self.triggers.setdefault(typename, []).append(trigger)
+            else:
+                raise ValueError('Triggers require a `typename` field!')
+
+        for typename, configs in self.triggers.items():
+            self.trigger_procs[typename] = multiprocessing.Process(
+                target=trigger_process.run_trigger,
+                args=(typename, self.q_recv, configs))
 
     def cleanup(self, clean_layout=True):
         self.q_recv.close()
-        self.q_send.close()
+        for q in self.send_queues.values():
+            q.close()
         self.server.terminate()
+        for _, t in self.trigger_procs.items():
+            t.terminate()
         super().cleanup(clean_layout)
 
     def on_completion(self, reason):
@@ -146,6 +174,8 @@ class RemoteControl(collection.Collection):
 
     def pre_run(self):
         self.server.start()
+        for proc in self.trigger_procs.values():
+            proc.start()
 
     def step(self, amt=None):
         self.run_animation()
@@ -156,4 +186,7 @@ class RemoteControl(collection.Collection):
                 resp = False, '{} is not a valid request!'.format(req)
             else:
                 resp = self.handlers[req](recv['data'])
-            self.q_send.put(resp)
+
+            resp_q = self.send_queues.get(recv['sender'])
+            if resp_q:
+                resp_q.put(resp)

@@ -1,5 +1,6 @@
 import logging, os, queue, sys
 from .. util import log
+import flask
 
 MESSAGE = """\
 Remote UI Server available at: {1}
@@ -17,7 +18,6 @@ class RemoteServer:
         cdir = os.path.dirname(os.path.realpath(__file__))
         static_dir = os.path.abspath(os.path.join(cdir, '../../ui/web_remote'))
 
-        import flask
         self.app = flask.Flask('BP Remote', static_folder=static_dir)
 
         self._set_routes()
@@ -45,14 +45,13 @@ class RemoteServer:
         return self.api('stop_animation')
 
     def api(self, request, data=None):
-        self.q_send.put({'req': request.lower(), 'data': data})
+        self.q_send.put({'req': request.lower(), 'data': data, 'sender': 'RemoteServer'})
 
         try:
             status, data = self.q_recv.get(timeout=5)
         except queue.Empty:
             status, data = False, 'Timeout waiting for response.'
 
-        import flask
         return flask.jsonify({
             'status': status,
             'msg': 'OK' if status else data,
