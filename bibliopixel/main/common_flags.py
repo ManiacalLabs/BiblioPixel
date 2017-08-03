@@ -41,10 +41,13 @@ Print the current version number of BiblioPixel (%s).
 """ % VERSION
 
 PRESET_HELP = """Filenames for preset library"""
-EXTERNAL_HELP = """\
-Run BiblioPixel as if it were running on an external machine, which means
-that it will not see any local Python classes (because `.` is no longer in
-`sys.path`.
+ISOLATE_HELP = """\
+Run BiblioPixel in isolated mode, where it cannot see your local files.
+This means that it will not see any local Python classes in your directories
+and it won't see your local aliases.
+
+Running your project in isolated mode help makes sure that your project will
+work on other machines without modification.
 """
 
 
@@ -91,7 +94,7 @@ def add_project_flags(parser):
         help='Default LED type if no LED type is specified')
 
     parser.add_argument(
-        '-x', '--external', action='store_true', help=EXTERNAL_HELP)
+        '-x', '--isolate', action='store_true', help=ISOLATE_HELP)
 
 
 def make_animation(args, desc):
@@ -112,14 +115,14 @@ def make_animation(args, desc):
     if args.numpy:
         project_flags['maker'] = {'use_numpy': True}
 
-    return project.project_to_animation(desc, project_flags, args.external)
+    return project.project_to_animation(desc, project_flags, args.isolate)
 
 
 def extend_path(args):
-    if args.external:
+    if args.isolate:
         path = args.path
     else:
         path = os.getcwd()
         if args.path:
             path += ':' + args.path
-    project.extend_path(path, args.external)
+    project.extend_path(path, args.isolate)

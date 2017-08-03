@@ -41,8 +41,8 @@ BUILTIN_ALIASES = {
 }
 
 
-def get_alias(alias, external=False):
-    value = not external and USER_ALIASES.get(alias)
+def get_alias(alias, isolate=False):
+    value = not isolate and USER_ALIASES.get(alias)
     return value or BUILTIN_ALIASES.get(alias)
 
 
