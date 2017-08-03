@@ -13,6 +13,7 @@ they are external.  Your path was %s."""
 
 
 def make_animation(layout, animation, run=None):
+    animation = aliases.resolve(animation)
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
     animation = importer.make_object(layout, **animation)
 
@@ -35,15 +36,18 @@ def extend_path(path, external=False):
 
 
 def project_to_animation(desc, default, external=False):
-    project = aliases.resolve(default or {}, desc)
+    project = copy.deepcopy(desc)
 
-    animation = project.pop('animation', None)
-    driver = project.pop('driver', None)
-    drivers = project.pop('drivers', None)
-    layout = project.pop('layout', None)
-    maker = project.pop('maker', None)
-    path = project.pop('path', None)
-    run = project.pop('run', None)
+    def get(name):
+        return project.pop(name, default.get(name))
+
+    animation = get('animation')
+    driver = get('driver')
+    drivers = get('drivers')
+    layout = get('layout')
+    maker = get('maker')
+    path = get('path')
+    run = get('run')
 
     if project:
         log.error('Did not understand sections %s', project)
@@ -63,6 +67,9 @@ def project_to_animation(desc, default, external=False):
 
     builder = MultiMapBuilder(make_object)
     driver_objects = builder.make_drivers(driver, drivers)
+
+    layout = aliases.resolve(layout)
     coord_map = layout.pop('coord_map', builder.map or None)
     layout_object = make_object(driver_objects, coord_map=coord_map, **layout)
+
     return make_animation(layout_object, animation, run)
