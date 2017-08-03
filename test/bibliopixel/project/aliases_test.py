@@ -4,7 +4,7 @@ from bibliopixel.project import aliases
 
 class AliasTest(unittest.TestCase):
     def test_empty(self):
-        with self.assertRaises(KeyError):
+        with self.assertRaises(ValueError):
             aliases.resolve({})
 
     def test_simple(self):

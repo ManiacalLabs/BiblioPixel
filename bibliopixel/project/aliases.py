@@ -1,4 +1,6 @@
-from .importer import import_symbol
+import re
+from .. util import log
+from . importer import import_symbol
 
 ALIASES = {
     # drivers
@@ -35,12 +37,40 @@ ALIASES = {
     'strip_test': 'bibliopixel.animation.tests.StripChannelTest',
 }
 
+ALIAS_MARKER = '$'
+SEPARATORS = re.compile(r'[./#]|[^./#]+')
+DEPRECATE_OLD_ALIASES = False
+
+
+def resolve_one(part):
+    if not part.startswith(ALIAS_MARKER):
+        return part
+
+    p = ALIASES.get(part[1:])
+    if p:
+        return p
+
+    raise ValueError('Do not understand alias %s' % part)
+
 
 def resolve(value):
     if isinstance(value, str):
         typename, value = value, {}
     else:
-        typename = value['typename']
+        typename = value.get('typename')
 
-    value['typename'] = ALIASES.get(typename.lower(), typename)
+    if not typename:
+        raise ValueError('"typename" is not present or empty')
+
+    alias = ALIASES.get(typename)
+
+    if alias:
+        if DEPRECATE_OLD_ALIASES:
+            log.warning('Aliases that do not start with $ are deprecated')
+
+    else:
+        parts = SEPARATORS.findall(typename)
+        alias = ''.join(resolve_one(p) for p in parts)
+
+    value['typename'] = alias
     return value
