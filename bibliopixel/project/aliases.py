@@ -7,12 +7,15 @@ ALIAS_MARKER = '$'
 SEPARATORS = re.compile(r'[./#]|[^./#]+')
 DEPRECATE_OLD_ALIASES = False
 
+# This can set from the commamnd line with --isolate
+ISOLATE = False
+
 
 def resolve_one(part):
     if not part.startswith(ALIAS_MARKER):
         return part
 
-    p = alias_lists.get_alias(part[1:])
+    p = alias_lists.get_alias(part[1:], ISOLATE)
     if p:
         return p
 
@@ -28,7 +31,7 @@ def resolve(value):
     if not typename:
         raise ValueError('"typename" is not present or empty')
 
-    alias = alias_lists.get_alias(typename)
+    alias = alias_lists.get_alias(typename, ISOLATE)
 
     if alias:
         if DEPRECATE_OLD_ALIASES:

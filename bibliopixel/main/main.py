@@ -2,6 +2,8 @@ import argparse, os, sys
 from . import common_flags
 from .. util import log
 from .. project.importer import import_symbol
+from .. project import aliases
+
 
 __all__ = ['main']
 COMMANDS = (
@@ -42,6 +44,7 @@ def get_args(argv=sys.argv):
 
 def main():
     args = get_args()
+    aliases.ISOLATE = args.isolate
     log.set_log_level(args.loglevel)
 
     try:
