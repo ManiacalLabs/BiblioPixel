@@ -115,7 +115,7 @@ def make_animation(args, desc):
     if args.numpy:
         project_flags['maker'] = {'use_numpy': True}
 
-    return project.project_to_animation(desc, project_flags, args.isolate)
+    return project.project_to_animation(desc, project_flags)
 
 
 def extend_path(args):
@@ -125,4 +125,4 @@ def extend_path(args):
         path = os.getcwd()
         if args.path:
             path += ':' + args.path
-    project.extend_path(path, args.isolate)
+    project.extend_path(path)

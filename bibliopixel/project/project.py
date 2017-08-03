@@ -25,17 +25,18 @@ def make_animation(layout, animation, run=None):
     return animation
 
 
-def extend_path(path, isolate=False):
+def extend_path(path):
     if not path:
         return
 
-    if isolate and not all(x.startswith('//git/') for x in path.split(':')):
-        raise ValueError(ISNT_GIT_PATH_ERROR % path)
+    if aliases.ISOLATE:
+        if not all(x.startswith('//git/') for x in path.split(':')):
+            raise ValueError(ISNT_GIT_PATH_ERROR % path)
 
     gitty.sys_path.extend(path)
 
 
-def project_to_animation(desc, default, isolate=False):
+def project_to_animation(desc, default):
     project = copy.deepcopy(desc)
 
     def get(name):
@@ -61,7 +62,7 @@ def project_to_animation(desc, default, isolate=False):
     if not (driver or drivers):
         raise ValueError('Projects has neither driver nor drivers sections')
 
-    extend_path(path, isolate)
+    extend_path(path)
     maker = data_maker.Maker(**(maker or {}))
     make_object = functools.partial(importer.make_object, maker=maker)
 

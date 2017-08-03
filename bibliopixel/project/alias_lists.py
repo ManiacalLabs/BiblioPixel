@@ -42,8 +42,8 @@ BUILTIN_ALIASES = {
 
 
 def get_alias(alias, isolate=False):
-    value = not isolate and USER_ALIASES.get(alias)
-    return value or BUILTIN_ALIASES.get(alias)
+    return (not isolate and USER_ALIASES.get(alias) or
+            BUILTIN_ALIASES.get(alias))
 
 
 def print_alias(alias, value=None, print=print):
