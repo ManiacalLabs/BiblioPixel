@@ -1,4 +1,3 @@
-import copy
 from .importer import import_symbol
 
 ALIASES = {
@@ -37,27 +36,11 @@ ALIASES = {
 }
 
 
-def resolve(*dicts):
-    """Resolve aliases and merge.  Evaluation proceeds from left to right."""
-    def resolver(value):
-        if isinstance(value, str):
-            value = {'typename': value}
-        else:
-            value = copy.deepcopy(value)
+def resolve(value):
+    if isinstance(value, str):
+        typename, value = value, {}
+    else:
+        typename = value['typename']
 
-        typename = value.get('typename')
-        if typename:
-            value['typename'] = ALIASES.get(typename.lower(), typename)
-
-        return value
-
-    result = {}
-
-    for d in dicts:
-        for key, value in d.items():
-            if key == 'drivers':
-                result['drivers'] = [resolver(d) for d in value]
-            else:
-                result.setdefault(key, {}).update(**resolver(value))
-
-    return result
+    value['typename'] = ALIASES.get(typename.lower(), typename)
+    return value

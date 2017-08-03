@@ -34,22 +34,25 @@ class Collection(animation.BaseAnimation):
             return None
 
     def _make_animation(self, a, no_fail=False):
-        a = copy.deepcopy(a)
-
         if isinstance(a, str):
-            desc = {'animation': a}
+            animation = a
+            run = None
+
         elif isinstance(a, dict):
-            if 'animation' in a:
-                # TODO: this hackiness occurs because this indirectly gets
-                # called from different places.  Figure out a better way.
-                desc = a
+            animation = a.get('animation')
+            if animation:
+                # Looks like {'animation': ..., 'run': }
+                run = a.get('run')
             else:
-                desc = {'animation': a}
+                # It's an animation itself.
+                animation, run = a, None
+
         else:
-            desc = {'animation': a[0], 'run': a[1]}
-        desc = aliases.resolve(desc)
+            animation, run = a
+
+        assert animation, '%s:%s:%s' % (a, animation, run)
         try:
-            return project.make_animation(layout=self.layout, **desc)
+            return project.make_animation(self.layout, animation, run)
         except:
             log.error(traceback.format_exc())
             return None

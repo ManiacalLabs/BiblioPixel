@@ -1,4 +1,5 @@
 from . geometry import gen_matrix
+from .. project import aliases
 
 
 class MultiMapBuilder:
@@ -10,7 +11,7 @@ class MultiMapBuilder:
 
     def make_drivers(self, driver, drivers):
         if not drivers:
-            return [self.make_object(**driver)]
+            return [self.make_object(**aliases.resolve(driver))]
 
         if driver:
             # driver is a default for each driver.
@@ -19,6 +20,7 @@ class MultiMapBuilder:
         return [self._make_driver(**d) for d in drivers]
 
     def _make_driver(self, width, height, matrix=None, **kwds):
+        kwds = aliases.resolve(kwds)
         row = gen_matrix(width, height, **(matrix or {}))
         for y, row_entry in enumerate(row):
             self.map.append([i + self.offset for i in row_entry])
