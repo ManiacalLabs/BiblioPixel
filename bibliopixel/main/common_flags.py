@@ -58,6 +58,9 @@ def add_common_flags(parser):
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
     parser.add_argument(
         '--version', action='store_true', help=VERSION_HELP)
+    parser.add_argument(
+        '-x', '--isolate', action='store_true', help=ISOLATE_HELP)
+
     if ENABLE_PRESETS:
         parser.add_argument(
             '--presets', help=PRESET_HELP, default=PRESET_LIBRARY_DEFAULT)
@@ -92,9 +95,6 @@ def add_project_flags(parser):
     parser.add_argument(
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
-
-    parser.add_argument(
-        '-x', '--isolate', action='store_true', help=ISOLATE_HELP)
 
 
 def make_animation(args, desc):

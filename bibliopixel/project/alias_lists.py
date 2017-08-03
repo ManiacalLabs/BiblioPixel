@@ -46,19 +46,24 @@ def get_alias(alias, isolate=False):
             BUILTIN_ALIASES.get(alias))
 
 
-def print_alias(alias, value=None, print=print):
-    value = value or get_alias(alias)
+def print_alias(alias, value, print=print):
     if value:
-        print('%s=%s' % (alias, value))
+        print('%s = %s' % (alias, value))
     else:
         print('# %s is not defined.' % alias)
 
 
-def print_aliases(aliases, by_value=False, print=print):
+def print_aliases(builtin, by_value=False, print=print):
     """
     Args:
         by_value: sort either by alias name, or by alias value
     """
+
+    aliases = BUILTIN_ALIASES if builtin else USER_ALIASES.data
+    if not aliases:
+        print('(no aliases)')
+        return
+
     key_func = operator.itemgetter(int(by_value))
     for alias, value in sorted(aliases.items(), key=key_func):
         print_alias(alias, value, print)
@@ -66,3 +71,4 @@ def print_aliases(aliases, by_value=False, print=print):
 
 set_alias = USER_ALIASES.set
 delete_alias = USER_ALIASES.delete
+delete_all_alias = USER_ALIASES.delete_all
