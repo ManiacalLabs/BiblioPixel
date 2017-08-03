@@ -17,19 +17,20 @@ class DataFile(object):
         else:
             self.data = json.load(fp)
 
-        self.data_as_read = copy.deepcopy(self.data)
-
     def write(self):
-        if self.data != self.data_as_read:
-            json.dump(self.data, self.open(self.filename, 'w'))
-            self.data_as_read = copy.deepcopy(self.data)
+        json.dump(self.data, self.open(self.filename, 'w'))
 
     def get(self, key):
         return self.data.get(key)
 
-    def set(self, key, value, write=True):
+    def set(self, key, value):
         self.data[key] = value
-        write and self.write()
+        self.write()
 
     def delete(self, key):
         del self.data[key]
+        self.write()
+
+    def delete_all(self):
+        self.data.clear()
+        self.write()
