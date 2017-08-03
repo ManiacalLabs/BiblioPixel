@@ -45,12 +45,17 @@ def get_args(argv=sys.argv):
 
 def main():
     args = get_args()
+    run = getattr(args, 'run', None)
+    if not run:
+        print('ERROR: No command entered')
+        print('Valid:', ', '.join(COMMANDS))
+        sys.exit(-1)
+
     aliases.ISOLATE = args.isolate
     log.set_log_level(args.loglevel)
 
     try:
-        run = getattr(args, 'run', no_command)
-        result = run(args) or 0
+        return run(args) or 0
     except Exception as e:
         if args.verbose:
             raise
