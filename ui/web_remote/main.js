@@ -30,6 +30,10 @@ function api_error(msg){
     console.error(msg);
 }
 
+function call_error(data){
+    api_error(data.statusText);
+}
+
 function dissmiss_error(){
     $('#overlay').css("display", "none");
 }
@@ -71,7 +75,31 @@ function add_button(config, click_func, dest='#button_list'){
     $(dest).append(div);
 }
 
+function brightness_change(val){
+    var success = function(resp){
+        if(!resp.status){
+            api_error(resp.msg);
+        }
+    }
+
+    call_api('/api/brightness/' + val, success, call_error);
+}
+
 function do_main(){
+    var slider = noUiSlider.create($('#brightness')[0], {
+        direction: 'rtl', // Put '0' at the bottom of the slider
+        orientation: 'vertical', // Orient the slider vertically
+        start: 255,
+        connect: [true, false],
+        range: {
+            'min': 0,
+            'max': 255
+        },
+        behaviour: 'drag-tap'
+    });
+
+    var slider = $('#brightness')[0].noUiSlider;
+
     var success = function(resp){
         if(resp.status){
             var config = resp.data;
@@ -86,7 +114,11 @@ function do_main(){
                 add_button(config.animations[i], run_animation);
             }
 
-            document.getElementById('overlay').addEventListener('click', dissmiss_error);
+            slider.set(config.brightness);
+            slider.on('set', function(){
+                brightness_change(Math.round(slider.get()));
+            });
+            $('#overlay').click(dissmiss_error);
 
             hide_loading();
         }
@@ -96,7 +128,7 @@ function do_main(){
         }
     };
 
-    call_api('/api/get_config', success, api_error);
+    call_api('/api/get_config', success, call_error);
 }
 
 function run_animation(name, id){

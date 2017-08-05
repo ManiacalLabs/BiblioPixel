@@ -62,7 +62,7 @@ class RemoteControl(collection.Collection):
             name = adesc['name']  # if failed to load anim will be None
             if anim is None:
                 adesc['data']['valid'] = False
-                adesc['data']['display'] = 'LOAD FAILED: ' + adesc['data']['display']
+                adesc['data']['display'] = 'FAILED: ' + adesc['data']['display']
                 adesc['data']['bgcolor'] = 'rgb(48, 48, 48)'
                 adesc['data']['font_color'] = 'white'
 
@@ -114,7 +114,8 @@ class RemoteControl(collection.Collection):
             'run_animation': self.run_animation,
             'stop_animation': self.stop_animation,
             'get_config': self.get_config,
-            'trigger_animation': self.run_animation
+            'trigger_animation': self.run_animation,
+            'brightness': self.change_brightness
         }
 
         self.trigger_procs = {}
@@ -165,9 +166,20 @@ class RemoteControl(collection.Collection):
     def stop_animation(self, data):
         return self.run_animation()
 
+    def change_brightness(self, data):
+        if isinstance(data, str):
+            try:
+                data = int(data)
+            except:
+                return False, 'Invalid brightness value!'
+
+        self.layout.set_brightness(data)
+        return True, None
+
     def get_config(self, data):
         resp = {
             'ui': self.ui_config,
+            'brightness': self.layout.brightness,
             'animations': list(self.anim_cfgs)
         }
         return True, resp

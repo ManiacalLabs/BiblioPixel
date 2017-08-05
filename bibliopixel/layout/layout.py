@@ -27,6 +27,7 @@ class Layout(object):
         self.animation_sleep_time = None
 
         self.threading = UpdateThreading(threadedUpdate, self)
+        self.brightness = brightness
         self.set_brightness(brightness)
 
     def set_pixel_positions(self, pixel_positions):
@@ -80,6 +81,7 @@ class Layout(object):
         self.set_colors(buf=list(zip(*(iter(buf),) * 3)))
 
     def set_brightness(self, brightness):
+        self.brightness = brightness
         for d in self.drivers:
             d.set_brightness(brightness)
 

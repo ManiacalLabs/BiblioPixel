@@ -7,38 +7,81 @@ body {
     margin: 0;
     background-color: #000000;
     color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    height: 100%;
 }
 
-#main_body {
-    min-width: 320px;
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0px;
-
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+*:focus {
+    outline: none;
 }
 
 #title {
+    height: 3rem;
     width: 100%;
     font-size: 2.5rem;
-    margin: 0;
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
     align-content: center;
     text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#main {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    width: 1; /*hacky - but makes work on some phones*/
+}
+
+#brightness {
+    height: auto;
+    background: black;
+    width: 3rem;
+}
+
+.noUi-vertical .noUi-handle {
+    width: 3rem;
+    left: 0px;
+    height: 2.5rem;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.noUi-vertical:focus .noUi-handle:focus {
+    outline: none;
+}
+
+.noUi-target {
+    border-radius: 0px;
+    border: 0;
+    background-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+.noUi-base {
+    height: 100%;
+    border-radius: 0px;
+}
+
+.noUi-connect {
+    background: #f36926;
+    border-radius: 0px;
+}
+
+.noUi-handle:after, .noUi-handle:before {
+    display: none;
 }
 
 #button_list {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
+    flex: auto;
+    height: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .btn {
@@ -52,6 +95,8 @@ body {
     justify-content: center;
     text-align: center;
     resize: vertical;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .btn:hover {
@@ -64,7 +109,7 @@ body {
 }
 
 /* Loading Animation */
-/* Loading Animation */
+
 body.loading:after {
 	/* with no content, nothing is rendered */
 	content: "";
