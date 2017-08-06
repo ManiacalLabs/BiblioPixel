@@ -122,16 +122,18 @@ class RemoteControl(collection.Collection):
         self.triggers = {}
         for trigger in triggers:
             typename = trigger.pop('typename')
-            if typename:
+            events = trigger.pop('events')
+            if typename and events:
                 importer.import_symbol(typename)  # attempt early to fail early
-                self.triggers.setdefault(typename, []).append(trigger)
+                self.triggers.setdefault(typename, []).extend((events, trigger))
             else:
-                raise ValueError('Triggers require a `typename` field!')
+                raise ValueError('Triggers require `typename` and `events` fields!')
 
-        for typename, configs in self.triggers.items():
+        for typename, trigger in self.triggers.items():
+            events, kwargs = trigger
             self.trigger_procs[typename] = multiprocessing.Process(
                 target=trigger_process.run_trigger,
-                args=(typename, self.q_recv, configs))
+                args=(typename, self.q_recv, events, kwargs))
 
     def cleanup(self, clean_layout=True):
         self.q_recv.close()
