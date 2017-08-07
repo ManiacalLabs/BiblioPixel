@@ -149,6 +149,6 @@ setup(
         'install_scripts': InstallScripts
     },
     include_package_data=True,
-    scripts=['scripts/bibliopixel'],
+    scripts=['scripts/bp', 'scripts/bibliopixel'],
     install_requires=REQUIRED
 )
