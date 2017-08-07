@@ -21,16 +21,18 @@ However we highly recommend using the latest BiblioPixel
 (v3+) with Python 3.4+.
 """
 
-
 BAT_TEMPLATE = \
     r"""@echo off
 REM wrapper to use shebang first line of {FNAME}
+
 set mypath=%~dp0
 set pyscript="%mypath%{FNAME}"
 set /p line1=<%pyscript%
+
 if "%line1:~0,2%" == "#!" (goto :goodstart)
 echo First line of %pyscript% does not start with "#!"
 exit /b 1
+
 :goodstart
 set py_exe=%line1:~2%
 call "%py_exe%" %pyscript% %*
@@ -61,11 +63,6 @@ class do_install_scripts(install_scripts):
                 continue
             with open(bat_file, 'wt') as fobj:
                 fobj.write(bat_contents)
-
-
-if sys.version_info.major != 3:
-    print(INSTALLATION_ERROR.format(sys.version_info))
-    sys.exit(1)
 
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
@@ -112,6 +109,10 @@ def _get_version():
     filename = join(dirname(abspath(__file__)), 'bibliopixel', 'VERSION')
     return open(filename).read().strip()
 
+
+if sys.version_info.major != 3:
+    print(INSTALLATION_ERROR.format(sys.version_info))
+    sys.exit(1)
 
 VERSION = _get_version()
 
