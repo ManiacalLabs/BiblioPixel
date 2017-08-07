@@ -2,9 +2,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from setuptools.command.install_scripts import install_scripts
 from setuptools.command.install import install as _install
-from os.path import join as pjoin, splitext, split as psplit
-import sys
-import os
+import os, sys
 
 
 INSTALLATION_ERROR = """INSTALLATION ERROR!
@@ -38,29 +36,35 @@ set py_exe=%line1:~2%
 call "%py_exe%" %pyscript% %*
 """
 
+NO_PYTHON_ERROR = """
+WARNING: No #!python executable found in %s, skipping .bat wrapper'"""
 
-class do_install_scripts(install_scripts):
 
+class InstallScripts(install_scripts):
     def run(self):
         install_scripts.run(self)
-        if not os.name == "nt":
+        if not os.name == 'nt':
             return
+
         for filepath in self.get_outputs():
             # If we can find an executable name in the #! top line of the script
             # file, make .bat wrapper for script.
             with open(filepath, 'rt') as fobj:
-                first_line = fobj.readline()
-            if not (first_line.startswith('#!') and
-                    'python' in first_line.lower()):
-                print("No #!python executable found, skipping .bat wrapper")
+                first_line = fobj.readline().lower()
+
+            if not (first_line.startswith('#!') and 'python' in first_line):
+                print(NO_PYTHON_ERROR % filepath)
                 continue
-            pth, fname = psplit(filepath)
-            froot, ext = splitext(fname)
-            bat_file = pjoin(pth, froot + '.bat')
+
+            path, fname = os.path.split(filepath)
+            froot, ext = os.path.splitext(fname)
+            bat_file = os.path.join(path, froot + '.bat')
             bat_contents = BAT_TEMPLATE.replace('{FNAME}', fname)
-            print("Making %s wrapper for %s" % (bat_file, filepath))
+
+            print('Making %s wrapper for %s' % (bat_file, filepath))
             if self.dry_run:
                 continue
+
             with open(bat_file, 'wt') as fobj:
                 fobj.write(bat_contents)
 
@@ -142,7 +146,7 @@ setup(
         'benchmark': RunBenchmark,
         'coverage': RunCoverage,
         'test': RunTests,
-        'install_scripts': do_install_scripts
+        'install_scripts': InstallScripts
     },
     include_package_data=True,
     scripts=['scripts/bibliopixel'],
