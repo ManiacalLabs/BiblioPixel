@@ -80,7 +80,7 @@ body {
 #button_list {
     flex: auto;
     height: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
