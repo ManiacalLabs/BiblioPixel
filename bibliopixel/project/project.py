@@ -37,8 +37,9 @@ def extend_path(path):
     gitty.sys_path.extend(path)
 
 
-def project_to_animation(desc, default):
+def project_to_animation(desc, default=None):
     project = copy.deepcopy(desc)
+    default = default or {}
 
     def get(name):
         return project.pop(name, default.get(name))
@@ -76,3 +77,10 @@ def project_to_animation(desc, default):
     layout_object = make_object(driver_objects, **layout)
 
     return make_animation(layout_object, animation, run)
+
+
+def read_project(location, threaded=True, default=None):
+    project = gitty.raw.request(location, json=True)
+    if threaded is not None:
+        project.setdefault('run', {})['threaded'] = threaded
+    return project_to_animation(project, default)
