@@ -69,9 +69,10 @@ def project_to_animation(desc, default):
 
     builder = MultiMapBuilder(make_object)
     driver_objects = builder.make_drivers(driver, drivers)
-
     layout = aliases.resolve(layout)
     coord_map = layout.pop('coord_map', builder.map or None)
-    layout_object = make_object(driver_objects, coord_map=coord_map, **layout)
+    if coord_map:
+        layout['coord_map'] = coord_map
+    layout_object = make_object(driver_objects, **layout)
 
     return make_animation(layout_object, animation, run)
