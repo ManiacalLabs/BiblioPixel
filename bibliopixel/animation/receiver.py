@@ -22,8 +22,8 @@ HOST_MAP = {
 class BaseReceiver(BaseAnimation):
     free_run = True
 
-    def __init__(self, layout):
-        super().__init__(layout)
+    def __init__(self, layout, **kwds):
+        super().__init__(layout, **kwds)
         name = type(self.layout).__name__
 
         if name not in HOST_MAP:

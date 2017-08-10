@@ -12,11 +12,21 @@ def make_desc(name, is_json):
     if not name:
         return {}
 
-    data = name if is_json else files.opener(name).read()
+    if is_json:
+        data = name
+    else:
+        try:
+            data = files.opener(name).read()
+        except Exception as e:
+            e.args = ('There was a problem reading the file:', name) + e.args
+            raise
     try:
         return json.loads(data)
     except ValueError as e:
-        e.args += tuple(['in %s' % name])
+        if is_json:
+            e.args = ('There was a JSON error on the command line.',) + e.args
+        else:
+            e.args = ('There was a JSON error in the file:', name) + e.args
         raise
 
 

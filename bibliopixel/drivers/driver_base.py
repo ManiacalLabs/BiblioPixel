@@ -1,6 +1,6 @@
 from . channel_order import ChannelOrder
 from .. colors import gamma as _gamma
-from .. project import data_maker
+from .. project import data_maker, project
 import threading, time
 
 
@@ -15,7 +15,9 @@ class DriverBase(object):
     set_device_brightness = None
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
-                 gamma=None, maker=data_maker.MAKER):
+                 gamma=None, maker=data_maker.MAKER, **kwds):
+        project.raise_if_unknown_attributes(kwds, 'driver', self)
+
         if num == 0:
             num = width * height
             if num == 0:

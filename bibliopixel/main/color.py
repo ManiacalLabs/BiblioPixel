@@ -19,7 +19,6 @@ def run(args):
         try:
             print(c, names.toggle(c), sep=': ')
         except Exception as e:
-            print('???', e)
             failures.append(c)
     if failures:
         s = '' if len(failures) == 1 else 's'

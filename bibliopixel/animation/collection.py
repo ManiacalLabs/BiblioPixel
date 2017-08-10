@@ -5,8 +5,8 @@ from .. util import log
 
 
 class Collection(animation.BaseAnimation):
-    def __init__(self, layout, animations=None, no_fail=False):
-        super().__init__(layout)
+    def __init__(self, layout, animations=None, no_fail=False, **kwds):
+        super().__init__(layout, **kwds)
         self.animations = [self._make_animation(i, no_fail) for i in animations or []]
         self.index = 0
         self.internal_delay = 0  # never wait
