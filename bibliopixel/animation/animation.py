@@ -2,6 +2,7 @@ import contextlib, threading, time
 from . runner import Runner
 from .. util import log
 from .. threads.animation_threading import AnimationThreading
+from .. project import project
 from enum import IntEnum
 
 
@@ -18,7 +19,8 @@ class BaseAnimation(object):
     name = None
     data = None
 
-    def __init__(self, layout):
+    def __init__(self, layout, **kwds):
+        project.raise_if_unknown_attributes(kwds, 'animation', self)
         self.layout = layout
         self.internal_delay = None
         self.on_completion = None

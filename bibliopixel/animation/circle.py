@@ -4,8 +4,8 @@ from .. layout import Circle
 
 class BaseCircleAnim(BaseAnimation):
 
-    def __init__(self, layout):
-        super().__init__(layout)
+    def __init__(self, layout, **kwds):
+        super().__init__(layout, **kwds)
 
         if not isinstance(layout, Circle):
             raise RuntimeError('Must use bibliopixel.layout.Circle with ' +

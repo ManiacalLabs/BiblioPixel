@@ -37,6 +37,18 @@ def extend_path(path):
     gitty.sys_path.extend(path)
 
 
+def raise_if_unknown(items, name, value):
+    if items:
+        msg = ', '.join('"%s"' % s for s in sorted(items))
+        s = '' if len(items) == 1 else 's'
+        raise ValueError('Unknown %s%s for %s: %s' % (name, s, value, msg))
+
+
+def raise_if_unknown_attributes(items, name, value):
+    value = '%s %s' % (name, value.__class__.__name__)
+    raise_if_unknown(items, 'attribute', value)
+
+
 def project_to_animation(desc, default=None):
     project = copy.deepcopy(desc)
     default = default or {}
@@ -52,17 +64,17 @@ def project_to_animation(desc, default=None):
     path = get('path')
     run = get('run')
 
-    if project:
-        log.error('Did not understand sections %s', project)
+    raise_if_unknown(project, 'section', 'project')
 
     if not animation:
-        raise ValueError('animation was not specified in project')
+        raise ValueError('There was no "animation" section in the project')
 
     if not layout:
-        raise ValueError('layout was not specified in project')
+        raise ValueError('There was no "layout" section in the project')
 
     if not (driver or drivers):
-        raise ValueError('Projects has neither driver nor drivers sections')
+        raise ValueError(
+            'The project has neither a "driver" nor a "drivers" sections')
 
     extend_path(path)
     maker = data_maker.Maker(**(maker or {}))

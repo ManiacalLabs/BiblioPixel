@@ -4,8 +4,8 @@ from .. layout import Strip
 
 class BaseStripAnim(BaseAnimation):
 
-    def __init__(self, layout, start=0, end=-1):
-        super().__init__(layout)
+    def __init__(self, layout, start=0, end=-1, **kwds):
+        super().__init__(layout, **kwds)
 
         if not isinstance(layout, Strip):
             raise RuntimeError('Must use bibliopixel.layout.Strip with ' +
