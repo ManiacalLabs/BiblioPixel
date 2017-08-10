@@ -1,9 +1,8 @@
 import json, unittest
 
-from bibliopixel.main import main, run
+from . make import make
 from bibliopixel.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
-from ..mark_tests import SKIP_LONG_TESTS
 
 
 PROJECT = """
@@ -215,14 +214,6 @@ PROJECT_FAILURE3 = """
     }
 }
 """
-
-
-def make(name, is_json=True, run_start=not SKIP_LONG_TESTS):
-    args = main.get_args(['none', 'run'])
-    animation = run.make_animation(name, is_json, args)
-    if run_start:
-        animation.start()
-    return animation
 
 
 class ProjectTest(unittest.TestCase):
