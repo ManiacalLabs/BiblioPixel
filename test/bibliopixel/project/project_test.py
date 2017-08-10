@@ -162,59 +162,6 @@ PROJECT_SEQUENCE = """
 }
 """
 
-PROJECT_FAILURE1 = """
-{
-    "driver": {
-        "typename": "test.bibliopixel.failure.Failure",
-        "num": 12
-    },
-
-    "layout": {
-        "typename": "bibliopixel.layout.strip.Strip"
-    },
-
-    "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest"
-    }
-}
-"""
-
-
-PROJECT_FAILURE2 = """
-{
-    "driver": {
-        "typename": "test.bibliopixel.failure2.NON_EXISTENT",
-        "num": 12
-    },
-
-    "layout": {
-        "typename": "bibliopixel.layout.strip.Strip"
-    },
-
-    "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest"
-    }
-}
-"""
-
-
-PROJECT_FAILURE3 = """
-{
-    "driver": {
-        "typename": "test.NON_EXISTENT.Failure",
-        "num": 12
-    },
-
-    "layout": {
-        "typename": "bibliopixel.layout.strip.Strip"
-    },
-
-    "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest"
-    }
-}
-"""
-
 
 class ProjectTest(unittest.TestCase):
     def test_bad_json(self):
@@ -263,19 +210,3 @@ class ProjectTest(unittest.TestCase):
         animation = make(PROJECT_SIM, run_start=False)
         self.assertEquals(animation.name, 'test name')
         self.assertEquals(animation.data, {'title': 'test title'})
-
-    def test_failure1(self):
-        with self.assertRaises(ImportError) as e:
-            make(PROJECT_FAILURE1)
-        self.assertEquals(e.exception.name, 'nonexistent_module')
-
-    def test_failure2(self):
-        with self.assertRaises(ImportError) as e:
-            make(PROJECT_FAILURE2)
-        self.assertEquals(e.exception.name,
-                          'test.bibliopixel.failure2.NON_EXISTENT')
-
-    def test_failure3(self):
-        with self.assertRaises(ImportError) as e:
-            make(PROJECT_FAILURE3)
-        self.assertEquals(e.exception.name, 'test.NON_EXISTENT')
