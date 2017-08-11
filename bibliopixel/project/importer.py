@@ -47,10 +47,10 @@ def validate_typename(typename):
         root_module, version, min_version, install_name))
 
 
-def import_symbol(typename, package=None):
+def import_symbol(typename):
     try:
-        result = importer.import_symbol(typename, package)
-        package or validate_typename(typename)
+        result = importer.import_symbol(typename)
+        validate_typename(typename)
         return result
     except ImportError as e:
         root_module = typename.split('.')[0]
@@ -64,9 +64,9 @@ def import_symbol(typename, package=None):
         raise
 
 
-def make_object(*args, typename, package=None, field_types=None, **kwds):
+def make_object(*args, typename, field_types=None, **kwds):
     """Make an object from a symbol."""
-    symbol = import_symbol(typename, package)
+    symbol = import_symbol(typename)
     if hasattr(symbol, 'FIELD_TYPES'):
         field_types = symbol.FIELD_TYPES
 
