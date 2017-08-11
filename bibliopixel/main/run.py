@@ -2,37 +2,9 @@
 Run a project description file.
 """
 
-import json, os
+import loady, json, os
 from . import common_flags, simpixel
 from .. util import log
-from .. util import files
-
-
-def make_desc(name, is_json):
-    if not name:
-        return {}
-
-    if is_json:
-        data = name
-    else:
-        try:
-            data = files.opener(name).read()
-        except Exception as e:
-            e.args = ('There was a problem reading the file:', name) + e.args
-            raise
-    try:
-        return json.loads(data)
-    except ValueError as e:
-        if is_json:
-            e.args = ('There was a JSON error on the command line.',) + e.args
-        else:
-            e.args = ('There was a JSON error in the file:', name) + e.args
-        raise
-
-
-def make_animation(name, is_json, args):
-    desc = make_desc(name, is_json)
-    return common_flags.make_animation(args, desc)
 
 
 def run(args):
@@ -41,7 +13,10 @@ def run(args):
         simpixel.open_simpixel(args.simpixel)
     elif args.s:
         simpixel.open_simpixel()
-    task = make_animation(args.name, args.json, args)
+
+    desc = args.name and loady.data.load(args.name, args.json) or {}
+    task = common_flags.make_animation(args, desc)
+
     try:
         task.start()
     except KeyboardInterrupt:

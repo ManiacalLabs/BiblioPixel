@@ -1,11 +1,9 @@
-import multiprocessing
+import copy, loady, multiprocessing
 from .. animation.animation import STATE
 from .. animation import collection
 from . import server
 from . import trigger_process
 from .. util import log
-from .. util import importer
-import copy
 
 
 DEFAULT_OFF = 'OFF_ANIM'
@@ -124,7 +122,7 @@ class RemoteControl(collection.Collection):
             typename = trigger.pop('typename')
             events = trigger.pop('events')
             if typename and events:
-                importer.import_symbol(typename)  # attempt early to fail early
+                loady.code.load(typename)  # attempt early to fail early
                 self.triggers.setdefault(typename, []).extend((events, trigger))
             else:
                 raise ValueError('Triggers require `typename` and `events` fields!')

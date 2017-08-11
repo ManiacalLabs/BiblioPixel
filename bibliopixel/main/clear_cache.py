@@ -1,11 +1,11 @@
 """
 Clear the git repository library cache.
 """
-import gitty
+import loady
 
 
 def run(args):
-    gitty.clear_library_cache()
+    loady.library.clear()
 
 
 def set_parser(parser):
