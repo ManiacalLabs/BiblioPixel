@@ -9,7 +9,7 @@ __all__ = ['main']
 COMMANDS = (
     'alias', 'all_pixel', 'clear_cache', 'color', 'devices', 'demo', 'run',
     'update')
-MODULES = {c: import_symbol('.' + c, 'bibliopixel.main') for c in COMMANDS}
+MODULES = {c: import_symbol('bibliopixel.main.' + c) for c in COMMANDS}
 
 
 def no_command(*_):

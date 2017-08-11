@@ -1,10 +1,10 @@
 import importlib
 
 
-def import_symbol(typename, package=None):
+def import_symbol(typename):
     """Import a module or typename within a module from its name."""
     try:
-        return importlib.import_module(typename, package=package)
+        return importlib.import_module(typename)
 
     except ImportError as e:
         parts = typename.split('.')
@@ -12,7 +12,7 @@ def import_symbol(typename, package=None):
             typename = parts.pop()
 
             # Call import_module recursively.
-            namespace = import_symbol('.'.join(parts), package=package)
+            namespace = import_symbol('.'.join(parts))
 
             try:
                 return getattr(namespace, typename)
