@@ -4,7 +4,7 @@ from bibliopixel.project import project
 from . make import make
 
 
-PYTHON_FILE = 'driver = test.bibliopixel.failure.Failure(driver, num=12)'
+PYTHON_FILE = 'driver = {"a": "b"}'
 MISSING_LAYOUT = '{"animation": "off", "driver": "dummy"}'
 MISSING_ANIMATION = '{"layout": "matrix", "driver": "dummy"}'
 MISSING_EVERYTHING = '{}'
@@ -65,17 +65,17 @@ class BadProjectTest(unittest.TestCase):
             make(PYTHON_FILE)
 
         self.assertEquals(
-            e.exception.args,
-            ('There was a JSON error on the command line.',
+            e.exception.args[0::2],
+            ('There was a JSON error in the file',
              'Expecting value: line 1 column 1 (char 0)'))
 
     def test_cant_open(self):
         with self.assertRaises(FileNotFoundError) as e:
-            make('this-file-does-not-exist.json', is_json=False)
+            make('this-file-does-not-exist.json')
 
         self.assertEquals(
             e.exception.args,
-            ('There was a problem reading the file:',
+            ('There was an error reading the file',
              'this-file-does-not-exist.json',
              2,
              'No such file or directory'))

@@ -1,4 +1,4 @@
-gitty
+loady
 flask
 BiblioPixelAnimations
 BiblioPixelTriggers

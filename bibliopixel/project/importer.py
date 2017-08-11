@@ -1,6 +1,6 @@
+import loady
 from . types import make
 from . types.defaults import FIELD_TYPES
-from .. util import importer
 from distutils.version import LooseVersion
 
 
@@ -49,7 +49,7 @@ def validate_typename(typename):
 
 def import_symbol(typename):
     try:
-        result = importer.import_symbol(typename)
+        result = loady.code.load(typename)
         validate_typename(typename)
         return result
     except ImportError as e:

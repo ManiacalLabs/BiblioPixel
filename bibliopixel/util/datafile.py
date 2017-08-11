@@ -1,11 +1,9 @@
 import copy, json
-from . import files
 
 
 class DataFile(object):
-    def __init__(self, filename, open=files.opener):
+    def __init__(self, filename, open=open):
         self.filename = filename
-
         self.open = open
         self.read()
 

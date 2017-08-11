@@ -1,4 +1,4 @@
-import gitty, json, os
+import json, os
 from .. project import project
 
 """Common command line arguments for run and demo."""
@@ -20,7 +20,7 @@ PATH_HELP = """\
 A list of directories, separated by colons, 'which are added to the end of
 `sys.path`.
 
-You can also use gitty-style paths which start with `//git/` to
+You can also use loady-style paths which start with `//git/` to
 dynamically load a library from a public git repository.
 
 See https://github.com/ManiacalLabs/BiblioPixel/wiki/BiblioPixel-Paths
@@ -97,7 +97,7 @@ def add_project_flags(parser):
         help='Default LED type if no LED type is specified')
 
 
-def make_animation(args, desc):
+def make_project_flags(args):
     def get_value(name):
         value = getattr(args, name)
         if not value:
@@ -115,6 +115,11 @@ def make_animation(args, desc):
     if args.numpy:
         project_flags['maker'] = {'use_numpy': True}
 
+    return project_flags
+
+
+def make_animation(args, desc):
+    project_flags = make_project_flags(args)
     return project.project_to_animation(desc, project_flags)
 
 

@@ -1,8 +1,7 @@
-import copy, gitty, functools, sys
+import copy, loady, functools, sys
 from . import aliases, importer
 from .. project import data_maker
 from .. layout.multimap import MultiMapBuilder
-from .. util import files
 from .. util import log
 
 RESERVED_PROPERTIES = 'name', 'data'
@@ -34,7 +33,7 @@ def extend_path(path):
         if not all(x.startswith('//git/') for x in path.split(':')):
             raise ValueError(ISNT_GIT_PATH_ERROR % path)
 
-    gitty.sys_path.extend(path)
+    loady.sys_path.extend(path)
 
 
 def raise_if_unknown(items, name, value):
@@ -95,7 +94,7 @@ def project_to_animation(desc, default=None):
 
 
 def read_project(location, threaded=True, default=None):
-    project = gitty.raw.request(location, json=True)
+    project = loady.data.load(location, json=True)
     if threaded is not None:
         project.setdefault('run', {})['threaded'] = threaded
     return project_to_animation(project, default)
