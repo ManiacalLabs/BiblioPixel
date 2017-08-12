@@ -12,11 +12,18 @@ from ... drivers.return_codes import RETURN_CODES, print_error, BiblioSerialErro
 class Serial(DriverBase):
     """Main driver for Serial based LED strips"""
 
-    def __init__(self, ledtype, num, dev="",
+    def __init__(self, ledtype=None, num=0, dev="",
                  c_order=ChannelOrder.RGB, spi_speed=2,
                  gamma=None, restart_timeout=3,
                  device_id=None, hardwareID="1D50:60AB",
                  baudrate=921600, **kwds):
+
+        if ledtype is None:
+            raise ValueError('Must provide ledtype value!')
+
+        if num == 0:
+            raise ValueError('Must provide num value >0!')
+
         super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.devices = Devices(hardwareID, baudrate)
         self.serial = self.devices.serial

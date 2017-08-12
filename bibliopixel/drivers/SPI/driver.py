@@ -21,8 +21,13 @@ SPI_DRIVERS = {
 }
 
 
-def SPI(ledtype, num, **kwargs):
+def SPI(ledtype=None, num=0, **kwargs):
     """Wrapper function for using SPI device drivers on systems like the Raspberry Pi and BeagleBone"""
+    if ledtype is None:
+        raise ValueError('Must provide ledtype value!')
+
+    if num == 0:
+        raise ValueError('Must provide num value >0!')
     ledtype = resolve_enum(LEDTYPE, ledtype)
     if ledtype not in SPI_DRIVERS.keys():
         raise ValueError('{} is not a valid LED type.'.format(type))
