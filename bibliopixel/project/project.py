@@ -54,15 +54,18 @@ def project_to_animation(desc, default=None):
     default = default or {}
 
     def get(name):
-        return project.pop(name, default.get(name))
+        pr = aliases.resolve(project.pop(name, {}))
+        de = aliases.resolve(default.get(name, {}))
+        return dict(de, **pr)
 
     animation = get('animation')
     driver = get('driver')
-    drivers = get('drivers')
     layout = get('layout')
-    maker = get('maker')
-    path = get('path')
-    run = get('run')
+
+    drivers = project.pop('drivers', [])
+    maker = project.pop('maker', {})
+    path = project.pop('path', default.get('path'))
+    run = project.pop('run', {})
 
     raise_if_unknown(project, 'section', 'project')
 
