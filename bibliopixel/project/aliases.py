@@ -27,9 +27,8 @@ def resolve(value):
         typename, value = value, {}
     else:
         typename = value.get('typename')
-
-    if not typename:
-        raise ValueError('"typename" is not present or empty')
+        if not typename:
+            return value
 
     alias = alias_lists.get_alias(typename, ISOLATE)
 

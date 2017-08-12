@@ -4,8 +4,7 @@ from bibliopixel.project import aliases
 
 class AliasTest(unittest.TestCase):
     def test_empty(self):
-        with self.assertRaises(ValueError):
-            aliases.resolve({})
+        self.assertEqual(aliases.resolve({}), {})
 
     def test_simple(self):
         d = {'typename': 'bibliopixel.layout.circle.Circle'}
