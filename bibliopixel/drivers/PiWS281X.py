@@ -24,6 +24,20 @@ python setup.py build install
     raise
 
 
+PIN_CHANNEL = {
+    12: 0,
+    18: 0,
+    40: 0,
+    52: 0,
+    13: 1,
+    19: 1,
+    41: 1,
+    45: 1,
+    53: 1,
+    10: 0,  # Technically SPI
+}
+
+
 class PiWS281X(DriverBase):
     """
     Driver for controlling WS281X LEDs via the rpi_ws281x C-extension.
@@ -40,8 +54,10 @@ class PiWS281X(DriverBase):
         """
         super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.gamma = gamma
+        if gpio not in PIN_CHANNEL.keys():
+            raise ValueError('{} is not a valid gpio option!')
         self._strip = Adafruit_NeoPixel(num, gpio, ledFreqHz,
-                                        ledDma, ledInvert, 255, 0, 0x081000)
+                                        ledDma, ledInvert, 255, PIN_CHANNEL[gpio], 0x081000)
         # Intialize the library (must be called once before other functions).
         self._strip.begin()
 
