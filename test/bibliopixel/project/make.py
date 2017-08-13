@@ -8,7 +8,6 @@ def make(data, run_start=not SKIP_LONG_TESTS):
         with tempfile.NamedTemporaryFile(mode='w') as fp:
             fp.write(data)
             fp.seek(0)
-            print('!!!', fp.name)
             animation = project.read_project(fp.name, threaded=None)
     else:
         animation = project.read_project(data, threaded=None)
