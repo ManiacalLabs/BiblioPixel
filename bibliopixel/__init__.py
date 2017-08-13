@@ -5,6 +5,7 @@ from . layout.geometry.circle import gen_circle
 from . layout.geometry.cube import gen_cube
 from . import animation, colors, layout, util
 from . util import log
+from . util import image
 
 from . colors import gamma
 from . drivers import return_codes

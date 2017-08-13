@@ -96,6 +96,10 @@ def add_project_flags(parser):
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
 
+    parser.add_argument(
+        '-b', '--brightness', default=None,
+        help='Override project brightness value')
+
 
 def make_project_flags(args):
     def get_value(name):
@@ -111,6 +115,9 @@ def make_project_flags(args):
     project_flags = {name: get_value(name) for name in COMPONENTS}
     if args.ledtype:
         project_flags['driver']['ledtype'] = args.ledtype
+
+    if args.brightness:
+        project_flags['layout']['brightness'] = int(args.brightness)
 
     if args.numpy:
         project_flags['maker'] = {'use_numpy': True}

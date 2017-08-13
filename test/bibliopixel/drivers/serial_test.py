@@ -14,7 +14,7 @@ class SerialTest(unittest.TestCase):
         from bibliopixel.drivers.serial.devices import Devices
         from bibliopixel.animation import StripChannelTest
 
-        import bibliopixel.log as log
+        from bibliopixel import log
         import time
 
         log.setLogLevel(log.DEBUG)
