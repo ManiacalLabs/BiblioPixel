@@ -14,8 +14,12 @@ def run(args):
     elif args.s:
         simpixel.open_simpixel()
 
-    desc = args.name and loady.data.load(args.name, args.json) or {}
-    task = common_flags.make_animation(args, desc)
+    if args.json:
+        desc = args.name
+    else:
+        desc = args.name and loady.data.load(args.name, True)
+
+    task = common_flags.make_animation(args, desc or {})
 
     try:
         task.start()

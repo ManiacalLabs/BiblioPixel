@@ -94,7 +94,7 @@ def project_to_animation(desc, default=None):
 
 
 def read_project(location, threaded=True, default=None):
-    project = loady.data.load(location, json=True)
+    project = loady.data.load(location, use_json=True)
     if threaded is not None:
         project.setdefault('run', {})['threaded'] = threaded
     return project_to_animation(project, default)
