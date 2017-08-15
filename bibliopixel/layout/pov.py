@@ -1,5 +1,6 @@
 import math, threading, time
-from . matrix import Matrix, Rotation
+from . matrix import Matrix
+from . geometry.rotation import Rotation
 
 
 # Takes a matrix and displays it as individual columns over time

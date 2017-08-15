@@ -1,4 +1,4 @@
-from . import Rotation, rotate_and_flip
+from . rotation import Rotation, rotate_and_flip
 from . matrix import gen_matrix
 
 

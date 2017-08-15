@@ -1,4 +1,7 @@
-class Rotation:
+from enum import IntEnum
+
+
+class Rotation(IntEnum):
     ROTATE_0 = 0  # no rotation
     ROTATE_90 = 3  # rotate 90 degrees
     ROTATE_180 = 2  # rotate 180 degrees

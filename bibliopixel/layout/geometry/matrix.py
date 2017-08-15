@@ -1,5 +1,5 @@
 from . import index_ops
-from . import Rotation, rotate_and_flip
+from . rotation import Rotation, rotate_and_flip
 
 
 class Matrix(object):
