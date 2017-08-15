@@ -5,7 +5,8 @@ from .. util import log
 from . import matrix_drawing as matrix
 from . import font
 from . layout import Layout
-from . geometry.matrix import Rotation, gen_matrix, pixel_positions_from_matrix
+from . geometry.matrix import gen_matrix, pixel_positions_from_matrix
+from . geometry.rotation import Rotation
 
 
 class Matrix(Layout):
