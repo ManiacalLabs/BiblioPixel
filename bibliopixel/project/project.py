@@ -52,14 +52,14 @@ def project_to_animation(desc, default=None):
     project = copy.deepcopy(desc)
     default = default or {}
 
-    def get(name):
+    def resolve_aliases(name):
         pr = aliases.resolve(project.pop(name, {}))
         de = aliases.resolve(default.get(name, {}))
         return dict(de, **pr)
 
-    animation = get('animation')
-    driver = get('driver')
-    layout = get('layout')
+    animation = resolve_aliases('animation')
+    driver = resolve_aliases('driver')
+    layout = resolve_aliases('layout')
 
     drivers = project.pop('drivers', [])
     maker = project.pop('maker', {})
@@ -84,7 +84,7 @@ def project_to_animation(desc, default=None):
 
     builder = MultiMapBuilder(make_object)
     driver_objects = builder.make_drivers(driver, drivers)
-    layout = aliases.resolve(layout)
+
     coord_map = layout.pop('coord_map', builder.map or None)
     if coord_map:
         layout['coord_map'] = coord_map

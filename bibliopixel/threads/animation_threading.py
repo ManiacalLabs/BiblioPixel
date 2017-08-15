@@ -25,10 +25,10 @@ class AnimationThreading(object):
         return not (self.thread and self.thread.isAlive())
 
     def target(self):
-        # TODO: no testpath exercises this code...
-        log.debug('Starting thread...')
+        is_main = threading.current_thread() is threading.main_thread()
+        log.debug('Animation starts on %s thread', 'main' if is_main else 'new')
         self.run()
-        log.debug('Thread Complete')
+        log.debug('Animation complete')
 
     def wait(self, wait_time, timestamps):
         if not wait_time:
@@ -50,13 +50,23 @@ class AnimationThreading(object):
     def start(self):
         self.stop_event.clear()
 
-        if not self.runner.threaded:
-            self.run()
-            return
+        def start_thread(target):
+            self.thread = threading.Thread(target=target, daemon=True)
+            self.thread.start()
 
-        self.thread = threading.Thread(target=self.target, daemon=True)
-        self.thread.start()
+        if self.runner.main:
+            if self.runner.threaded:
+                start_thread(self.target)
+                self.runner.main()
 
-        if self.runner.join_thread:
-            # TODO: why would you do this rather than disable threading?
-            self.thread.join()
+            else:
+                start_thread(self.runner.main)
+                self.target()
+
+        elif self.runner.threaded:
+            start_thread(self.target)
+
+        else:
+            self.target()
+
+        self.thread and self.thread.join()
