@@ -73,12 +73,12 @@ class BadProjectTest(unittest.TestCase):
         with self.assertRaises(FileNotFoundError) as e:
             make('this-file-does-not-exist.json')
 
+        intro = e.exception.args[:2]
+        tail = e.exception.args[-2:]
         self.assertEquals(
-            e.exception.args,
-            ('There was an error reading the file',
-             'this-file-does-not-exist.json',
-             2,
-             'No such file or directory'))
+            intro, ('There was an error reading the file',
+                    'this-file-does-not-exist.json'))
+        self.assertEquals(tail, (2, 'No such file or directory'))
 
     def test_bad_section(self):
         with self.assertRaises(ValueError) as e:
