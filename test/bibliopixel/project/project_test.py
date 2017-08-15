@@ -3,6 +3,7 @@ import json, unittest
 from . make import make
 from bibliopixel.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
+from bibliopixel.layout.geometry.rotation import Rotation
 
 
 PROJECT = """
@@ -31,6 +32,7 @@ PROJECT_TYPES = """
         "duration": "1 hour, 2 minutes",
         "gamma": "APA102",
         "time": "35ks",
+        "rotation": "ROTATE_180",
         "ledtype": "GENERIC"
     },
 
@@ -180,6 +182,7 @@ class ProjectTest(unittest.TestCase):
         self.assertEquals(kwds['gamma'], gamma.APA102)
         self.assertEquals(kwds['time'], 35000)
         self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
+        self.assertEquals(kwds['rotation'], Rotation.ROTATE_180)
 
     def test_file(self):
         make('test/bibliopixel/project/project.json', False)

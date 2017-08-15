@@ -1,4 +1,4 @@
-from . import channel_order, color, duration, gamma, ledtype
+from . import channel_order, color, duration, gamma, ledtype, rotation
 
 FIELD_TYPES = {
     'c_order': channel_order,
@@ -6,6 +6,7 @@ FIELD_TYPES = {
     'duration': duration,
     'gamma': gamma,
     'ledtype': ledtype,
-    'time': duration,
     'ledtype': ledtype,
+    'rotation': rotation,
+    'time': duration,
 }
