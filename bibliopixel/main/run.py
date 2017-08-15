@@ -9,23 +9,23 @@ from .. util import log
 
 def run(args):
     common_flags.extend_path(args)
-    if args.simpixel:
-        simpixel.open_simpixel(args.simpixel)
-    elif args.s:
-        simpixel.open_simpixel()
-
     if args.json:
         desc = args.name
     else:
         desc = args.name and loady.data.load(args.name, True)
 
-    task = common_flags.make_animation(args, desc or {})
+    animation = common_flags.make_animation(args, desc or {})
+
+    if args.simpixel:
+        simpixel.open_simpixel(args.simpixel)
+    elif args.s:
+        simpixel.open_simpixel()
 
     try:
-        task.start()
+        animation.start()
     except KeyboardInterrupt:
         print('\nTermination requested by user.')
-        task.cleanup()
+        animation.cleanup()
 
 
 def set_parser(parser):
