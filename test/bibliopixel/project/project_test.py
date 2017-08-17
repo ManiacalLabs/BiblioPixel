@@ -61,7 +61,21 @@ PROJECT_MULTI = """
 
     "layout": {
         "typename": "matrix",
-        "width": 128
+        "width": 128,
+        "gen_coord_map": [
+            {
+              "dx": 32,
+              "dy": 32
+            },
+            {
+              "dx": 32,
+              "dy": 32
+            },
+            {
+              "dx": 32,
+              "dy": 32
+            }
+        ]
     },
 
     "animation": "matrix_test",

@@ -1,14 +1,20 @@
 import copy, loady, functools, sys
 from . import aliases, importer
 from .. project import data_maker
-from .. layout.multimap import MultiMapBuilder
 from .. util import log
+
+from .. layout.geometry import make_strip_coord_map_multi, make_matrix_coord_map_multi
 
 RESERVED_PROPERTIES = 'name', 'data'
 
 ISNT_GIT_PATH_ERROR = """\
 Because the --isolate flag is set, all paths must start with //git.
 Your path was %s."""
+
+MULTI_HANDLERS = {
+    'bibliopixel.layout.strip.Strip': make_strip_coord_map_multi,
+    'bibliopixel.layout.matrix.Matrix': make_matrix_coord_map_multi
+}
 
 
 def make_animation(layout, animation, run=None):
@@ -76,21 +82,40 @@ def project_to_animation(desc, default=None):
 
     if not (driver or drivers):
         raise ValueError(
-            'The project has neither a "driver" nor a "drivers" sections')
+            'The project has neither a "driver" nor a "drivers" section')
 
     extend_path(path)
     maker = data_maker.Maker(**(maker or {}))
     make_object = functools.partial(importer.make_object, maker=maker)
 
-    builder = MultiMapBuilder(make_object)
-    driver_objects = builder.make_drivers(driver, drivers)
+    driver_objects = make_drivers(driver, drivers, make_object)
 
-    coord_map = layout.pop('coord_map', builder.map or None)
-    if coord_map:
-        layout['coord_map'] = coord_map
+    gen_coord_map = layout.pop('gen_coord_map', None)
+
+    if 'coord_map' not in layout and gen_coord_map:
+        typename = layout['typename']
+        if typename not in MULTI_HANDLERS:
+            raise ValueError('There is currently no available multi-map builder for {}'.format(typename))
+        gen_multi = MULTI_HANDLERS[typename]
+        if isinstance(gen_coord_map, dict):
+            layout['coord_map'] = gen_multi(**gen_coord_map)
+        elif isinstance(gen_coord_map, list):
+            layout['coord_map'] = gen_multi(gen_coord_map)
+
     layout_object = make_object(driver_objects, **layout)
 
     return make_animation(layout_object, animation, run)
+
+
+def make_drivers(driver, drivers, make_object):
+    if not drivers:
+        return [make_object(**aliases.resolve(driver))]
+
+    if driver:
+        # driver is a default for each driver.
+        drivers = [dict(driver, **d) for d in drivers]
+
+    return [make_object(**aliases.resolve(d)) for d in drivers]
 
 
 def read_project(location, threaded=True, default=None):

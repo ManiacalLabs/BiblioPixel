@@ -30,5 +30,27 @@ def fill(strip, item, start=0, stop=None, step=1):
         strip[i] = item
 
 
-def gen_strip(num):
+def make_strip_coord_map(num, invert=False, offset=0):
+    result = list(range(num))
+    if offset:
+        result = [i + offset for i in result]
+    if invert:
+        result = result[::-1]
+    return result
+
+
+def make_strip_coord_map_multi(config, invert=False):
+    offset = 0
+    result = []
+    for c in config:
+        result.extend(make_strip_coord_map(offset=offset, **c))
+        offset = len(result)
+
+    if invert:
+        result = result[::-1]
+
+    return result
+
+
+def make_strip_coord_map_positions(num):
     return [[x, 0, 0] for x in range(num)]

@@ -1,8 +1,8 @@
 from . layout import Circle, Matrix, POV, Strip, Cube, font
 from . layout.geometry import Rotation
-from . layout.geometry.matrix import gen_matrix
-from . layout.geometry.circle import gen_circle
-from . layout.geometry.cube import gen_cube
+from . layout.geometry.matrix import make_matrix_coord_map
+from . layout.geometry.circle import make_circle_coord_map
+from . layout.geometry.cube import make_cube_coord_map
 from . import animation, colors, layout, util
 from . util import log
 from . util import image

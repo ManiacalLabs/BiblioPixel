@@ -1,6 +1,6 @@
 from .. import colors
 from . layout import Layout
-from . geometry.strip import gen_strip
+from . geometry.strip import make_strip_coord_map_positions
 
 
 class Strip(Layout):
@@ -30,7 +30,7 @@ class Strip(Layout):
         else:
             self.set_base = self._set_base
 
-        self.set_pixel_positions(gen_strip(self.numLEDs))
+        self.set_pixel_positions(make_strip_coord_map_positions(self.numLEDs))
 
     def _set_strip_mapped(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:

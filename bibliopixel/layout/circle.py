@@ -1,7 +1,7 @@
 from . layout import Layout
 from . geometry.circle import (
-    gen_circle, calc_ring_steps, calc_ring_pixel_count,
-    pixel_positions_from_rings)
+    make_circle_coord_map, calc_ring_steps, calc_ring_pixel_count,
+    make_circle_coord_map_positions)
 
 
 class Circle(Layout):
@@ -17,7 +17,7 @@ class Circle(Layout):
             full_coords |= (len(r) > 2)
 
         if not full_coords:
-            self.rings, self.ringSteps = gen_circle(
+            self.rings, self.ringSteps = make_circle_coord_map(
                 rings=self.rings, pixels_per=pixels_per)
         else:
             self.ringSteps = calc_ring_steps(self.rings)
@@ -25,7 +25,7 @@ class Circle(Layout):
         self.ringCount = len(self.rings)
         self.lastRing = self.ringCount - 1
 
-        self.set_pixel_positions(pixel_positions_from_rings(self.rings))
+        self.set_pixel_positions(make_circle_coord_map_positions(self.rings))
 
         num = calc_ring_pixel_count(self.rings)
 

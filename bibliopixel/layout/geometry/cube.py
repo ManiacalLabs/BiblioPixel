@@ -1,16 +1,16 @@
 from . rotation import Rotation, rotate_and_flip
-from . matrix import gen_matrix
+from . matrix import make_matrix_coord_map
 
 
-def gen_cube(dx, dy, dz, xy_serpentine=True, offset=0,
-             xy_rotation=Rotation.ROTATE_0, z_rotation=Rotation.ROTATE_0,
-             y_flip=False, z_flip=False):
+def make_cube_coord_map(dx, dy, dz, xy_serpentine=True, offset=0,
+                        xy_rotation=Rotation.ROTATE_0, z_rotation=Rotation.ROTATE_0,
+                        y_flip=False, z_flip=False):
     result = []
     plane_offset = offset
     for z in range(dz):
-        plane = gen_matrix(dx, dy, serpentine=xy_serpentine,
-                           offset=plane_offset, rotation=xy_rotation,
-                           y_flip=y_flip)
+        plane = make_matrix_coord_map(dx, dy, serpentine=xy_serpentine,
+                                      offset=plane_offset, rotation=xy_rotation,
+                                      y_flip=y_flip)
         plane_offset += (dx * dy)
         result.append(plane)
 
@@ -19,7 +19,7 @@ def gen_cube(dx, dy, dz, xy_serpentine=True, offset=0,
     return result
 
 
-def pixel_positions_from_cube(coord_map):
+def make_cube_coord_map_positions(coord_map):
     num = 0
     dx, dy, dz = (0, 0, len(coord_map))
 

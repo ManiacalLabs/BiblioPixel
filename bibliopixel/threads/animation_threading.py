@@ -69,4 +69,4 @@ class AnimationThreading(object):
         else:
             self.target()
 
-        self.thread and self.thread.join()
+        self.thread and self.runner.main and self.thread.join()

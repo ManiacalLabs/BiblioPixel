@@ -16,7 +16,7 @@ def calc_ring_steps(rings):
     return steps
 
 
-def gen_circle(rings=None, pixels_per=None, offset=0, invert=False):
+def make_circle_coord_map(rings=None, pixels_per=None, offset=0, invert=False):
     if pixels_per:
         rings = []
         for c in pixels_per:
@@ -45,7 +45,7 @@ def gen_circle(rings=None, pixels_per=None, offset=0, invert=False):
         return (out_rings, calc_ring_steps(out_rings))
 
 
-def pixel_positions_from_rings(rings, origin=(0, 0, 0), z_diff=0, radii=None):
+def make_circle_coord_map_positions(rings, origin=(0, 0, 0), z_diff=0, radii=None):
     if len(origin) not in [2, 3]:
         raise ValueError('origin must be (x,y) or (x,y,z)')
 
