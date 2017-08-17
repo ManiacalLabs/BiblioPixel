@@ -41,7 +41,8 @@ class ImportAllTest(unittest.TestCase):
 
             try:
                 importlib.import_module(name)
-            except:
+            except Exception as ex:
+                print(ex)
                 failures.append(name)
         self.assertEqual(failures, [])
 

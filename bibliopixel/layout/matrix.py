@@ -5,14 +5,14 @@ from .. util import log
 from . import matrix_drawing as matrix
 from . import font
 from . layout import Layout
-from . geometry.matrix import gen_matrix, pixel_positions_from_matrix
+from . geometry.matrix import make_matrix_coord_map, make_matrix_coord_map_positions
 from . geometry.rotation import Rotation
 
 
 class Matrix(Layout):
 
     def __init__(self, drivers, width=0, height=0, coord_map=None,
-                 rotation=Rotation.ROTATE_0, vert_flip=False,
+                 rotation=Rotation.ROTATE_0, vert_flip=False, y_flip=False,
                  serpentine=True,
                  threadedUpdate=False, brightness=255,
                  pixelSize=(1, 1), **kwargs):
@@ -49,8 +49,9 @@ class Matrix(Layout):
             self.coord_map = coord_map
         else:
             if len(self.drivers) == 1:
-                log.info('Auto generating coordinate map. Use gen_matrix directly if more control needed.')
-                self.coord_map = gen_matrix(self.width, self.height,
+                log.info('Auto generating coordinate map. Use make_matrix_coord_map directly if more control needed.')
+                y_flip = y_flip or vert_flip  # was switched to y_flip, but need to keep vert_flip available
+                self.coord_map = make_matrix_coord_map(self.width, self.height,
                                             serpentine=serpentine,
                                             rotation=rotation,
                                             y_flip=vert_flip)
@@ -58,7 +59,7 @@ class Matrix(Layout):
                 raise TypeError(
                     "Must provide coord_map if using multiple drivers!")
 
-        self.set_pixel_positions(pixel_positions_from_matrix(self.coord_map))
+        self.set_pixel_positions(make_matrix_coord_map_positions(self.coord_map))
 
         # if 90 or 270 rotation dimensions need to be swapped so they match the
         # matrix rotation
@@ -89,7 +90,7 @@ class Matrix(Layout):
         self.fonts = font.fonts
 
     def get_pixel_positions(self):
-        return pixel_positions_from_matrix(self.coord_map)
+        return make_matrix_coord_map_positions(self.coord_map)
 
     def loadFont(self, name, height, width, data):
         self.fonts[name] = {

@@ -4,7 +4,7 @@ from .. import colors
 from .. util import log
 from . import font
 from . layout import Layout
-from . geometry.cube import gen_cube, pixel_positions_from_cube
+from . geometry.cube import make_cube_coord_map, make_cube_coord_map_positions
 
 
 class Cube(Layout):
@@ -23,15 +23,15 @@ class Cube(Layout):
             self.coord_map = coord_map
         else:
             if len(self.drivers) == 1:
-                log.info('Auto generating coordinate map. Use gen_cube directly if more control needed.')
-                self.coord_map = gen_cube(x, y, z)
+                log.info('Auto generating coordinate map. Use make_cube_coord_map directly if more control needed.')
+                self.coord_map = make_cube_coord_map(x, y, z)
             else:
                 raise TypeError("Must provide coord_map if using multiple drivers!")
 
-        self.set_pixel_positions(pixel_positions_from_cube(self.coord_map))
+        self.set_pixel_positions(make_cube_coord_map_positions(self.coord_map))
 
     def get_pixel_positions(self):
-        return pixel_positions_from_cube(self.coord_map)
+        return make_cube_coord_map_positions(self.coord_map)
 
     def set(self, x, y, z, color):
         try:
