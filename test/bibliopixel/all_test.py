@@ -19,11 +19,8 @@ def get_imports():
         if '__' in directory:
             continue
 
-        relative = os.path.relpath(directory, python_root)
-        if relative == '.':
-            root_import = 'bibliopixel'
-        else:
-            root_import = 'bibliopixel.' + '.'.join(split_all(relative))
+        relative = os.path.relpath(directory, bp_root)
+        root_import = '.'.join(split_all(relative))
 
         yield root_import
 
@@ -36,17 +33,10 @@ class ImportAllTest(unittest.TestCase):
     def test_all(self):
         failures = []
         for name in get_imports():
-            if name in BLACKLIST:
-                continue
+            if name not in BLACKLIST:
+                try:
+                    importlib.import_module(name)
+                except:
+                    failures.append(name)
 
-            try:
-                importlib.import_module(name)
-            except Exception as ex:
-                print(ex)
-                failures.append(name)
         self.assertEqual(failures, [])
-
-        with open('/tmp/imports.txt', 'w') as f:
-            for name in get_imports():
-                f.write(name)
-                f.write('\n')
