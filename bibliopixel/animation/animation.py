@@ -66,8 +66,14 @@ class BaseAnimation(object):
     def compute_state(self):
         if self.threading.stop_event.isSet():
             self.state = STATE.canceled
-        elif self.runner.max_steps and not (self.cur_step < self.runner.max_steps):
+
+        elif self.runner.max_steps and (self.cur_step >= self.runner.max_steps):
             self.state = STATE.max_steps
+
+        elif self.runner.seconds:
+            complete = (time.time() - self.start_time) >= self.runner.seconds
+            self.state = STATE.complete if complete else STATE.running
+
         elif (not self.runner.until_complete and self.state == STATE.complete):
             # Ignore STATE.complete if until_complete is False
             self.state = STATE.running
@@ -136,6 +142,8 @@ class BaseAnimation(object):
 
     def run_all_frames(self):
         with self.run_context():
+            if self.runner.seconds:
+                self.start_time = time.time()
             while self.state == STATE.running:
                 self.run_one_frame()
 

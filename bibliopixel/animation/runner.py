@@ -33,11 +33,8 @@ class Runner(object):
         self.fps = fps
         self.sleep_time = 1 / fps if fps else sleep_time
         self.until_complete = until_complete
-        if seconds is None:
-            self.max_steps = max_steps
-        else:
-            self.max_steps = int(seconds / self.sleep_time)
         self.max_cycles = max_cycles
         self.seconds = seconds
+        self.max_steps = max_steps
         self.threaded = threaded
         self.main = main and loady.code.load(main)
