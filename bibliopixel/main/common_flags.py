@@ -11,10 +11,14 @@ def _get_version():
     return open(filename).read().strip()
 
 
+VERSION = _get_version()
 COMPONENTS = 'driver', 'layout', 'animation'
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
 ENABLE_PRESETS = False
+
+
+# Help messages.
 
 PATH_HELP = """\
 A list of directories, separated by colons, 'which are added to the end of
@@ -30,17 +34,6 @@ for more information.
 LOGLEVEL_HELP = """\
 Set what level of events to log. Higher log levels print less."""
 
-VERBOSE_HELP = """\
-If this is set, then errors are reported with a full stack trace.
-If not set, just the exception message is printed.
-"""
-
-VERSION = _get_version()
-VERSION_HELP = """\
-Print the current version number of BiblioPixel (%s).
-""" % VERSION
-
-PRESET_HELP = """Filenames for preset library"""
 ISOLATE_HELP = """\
 Run BiblioPixel in isolated mode, where it cannot see your local files.
 This means that it will not see any local Python classes in your directories
@@ -49,6 +42,19 @@ and it won't see your local aliases.
 Running your project in isolated mode help makes sure that your project will
 work on other machines without modification.
 """
+
+PRESET_HELP = """Filenames for preset library"""
+
+RUN_FOR_HELP = """How long to run the animation (overrides runner.seconds)."""
+
+VERBOSE_HELP = """\
+If this is set, then errors are reported with a full stack trace.
+If not set, just the exception message is printed.
+"""
+
+VERSION_HELP = """\
+Print the current version number of BiblioPixel (%s).
+""" % VERSION
 
 
 def add_common_flags(parser):
@@ -72,6 +78,10 @@ def add_project_flags(parser):
         help='Default animation type if no animation is specified')
 
     parser.add_argument(
+        '-b', '--brightness', default=None,
+        help='Override project brightness value')
+
+    parser.add_argument(
         '-d', '--driver', default='simpixel',
         help='Default driver type if no driver is specified')
 
@@ -86,6 +96,9 @@ def add_project_flags(parser):
         '-p', '--path', default=None, help=PATH_HELP)
 
     parser.add_argument(
+        '-r', '--run_for', default=None, help=RUN_FOR_HELP)
+
+    parser.add_argument(
         '-s', action='store_true', help='Run SimPixel at the default URL')
 
     parser.add_argument(
@@ -94,10 +107,6 @@ def add_project_flags(parser):
     parser.add_argument(
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
-
-    parser.add_argument(
-        '-b', '--brightness', default=None,
-        help='Override project brightness value')
 
 
 def make_project_flags(args):
@@ -120,6 +129,9 @@ def make_project_flags(args):
 
     if args.numpy_dtype:
         project_flags['maker'] = {'numpy_dtype': args.numpy_dtype}
+
+    if args.run_for is not None:
+        project_flags.setdefault('run', {})['seconds'] = float(args.run_for)
 
     return project_flags
 
