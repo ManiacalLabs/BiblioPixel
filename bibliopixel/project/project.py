@@ -70,7 +70,7 @@ def project_to_animation(desc, default=None):
     drivers = project.pop('drivers', [])
     maker = project.pop('maker', {})
     path = project.pop('path', default.get('path'))
-    run = project.pop('run', {})
+    run = project.pop('run', default.get('run', {}))
 
     raise_if_unknown(project, 'section', 'project')
 
