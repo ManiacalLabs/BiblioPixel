@@ -80,8 +80,7 @@ def add_project_flags(parser):
         help='Default layout class if no layout is specified')
 
     parser.add_argument(
-        '-n', '--numpy', action='store_true',
-        help='Use numpy if it available.')
+        '-n', '--numpy_dtype', default=None, help='Use this numpy datatype.')
 
     parser.add_argument(
         '-p', '--path', default=None, help=PATH_HELP)
@@ -119,8 +118,8 @@ def make_project_flags(args):
     if args.brightness:
         project_flags['layout']['brightness'] = int(args.brightness)
 
-    if args.numpy:
-        project_flags['maker'] = {'use_numpy': True}
+    if args.numpy_dtype:
+        project_flags['maker'] = {'numpy_dtype': args.numpy_dtype}
 
     return project_flags
 

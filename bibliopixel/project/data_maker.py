@@ -1,4 +1,4 @@
-import ctypes
+import ctypes, os
 from multiprocessing.sharedctypes import RawArray
 from .. util import log
 
@@ -7,21 +7,21 @@ try:
 except:
     numpy = None
 
-USE_NUMPY = False
+NUMPY_DTYPE = os.environ.get('BP_NUMPY_DTYPE')
 
 
-def Maker(floating=None, shared_memory=False, use_numpy=USE_NUMPY):
+def Maker(floating=None, shared_memory=False, numpy_dtype=NUMPY_DTYPE):
     def list_maker(size):
         return [(0, 0, 0)] * size
 
-    if use_numpy and not numpy:
-        log.error('numpy module is not available.')
-        use_numpy = False
+    if numpy_dtype:
+        if numpy:
+            log.info('Using numpy')
+        else:
+            log.error('numpy module is not available.')
+            numpy_dtype = None
 
-    if use_numpy:
-        log.info('Using numpy')
-
-    if not (shared_memory or use_numpy):
+    if not (shared_memory or numpy_dtype):
         return bytearray, list_maker
 
     byte_type, float_type = ctypes.c_uint8, ctypes.c_float
@@ -36,7 +36,7 @@ def Maker(floating=None, shared_memory=False, use_numpy=USE_NUMPY):
         return shared_list_maker(byte_type), shared_list_maker(3 * number_type)
 
     def numpy_list_maker(size):
-        return numpy.array(list_maker(size), dtype=number_type)
+        return numpy.empty((size, 3), dtype=numpy_dtype)
 
     return bytearray, numpy_list_maker
 

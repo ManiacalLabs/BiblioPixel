@@ -121,7 +121,7 @@ PROJECT_NUMPY = """
     },
 
     "maker": {
-        "use_numpy": true
+        "numpy_dtype": "float"
     }
 }
 """
