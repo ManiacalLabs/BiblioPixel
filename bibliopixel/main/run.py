@@ -9,22 +9,24 @@ from .. util import log
 
 def run(args):
     common_flags.extend_path(args)
-    if args.json:
-        desc = args.name
-    else:
-        desc = args.name and loady.data.load(args.name, True)
+    for name in args.name or ['']:
+        if args.json:
+            desc = name
+        else:
+            desc = name and loady.data.load(name, True)
 
-    animation = common_flags.make_animation(args, desc or {})
+        animation = common_flags.make_animation(args, desc or {})
 
-    if args.simpixel:
-        simpixel.open_simpixel(args.simpixel)
-    elif args.s:
-        simpixel.open_simpixel()
+        if args.simpixel:
+            simpixel.open_simpixel(args.simpixel)
+        elif args.s:
+            simpixel.open_simpixel()
 
-    try:
-        animation.start()
-    except KeyboardInterrupt:
-        print('\nTermination requested by user.')
+        try:
+            animation.start()
+        except KeyboardInterrupt:
+            print('\nTermination requested by user.')
+
         animation.cleanup()
 
 
@@ -35,9 +37,8 @@ def set_parser(parser):
     common_flags.add_project_flags(parser)
 
     parser.add_argument(
-        'name', nargs='?',
-        help='Path project file - can be a URL or file system location',
-        default='')
+        'name', nargs='*',
+        help='Path project files - can be a URL or file system location')
 
     parser.add_argument(
         '-j', '--json', action='store_true',
