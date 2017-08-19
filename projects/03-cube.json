@@ -1,0 +1,48 @@
+{
+    "animation": {
+        "typename": "sequence",
+        "animations": [
+            {
+                "animation": "BiblioPixelAnimations.cube.Rain.RainBow",
+                "run": {
+                    "seconds": 2.0,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.cube.bloom.CubeBloom",
+                "run": {
+                    "seconds": 2.0,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.cube.simplex.Simplex",
+                "run": {
+                    "seconds": 2.0,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.cube.wave_spiral.WaveSpiral",
+                "run": {
+                    "seconds": 2.0,
+                    "fps": 30
+                }
+            }
+         ]
+    },
+    "driver": {
+        "num": 512,
+        "typename": "simpixel"
+    },
+    "layout": {
+        "typename": "cube",
+        "x": 8,
+        "y": 8,
+        "z": 8
+    },
+    "run": {
+        "seconds": 9
+    }
+}

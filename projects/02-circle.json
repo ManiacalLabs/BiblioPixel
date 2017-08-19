@@ -1,0 +1,88 @@
+{
+    "animation": {
+        "typename": "sequence",
+        "animations": [
+            {
+                "animation": "BiblioPixelAnimations.circle.arc_clock.ArcClock",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.arc_rotate.ArcRotate",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.bloom.CircleBloom",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.circle_clock.CircleClock",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.diag.Diag",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.fireflies.FireFlies",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.hyperspace.Hyperspace",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.hyperspace.HyperspaceRainbow",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.pinwheel.PinWheel",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.circle.swirl.Swirl",
+                "run": {
+                    "seconds": 0.5,
+                    "fps": 30
+                }
+            }
+        ]
+    },
+    "driver": {
+        "num": 99,
+        "typename": "simpixel"
+    },
+    "layout": {
+        "typename": "circle",
+        "pixels_per": [1, 4, 8, 12, 18, 24, 32]
+    },
+    "run": {
+        "seconds": 12
+    }
+}
