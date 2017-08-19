@@ -136,10 +136,11 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['test']) + ['ui', 'scripts'],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     tests_require=['pytest'],
     cmdclass={

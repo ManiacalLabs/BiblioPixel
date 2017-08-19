@@ -1,3 +1,10 @@
+## v3.3.0 - 2017-09-19
+- Overhauled multi-driver coord_map system
+
+## v3.2.0 -	2017-08-13
+- Remote UI triggers
+- Other bug fixes
+
 ## v3.1.0 - 2017-07-23
 - New remote UI
 - Many bug fixes and usability tweaks
