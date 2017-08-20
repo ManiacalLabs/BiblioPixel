@@ -39,6 +39,14 @@ class Layout(object):
         """DEPRECATED - use self.push_to_driver()"""
         return self.push_to_driver()
 
+    def start(self):
+        for d in self.drivers:
+            d.start()
+
+    def cleanup_drivers(self):
+        for d in self.drivers:
+            d.cleanup()
+
     def cleanup(self):
         self.all_off()
         self.push_to_driver()

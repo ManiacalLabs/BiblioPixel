@@ -28,7 +28,7 @@ class SimPixel(DriverBase):
         if pixel_positions:
             self.set_pixel_positions(pixel_positions)
 
-    def __start_server(self):
+    def start(self):
         log.debug('Starting server...')
         desc = dict(driver=self,
                     pixel_positions=self.pixel_positions,
@@ -57,7 +57,6 @@ class SimPixel(DriverBase):
             # Flatten list of led positions.
             pl = [c for p in pixel_positions for c in p]
             self.pixel_positions = bytearray(struct.pack('<%sh' % len(pl), *pl))
-            self.__start_server()
 
     def add_websock(self, oid, send_pixels):
         self.websocks[oid] = send_pixels
