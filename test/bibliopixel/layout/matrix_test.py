@@ -25,6 +25,27 @@ class BaseMatrixTest(unittest.TestCase):
         unchanged = [i for i, c in enumerate(matrix._colors) if not c[0]]
         self.assertEqual(unchanged, expected)
 
+    def test_horizontal_line(self):
+        matrix = self.make_matrix(width=16, height=16)
+        matrix.drawLine(0, 0, 15, 0, WHITE)
+        self.assert_changed(matrix, list(range(16)))
+
+    def test_vertical_line(self):
+        matrix = self.make_matrix(width=16, height=16)
+        matrix.drawLine(0, 0, 0, 15, WHITE)
+        self.assert_changed(
+            matrix,
+            [0, 31, 32, 63, 64, 95, 96, 127, 128,
+             159, 160, 191, 192, 223, 224, 255])
+
+    def test_vertical_line2(self):
+        matrix = self.make_matrix(width=16, height=16)
+        matrix.drawLine(1, 0, 1, 15, WHITE)
+        self.assert_changed(
+            matrix,
+            [1, 30, 33, 62, 65, 94, 97, 126, 129,
+             158, 161, 190, 193, 222, 225, 254])
+
     def test_draw_circle1(self):
         matrix = self.make_matrix(width=16, height=16)
         matrix.drawCircle(8, 8, 6, WHITE)
