@@ -2,7 +2,7 @@
 Run a project description file.
 """
 
-import loady, json, os
+import loady, json, os, time
 from . import common_flags, simpixel
 from .. util import log
 
@@ -22,10 +22,12 @@ def run(args):
         simpixel.open_simpixel()
 
     try:
+        animation.layout.start()
         animation.start()
     except KeyboardInterrupt:
         print('\nTermination requested by user.')
         animation.cleanup()
+        animation.layout.cleanup_drivers()
 
 
 def set_parser(parser):
