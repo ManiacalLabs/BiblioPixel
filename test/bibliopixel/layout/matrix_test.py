@@ -1,4 +1,4 @@
-import os, itertools, time, unittest
+import contextlib, itertools, os, time, unittest
 
 from bibliopixel.project import data_maker
 from bibliopixel.layout import Matrix
@@ -23,157 +23,151 @@ class BaseMatrixTest(unittest.TestCase):
         """Return text for a given pixel"""
         return '*' if any(self.matrix.get(x, y)) else ' '
 
+    def line_at(self, y):
+        return ''.join(self.text_at(x, y) for x in range(self.matrix.width))
+
     def to_strings(self):
-        xrange = range(self.matrix.width)
-        for y in range(self.matrix.height):
-            yield ''.join(self.text_at(x, y) for x in xrange)
+        return tuple(self.line_at(y) for y in range(self.matrix.height))
 
     def name_of_test(self):
-        id = self.id().split('.')[-1]
-        if id.startswith('test_'):
-            id = id[len('test_'):]
-        return id.upper()
-
-    def make_matrix(self, width, height, **kwds):
-        driver = DriverBase(num=width * height)
-        self.matrix = Matrix(
-            driver, width=width, height=height, maker=self.maker, **kwds)
+        name = self.id().split('.')[-1]
+        if name.startswith('test_'):
+            name = name[len('test_'):]
+        return name.upper()
 
     def dump(self):
         # Dump the result to a file, if enabled.
         pass
 
-    def assert_in_results(self):
-        result = getattr(matrix_results, self.name_of_test())
-        self.assertEqual(tuple(self.to_strings()), result)
+    @contextlib.contextmanager
+    def matrix_test(self, width=16, height=16):
+        d = DriverBase(num=width * height)
+        self.matrix = Matrix(d, width=width, height=height, maker=self.maker)
+
+        yield  # Perform your operation here.
+
+        self.dump()
+        expected = getattr(matrix_results, self.name_of_test())
+        actual = self.to_strings()
+        if expected != actual:
+            print('Expected:', *(repr(s) for s in expected), sep='\n')
+            print('Actual:', *(repr(s) for s in actual), sep='\n')
+            self.assertTrue(False)
 
     def test_horizontal_line(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawLine(0, 0, 15, 0, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawLine(0, 0, 15, 0, WHITE)
 
     def test_vertical_line(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawLine(0, 0, 0, 15, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawLine(0, 0, 0, 15, WHITE)
 
     def test_vertical_line2(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawLine(1, 0, 1, 15, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawLine(1, 0, 1, 15, WHITE)
 
     def test_draw_circle1(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawCircle(8, 8, 6, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawCircle(8, 8, 6, WHITE)
 
     def test_draw_circle2(self):
-        self.make_matrix(width=8, height=8)
-        self.matrix.drawCircle(4, 4, 15, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(8, 8):
+            self.matrix.drawCircle(4, 4, 15, WHITE)
 
     def test_draw_circle3(self):
-        self.make_matrix(width=4, height=12)
-        self.matrix.drawCircle(4, 6, 20, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(4, 12):
+            self.matrix.drawCircle(4, 6, 20, WHITE)
 
     def test_fill_circle1(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.fillCircle(8, 8, 6, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.fillCircle(8, 8, 6, WHITE)
 
     def test_fill_circle2(self):
-        self.make_matrix(width=8, height=8)
-        self.matrix.fillCircle(4, 4, 15, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(8, 8):
+            self.matrix.fillCircle(4, 4, 15, WHITE)
 
     def test_fill_circle3(self):
-        self.make_matrix(width=4, height=12)
-        self.matrix.fillCircle(4, 6, 20, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(4, 12):
+            self.matrix.fillCircle(4, 6, 20, WHITE)
 
     def test_bresenham0(self):
-        self.make_matrix(width=8, height=8)
-        self.matrix.bresenham_line(0, 0, 8, 8, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(8, 8):
+            self.matrix.bresenham_line(0, 0, 8, 8, WHITE)
 
     def test_bresenham1(self):
-        self.make_matrix(width=8, height=8)
-        self.matrix.bresenham_line(8, 8, 0, 0, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(8, 8):
+            self.matrix.bresenham_line(8, 8, 0, 0, WHITE)
 
     def test_bresenham2(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.bresenham_line(3, 5, 15, 18, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.bresenham_line(3, 5, 15, 18, WHITE)
 
     def test_bresenham3(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.bresenham_line(15, 18, 3, 5, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.bresenham_line(15, 18, 3, 5, WHITE)
 
     def test_wu0(self):
-        self.make_matrix(width=8, height=8)
-        self.matrix.wu_line(0, 0, 8, 8, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(8, 8):
+            self.matrix.wu_line(0, 0, 8, 8, WHITE)
 
     def test_wu1(self):
-        self.make_matrix(width=8, height=8)
-        self.matrix.wu_line(8, 8, 0, 0, WHITE)
-        self.assert_in_results()
+        with self.matrix_test(8, 8):
+            self.matrix.wu_line(8, 8, 0, 0, WHITE)
 
     def test_wu2(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.wu_line(3, 5, 15, 18, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.wu_line(3, 5, 15, 18, WHITE)
 
     def test_wu3(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.wu_line(15, 18, 3, 5, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.wu_line(15, 18, 3, 5, WHITE)
 
     def test_draw_rect(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawRect(3, 5, 3, 2, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawRect(3, 5, 3, 2, WHITE)
 
     def test_fill_rect(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.fillRect(3, 5, 6, 4, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.fillRect(3, 5, 6, 4, WHITE)
 
     def test_fill_screen(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.fillScreen(WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.fillScreen(WHITE)
 
     def DISABLED_test_draw_round_rect(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawRoundRect(3, 5, 6, 7, 7, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawRoundRect(3, 5, 6, 7, 7, WHITE)
 
     def DISABLED_test_fill_round_rect(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.fillRoundRect(3, 5, 6, 7, 7, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.fillRoundRect(3, 5, 6, 7, 7, WHITE)
 
     def test_draw_triangle(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.drawTriangle(0, 0, 11, 4, 5, 12, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.drawTriangle(0, 0, 11, 4, 5, 12, WHITE)
 
     def DISABLED_test_fill_triangle(self):
-        self.make_matrix(width=16, height=16)
-        self.matrix.fillTriangle(0, 0, 11, 4, 5, 12, WHITE)
-        self.assert_in_results()
+        with self.matrix_test():
+            self.matrix.fillTriangle(0, 0, 11, 4, 5, 12, WHITE)
 
     def test_draw_text(self):
-        self.make_matrix(width=32, height=10)
-        self.matrix.drawText('abc', color=WHITE)
-        self.assert_in_results()
+        with self.matrix_test(32, 10):
+            self.matrix.drawText('abc', color=WHITE)
 
 
 class MatrixTest(BaseMatrixTest):
+    maker = data_maker.Maker()
+
+
+class SharedMatrixTest(BaseMatrixTest):
+    maker = data_maker.Maker(shared_memory=True, floating=True)
+
+
+class SharedMatrixIntegerTest(BaseMatrixTest):
+    maker = data_maker.Maker(shared_memory=True, floating=False)
+
+
+class DumpTest(BaseMatrixTest):
     maker = data_maker.Maker()
     indent = ''
 
@@ -195,14 +189,6 @@ class MatrixTest(BaseMatrixTest):
                 writeln("    '", row, "',")
 
             writeln(')')
-
-
-class SharedMatrixTest(BaseMatrixTest):
-    maker = data_maker.Maker(shared_memory=True, floating=True)
-
-
-class SharedMatrixIntegerTest(BaseMatrixTest):
-    maker = data_maker.Maker(shared_memory=True, floating=False)
 
 
 del BaseMatrixTest  # http://stackoverflow.com/a/22836015/43839
