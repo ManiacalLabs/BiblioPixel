@@ -1,28 +1,64 @@
-import unittest
+import os, itertools, time, unittest
 
 from bibliopixel.project import data_maker
 from bibliopixel.layout import Matrix
 from bibliopixel.drivers.driver_base import DriverBase
+from . import matrix_results
 
 
 WHITE = (255, 255, 255)
 
+DUMP_FILENAME = os.environ.get('BP_MATRIX_DUMP')
+
+if DUMP_FILENAME:
+    with open(DUMP_FILENAME, 'w') as fp:
+        fp.write('# This was file was automatically generated on ')
+        fp.write(time.strftime('%X %x %Z'))
+        fp.write('\n')
+
 
 class BaseMatrixTest(unittest.TestCase):
+
+    def text_at(self, x, y):
+        """Return text for a given pixel"""
+        return '*' if any(self.matrix.get(x, y)) else ' '
+
+    def to_strings(self):
+        xrange = range(self.matrix.width)
+        for y in range(self.matrix.height):
+            yield ''.join(self.text_at(x, y) for x in xrange)
+
+    def name_of_test(self):
+        id = self.id().split('.')[-1]
+        if id.startswith('test_'):
+            id = id[len('test_'):]
+        return id.upper()
 
     def make_matrix(self, width, height, **kwds):
         driver = DriverBase(num=width * height)
         self.matrix = Matrix(
             driver, width=width, height=height, maker=self.maker, **kwds)
 
+    def dump(self):
+        # Dump the result to a file, if enabled.
+        pass
+
+    def assert_in_results(self):
+        result = getattr(matrix_results, self.name_of_test())
+        self.assertEqual(tuple(self.to_strings()), result)
+
     def assert_changed(self, expected):
         changed = [i for i, c in enumerate(self.matrix._colors) if c[0]]
         if changed != expected:
             print(changed)
+        self.dump()
+        self.assert_in_results()
         self.assertEqual(changed, expected)
 
     def assert_unchanged(self, expected):
         unchanged = [i for i, c in enumerate(self.matrix._colors) if not c[0]]
+        self.dump()
+        self.assert_in_results()
         self.assertEqual(unchanged, expected)
 
     def test_horizontal_line(self):
@@ -94,14 +130,16 @@ class BaseMatrixTest(unittest.TestCase):
         expected = []
         self.assert_unchanged(expected)
 
-    def test_bresenham1(self):
+    def test_bresenham0(self):
         self.make_matrix(width=8, height=8)
         self.matrix.bresenham_line(0, 0, 8, 8, WHITE)
         expected = [0, 14, 18, 28, 36, 42, 54, 56]
         self.assert_changed(expected)
 
+    def test_bresenham1(self):
         self.make_matrix(width=8, height=8)
         self.matrix.bresenham_line(8, 8, 0, 0, WHITE)
+        expected = [0, 14, 18, 28, 36, 42, 54, 56]
         self.assert_changed(expected)
 
     def test_bresenham2(self):
@@ -110,18 +148,22 @@ class BaseMatrixTest(unittest.TestCase):
         expected = [92, 100, 122, 134, 152, 168, 182, 201, 213, 235, 243]
         self.assert_changed(expected)
 
+    def test_bresenham3(self):
         self.make_matrix(width=16, height=16)
         self.matrix.bresenham_line(15, 18, 3, 5, WHITE)
+        expected = [92, 100, 122, 134, 152, 168, 182, 201, 213, 235, 243]
         self.assert_changed(expected)
 
-    def test_wu1(self):
+    def test_wu0(self):
         self.make_matrix(width=8, height=8)
         self.matrix.wu_line(0, 0, 8, 8, WHITE)
         expected = [0, 14, 18, 28, 36, 42, 54, 56]
         self.assert_changed(expected)
 
+    def test_wu1(self):
         self.make_matrix(width=8, height=8)
         self.matrix.wu_line(8, 8, 0, 0, WHITE)
+        expected = [0, 14, 18, 28, 36, 42, 54, 56]
         self.assert_changed(expected)
 
     def test_wu2(self):
@@ -132,8 +174,12 @@ class BaseMatrixTest(unittest.TestCase):
                     242, 243]
         self.assert_changed(expected)
 
+    def test_wu3(self):
         self.make_matrix(width=16, height=16)
         self.matrix.wu_line(15, 18, 3, 5, WHITE)
+        expected = [92, 99, 100, 122, 123, 133, 134, 152, 153,
+                    167, 168, 182, 183, 201, 202, 212, 213, 235, 236,
+                    242, 243]
         self.assert_changed(expected)
 
     def test_draw_rect(self):
@@ -193,6 +239,26 @@ class BaseMatrixTest(unittest.TestCase):
 
 class MatrixTest(BaseMatrixTest):
     maker = data_maker.Maker()
+    indent = ''
+
+    def dump(self):
+        if not DUMP_FILENAME:
+            return
+
+        with open(DUMP_FILENAME, 'a') as fp:
+            def writeln(*parts):
+                if parts:
+                    fp.write(self.indent)
+                    fp.writelines(itertools.chain(*parts))
+                fp.write('\n')
+
+            writeln()
+            writeln(self.name_of_test(), ' = (')
+
+            for row in self.to_strings():
+                writeln("    '", row, "',")
+
+            writeln(')')
 
 
 class SharedMatrixTest(BaseMatrixTest):
