@@ -1,10 +1,13 @@
 import struct
 from . import websocket
 from .. driver_base import DriverBase
-from ... util import log
+from ... util import log, server_cache
 
 
 class SimPixel(DriverBase):
+    CACHE = server_cache.ServerCache(
+        constructor=websocket.Server,
+        selectInterval=0.001)
 
     def __init__(self, num=1024, port=1337, pixel_positions=None, **kwds):
         """
@@ -22,7 +25,7 @@ class SimPixel(DriverBase):
             self.set_pixel_positions(pixel_positions)
 
     def start(self):
-        self.server = websocket.make_server(self.port, selectInterval=0.001)
+        self.server = self.CACHE.get_server(self.port)
         if self.pixel_positions:
             self.server.update(positions=self.pixel_positions)
 
