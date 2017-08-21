@@ -46,16 +46,6 @@ class SimPixel(DriverBase):
         pl = [c for p in pixel_positions for c in p]
         self.pixel_positions = bytearray(struct.pack('<%sh' % len(pl), *pl))
 
-
-    def add_websock(self, oid, send_pixels):
-        self.websocks[oid] = send_pixels
-
-    def remove_websock(self, oid):
-        try:
-            del self.websocks[oid]
-        except KeyError:
-            pass
-
     def cleanup(self):
         self.server.close()
 
@@ -63,8 +53,7 @@ class SimPixel(DriverBase):
         self._render()
 
     def _send_packet(self):
-        for ws in self.websocks.values():
-            ws(self._buf)
+        self.server.send_pixels(self._buf)
 
 
 # This is DEPRECATED.
