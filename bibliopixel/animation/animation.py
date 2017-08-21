@@ -12,6 +12,7 @@ class STATE(IntEnum):
     complete = 2
     canceled = 3
     max_steps = 4
+    timeout = 5
 
 
 class BaseAnimation(object):
@@ -66,6 +67,8 @@ class BaseAnimation(object):
     def compute_state(self):
         if self.threading.stop_event.isSet():
             self.state = STATE.canceled
+        elif self.runner.seconds and (time.time() - self.runner.run_start_time) > self.runner.seconds:
+            self.state = STATE.timeout
         elif self.runner.max_steps and not (self.cur_step < self.runner.max_steps):
             self.state = STATE.max_steps
         elif (not self.runner.until_complete and self.state == STATE.complete):
@@ -117,6 +120,7 @@ class BaseAnimation(object):
     @contextlib.contextmanager
     def run_context(self):
         self.state = STATE.running
+        self.runner.run_start_time = time.time()
         self.threading.stop_event.clear()
         self._step = 0
         self.cur_step = 0
