@@ -4,6 +4,8 @@ from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
 
 
 class Client(WebSocket):
+    POSITION_START = bytearray([0x00, 0x00])
+    PIXEL_START = bytearray([0x00, 0x01])
 
     def __init__(self, *args, driver):
         super().__init__(*args)
@@ -17,7 +19,8 @@ class Client(WebSocket):
         self.connected = True
         self.oid = uuid.uuid1()
         self.driver.add_websock(self.oid, self.send_pixels)
-        self.sendMessage(bytearray([0x00, 0x00]) + self.driver.pixel_positions)
+        self.sendFragmentStart(self.POSITION_START)
+        self.sendFragmentEnd(self.driver.pixel_positions)
 
     def handleClose(self):
         self.driver.remove_websock(self.oid)
@@ -29,7 +32,8 @@ class Client(WebSocket):
 
     def send_pixels(self, pixels):
         if self.connected:
-            self.sendMessage(bytearray([0x00, 0x01]) + pixels)
+            self.sendFragmentStart(self.PIXEL_START)
+            self.sendFragmentEnd(pixels)
 
 
 class Server:
@@ -44,6 +48,9 @@ class Server:
 
     def close(self):
         self.ws_server.close()
+
+    def close(self):
+        self.server.close()
 
     def is_alive(self):
         return self.thread.is_alive()
