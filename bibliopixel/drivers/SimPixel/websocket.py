@@ -1,12 +1,6 @@
-import errno, threading, uuid
+import threading, uuid
 from ... util import log
 from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
-
-ADDRESS_IN_USE_ERROR = """
-
-Port {0} on your machine is already in use.
-Perhaps BiblioPixel is already running on your machine?
-"""
 
 
 class Client(WebSocket):
@@ -87,14 +81,3 @@ class Server:
             self.clients.remove(client)
         except:
             pass
-
-
-def make_server(port, *args, **kwds):
-    try:
-        return Server(port, *args, **kwds)
-
-    except OSError as e:
-        if e.errno == errno.EADDRINUSE:
-            e.strerror += ADDRESS_IN_USE_ERROR.format(port)
-            e.args = (e.errno, e.strerror)
-        raise
