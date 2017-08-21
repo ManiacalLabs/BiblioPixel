@@ -1,7 +1,7 @@
 import errno, struct, threading, uuid
 from ... util import log
 from .. driver_base import DriverBase
-from . import websocket
+from . websocket import Server
 
 ADDRESS_IN_USE_ERROR = """
 
@@ -29,34 +29,23 @@ class SimPixel(DriverBase):
             self.set_pixel_positions(pixel_positions)
 
     def start(self):
-        log.debug('Starting server...')
-        desc = dict(driver=self,
-                    pixel_positions=self.pixel_positions,
-                    selectInterval=0.001)
         try:
-            self.server = websocket.Server(
-                '', self.port, websocket.Client, **desc)
+            self.server = Server(self.port, driver=self, selectInterval=0.001)
+
         except OSError as e:
             if e.errno == errno.EADDRINUSE:
                 e.strerror += ADDRESS_IN_USE_ERROR.format(self.port)
                 e.args = (e.errno, e.strerror)
             raise
 
-        self.thread = threading.Thread(target=self._serve_forever, daemon=True)
-        self.thread.start()
-
-    def _serve_forever(self):
-        try:
-            self.server.serveforever()
-        except:
-            pass
-        log.debug('WebSocket Server closed')
-
     def set_pixel_positions(self, pixel_positions):
-        if not (self.thread and self.thread.is_alive()):
-            # Flatten list of led positions.
-            pl = [c for p in pixel_positions for c in p]
-            self.pixel_positions = bytearray(struct.pack('<%sh' % len(pl), *pl))
+        if self.server:
+            log.warning('set_pixel_positions after server has started')
+
+        # Flatten list of led positions.
+        pl = [c for p in pixel_positions for c in p]
+        self.pixel_positions = bytearray(struct.pack('<%sh' % len(pl), *pl))
+
 
     def add_websock(self, oid, send_pixels):
         self.websocks[oid] = send_pixels
