@@ -7,9 +7,10 @@ class Client(WebSocket):
     POSITION_START = bytearray([0x00, 0x00])
     PIXEL_START = bytearray([0x00, 0x01])
 
-    def __init__(self, *args, driver):
+    def __init__(self, *args, driver, server):
         super().__init__(*args)
         self.driver = driver
+        self.server = server
         self.connected = False
         self.oid = None
         log.debug('Server started...')
@@ -17,13 +18,12 @@ class Client(WebSocket):
     def handleConnected(self):
         log.debug('Connected:{}'.format(self.address))
         self.connected = True
-        self.oid = uuid.uuid1()
-        self.driver.add_websock(self.oid, self.send_pixels)
+        self.server.clients.add(self)
         self.sendFragmentStart(self.POSITION_START)
         self.sendFragmentEnd(self.driver.pixel_positions)
 
     def handleClose(self):
-        self.driver.remove_websock(self.oid)
+        self.server.clients.remove(self)
         self.connected = False
         log.debug('Closed:{}'.format(self.address))
 
@@ -39,9 +39,11 @@ class Client(WebSocket):
 class Server:
 
     def __init__(self, port, **kwds):
-        self.ws_server = SimpleWebSocketServer('', port, Client, **kwds)
+        self.ws_server = SimpleWebSocketServer(
+            '', port, Client, server=self, **kwds)
         self.thread = threading.Thread(target=self.target, daemon=True)
         self.thread.start()
+        self.clients = set()
 
     def stop(self):
         self.ws_server.stop()
@@ -62,3 +64,7 @@ class Server:
         except:
             pass
         log.info('WebSocket server closed')
+
+    def send_pixels(self, pixels):
+        for client in self.clients:
+            client.send_pixels(pixels)
