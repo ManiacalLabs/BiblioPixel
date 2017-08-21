@@ -34,9 +34,19 @@ class RemoteControl(collection.Collection):
                  external_access=False, port=5000,
                  title='BiblioPixel Remote', bgcolor='black',
                  font_color='white', default=None,
-                 triggers=[]):
+                 triggers=[], auto_demo=None):
 
         self.internal_delay = 0  # never wait
+
+        if auto_demo:
+            auto_demo_run = auto_demo.pop('run', 10)  # default to 10 seconds per
+            auto_demo['typename'] = 'sequence'
+            auto_demo['data'] = dict(DEFAULT_ANIM_CONFIG, **auto_demo.get('data', {}))
+            if 'name' not in auto_demo:
+                auto_demo['name'] = 'DEMO_ANIM'
+            auto_demo['data']['display'] = auto_demo['data'].get('display', auto_demo['name'])
+            auto_demo['name'] = normalize_name(auto_demo['name'])
+            auto_demo['animations'] = []
 
         # normalize name and display first
         for i, anim in enumerate(animations):
@@ -48,7 +58,17 @@ class RemoteControl(collection.Collection):
             adesc['data']['display'] = adesc['data'].get('display', adesc['name'])
             adesc['name'] = normalize_name(adesc['name'])
             anim['run'] = anim.get('run', {})
+            if auto_demo:
+                demo_sub = copy.deepcopy(anim)
+                demo_sub['run'].update(auto_demo_run)
+                demo_sub['animation'].pop('name')
+                demo_sub['animation'].pop('data')
+                demo_sub['run']['threaded'] = False  # no threading allowed for internal sequences
+                auto_demo['animations'].append(demo_sub)
             anim['run']['threaded'] = True  # threaded required
+
+        if auto_demo:
+            animations.insert(0, {'animation': auto_demo, 'run': {'threaded': True}})
 
         super().__init__(layout, copy.deepcopy(animations), True)
 

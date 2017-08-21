@@ -33,10 +33,9 @@ class Runner(object):
         self.fps = fps
         self.sleep_time = 1 / fps if fps else sleep_time
         self.until_complete = until_complete
-        if seconds is None:
-            self.max_steps = max_steps
-        else:
-            self.max_steps = int(seconds / self.sleep_time)
+        self.seconds = seconds
+        self.run_start_time = 0
+        self.max_steps = max_steps
         self.max_cycles = max_cycles
         self.seconds = seconds
         self.threaded = threaded
