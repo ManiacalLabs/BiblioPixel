@@ -1,3 +1,7 @@
+## v3.3.1 - 2017-08-23
+- Added auto_demo for remote UI
+- Bug fixes
+
 ## v3.3.0 - 2017-09-19
 - Overhauled multi-driver coord_map system
 
