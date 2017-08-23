@@ -1,49 +1,57 @@
-import threading, uuid
+import errno, threading, uuid
 from ... util import log
 from . SimpleWebSocketServer import WebSocket, SimpleWebSocketServer
+
+ADDRESS_IN_USE_ERROR = """
+
+Port {0} on your machine is already in use.
+Perhaps BiblioPixel is already running on your machine?
+"""
 
 
 class Client(WebSocket):
     POSITION_START = bytearray([0x00, 0x00])
     PIXEL_START = bytearray([0x00, 0x01])
 
-    def __init__(self, *args, driver, server):
+    def __init__(self, *args, server):
         super().__init__(*args)
-        self.driver = driver
         self.server = server
         self.connected = False
-        self.oid = None
         log.debug('Server started...')
 
     def handleConnected(self):
         log.debug('Connected:{}'.format(self.address))
         self.connected = True
-        self.server.clients.add(self)
-        self.sendFragmentStart(self.POSITION_START)
-        self.sendFragmentEnd(self.driver.pixel_positions)
+        self.server.add_client(self)
 
     def handleClose(self):
-        self.server.clients.remove(self)
+        self.server.remove_client(self)
         self.connected = False
         log.debug('Closed:{}'.format(self.address))
 
     def handleMessage(self):
         pass
 
-    def send_pixels(self, pixels):
+    def update(self, pixels=None, positions=None):
         if self.connected:
-            self.sendFragmentStart(self.PIXEL_START)
-            self.sendFragmentEnd(pixels)
+            if pixels:
+                self.sendFragmentStart(self.PIXEL_START)
+                self.sendFragmentEnd(pixels)
+            if positions:
+                self.sendFragmentStart(self.POSITION_START)
+                self.sendFragmentEnd(positions)
 
 
 class Server:
 
-    def __init__(self, port, **kwds):
+    def __init__(self, port, selectInterval):
+        self.clients = set()
+        self.state = {}
+
         self.ws_server = SimpleWebSocketServer(
-            '', port, Client, server=self, **kwds)
+            '', port, Client, server=self, selectInterval=selectInterval)
         self.thread = threading.Thread(target=self.target, daemon=True)
         self.thread.start()
-        self.clients = set()
 
     def stop(self):
         self.ws_server.stop()
@@ -65,6 +73,28 @@ class Server:
             pass
         log.info('WebSocket server closed')
 
-    def send_pixels(self, pixels):
+    def update(self, **state):
+        self.state.update(state)
         for client in self.clients:
-            client.send_pixels(pixels)
+            client.update(**state)
+
+    def add_client(self, client):
+        self.clients.add(client)
+        client.update(**self.state)
+
+    def remove_client(self, client):
+        try:
+            self.clients.remove(client)
+        except:
+            pass
+
+
+def make_server(port, *args, **kwds):
+    try:
+        return Server(port, *args, **kwds)
+
+    except OSError as e:
+        if e.errno == errno.EADDRINUSE:
+            e.strerror += ADDRESS_IN_USE_ERROR.format(port)
+            e.args = (e.errno, e.strerror)
+        raise
