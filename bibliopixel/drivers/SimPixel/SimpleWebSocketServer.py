@@ -596,6 +596,16 @@ class SimpleWebSocketServer(object):
             conn.close()
             conn.handleClose()
 
+    def _kill_client(self, client, client_id, exception=True):
+        del self.connections[id]
+        self.listeners.remove(id)
+        client.client.close()
+        client.handleClose()
+
+        if exception:
+            import traceback
+            traceback.print_exc()
+
     def serveforever(self):
         while True:
             writers = []
@@ -627,10 +637,7 @@ class SimpleWebSocketServer(object):
                                 raise Exception('received client close')
 
                 except Exception:
-                    client.client.close()
-                    client.handleClose()
-                    del self.connections[ready]
-                    self.listeners.remove(ready)
+                    self._kill_client(client, ready)
 
             for ready in rList:
                 if ready == self.serversocket:
@@ -652,20 +659,11 @@ class SimpleWebSocketServer(object):
                     try:
                         client._handleData()
                     except Exception:
-                        client.client.close()
-                        client.handleClose()
-                        del self.connections[ready]
-                        self.listeners.remove(ready)
+                        self._kill_client(client, ready)
 
             for failed in xList:
                 if failed == self.serversocket:
                     self.close()
                     raise Exception('server socket failed')
-                else:
-                    if failed not in self.connections:
-                        continue
-                    client = self.connections[failed]
-                    client.client.close()
-                    client.handleClose()
-                    del self.connections[failed]
-                    self.listeners.remove(failed)
+                if failed in self.connections:
+                    self._kill_client(self.connections[failed], failed, False)
