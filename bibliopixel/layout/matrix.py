@@ -51,10 +51,11 @@ class Matrix(Layout):
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use make_matrix_coord_map directly if more control needed.')
                 y_flip = y_flip or vert_flip  # was switched to y_flip, but need to keep vert_flip available
-                self.coord_map = make_matrix_coord_map(self.width, self.height,
-                                            serpentine=serpentine,
-                                            rotation=rotation,
-                                            y_flip=vert_flip)
+                self.coord_map = make_matrix_coord_map(
+                    self.width, self.height,
+                    serpentine=serpentine,
+                    rotation=rotation,
+                    y_flip=vert_flip)
             else:
                 raise TypeError(
                     "Must provide coord_map if using multiple drivers!")
