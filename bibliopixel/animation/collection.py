@@ -13,6 +13,7 @@ class Collection(animation.BaseAnimation):
 
     # Override to handle all the animations
     def cleanup(self, clean_layout=True):
+        self.state = animation.STATE.canceled
         for a in self.animations:
             if a:
                 a.cleanup()
