@@ -9,6 +9,7 @@ install:
 - pip install -r test_requirements.txt
 
 script:
+- flake8
 - python setup.py coverage
 
 deploy:
