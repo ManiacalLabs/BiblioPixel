@@ -27,7 +27,7 @@ def run(args):
             desc = name and loady.data.load(name, True)
 
         try:
-           animations.append(common_flags.make_animation(args, desc or {}))
+            animations.append(common_flags.make_animation(args, desc or {}))
         except Exception as exception:
             failed.append(RUN_ERROR.format(**locals()))
 
@@ -43,12 +43,19 @@ def run(args):
     elif args.s:
         simpixel.open_simpixel()
 
+    needs_pause = False
     for animation in animations:
+        if needs_pause:
+            args.pause and time.sleep(float(args.pause))
+        else:
+            needs_pause = True
+
         try:
             animation.layout.start()
             animation.start()
         except KeyboardInterrupt:
             log.warning('\nTermination requested by user.')
+            needs_pause = False
 
         animation.cleanup()
         animation.layout.cleanup_drivers()
