@@ -96,6 +96,9 @@ def add_project_flags(parser):
         '-p', '--path', default=None, help=PATH_HELP)
 
     parser.add_argument(
+        '--pause', default=0, help='Time to pause between running animations')
+
+    parser.add_argument(
         '-r', '--run_for', default=None, help=RUN_FOR_HELP)
 
     parser.add_argument(
