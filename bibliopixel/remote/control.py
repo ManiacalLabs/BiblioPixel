@@ -70,7 +70,7 @@ class RemoteControl(collection.Collection):
         if auto_demo:
             animations.insert(0, {'animation': auto_demo, 'run': {'threaded': True}})
 
-        super().__init__(layout, copy.deepcopy(animations), True)
+        super().__init__(layout, copy.deepcopy(animations))
 
         self.name_map = {}
         self.anim_cfgs = []

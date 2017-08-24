@@ -5,9 +5,11 @@ from .. util import log
 
 
 class Collection(animation.BaseAnimation):
-    def __init__(self, layout, animations=None, no_fail=False, **kwds):
+    FAIL_ON_EXCEPTION = False
+
+    def __init__(self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)
-        self.animations = [self._make_animation(i, no_fail) for i in animations or []]
+        self.animations = [self._make_animation(i) for i in (animations or [])]
         self.index = 0
         self.internal_delay = 0  # never wait
 
@@ -34,7 +36,7 @@ class Collection(animation.BaseAnimation):
         else:
             return None
 
-    def _make_animation(self, a, no_fail=False):
+    def _make_animation(self, a):
         if isinstance(a, str):
             animation = a
             run = None
@@ -55,5 +57,7 @@ class Collection(animation.BaseAnimation):
         try:
             return project.make_animation(self.layout, animation, run)
         except:
+            if self.FAIL_ON_EXCEPTION:
+                raise
+
             log.error(traceback.format_exc())
-            return None

@@ -5,6 +5,7 @@ Run a project description file.
 import loady, json, os, time
 from . import common_flags, simpixel
 from .. util import log
+from .. animation.collection import Collection
 
 RUN_ERROR = """When reading description:
 {desc}
@@ -17,6 +18,8 @@ FAILURE_ERROR = '{count} project{s} failed'
 
 def run(args):
     common_flags.extend_path(args)
+    if args.fail_on_exception:
+        Collection.FAIL_ON_EXCEPTION = True
 
     animations, failed = [], []
 
