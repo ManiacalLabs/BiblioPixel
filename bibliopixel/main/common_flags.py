@@ -86,6 +86,10 @@ def add_project_flags(parser):
         help='Default driver type if no driver is specified')
 
     parser.add_argument(
+        '-f', '--fail_on_exception', action='store_true',
+        help='If true, bp fail if any subanimation fails to construct')
+
+    parser.add_argument(
         '-l', '--layout', default='matrix',
         help='Default layout class if no layout is specified')
 
