@@ -54,6 +54,10 @@ class BaseMatrixTest(unittest.TestCase):
             print('Actual:', *(repr(s) for s in actual), sep='\n')
             self.assertTrue(False)
 
+    def test_empty(self):
+        with self.matrix_test(4, 4):
+            pass
+
     def test_horizontal_line(self):
         with self.matrix_test():
             self.matrix.drawLine(0, 0, 15, 0, WHITE)
@@ -165,6 +169,18 @@ class SharedMatrixTest(BaseMatrixTest):
 
 class SharedMatrixIntegerTest(BaseMatrixTest):
     maker = data_maker.Maker(shared_memory=True, floating=False)
+
+
+class FloatNumpyMatrixTest(BaseMatrixTest):
+    maker = data_maker.Maker(numpy_dtype='float')
+
+
+class Uint8NumpyMatrixTest(BaseMatrixTest):
+    maker = data_maker.Maker(numpy_dtype='uint8')
+
+
+class Int8NumpyMatrixTest(BaseMatrixTest):
+    maker = data_maker.Maker(numpy_dtype='int8')
 
 
 class DumpTest(BaseMatrixTest):
