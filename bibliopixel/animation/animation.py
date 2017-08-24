@@ -67,13 +67,20 @@ class BaseAnimation(object):
     def compute_state(self):
         if self.threading.stop_event.isSet():
             self.state = STATE.canceled
-        elif self.runner.seconds and (time.time() - self.runner.run_start_time) > self.runner.seconds:
-            self.state = STATE.timeout
-        elif self.runner.max_steps and not (self.cur_step < self.runner.max_steps):
-            self.state = STATE.max_steps
-        elif (not self.runner.until_complete and self.state == STATE.complete):
-            # Ignore STATE.complete if until_complete is False
-            self.state = STATE.running
+
+        elif self.runner.seconds:
+            elapsed = time.time() - self.runner.run_start_time
+            if elapsed >= self.runner.seconds:
+                self.state = STATE.timeout
+
+        elif self.runner.max_steps:
+            if self.cur_step >= self.runner.max_steps:
+                self.state = STATE.max_steps
+
+        elif not self.runner.until_complete:
+            if self.state == STATE.complete:
+                # Ignore STATE.complete if until_complete is False
+                self.state = STATE.running
 
     def check_delay(self):
         if self.free_run:
