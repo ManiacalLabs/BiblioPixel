@@ -36,7 +36,7 @@ def Maker(floating=None, shared_memory=False, numpy_dtype=NUMPY_DTYPE):
         return shared_list_maker(byte_type), shared_list_maker(3 * number_type)
 
     def numpy_list_maker(size):
-        return numpy.empty((size, 3), dtype=numpy_dtype)
+        return numpy.array(list_maker(size), dtype=numpy_dtype)
 
     return bytearray, numpy_list_maker
 

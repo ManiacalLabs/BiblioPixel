@@ -1,4 +1,4 @@
-# This was file was automatically generated on 15:53:46 08/20/17 CEST
+# This was file was automatically generated on 16:31:40 08/24/17 CEST
 
 BRESENHAM0 = (
     '*       ',
@@ -154,6 +154,13 @@ DRAW_TRIANGLE = (
     '                ',
     '                ',
     '                ',
+)
+
+EMPTY = (
+    '    ',
+    '    ',
+    '    ',
+    '    ',
 )
 
 FILL_CIRCLE1 = (
