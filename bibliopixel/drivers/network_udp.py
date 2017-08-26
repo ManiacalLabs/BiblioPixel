@@ -46,10 +46,10 @@ class NetworkUDP(DriverBase):
             raise IOError(error)
 
     def _compute_packet(self):
+        self._render()
         count = self.bufByteCount()
         self._packet = util.generate_header(CMDTYPE.PIXEL_DATA, count)
-        indexes = range(self._pos, self._pos + self.numLEDs)
-        self._packet.extend(int(c) for i in indexes for c in self._colors[i])
+        self._packet.extend(self._buf)
 
     # Push new data to strand
     def _send_packet(self):

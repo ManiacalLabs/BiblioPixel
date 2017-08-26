@@ -14,7 +14,7 @@ BUILTIN_ALIASES = {
     'image': 'bibliopixel.drivers.image_sequence.ImageSequence',
     'lpd8806': 'bibliopixel.drivers.API.LPD8806.LPD8806',
     'network': 'bibliopixel.drivers.network.Network',
-    'network_udp': 'bibliopixel.drivers.network.NetworkUDP',
+    'network_udp': 'bibliopixel.drivers.network_udp.NetworkUDP',
     'serial': 'bibliopixel.drivers.serial.Serial',
     'simpixel': 'bibliopixel.drivers.SimPixel.SimPixel',
     'ws281x': 'bibliopixel.drivers.API.WS281X.WS281X',
