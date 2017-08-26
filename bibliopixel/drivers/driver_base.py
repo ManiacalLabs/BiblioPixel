@@ -23,7 +23,6 @@ class DriverBase(object):
             if num == 0:
                 raise ValueError("Either num, or width and height are needed!")
 
-        self.make_packet, self.color_list = maker
         self.numLEDs = num
         gamma = gamma or _gamma.DEFAULT
         self.gamma = gamma
@@ -38,7 +37,8 @@ class DriverBase(object):
 
         self.width = width
         self.height = height
-        self._buf = self.make_packet(self.bufByteCount())
+        self.maker = maker
+        self._buf = maker.bytes(self.bufByteCount())
 
         self.lastUpdate = 0
         self.brightness_lock = threading.Lock()
