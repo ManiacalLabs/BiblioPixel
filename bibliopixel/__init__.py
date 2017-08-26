@@ -1,5 +1,4 @@
 from . layout import Circle, Matrix, POV, Strip, Cube, font
-from . layout.geometry import Rotation
 from . layout.geometry.matrix import make_matrix_coord_map
 from . layout.geometry.circle import make_circle_coord_map
 from . layout.geometry.cube import make_cube_coord_map
@@ -15,6 +14,7 @@ from . project.project import read_project
 # These are DEPRECATED
 from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
 from . layout import matrix_drawing as matrix
+from . layout.geometry.rotation import Rotation
 
 
 def _get_version():

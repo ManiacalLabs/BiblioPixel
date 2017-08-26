@@ -1,12 +1,11 @@
 import math, threading, time
 from . matrix import Matrix
-from . geometry.rotation import Rotation
 
 
 # Takes a matrix and displays it as individual columns over time
 class POV(Matrix):
 
-    def __init__(self, drivers, povHeight, width, rotation=Rotation.ROTATE_0,
+    def __init__(self, drivers, povHeight, width, rotation=0,
                  vert_flip=False, threadedUpdate=False,
                  brightness=255, **kwargs):
         self.numLEDs = povHeight * width

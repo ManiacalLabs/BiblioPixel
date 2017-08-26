@@ -6,13 +6,17 @@ from . import matrix_drawing as matrix
 from . import font
 from . layout import Layout
 from . geometry.matrix import make_matrix_coord_map, make_matrix_coord_map_positions
-from . geometry.rotation import Rotation
+
+
+ROTATION_WARNING = """
+Matrix.rotation must be a multiple of 90 degrees but was in fact %s degress.
+It was rounded to %s degrees."""
 
 
 class Matrix(Layout):
 
     def __init__(self, drivers, width=0, height=0, coord_map=None,
-                 rotation=Rotation.ROTATE_0, vert_flip=False, y_flip=False,
+                 rotation=0, vert_flip=False, y_flip=False,
                  serpentine=True,
                  threadedUpdate=False, brightness=255,
                  pixelSize=(1, 1), **kwargs):
@@ -25,6 +29,11 @@ class Matrix(Layout):
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
+
+        rot_mod = rotation % 360
+        self.rotation = 90 * round(rot_mod / 90)
+        if self.rotation != rot_mod:
+            log.warning(ROTATION_WARNING, rotation, self.rotation)
 
         self.width = width or getattr(self.drivers[0], 'width') or 32
         self.height = height or getattr(self.drivers[0], 'height') or 32
@@ -64,7 +73,7 @@ class Matrix(Layout):
 
         # if 90 or 270 rotation dimensions need to be swapped so they match the
         # matrix rotation
-        if rotation % 2 != 0:
+        if rotation in (90, 270):
             w = self.width
             h = self.height
             self.width = h

@@ -1,5 +1,5 @@
 from . import index_ops
-from . rotation import Rotation, rotate_and_flip
+from . rotation import rotate_and_flip
 import copy
 
 
@@ -46,8 +46,8 @@ class Matrix(object):
         self.strip[self._index(x, y)] = value
 
 
-def make_matrix_coord_map(dx, dy, serpentine=True, offset=0,
-                          rotation=Rotation.ROTATE_0, y_flip=False):
+def make_matrix_coord_map(
+        dx, dy, serpentine=True, offset=0, rotation=0, y_flip=False):
     """Helper method to generate X,Y coordinate maps for strips"""
     result = []
     for y in range(dy):
@@ -63,12 +63,12 @@ def make_matrix_coord_map(dx, dy, serpentine=True, offset=0,
 
 DEFAULT_CONFIG = {
     "serpentine": True,
-    "rotation": Rotation.ROTATE_0,
+    "rotation": 0,
     "y_flip": False
 }
 
 
-def make_matrix_coord_map_multi(config, rotation=Rotation.ROTATE_0, y_flip=False):
+def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
     matrix_offset = 0
     matrix_result = []
 
