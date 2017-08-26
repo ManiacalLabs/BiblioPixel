@@ -1,45 +1,44 @@
-import ctypes, os
+import os
+from ctypes import c_float, c_uint8
 from multiprocessing.sharedctypes import RawArray
 from .. util import log
-
-try:
-    import numpy
-except:
-    numpy = None
+from .. util.color_list import numpy, numpy_array
 
 NUMPY_DTYPE = os.environ.get('BP_NUMPY_DTYPE')
 
 
-def Maker(floating=None, shared_memory=False, numpy_dtype=NUMPY_DTYPE):
-    def list_maker(size):
-        return [(0, 0, 0)] * size
+class Maker:
+    def __init__(
+            self, floating=None, shared_memory=False, numpy_dtype=NUMPY_DTYPE):
+        if numpy_dtype:
+            if numpy_array:
+                log.info('Using numpy')
+            else:
+                log.error('numpy module is not available.')
+                numpy_dtype = None
 
-    if numpy_dtype:
-        if numpy:
-            log.info('Using numpy')
-        else:
-            log.error('numpy module is not available.')
+        if shared_memory and numpy_dtype:
+            log.error('Shared memory for numpy arrays is not yet supported.')
             numpy_dtype = None
 
-    if not (shared_memory or numpy_dtype):
-        return bytearray, list_maker
+        if floating is None:
+            floating = not shared_memory
 
-    byte_type, float_type = ctypes.c_uint8, ctypes.c_float
-    floating = (not shared_memory) if (floating is None) else floating
-    number_type = float_type if floating else byte_type
+        c_type = c_float if floating else c_uint8
 
-    if shared_memory:
-        def shared_list_maker(type):
+        if shared_memory:
+            self.bytes = lambda size: RawArray(c_uint8, size)
+            self.color_list = lambda size: RawArray(3 * c_type, size)
             # Note https://stackoverflow.com/questions/37705974/
-            return lambda size: RawArray(type, size)
 
-        return shared_list_maker(byte_type), shared_list_maker(3 * number_type)
+        elif numpy_dtype:
+            self.bytes = bytearray
+            self.color_list = lambda size: numpy.zeros((size, 3), numpy_dtype)
 
-    def numpy_list_maker(size):
-        return numpy.array(list_maker(size), dtype=numpy_dtype)
-
-    return bytearray, numpy_list_maker
+        else:
+            self.bytes = bytearray
+            self.color_list = lambda size: [(0, 0, 0)] * size
 
 
 MAKER = Maker()
-ColorList = MAKER[1]
+ColorList = MAKER.color_list
