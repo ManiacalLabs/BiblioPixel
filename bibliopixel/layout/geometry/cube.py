@@ -1,9 +1,9 @@
-from . rotation import Rotation, rotate_and_flip
+from . rotation import rotate_and_flip
 from . matrix import make_matrix_coord_map
 
 
 def make_cube_coord_map(dx, dy, dz, xy_serpentine=True, offset=0,
-                        xy_rotation=Rotation.ROTATE_0, z_rotation=Rotation.ROTATE_0,
+                        xy_rotation=0, z_rotation=0,
                         y_flip=False, z_flip=False):
     result = []
     plane_offset = offset
