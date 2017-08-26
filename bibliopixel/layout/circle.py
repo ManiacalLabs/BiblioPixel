@@ -7,7 +7,7 @@ from . geometry.circle import (
 class Circle(Layout):
 
     def __init__(self, drivers, rings=[], pixels_per=None,
-                 maxAngleDiff=0, rotation=0, reverse_angle=False,
+                 maxAngleDiff=0, ring_rotation=0, reverse_angle=False,
                  threadedUpdate=False, brightness=255, **kwargs):
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
         self.rings = rings
@@ -29,7 +29,7 @@ class Circle(Layout):
 
         num = calc_ring_pixel_count(self.rings)
 
-        self.rotation = rotation
+        self.ring_rotation = ring_rotation
         self.reverse_angle = reverse_angle
 
         if self.numLEDs != num:
@@ -40,7 +40,7 @@ class Circle(Layout):
         if ring >= self.ringCount:
             return -1
 
-        angle = (angle + self.rotation) % 360
+        angle = (angle + self.ring_rotation) % 360
 
         if self.reverse_angle:
             angle = 360 - angle
