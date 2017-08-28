@@ -9,7 +9,7 @@ from .. animation.collection import Collection
 
 RUN_ERROR = """When reading description:
 {desc}
-encounted exception
+encountered exception
 {exception}
 """
 
