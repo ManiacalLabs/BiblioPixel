@@ -5,23 +5,28 @@ from . driver_base import DriverBase
 from .. util import log
 from .. colors import gamma
 
+WS_ERROR = """
+PiWS281X Requires the rpi_ws281x C extension.
+
+Install rpi_ws281x with the following shell commands:
+
+    git clone https://github.com/jgarff/rpi_ws281x.git
+    cd rpi_ws281x
+
+    sudo apt-get install python-dev swig scons
+    sudo scons
+
+    cd python
+    # If using default system python3
+    sudo python3 setup.py build install
+    # If using virtualenv, enter env then run
+    python setup.py build install
+"""
+
 try:
     from neopixel import Adafruit_NeoPixel, Color as NeoColor
 except:
-    WS_ERROR = """PiWS281X Requires the rpi_ws281x C extension.
-Install rpi_ws281x with below commands:
-git clone https://github.com/jgarff/rpi_ws281x.git
-cd rpi_ws281x
-sudo apt-get install python-dev swig scons
-sudo scons
-cd python
-# If using default system python3
-sudo python3 setup.py build install
-# If using virtualenv, enter env then run
-python setup.py build install
-    """
-    log.error(WS_ERROR)
-    raise
+    Color = None
 
 
 PIN_CHANNEL = {
@@ -52,6 +57,8 @@ class PiWS281X(DriverBase):
         ledDma - DMA channel to use for generating signal (Between 1 and 14)
         ledInvert - True to invert the signal (when using NPN transistor level shift)
         """
+        if not Color:
+            raise ValueError(WS_ERROR)
         super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.gamma = gamma
         if gpio not in PIN_CHANNEL.keys():

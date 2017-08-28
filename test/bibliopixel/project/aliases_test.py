@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.project import aliases
+from bibliopixel.project import aliases, alias_lists, importer
 
 
 class AliasTest(unittest.TestCase):
@@ -18,3 +18,15 @@ class AliasTest(unittest.TestCase):
         d['foo'] = 'bar'
         self.assertEqual(
             aliases.resolve({'typename': 'circle', 'foo': 'bar'}), d)
+
+    def test_existence(self):
+        failed = []
+        for cl in alias_lists.BUILTIN_ALIASES.values():
+            try:
+                importer.import_symbol(cl)
+            except:
+                failed.append(cl)
+
+        if failed:
+            print('Failed', *failed, sep='\n')
+        self.assertFalse(failed)
