@@ -7,18 +7,17 @@ USER_ALIASES = datafile.DataFile(USER_ALIAS_FILE)
 
 BUILTIN_ALIASES = {
     # drivers
-    'apa102': 'bibliopixel.drivers.API.APA102.APA102',
-    'sk9822': 'bibliopixel.drivers.API.APA102.APA102',
+    'apa102': 'bibliopixel.drivers.SPI.APA102.APA102',
+    'sk9822': 'bibliopixel.drivers.SPI.APA102.APA102',
     'dummy': 'bibliopixel.drivers.dummy_driver.Dummy',
     'hue': 'bibliopixel.drivers.hue.Hue',
-    'image': 'bibliopixel.drivers.image_sequence.ImageSequence',
-    'lpd8806': 'bibliopixel.drivers.API.LPD8806.LPD8806',
+    'lpd8806': 'bibliopixel.drivers.SPI.LPD8806.LPD8806',
     'network': 'bibliopixel.drivers.network.Network',
     'network_udp': 'bibliopixel.drivers.network_udp.NetworkUDP',
     'serial': 'bibliopixel.drivers.serial.Serial',
     'simpixel': 'bibliopixel.drivers.SimPixel.SimPixel',
-    'ws281x': 'bibliopixel.drivers.API.WS281X.WS281X',
-    'ws2801': 'bibliopixel.drivers.API.WS2801.WS2801',
+    'ws281x': 'bibliopixel.drivers.SPI.WS281X.WS281X',
+    'ws2801': 'bibliopixel.drivers.SPI.WS2801.WS2801',
     'spi': 'bibliopixel.drivers.SPI.SPI',
     'pi_ws281x': 'bibliopixel.drivers.PiWS281X.PiWS281X',
 
