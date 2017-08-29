@@ -1,6 +1,6 @@
 import loady
 from .. util import log
-from .. project import project
+from .. project import check
 
 
 class Runner(object):
@@ -8,7 +8,7 @@ class Runner(object):
     def __init__(self, amt=1, fps=None, sleep_time=0, max_steps=0,
                  until_complete=False, max_cycles=0, seconds=None,
                  threaded=False, main=None, **kwds):
-        project.raise_if_unknown(kwds, 'attribute', 'run')
+        check.unknown(kwds, 'attribute', 'run')
 
         if max_steps < 0:
             log.error('max_steps %s < 0', max_steps)
