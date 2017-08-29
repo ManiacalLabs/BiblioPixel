@@ -5,7 +5,6 @@ from . devices import Devices
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... util import log, util
-from ... util.enum import resolve_enum
 from ... drivers.return_codes import (
     RETURN_CODES, print_error, raise_error, BiblioSerialError)
 
@@ -34,7 +33,7 @@ class Serial(DriverBase):
 
         self._spi_speed = spi_speed
         self._com = None
-        self._ledtype = resolve_enum(LEDTYPE, ledtype)
+        self._ledtype = ledtype
         self._bufPad = 0
         self.dev = dev
         self.device_version = 0

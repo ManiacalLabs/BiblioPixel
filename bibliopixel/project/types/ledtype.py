@@ -11,6 +11,11 @@ def make(c):
     raise ValueError("Don't understand type %s" % type(c), USAGE)
 
 
+@make.register(LEDTYPE)
+def _(c):
+    return c
+
+
 @make.register(str)
 def _(c):
     return LEDTYPE[c]

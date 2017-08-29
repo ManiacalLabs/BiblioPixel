@@ -1,6 +1,5 @@
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
-from ... util.enum import resolve_enum
 from . import interfaces
 from enum import IntEnum
 from .. ledtype import LEDTYPE
@@ -22,14 +21,16 @@ SPI_DRIVERS = {
 
 
 def SPI(ledtype=None, num=0, **kwargs):
-    """Wrapper function for using SPI device drivers on systems like the Raspberry Pi and BeagleBone"""
+    """Wrapper function for using SPI device drivers on systems like the
+    Raspberry Pi and BeagleBone"""
+
+    from ...project.types.ledtype import make
     if ledtype is None:
         raise ValueError('Must provide ledtype value!')
 
     if num == 0:
         raise ValueError('Must provide num value >0!')
-    ledtype = resolve_enum(LEDTYPE, ledtype)
     if ledtype not in SPI_DRIVERS.keys():
-        raise ValueError('{} is not a valid LED type.'.format(type))
+        raise ValueError('{} is not a valid LED type.'.format(ledtype))
 
     return SPI_DRIVERS[ledtype](num, **kwargs)
