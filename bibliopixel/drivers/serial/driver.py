@@ -6,7 +6,8 @@ from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... util import log, util
 from ... util.enum import resolve_enum
-from ... drivers.return_codes import RETURN_CODES, print_error, BiblioSerialError
+from ... drivers.return_codes import (
+    RETURN_CODES, print_error, raise_error, BiblioSerialError)
 
 
 class Serial(DriverBase):
@@ -51,11 +52,11 @@ class Serial(DriverBase):
             time.sleep(restart_timeout)
             resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
-                print_error(resp)
+                raise_error(resp)
             else:
                 log.info("Reconfigure success!")
         elif resp != RETURN_CODES.SUCCESS:
-            print_error(resp)
+            raise_error(resp)
 
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._spi_speed)
@@ -128,11 +129,12 @@ class Serial(DriverBase):
 
         resp = self._com.read(1)
         if len(resp) == 0:
-            self.devices.error()
-        if ord(resp) != RETURN_CODES.SUCCESS:
+            self.devices.error(fail=False)
+        elif ord(resp) != RETURN_CODES.SUCCESS:
             print_error(ord(resp))
-
-        self._com.flushInput()
+        else:
+            self._com.flushInput()
+            return True
 
     def _compute_packet(self):
         count = self.bufByteCount() + self._bufPad

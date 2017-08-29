@@ -1,6 +1,6 @@
 from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
-from ... drivers.return_codes import RETURN_CODES, print_error
+from ... drivers.return_codes import RETURN_CODES, raise_error
 from ... util import log, util
 from ... project.importer import import_symbol
 
@@ -70,7 +70,7 @@ class Devices(object):
         if len(resp) == 0:
             self.error()
         elif ord(resp) != RETURN_CODES.SUCCESS:
-            print_error(ord(resp))
+            raise_error(ord(resp))
 
     def get_device_id(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETID, 0)

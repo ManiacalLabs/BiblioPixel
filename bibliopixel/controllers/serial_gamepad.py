@@ -41,7 +41,7 @@ class SerialGamePad(BaseGamePad):
 
         resp = self._connect()
         if resp != RETURN_CODES.SUCCESS:
-            print_error(resp, SerialPadError)
+            raise SerialPadError(print_error(resp))
 
     def cleanup(self):
         if self._com is not None:
@@ -76,10 +76,11 @@ class SerialGamePad(BaseGamePad):
         raise SerialPadError(msg)
 
     @staticmethod
-    def _comError():
+    def _comError(fail=False):
         error = "There was an unknown error communicating with the device."
         log.error(error)
-        raise IOError(error)
+        if fail:
+            raise IOError(error)
 
     def _connect(self):
         try:
@@ -105,10 +106,7 @@ class SerialGamePad(BaseGamePad):
             self._com.write(packet)
 
             resp = self._com.read(1)
-            if len(resp) == 0:
-                SerialGamePad._comError()
-
-            return ord(resp)
+            return resp and ord(resp)
 
         except serial.SerialException as e:
             error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
@@ -126,14 +124,15 @@ class SerialGamePad(BaseGamePad):
             if len(resp) == 0:
                 SerialGamePad._comError()
             elif ord(resp) != RETURN_CODES.SUCCESS:
-                print_error(ord(resp), SerialPadError)
-            resp = self._com.read(2)
-            if len(resp) != 2:
-                SerialGamePad._comError()
-
-            bits = ord(resp[0]) + (ord(resp[1]) << 8)
-        except IOError:
-            log.error("IO Error Communicatng With Game Pad!")
+                print_error(ord(resp))
+            else:
+                resp = self._com.read(2)
+                if len(resp) != 2:
+                    SerialGamePad._comError()
+                else:
+                    bits = ord(resp[0]) + (ord(resp[1]) << 8)
+        except:
+            log.error("IO Error Communicating With Game Pad!")
 
         index = 0
         result = {}
@@ -159,7 +158,7 @@ class SerialGamePad(BaseGamePad):
         if len(resp) == 0:
             SerialGamePad._comError()
         elif ord(resp) != RETURN_CODES.SUCCESS:
-            print_error(ord(resp), SerialPadError)
+            print_error(ord(resp))
 
     def setLightsOff(self, count):
         data = {}
