@@ -1,23 +1,22 @@
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... colors import gamma as _gamma
-from ... util.enum import resolve_enum
 from . import interfaces
 
 
 class SPIBase(DriverBase):
-    """Base driver for controling SPI devices on systems like the Raspberry Pi and BeagleBone"""
+    """Base driver for controling SPI devices on systems like the Raspberry Pi
+       and BeagleBone"""
     def __init__(self, num, dev='/dev/spidev0.0',
-                 interface='FILE', spi_speed=1,
+                 spi_interface=None, spi_speed=1,
+                 interface='FILE',  # DEPRECATED
                  **kwargs):
-
         super().__init__(num, **kwargs)
+        from ...project.types.spi_interface import make
+        # See https://github.com/ManiacalLabs/BiblioPixel/issues/419
 
-        iface = resolve_enum(interfaces.SPI_INTERFACES, interface)
-        if iface >= len(interfaces._SPI_INTERFACES):
-            raise ValueError('{} is not a valid interface.'.format(interface))
-
-        self._interface = interfaces._SPI_INTERFACES[iface](dev=dev, spi_speed=spi_speed)
+        maker = interfaces._SPI_INTERFACES[make(spi_interface or interface)]
+        self._interface = maker(dev=dev, spi_speed=spi_speed)
 
     def _send_packet(self):
         self._interface.send_packet(self._packet)

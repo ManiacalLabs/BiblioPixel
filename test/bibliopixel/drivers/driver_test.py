@@ -3,6 +3,7 @@ import unittest
 from bibliopixel.colors import gamma
 from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
 from bibliopixel.drivers.SPI import SPI, SPI_INTERFACES
+from bibliopixel.drivers.ledtype import LEDTYPE
 
 
 class DriverTest(unittest.TestCase):
@@ -48,17 +49,17 @@ class DriverTest(unittest.TestCase):
         self.do_test(driver, expected)
 
     def test_apa102(self):
-        driver = SPI(ledtype='APA102', num=4, **self.SPD)
+        driver = SPI(ledtype=LEDTYPE.APA102, num=4, **self.SPD)
         expected = [0, 0, 0, 0, 0, 8, 0, 0, 46, 0, 1, 125]
         self.do_test(driver, expected)
 
     def test_lpd8806(self):
-        driver = SPI(ledtype='LPD8806', num=4, **self.SPD)
+        driver = SPI(ledtype=LEDTYPE.LPD8806, num=4, **self.SPD)
         expected = [
             128, 128, 128, 128, 128, 132, 128, 128, 151, 128, 128, 190, 0]
         self.do_test(driver, expected)
 
     def test_ws2801(self):
-        driver = SPI(ledtype='WS2801', num=4, **self.SPD)
+        driver = SPI(ledtype=LEDTYPE.WS2801, num=4, **self.SPD)
         expected = [0, 0, 0, 0, 0, 8, 0, 0, 45, 0, 0, 125]
         self.do_test(driver, expected)
