@@ -1,5 +1,5 @@
 import copy, loady, functools
-from . import aliases, importer
+from . import aliases, check, importer
 from .. project import data_maker
 
 RESERVED_PROPERTIES = 'name', 'data'
@@ -34,18 +34,6 @@ def extend_path(path):
     loady.sys_path.extend(path)
 
 
-def raise_if_unknown(items, name, value):
-    if items:
-        msg = ', '.join('"%s"' % s for s in sorted(items))
-        s = '' if len(items) == 1 else 's'
-        raise ValueError('Unknown %s%s for %s: %s' % (name, s, value, msg))
-
-
-def raise_if_unknown_attributes(items, name, value):
-    value = '%s %s' % (name, value.__class__.__name__)
-    raise_if_unknown(items, 'attribute', value)
-
-
 def project_to_animation(desc, default=None):
     project = copy.deepcopy(desc)
     default = default or {}
@@ -64,7 +52,7 @@ def project_to_animation(desc, default=None):
     path = project.pop('path', default.get('path'))
     run = project.pop('run', default.get('run', {}))
 
-    raise_if_unknown(project, 'section', 'project')
+    check.unknown(project, 'section', 'project')
 
     if not animation:
         raise ValueError('There was no "animation" section in the project')
