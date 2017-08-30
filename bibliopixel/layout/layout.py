@@ -11,6 +11,7 @@ class Layout(object):
         """Base LED class. Use Strip or Matrix instead!"""
         project.raise_if_unknown_attributes(kwds, 'layout', self)
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
+        self.maker = maker
 
         if not hasattr(self, 'numLEDs'):
             self.numLEDs = sum(d.numLEDs for d in self.drivers)
@@ -51,6 +52,10 @@ class Layout(object):
         self.all_off()
         self.push_to_driver()
         self.threading.wait_for_update()
+
+    @property
+    def color_list(self):
+        return self._colors
 
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:

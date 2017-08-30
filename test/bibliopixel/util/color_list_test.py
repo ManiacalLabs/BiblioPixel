@@ -57,10 +57,10 @@ class ColorListTest(TestBase):
         self.assertIs(numpy.ndarray, color_list.numpy_array)
 
         cl = make_list([])
-        self.assertIsInstance(cl, color_list.List)
+        self.assertIs(cl.math, color_list.ListMath)
 
         cl = make_numpy([])
-        self.assertIsInstance(cl, color_list.Numpy)
+        self.assertIs(cl.math, color_list.NumpyMath)
 
     def test_lists(self):
         cl1 = make_list(COLORS1)
@@ -102,7 +102,7 @@ class ColorListTest(TestBase):
 
 class MixerTest(TestBase):
     def do_test(self, mixer, thirds):
-        self.assertEqual(mixer.levels, [0, 0, 0])
+        self.assertEqual(mixer.levels, [])
         self.assert_list_equal(mixer.color_list, COLORS1)
 
         mixer.mix()
@@ -131,6 +131,11 @@ class MixerTest(TestBase):
         mixer.levels[:] = [1 / 3, 1 / 3, 1 / 3]
         mixer.clear()
         mixer.mix()
+        self.assert_list_equal(mixer.color_list, thirds)
+
+        mixer.levels[:] = [1, 1, 1]
+        mixer.clear()
+        mixer.mix(1 / 3)
         self.assert_list_equal(mixer.color_list, thirds)
 
     def test_lists(self):
