@@ -30,12 +30,12 @@ BUILTIN_ALIASES = {
 
     # animations
     'off': 'bibliopixel.animation.off.OffAnim',
-    'remote': 'bibliopixel.remote.control.RemoteControl',
-    'matrix_calibration':
-    'bibliopixel.animation.tests.MatrixCalibrationTest',
+    'feedback': 'bibliopixel.animation.feedback.Feedback',
+    'matrix_calibration': 'bibliopixel.animation.tests.MatrixCalibrationTest',
     'matrix_test': 'bibliopixel.animation.tests.MatrixChannelTest',
     'mixer': 'bibliopixel.animation.mixer.Mixer',
     'receiver': 'bibliopixel.animation.receiver.BaseReceiver',
+    'remote': 'bibliopixel.remote.control.RemoteControl',
     'sequence': 'bibliopixel.animation.Sequence',
     'strip_test': 'bibliopixel.animation.tests.StripChannelTest',
 }
