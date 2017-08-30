@@ -37,6 +37,10 @@ class BaseAnimation(object):
         self.layout = layout
 
     @property
+    def color_list(self):
+        return self.layout.color_list
+
+    @property
     def completed(self):
         """Many BiblioPixelAnimations use the old `completed` variable."""
         return self.state == STATE.complete
