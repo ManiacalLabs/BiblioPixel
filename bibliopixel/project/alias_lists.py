@@ -34,6 +34,7 @@ BUILTIN_ALIASES = {
     'matrix_calibration':
     'bibliopixel.animation.tests.MatrixCalibrationTest',
     'matrix_test': 'bibliopixel.animation.tests.MatrixChannelTest',
+    'mixer': 'bibliopixel.animation.mixer.Mixer',
     'receiver': 'bibliopixel.animation.receiver.BaseReceiver',
     'sequence': 'bibliopixel.animation.Sequence',
     'strip_test': 'bibliopixel.animation.tests.StripChannelTest',
