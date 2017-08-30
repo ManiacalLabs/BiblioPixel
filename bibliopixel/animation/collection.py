@@ -1,6 +1,6 @@
+import traceback
 from .. project import aliases, project
 from . import animation
-import copy, traceback
 from .. util import log
 
 
@@ -61,3 +61,17 @@ class Collection(animation.BaseAnimation):
                 raise
 
             log.error(traceback.format_exc())
+
+
+class Parallel(Collection):
+    def __init__(self, *args, levels, **kwds):
+        super()(*args, **kwds)
+
+        # Give each animation a unique, mutable layout so they can
+        # run independently.
+        for a in self.animations:
+            a.layout = a.layout.mutable_copy()
+
+    def step(self, amt=1):
+        for a in self.animations:
+            a.step(amt)
