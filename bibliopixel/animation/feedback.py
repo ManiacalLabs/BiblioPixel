@@ -1,12 +1,12 @@
 import copy
-from . collection import Collection
+from . collection import Wrapper
 from .. util import color_list
 
 
-class Feedback(Collection):
+class Feedback(Wrapper):
     def __init__(self, *args, source,
                  master=1, inputs=None, outputs=None, **kwds):
-        super().__init__(*args, animations=[source], **kwds)
+        super().__init__(*args, source=source, **kwds)
         self.source = self.animations[0]
         self.master = master
 
@@ -25,7 +25,7 @@ class Feedback(Collection):
         self.math = self.inputs.math
 
     def step(self, amt=1):
-        self.source.step(amt)
+        super().step(amt=amt)
 
         self.clear()
         self.inputs.mix(self.master)
