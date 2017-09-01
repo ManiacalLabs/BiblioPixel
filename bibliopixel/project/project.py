@@ -10,7 +10,7 @@ Your path was %s."""
 
 
 def make_animation(layout, animation, run=None):
-    animation = aliases.resolve(animation)
+    animation = aliases.resolve_section(animation)
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
     animation_obj = importer.make_object(layout, **animation)
 
@@ -38,14 +38,14 @@ def project_to_animation(desc, default=None):
     project = copy.deepcopy(desc)
     default = default or {}
 
-    def resolve_aliases(name):
-        pr = aliases.resolve(project.pop(name, {}))
-        de = aliases.resolve(default.get(name, {}))
+    def resolve_section_aliases(name):
+        pr = aliases.resolve_section(project.pop(name, {}))
+        de = aliases.resolve_section(default.get(name, {}))
         return dict(de, **pr)
 
-    animation = resolve_aliases('animation')
-    driver = resolve_aliases('driver')
-    layout = resolve_aliases('layout')
+    animation = resolve_section_aliases('animation')
+    driver = resolve_section_aliases('driver')
+    layout = resolve_section_aliases('layout')
 
     drivers = project.pop('drivers', [])
     maker = project.pop('maker', {})
@@ -75,13 +75,13 @@ def project_to_animation(desc, default=None):
 
 def make_drivers(driver, drivers, make_object):
     if not drivers:
-        return [make_object(**aliases.resolve(driver))]
+        return [make_object(**aliases.resolve_section(driver))]
 
     if driver:
         # driver is a default for each driver.
         drivers = [dict(driver, **d) for d in drivers]
 
-    return [make_object(**aliases.resolve(d)) for d in drivers]
+    return [make_object(**aliases.resolve_section(d)) for d in drivers]
 
 
 def read_project(location, threaded=True, default=None):

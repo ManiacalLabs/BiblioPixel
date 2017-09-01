@@ -4,20 +4,47 @@ from bibliopixel.project import aliases, alias_lists, importer
 
 class AliasTest(unittest.TestCase):
     def test_empty(self):
-        self.assertEqual(aliases.resolve({}), {})
+        self.assertEqual(aliases.resolve_section({}), {})
+        self.assertEqual(aliases.resolve(''), '')
 
     def test_simple(self):
         d = {'typename': 'bibliopixel.layout.circle.Circle'}
-        self.assertEqual(aliases.resolve(d), d)
+        self.assertEqual(aliases.resolve_section(d), d)
 
-    def test_resolve(self):
+    def test_resolve_section(self):
         d = {'typename': 'bibliopixel.layout.circle.Circle'}
-        self.assertEqual(aliases.resolve('circle'), d)
-        self.assertEqual(aliases.resolve({'typename': 'circle'}), d)
+        self.assertEqual(aliases.resolve_section('circle'), d)
+        self.assertEqual(aliases.resolve_section({'typename': 'circle'}), d)
 
         d['foo'] = 'bar'
         self.assertEqual(
-            aliases.resolve({'typename': 'circle', 'foo': 'bar'}), d)
+            aliases.resolve_section({'typename': 'circle', 'foo': 'bar'}), d)
+
+    def test_resolve(self):
+        self.assertEqual(
+            aliases.resolve('off'), 'bibliopixel.animation.off.OffAnim')
+        self.assertEquals(aliases.resolve('foo'), 'foo')
+
+        old_user = aliases.alias_lists.USER_ALIASES
+        aliases.alias_lists.USER_ALIASES = {'foo': 'bar'}
+        try:
+            self.assertEquals(aliases.resolve('foo'), 'bar')
+        finally:
+            aliases.alias_lists.USER_ALIASES = old_user
+
+    def test_preserve_separators(self):
+        s = '.asdfa./#fahdwrdr./#435'
+        self.assertEqual(aliases.resolve(s), s)
+
+    def test_marker(self):
+        old_user = aliases.alias_lists.USER_ALIASES
+        aliases.alias_lists.USER_ALIASES = {'foo': 'bar.com/a.html'}
+        try:
+            result = aliases.resolve('https://$foo#tag')
+        finally:
+            aliases.alias_lists.USER_ALIASES = old_user
+
+        self.assertEqual(result, 'https://bar.com/a.html#tag')
 
     def test_existence(self):
         failed = []

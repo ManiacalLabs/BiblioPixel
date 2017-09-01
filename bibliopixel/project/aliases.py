@@ -3,41 +3,31 @@ from .. util import log
 from . import alias_lists
 
 ALIAS_MARKER = '$'
-SEPARATORS = re.compile(r'[./#]|[^./#]+')
-DEPRECATE_OLD_ALIASES = False
+SEPARATORS = re.compile(r'([./#]|[^./#]+)')
+
 
 # This can set from the commamnd line with --isolate
 ISOLATE = False
 
 
-def resolve_one(part):
-    if not part.startswith(ALIAS_MARKER):
-        return part
+def resolve(typename, user=None):
+    def get(s):
+        return alias_lists.get_alias(s, ISOLATE) or ''
 
-    p = alias_lists.get_alias(part[1:], ISOLATE)
-    if p:
-        return p
+    def get_all():
+        for part in SEPARATORS.split(typename):
+            yield get(part[1:]) if part.startswith(ALIAS_MARKER) else part
 
-    raise ValueError('Do not understand alias %s' % part)
+    return get(typename) or ''.join(get_all())
 
 
-def resolve(value):
-    if isinstance(value, str):
-        typename, value = value, {}
+def resolve_section(section):
+    if isinstance(section, str):
+        typename, section = section, {}
     else:
-        typename = value.get('typename')
-        if not typename:
-            return value
+        typename = section.get('typename')
 
-    alias = alias_lists.get_alias(typename, ISOLATE)
+    if typename:
+        section['typename'] = resolve(typename)
 
-    if alias:
-        if DEPRECATE_OLD_ALIASES:
-            log.warning('Aliases that do not start with $ are deprecated')
-
-    else:
-        parts = SEPARATORS.findall(typename)
-        alias = ''.join(resolve_one(p) for p in parts)
-
-    value['typename'] = alias
-    return value
+    return section
