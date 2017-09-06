@@ -1,6 +1,5 @@
 import re
 from .. util import log
-from . importer import import_symbol
 from . import alias_lists
 
 ALIAS_MARKER = '$'

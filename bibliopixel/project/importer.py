@@ -32,7 +32,7 @@ Please install it at the command line with:
 """
 
 
-def validate_typename(typename):
+def _validate_typename(typename):
     root_module = typename.split('.')[0]
     min_version = MINIMUM_VERSIONS.get(root_module)
     if not min_version:
@@ -50,8 +50,9 @@ def validate_typename(typename):
 def import_symbol(typename):
     try:
         result = loady.code.load(typename)
-        validate_typename(typename)
+        _validate_typename(typename)
         return result
+
     except ImportError as e:
         root_module = typename.split('.')[0]
         install_name = INSTALL_NAMES.get(root_module)
@@ -64,11 +65,8 @@ def import_symbol(typename):
         raise
 
 
-def make_object(*args, typename, field_types=None, **kwds):
+def make_object(*args, typename, **kwds):
     """Make an object from a symbol."""
-    symbol = import_symbol(typename)
-    if hasattr(symbol, 'FIELD_TYPES'):
-        field_types = symbol.FIELD_TYPES
-
-    kwds = make.component(kwds, field_types or FIELD_TYPES)
-    return symbol(*args, **kwds)
+    object_class = import_symbol(typename)
+    field_types = getattr(object_class, 'FIELD_TYPES', FIELD_TYPES)
+    return object_class(*args, **make.component(kwds, field_types))
