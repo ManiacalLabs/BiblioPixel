@@ -136,3 +136,19 @@ class Layout(object):
     def fillHSV(self, hsv, start=0, end=-1):
         """Fill the entire strip with HSV color tuple"""
         self.fill(colors.hsv2rgb(hsv), start, end)
+
+
+class MultiLayout(Layout):
+    def __init__(self, *args, gen_coord_map=None, coord_map=None, **kwds):
+        super().__init__(*args, **kwds)
+        if gen_coord_map:
+            if coord_map:
+                util.log.warning('Cannot set both coord_map and gen_coord_map')
+            elif isinstance(gen_coord_map, dict):
+                coord_map = self.gen_multi(**gen_coord_map)
+            else:
+                coord_map = self.gen_multi(gen_coord_map)
+        self.coord_map = coord_map
+
+    def gen_multi(self, *args, **kwds):
+        raise NotImplementedError

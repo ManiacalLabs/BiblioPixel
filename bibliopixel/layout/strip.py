@@ -1,12 +1,14 @@
 from .. import colors
-from . layout import Layout
+from . layout import MultiLayout
+from . geometry import make_strip_coord_map_multi
 from . geometry.strip import make_strip_coord_map_positions
 
 
-class Strip(Layout):
+class Strip(MultiLayout):
 
     def __init__(self, drivers, threadedUpdate=False,
-                 brightness=255, pixelWidth=1, coord_map=None, **kwargs):
+                 brightness=255, pixelWidth=1, **kwargs):
+        self.gen_multi = make_strip_coord_map_multi
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
 
         self.pixelWidth = pixelWidth
@@ -22,7 +24,6 @@ class Strip(Layout):
             self.set = self._setScaled
             self.num_pixels = int(self.numLEDs / self.pixelWidth)
 
-        self.coord_map = coord_map
         if self.coord_map:
             if len(self.coord_map) != self.numLEDs:
                 raise ValueError('coord_map length must equal total number of pixels!')
