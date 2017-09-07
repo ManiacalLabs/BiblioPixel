@@ -1,20 +1,12 @@
-import copy, loady, functools, sys
+import copy, loady, functools
 from . import aliases, importer
 from .. project import data_maker
-from .. util import log
-
-from .. layout.geometry import make_strip_coord_map_multi, make_matrix_coord_map_multi
 
 RESERVED_PROPERTIES = 'name', 'data'
 
 ISNT_GIT_PATH_ERROR = """\
 Because the --isolate flag is set, all paths must start with //git.
 Your path was %s."""
-
-MULTI_HANDLERS = {
-    'bibliopixel.layout.strip.Strip': make_strip_coord_map_multi,
-    'bibliopixel.layout.matrix.Matrix': make_matrix_coord_map_multi
-}
 
 
 def make_animation(layout, animation, run=None):
@@ -89,21 +81,7 @@ def project_to_animation(desc, default=None):
     make_object = functools.partial(importer.make_object, maker=maker)
 
     driver_objects = make_drivers(driver, drivers, make_object)
-
-    gen_coord_map = layout.pop('gen_coord_map', None)
-
-    if 'coord_map' not in layout and gen_coord_map:
-        typename = layout['typename']
-        if typename not in MULTI_HANDLERS:
-            raise ValueError('There is currently no available multi-map builder for {}'.format(typename))
-        gen_multi = MULTI_HANDLERS[typename]
-        if isinstance(gen_coord_map, dict):
-            layout['coord_map'] = gen_multi(**gen_coord_map)
-        elif isinstance(gen_coord_map, list):
-            layout['coord_map'] = gen_multi(gen_coord_map)
-
     layout_object = make_object(driver_objects, **layout)
-
     return make_animation(layout_object, animation, run)
 
 

@@ -4,8 +4,10 @@ from .. import colors
 from .. util import log
 from . import matrix_drawing as matrix
 from . import font
-from . layout import Layout
-from . geometry.matrix import make_matrix_coord_map, make_matrix_coord_map_positions
+from . layout import MultiLayout
+from . geometry import make_matrix_coord_map_multi
+from . geometry.matrix import (
+    make_matrix_coord_map, make_matrix_coord_map_positions)
 
 
 ROTATION_WARNING = """
@@ -13,9 +15,9 @@ Matrix.rotation must be a multiple of 90 degrees but was in fact %s degress.
 It was rounded to %s degrees."""
 
 
-class Matrix(Layout):
+class Matrix(MultiLayout):
 
-    def __init__(self, drivers, width=0, height=0, coord_map=None,
+    def __init__(self, drivers, width=0, height=0,
                  rotation=0, vert_flip=False, y_flip=False,
                  serpentine=True,
                  threadedUpdate=False, brightness=255,
@@ -28,6 +30,7 @@ class Matrix(Layout):
         rotation - how to rotate when generating the map. Not used if coord_map specified
         vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
         """
+        self.gen_multi = make_matrix_coord_map_multi
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
 
         rot_mod = rotation % 360
@@ -54,9 +57,7 @@ class Matrix(Layout):
                              ' %s * %s > %s'
                              % (self.width, self.height, self.numLEDs))
 
-        if coord_map:
-            self.coord_map = coord_map
-        else:
+        if not self.coord_map:
             if len(self.drivers) == 1:
                 log.info('Auto generating coordinate map. Use make_matrix_coord_map directly if more control needed.')
                 y_flip = y_flip or vert_flip  # was switched to y_flip, but need to keep vert_flip available
