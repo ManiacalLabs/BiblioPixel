@@ -42,14 +42,21 @@ PIN_CHANNEL = {
     10: 0,  # Technically SPI
 }
 
+STRIP_TYPES = {
+    3: 0x00100800,
+    4: 0x18100800,
+}
+
 
 class PiWS281X(DriverBase):
     """
     Driver for controlling WS281X LEDs via the rpi_ws281x C-extension.
     Only supported on the Raspberry Pi 2 & 3
     """
-    def __init__(self, num, gamma=gamma.NEOPIXEL, c_order=ChannelOrder.RGB, gpio=18,
-                 ledFreqHz=800000, ledDma=5, ledInvert=False, **kwds):
+    def __init__(
+            self, num, gamma=gamma.NEOPIXEL, c_order=ChannelOrder.RGB, gpio=18,
+            ledFreqHz=800000, ledDma=5, ledInvert=False,
+            color_channels=3, brightness=255, **kwds):
         """
         num - Number of LED pixels.
         gpio - GPIO pin connected to the pixels (must support PWM! GPIO 13 or 18 (pins 33 or 12) on RPi 3).
@@ -63,8 +70,14 @@ class PiWS281X(DriverBase):
         self.gamma = gamma
         if gpio not in PIN_CHANNEL.keys():
             raise ValueError('{} is not a valid gpio option!')
-        self._strip = Adafruit_NeoPixel(num, gpio, ledFreqHz,
-                                        ledDma, ledInvert, 255, PIN_CHANNEL[gpio], 0x081000)
+        try:
+            strip_type = STRIP_TYPES[color_channels]
+        except:
+            raise ValueError('In PiWS281X, color_channels must be either 3 or 4')
+
+        self._strip = Adafruit_NeoPixel(
+            num, gpio, ledFreqHz, ledDma, ledInvert, brightness,
+            PIN_CHANNEL[gpio], strip_type)
         # Intialize the library (must be called once before other functions).
         self._strip.begin()
 
