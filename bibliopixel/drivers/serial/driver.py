@@ -92,7 +92,7 @@ class Serial(DriverBase):
                     pass
                 else:
                     self._bufPad = BufferChipsets[
-                        self._ledtype](self.numLEDs) * 3
+                        self._ledtype](self.numLEDs) * self.pixel_size
                     byteCount += self._bufPad
 
             packet.append(byteCount & 0xFF)  # set 1st byte of byteCount

@@ -14,6 +14,9 @@ class DriverBase(object):
     # the pixels.
     set_device_brightness = None
 
+    # The number of components in a pixel
+    pixel_size = 3
+
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
                  gamma=None, maker=data_maker.MAKER, **kwds):
         project.raise_if_unknown_attributes(kwds, 'driver', self)
@@ -51,6 +54,8 @@ class DriverBase(object):
     def set_colors(self, colors, pos):
         self._colors = colors
         self._pos = pos
+        if len(colors):
+            self.pixel_size = len(colors[0])
 
     def cleanup(self):
         pass
@@ -111,7 +116,10 @@ class DriverBase(object):
             level = 1.0
         else:
             level = self._brightness / 255.0
-        gam, (r, g, b) = self.gamma.get, self.c_order
+
+        gam, co = self.gamma.get, self.c_order
         for i in range(self.numLEDs):
             c = [int(level * x) for x in self._colors[i + self._pos]]
-            self._buf[i * 3:(i + 1) * 3] = gam(c[r]), gam(c[g]), gam(c[b])
+            begin = i * self.pixel_size
+            end = begin + self.pixel_size
+            self._buf[begin:end] = (gam(c[i]) for i in co)

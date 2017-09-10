@@ -18,6 +18,8 @@ def make(c):
 
 @make.register(tuple)
 def _(c):
+
+    # TODO: pixel_size
     if len(c) != 3:
         raise ValueError('Length %d is not 3' % len(c), USAGE)
 

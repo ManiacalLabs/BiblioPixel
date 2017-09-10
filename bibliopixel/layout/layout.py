@@ -7,18 +7,19 @@ from .. threads.update_threading import UpdateThreading
 class Layout(object):
 
     def __init__(self, drivers, threadedUpdate, brightness,
-                 maker=data_maker.MAKER, **kwds):
+                 maker=data_maker.MAKER, pixel_size=3, **kwds):
         """Base LED class. Use Strip or Matrix instead!"""
         project.raise_if_unknown_attributes(kwds, 'layout', self)
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
         self.maker = maker
+        self.pixel_size = pixel_size
 
-        if not hasattr(self, 'numLEDs'):
-            self.numLEDs = sum(d.numLEDs for d in self.drivers)
+        self.numLEDs = sum(d.numLEDs for d in self.drivers)
 
         # This buffer will always be the same list - i.e. is guaranteed to only
         # be changed by list surgery, never assignment.
-        self._colors = maker.color_list(self.numLEDs)
+        self._colors = maker.color_list(self.numLEDs, pixel_size)
+        self._empty = tuple(0 for i in range(pixel_size))
 
         pos = 0
         for d in self.drivers:
@@ -60,7 +61,7 @@ class Layout(object):
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
             return self._colors[pixel]
-        return 0, 0, 0  # don't go out of bounds
+        return self._empty  # don't go out of bounds
 
     def _set_base(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
@@ -92,7 +93,7 @@ class Layout(object):
     def setBuffer(self, buf):
         """DEPRECATED!"""
         # https://stackoverflow.com/questions/1624883
-        self.set_colors(buf=list(zip(*(iter(buf),) * 3)))
+        self.set_colors(buf=list(zip(*(iter(buf),) * self.pixel_size)))
 
     def set_brightness(self, brightness):
         self.brightness = brightness
@@ -100,23 +101,27 @@ class Layout(object):
             d.set_brightness(brightness)
 
     # Set single pixel to RGB value
-    def setRGB(self, pixel, r, g, b):
+    def setRGB(self, pixel, *color):
         """Set single pixel using individual RGB values instead of tuple"""
-        self._set_base(pixel, (r, g, b))
+        if len(color) != self.pixel_size:
+            raise ValueError('Expected a pixel of length %s but got %s' % (
+                self.pixel_size, color))
+        self._set_base(pixel, color)
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
+        # TODO: pixel_size
         color = colors.hsv2rgb(hsv)
         self._set_base(pixel, color)
 
     # turns off the desired pixel
     def setOff(self, pixel):
         """Set single pixel off"""
-        self._set_base(pixel, (0, 0, 0))
+        self._set_base(pixel, self._empty)
 
     def all_off(self):
         """Set all pixels off"""
-        self._colors[:] = [(0, 0, 0)] * self.numLEDs
+        self._colors[:] = [self._empty] * self.numLEDs
 
     # Fill the strand (or a subset) with a single color using a Color object
     def fill(self, color, start=0, end=-1):
@@ -130,6 +135,7 @@ class Layout(object):
     # Fill the strand (or a subset) with a single color using RGB values
     def fillRGB(self, r, g, b, start=0, end=-1):
         """Fill entire strip by giving individual RGB values instead of tuple"""
+        # TODO: pixel_size
         self.fill((r, g, b), start, end)
 
     # Fill the strand (or a subset) with a single color using HSV values

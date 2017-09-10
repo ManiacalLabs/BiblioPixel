@@ -27,17 +27,25 @@ class Maker:
         c_type = c_float if floating else c_uint8
 
         if shared_memory:
+            def color_list(size, pixel_size=3):
+                return RawArray(pixel_size * c_type, size)
+
             self.bytes = lambda size: RawArray(c_uint8, size)
-            self.color_list = lambda size: RawArray(3 * c_type, size)
+            self.color_list = color_list
             # Note https://stackoverflow.com/questions/37705974/
 
         elif numpy_dtype:
+            def color_list(size, pixel_size=3):
+                return numpy.zeros((size, pixel_size), numpy_dtype)
             self.bytes = bytearray
-            self.color_list = lambda size: numpy.zeros((size, 3), numpy_dtype)
+            self.color_list = color_list
 
         else:
+            def color_list(size, pixel_size=3):
+                return [tuple(0 for i in range(pixel_size))] * size
+
             self.bytes = bytearray
-            self.color_list = lambda size: [(0, 0, 0)] * size
+            self.color_list = color_list
 
 
 MAKER = Maker()
