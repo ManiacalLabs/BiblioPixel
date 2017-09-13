@@ -52,7 +52,17 @@ class DriverBase(object):
         self._colors = colors
         self._pos = pos
 
+    def start(self):
+        """
+        Called right before this driver will run.  This is the place
+        to do things like start threads, not in the constructor.
+        """
+        pass
+
     def cleanup(self):
+        """
+        Called to shut this driver down, and stop all threads and processes.
+        """
         pass
 
     def bufByteCount(self):
