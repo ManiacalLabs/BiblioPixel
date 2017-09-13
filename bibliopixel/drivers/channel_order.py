@@ -28,6 +28,7 @@ class ChannelOrder(object):
                 raise ValueError(
                     'ChannelOrder index "%s" is not an integer' % x)
 
+        # TODO: pixel_size
         if length != 3:
             raise ValueError('ChannelOrder "%s" does not have length 3' % x)
 
