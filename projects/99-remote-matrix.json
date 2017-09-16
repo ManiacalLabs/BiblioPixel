@@ -1,4 +1,15 @@
 {
+    "driver": {
+        "num": 1024,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
     "animation": {
         "title": "Matrix Demo",
         "typename": "remote",
@@ -232,14 +243,5 @@
         "bgcolor": "black",
         "external_access": true,
         "port": 5000
-    },
-    "driver": {
-        "num": 1024,
-        "typename": "simpixel"
-    },
-    "layout": {
-        "typename": "matrix",
-        "width": 32,
-        "height": 32
     }
 }

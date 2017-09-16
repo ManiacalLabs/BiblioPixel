@@ -1,4 +1,19 @@
 {
+    "driver": {
+        "num": 512,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "cube",
+        "x": 8,
+        "y": 8,
+        "z": 8
+    },
+
+    "run": {
+        "seconds": 9
+    },
     "animation": {
         "typename": "sequence",
         "animations": [
@@ -31,18 +46,5 @@
                 }
             }
          ]
-    },
-    "driver": {
-        "num": 512,
-        "typename": "simpixel"
-    },
-    "layout": {
-        "typename": "cube",
-        "x": 8,
-        "y": 8,
-        "z": 8
-    },
-    "run": {
-        "seconds": 9
     }
 }

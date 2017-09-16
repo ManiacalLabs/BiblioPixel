@@ -1,4 +1,15 @@
 {
+    "driver": {
+        "num": 50,
+        "typename": "simpixel"
+    },
+
+    "layout": "strip",
+
+    "run": {
+        "seconds": 12
+    },
+
     "animation": {
         "typename": "sequence",
         "animations": [
@@ -150,14 +161,5 @@
                 }
             }
         ]
-    },
-    "driver": {
-        "num": 50,
-        "typename": "simpixel"
-    },
-    "layout": "strip",
-
-    "run": {
-        "seconds": 12
     }
 }
