@@ -1,4 +1,18 @@
 {
+    "driver": {
+        "num": 99,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "circle",
+        "pixels_per": [1, 4, 8, 12, 18, 24, 32]
+    },
+
+    "run": {
+        "seconds": 12
+    },
+
     "animation": {
         "typename": "sequence",
         "animations": [
@@ -73,16 +87,5 @@
                 }
             }
         ]
-    },
-    "driver": {
-        "num": 99,
-        "typename": "simpixel"
-    },
-    "layout": {
-        "typename": "circle",
-        "pixels_per": [1, 4, 8, 12, 18, 24, 32]
-    },
-    "run": {
-        "seconds": 12
     }
 }

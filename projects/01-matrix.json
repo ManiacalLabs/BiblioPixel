@@ -1,4 +1,19 @@
 {
+    "driver": {
+        "num": 1024,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
+    "run": {
+        "seconds": 14
+    },
+
     "animation": {
         "typename": "sequence",
         "animations": [
@@ -177,17 +192,5 @@
                 }
             }
         ]
-    },
-    "driver": {
-        "num": 1024,
-        "typename": "simpixel"
-    },
-    "layout": {
-        "typename": "matrix",
-        "width": 32,
-        "height": 32
-    },
-    "run": {
-        "seconds": 14
     }
 }
