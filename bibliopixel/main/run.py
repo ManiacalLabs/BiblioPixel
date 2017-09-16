@@ -2,7 +2,7 @@
 Run a project description file.
 """
 
-import loady, json, os, time
+import loady, time, traceback
 from . import common_flags, simpixel
 from .. util import log
 from .. animation.collection import Collection
@@ -32,6 +32,8 @@ def run(args):
         try:
             animations.append(common_flags.make_animation(args, desc or {}))
         except Exception as exception:
+            if args.verbose:
+                exception = traceback.format_exc()
             failed.append(RUN_ERROR.format(**locals()))
 
     if failed:
