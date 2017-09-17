@@ -20,6 +20,12 @@ def no_command(*_):
 
 def get_args(argv=sys.argv):
     argv = ['--help' if i == 'help' else i for i in argv[1:]]
+
+    # argparse doesn't give command-specific help for `bp --help <command>`
+    # so we use `bp <command> --help` (#429)
+    if len(argv) == 2 and argv[0] == '--help':
+        argv.reverse()
+
     try:
         argv.remove('--version')
     except:
