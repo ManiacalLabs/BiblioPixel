@@ -31,17 +31,15 @@ class Collection(animation.BaseAnimation):
 
     @property
     def current_animation(self):
-        if (0 <= self.index < len(self.animations)):
+        if 0 <= self.index < len(self.animations):
             return self.animations[self.index]
-        else:
-            return None
 
     def _make_animation(self, a):
         if isinstance(a, str):
             animation = a
             run = None
 
-        elif isinstance(a, dict):
+        else:
             animation = a.get('animation')
             if animation:
                 # Looks like {'animation': ..., 'run': }
@@ -50,10 +48,6 @@ class Collection(animation.BaseAnimation):
                 # It's an animation itself.
                 animation, run = a, None
 
-        else:
-            animation, run = a
-
-        assert animation, '%s:%s:%s' % (a, animation, run)
         try:
             return project.make_animation(self.layout, animation, run)
         except:
