@@ -118,7 +118,7 @@ class BadProjectTest(unittest.TestCase):
 
     def test_missing_layout(self):
         with self.assertRaises(ValueError) as e:
-            project.project_to_animation(json.loads(MISSING_LAYOUT), {})
+            project.Project(**json.loads(MISSING_LAYOUT))
         self.assertEquals(
             e.exception.args,
             ('There was no "layout" section in the project',))
