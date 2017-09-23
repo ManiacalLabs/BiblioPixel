@@ -20,8 +20,14 @@ class Devices(object):
 
         for ports in self.list_ports.grep(hardware_id):
             port = ports[0]
-            id = self.get_device_id(port, self.baudrate)
-            ver = self._get_device_version(port, self.baudrate)
+            try:
+                id = self.get_device_id(port, self.baudrate)
+                ver = self._get_device_version(port, self.baudrate)
+            except:
+                log.debug('Error getting device_id for %s, %s',
+                          port, self.baudrate)
+                continue
+
             if getattr(ports, '__len__', lambda: 0)():
                 log.debug('Multi-port device %s:%s:%s with %s ports found',
                           self.hardware_id, id, ver, len(ports))
@@ -43,7 +49,7 @@ class Devices(object):
             device, version = self.devices[id]
 
         else:
-            error = 'Unable to find device with ID %s' % self.deviceID
+            error = 'Unable to find device with ID %s' % self.device_id
             log.error(error)
             raise ValueError(error)
 

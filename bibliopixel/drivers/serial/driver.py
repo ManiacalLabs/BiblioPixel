@@ -153,9 +153,9 @@ DriverSerial = Serial
 
 class TeensySmartMatrix(Serial):
     def __init__(self, width, height, dev="", device_id=None,
-                 hardwareID="16C0:0483"):
+                 hardwareID="16C0:0483", **kwds):
         super().__init__(ledtype=LEDTYPE.GENERIC, num=width * height,
-                         device_id=device_id, hardwareID=hardwareID)
+                         device_id=device_id, hardwareID=hardwareID, **kwds)
         self.sync = self._send_sync
 
 
