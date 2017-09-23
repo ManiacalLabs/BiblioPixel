@@ -151,7 +151,7 @@ def make_project_flags(args):
 
 def make_animation(args, desc):
     project_flags = make_project_flags(args)
-    return project.project_to_animation(desc, project_flags)
+    return project.Project(default=project_flags, **desc).make_animation()
 
 
 def extend_path(args):

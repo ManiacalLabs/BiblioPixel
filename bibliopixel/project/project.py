@@ -1,4 +1,4 @@
-import copy, loady, functools
+import copy, loady
 from . import aliases, check, importer
 from .. project import data_maker
 
@@ -34,58 +34,69 @@ def extend_path(path):
     loady.sys_path.extend(path)
 
 
-def project_to_animation(desc, default=None):
-    project = copy.deepcopy(desc)
-    default = default or {}
+class Project:
+    def __init__(self, *,
+                 animation=None,
+                 default=None,
+                 driver=None,
+                 drivers=None,
+                 layout=None,
+                 maker=None,
+                 path=None,
+                 run=None,
+                 **kwds):
+        check.unknown(kwds, 'section', 'project')
+        default = default or {}
 
-    def resolve_section_aliases(name):
-        pr = aliases.resolve_section(project.pop(name, {}))
-        de = aliases.resolve_section(default.get(name, {}))
-        return dict(de, **pr)
+        def resolve(name, value):
+            pr = aliases.resolve_section(value)
+            de = aliases.resolve_section(default.get(name))
+            return dict(de, **pr)
 
-    animation = resolve_section_aliases('animation')
-    driver = resolve_section_aliases('driver')
-    layout = resolve_section_aliases('layout')
+        self.animation = resolve('animation', animation)
+        self.driver = resolve('driver', driver)
+        self.layout = resolve('layout', layout)
+        self.path = resolve('path', path)
 
-    drivers = project.pop('drivers', [])
-    maker = project.pop('maker', {})
-    path = project.pop('path', default.get('path'))
-    run = project.pop('run', default.get('run', {}))
+        self.drivers = drivers or []
+        self.maker = data_maker.Maker(**(maker or {}))
 
-    check.unknown(project, 'section', 'project')
+        self.path = path or default.get('path', '')
+        self.run = run or default.get('run', {})
 
-    if not animation:
-        raise ValueError('There was no "animation" section in the project')
+        if not self.animation:
+            raise ValueError('There was no "animation" section in the project')
 
-    if not layout:
-        raise ValueError('There was no "layout" section in the project')
+        if not self.layout:
+            raise ValueError('There was no "layout" section in the project')
 
-    if not (driver or drivers):
-        raise ValueError(
-            'The project has neither a "driver" nor a "drivers" section')
+        if not (self.driver or self.drivers):
+            raise ValueError(
+                'The project has neither a "driver" nor a "drivers" section')
 
-    extend_path(path)
-    maker = data_maker.Maker(**(maker or {}))
-    make_object = functools.partial(importer.make_object, maker=maker)
+    def make_object(self, *args, **kwds):
+        kwds = aliases.resolve_section(kwds)
+        return importer.make_object(*args, maker=self.maker, **kwds)
 
-    driver_objects = make_drivers(driver, drivers, make_object)
-    layout_object = make_object(driver_objects, **layout)
-    return make_animation(layout_object, animation, run)
+    def make_animation(self):
+        extend_path(self.path)
+        driver_objects = self.make_drivers()
+        layout_object = self.make_object(driver_objects, **self.layout)
+        return make_animation(layout_object, self.animation, self.run)
 
+    def make_drivers(self):
+        if not self.drivers:
+            return [self.make_object(**self.driver)]
 
-def make_drivers(driver, drivers, make_object):
-    if not drivers:
-        return [make_object(**aliases.resolve_section(driver))]
+        if self.driver:
+            # driver is a default for each driver.
+            self.drivers = [dict(self.driver, **d) for d in self.drivers]
 
-    if driver:
-        # driver is a default for each driver.
-        drivers = [dict(driver, **d) for d in drivers]
-
-    return [make_object(**aliases.resolve_section(d)) for d in drivers]
+        return [self.make_object(**d) for d in self.drivers]
 
 
 def read_project(location, threaded=True, default=None):
     project = loady.data.load(location, use_json=True)
     if threaded is not None:
         project.setdefault('run', {})['threaded'] = threaded
-    return project_to_animation(project, default)
+    return Project(default=default, **project).make_animation()

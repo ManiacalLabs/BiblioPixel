@@ -22,6 +22,8 @@ def resolve(typename, user=None):
 
 
 def resolve_section(section):
+    section = section or {}
+
     if isinstance(section, str):
         typename, section = section, {}
     else:
