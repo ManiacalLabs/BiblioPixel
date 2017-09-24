@@ -54,7 +54,7 @@ def make_matrix_coord_map(
         if not serpentine or y % 2 == 0:
             result.append([(dx * y) + x + offset for x in range(dx)])
         else:
-            result.append([((dx * (y + 1)) - 1) - x + offset for x in range(dx)])
+            result.append([dx * (y + 1) - 1 - x + offset for x in range(dx)])
 
     result = rotate_and_flip(result, rotation, y_flip)
 
@@ -62,9 +62,9 @@ def make_matrix_coord_map(
 
 
 DEFAULT_CONFIG = {
-    "serpentine": True,
-    "rotation": 0,
-    "y_flip": False
+    'serpentine': True,
+    'rotation': 0,
+    'y_flip': False
 }
 
 
@@ -73,16 +73,13 @@ def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
     matrix_result = []
 
     def populate_config(cfg):
-        result = copy.copy(DEFAULT_CONFIG)
-        result.update(cfg)
-        return result
+        return dict(DEFAULT_CONFIG, **cfg)
 
     def add_row(offset, matrix, row):
-        count = sum([len(y) for y in row])
         for y in row:
             matrix.append([x + offset for x in y])
-        offset += count
-        return matrix, offset
+
+        return offset + sum([len(y) for y in row])
 
     def combine_cols(cols):
         row_offset = 0
@@ -101,30 +98,28 @@ def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
 
     if isinstance(config, dict):
         matrix_result = make_matrix_coord_map(**config)
+
     else:
         for row in config:
             if isinstance(row, dict):  # is configs
                 row = populate_config(row)
-                matrix_result, matrix_offset = add_row(matrix_offset, matrix_result, make_matrix_coord_map(**row))
+                matrix_offset = add_row(
+                    matrix_offset, matrix_result, make_matrix_coord_map(**row))
+
             elif isinstance(row, list):  # is row
                 cols = []
                 for config in row:
                     config = populate_config(config)
                     cols.append(make_matrix_coord_map(**config))
-                matrix_result, matrix_offset = add_row(matrix_offset, matrix_result, combine_cols(cols))
 
-    matrix_result = rotate_and_flip(matrix_result, rotation, y_flip)
+                matrix_offset = add_row(
+                    matrix_offset, matrix_result, combine_cols(cols))
 
-    return matrix_result
+    return rotate_and_flip(matrix_result, rotation, y_flip)
 
 
 def make_matrix_coord_map_positions(coord_map):
-    max_width = 0
-    for x in coord_map:
-        if len(x) > max_width:
-            max_width = len(x)
-
-    num = len(coord_map) * max_width
+    num = len(coord_map) * max(len(x) for x in coord_map)
     result = [None] * num
 
     for y in range(len(coord_map)):
