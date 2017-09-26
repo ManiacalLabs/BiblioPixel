@@ -2,7 +2,7 @@
 Run a project description file.
 """
 
-import loady, time, traceback
+import loady, sys, time, traceback
 from . import common_flags, simpixel
 from .. util import log
 from .. animation.collection import Collection
@@ -17,7 +17,6 @@ FAILURE_ERROR = '{count} project{s} failed'
 
 
 def run(args):
-    common_flags.extend_path(args)
     if args.fail_on_exception:
         Collection.FAIL_ON_EXCEPTION = True
 
@@ -29,12 +28,17 @@ def run(args):
         else:
             desc = name and loady.data.load(name, True)
 
+        saved_path = sys.path[:]
         try:
             animations.append(common_flags.make_animation(args, desc or {}))
+
         except Exception as exception:
             if args.verbose:
                 exception = traceback.format_exc()
             failed.append(RUN_ERROR.format(**locals()))
+
+        finally:
+            sys.path[:] = saved_path
 
     if failed:
         log.error(FAILURE_ERROR.format(

@@ -49,8 +49,6 @@ def run(args):
         usage()
         return
 
-    common_flags.extend_path(args)
-
     if not args.name:
         usage()
         args.name = random.choice(list(demo_table.DEMO_TABLE))
