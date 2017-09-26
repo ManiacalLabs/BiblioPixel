@@ -119,7 +119,7 @@ def add_project_flags(parser):
         help='Default LED type if no LED type is specified')
 
 
-def make_project_flags(args):
+def _make_project_flags(args):
     def get_value(name):
         value = getattr(args, name)
         if not value:
@@ -150,15 +150,5 @@ def make_project_flags(args):
 
 
 def make_animation(args, desc):
-    project_flags = make_project_flags(args)
+    project_flags = _make_project_flags(args)
     return project.Project(default=project_flags, **desc).make_animation()
-
-
-def extend_path(args):
-    if args.isolate:
-        path = args.path
-    else:
-        path = os.getcwd()
-        if args.path:
-            path += ':' + args.path
-    project.extend_path(path)

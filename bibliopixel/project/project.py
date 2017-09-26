@@ -1,4 +1,4 @@
-import copy, loady
+import loady, os
 from . import aliases, check, importer
 from .. project import data_maker
 
@@ -25,14 +25,15 @@ def make_animation(layout, animation, run=None):
 
 
 def extend_path(path):
-    if not path:
-        return
+    parts = path.split(':')
 
     if aliases.ISOLATE:
-        if not all(x.startswith('//git/') for x in path.split(':')):
+        if not all(x.startswith('//git/') for x in parts):
             raise ValueError(ISNT_GIT_PATH_ERROR % path)
+    else:
+        parts.insert(0, os.getcwd())
 
-    loady.sys_path.extend(path)
+    parts and loady.sys_path.extend(':'.join(parts))
 
 
 class Project:
