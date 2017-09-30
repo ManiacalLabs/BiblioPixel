@@ -3,6 +3,7 @@ coverage
 flake8
 phue
 pytest
+pytest-benchmark
 Pillow>=2.4.0
 
 noise
