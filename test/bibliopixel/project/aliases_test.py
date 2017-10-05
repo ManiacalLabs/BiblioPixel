@@ -19,6 +19,8 @@ class AliasTest(unittest.TestCase):
         d['foo'] = 'bar'
         self.assertEqual(
             aliases.resolve_section({'typename': 'circle', 'foo': 'bar'}), d)
+        self.assertEqual(
+            aliases.resolve_section({'typename': '@circle', 'foo': 'bar'}), d)
 
     def test_resolve(self):
         self.assertEqual(
@@ -29,6 +31,9 @@ class AliasTest(unittest.TestCase):
         aliases.alias_lists.USER_ALIASES = {'foo': 'bar'}
         try:
             self.assertEquals(aliases.resolve('foo'), 'bar')
+            self.assertEquals(aliases.resolve('@foo.bing'), 'bar.bing')
+            self.assertEquals(aliases.resolve('bar.bing.@foo'), 'bar.bing.bar')
+            self.assertEquals(aliases.resolve('x@foo'), 'x@foo')
         finally:
             aliases.alias_lists.USER_ALIASES = old_user
 
@@ -40,7 +45,7 @@ class AliasTest(unittest.TestCase):
         old_user = aliases.alias_lists.USER_ALIASES
         aliases.alias_lists.USER_ALIASES = {'foo': 'bar.com/a.html'}
         try:
-            result = aliases.resolve('https://$foo#tag')
+            result = aliases.resolve('https://@foo#tag')
         finally:
             aliases.alias_lists.USER_ALIASES = old_user
 

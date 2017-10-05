@@ -2,7 +2,7 @@ import re
 from .. util import log
 from . import alias_lists
 
-ALIAS_MARKER = '$'
+ALIAS_MARKER = '@'
 SEPARATORS = re.compile(r'([./#]|[^./#]+)')
 
 
