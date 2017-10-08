@@ -20,12 +20,13 @@ class BaseAnimation(object):
     name = None
     data = None
 
-    def __init__(self, layout, **kwds):
+    def __init__(self, layout, *, preclear=True, **kwds):
         check.unknown_attributes(kwds, 'animation', self)
         self.layout = layout
         self.internal_delay = None
         self.on_completion = None
         self.state = STATE.ready
+        self.preclear = preclear
 
     @property
     def _led(self):
@@ -129,7 +130,7 @@ class BaseAnimation(object):
         self.compute_state()
 
     @contextlib.contextmanager
-    def run_context(self):
+    def run_context(self, clean_layout=True):
         self.state = STATE.running
         self.runner.run_start_time = time.time()
         self.threading.stop_event.clear()
@@ -139,18 +140,19 @@ class BaseAnimation(object):
 
         self.check_delay()
 
+        self.preclear and self.layout.all_off()
         self.pre_run()
         try:
             yield
         finally:
-            self.cleanup()
+            self.cleanup(clean_layout)
 
         self.on_completion and self.on_completion(self.state)
 
         self.state = STATE.ready
 
-    def run_all_frames(self):
-        with self.run_context():
+    def run_all_frames(self, clean_layout=True):
+        with self.run_context(clean_layout):
             while self.state == STATE.running:
                 self.run_one_frame()
 

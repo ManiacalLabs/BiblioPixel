@@ -19,7 +19,7 @@ class Sequence(collection.Collection):
             return
 
         if not self.completed:
-            self.current_animation.run_all_frames()
+            self.current_animation.run_all_frames(clean_layout=False)
 
         self.index += 1
         if self.index >= len(self.animations):
