@@ -1,0 +1,47 @@
+{
+    "driver": {
+        "num": 1024,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "animations": [
+            {
+                "animation": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel",
+                "run": {
+                    "seconds": 2.0,
+                    "fps": 30
+                }
+            },
+            {
+                "typename": "sequence",
+                "preclear": false,
+                "animations": [
+                    {
+                        "animation": "reprocess",
+                        "run": { "seconds": 2.0 }
+                    },
+                    {
+                        "animation": {
+                            "typename": "reprocess",
+                            "process": { "by_row": false}
+                        },
+
+                        "run": { "seconds": 5 }
+                    }
+                ]
+            }
+        ]
+    },
+
+    "run": {
+        "until_complete": true
+    }
+}
