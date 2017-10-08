@@ -66,7 +66,7 @@ class Matrix(MultiLayout):
                     serpentine=serpentine,
                     rotation=rotation,
                     y_flip=vert_flip)
-            else:
+            elif self.drivers:
                 raise TypeError(
                     "Must provide coord_map if using multiple drivers!")
 
