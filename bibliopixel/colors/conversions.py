@@ -231,3 +231,19 @@ def hue_helper(pos, length, cycle_step):
 
 def hue_helper360(pos, length, cycle_step):
     return hue2rgb_360(((pos * 360 // length) + cycle_step) % 360)
+
+
+def rgb_to_hsv(pixel):
+    return colorsys.rgb_to_hsv(*(p / 255 for p in pixel))
+
+
+def color_cmp(a, b):
+    """Order colors by hue, saturation and value, in that order.
+
+    Returns -1 if a < b, 0 if a == b and 1 if a < b.
+    """
+    if a == b:
+        return 0
+
+    a, b = rgb_to_hsv(a), rgb_to_hsv(b)
+    return -1 if a < b else 1
