@@ -1,0 +1,39 @@
+{
+    "driver": {
+        "num": 1024,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "random": true,
+        "animations": [
+            {
+                "animation": "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
+                "run": {
+                    "seconds": 2
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel",
+                "run": {
+                    "seconds": 2,
+                    "fps": 30
+                }
+            },
+            {
+                "animation": "BiblioPixelAnimations.matrix.bloom.Bloom",
+                "run": {
+                    "seconds": 2,
+                    "fps": 30
+                }
+            }
+        ]
+    }
+}
