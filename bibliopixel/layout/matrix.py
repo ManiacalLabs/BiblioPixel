@@ -23,12 +23,16 @@ class Matrix(MultiLayout):
                  threadedUpdate=False, brightness=255,
                  pixelSize=(1, 1), **kwargs):
         """Main class for matricies.
-        driver - instance that inherits from DriverBase
-        width - X axis size of matrix
-        height - Y axis size of matrix
-        coord_map - a 2D matrix defining the X,Y to strip index mapping. Not needed in most cases
-        rotation - how to rotate when generating the map. Not used if coord_map specified
-        vert_flip - flips the generated map along the Y axis. This along with rotation can achieve any orientation
+
+        driver --  instance that inherits from DriverBase
+        width --  X axis size of matrix
+        height --  Y axis size of matrix
+        coord_map --  a 2D matrix defining the X,Y to strip index mapping.
+            Not needed in most cases
+        rotation -- how to rotate when generating the map.
+            Not used if coord_map specified
+        vert_flip - flips the generated map along the Y axis.
+            This along with rotation can achieve any orientation
         """
         self.gen_multi = make_matrix_coord_map_multi
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
@@ -43,37 +47,44 @@ class Matrix(MultiLayout):
         self.pixelSize = pixelSize
         pw, ph = self.pixelSize
 
-        # if both are 0 try to assume it's a square display
+        # If both are 0, try to assume it's a square display.
         if self.width == 0 and self.height == 0:
             square = int(math.sqrt(self.numLEDs))
             if (square * square) == self.numLEDs:
                 self.width = self.height = square
             else:
-                raise TypeError(
-                    "No width or height passed but the number of LEDs is not a perfect square")
+                raise TypeError('No width or height passed but '
+                                'the number of LEDs is not a perfect square')
 
         if self.width * self.height > self.numLEDs:
-            raise ValueError('width * height cannot exceed total pixel count!'
-                             ' %s * %s > %s'
-                             % (self.width, self.height, self.numLEDs))
+            raise ValueError(
+                'width * height cannot exceed total pixel count! %s * %s > %s'
+                % (self.width, self.height, self.numLEDs))
 
         if not self.coord_map:
             if len(self.drivers) == 1:
-                log.info('Auto generating coordinate map. Use make_matrix_coord_map directly if more control needed.')
-                y_flip = y_flip or vert_flip  # was switched to y_flip, but need to keep vert_flip available
+                log.info(
+                    'Auto generating coordinate map. Use make_matrix_coord_map '
+                    'directly if more control needed.')
+
+                # was switched to y_flip, but need to keep vert_flip available
+                y_flip = y_flip or vert_flip
+
                 self.coord_map = make_matrix_coord_map(
                     self.width, self.height,
                     serpentine=serpentine,
                     rotation=rotation,
                     y_flip=vert_flip)
+
             elif self.drivers:
                 raise TypeError(
-                    "Must provide coord_map if using multiple drivers!")
+                    'Must provide coord_map if using multiple drivers!')
 
-        self.set_pixel_positions(make_matrix_coord_map_positions(self.coord_map))
+        self.set_pixel_positions(
+            make_matrix_coord_map_positions(self.coord_map))
 
-        # if 90 or 270 rotation dimensions need to be swapped so they match the
-        # matrix rotation
+        # If rotation is 90 or 270 degrees, dimensions need to be swapped so
+        # they match the matrix rotation.
         if rotation in (90, 270):
             w = self.width
             h = self.height
@@ -85,10 +96,12 @@ class Matrix(MultiLayout):
 
         if pw < 0 or pw > self.width or ph < 0 or ph > self.height:
             raise ValueError(
-                "pixelSize must be greater than 0 and not larger than total matrix!")
+                'pixelSize must be greater than 0 '
+                'and not larger than total matrix')
+
         if self.width % pw != 0 or self.height % ph != 0:
             raise ValueError(
-                "pixelSize must evenly divide into matrix dimensions!")
+                'pixelSize must evenly divide into matrix dimensions!')
 
         if pw == 1 and ph == 1:
             self._set = self.__setNormal
@@ -105,31 +118,33 @@ class Matrix(MultiLayout):
 
     def loadFont(self, name, height, width, data):
         self.fonts[name] = {
-            "data": data,
-            "height": height,
-            "width": width
+            'data': data,
+            'height': height,
+            'width': width
         }
 
     def setTexture(self, tex=None):
         if tex is None:
             self.texture = tex
             self.set = self._setColor
-        else:
-            if not isinstance(tex, list):
-                raise ValueError("Texture must be a list!")
-            elif len(tex) != self.height:
-                raise ValueError(
-                    "Given texture is must be {} high!".format(self.height))
-            else:
-                for r in tex:
-                    if not isinstance(r, list):
-                        raise ValueError("Texture rows must be lists!")
-                    elif len(r) != self.width:
-                        raise ValueError(
-                            "Texture rows must be {} wide!".format(self.width))
+            return
 
-            self.texture = tex
-            self.set = self._setTexture
+        if not isinstance(tex, list):
+            raise ValueError('Texture must be a list!')
+
+        if len(tex) != self.height:
+            raise ValueError(
+                'Given texture is must be {} high!'.format(self.height))
+
+        for r in tex:
+            if not isinstance(r, list):
+                raise ValueError('Texture rows must be lists!')
+            if len(r) != self.width:
+                raise ValueError(
+                    'Texture rows must be {} wide!'.format(self.width))
+
+        self.texture = tex
+        self.set = self._setTexture
 
     def __setNormal(self, x, y, color):
         try:
@@ -182,31 +197,71 @@ class Matrix(MultiLayout):
     ##########################################################################
 
     def drawCircle(self, x0, y0, r, color=None):
-        """Draws a circle at point x0, y0 with radius r of the specified RGB color"""
+        """
+        Draw a circle in an RGB color, with center x0, y0 and radius r.
+        """
         matrix.draw_circle(self.set, x0, y0, r, color)
 
     def fillCircle(self, x0, y0, r, color=None):
-        """Draws a filled circle at point x0,y0 with radius r and specified color"""
+        """
+        Draw a filled circle in an RGB color, with center x0, y0 and radius r.
+        """
         matrix.fill_circle(self.set, x0, y0, r, color)
 
     def drawLine(self, x0, y0, x1, y1, color=None, colorFunc=None, aa=False):
+        """
+        Draw a between x0, y0 and x1, y1 in an RGB color.
+
+        Arguments:
+        colorFunc -- a function that takes an integer from x0 to x1 and returns
+            a color corresponding to that point
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+
+        """
         matrix.draw_line(self.set, x0, y0, x1, y1, color, colorFunc, aa)
 
     # Bresenham's algorithm
     def bresenham_line(self, x0, y0, x1, y1, color=None, colorFunc=None):
-        """Draw line from point x0,y0 to x,1,y1. Will draw beyond matrix bounds."""
+        """
+        Draw line from point x0, y0 to x1, y1 using Bresenham's algorithm.
+
+        Will draw beyond matrix bounds.
+        """
         matrix.bresenham_line(self.set, x0, y0, x1, y1, color, colorFunc)
 
     # Xiaolin Wu's Line Algorithm
     def wu_line(self, x0, y0, x1, y1, color=None, colorFunc=None):
+        """
+        Draw a between x0, y0 and x1, y1 in an RGB color.
+
+        Arguments:
+        colorFunc -- a function that takes an integer from x0 to x1 and returns
+            a color corresponding to that point
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+        """
         matrix.wu_line(self.set, x0, y0, x1, y1, color, colorFunc)
 
     def drawRect(self, x, y, w, h, color=None, aa=False):
-        """Draw rectangle with top-left corner at x,y, width w and height h"""
+        """
+        Draw rectangle with top-left corner at x,y, width w and height h
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+        """
         matrix.draw_rect(self.set, x, y, w, h, color, aa)
 
     def fillRect(self, x, y, w, h, color=None, aa=False):
-        """Draw solid rectangle with top-left corner at x,y, width w and height h"""
+        """
+        Draw a solid rectangle with top-left corner at (x, y), width w and
+        height h.
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+        """
         matrix.fill_rect(self.set, x, y, w, h, color, aa)
 
     def fillScreen(self, color=None):
@@ -214,28 +269,73 @@ class Matrix(MultiLayout):
         matrix.fill_rect(self.set, 0, 0, self.width, self.height, color)
 
     def drawRoundRect(self, x, y, w, h, r, color=None, aa=False):
-        """Draw rectangle with top-left corner at x,y, width w, height h, and corner radius r"""
+        """
+        Draw a rounded rectangle with top-left corner at (x, y), width w,
+        height h, and corner radius r
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+
+        """
         matrix.draw_round_rect(self.set, x, y, w, h, r, color, aa)
 
     def fillRoundRect(self, x, y, w, h, r, color=None, aa=False):
-        """Draw solid rectangle with top-left corner at x,y, width w, height h, and corner radius r"""
+        """
+        Draw a rounded rectangle with top-left corner at (x, y), width w,
+        height h, and corner radius r
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+
+        """
         matrix.fill_round_rect(self.set, x, y, w, h, r, color, aa)
 
     def drawTriangle(self, x0, y0, x1, y1, x2, y2, color=None, aa=False):
-        """Draw triangle with points x0,y0 - x1,y1 - x2,y2"""
+        """
+        Draw triangle with vertices (x0, y0), (x1, y1) and (x2, y2)
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+
+        """
         matrix.draw_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
     def fillTriangle(self, x0, y0, x1, y1, x2, y2, color=None, aa=False):
-        """Draw solid triangle with points x0,y0 - x1,y1 - x2,y2"""
+        """
+        Draw filled triangle with points x0,y0 - x1,y1 - x2,y2
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+
+        """
         matrix.fill_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
     fillTrangle = fillTriangle  # DEPRECATED!
 
-    def drawChar(self, x, y, c, color, bg, aa=False, font=font.default_font, font_scale=1):
+    def drawChar(self, x, y, c, color, bg,
+                 aa=False, font=font.default_font, font_scale=1):
+        """
+        Draw a single character c at at (x, y) in an RGB color.
+        """
         matrix.draw_char(self.fonts, self.set, self.width, self.height,
                          x, y, c, color, bg, aa, font, font_scale)
 
-    def drawText(self, text, x=0, y=0, color=None, bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+    def drawText(self, text, x=0, y=0, color=None,
+                 bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+        """
+        Draw a line of text starting at (x, y) in an RGB color.
+
+        Arguments:
+        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+            Xiaolin Wu's algorithm
+        bg -- if not None, draw a background of this color in the bounding
+            rectangle for the text block.
+
+        """
         matrix.draw_text(self.fonts, self.set, text, self.width, self.height,
                          x, y, color, bg, aa, font, font_scale)
 
