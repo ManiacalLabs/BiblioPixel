@@ -1,7 +1,7 @@
 import argparse, os, sys
 from . import common_flags
 from .. util import log
-from .. project.importer import import_symbol
+from .. project.importer import import_module
 from .. project import aliases
 
 
@@ -9,7 +9,7 @@ __all__ = ['main']
 COMMANDS = (
     'alias', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'devices',
     'demo', 'run', 'update')
-MODULES = {c: import_symbol('bibliopixel.main.' + c) for c in COMMANDS}
+MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
 
 def no_command(*_):
