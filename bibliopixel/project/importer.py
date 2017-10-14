@@ -47,9 +47,10 @@ def _validate_typename(typename):
         root_module, version, min_version, install_name))
 
 
-def import_symbol(typename):
+def _import(typename, base_path=None, module=False):
     try:
-        result = loady.code.load(typename)
+        loader = loady.code.load_module if module else loady.code.load
+        result = loader(typename, base_path)
         _validate_typename(typename)
         return result
 
@@ -65,8 +66,16 @@ def import_symbol(typename):
         raise
 
 
-def make_object(*args, typename, **kwds):
+def import_symbol(typename, base_path=None):
+    return _import(typename, base_path)
+
+
+def import_module(typename, base_path=None):
+    return _import(typename, base_path, True)
+
+
+def make_object(*args, typename, base_path=None, **kwds):
     """Make an object from a symbol."""
-    object_class = import_symbol(typename)
+    object_class = import_symbol(typename, base_path)
     field_types = getattr(object_class, 'FIELD_TYPES', FIELD_TYPES)
     return object_class(*args, **make.component(kwds, field_types))

@@ -112,7 +112,7 @@ PROJECT_NUMPY = """
         "num": 12
     },
 
-    "layout": "strip",
+    "layout": "bibliopixel.layout.strip.Strip",
     "animation": "strip_test",
     "run": {
         "max_steps": 2
@@ -128,17 +128,17 @@ PROJECT_NUMPY = """
 PROJECT_SIM = """
 {
     "driver": {
-        "typename": "bibliopixel.drivers.SimPixel.SimPixel",
+        "typename": ".SimPixel",
         "num": 12,
         "port": 1338
     },
 
     "layout": {
-        "typename": "bibliopixel.layout.strip.Strip"
+        "typename": ".strip"
     },
 
     "animation": {
-        "typename": "bibliopixel.animation.tests.StripChannelTest",
+        "typename": ".tests.StripChannelTest",
         "name": "test name",
         "data": {"title": "test title"}
     },

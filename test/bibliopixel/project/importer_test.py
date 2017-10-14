@@ -1,6 +1,7 @@
 import unittest
 
-from bibliopixel.project.importer import import_symbol, make_object
+from bibliopixel.project.importer import (
+    import_module, import_symbol, make_object)
 from bibliopixel.project import importer
 
 
@@ -10,8 +11,8 @@ class ImporterTest(unittest.TestCase):
             import_symbol('')
 
     def test_single(self):
-        import_symbol('math')
-        import_symbol('bibliopixel')
+        import_module('math')
+        import_module('bibliopixel')
 
     def test_failed_single(self):
         with self.assertRaises(ImportError):
@@ -19,7 +20,7 @@ class ImporterTest(unittest.TestCase):
 
     def test_double(self):
         import_symbol('math.log')
-        import_symbol('bibliopixel.util')
+        import_module('bibliopixel.util')
 
     def test_failed_double(self):
         with self.assertRaises(ImportError):
@@ -33,7 +34,7 @@ class ImporterTest(unittest.TestCase):
 
     def test_longer(self):
         self.assertEqual(
-            import_symbol('bibliopixel.project.importer'), importer)
+            import_module('bibliopixel.project.importer'), importer)
         self.assertEqual(
             import_symbol('bibliopixel.project.importer.import_symbol'),
             import_symbol)

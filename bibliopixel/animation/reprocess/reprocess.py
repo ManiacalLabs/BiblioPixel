@@ -30,7 +30,8 @@ class Reprocess(collection.Collection):
         else:
             typename = process.pop('typename', pname)
 
-        datatype = importer.import_symbol(typename)
+        datatype = importer.import_symbol(
+            typename, 'bibliopixel.animation.reprocess')
         self.process = datatype(layout=self.layout, **process)
 
     def step(self, amt=1):

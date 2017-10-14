@@ -12,7 +12,8 @@ Your path was %s."""
 def make_animation(layout, animation, run=None):
     animation = aliases.resolve_section(animation)
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
-    animation_obj = importer.make_object(layout, **animation)
+    animation_obj = importer.make_object(
+        layout, base_path='bibliopixel.animation', **animation)
 
     # Add the reserved properties back in.
     for k, v in reserved.items():
@@ -74,25 +75,30 @@ class Project:
             raise ValueError(
                 'The project has neither a "driver" nor a "drivers" section')
 
-    def make_object(self, *args, **kwds):
+    def make_object(self, *args, base_path=None, **kwds):
         kwds = aliases.resolve_section(kwds)
-        return importer.make_object(*args, maker=self.maker, **kwds)
+        return importer.make_object(
+            *args, maker=self.maker, base_path=base_path, **kwds)
 
     def make_animation(self):
         extend_path(self.path)
         driver_objects = self.make_drivers()
-        layout_object = self.make_object(driver_objects, **self.layout)
+        layout_object = self.make_object(
+            driver_objects, base_path='bibliopixel.layout', **self.layout)
         return make_animation(layout_object, self.animation, self.run)
 
     def make_drivers(self):
+        def make_object(d):
+            return self.make_object(base_path='bibliopixel.drivers', **d)
+
         if not self.drivers:
-            return [self.make_object(**self.driver)]
+            return [make_object(self.driver)]
 
         if self.driver:
             # driver is a default for each driver.
             self.drivers = [dict(self.driver, **d) for d in self.drivers]
 
-        return [self.make_object(**d) for d in self.drivers]
+        return [make_object(d) for d in self.drivers]
 
 
 def read_project(location, threaded=True, default=None):
