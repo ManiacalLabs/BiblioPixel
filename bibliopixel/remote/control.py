@@ -142,7 +142,7 @@ class RemoteControl(collection.Collection):
             typename = trigger.pop('typename')
             events = trigger.pop('events')
             if typename and events:
-                loady.code.load(typename)  # attempt early to fail early
+                loady.code.load_code(typename)  # attempt early to fail early
                 self.triggers.setdefault(typename, []).extend((events, trigger))
             else:
                 raise ValueError('Triggers require `typename` and `events` fields!')

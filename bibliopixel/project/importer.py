@@ -49,7 +49,7 @@ def _validate_typename(typename):
 
 def _import(typename, base_path=None, module=False):
     try:
-        loader = loady.code.load_module if module else loady.code.load
+        loader = loady.code.load_module if module else loady.code.load_code
         result = loader(typename, base_path)
         _validate_typename(typename)
         return result
