@@ -39,4 +39,4 @@ class Runner(object):
         self.max_cycles = max_cycles
         self.seconds = seconds
         self.threaded = threaded
-        self.main = main and loady.code.load(main)
+        self.main = main and loady.code.load_code(main)
