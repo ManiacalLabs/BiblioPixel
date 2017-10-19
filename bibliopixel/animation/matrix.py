@@ -3,6 +3,8 @@ from .. layout import Matrix
 
 
 class BaseMatrixAnim(BaseAnimation):
+    LAYOUT_CLASS = Matrix
+    LAYOUT_ARGS = 'width', 'height'
 
     def __init__(self, layout, width=0, height=0, **kwds):
         super().__init__(layout, **kwds)

@@ -3,6 +3,8 @@ from .. layout import Cube
 
 
 class BaseCubeAnim(BaseAnimation):
+    LAYOUT_CLASS = Cube
+    LAYOUT_ARGS = 'x', 'y', 'z'
 
     def __init__(self, layout, **kwds):
         super().__init__(layout, **kwds)
