@@ -3,6 +3,8 @@ from .. layout import Strip
 
 
 class BaseStripAnim(BaseAnimation):
+    LAYOUT_CLASS = Strip
+    LAYOUT_ARGS = 'num',
 
     def __init__(self, layout, start=0, end=-1, **kwds):
         super().__init__(layout, **kwds)
