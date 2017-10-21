@@ -1,15 +1,16 @@
 import time
 from .. import colors, util
-from .. project import data_maker, check
+from .. project import attributes, data_maker, fields
 from .. threads.update_threading import UpdateThreading
 
 
 class Layout(object):
+    fix_fields = fields.CONVERTER
 
     def __init__(self, drivers, threadedUpdate, brightness,
                  maker=data_maker.MAKER, **kwds):
         """Base LED class. Use Strip or Matrix instead!"""
-        check.unknown_attributes(kwds, 'layout', self)
+        attributes.set_reserved(self, 'layout', **kwds)
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
         self.maker = maker
 

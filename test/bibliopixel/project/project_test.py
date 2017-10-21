@@ -241,6 +241,7 @@ class ProjectTest(unittest.TestCase):
     def test_sequence(self):
         animation = make(PROJECT_SEQUENCE, run_start=False)
         self.assertEquals(len(animation.animations), 3)
+        self.assertIsNotNone(animation.animations[0])
         animation = animation.animations[1]
         self.assertEquals(animation.name, 'mt')
         self.assertEquals(animation.layout.rotation, 90)
@@ -248,7 +249,7 @@ class ProjectTest(unittest.TestCase):
     def test_numpy(self):
         make(PROJECT_NUMPY)
 
-    def test_sim(self):
+    def test_simpixel(self):
         animation = make(PROJECT_SIM, run_start=False)
         self.assertEquals(animation.name, 'test name')
         self.assertEquals(animation.data, {'title': 'test title'})

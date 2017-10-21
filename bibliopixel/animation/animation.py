@@ -2,7 +2,7 @@ import contextlib, threading, time
 from . runner import Runner
 from .. util import log
 from .. threads.animation_threading import AnimationThreading
-from .. project import check
+from .. project import attributes, fields
 from enum import IntEnum
 
 
@@ -17,11 +17,10 @@ class STATE(IntEnum):
 
 class BaseAnimation(object):
     free_run = False
-    name = None
-    data = None
+    fix_fields = fields.CONVERTER
 
     def __init__(self, layout, *, preclear=True, **kwds):
-        check.unknown_attributes(kwds, 'animation', self)
+        attributes.set_reserved(self, 'animation', **kwds)
         self.layout = layout
         self.internal_delay = None
         self.on_completion = None
@@ -157,7 +156,10 @@ class BaseAnimation(object):
                 self.run_one_frame()
 
     def set_runner(self, runner):
-        self.runner = Runner(**(runner or {}))
+        if isinstance(runner, Runner):
+            self.runner = runner
+        else:
+            self.runner = Runner(**(runner or {}))
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
 
     def start(self):

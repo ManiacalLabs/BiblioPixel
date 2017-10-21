@@ -1,5 +1,5 @@
-import loady, os
-from . import aliases, check, importer
+import copy, loady, os
+from . import aliases, attributes, importer, load, project2
 from .. project import data_maker
 
 RESERVED_PROPERTIES = 'name', 'data'
@@ -36,7 +36,13 @@ def extend_path(path):
     parts and loady.sys_path.extend(':'.join(parts))
 
 
+def _create(*args, datatype, typename=None, **desc):
+    return datatype(*args, **desc)
+
+
 class Project:
+    SUBOBJECTS = 'animation', 'driver', 'drivers', 'maker'
+
     def __init__(self, *,
                  animation=None,
                  default=None,
@@ -47,7 +53,7 @@ class Project:
                  path=None,
                  run=None,
                  **kwds):
-        check.unknown(kwds, 'section', 'project')
+        attributes.check(kwds, 'project')
         default = default or {}
 
         def resolve(name, value):
@@ -61,7 +67,10 @@ class Project:
         self.path = resolve('path', path)
 
         self.drivers = drivers or []
-        self.maker = data_maker.Maker(**(maker or {}))
+        maker = maker or {}
+        maker_type = maker.pop('datatype', data_maker.Maker)
+        maker.pop('typename', None)
+        self.maker = maker_type(**maker)
 
         self.path = path or default.get('path', '')
         self.run = run or default.get('run', {})
@@ -76,34 +85,42 @@ class Project:
             raise ValueError(
                 'The project has neither a "driver" nor a "drivers" section')
 
-    def make_object(self, *args, python_path=None, **kwds):
+    def _make_object(self, *args, python_path=None, **kwds):
         kwds = aliases.resolve_section(kwds)
         return importer.make_object(
             *args, maker=self.maker, python_path=python_path, **kwds)
 
     def make_animation(self):
         extend_path(self.path)
-        driver_objects = self.make_drivers()
-        layout_object = self.make_object(
+        driver_objects = self._make_drivers()
+        layout_object = self._make_object(
             driver_objects, python_path='bibliopixel.layout', **self.layout)
         return make_animation(layout_object, self.animation, self.run)
 
-    def make_drivers(self):
-        def make_object(d):
-            return self.make_object(python_path='bibliopixel.drivers', **d)
+    def _make_drivers(self):
+        def make_driver(d):
+            return self._make_object(python_path='bibliopixel.drivers', **d)
 
         if not self.drivers:
-            return [make_object(self.driver)]
+            return [make_driver(self.driver)]
 
         if self.driver:
             # driver is a default for each driver.
             self.drivers = [dict(self.driver, **d) for d in self.drivers]
 
-        return [make_object(d) for d in self.drivers]
+        return [make_driver(d) for d in self.drivers]
 
 
-def read_project(location, threaded=True, default=None):
-    project = loady.data.load(location, use_json=True)
+USE_NEW_PROJECTS = False
+
+
+def read_project(location, threaded=None, default=None):
+    project = load.data(location)
     if threaded is not None:
         project.setdefault('run', {})['threaded'] = threaded
-    return Project(default=default, **project).make_animation()
+
+    new_project = project2.project(default, copy.deepcopy(project))
+    if USE_NEW_PROJECTS:
+        return new_project
+
+    return Project(default=default, **project)

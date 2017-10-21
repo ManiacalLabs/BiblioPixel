@@ -1,6 +1,5 @@
-import loady
 from .. util import log
-from .. project import check
+from .. project import attributes, load
 
 
 class Runner(object):
@@ -8,7 +7,7 @@ class Runner(object):
     def __init__(self, amt=1, fps=None, sleep_time=0, max_steps=0,
                  until_complete=False, max_cycles=0, seconds=None,
                  threaded=False, main=None, **kwds):
-        check.unknown(kwds, 'attribute', 'run')
+        attributes.check(kwds, 'run')
 
         if max_steps < 0:
             log.error('max_steps %s < 0', max_steps)
@@ -39,4 +38,4 @@ class Runner(object):
         self.max_cycles = max_cycles
         self.seconds = seconds
         self.threaded = threaded
-        self.main = main and loady.code.load_code(main)
+        self.main = load.code(main)

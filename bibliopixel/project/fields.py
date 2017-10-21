@@ -26,6 +26,8 @@ def type_converter(types):
                     key, value[key]),) + e.args
                 raise
 
+        return value
+
     return converter
 
 

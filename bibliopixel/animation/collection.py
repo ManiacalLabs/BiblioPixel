@@ -1,5 +1,5 @@
 import traceback
-from .. project import aliases, project
+from .. project import aliases, construct, project, run_animation
 from . import animation
 from .. util import log
 
@@ -7,9 +7,31 @@ from .. util import log
 class Collection(animation.BaseAnimation):
     FAIL_ON_EXCEPTION = False
 
+    @staticmethod
+    def fix_children(desc):
+        def fix(a):
+            a = run_animation.fix(a)
+            result = a.pop('run_animation')
+            if a:
+                raise ValueError('Unknown animation field  %s' % ', '.join(a))
+            return result
+
+        animations = desc.setdefault('animations', [])
+        animations[:] = [fix(a) for a in animations]
+
+    @staticmethod
+    def children(value):
+        animations = value['animations']
+        return ((i, animations) for i in range(len(animations)))
+
     def __init__(self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)
-        self.animations = [self._make_animation(i) for i in (animations or [])]
+        if animations:
+            if isinstance(animations[0], (str, dict)):
+                self.animations = [self._make_animation(i) for i in animations]
+            else:
+                self.animations = [r.runnable_animation() for r in animations]
+
         self.index = 0
         self.internal_delay = 0  # never wait
 

@@ -1,6 +1,6 @@
 from . channel_order import ChannelOrder
 from .. colors import gamma as _gamma
-from .. project import data_maker, check
+from .. project import attributes, data_maker, fields
 import threading, time
 
 
@@ -14,9 +14,11 @@ class DriverBase(object):
     # the pixels.
     set_device_brightness = None
 
+    fix_fields = fields.CONVERTER
+
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
                  gamma=None, maker=data_maker.MAKER, **kwds):
-        check.unknown_attributes(kwds, 'driver', self)
+        attributes.set_reserved(self, 'driver', **kwds)
 
         if num == 0:
             num = width * height
