@@ -1,14 +1,9 @@
 from . base import TypesBaseTest
 from bibliopixel import colors
-from bibliopixel.project.types import defaults, make
+from bibliopixel.project import fields
 
 
 class ColorTypesTest(TypesBaseTest):
-    def test_unchanged(self):
-        for p in {}, {'a': {}}, {'a': {'b': 'c'}}:
-            self.assertEqual(make.project(p, {}), p)
-            self.assertEqual(make.project(p, defaults.FIELD_TYPES), p)
-
     def test_color_names(self):
         # Test every color.
         for name in dir(colors):

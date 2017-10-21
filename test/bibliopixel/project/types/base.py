@@ -1,10 +1,10 @@
 import unittest
-from bibliopixel.project.types import defaults, make
+from bibliopixel.project import fields
 
 
 class TypesBaseTest(unittest.TestCase):
     def make(self, name, c, result=None):
-        component = make.component({name: c}, field_types=defaults.FIELD_TYPES)
+        component = fields.component({name: c}, field_types=fields.FIELD_TYPES)
         if result is not None:
             self.assertEquals(component, {name: result})
         return component

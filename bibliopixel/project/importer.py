@@ -1,6 +1,6 @@
 import json
 from . import load
-from . types import defaults, make
+from . import fields
 from distutils.version import LooseVersion
 
 
@@ -76,5 +76,5 @@ def import_module(typename, python_path=None):
 def make_object(*args, typename, python_path=None, datatype=None, **kwds):
     """Make an object from a symbol."""
     object_class = import_symbol(typename, python_path)
-    field_types = getattr(object_class, 'FIELD_TYPES', defaults.FIELD_TYPES)
-    return object_class(*args, **make.component(kwds, field_types))
+    field_types = getattr(object_class, 'FIELD_TYPES', fields.FIELD_TYPES)
+    return object_class(*args, **fields.component(kwds, field_types))
