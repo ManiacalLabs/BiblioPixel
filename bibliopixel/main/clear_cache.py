@@ -1,7 +1,8 @@
+import loady
+
 """
 Clear the git repository library cache.
 """
-import loady
 
 
 def run(args):

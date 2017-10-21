@@ -13,7 +13,7 @@ def make_animation(layout, animation, run=None):
     animation = aliases.resolve_section(animation)
     reserved = {p: animation.pop(p, None) for p in RESERVED_PROPERTIES}
     animation_obj = importer.make_object(
-        layout, base_path='bibliopixel.animation', **animation)
+        layout, python_path='bibliopixel.animation', **animation)
 
     # Add the reserved properties back in.
     for k, v in reserved.items():
@@ -76,21 +76,21 @@ class Project:
             raise ValueError(
                 'The project has neither a "driver" nor a "drivers" section')
 
-    def make_object(self, *args, base_path=None, **kwds):
+    def make_object(self, *args, python_path=None, **kwds):
         kwds = aliases.resolve_section(kwds)
         return importer.make_object(
-            *args, maker=self.maker, base_path=base_path, **kwds)
+            *args, maker=self.maker, python_path=python_path, **kwds)
 
     def make_animation(self):
         extend_path(self.path)
         driver_objects = self.make_drivers()
         layout_object = self.make_object(
-            driver_objects, base_path='bibliopixel.layout', **self.layout)
+            driver_objects, python_path='bibliopixel.layout', **self.layout)
         return make_animation(layout_object, self.animation, self.run)
 
     def make_drivers(self):
         def make_object(d):
-            return self.make_object(base_path='bibliopixel.drivers', **d)
+            return self.make_object(python_path='bibliopixel.drivers', **d)
 
         if not self.drivers:
             return [make_object(self.driver)]

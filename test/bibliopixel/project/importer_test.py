@@ -7,8 +7,7 @@ from bibliopixel.project import importer
 
 class ImporterTest(unittest.TestCase):
     def test_empty(self):
-        with self.assertRaises(ValueError):
-            import_symbol('')
+        import_symbol('')
 
     def test_single(self):
         import_module('math')
