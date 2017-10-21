@@ -5,29 +5,29 @@ from bibliopixel import colors
 
 class Tester:
     @staticmethod
-    def post(x):
+    def fix_fields(x):
         for k, v in x.items():
             if k != 'typename' and isinstance(v, str):
                 x[k] = 'post-' + x[k]
 
     @staticmethod
     def children(x):
-        return (x, 'foo'),
+        return ('foo', x),
 
 
 class RecurseTest(unittest.TestCase):
     def test_empty(self):
-        self.assertEquals(recurse.recurse({}), {})
+        self.assertEquals(recurse.fix({}), {})
 
     def test_trivial(self):
-        self.assertEquals(recurse.recurse({'a': {}}), {'a': {}})
+        self.assertEquals(recurse.fix({'a': {}}), {'a': {}})
 
-    pre = staticmethod(fields.CONVERTER)
+    fix_fields = staticmethod(fields.CONVERTER)
 
     def test_simple(self):
         source = {'datatype': RecurseTest, 'foo': 'bar', 'color': 'red'}
         expected = {'datatype': RecurseTest, 'foo': 'bar', 'color': colors.Red}
-        self.assertEquals(expected, recurse.recurse(source))
+        self.assertEquals(expected, recurse.fix(source))
 
     def test_complex(self):
         source = {
@@ -41,4 +41,4 @@ class RecurseTest(unittest.TestCase):
             'foo': {'datatype': RecurseTest, 'foo': 'bar', 'color': colors.Red},
             'bing': 'post-bang',
         }
-        self.assertEquals(expected, recurse.recurse(source))
+        self.assertEquals(expected, recurse.fix(source))

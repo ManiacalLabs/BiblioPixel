@@ -1,4 +1,5 @@
 from .. util import log
+from . import construct
 
 DEFAULT_PROJECT = {
     'animation': {},
@@ -7,7 +8,7 @@ DEFAULT_PROJECT = {
     'layout': {},
     'maker': 'bibliopixel.project.data_maker.Maker',
     'path': '',
-    'run': {},
+    'run': 'bibliopixel.animation.runner.Runner',
     'typename': 'bibliopixel.project.project2.Project',
 }
 
@@ -23,8 +24,6 @@ def merge(*projects):
             if name in ('drivers', 'path', 'typename'):
                 result[name] = section
             else:
-                if isinstance(section, str):
-                    section = {'typename': section}
-                result.setdefault(name, {}).update(section)
+                result.setdefault(name, {}).update(construct.to_type(section))
 
     return result

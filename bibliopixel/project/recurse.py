@@ -17,14 +17,15 @@ children.
 """
 
 
-def recurse(dictionary, pre=None, post=None, children=None, python_path=None):
+def recurse(desc, pre=None, post=None, children='children', python_path=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
     The arguments pre, post and children are independently either:
 
-    * None, which means to use the static class method of the same name on
-      the class being constructed, or
+    * None, which means to do nothing
+    * a string, which means to use the static class method of that name on the
+      class being constructed, or
     * a callable, to be called at each recursion
 
     Arguments:
@@ -35,17 +36,26 @@ def recurse(dictionary, pre=None, post=None, children=None, python_path=None):
     post -- called after children are visited in the recursion.
 
     """
-    value = construct.to_type_constructor(dictionary, python_path)
-    datatype = value.get('datatype')
+    def call(f, desc):
+        if isinstance(f, str):
+            # f is the name of a static class method on the datatype.
+            f = getattr(datatype, f, None)
+            return f and f(desc)
 
-    def call(name, f):
-        f = f or getattr(datatype, name, None)
-        return f and f(value)
+        # f is a function.
+        return f and f(datatype, desc)
 
-    value = call('pre', pre) or value
+    desc = construct.to_type_constructor(desc, python_path)
+    datatype = desc.get('datatype')
 
-    for coll, key, *new_path in call('children', children) or ():
+    desc = call(pre, desc) or desc
+
+    for key, coll, *new_path in call(children, desc) or ():
         new_path = new_path[0] if new_path else python_path
         coll[key] = recurse(coll[key], pre, post, children, new_path)
 
-    return call('post', post) or value
+    return call(post, desc) or desc
+
+
+def fix(desc):
+    return recurse(desc, pre='fix_children', post='fix_fields')

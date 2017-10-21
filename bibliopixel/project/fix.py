@@ -1,16 +1,12 @@
-from . import importer
+from . import construct
 
-
-def to_type(d):
-    return {'typename': d} if isinstance(d, str) else d
-
-
-DEFAULT_DRIVERS = [to_type('simpixel')]
+DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 
 def fix_drivers(project):
-    driver = to_type(project.pop('driver', {}))
-    drivers = [to_type(d) for d in project.get('drivers', [])]
+    # This must be called before recursing into the children.
+    driver = construct.to_type(project.pop('driver', {}))
+    drivers = [construct.to_type(d) for d in project.get('drivers', [])]
     if driver:
         if drivers:
             drivers = [dict(driver, **d) for d in drivers]
@@ -19,19 +15,28 @@ def fix_drivers(project):
 
     project['drivers'] = drivers or DEFAULT_DRIVERS
 
-    return project
 
+def fix_layout_and_animation(project):
+    # This must be called after recursing into children.
+    anim = project.get('run_animation', {}).get('animation')
+    if not anim:
+        raise ValueError('Missing "animation" section')
 
-def fix_layout(project):
-    # This needs to be called after resolution.
-    if project.get('layout'):
-        return project
+    anim_datatype = anim.get('datatype')
+    if not anim_datatype:
+        raise ValueError('Missing "datatype" in "animation" section')
 
-    animation = project.get('animation')
-    if animation:
-        animation_type = animation['datatype']
-        args = {k: animation[k] for k in animation_type.LAYOUT_ARGS
-                if k in animation}
-        project['layout'] = dict(args, datatype=animation_type.LAYOUT_CLASS)
+    layout = project.get('layout')
+    if layout:
+        if not layout.get('datatype'):
+            raise ValueError('Missing "datatype" in "layout" section')
+        return
 
-    return project
+    # Try to fill in the layout if it's missing.
+    try:
+        args, layout_cl = anim_datatype.LAYOUT_ARGS, anim_datatype.LAYOUT_CLASS
+    except:
+        raise ValueError('Missing "layout" section')
+
+    args = {k: anim[k] for k in args if k in anim}
+    project['layout'] = dict(args, datatype=layout_cl)

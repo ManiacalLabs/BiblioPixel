@@ -3,7 +3,9 @@ from bibliopixel.project import merge
 
 BASE = dict(
     merge.DEFAULT_PROJECT,
-    maker={'typename': 'bibliopixel.project.data_maker.Maker'})
+    maker={'typename': 'bibliopixel.project.data_maker.Maker'},
+    run={'typename': 'bibliopixel.animation.runner.Runner'},
+)
 
 
 class MergeTest(unittest.TestCase):
@@ -32,7 +34,7 @@ class MergeTest(unittest.TestCase):
                 'typename': 'bibliopixel.project.data_maker.Maker'
             },
             'path': 'path/to/dir',
-            'run': {},
+            'run': {'typename': 'bibliopixel.animation.runner.Runner'},
             'typename': 'bibliopixel.project.project2.Project'
         }
 

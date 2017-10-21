@@ -12,6 +12,18 @@ def construct(*args, datatype, typename=None, **kwds):
     return datatype(*args, **kwds)
 
 
+def construct_reserved(*args, name=None, data=None, **desc):
+    """Construct and add in the two reserved fields name and data"""
+    result = construct(*args, **desc)
+    result.name, result.data = name, data
+
+    return result
+
+
+def to_type(d):
+    return {'typename': d} if isinstance(d, str) else d
+
+
 def to_type_constructor(value, python_path=None):
     """"
     Tries to convert a value to a type constructor.
@@ -28,9 +40,7 @@ def to_type_constructor(value, python_path=None):
     if not value:
         return value
 
-    if isinstance(value, str):
-        value = {'typename': value}
-
+    value = to_type(value)
     typename = value.get('typename')
     if typename:
         value['datatype'] = importer.import_symbol(

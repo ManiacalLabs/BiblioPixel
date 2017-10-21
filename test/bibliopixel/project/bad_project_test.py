@@ -7,7 +7,6 @@ from . make import make
 PYTHON_FILE = 'driver = {"a": "b"}'
 MISSING_LAYOUT = '{"animation": "off", "driver": "dummy"}'
 MISSING_ANIMATION = '{"layout": "matrix", "driver": "dummy"}'
-MISSING_EVERYTHING = '{}'
 
 
 # This one works, but prints a warning.
@@ -86,7 +85,7 @@ class BadProjectTest(unittest.TestCase):
 
         self.assertEquals(
             e.exception.args,
-            ('Unknown section for project: "bad_section"',))
+            ('Unknown attribute for project: "bad_section"',))
 
     def test_bad_driver_attribute(self):
         with self.assertRaises(ValueError) as e:
@@ -100,21 +99,24 @@ class BadProjectTest(unittest.TestCase):
             make(BAD_LAYOUT_ATTRIBUTE)
         self.assertEquals(
             e.exception.args,
-            ('Unknown attribute for layout Matrix: "bad_attribute"',))
+            ('Unable to create layout',
+             'Unknown attribute for layout Matrix: "bad_attribute"'))
 
     def test_bad_animation_attribute(self):
         with self.assertRaises(ValueError) as e:
             make(BAD_ANIMATION_ATTRIBUTE)
         self.assertEquals(
             e.exception.args,
-            ('Unknown attribute for animation OffAnim: "bad_attribute"',))
+            ('Unable to create animation',
+             'Unknown attribute for animation OffAnim: "bad_attribute"'))
 
     def test_bad_run_attribute(self):
         with self.assertRaises(ValueError) as e:
             make(BAD_RUN_ATTRIBUTE)
         self.assertEquals(
             e.exception.args,
-            ('Unknown attribute for run: "bad_attribute"',))
+            ('Unable to create animation',
+             'Unknown attribute for run: "bad_attribute"'))
 
     def test_missing_layout(self):
         with self.assertRaises(ValueError) as e:
@@ -128,11 +130,11 @@ class BadProjectTest(unittest.TestCase):
             make(MISSING_ANIMATION)
         self.assertEquals(
             e.exception.args,
-            ('There was no "animation" section in the project',))
+            ('Missing "animation" section',))
 
     def test_missing_everything(self):
         with self.assertRaises(ValueError) as e:
-            make(MISSING_EVERYTHING)
+            make('{}')
         self.assertEquals(
             e.exception.args,
-            ('There was no "animation" section in the project',))
+            ('Missing "animation" section',))
