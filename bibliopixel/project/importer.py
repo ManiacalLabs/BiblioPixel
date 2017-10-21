@@ -1,6 +1,6 @@
-import loady
-from . types import make
-from . types.defaults import FIELD_TYPES
+import json
+from . import load
+from . types import defaults, make
 from distutils.version import LooseVersion
 
 
@@ -47,10 +47,9 @@ def _validate_typename(typename):
         root_module, version, min_version, install_name))
 
 
-def _import(typename, base_path=None, module=False):
+def _import(typename, python_path=None, loader=load.code):
     try:
-        loader = loady.code.load_module if module else loady.code.load_code
-        result = loader(typename, base_path)
+        result = loader(typename, python_path=python_path)
         _validate_typename(typename)
         return result
 
@@ -66,16 +65,16 @@ def _import(typename, base_path=None, module=False):
         raise
 
 
-def import_symbol(typename, base_path=None):
-    return _import(typename, base_path)
+def import_symbol(typename, python_path=None):
+    return _import(typename, python_path)
 
 
-def import_module(typename, base_path=None):
-    return _import(typename, base_path, True)
+def import_module(typename, python_path=None):
+    return _import(typename, python_path, loader=load.module)
 
 
-def make_object(*args, typename, base_path=None, **kwds):
+def make_object(*args, typename, python_path=None, datatype=None, **kwds):
     """Make an object from a symbol."""
-    object_class = import_symbol(typename, base_path)
-    field_types = getattr(object_class, 'FIELD_TYPES', FIELD_TYPES)
+    object_class = import_symbol(typename, python_path)
+    field_types = getattr(object_class, 'FIELD_TYPES', defaults.FIELD_TYPES)
     return object_class(*args, **make.component(kwds, field_types))

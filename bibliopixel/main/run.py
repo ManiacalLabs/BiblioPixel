@@ -2,10 +2,11 @@
 Run a project description file.
 """
 
-import loady, sys, time, traceback
+import sys, time, traceback
 from . import common_flags, simpixel
 from .. util import log
 from .. animation.collection import Collection
+from .. project import load
 
 RUN_ERROR = """When reading description:
 {desc}
@@ -22,15 +23,11 @@ def run(args):
 
     animations, failed = [], []
 
-    for name in args.name or ['']:
-        if args.json:
-            desc = name
-        else:
-            desc = name and loady.data.load(name, True)
-
+    for project in args.name or ['']:
         saved_path = sys.path[:]
         try:
-            animations.append(common_flags.make_animation(args, desc or {}))
+            desc = load.data(project)
+            animations.append(common_flags.make_animation(args, desc))
 
         except Exception as exception:
             if args.verbose:
