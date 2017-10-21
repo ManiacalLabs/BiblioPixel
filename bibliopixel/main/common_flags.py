@@ -149,6 +149,10 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_animation(args, desc):
+def make_project(args, desc):
     project_flags = _make_project_flags(args)
-    return project.Project(default=project_flags, **desc).make_animation()
+    return project.Project(default=project_flags, **desc)
+
+
+def make_animation(args, desc):
+    return make_project(args, desc).make_animation()
