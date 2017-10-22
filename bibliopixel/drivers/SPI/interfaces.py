@@ -1,8 +1,8 @@
 import os
 import math
-from enum import IntEnum
 from . import errors
 from ... util import log
+from .. spi_interfaces import SPI_INTERFACES
 
 
 class SpiBaseInterface(object):
@@ -123,10 +123,3 @@ _SPI_INTERFACES = [
     SpiPeripheryInterface,
     SpiDummyInterface
 ]
-
-
-class SPI_INTERFACES(IntEnum):
-    FILE = 0
-    PYDEV = 1
-    PERIPHERY = 2
-    DUMMY = 3
