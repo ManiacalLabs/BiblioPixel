@@ -111,7 +111,7 @@ class Project:
         return [make_driver(d) for d in self.drivers]
 
 
-USE_NEW_PROJECTS = False
+USE_NEW_PROJECTS = True
 
 
 def read_project(location, threaded=None, default=None):
