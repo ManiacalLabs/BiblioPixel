@@ -1,5 +1,5 @@
 import functools
-from ...drivers.SPI.interfaces import SPI_INTERFACES
+from ...drivers.spi_interfaces import SPI_INTERFACES
 
 USAGE = """A spi_interface is represented by a string.
 
