@@ -31,7 +31,7 @@ class SubTest(unittest.TestCase):
         self.assertEqual(output.get(), 'first')
         self.assertTrue(s.is_alive())
         self.assertEqual(output.get(), 'second')
-        pause()
+        pause(WAIT_FOR_SUB)
         self.assertFalse(s.is_alive())
 
     def test_subprocess(self):
