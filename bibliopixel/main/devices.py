@@ -1,5 +1,7 @@
 """Find serial devices."""
 
+from .. util import log
+
 CONNECT_MESSAGE = """
 Connect just one Serial device (AllPixel) and press enter..."""
 
@@ -10,7 +12,7 @@ def run(args):
     import serial
 
     run = True
-    print("Press Ctrl+C any time to exit.")
+    log.printer("Press Ctrl+C any time to exit.")
     try:
         while run:
             try:
@@ -18,12 +20,12 @@ def run(args):
                 devices = Devices(args.hardware_id, args.baud)
                 ports = devices.find_serial_devices()
                 if not ports:
-                    print("No serial devices found. Please connect one.")
+                    log.printer("No serial devices found. Please connect one.")
                     continue
 
                 port = sorted(ports.items())[0][1][0]
                 id = devices.get_device_id(port)
-                print("Device ID of {}: {}".format(port, id))
+                log.printer("Device ID of {}: {}".format(port, id))
                 newID = input("Input new ID (enter to skip): ")
                 if newID != '':
                     try:
@@ -33,14 +35,14 @@ def run(args):
 
                         devices.set_device_id(port, newID)
                         id = devices.get_device_id(port)
-                        print("Device ID set to: %s" % id)
+                        log.printer("Device ID set to: %s" % id)
                     except ValueError:
-                        print("Please enter a number between 0 and 255.")
+                        log.printer("Please enter a number between 0 and 255.")
             except serial.SerialException as e:
-                print("Problem connecting to serial device. %s" % e)
+                log.printer("Problem connecting to serial device. %s" % e)
 
             except Exception as e:
-                print('Programmer error with exception %s' % e)
+                log.printer('Programmer error with exception %s' % e)
 
     except KeyboardInterrupt:
         pass

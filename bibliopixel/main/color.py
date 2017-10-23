@@ -4,11 +4,12 @@ Converts its arguments between color names and color tuples.
 
 import json
 from .. colors import names
+from .. util import log
 
 
 def run(args):
     if args.list:
-        print(*sorted(names.COLOR_DICT.items()), sep='\n')
+        log.printer(*sorted(names.COLOR_DICT.items()), sep='\n')
 
     if not args.colors:
         if not args.list:
@@ -17,7 +18,7 @@ def run(args):
     failures = []
     for c in args.colors:
         try:
-            print(c, names.toggle(c), sep=': ')
+            log.printer(c, names.toggle(c), sep=': ')
         except Exception as e:
             failures.append(c)
     if failures:

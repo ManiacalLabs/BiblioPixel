@@ -1,5 +1,5 @@
 import operator, os
-from .. util import datafile
+from .. util import datafile, log
 
 USER_ALIAS_FILE = os.path.expanduser('~/.bibliopixel_aliases')
 USER_ALIASES = datafile.DataFile(USER_ALIAS_FILE)
@@ -46,14 +46,14 @@ def get_alias(alias, isolate=False):
     return not isolate and USER_ALIASES.get(alias) or BUILTIN_ALIASES.get(alias)
 
 
-def print_alias(alias, value, print=print):
+def print_alias(alias, value, printer=log.printer):
     if value:
-        print('%s = %s' % (alias, value))
+        printer('%s = %s' % (alias, value))
     else:
-        print('# %s is not defined.' % alias)
+        printer('# %s is not defined.' % alias)
 
 
-def print_aliases(builtin, by_value=False, print=print):
+def print_aliases(builtin, by_value=False, printer=log.printer):
     """
     Args:
         by_value: sort either by alias name, or by alias value
@@ -61,7 +61,7 @@ def print_aliases(builtin, by_value=False, print=print):
 
     aliases = BUILTIN_ALIASES if builtin else USER_ALIASES.data
     if not aliases:
-        print('(no aliases)')
+        printer('(no aliases)')
         return
 
     key_func = operator.itemgetter(int(by_value))

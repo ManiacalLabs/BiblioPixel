@@ -2,8 +2,8 @@
 Converts its arguments between color names and color tuples.
 """
 
-
 from .. project import aliases, alias_lists
+from .. util import log
 
 DELETE_ALL_PROMPT = 'Delete all aliases - are you sure? (yN) '
 
@@ -20,7 +20,7 @@ def _assign(parts):
     assignments = [assign(i) for i in range(0, len(parts), 3)]
     for name, value in assignments:
         alias_lists.set_alias(name, value)
-        print('Set:', name, '=', value)
+        log.printer('Set:', name, '=', value)
 
 
 def run(args):
@@ -32,7 +32,7 @@ def run(args):
             raise ValueError('--delete-all aborted')
 
         alias_lists.delete_all_alias()
-        print('All aliases deleted.')
+        log.printer('All aliases deleted.')
         return
 
     if not args.aliases:
@@ -56,8 +56,8 @@ def run(args):
                 alias_lists.delete_alias(alias)
                 success.append(alias)
             except:
-                print('Alias', alias, 'did not exist')
-        success and print('Deleted aliases:', *success)
+                log.printer('Alias', alias, 'did not exist')
+        success and log.printer('Deleted aliases:', *success)
 
     else:
         for alias in parts:
