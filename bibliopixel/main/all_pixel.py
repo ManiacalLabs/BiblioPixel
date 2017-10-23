@@ -23,11 +23,11 @@ types = [
 ]
 
 
-def O(msg):
+def O(msg):  # noqa: E743
     print('\n' + msg)
 
 
-def I(msg):
+def I(msg):  # noqa: E743
     return input('\n' + msg)
 
 
