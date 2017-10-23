@@ -13,8 +13,8 @@ MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
 
 def no_command(*_):
-    print('ERROR: No command entered')
-    print('Valid:', ', '.join(COMMANDS))
+    log.printer('ERROR: No command entered')
+    log.printer('Valid:', ', '.join(COMMANDS))
     return -1
 
 
@@ -31,7 +31,7 @@ def get_args(argv=sys.argv):
     except:
         pass
     else:
-        print('BiblioPixel version %s' % common_flags.VERSION)
+        log.printer('BiblioPixel version %s' % common_flags.VERSION)
         if not argv:
             return
 
@@ -40,7 +40,8 @@ def get_args(argv=sys.argv):
         argv.insert(0, 'run')
 
     if argv and argv[0].startswith('-'):
-        print('bibliopixel: error: command line flags must appear at the end.')
+        log.printer(
+            'bibliopixel: error: command line flags must appear at the end.')
 
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -57,8 +58,8 @@ def main():
     args = get_args()
     run = getattr(args, 'run', None)
     if not run:
-        print('ERROR: No command entered')
-        print('Valid:', ', '.join(COMMANDS))
+        log.printer('ERROR: No command entered')
+        log.printer('Valid:', ', '.join(COMMANDS))
         sys.exit(-1)
 
     aliases.ISOLATE = args.isolate
@@ -69,8 +70,8 @@ def main():
     except Exception as e:
         if args.verbose:
             raise
-        print('ERROR:', e.args[0], file=sys.stderr)
-        print(*e.args[1:], sep='\n', file=sys.stderr)
+        log.printer('ERROR:', e.args[0], file=sys.stderr)
+        log.printer(*e.args[1:], sep='\n', file=sys.stderr)
         result = getattr(e, 'errorcode', -1)
 
     sys.exit(result)

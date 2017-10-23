@@ -9,6 +9,7 @@ import random
 
 from . import common_flags, demo_table, simpixel
 from .. project import project
+from .. util import log
 
 DEMO_OPTS = ', '.join(sorted(demo_table.DEMO_TABLE.keys()))
 
@@ -41,7 +42,7 @@ def make_runnable(demo, args):
 
 
 def usage():
-    print('Available demos are: {}'.format(DEMO_OPTS))
+    log.printer('Available demos are: {}'.format(DEMO_OPTS))
 
 
 def run(args):
@@ -52,7 +53,7 @@ def run(args):
     if not args.name:
         usage()
         args.name = random.choice(list(demo_table.DEMO_TABLE))
-        print('Randomly selected', args.name)
+        log.printer('Randomly selected', args.name)
 
     try:
         demo = demo_table.DEMO_TABLE[args.name]

@@ -63,4 +63,4 @@ class SerialTest(unittest.TestCase):
         layout.all_off()
         layout.update()
 
-        print("Test Complete!")
+        log.printer("Test Complete!")

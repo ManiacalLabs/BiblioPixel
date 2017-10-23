@@ -44,8 +44,14 @@ def set_log_level(level):
 
 logger = _new_custom_logger()
 
-setLogLevel = set_log_level
-
 debug, info, warning, error, critical, exception = (
     logger.debug, logger.info, logger.warning, logger.error, logger.critical,
     logger.exception)
+
+# The function `printer` emits text no matter what the loglevel, and without any
+# introducers like "INFO".  By default this is the same as the global `print` -
+# re-assign this variable if you need to redirect your printing.
+printer = print
+
+# DEPRECATED
+setLogLevel = set_log_level

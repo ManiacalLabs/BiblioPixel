@@ -3,6 +3,7 @@ Update BiblioPixel's dependencies.
 """
 
 import os, sys, subprocess
+from .. util import log
 
 
 def run(args):
@@ -17,10 +18,10 @@ def run(args):
             output, err = process.communicate()
             exit_code = process.wait()
             if exit_code:
-                print('ERROR upgrading', requirement, output, err)
+                log.printer('ERROR upgrading', requirement, output, err)
                 code = exit_code
             else:
-                print('Upgraded', requirement)
+                log.printer('Upgraded', requirement)
 
     sys.exit(code)
 
