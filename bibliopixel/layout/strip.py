@@ -37,6 +37,15 @@ class Strip(MultiLayout):
         """Get RGB color tuple of color at index pixel"""
         return self._get_base(pixel * self.pixelWidth)
 
+    def set(self, pixel, color):
+        """
+        Set the pixel color at position x in the strip.
+        """
+        # The actual implementation of this method is computed at construction
+        # time and monkey-patched in from one of self._setTexture,
+        # self.__setNormal or self.__setScaled
+        raise NotImplementedError
+
     def _set_strip_mapped(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
             pixel = self.coord_map[pixel]
@@ -51,10 +60,6 @@ class Strip(MultiLayout):
         start = pixel * self.pixelWidth
         for p in range(start, start + self.pixelWidth):
             self.set_base(p, color)
-
-    def get(self, pixel):
-        """Get RGB color tuple of color at index pixel"""
-        return self._get_base(pixel)
 
     # Set single pixel to RGB value
     def setRGB(self, pixel, r, g, b):

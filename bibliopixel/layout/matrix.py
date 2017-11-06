@@ -113,6 +113,24 @@ class Matrix(MultiLayout):
 
         self.fonts = font.fonts
 
+    def get(self, x, y):
+        """
+        Return the pixel color at position (x, y), or Colors.black if that
+        position is out-of-bounds.
+        """
+        try:
+            pixel = self.coord_map[y][x]
+            return self._get_base(pixel)
+        except IndexError:
+            return colors.Black
+
+    def set(self, x, y, color):
+        """Set the pixel color at position x, y."""
+        # The actual implementation of this method is computed at construction
+        # time and monkey-patched in from one of self._setTexture,
+        # self.__setNormal or self.__setScaled
+        raise NotImplementedError
+
     def get_pixel_positions(self):
         return make_matrix_coord_map_positions(self.coord_map)
 
@@ -174,13 +192,6 @@ class Matrix(MultiLayout):
                 self._set(x, y, color or self.texture[y][x])
             except IndexError:
                 pass
-
-    def get(self, x, y):
-        try:
-            pixel = self.coord_map[y][x]
-            return self._get_base(pixel)
-        except IndexError:
-            return 0, 0, 0
 
     def setHSV(self, x, y, hsv):
         color = colors.hsv2rgb(hsv)
