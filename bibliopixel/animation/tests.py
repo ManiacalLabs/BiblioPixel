@@ -1,6 +1,6 @@
 from . strip import BaseStripAnim
 from . matrix import BaseMatrixAnim
-from .. import colors
+from .. util import colors
 
 
 class StripChannelTest(BaseStripAnim):

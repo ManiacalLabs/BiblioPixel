@@ -1,4 +1,4 @@
-from .. import colors
+from .. util import colors
 from . layout import MultiLayout
 from . geometry import make_strip_coord_map_multi
 from . geometry.strip import make_strip_coord_map_positions

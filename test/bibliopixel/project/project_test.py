@@ -1,7 +1,7 @@
 import json, unittest
 
 from . make import make
-from bibliopixel.colors import gamma
+from bibliopixel.util.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
 
 

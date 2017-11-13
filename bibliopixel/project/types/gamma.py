@@ -1,5 +1,5 @@
 import functools, numbers
-from ... colors import gamma
+from ... util.colors import gamma
 
 NAMES = [d for d in dir(gamma) if d.isupper()]
 

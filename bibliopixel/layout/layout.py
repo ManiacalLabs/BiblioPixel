@@ -1,5 +1,5 @@
 import time
-from .. import colors, util
+from .. import util
 from .. project import attributes, data_maker, fields
 from .. util.threads.update_threading import UpdateThreading
 
@@ -107,7 +107,7 @@ class Layout(object):
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
-        color = colors.hsv2rgb(hsv)
+        color = util.colors.hsv2rgb(hsv)
         self._set_base(pixel, color)
 
     # turns off the desired pixel
@@ -136,7 +136,7 @@ class Layout(object):
     # Fill the strand (or a subset) with a single color using HSV values
     def fillHSV(self, hsv, start=0, end=-1):
         """Fill the entire strip with HSV color tuple"""
-        self.fill(colors.hsv2rgb(hsv), start, end)
+        self.fill(util.colors.hsv2rgb(hsv), start, end)
 
 
 class MultiLayout(Layout):

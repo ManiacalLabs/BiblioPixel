@@ -1,6 +1,6 @@
 import unittest
 
-from bibliopixel.colors import gamma
+from bibliopixel.util.colors import gamma
 
 
 # TODO: either figure out actual tests or delete this file.

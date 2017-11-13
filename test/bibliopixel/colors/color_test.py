@@ -1,7 +1,7 @@
 import unittest
 
-from bibliopixel import colors
-from bibliopixel.colors import classic, names
+from bibliopixel.util import colors
+from bibliopixel.util.colors import classic, names
 
 
 class ArithmeticTest(unittest.TestCase):

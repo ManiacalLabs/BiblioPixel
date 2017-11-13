@@ -1,7 +1,6 @@
 import math, threading, time
 
-from .. import colors
-from .. util import log
+from .. util import colors, log
 from . import font
 from . layout import Layout
 from . geometry.cube import make_cube_coord_map, make_cube_coord_map_positions

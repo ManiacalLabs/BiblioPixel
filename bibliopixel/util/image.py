@@ -1,5 +1,5 @@
 import glob, numbers, os, sys
-from .. import colors, log
+from .. util import colors, log
 from .. layout import Matrix
 
 try:
