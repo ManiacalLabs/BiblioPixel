@@ -1,5 +1,5 @@
 import functools, time, unittest
-from bibliopixel.threads import sub
+from bibliopixel.util.threads import sub
 
 WAIT_FOR_SUB = 0.1
 
