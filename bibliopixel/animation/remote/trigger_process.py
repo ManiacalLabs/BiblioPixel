@@ -1,4 +1,4 @@
-from .. project import load
+from ... project import load
 
 
 def run_trigger(typename, q, events, kwargs):

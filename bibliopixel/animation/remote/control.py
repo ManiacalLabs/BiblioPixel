@@ -1,10 +1,9 @@
 import copy, multiprocessing
-from .. animation.animation import STATE
-from .. animation import collection
-from . import server
-from . import trigger_process
-from .. util import log
-from .. project import load
+from . import server, trigger_process
+from .. animation import STATE
+from .. import collection
+from ... project import load
+from ... util import log
 
 
 DEFAULT_OFF = 'OFF_ANIM'
