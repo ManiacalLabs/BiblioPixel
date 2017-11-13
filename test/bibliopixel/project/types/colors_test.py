@@ -1,5 +1,5 @@
 from . base import TypesBaseTest
-from bibliopixel import colors
+from bibliopixel.util import colors
 
 
 class ColorTypesTest(TypesBaseTest):

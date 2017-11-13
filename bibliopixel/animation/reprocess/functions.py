@@ -1,4 +1,4 @@
-from ... colors.conversions import color_cmp
+from ... util.colors.conversions import color_cmp
 
 
 def sorter(x):

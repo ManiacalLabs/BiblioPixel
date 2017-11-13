@@ -2,7 +2,7 @@ import numpy, unittest
 from numpy import array_equal
 
 from bibliopixel.util import color_list
-from bibliopixel import colors
+from bibliopixel.util import colors
 
 COLORS1 = [colors.Red, colors.Green, colors.Blue, colors.White]
 COLORS2 = [colors.Black, colors.Blue, colors.Red, colors.Black]

@@ -2,11 +2,10 @@ from . layout import Circle, Matrix, POV, Strip, Cube, font
 from . layout.geometry.matrix import make_matrix_coord_map
 from . layout.geometry.circle import make_circle_coord_map
 from . layout.geometry.cube import make_cube_coord_map
-from . import animation, colors, layout, util
-from . util import log
-from . util import image
+from . import animation, layout, util
+from . util import colors, image, log
 
-from . colors import gamma
+from . util.colors import gamma
 from . drivers import return_codes
 from . project import data_maker
 from . project.project import read_project

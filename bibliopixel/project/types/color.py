@@ -1,5 +1,5 @@
 import functools, numbers
-from ... import colors
+from ... util import colors
 
 USAGE = """A Color can be initialized with:
 

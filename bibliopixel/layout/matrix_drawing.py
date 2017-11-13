@@ -1,6 +1,5 @@
 import math
-from .. import colors
-from .. util import log
+from .. util import colors, log
 from . import font
 
 ##########################################################################

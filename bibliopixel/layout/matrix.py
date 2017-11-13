@@ -1,7 +1,6 @@
 import math, threading, time
 
-from .. import colors
-from .. util import log
+from .. util import colors, log
 from . import matrix_drawing as matrix
 from . import font
 from . layout import MultiLayout

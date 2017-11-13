@@ -1,6 +1,6 @@
 from .. channel_order import ChannelOrder
 from . base import SPIBase
-from ... colors import gamma
+from ... util.colors import gamma
 
 
 class WS2801(SPIBase):

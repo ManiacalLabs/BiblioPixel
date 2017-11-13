@@ -1,6 +1,6 @@
 import unittest
-from bibliopixel.colors.conversions import hsv2rgb_raw
 from bibliopixel.animation.reprocess import functions
+from bibliopixel.util.colors.conversions import hsv2rgb_raw
 
 # Map letters to colors so that we can read inputs and outputs.
 COLORS = {ch: hsv2rgb_raw((ord(ch), 127, 127)) for ch in 'abcdef'}

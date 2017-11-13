@@ -1,5 +1,5 @@
 from . channel_order import ChannelOrder
-from .. colors import gamma as _gamma
+from .. util.colors import gamma as _gamma
 from .. project import attributes, data_maker, fields
 import threading, time
 

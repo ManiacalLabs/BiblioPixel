@@ -1,5 +1,4 @@
-from .. import util
-from .. util import log
+from .. import log, util
 import colorsys
 
 

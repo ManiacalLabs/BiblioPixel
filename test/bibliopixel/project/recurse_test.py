@@ -1,6 +1,6 @@
 import json, unittest
 from bibliopixel.project import fields, recurse
-from bibliopixel import colors
+from bibliopixel.util import colors
 
 
 class Tester:
