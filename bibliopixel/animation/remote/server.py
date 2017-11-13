@@ -1,6 +1,5 @@
-import logging, os, queue, sys
-from .. util import log
-import flask
+import flask, logging, os, queue, sys
+from ... util import log
 
 MESSAGE = """\
 Remote UI Server available at: {1}

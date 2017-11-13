@@ -36,7 +36,7 @@ BUILTIN_ALIASES = {
     'mixer': 'bibliopixel.animation.mixer.Mixer',
     'receiver': 'bibliopixel.animation.receiver.BaseReceiver',
     'reprocess': 'bibliopixel.animation.reprocess.reprocess.Reprocess',
-    'remote': 'bibliopixel.remote.control.RemoteControl',
+    'remote': 'bibliopixel.animation.remote.control.RemoteControl',
     'sequence': 'bibliopixel.animation.Sequence',
     'strip_test': 'bibliopixel.animation.tests.StripChannelTest',
 }
