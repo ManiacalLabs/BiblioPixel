@@ -1,7 +1,7 @@
 import contextlib, threading, time
 from . runner import Runner
 from .. util import log
-from .. threads.animation_threading import AnimationThreading
+from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
 from enum import IntEnum
 

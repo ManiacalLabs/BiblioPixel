@@ -1,5 +1,5 @@
 import threading, time
-from .. util import log
+from .. import log
 
 
 class AnimationThreading(object):

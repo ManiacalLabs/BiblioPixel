@@ -1,7 +1,7 @@
 import time
 from .. import colors, util
 from .. project import attributes, data_maker, fields
-from .. threads.update_threading import UpdateThreading
+from .. util.threads.update_threading import UpdateThreading
 
 
 class Layout(object):
