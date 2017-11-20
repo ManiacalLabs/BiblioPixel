@@ -4,7 +4,7 @@ from bibliopixel.project import merge
 BASE = dict(
     merge.DEFAULT_PROJECT,
     maker={'typename': 'bibliopixel.project.data_maker.Maker'},
-    run={'typename': 'bibliopixel.animation.runner.Runner'},
+    run={},
 )
 
 
@@ -34,7 +34,7 @@ class MergeTest(unittest.TestCase):
                 'typename': 'bibliopixel.project.data_maker.Maker'
             },
             'path': 'path/to/dir',
-            'run': {'typename': 'bibliopixel.animation.runner.Runner'},
+            'run': {},
             'typename': 'bibliopixel.project.project2.Project'
         }
 

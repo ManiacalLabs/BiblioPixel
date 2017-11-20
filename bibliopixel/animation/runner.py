@@ -4,7 +4,7 @@ from .. project import attributes, load
 
 class Runner(object):
 
-    def __init__(self, amt=1, fps=None, sleep_time=0, max_steps=0,
+    def __init__(self, *, amt=1, fps=None, sleep_time=0, max_steps=0,
                  until_complete=False, max_cycles=0, seconds=None,
                  threaded=False, main=None, **kwds):
         attributes.check(kwds, 'run')

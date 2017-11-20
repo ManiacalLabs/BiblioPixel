@@ -73,8 +73,8 @@ def import_module(typename, python_path=None):
     return _import(typename, python_path, loader=load.module)
 
 
-def make_object(*args, typename, python_path=None, datatype=None, **kwds):
+def make_object(*args, typename=None, python_path=None, datatype=None, **kwds):
     """Make an object from a symbol."""
-    object_class = import_symbol(typename, python_path)
-    field_types = getattr(object_class, 'FIELD_TYPES', fields.FIELD_TYPES)
-    return object_class(*args, **fields.component(kwds, field_types))
+    datatype = datatype or import_symbol(typename, python_path)
+    field_types = getattr(datatype, 'FIELD_TYPES', fields.FIELD_TYPES)
+    return datatype(*args, **fields.component(kwds, field_types))
