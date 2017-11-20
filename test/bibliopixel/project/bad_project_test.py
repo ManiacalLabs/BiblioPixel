@@ -25,7 +25,7 @@ BAD_DRIVER_ATTRIBUTE = """
          "typename": "simpixel",
          "width": 16,
          "height": 16,
-         "bad_attribute": 16
+        "bad_attribute": 16
     },
     "layout": "matrix",
     "animation": "off"
@@ -120,10 +120,10 @@ class BadProjectTest(unittest.TestCase):
 
     def test_missing_layout(self):
         with self.assertRaises(ValueError) as e:
-            project.Project(**json.loads(MISSING_LAYOUT))
+            make(MISSING_LAYOUT)
         self.assertEquals(
             e.exception.args,
-            ('There was no "layout" section in the project',))
+            ('Missing "layout" section',))
 
     def test_missing_animation(self):
         with self.assertRaises(ValueError) as e:
