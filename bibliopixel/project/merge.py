@@ -8,7 +8,7 @@ DEFAULT_PROJECT = {
     'layout': {},
     'maker': 'bibliopixel.project.data_maker.Maker',
     'path': '',
-    'run': 'bibliopixel.animation.runner.Runner',
+    'run': {},
     'typename': 'bibliopixel.project.project2.Project',
 }
 
