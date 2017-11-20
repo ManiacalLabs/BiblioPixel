@@ -4,19 +4,13 @@ from .. animation import STATE
 from .. import collection
 from ... project import load
 from ... util import log
-
+from bibliopixel.animation.off import OffAnim
 
 DEFAULT_OFF = 'OFF_ANIM'
 DEFAULT_ANIM_CONFIG = {
     'bgcolor': '#00ff00',
     'font_color': '#ffffff',
     'valid': True
-}
-
-
-OFF_ANIM = {
-    'animation': 'bibliopixel.animation.off.OffAnim',
-    'run': {'threaded': True}
 }
 
 
@@ -30,13 +24,13 @@ def normalize_name(name):
 
 
 class RemoteControl(collection.Collection):
-    def __init__(self, layout, animations,
-                 external_access=False, port=5000,
-                 title='BiblioPixel Remote', bgcolor='black',
-                 font_color='white', default=None,
-                 triggers=[], auto_demo=None):
+    @staticmethod
+    def pre_recursion(desc):
+        collection.Collection.pre_recursion(desc)
 
-        self.internal_delay = 0  # never wait
+        animations = desc['animations']
+        auto_demo = desc.pop('auto_demo', None)
+        desc['anim_cfgs'] = []
 
         if auto_demo:
             auto_demo_run = auto_demo.pop('run', 10)  # default to 10 seconds per
@@ -47,17 +41,23 @@ class RemoteControl(collection.Collection):
             auto_demo['data']['display'] = auto_demo['data'].get('display', auto_demo['name'])
             auto_demo['name'] = normalize_name(auto_demo['name'])
             auto_demo['animations'] = []
+            animations.insert(0, {'animation': auto_demo, 'run': {'threaded': True}})
 
         # normalize name and display first
         for i, anim in enumerate(animations):
-            adesc = anim['animation']
-            adesc['data'] = dict(DEFAULT_ANIM_CONFIG, **adesc.get('data', {}))
-            if not adesc.get('name'):
-                log.error('All animations should have the `name` parameter: {}'.format(adesc))
-                adesc['name'] = str(i)
-            adesc['data']['display'] = adesc['data'].get('display', adesc['name'])
-            adesc['name'] = normalize_name(adesc['name'])
+            anim['data'] = dict(DEFAULT_ANIM_CONFIG, **anim.get('data', {}))
+            if not anim.get('name'):
+                log.error('All animations should have the `name` parameter: {}'.format(anim))
+                anim['name'] = str(i)
+            anim['data']['display'] = anim['data'].get('display', anim['name'])
+            anim['name'] = normalize_name(anim['name'])
+
+            # This was originally done later as a side-effect.
+            # Moved it here so it's obvious.  Seems like a defect - name is in
+            # two places.
+            anim['data']['name'] = anim['name']
             anim['run'] = anim.get('run', {})
+
             if auto_demo:
                 demo_sub = copy.deepcopy(anim)
                 demo_sub['run'].update(auto_demo_run)
@@ -65,32 +65,37 @@ class RemoteControl(collection.Collection):
                 demo_sub['animation'].pop('data')
                 demo_sub['run']['threaded'] = False  # no threading allowed for internal sequences
                 auto_demo['animations'].append(demo_sub)
+
             anim['run']['threaded'] = True  # threaded required
+            desc['anim_cfgs'].append(anim['data'])
 
-        if auto_demo:
-            animations.insert(0, {'animation': auto_demo, 'run': {'threaded': True}})
+        return desc
 
-        super().__init__(layout, copy.deepcopy(animations))
-
+    def __init__(self, *args, anim_cfgs,
+                 external_access=False, port=5000,
+                 title='BiblioPixel Remote', bgcolor='black',
+                 font_color='white', default=None,
+                 triggers=[], **kwds):
+        super().__init__(*args, **kwds)
+        self.internal_delay = 0  # never wait
         self.name_map = {}
-        self.anim_cfgs = []
+        self.anim_cfgs = anim_cfgs
 
-        for i, anim in enumerate(self.animations):
-            adesc = animations[i]['animation']
-            name = adesc['name']  # if failed to load anim will be None
-            if anim is None:
-                adesc['data']['valid'] = False
-                adesc['data']['display'] = 'FAILED: ' + adesc['data']['display']
-                adesc['data']['bgcolor'] = 'rgb(48, 48, 48)'
-                adesc['data']['font_color'] = 'white'
-
+        for i, (anim, cfg) in enumerate(zip(self.animations, self.anim_cfgs)):
+            name = cfg['name']
             if name in self.name_map:
                 raise ValueError('Cannot have multiple animations with the same name: ' + name)
-            self.name_map[name] = anim and i
-            self.anim_cfgs.append(animations[i]['animation']['data'])
-            self.anim_cfgs[-1]['name'] = name
             if anim:
                 anim.on_completion = self.on_completion
+                self.name_map[name] = i
+            else:
+                # The animation failed to load.
+                cfg.update(
+                    valid=False,
+                    display='FAILED: ' + cfg.get('display', '(no error)'),
+                    bgcolor='rgb(48, 48, 48)',
+                    font_color='white')
+                self.name_map[name] = None
 
         if default is None:
             self.default = DEFAULT_OFF
@@ -101,7 +106,9 @@ class RemoteControl(collection.Collection):
                 self.default = DEFAULT_OFF
 
         if self.default == DEFAULT_OFF:
-            self.animations.append(self._make_animation(OFF_ANIM))
+            off = OffAnim(self.layout)
+            off.set_runner({'threaded': True})
+            self.animations.append(off)
             self.name_map[DEFAULT_OFF] = len(self.animations) - 1
 
         self.index = self.name_map[DEFAULT_OFF]  # start with default animation
@@ -172,7 +179,9 @@ class RemoteControl(collection.Collection):
             name = self.default
 
         if name not in self.name_map:
-            return False, 'Invalid animation name: {}'.format(name)
+            error = 'Invalid animation name: {}'.format(name)
+            log.info(error)
+            return False, error
 
         if self.current_animation:
             self.current_animation.cleanup(clean_layout=False)

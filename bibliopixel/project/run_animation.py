@@ -10,8 +10,12 @@ class RunAnimation:
         self.animation = animation
 
     @staticmethod
+    def fix_children(desc):
+        run = desc.get('run', {})
+        desc['run'] = runner.Runner(**run)
+
+    @staticmethod
     def children(desc):
-        yield 'run', desc
         yield 'animation', desc
 
     def runnable_animation(self):
@@ -23,11 +27,13 @@ def fix(desc):
     if isinstance(desc, str) or 'animation' not in desc:
         desc = {'animation': desc}
 
-    run = desc.pop('run', class_name.class_name(runner.Runner))
+    run = desc.pop('run', {})
+    datatype = run.pop('typename', None)
+    assert not datatype, datatype
     animation = desc.pop('animation', None) or {}
 
     desc['run_animation'] = {
-        'typename': class_name.class_name(RunAnimation),
+        'datatype': RunAnimation,
         'run': run,
         'animation': animation}
 

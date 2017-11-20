@@ -1,3 +1,4 @@
+import copy
 from . import attributes, fix, load, merge, recurse, run_animation
 from . construct import construct, construct_reserved
 from .. util import exception
@@ -47,3 +48,11 @@ def project(*descs):
     fix.fix_layout_and_animation(desc)
 
     return construct(**desc)
+
+
+def read_project(location, threaded=None, default=None):
+    project_data = load.data(location)
+    if threaded is not None:
+        project_data.setdefault('run', {})['threaded'] = threaded
+
+    return project(default, copy.deepcopy(project_data))
