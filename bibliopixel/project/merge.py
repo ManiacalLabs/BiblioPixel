@@ -9,7 +9,7 @@ DEFAULT_PROJECT = {
     'maker': 'bibliopixel.project.data_maker.Maker',
     'path': '',
     'run': 'bibliopixel.animation.runner.Runner',
-    'typename': 'bibliopixel.project.project2.Project',
+    'typename': 'bibliopixel.project.project.Project',
 }
 
 
