@@ -1,5 +1,5 @@
 import copy, unittest
-from bibliopixel.project import project2
+from bibliopixel.project import project
 from bibliopixel.animation.sequence import Sequence
 from bibliopixel.animation.matrix import BaseMatrixAnim
 from bibliopixel.layout import Matrix
@@ -13,7 +13,7 @@ def classname(c):
 class Project2Test(unittest.TestCase):
     def test_empty(self):
         with self.assertRaises(ValueError):
-            project2.project()
+            project.project()
 
     def test_single(self):
         source = {
@@ -23,14 +23,14 @@ class Project2Test(unittest.TestCase):
                 'height': 32,
             }
         }
-        project = project2.project(source)
+        pr = project.project(source)
         self.assertEquals(
             [BaseMatrixAnim, 1, Matrix, Maker, 23, 32],
             [
-                type(project.animation),
-                len(project.drivers),
-                type(project.layout),
-                type(project.maker),
-                project.layout.width,
-                project.layout.height,
+                type(pr.animation),
+                len(pr.drivers),
+                type(pr.layout),
+                type(pr.maker),
+                pr.layout.width,
+                pr.layout.height,
             ])
