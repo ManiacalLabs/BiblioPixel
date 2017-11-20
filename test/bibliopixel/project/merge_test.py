@@ -35,7 +35,7 @@ class MergeTest(unittest.TestCase):
             },
             'path': 'path/to/dir',
             'run': {},
-            'typename': 'bibliopixel.project.project2.Project'
+            'typename': 'bibliopixel.project.project.Project'
         }
 
         self.assertEqual(result, expected)
