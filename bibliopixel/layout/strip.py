@@ -22,7 +22,7 @@ class Strip(MultiLayout):
             self.set = self._set
         else:
             self.set = self._setScaled
-            self.numLEDs = self.numLEDs / self.pixelWidth
+            self.numLEDs = int(self.numLEDs / self.pixelWidth)
 
         if self.coord_map:
             if len(self.coord_map) != self.numLEDs:
