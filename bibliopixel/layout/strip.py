@@ -20,7 +20,7 @@ class Strip(Layout):
             self.set = self._set
         else:
             self.set = self._setScaled
-            self.numLEDs = self.numLEDs / self.pixelWidth
+            self.numLEDs = int(self.numLEDs / self.pixelWidth)
 
         self.coord_map = coord_map
         if self.coord_map:
