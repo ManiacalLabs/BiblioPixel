@@ -179,6 +179,26 @@ PROJECT_SEQUENCE = """
 """
 
 
+PROJECT_PIXELWIDTH = """
+{
+    "driver": {
+        "typename": "dummy",
+        "num": 12
+    },
+
+    "layout": {
+        "typename": "strip",
+        "pixelWidth": 3
+    },
+
+    "animation": "strip_test",
+    "run": {
+        "max_steps": 2
+    }
+}
+"""
+
+
 class ProjectTest(unittest.TestCase):
     def test_bad_json(self):
         with self.assertRaises(ValueError):
@@ -213,6 +233,9 @@ class ProjectTest(unittest.TestCase):
 
     def test_shared(self):
         make(PROJECT_SHARED)
+
+    def test_project_pixelwidth(self):
+        make(PROJECT_PIXELWIDTH)
 
     def test_sequence(self):
         animation = make(PROJECT_SEQUENCE, run_start=False)

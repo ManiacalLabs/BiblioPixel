@@ -52,6 +52,11 @@ class DriverBase(object):
         self._colors = colors
         self._pos = pos
 
+        end = self._pos + self.numLEDs
+        if end > len(self._colors):
+            raise ValueError('Needed %d colors but found %d' % (
+                end, len(self._colors)))
+
     def cleanup(self):
         pass
 
