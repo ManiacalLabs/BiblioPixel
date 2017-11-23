@@ -1,4 +1,5 @@
 from . import collection
+from .. util import log
 import random as rand
 
 
@@ -19,6 +20,7 @@ class Sequence(collection.Collection):
             return
 
         if not self.completed:
+            log.debug('Sequence: %s', self.current_animation.title)
             self.current_animation.run_all_frames(clean_layout=False)
 
         self.index += 1
