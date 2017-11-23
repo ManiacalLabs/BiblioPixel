@@ -20,7 +20,7 @@ class Strip(Layout):
             self.set = self._set
         else:
             self.set = self._setScaled
-            self.numLEDs = int(self.numLEDs / self.pixelWidth)
+            self.num_pixels = int(self.numLEDs / self.pixelWidth)
 
         self.coord_map = coord_map
         if self.coord_map:
@@ -31,6 +31,10 @@ class Strip(Layout):
             self.set_base = self._set_base
 
         self.set_pixel_positions(make_strip_coord_map_positions(self.numLEDs))
+
+    def get(self, pixel):
+        """Get RGB color tuple of color at index pixel"""
+        return self._get_base(pixel * self.pixelWidth)
 
     def _set_strip_mapped(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
@@ -43,7 +47,7 @@ class Strip(Layout):
         self.set_base(pixel, color)
 
     def _setScaled(self, pixel, color):
-        start = pixel * self.pixelWidth
+        start = pixel * self.num_pixels
         for p in range(start, start + self.pixelWidth):
             self.set_base(p, color)
 
