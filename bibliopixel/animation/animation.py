@@ -55,6 +55,10 @@ class BaseAnimation(object):
     def pre_run(self):
         pass
 
+    @property
+    def title(self):
+        return self.__class__.__name__
+
     def step(self, amt=1):
         raise RuntimeError("Base class step() called. This shouldn't happen")
 
