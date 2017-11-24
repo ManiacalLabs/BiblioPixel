@@ -1,4 +1,7 @@
 ## 3.3.4 2017-11-23
+- Fixed #485 somewhat more
+
+## 3.3.4 2017-11-23
 - Fixed #485, #471, network brightness, and ring_rotation
 
 ## v3.3.1 - 2017-08-23
