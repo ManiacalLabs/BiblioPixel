@@ -47,7 +47,7 @@ class Strip(Layout):
         self.set_base(pixel, color)
 
     def _setScaled(self, pixel, color):
-        start = pixel * self.num_pixels
+        start = pixel * self.pixelWidth
         for p in range(start, start + self.pixelWidth):
             self.set_base(p, color)
 
