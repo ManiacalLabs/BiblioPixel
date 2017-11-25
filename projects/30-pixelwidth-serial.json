@@ -1,0 +1,15 @@
+{
+    "driver": {
+        "typename": "serial",
+        "ledtype": "WS2812B",
+        "c_order": "GRB",
+        "num": 300
+    },
+
+    "layout": {
+        "typename": "strip",
+        "pixelWidth": 3
+    },
+
+    "animation": "strip1"
+}

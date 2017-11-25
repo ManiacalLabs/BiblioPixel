@@ -1,0 +1,13 @@
+{
+    "driver": {
+        "typename": "simpixel",
+        "num": 300
+    },
+
+    "layout": {
+        "typename": "strip",
+        "pixelWidth": 4
+    },
+
+    "animation": "strip1.Strip1"
+}
