@@ -5,6 +5,60 @@ from bibliopixel.util.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
 
 
+class ProjectTest(unittest.TestCase):
+    def test_bad_json(self):
+        with self.assertRaises(ValueError):
+            make('{]')
+
+    def test_simple(self):
+        make(PROJECT)
+
+    def test_types(self):
+        animation = make(PROJECT_TYPES)
+        kwds = animation.layout.drivers[0]._kwds
+        self.assertEquals(kwds['c_order'], (1, 2, 0))
+        self.assertEquals(kwds['color'], (0, 255, 0))
+        self.assertEquals(kwds['duration'], 3720)
+        self.assertEquals(kwds['gamma'], gamma.APA102)
+        self.assertEquals(kwds['time'], 35000)
+        self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
+
+    def test_file(self):
+        make('test/bibliopixel/project/project.json', False)
+
+    def test_multi(self):
+        animation = make(PROJECT_MULTI)
+        k = [d._kwds for d in animation.layout.drivers]
+        self.assertEquals(k[0]['width'], 128)
+        self.assertEquals(k[1]['width'], 128)
+        self.assertEquals(k[2]['width'], 128)
+        self.assertEquals(k[0]['device_id'], 10)
+        self.assertEquals(k[1]['device_id'], 11)
+        self.assertEquals(k[2]['device_id'], 12)
+
+    def test_shared(self):
+        make(PROJECT_SHARED)
+
+    def test_sequence(self):
+        animation = make(PROJECT_SEQUENCE, run_start=False)
+        self.assertEquals(len(animation.animations), 3)
+        self.assertIsNotNone(animation.animations[0])
+        animation = animation.animations[1]
+        self.assertEquals(animation.name, 'mt')
+        self.assertEquals(animation.layout.rotation, 90)
+
+    def test_numpy(self):
+        make(PROJECT_NUMPY)
+
+    def test_project_pixelwidth(self):
+        make(PROJECT_PIXELWIDTH)
+
+    def test_simpixel(self):
+        animation = make(PROJECT_SIM, run_start=False)
+        self.assertEquals(animation.name, 'test name')
+        self.assertEquals(animation.data, {'title': 'test title'})
+
+
 PROJECT = """
 {
     "driver": {
@@ -180,7 +234,6 @@ PROJECT_SEQUENCE = """
 }
 """
 
-
 PROJECT_PIXELWIDTH = """
 {
     "driver": {
@@ -199,57 +252,3 @@ PROJECT_PIXELWIDTH = """
     }
 }
 """
-
-
-class ProjectTest(unittest.TestCase):
-    def test_bad_json(self):
-        with self.assertRaises(ValueError):
-            make('{]')
-
-    def test_simple(self):
-        make(PROJECT)
-
-    def test_types(self):
-        animation = make(PROJECT_TYPES)
-        kwds = animation.layout.drivers[0]._kwds
-        self.assertEquals(kwds['c_order'], (1, 2, 0))
-        self.assertEquals(kwds['color'], (0, 255, 0))
-        self.assertEquals(kwds['duration'], 3720)
-        self.assertEquals(kwds['gamma'], gamma.APA102)
-        self.assertEquals(kwds['time'], 35000)
-        self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
-
-    def test_file(self):
-        make('test/bibliopixel/project/project.json', False)
-
-    def test_multi(self):
-        animation = make(PROJECT_MULTI)
-        k = [d._kwds for d in animation.layout.drivers]
-        self.assertEquals(k[0]['width'], 128)
-        self.assertEquals(k[1]['width'], 128)
-        self.assertEquals(k[2]['width'], 128)
-        self.assertEquals(k[0]['device_id'], 10)
-        self.assertEquals(k[1]['device_id'], 11)
-        self.assertEquals(k[2]['device_id'], 12)
-
-    def test_shared(self):
-        make(PROJECT_SHARED)
-
-    def test_project_pixelwidth(self):
-        make(PROJECT_PIXELWIDTH)
-
-    def test_sequence(self):
-        animation = make(PROJECT_SEQUENCE, run_start=False)
-        self.assertEquals(len(animation.animations), 3)
-        self.assertIsNotNone(animation.animations[0])
-        animation = animation.animations[1]
-        self.assertEquals(animation.name, 'mt')
-        self.assertEquals(animation.layout.rotation, 90)
-
-    def test_numpy(self):
-        make(PROJECT_NUMPY)
-
-    def test_simpixel(self):
-        animation = make(PROJECT_SIM, run_start=False)
-        self.assertEquals(animation.name, 'test name')
-        self.assertEquals(animation.data, {'title': 'test title'})
