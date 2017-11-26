@@ -1,6 +1,7 @@
 import json, unittest
 
 from . make import make
+from bibliopixel.animation import animation
 from bibliopixel.util.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
 
@@ -57,6 +58,10 @@ class ProjectTest(unittest.TestCase):
         animation = make(PROJECT_SIM, run_start=False)
         self.assertEquals(animation.name, 'test name')
         self.assertEquals(animation.data, {'title': 'test title'})
+
+    def test_project_from_animation_class(self):
+        animation = make(PROJECT_ANIMATION)
+        self.assertEquals(animation.layout.rotation, 90)
 
 
 PROJECT = """
@@ -252,3 +257,21 @@ PROJECT_PIXELWIDTH = """
     }
 }
 """
+
+PROJECT_ANIMATION = """
+{"animation": "test.bibliopixel.project.project_test.AnimationTest"}
+"""
+
+
+class AnimationTest(animation.BaseAnimation):
+    PROJECT = {
+        "driver": "dummy",
+        "layout": {
+            "typename": "matrix",
+            "rotation": 92},
+        "run": {
+            "max_steps": 2},
+    }
+
+    def step(self, amt=1):
+        pass

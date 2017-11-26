@@ -42,11 +42,10 @@ class Project:
 
 
 def project(*descs):
-    desc = merge.merge(*descs)
-    fix.fix_drivers(desc)
+    desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
+    desc = fix.fix_before_recursion(desc)
     desc = recurse.fix(desc)
-    fix.fix_layout_and_animation(desc)
-
+    desc = fix.fix_after_recursion(desc)
     return construct(**desc)
 
 

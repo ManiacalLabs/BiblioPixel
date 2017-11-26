@@ -19,7 +19,7 @@ def merge(*projects):
     project dictionary and return the result
     """
     result = {}
-    for project in (DEFAULT_PROJECT,) + projects:
+    for project in projects:
         for name, section in (project or {}).items():
             if name in ('drivers', 'path', 'typename'):
                 result[name] = section
