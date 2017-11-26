@@ -10,10 +10,14 @@ BASE = dict(
 
 class MergeTest(unittest.TestCase):
     def test_empty(self):
-        self.assertEqual(merge.merge(), BASE)
+        self.assertEqual(merge.merge(), {})
+
+    def test_single(self):
+        self.assertEqual(merge.merge(merge.DEFAULT_PROJECT), BASE)
 
     def test_more(self):
         result = merge.merge(
+            merge.DEFAULT_PROJECT,
             {
                 'animation': 'foo',
                 'driver': 'bar',

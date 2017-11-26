@@ -1,10 +1,17 @@
-from . import construct
+from . import construct, merge
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 
-def fix_drivers(project):
-    # This must be called before recursing into the children.
+def fix_before_recursion(project):
+    try:
+        animation = construct.to_type_constructor(project['animation'])
+        fix = animation['datatype'].PROJECT
+    except:
+        pass
+    else:
+        project = merge.merge(fix, project)
+
     driver = construct.to_type(project.pop('driver', {}))
     drivers = [construct.to_type(d) for d in project.get('drivers', [])]
     if driver:
@@ -14,29 +21,31 @@ def fix_drivers(project):
             drivers = [driver]
 
     project['drivers'] = drivers or DEFAULT_DRIVERS
+    return project
 
 
-def fix_layout_and_animation(project):
-    # This must be called after recursing into children.
-    anim = project.get('run_animation', {}).get('animation')
-    if not anim:
+def fix_after_recursion(project):
+    animation = project.get('run_animation', {}).get('animation')
+    if not animation:
         raise ValueError('Missing "animation" section')
 
-    anim_datatype = anim.get('datatype')
-    if not anim_datatype:
+    datatype = animation.get('datatype')
+    if not datatype:
         raise ValueError('Missing "datatype" in "animation" section')
 
-    layout = project.get('layout')
-    if layout:
-        if not layout.get('datatype'):
-            raise ValueError('Missing "datatype" in "layout" section')
-        return
+    if not project.get('layout'):
+        # Try to fill in the layout if it's missing.
+        try:
+            args = datatype.LAYOUT_ARGS
+            layout_cl = datatype.LAYOUT_CLASS
+        except:
+            raise ValueError('Missing "layout" section')
 
-    # Try to fill in the layout if it's missing.
-    try:
-        args, layout_cl = anim_datatype.LAYOUT_ARGS, anim_datatype.LAYOUT_CLASS
-    except:
-        raise ValueError('Missing "layout" section')
+        args = {k: animation[k] for k in args if k in animation}
+        layout = dict(args, datatype=layout_cl)
+        project['layout'] = layout
 
-    args = {k: anim[k] for k in args if k in anim}
-    project['layout'] = dict(args, datatype=layout_cl)
+    elif not project['layout'].get('datatype'):
+        raise ValueError('Missing "datatype" in "layout" section')
+
+    return project
