@@ -2,7 +2,7 @@
 Run a project description file.
 """
 
-import sys, time, traceback
+import os, sys, time, traceback
 from . import common_flags, simpixel
 from .. util import log
 from .. animation.collection import Collection
@@ -17,16 +17,48 @@ encountered exception
 FAILURE_ERROR = '{count} project{s} failed'
 
 
+def _load_py(filename):
+    module = load.module(filename)
+    project = module.get('PROJECT', {})
+
+    if 'animation' not in project:
+        no_extension = os.path.splitext(filename)[0]
+        module_name = os.path.split(no_extension)[-1]
+        names = module.keys()
+        try:
+            animation_name = load.guess_name(names, module_name, filename)
+        except:
+            if 'Animation' not in names:
+                print('!!!!', names)
+                raise ValueError('Cannot deduce animation in file ' + filename)
+            animation_name = 'Animation'
+        animation = module[animation_name]
+        if not callable(animation):
+            raise ValueError('Animation "%s" in file "%s" is not callable'
+                             % (animation_name, filename))
+
+        project['animation'] = {'datatype': animation}
+
+    return project
+
+
 def _get_animations(args):
     animations, failed = [], []
 
-    for project in args.name or ['']:
+    for filename in args.name or ['']:
         saved_path = sys.path[:]
+        desc = '(not loaded)'
         try:
-            desc = load.data(project)
-            animations.append(common_flags.make_animation(args, desc))
+            if filename.endswith('.py'):
+                desc = _load_py(filename)
+            else:
+                desc = load.data(filename)
+            animation = common_flags.make_animation(args, desc)
+            animations.append(animation)
 
         except Exception as exception:
+            if filename.endswith('.py'):
+                raise
             if args.verbose:
                 exception = traceback.format_exc()
             failed.append(RUN_ERROR.format(**locals()))
