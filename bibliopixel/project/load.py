@@ -1,10 +1,11 @@
 from . import aliases
 import json, loady, os
 
-
 ISNT_GIT_PATH_ERROR = """\
 Because the --isolate flag is set, all paths must start with //git.
 Your path was %s."""
+
+guess_name = loady.importer.guess_name
 
 
 def data(name):
