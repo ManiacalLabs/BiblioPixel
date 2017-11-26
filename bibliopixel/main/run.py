@@ -17,10 +17,7 @@ encountered exception
 FAILURE_ERROR = '{count} project{s} failed'
 
 
-def run(args):
-    if args.fail_on_exception:
-        Collection.FAIL_ON_EXCEPTION = True
-
+def _get_animations(args):
     animations, failed = [], []
 
     for project in args.name or ['']:
@@ -37,22 +34,21 @@ def run(args):
         finally:
             sys.path[:] = saved_path
 
-    if failed:
-        log.error(FAILURE_ERROR.format(
-            count=len(failed), s='' if len(failed) == 1 else 's'))
-        for f in failed:
-            log.error(f)
-        raise ValueError('Run aborted')
+    if not failed:
+        return animations
 
-    if args.simpixel:
-        simpixel.open_simpixel(args.simpixel)
-    elif args.s:
-        simpixel.open_simpixel()
+    log.error(FAILURE_ERROR.format(
+        count=len(failed), s='' if len(failed) == 1 else 's'))
+    for f in failed:
+        log.error(f)
+    raise ValueError('Run aborted')
 
+
+def _run_animations(animations, pause):
     needs_pause = False
     for animation in animations:
         if needs_pause:
-            args.pause and time.sleep(float(args.pause))
+            pause and time.sleep(float(pause))
         else:
             needs_pause = True
 
@@ -65,6 +61,20 @@ def run(args):
 
         animation.cleanup()
         animation.layout.cleanup_drivers()
+
+
+def run(args):
+    if args.fail_on_exception:
+        Collection.FAIL_ON_EXCEPTION = True
+
+    animations = _get_animations(args)
+
+    if args.simpixel:
+        simpixel.open_simpixel(args.simpixel)
+    elif args.s:
+        simpixel.open_simpixel()
+
+    _run_animations(animations, args.pause)
 
 
 def set_parser(parser):
