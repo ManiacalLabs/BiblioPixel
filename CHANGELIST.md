@@ -1,3 +1,6 @@
+## 3.3.6 2017-11-24
+- Fixed #485 even yet more
+
 ## 3.3.5 2017-11-24
 - Fixed #485 somewhat more
 
