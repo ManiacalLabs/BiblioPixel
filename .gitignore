@@ -6,8 +6,13 @@ BiblioPixel.egg*
 *.so
 .DS_STORE
 *.pyc
+__pycache__
 .cache
 .coverage
 htmlcov
 .eggs
 .cache
+doc/_build
+doc/_static
+doc/_templates
+doc/api
