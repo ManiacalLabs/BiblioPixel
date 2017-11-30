@@ -75,9 +75,8 @@ class RunTests(TestCommand):
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        if self.test_args == ['--verbose', None]:
-            self.test_args = [self.DIRECTORY]
-            self.test_suite = True
+        self.test_args = [self.DIRECTORY]
+        self.test_suite = True
 
     def run_tests(self):
         # Import here, because outside the eggs aren't loaded.
