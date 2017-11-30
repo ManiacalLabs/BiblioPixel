@@ -7,14 +7,13 @@ class Feedback(Wrapper):
     def __init__(self, *args, source,
                  master=1, inputs=None, outputs=None, **kwds):
         super().__init__(*args, source=source, **kwds)
-        self.source = self.animations[0]
         self.master = master
 
         inputs = inputs or [0]
         outputs = outputs or []
 
         in_sources = [copy.deepcopy(self.color_list) for i in inputs[1:]]
-        in_sources.insert(self.source.color_list)
+        in_sources.insert(self.animation.color_list)
 
         out_sources = [copy.deepcopy(self.color_list) for i in outputs]
 
