@@ -1,4 +1,4 @@
-import unittest
+import fractions, unittest
 from bibliopixel.controllers import midi
 from argparse import Namespace
 
@@ -42,7 +42,7 @@ class MidiTest(unittest.TestCase):
             ('channel', 1),
             ('type', 'note_on'),
             ('note', 32),
-            ('velocity', 96 / 127)]
+            ('velocity', fractions.Fraction(96) / 127)]
 
         self.run_test([C3], [expected])
         self.run_test([C3, C3], [expected, expected])
@@ -50,5 +50,6 @@ class MidiTest(unittest.TestCase):
 
     def test_accept(self):
         accept = {'channel': 2, 'type': 'control_change', 'control': 2}
-        self.run_test([C3, C3_OFF, BC, BC3, MOD, OTHER],
-                      [[('value', 10 / 127)]], accept=accept)
+        expected = [('value', fractions.Fraction(10) / 127)]
+        self.run_test(
+            [C3, C3_OFF, BC, BC3, MOD, OTHER], [expected], accept=accept)

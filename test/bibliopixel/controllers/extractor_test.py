@@ -1,4 +1,4 @@
-import unittest
+import fractions, unittest
 from bibliopixel.controllers import extractor
 
 KEYS_BY_TYPE = {
@@ -8,9 +8,9 @@ KEYS_BY_TYPE = {
 }
 
 NORMALIZERS = {
-    'pitch': lambda x: (x - 8192) / 8192,
-    'value': lambda x: x / 127,
-    'velocity': lambda x: x / 127,
+    'pitch': lambda x: fractions.Fraction(x - 8192) / 8192,
+    'value': lambda x: fractions.Fraction(x) / 127,
+    'velocity': lambda x: fractions.Fraction(x) / 127,
 }
 
 C3 = {'type': 'note_on', 'note': 32, 'channel': 1, 'velocity': 96}
@@ -41,7 +41,7 @@ class ExtractorTest(unittest.TestCase):
             ('channel', 1),
             ('type', 'note_on'),
             ('note', 32),
-            ('velocity', 96 / 127)]
+            ('velocity', fractions.Fraction(96) / 127)]
 
         self.run_test(C3, expected)
         self.run_test(C3, expected[1:], omit='channel')
@@ -51,4 +51,7 @@ class ExtractorTest(unittest.TestCase):
         for msg in C3, C3_OFF, BC3, MOD, OTHER:
             self.run_test(msg, None, accept=accept)
 
-        self.run_test(BC, [('value', 10 / 127)], accept=accept)
+        self.run_test(
+            BC,
+            [('value', fractions.Fraction(10) / 127)],
+            accept=accept)

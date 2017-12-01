@@ -1,3 +1,4 @@
+import fractions
 from . import control_source
 
 try:
@@ -33,9 +34,9 @@ class Midi(control_source.ExtractedSource):
     # normalized because they are basically names.
     #
     NORMALIZERS = {
-        'pitch': lambda x: (x - 8192) / 8192,
-        'value': lambda x: x / 127,
-        'velocity': lambda x: x / 127,
+        'pitch': lambda x: fractions.Fraction(x - 8192) / 8192,
+        'value': lambda x: fractions.Fraction(x) / 127,
+        'velocity': lambda x: fractions.Fraction(x) / 127,
     }
 
     def __iter__(self):
