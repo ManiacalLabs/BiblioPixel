@@ -1,16 +1,16 @@
 import copy, unittest
-from bibliopixel.project import fix
+from bibliopixel.project import project
 from bibliopixel.animation.sequence import Sequence
 from bibliopixel.animation.matrix import BaseMatrixAnim
 from bibliopixel.layout import Matrix
 
 
 def fix_before(desc):
-    return fix.fix_before_recursion(desc)
+    return project.Project.pre_recursion(desc)
 
 
 def fix_after(desc):
-    return fix.fix_after_recursion(desc)
+    return project.Project.post_recursion(desc)
 
 
 class FixTest(unittest.TestCase):
@@ -18,13 +18,13 @@ class FixTest(unittest.TestCase):
         actual = fix_before({'layout': 'matrix', 'drivers': []})
         expected = {
             'layout': 'matrix',
-            'drivers': fix.DEFAULT_DRIVERS}
+            'drivers': project.DEFAULT_DRIVERS}
         self.assertEqual(actual, expected)
 
     def test_drivers_empty(self):
         self.assertEqual(
             fix_before({}),
-            {'drivers': fix.DEFAULT_DRIVERS})
+            {'drivers': project.DEFAULT_DRIVERS})
 
     def test_drivers_one(self):
         self.assertEqual(
