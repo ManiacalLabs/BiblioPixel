@@ -1,5 +1,5 @@
 import traceback
-from .. project import aliases, construct, project, run_animation
+from .. project import aliases, construct, project
 from . import animation
 from .. util import log
 
@@ -9,15 +9,21 @@ class Collection(animation.BaseAnimation):
 
     @staticmethod
     def pre_recursion(desc):
-        def fix(a):
-            a = run_animation.fix(a)
-            result = a.pop('run_animation')
+        def make_animation(a):
+            if isinstance(a, str) or 'animation' not in a:
+                animation = a
+                a = {}
+            else:
+                animation = a.pop('animation')
+            animation = construct.to_type(animation)
+            run = a.pop('run', {})
+            animation['run'] = dict(run, **animation.get('run', {}))
             if a:
-                raise ValueError('Unknown animation field  %s' % ', '.join(a))
-            return result
+                raise ValueError('Extra fields in animation: ' + ', '.join(a))
+            return animation
 
-        animations = desc.setdefault('animations', [])
-        animations[:] = [fix(a) for a in animations]
+        desc['animations'] = [make_animation(a) for a in desc['animations']]
+        return desc
 
     @staticmethod
     def children(value):
@@ -30,7 +36,7 @@ class Collection(animation.BaseAnimation):
             if isinstance(animations[0], (str, dict)):
                 self.animations = [self._make_animation(i) for i in animations]
             else:
-                self.animations = [r.runnable_animation() for r in animations]
+                self.animations = animations
 
         self.index = 0
         self.internal_delay = 0  # never wait
