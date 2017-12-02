@@ -5,7 +5,7 @@ from .. util.threads.update_threading import UpdateThreading
 
 
 class Layout(object):
-    fix_fields = fields.CONVERTER
+    post_recursion = fields.CONVERTER
 
     def __init__(self, drivers, threadedUpdate, brightness,
                  maker=data_maker.MAKER, **kwds):

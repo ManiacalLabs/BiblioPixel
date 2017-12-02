@@ -10,7 +10,7 @@ class RunAnimation:
         self.animation = animation
 
     @staticmethod
-    def fix_children(desc):
+    def pre_recursion(desc):
         run = desc.get('run', {})
         desc['run'] = runner.Runner(**run)
 

@@ -14,7 +14,7 @@ class DriverBase(object):
     # the pixels.
     set_device_brightness = None
 
-    fix_fields = fields.CONVERTER
+    post_recursion = fields.CONVERTER
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
                  gamma=None, maker=data_maker.MAKER, **kwds):
