@@ -1,11 +1,33 @@
 import copy
-from . import attributes, fix, load, merge, recurse, run_animation
-from . construct import construct, construct_reserved
+from . import attributes, construct, load, merge, recurse, run_animation
 from .. util import exception
+
+DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 
 class Project:
-    pre_recursion = staticmethod(run_animation.fix)
+    @staticmethod
+    def pre_recursion(desc):
+        try:
+            animation = construct.to_type_constructor(desc['animation'])
+            fix = animation['datatype'].PROJECT
+        except:
+            pass
+        else:
+            desc = merge.merge(fix, desc)
+
+        run_animation.fix(desc)
+
+        driver = construct.to_type(desc.pop('driver', {}))
+        drivers = [construct.to_type(d) for d in desc.get('drivers', [])]
+        if driver:
+            if drivers:
+                drivers = [dict(driver, **d) for d in drivers]
+            else:
+                drivers = [driver]
+
+        desc['drivers'] = drivers or DEFAULT_DRIVERS
+        return desc
 
     @staticmethod
     def children(desc):
@@ -17,18 +39,46 @@ class Project:
         yield 'run_animation', desc, 'bibliopixel.animation'
         yield 'layout', desc, 'bibliopixel.layout'
 
+    @staticmethod
+    def post_recursion(desc):
+        animation = desc.get('run_animation', {}).get('animation')
+        if not animation:
+            raise ValueError('Missing "animation" section')
+
+        datatype = animation.get('datatype')
+        if not datatype:
+            raise ValueError('Missing "datatype" in "animation" section')
+
+        if not desc.get('layout'):
+            # Try to fill in the layout if it's missing.
+            try:
+                args = datatype.LAYOUT_ARGS
+                layout_cl = datatype.LAYOUT_CLASS
+            except:
+                raise ValueError('Missing "layout" section')
+
+            args = {k: animation[k] for k in args if k in animation}
+            layout = dict(args, datatype=layout_cl)
+            desc['layout'] = layout
+
+        elif not desc['layout'].get('datatype'):
+            raise ValueError('Missing "datatype" in "layout" section')
+
+        return desc
+
     def __init__(self, *, drivers, layout, maker, path, run_animation, **kwds):
         def make_animation(datatype, desc):
-            return construct_reserved(self.layout, **desc)
+            return construct.construct_reserved(self.layout, **desc)
 
         attributes.check(kwds, 'project')
         self.path = path
 
         with load.extender(self.path):
-            self.maker = construct(**maker)
-            self.drivers = [construct(maker=self.maker, **d) for d in drivers]
+            self.maker = construct.construct(**maker)
+            self.drivers = [construct.construct(maker=self.maker, **d)
+                            for d in drivers]
             with exception.add('Unable to create layout'):
-                self.layout = construct(
+                self.layout = construct.construct(
                     self.drivers, maker=self.maker, **layout)
 
             with exception.add('Unable to create animation'):
@@ -44,10 +94,8 @@ class Project:
 
 def project(*descs):
     desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
-    desc = fix.fix_before_recursion(desc)
     desc = recurse.recurse(desc)
-    desc = fix.fix_after_recursion(desc)
-    return construct(**desc)
+    return construct.construct(**desc)
 
 
 def read_project(location, threaded=None, default=None):
