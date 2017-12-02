@@ -16,6 +16,11 @@ class DriverBase(object):
 
     post_recursion = fields.CONVERTER
 
+    @classmethod
+    def construct(cls, project, **desc):
+        """Construct a layout from a project and a description."""
+        return cls(maker=project.maker, **desc)
+
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
                  gamma=None, maker=data_maker.MAKER, **kwds):
         attributes.set_reserved(self, 'driver', **kwds)

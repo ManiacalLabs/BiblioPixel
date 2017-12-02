@@ -9,6 +9,10 @@ class RunAnimation:
         self.run = run
         self.animation = animation
 
+    @classmethod
+    def construct(cls, project, **desc):
+        return cls(project.layout, **desc)
+
     @staticmethod
     def pre_recursion(desc):
         run = desc.get('run', {})

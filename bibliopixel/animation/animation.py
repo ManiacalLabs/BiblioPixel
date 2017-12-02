@@ -19,6 +19,18 @@ class BaseAnimation(object):
     free_run = False
     post_recursion = fields.CONVERTER
 
+    @classmethod
+    def construct(cls, project, *, run=None, name=None, data=None, **desc):
+        """
+        Construct an animation, set the runner, and add in the two
+        "reserved fields" `name` and `data`.
+        """
+        a = cls(project.layout, **desc)
+        a.set_runner(run or {})
+        a.name = name
+        a.data = data
+        return a
+
     def __init__(self, layout, *, preclear=True, **kwds):
         attributes.set_reserved(self, 'animation', **kwds)
         self.layout = layout

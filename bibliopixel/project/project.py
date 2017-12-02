@@ -66,26 +66,30 @@ class Project:
 
         return desc
 
-    def __init__(self, *, drivers, layout, maker, path, run_animation, **kwds):
-        def make_animation(datatype, desc):
-            return construct.construct_reserved(self.layout, **desc)
+    def construct_child(self, datatype, typename=None, **kwds):
+        construct = getattr(datatype, 'construct', None)
+        if construct:
+            return construct(self, **kwds)
+        return datatype(**kwds)
 
+    def __init__(self, *, drivers, layout, maker, path, run_animation, **kwds):
         attributes.check(kwds, 'project')
         self.path = path
 
         with load.extender(self.path):
-            self.maker = construct.construct(**maker)
-            self.drivers = [construct.construct(maker=self.maker, **d)
-                            for d in drivers]
+            self.maker = self.construct_child(**maker)
+            self.drivers = [self.construct_child(**d) for d in drivers]
             with exception.add('Unable to create layout'):
-                self.layout = construct.construct(
-                    self.drivers, maker=self.maker, **layout)
+                self.layout = self.construct_child(**layout)
+
+            def post(d, desc):
+                return self.construct_child(**desc)
 
             with exception.add('Unable to create animation'):
                 self.animation = recurse.recurse(
                     run_animation,
                     pre=None,
-                    post=make_animation,
+                    post=post,
                     python_path='bibliopixel.animation').runnable_animation()
 
     def make_animation(self):
