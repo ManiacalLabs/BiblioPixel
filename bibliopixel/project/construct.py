@@ -1,3 +1,4 @@
+import copy
 from . import aliases, importer
 
 
@@ -13,7 +14,7 @@ def construct(*args, datatype, typename=None, **kwds):
 
 
 def to_type(d):
-    return {'typename': d} if isinstance(d, str) else d
+    return {'typename': d} if isinstance(d, str) else copy.deepcopy(d)
 
 
 def to_type_constructor(value, python_path=None):

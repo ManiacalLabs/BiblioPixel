@@ -115,7 +115,8 @@ class BadProjectTest(unittest.TestCase):
             make(BAD_RUN_ATTRIBUTE)
         self.assertEquals(
             e.exception.args,
-            ('Unknown attribute for run: "bad_attribute"',))
+            ('Unable to create animation',
+             'Unknown attribute for run: "bad_attribute"'))
 
     def test_missing_layout(self):
         with self.assertRaises(ValueError) as e:

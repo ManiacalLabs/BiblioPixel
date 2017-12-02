@@ -1,5 +1,5 @@
 import copy
-from . import attributes, construct, load, merge, recurse, run_animation
+from . import attributes, construct, load, merge, recurse
 from .. util import exception
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
@@ -8,25 +8,32 @@ DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 class Project:
     @staticmethod
     def pre_recursion(desc):
+        if not desc.get('animation'):
+            raise ValueError('Missing "animation" section')
+
+        desc['animation'] = construct.to_type_constructor(
+            desc['animation'], 'bibliopixel.animation')
         try:
-            animation = construct.to_type_constructor(desc['animation'])
-            fix = animation['datatype'].PROJECT
+            fix = desc['animation']['datatype'].PROJECT
         except:
             pass
         else:
             desc = merge.merge(fix, desc)
 
-        run_animation.fix(desc)
+        run = desc.pop('run')
+        anim_run = desc['animation'].setdefault('run', {})
+        if run:
+            desc['animation']['run'] = dict(run, **anim_run)
 
         driver = construct.to_type(desc.pop('driver', {}))
-        drivers = [construct.to_type(d) for d in desc.get('drivers', [])]
+        drivers = [construct.to_type(d) for d in desc['drivers']]
         if driver:
             if drivers:
                 drivers = [dict(driver, **d) for d in drivers]
             else:
                 drivers = [driver]
 
-        desc['drivers'] = drivers or DEFAULT_DRIVERS
+        desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
         return desc
 
     @staticmethod
@@ -36,15 +43,12 @@ class Project:
             yield i, drivers, 'bibliopixel.drivers'
 
         yield 'maker', desc
-        yield 'run_animation', desc, 'bibliopixel.animation'
+        yield 'animation', desc, 'bibliopixel.animation'
         yield 'layout', desc, 'bibliopixel.layout'
 
     @staticmethod
     def post_recursion(desc):
-        animation = desc.get('run_animation', {}).get('animation')
-        if not animation:
-            raise ValueError('Missing "animation" section')
-
+        animation = desc['animation']
         datatype = animation.get('datatype')
         if not datatype:
             raise ValueError('Missing "datatype" in "animation" section')
@@ -72,7 +76,7 @@ class Project:
             return construct(self, **kwds)
         return datatype(**kwds)
 
-    def __init__(self, *, drivers, layout, maker, path, run_animation, **kwds):
+    def __init__(self, *, drivers, layout, maker, path, animation, **kwds):
         attributes.check(kwds, 'project')
         self.path = path
 
@@ -87,10 +91,10 @@ class Project:
 
             with exception.add('Unable to create animation'):
                 self.animation = recurse.recurse(
-                    run_animation,
+                    animation,
                     pre=None,
                     post=post,
-                    python_path='bibliopixel.animation').runnable_animation()
+                    python_path='bibliopixel.animation')
 
     def make_animation(self):
         return self.animation
