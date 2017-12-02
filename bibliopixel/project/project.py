@@ -5,7 +5,7 @@ from .. util import exception
 
 
 class Project:
-    fix_children = staticmethod(run_animation.fix)
+    pre_recursion = staticmethod(run_animation.fix)
 
     @staticmethod
     def children(desc):
@@ -34,6 +34,7 @@ class Project:
             with exception.add('Unable to create animation'):
                 self.animation = recurse.recurse(
                     run_animation,
+                    pre=None,
                     post=make_animation,
                     python_path='bibliopixel.animation').runnable_animation()
 
@@ -44,7 +45,7 @@ class Project:
 def project(*descs):
     desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
     desc = fix.fix_before_recursion(desc)
-    desc = recurse.fix(desc)
+    desc = recurse.recurse(desc)
     desc = fix.fix_after_recursion(desc)
     return construct(**desc)
 

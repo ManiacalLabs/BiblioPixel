@@ -17,7 +17,8 @@ children.
 """
 
 
-def recurse(desc, pre=None, post=None, children='children', python_path=None):
+def recurse(desc, pre='pre_recursion', post='post_recursion',
+            children='children', python_path=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
@@ -55,7 +56,3 @@ def recurse(desc, pre=None, post=None, children='children', python_path=None):
         coll[key] = recurse(coll[key], pre, post, children, new_path)
 
     return call(post, desc) or desc
-
-
-def fix(desc):
-    return recurse(desc, pre='fix_children', post='fix_fields')

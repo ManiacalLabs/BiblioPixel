@@ -17,7 +17,7 @@ class STATE(IntEnum):
 
 class BaseAnimation(object):
     free_run = False
-    fix_fields = fields.CONVERTER
+    post_recursion = fields.CONVERTER
 
     def __init__(self, layout, *, preclear=True, **kwds):
         attributes.set_reserved(self, 'animation', **kwds)

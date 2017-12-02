@@ -8,7 +8,7 @@ class Collection(animation.BaseAnimation):
     FAIL_ON_EXCEPTION = False
 
     @staticmethod
-    def fix_children(desc):
+    def pre_recursion(desc):
         def fix(a):
             a = run_animation.fix(a)
             result = a.pop('run_animation')
