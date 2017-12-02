@@ -7,6 +7,11 @@ from .. util.threads.update_threading import UpdateThreading
 class Layout(object):
     post_recursion = fields.CONVERTER
 
+    @classmethod
+    def construct(cls, project, **desc):
+        """Construct a layout."""
+        return cls(project.drivers, maker=project.maker, **desc)
+
     def __init__(self, drivers, threadedUpdate, brightness,
                  maker=data_maker.MAKER, **kwds):
         """Base LED class. Use Strip or Matrix instead!"""
