@@ -17,8 +17,7 @@ children.
 """
 
 
-def recurse(
-        desc, pre='pre_recursion', post='post_recursion', python_path=None):
+def recurse(desc, pre='pre_recursion', post=None, python_path=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
@@ -40,10 +39,7 @@ def recurse(
         if isinstance(f, str):
             # f is the name of a static class method on the datatype.
             f = getattr(datatype, f, None)
-            return f and f(desc)
-
-        # f is a function.
-        return f and f(datatype, desc)
+        return f and f(desc)
 
     desc = construct.to_type_constructor(desc, python_path)
     datatype = desc.get('datatype')

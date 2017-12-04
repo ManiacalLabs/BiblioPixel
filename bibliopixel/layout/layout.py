@@ -5,7 +5,7 @@ from .. util.threads.update_threading import UpdateThreading
 
 
 class Layout(object):
-    post_recursion = fields.CONVERTER
+    pre_recursion = fields.default_converter
 
     @classmethod
     def construct(cls, project, **desc):

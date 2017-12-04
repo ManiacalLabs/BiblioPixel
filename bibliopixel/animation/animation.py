@@ -17,7 +17,7 @@ class STATE(IntEnum):
 
 class BaseAnimation(object):
     free_run = False
-    post_recursion = fields.CONVERTER
+    pre_recursion = fields.default_converter
 
     @classmethod
     def construct(cls, project, *, run=None, name=None, data=None, **desc):

@@ -14,7 +14,7 @@ class DriverBase(object):
     # the pixels.
     set_device_brightness = None
 
-    post_recursion = fields.CONVERTER
+    pre_recursion = fields.default_converter
 
     @classmethod
     def construct(cls, project, **desc):
