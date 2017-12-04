@@ -8,7 +8,6 @@ from . util import colors, image, log
 from . util.colors import gamma
 from . drivers import return_codes
 from . project import data_maker
-from . project.project import read_project
 
 # These are DEPRECATED
 from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube

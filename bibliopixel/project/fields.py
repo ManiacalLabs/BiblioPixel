@@ -31,7 +31,7 @@ def type_converter(types):
     return converter
 
 
-CONVERTER = type_converter(FIELD_TYPES)
+default_converter = type_converter(FIELD_TYPES)
 
 
 def field_value(field, value, field_types):

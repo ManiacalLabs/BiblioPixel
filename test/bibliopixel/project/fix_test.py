@@ -27,7 +27,8 @@ def fix_before(desc):
 
 def fix_after(desc):
     desc = merge.merge(merge.DEFAULT_PROJECT, desc)
-    return project.Project.post_recursion(desc)
+    desc['layout'] = desc['layout'] or project.fix_layout(desc['animation'])
+    return desc
 
 
 class FixTest(unittest.TestCase):
