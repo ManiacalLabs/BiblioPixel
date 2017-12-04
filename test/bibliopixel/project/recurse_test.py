@@ -10,9 +10,7 @@ class Tester:
             if k != 'typename' and isinstance(v, str):
                 x[k] = 'post-' + x[k]
 
-    @staticmethod
-    def children(x):
-        return ('foo', x),
+    CHILDREN = 'foo',
 
 
 class RecurseTest(unittest.TestCase):
