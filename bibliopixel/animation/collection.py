@@ -25,10 +25,7 @@ class Collection(animation.BaseAnimation):
         desc['animations'] = [make_animation(a) for a in desc['animations']]
         return desc
 
-    @staticmethod
-    def children(value):
-        animations = value['animations']
-        return ((i, animations) for i in range(len(animations)))
+    CHILDREN = 'animations',
 
     def __init__(self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)

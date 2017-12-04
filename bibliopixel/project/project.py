@@ -36,15 +36,7 @@ class Project:
         desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
         return desc
 
-    @staticmethod
-    def children(desc):
-        drivers = desc['drivers']
-        for i in range(len(drivers)):
-            yield i, drivers, 'bibliopixel.drivers'
-
-        yield 'maker', desc
-        yield 'animation', desc, 'bibliopixel.animation'
-        yield 'layout', desc, 'bibliopixel.layout'
+    CHILDREN = 'maker', 'driver', 'drivers', 'layout', 'animation'
 
     @staticmethod
     def post_recursion(desc):
