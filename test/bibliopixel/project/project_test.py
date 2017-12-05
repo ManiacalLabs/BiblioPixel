@@ -51,8 +51,11 @@ class ProjectTest(unittest.TestCase):
     def test_numpy(self):
         make(PROJECT_NUMPY)
 
-    def test_project_pixelwidth(self):
+    def test_pixelwidth(self):
         make(PROJECT_PIXELWIDTH)
+
+    def test_aliases(self):
+        make(PROJECT_ALIASES)
 
     def test_simpixel(self):
         animation = make(PROJECT_SIM, run_start=False)
@@ -238,6 +241,27 @@ PROJECT_SEQUENCE = """
     }
 }
 """
+
+PROJECT_ALIASES = """
+{
+    "aliases": {
+        "st": "bibliopixel.layout.strip",
+        "stc": ".tests.StripChannelTest"
+    },
+
+    "driver": {
+        "typename": "dummy",
+        "num": 12
+    },
+
+    "layout": "@st.Strip",
+    "animation": "stc",
+    "run": {
+        "max_steps": 2
+    }
+}
+"""
+
 
 PROJECT_PIXELWIDTH = """
 {

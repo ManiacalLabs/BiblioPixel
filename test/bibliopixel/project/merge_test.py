@@ -29,6 +29,7 @@ class MergeTest(unittest.TestCase):
                 'path': 'path/to/dir'
             })
         expected = {
+            'aliases': {},
             'animation': {'typename': 'bfoo'},
             'driver': {'typename': 'bar'},
             'drivers': ['bang', 'bop'],

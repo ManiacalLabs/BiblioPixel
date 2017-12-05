@@ -29,7 +29,6 @@ def _load_py(filename):
             animation_name = load.guess_name(names, module_name, filename)
         except:
             if 'Animation' not in names:
-                print('!!!!', names)
                 raise ValueError('Cannot deduce animation in file ' + filename)
             animation_name = 'Animation'
         animation = module[animation_name]
