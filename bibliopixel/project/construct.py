@@ -17,7 +17,7 @@ def to_type(d):
     return {'typename': d} if isinstance(d, str) else copy.deepcopy(d)
 
 
-def to_type_constructor(value, python_path=None):
+def to_type_constructor(value, python_path=None, other_aliases=None):
     """"
     Tries to convert a value to a type constructor.
 
@@ -39,7 +39,7 @@ def to_type_constructor(value, python_path=None):
     value = to_type(value)
     typename = value.get('typename')
     if typename:
-        value['datatype'] = importer.import_symbol(
-            aliases.resolve(typename), python_path=python_path)
+        r = aliases.resolve(typename, other_aliases)
+        value['datatype'] = importer.import_symbol(r, python_path=python_path)
 
     return value

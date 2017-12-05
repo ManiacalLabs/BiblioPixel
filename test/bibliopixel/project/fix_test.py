@@ -6,6 +6,7 @@ from bibliopixel.animation.off import OffAnim
 from bibliopixel.layout import Matrix
 
 BASE = {
+    'aliases': {},
     'animation': {
         'run': {},
         'datatype': OffAnim,

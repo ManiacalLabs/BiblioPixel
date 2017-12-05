@@ -10,26 +10,14 @@ SEPARATORS = re.compile(r'([./#]|[^./#]+)')
 ISOLATE = False
 
 
-def resolve(typename, user=None):
-    def get(s):
-        return alias_lists.get_alias(s, ISOLATE) or ''
+def resolve(typename, aliases=None):
+    aliases = aliases or {}
 
-    def get_all():
+    def get(s):
+        return aliases.get(s) or alias_lists.get_alias(s, ISOLATE) or s
+
+    def get_all(typename):
         for part in SEPARATORS.split(typename):
             yield get(part[1:]) if part.startswith(ALIAS_MARKER) else part
 
-    return get(typename) or ''.join(get_all())
-
-
-def resolve_section(section):
-    section = section or {}
-
-    if isinstance(section, str):
-        typename, section = section, {}
-    else:
-        typename = section.get('typename')
-
-    if typename:
-        section['typename'] = resolve(typename)
-
-    return section
+    return ''.join(get_all(get(typename)))

@@ -2,6 +2,7 @@ from .. util import log
 from . import construct
 
 DEFAULT_PROJECT = {
+    'aliases': {},
     'animation': {},
     'driver': {},
     'drivers': [],

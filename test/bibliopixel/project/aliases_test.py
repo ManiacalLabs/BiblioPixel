@@ -4,23 +4,7 @@ from bibliopixel.project import aliases, alias_lists, importer
 
 class AliasTest(unittest.TestCase):
     def test_empty(self):
-        self.assertEqual(aliases.resolve_section({}), {})
         self.assertEqual(aliases.resolve(''), '')
-
-    def test_simple(self):
-        d = {'typename': 'bibliopixel.layout.circle.Circle'}
-        self.assertEqual(aliases.resolve_section(d), d)
-
-    def test_resolve_section(self):
-        d = {'typename': 'bibliopixel.layout.circle.Circle'}
-        self.assertEqual(aliases.resolve_section('circle'), d)
-        self.assertEqual(aliases.resolve_section({'typename': 'circle'}), d)
-
-        d['foo'] = 'bar'
-        self.assertEqual(
-            aliases.resolve_section({'typename': 'circle', 'foo': 'bar'}), d)
-        self.assertEqual(
-            aliases.resolve_section({'typename': '@circle', 'foo': 'bar'}), d)
 
     def test_resolve(self):
         self.assertEqual(
@@ -62,3 +46,8 @@ class AliasTest(unittest.TestCase):
         if failed:
             print('Failed', *failed, sep='\n')
         self.assertFalse(failed)
+
+    def test_additional_aliases(self):
+        additional = {'foo': 'bar', 'remote': 'distance'}
+        self.assertEqual(aliases.resolve('foo', additional), 'bar')
+        self.assertEqual(aliases.resolve('remote', additional), 'distance')

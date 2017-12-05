@@ -28,7 +28,7 @@ class Project:
             raise ValueError('Missing "animation" section')
 
         desc['animation'] = construct.to_type_constructor(
-            desc['animation'], 'bibliopixel.animation')
+            desc['animation'], 'bibliopixel.animation', desc['aliases'])
         datatype = desc['animation'].get('datatype')
         if not datatype:
             raise ValueError('Missing "datatype" in "animation" section')
@@ -56,16 +56,17 @@ class Project:
             return construct(self, **kwds)
         return datatype(**kwds)
 
-    def __init__(self, *, drivers, layout, maker, path, animation, **kwds):
+    def __init__(
+            self, *, drivers, layout, maker, path, animation, aliases, **kwds):
         attributes.check(kwds, 'project')
         self.path = path
+        self.aliases = aliases
         layout = layout or fix_layout(animation)
 
         with load.extender(self.path):
             self.maker = self.construct_child(**maker)
             self.drivers = [self.construct_child(**d) for d in drivers]
             with exception.add('Unable to create layout'):
-                print('!!!!', layout)
                 self.layout = self.construct_child(**layout)
 
             def post(desc):
@@ -76,7 +77,8 @@ class Project:
                     animation,
                     pre=None,
                     post=post,
-                    python_path='bibliopixel.animation')
+                    python_path='bibliopixel.animation',
+                    aliases=self.aliases)
 
     def make_animation(self):
         return self.animation
@@ -84,8 +86,7 @@ class Project:
 
 def project(*descs):
     desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
-    desc = recurse.recurse(desc)
-
+    desc = recurse.recurse(desc, aliases=desc['aliases'])
     return construct.construct(**desc)
 
 

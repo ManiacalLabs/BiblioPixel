@@ -17,7 +17,8 @@ children.
 """
 
 
-def recurse(desc, pre='pre_recursion', post=None, python_path=None):
+def recurse(
+        desc, pre='pre_recursion', post=None, python_path=None, aliases=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
@@ -32,7 +33,9 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
 
     dictionary -- a project dictionary or one of its subdictionaries
     pre -- called before children are visited node in the recursion
-    post -- called after children are visited in the recursion.
+    post -- called after children are visited in the recursion
+    python_path -- relative path to start resolving typenames
+    aliases -- a dictionary of aliases
 
     """
     def call(f, desc):
@@ -41,7 +44,7 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
             f = getattr(datatype, f, None)
         return f and f(desc)
 
-    desc = construct.to_type_constructor(desc, python_path)
+    desc = construct.to_type_constructor(desc, python_path, aliases)
     datatype = desc.get('datatype')
 
     desc = call(pre, desc) or desc
@@ -52,8 +55,8 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
             new_path = python_path or ('bibliopixel.' + child_name)
             if child_name.endswith('s'):
                 for i, c in enumerate(child):
-                    child[i] = recurse(c, pre, post, new_path)
+                    child[i] = recurse(c, pre, post, new_path, aliases)
             else:
-                desc[child_name] = recurse(child, pre, post, new_path)
+                desc[child_name] = recurse(child, pre, post, new_path, aliases)
 
     return call(post, desc) or desc
