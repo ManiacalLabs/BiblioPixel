@@ -33,6 +33,9 @@ def to_type_constructor(value, python_path=None):
     if not value:
         return value
 
+    if callable(value):
+        return {'datatype': value}
+
     value = to_type(value)
     typename = value.get('typename')
     if typename:

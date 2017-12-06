@@ -10,12 +10,13 @@ class Collection(animation.BaseAnimation):
     @staticmethod
     def pre_recursion(desc):
         def make_animation(a):
-            if isinstance(a, str) or 'animation' not in a:
+            if callable(a) or isinstance(a, str) or 'animation' not in a:
                 animation = a
                 a = {}
             else:
                 animation = a.pop('animation')
-            animation = construct.to_type(animation)
+            animation = construct.to_type_constructor(
+                animation, 'bibliopixel.animation')
             run = a.pop('run', {})
             animation['run'] = dict(run, **animation.get('run', {}))
             if a:
