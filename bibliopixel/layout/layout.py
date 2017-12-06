@@ -70,7 +70,11 @@ class Layout(object):
 
     def _set_base(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
-            self._colors[pixel] = tuple(color)
+            if isinstance(color, str):
+                color = util.colors.COLORS[color]
+            else:
+                color = tuple(color)
+            self.color_list[pixel] = color
 
     def get_pixel_positions(self):
         result = []
