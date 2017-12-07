@@ -2,7 +2,7 @@ from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from ... drivers.return_codes import RETURN_CODES, raise_error
 from ... util import log, util
-from ... project.importer import import_symbol
+from ... project.importer import import_module
 
 
 class Devices(object):
@@ -11,8 +11,9 @@ class Devices(object):
     def __init__(self, hardware_id, baudrate):
         self.hardware_id = hardware_id
         self.baudrate = baudrate
-        self.Serial = import_symbol('serial.Serial')
-        self.list_ports = import_symbol('serial.tools.list_ports')
+        self.serial = import_module('serial')
+        self.Serial = self.serial.Serial
+        self.list_ports = import_module('serial.tools.list_ports')
 
     def find_serial_devices(self):
         self.devices = {}
