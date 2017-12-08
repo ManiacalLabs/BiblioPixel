@@ -1,9 +1,5 @@
 {
-    "driver": {
-        "num": 50,
-        "typename": "simpixel"
-    },
-
+    "dimensions": 50,
     "layout": "strip",
 
     "run": {
