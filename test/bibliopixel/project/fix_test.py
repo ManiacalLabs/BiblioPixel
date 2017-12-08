@@ -20,29 +20,29 @@ BASE = {
 }
 
 
-def fix_before(desc):
+def cleanup_before(desc):
     desc = merge.merge(
         merge.DEFAULT_PROJECT, {'animation': {'typename': 'off'}}, desc)
     return project.Project.pre_recursion(desc)
 
 
-def fix_after(desc):
+def cleanup_after(desc):
     desc = merge.merge(merge.DEFAULT_PROJECT, desc)
-    desc['layout'] = desc['layout'] or project.fix_layout(desc['animation'])
+    desc['layout'] = desc['layout'] or project.cleanup_layout(desc['animation'])
     return desc
 
 
-class FixTest(unittest.TestCase):
+class CleanupTest(unittest.TestCase):
     def test_both(self):
-        actual = fix_before({'layout': 'matrix'})
+        actual = cleanup_before({'layout': 'matrix'})
         expected = dict(BASE, layout={'typename': 'matrix'})
         self.assertEqual(actual, expected)
 
     def test_drivers_empty(self):
-        self.assertEqual(fix_before({}), BASE)
+        self.assertEqual(cleanup_before({}), BASE)
 
     def test_drivers_one(self):
-        actual = fix_before({'driver': 'lpd8806'})
+        actual = cleanup_before({'driver': 'lpd8806'})
         expected = dict(BASE, drivers=[{'typename': 'lpd8806'}])
         self.assertEqual(actual, expected)
 
@@ -55,7 +55,7 @@ class FixTest(unittest.TestCase):
                 'wombat': 7,
             },
         }
-        actual = fix_after(source)
+        actual = cleanup_after(source)
         expected = {
             'driver': {},
             'drivers': [],

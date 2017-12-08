@@ -5,7 +5,7 @@ from .. util import exception
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 
-def fix_layout(animation):
+def cleanup_layout(animation):
     # Try to fill in the layout if it's missing.
     datatype = animation['datatype']
 
@@ -19,36 +19,53 @@ def fix_layout(animation):
     return dict(args, datatype=layout_cl)
 
 
+def cleanup_animation(desc):
+    if not desc.get('animation'):
+        raise ValueError('Missing "animation" section')
+
+    desc['animation'] = construct.to_type_constructor(
+        desc['animation'], 'bibliopixel.animation', desc['aliases'])
+    datatype = desc['animation'].get('datatype')
+    if not datatype:
+        raise ValueError('Missing "datatype" in "animation" section')
+    desc = merge.merge(getattr(datatype, 'PROJECT', {}), desc)
+
+    run = desc.pop('run')
+    anim_run = desc['animation'].setdefault('run', {})
+    if run:
+        desc['animation']['run'] = dict(run, **anim_run)
+
+    driver = construct.to_type(desc.pop('driver', {}))
+    drivers = [construct.to_type(d) for d in desc['drivers']]
+    if driver:
+        if drivers:
+            drivers = [dict(driver, **d) for d in drivers]
+        else:
+            drivers = [driver]
+
+    desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
+    return desc
+
+
+def cleanup_drivers(desc):
+    driver = construct.to_type(desc.pop('driver', {}))
+    drivers = [construct.to_type(d) for d in desc['drivers']]
+    if driver:
+        if drivers:
+            drivers = [dict(driver, **d) for d in drivers]
+        else:
+            drivers = [driver]
+
+    desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
+    return desc
+
+
 class Project:
     CHILDREN = 'maker', 'drivers', 'layout', 'animation'
 
     @staticmethod
     def pre_recursion(desc):
-        if not desc.get('animation'):
-            raise ValueError('Missing "animation" section')
-
-        desc['animation'] = construct.to_type_constructor(
-            desc['animation'], 'bibliopixel.animation', desc['aliases'])
-        datatype = desc['animation'].get('datatype')
-        if not datatype:
-            raise ValueError('Missing "datatype" in "animation" section')
-        desc = merge.merge(getattr(datatype, 'PROJECT', {}), desc)
-
-        run = desc.pop('run')
-        anim_run = desc['animation'].setdefault('run', {})
-        if run:
-            desc['animation']['run'] = dict(run, **anim_run)
-
-        driver = construct.to_type(desc.pop('driver', {}))
-        drivers = [construct.to_type(d) for d in desc['drivers']]
-        if driver:
-            if drivers:
-                drivers = [dict(driver, **d) for d in drivers]
-            else:
-                drivers = [driver]
-
-        desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
-        return desc
+        return cleanup_drivers(cleanup_animation(desc))
 
     def construct_child(self, datatype, typename=None, **kwds):
         construct = getattr(datatype, 'construct', None)
@@ -61,7 +78,7 @@ class Project:
         attributes.check(kwds, 'project')
         self.path = path
         self.aliases = aliases
-        layout = layout or fix_layout(animation)
+        layout = layout or cleanup_layout(animation)
 
         with load.extender(self.path):
             self.maker = self.construct_child(**maker)
