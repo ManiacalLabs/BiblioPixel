@@ -86,6 +86,10 @@ def add_project_flags(parser):
         help='Default driver type if no driver is specified')
 
     parser.add_argument(
+        '--dimensions', '--dim', default=None,
+        help='x, (x, y) or (x, y, z) dimensions for project')
+
+    parser.add_argument(
         '-f', '--fail_on_exception', action='store_true',
         help='If true, bp fail if any subanimation fails to construct')
 
@@ -145,6 +149,14 @@ def _make_project_flags(args):
 
     if args.run_for is not None:
         project_flags.setdefault('run', {})['seconds'] = float(args.run_for)
+
+    if args.dimensions is not None:
+        dimensions = args.dimensions.split(',')
+        try:
+            project_flags['dimensions'] = [int(i) for i in dimensions]
+        except:
+            raise ValueError('--dimensions must be one to three numbers '
+                             'separated by commas.')
 
     return project_flags
 

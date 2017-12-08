@@ -8,7 +8,7 @@ class Project:
 
     @staticmethod
     def pre_recursion(desc):
-        return cleanup.cleanup_drivers(cleanup.cleanup_animation(desc))
+        return cleanup.cleanup(desc)
 
     def construct_child(self, datatype, typename=None, **kwds):
         construct = getattr(datatype, 'construct', None)

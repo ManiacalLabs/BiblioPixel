@@ -1,4 +1,6 @@
+import copy
 from . import construct, merge
+from .. import layout
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
@@ -46,3 +48,45 @@ def cleanup_drivers(desc):
 
     desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
     return desc
+
+
+def cleanup_dimensions(desc):
+    desc = copy.deepcopy(desc)
+    dimensions = desc.pop('dimensions', None)
+    if not dimensions:
+        return desc
+
+    if len(desc['drivers']) != 1:
+        raise ValueError('Cannot use dimensions with more than one driver')
+
+    try:
+        d = [int(dimensions)]
+    except:
+        d = list(dimensions)
+
+    ldesc = construct.to_type_constructor(desc.get('layout') or {})
+    driver = desc['drivers'][0]
+
+    if len(d) == 1:
+        driver['num'] = d[0]
+        ldesc.setdefault('datatype', layout.strip.Strip)
+
+    elif len(d) == 2:
+        driver['num'] = d[0] * d[1]
+        ldesc.setdefault('datatype', layout.matrix.Matrix)
+        ldesc.update(width=d[0], height=d[1])
+
+    elif len(d) == 3:
+        driver['num'] = d[0] * d[1] * d[2]
+        ldesc.setdefault('datatype', layout.cube.Cube)
+        ldesc.update(x=d[0], y=d[1], z=d[2])
+
+    else:
+        raise ValueError('Dimension %s > 3' % len(d))
+
+    desc['layout'] = ldesc
+    return desc
+
+
+def cleanup(desc):
+    return cleanup_dimensions(cleanup_drivers(cleanup_animation(desc)))

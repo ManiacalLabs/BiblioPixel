@@ -3,7 +3,7 @@ from bibliopixel.project import cleanup, merge, project
 from bibliopixel.animation.sequence import Sequence
 from bibliopixel.animation.matrix import BaseMatrixAnim
 from bibliopixel.animation.off import OffAnim
-from bibliopixel.layout import Matrix
+from bibliopixel.layout import Cube, Matrix, Strip
 
 BASE = {
     'aliases': {},
@@ -67,4 +67,35 @@ class CleanupTest(unittest.TestCase):
             'run': {},
         }
         expected = dict(source, **expected)
+        self.assertEqual(actual, dict(BASE, **expected))
+
+    def test_1_dimension(self):
+        source = {'dimensions': 3}
+        actual = cleanup_before(source)
+        expected = {
+            'drivers': [{'num': 3, 'typename': 'simpixel'}],
+            'layout': {'datatype': Strip},
+        }
+        self.assertEqual(actual, dict(BASE, **expected))
+
+        source = {'dimensions': [3]}
+        actual = cleanup_before(source)
+        self.assertEqual(actual, dict(BASE, **expected))
+
+    def test_2_dimensions(self):
+        source = {'dimensions': [2, 5]}
+        actual = cleanup_before(source)
+        expected = {
+            'drivers': [{'num': 10, 'typename': 'simpixel'}],
+            'layout': {'datatype': Matrix, 'width': 2, 'height': 5},
+        }
+        self.assertEqual(actual, dict(BASE, **expected))
+
+    def test_3_dimensions(self):
+        source = {'dimensions': [2, 3, 7]}
+        actual = cleanup_before(source)
+        expected = {
+            'drivers': [{'num': 42, 'typename': 'simpixel'}],
+            'layout': {'datatype': Cube, 'x': 2, 'y': 3, 'z': 7},
+        }
         self.assertEqual(actual, dict(BASE, **expected))

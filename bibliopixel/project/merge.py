@@ -22,7 +22,8 @@ def merge(*projects):
     result = {}
     for project in projects:
         for name, section in (project or {}).items():
-            if name in ('datatype', 'drivers', 'path', 'typename'):
+            if name in (
+                    'datatype', 'drivers', 'path', 'typename', 'dimensions'):
                 result[name] = section
             else:
                 result.setdefault(name, {}).update(construct.to_type(section))
