@@ -50,7 +50,7 @@ class Devices(object):
             device, version = self.devices[id]
 
         else:
-            error = 'Unable to find device with ID %s' % self.device_id
+            error = 'Unable to find device with ID %s' % id
             log.error(error)
             raise ValueError(error)
 
