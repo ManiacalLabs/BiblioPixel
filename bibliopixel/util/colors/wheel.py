@@ -1,6 +1,3 @@
-WHEEL_MAX = 384
-
-
 def _gen_wheel():
     result = []
     for p in range(385):
@@ -28,15 +25,10 @@ def wheel_color(position):
     """Get color from wheel value (0 - 384).
     Provided for those used to using it from Adafruit libraries
     """
-    if position < 0:
-        position = 0
-    if position > 384:
-        position = 384
-
-    return _WHEEL[position]
+    return _WHEEL[round(position) % len(_WHEEL)]
 
 
 def wheel_helper(pos, length, cycle_step):
     """Helper for wheel_color that distributes colors over length and
     allows shifting position."""
-    return wheel_color(((pos * WHEEL_MAX // length) + cycle_step) % WHEEL_MAX)
+    return wheel_color((pos * len(_WHEEL) / length) + cycle_step)
