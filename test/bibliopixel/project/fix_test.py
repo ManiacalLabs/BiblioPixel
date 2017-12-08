@@ -1,5 +1,5 @@
 import copy, unittest
-from bibliopixel.project import merge, project
+from bibliopixel.project import cleanup, merge, project
 from bibliopixel.animation.sequence import Sequence
 from bibliopixel.animation.matrix import BaseMatrixAnim
 from bibliopixel.animation.off import OffAnim
@@ -28,7 +28,7 @@ def cleanup_before(desc):
 
 def cleanup_after(desc):
     desc = merge.merge(merge.DEFAULT_PROJECT, desc)
-    desc['layout'] = desc['layout'] or project.cleanup_layout(desc['animation'])
+    desc['layout'] = desc['layout'] or cleanup.cleanup_layout(desc['animation'])
     return desc
 
 
