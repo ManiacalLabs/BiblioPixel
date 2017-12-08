@@ -1,63 +1,6 @@
 import copy
-from . import attributes, construct, load, merge, recurse
+from . import attributes, construct, cleanup, load, merge, recurse
 from .. util import exception
-
-DEFAULT_DRIVERS = [construct.to_type('simpixel')]
-
-
-def cleanup_layout(animation):
-    # Try to fill in the layout if it's missing.
-    datatype = animation['datatype']
-
-    try:
-        args = datatype.LAYOUT_ARGS
-        layout_cl = datatype.LAYOUT_CLASS
-    except:
-        raise ValueError('Missing "layout" section')
-
-    args = {k: animation[k] for k in args if k in animation}
-    return dict(args, datatype=layout_cl)
-
-
-def cleanup_animation(desc):
-    if not desc.get('animation'):
-        raise ValueError('Missing "animation" section')
-
-    desc['animation'] = construct.to_type_constructor(
-        desc['animation'], 'bibliopixel.animation', desc['aliases'])
-    datatype = desc['animation'].get('datatype')
-    if not datatype:
-        raise ValueError('Missing "datatype" in "animation" section')
-    desc = merge.merge(getattr(datatype, 'PROJECT', {}), desc)
-
-    run = desc.pop('run')
-    anim_run = desc['animation'].setdefault('run', {})
-    if run:
-        desc['animation']['run'] = dict(run, **anim_run)
-
-    driver = construct.to_type(desc.pop('driver', {}))
-    drivers = [construct.to_type(d) for d in desc['drivers']]
-    if driver:
-        if drivers:
-            drivers = [dict(driver, **d) for d in drivers]
-        else:
-            drivers = [driver]
-
-    desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
-    return desc
-
-
-def cleanup_drivers(desc):
-    driver = construct.to_type(desc.pop('driver', {}))
-    drivers = [construct.to_type(d) for d in desc['drivers']]
-    if driver:
-        if drivers:
-            drivers = [dict(driver, **d) for d in drivers]
-        else:
-            drivers = [driver]
-
-    desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
-    return desc
 
 
 class Project:
@@ -65,7 +8,7 @@ class Project:
 
     @staticmethod
     def pre_recursion(desc):
-        return cleanup_drivers(cleanup_animation(desc))
+        return cleanup.cleanup_drivers(cleanup.cleanup_animation(desc))
 
     def construct_child(self, datatype, typename=None, **kwds):
         construct = getattr(datatype, 'construct', None)
@@ -78,7 +21,7 @@ class Project:
         attributes.check(kwds, 'project')
         self.path = path
         self.aliases = aliases
-        layout = layout or cleanup_layout(animation)
+        layout = layout or cleanup.cleanup_layout(animation)
 
         with load.extender(self.path):
             self.maker = self.construct_child(**maker)
