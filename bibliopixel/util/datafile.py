@@ -25,6 +25,11 @@ class DataFile(object):
         self.data[key] = value
         self.write()
 
+    def set_items(self, items):
+        for k, v in items:
+            self.data[k] = v
+        self.write()
+
     def delete(self, key):
         del self.data[key]
         self.write()

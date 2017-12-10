@@ -1,5 +1,6 @@
 import unittest
 from bibliopixel.project import aliases, alias_lists, importer
+from test.bibliopixel import patch
 
 
 class AliasTest(unittest.TestCase):
@@ -11,15 +12,11 @@ class AliasTest(unittest.TestCase):
             aliases.resolve('off'), 'bibliopixel.animation.off.OffAnim')
         self.assertEquals(aliases.resolve('foo'), 'foo')
 
-        old_user = aliases.alias_lists.USER_ALIASES
-        aliases.alias_lists.USER_ALIASES = {'foo': 'bar'}
-        try:
+        with patch.patch(aliases.alias_lists, 'USER_ALIASES', {'foo': 'bar'}):
             self.assertEquals(aliases.resolve('foo'), 'bar')
             self.assertEquals(aliases.resolve('@foo.bing'), 'bar.bing')
             self.assertEquals(aliases.resolve('bar.bing.@foo'), 'bar.bing.bar')
             self.assertEquals(aliases.resolve('x@foo'), 'x@foo')
-        finally:
-            aliases.alias_lists.USER_ALIASES = old_user
 
     def test_preserve_separators(self):
         s = '.asdfa./#fahdwrdr./#435'

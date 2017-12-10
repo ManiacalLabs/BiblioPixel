@@ -67,10 +67,6 @@ def add_common_flags(parser):
     parser.add_argument(
         '-x', '--isolate', action='store_true', help=ISOLATE_HELP)
 
-    if ENABLE_PRESETS:
-        parser.add_argument(
-            '--presets', help=PRESET_HELP, default=PRESET_LIBRARY_DEFAULT)
-
 
 def add_project_flags(parser):
     parser.add_argument(
@@ -80,6 +76,10 @@ def add_project_flags(parser):
     parser.add_argument(
         '-b', '--brightness', default=None,
         help='Override project brightness value')
+
+    parser.add_argument(
+        '--bypass_project_defaults', '--bypass', action='store_true',
+        help='Override project defaults')
 
     parser.add_argument(
         '-d', '--driver', default='simpixel',

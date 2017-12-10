@@ -10,7 +10,8 @@ def make(data, run_start=not SKIP_LONG_TESTS):
         fp.seek(0)
         data = fp.name
 
-    animation = project.read_project(data).make_animation()
+    pr = project.read_project(data)
+    animation = pr.make_animation()
     if run_start:
         animation.start()
 

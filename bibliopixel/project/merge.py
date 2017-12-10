@@ -1,17 +1,23 @@
-from .. util import log
+import collections
 from . import construct
 
-DEFAULT_PROJECT = {
-    'aliases': {},
-    'animation': {},
-    'driver': {},
-    'drivers': [],
-    'layout': {},
-    'maker': 'bibliopixel.project.data_maker.Maker',
-    'path': '',
-    'run': {},
-    'typename': 'bibliopixel.project.project.Project',
-}
+# Elements in the DEFAULT_PROJECT are listed in order of dependency: sections
+# can only be dependent on sections that are above them in this list.
+# For example, animation is at the bottom which are  dependent on run and
+# layout, which depend on drivers, and everything depends on path and typename.
+DEFAULT_PROJECT = collections.OrderedDict((
+    ('aliases', {}),
+    ('path', ''),
+    ('typename', 'bibliopixel.project.project.Project'),
+    ('maker', 'bibliopixel.project.data_maker.Maker'),
+    ('driver', {}),
+    ('drivers', []),
+    ('dimensions', ()),
+    ('layout', {}),
+    ('run', {}),
+    ('animation', {}),
+))
+PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
 
 
 def merge(*projects):

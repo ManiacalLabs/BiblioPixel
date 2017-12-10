@@ -31,6 +31,7 @@ class MergeTest(unittest.TestCase):
         expected = {
             'aliases': {},
             'animation': {'typename': 'bfoo'},
+            'dimensions': (),
             'driver': {'typename': 'bar'},
             'drivers': ['bang', 'bop'],
             'layout': {},
