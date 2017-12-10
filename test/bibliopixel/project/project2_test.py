@@ -1,9 +1,10 @@
 import copy, unittest
-from bibliopixel.project import project
+from bibliopixel.project import defaults, project
 from bibliopixel.animation.sequence import Sequence
 from bibliopixel.animation.matrix import BaseMatrixAnim
 from bibliopixel.layout import Matrix
 from bibliopixel.project.data_maker import Maker
+from test.bibliopixel import patch
 
 
 def classname(c):
@@ -12,8 +13,9 @@ def classname(c):
 
 class Project2Test(unittest.TestCase):
     def test_empty(self):
-        with self.assertRaises(ValueError):
-            project.project()
+        with patch.patch(defaults, 'BYPASS_PROJECT_DEFAULTS', True):
+            with self.assertRaises(ValueError):
+                project.project()
 
     def test_single(self):
         source = {
@@ -23,7 +25,9 @@ class Project2Test(unittest.TestCase):
                 'height': 32,
             }
         }
-        pr = project.project(source)
+        with patch.patch(defaults, 'BYPASS_PROJECT_DEFAULTS', True):
+            pr = project.project(source)
+
         self.assertEquals(
             [BaseMatrixAnim, 1, Matrix, Maker, 23, 32],
             [

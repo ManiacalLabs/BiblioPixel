@@ -3,6 +3,7 @@ import unittest
 from bibliopixel.project.importer import (
     import_module, import_symbol, make_object)
 from bibliopixel.project import importer
+from test.bibliopixel import patch
 
 
 class ImporterTest(unittest.TestCase):
@@ -54,7 +55,8 @@ class ImporterTest(unittest.TestCase):
         self.assertTrue('No module named \'nonexistent\'' in e)
 
     def test_exception_known(self):
-        try:
+        names = dict(importer.INSTALL_NAMES, nonexistent='pynone')
+        with patch.patch(importer, 'INSTALL_NAMES', names):
             # Patch in a known, "fake" module.
             importer.INSTALL_NAMES['nonexistent'] = 'pynone'
             with self.assertRaises(ImportError) as cm:
@@ -62,6 +64,3 @@ class ImporterTest(unittest.TestCase):
             e = str(cm.exception)
             self.assertTrue('pip install pynone' in e)
             self.assertTrue('No module named \'nonexistent\'' in e)
-
-        finally:
-            importer.INSTALL_NAMES.pop('nonexistent')

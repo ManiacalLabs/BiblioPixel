@@ -1,6 +1,7 @@
 import fractions, unittest
 from bibliopixel.controllers import midi
 from argparse import Namespace
+from test.bibliopixel import patch
 
 C3 = Namespace(type='note_on', note=32, channel=1, velocity=96)
 C3_OFF = Namespace(type='note_off', note=32, channel=1, velocity=0, x=47)
@@ -27,15 +28,12 @@ class MidiTest(unittest.TestCase):
     def run_test(self, msgs, expected, **kwds):
         actual = []
 
-        midi.mido, saved_mido = FakeMido(msgs), midi.mido
-        try:
+        with patch.patch(midi, 'mido', FakeMido(msgs)):
             m = midi.Midi(callback=actual.append, **kwds)
             m.start()
             m.thread.join()
             actual = [list(i.items()) for i in actual]
             self.assertEquals(actual, expected)
-        finally:
-            midi.mido = saved_mido
 
     def test_one(self):
         expected = [

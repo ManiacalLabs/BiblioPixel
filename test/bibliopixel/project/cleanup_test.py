@@ -57,6 +57,7 @@ class CleanupTest(unittest.TestCase):
         }
         actual = cleanup_after(source)
         expected = {
+            'dimensions': (),
             'driver': {},
             'drivers': [],
             'layout': {

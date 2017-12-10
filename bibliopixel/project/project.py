@@ -1,5 +1,5 @@
 import copy
-from . import attributes, construct, cleanup, load, merge, recurse
+from . import attributes, construct, cleanup, defaults, load, recurse
 from .. util import exception
 
 
@@ -44,15 +44,15 @@ class Project:
         return self.animation
 
 
-def project(*descs):
-    desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
+def project(*descs, **kwds):
+    desc = defaults.merge(*descs, **kwds)
     desc = recurse.recurse(desc, aliases=desc['aliases'])
     return construct.construct(**desc)
 
 
-def read_project(location, threaded=None, default=None):
+def read_project(location, threaded=None, default=None, **kwds):
     project_data = load.data(location)
     if threaded is not None:
         project_data.setdefault('run', {})['threaded'] = threaded
 
-    return project(default, copy.deepcopy(project_data))
+    return project(default, copy.deepcopy(project_data), **kwds)
