@@ -7,8 +7,8 @@ from .. project import aliases
 
 __all__ = ['main']
 COMMANDS = (
-    'alias', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'devices',
-    'demo', 'run', 'update')
+    'alias', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'default',
+    'demo', 'devices', 'run', 'update')
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
 
