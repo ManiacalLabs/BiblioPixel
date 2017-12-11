@@ -36,7 +36,7 @@ class AnimationThreading(object):
 
         elapsed_time = timestamps[-1] - timestamps[0]
         if elapsed_time > wait_time:
-            logger = log.debug if self.frame_overrun else log.warning
+            logger = log.frame if self.frame_overrun else log.warning
             logger('Frame-time of %dms set, but took %dms!',
                    1000 * wait_time, 1000 * elapsed_time)
             self.frame_overrun = True
