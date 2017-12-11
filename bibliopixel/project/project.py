@@ -23,22 +23,21 @@ class Project:
         self.aliases = aliases
         layout = layout or cleanup.cleanup_layout(animation)
 
-        with load.extender(self.path):
-            self.maker = self.construct_child(**maker)
-            self.drivers = [self.construct_child(**d) for d in drivers]
-            with exception.add('Unable to create layout'):
-                self.layout = self.construct_child(**layout)
+        self.maker = self.construct_child(**maker)
+        self.drivers = [self.construct_child(**d) for d in drivers]
+        with exception.add('Unable to create layout'):
+            self.layout = self.construct_child(**layout)
 
-            def post(desc):
-                return self.construct_child(**desc)
+        def post(desc):
+            return self.construct_child(**desc)
 
-            with exception.add('Unable to create animation'):
-                self.animation = recurse.recurse(
-                    animation,
-                    pre=None,
-                    post=post,
-                    python_path='bibliopixel.animation',
-                    aliases=self.aliases)
+        with exception.add('Unable to create animation'):
+            self.animation = recurse.recurse(
+                animation,
+                pre=None,
+                post=post,
+                python_path='bibliopixel.animation',
+                aliases=self.aliases)
 
     def make_animation(self):
         return self.animation
@@ -46,8 +45,9 @@ class Project:
 
 def project(*descs, **kwds):
     desc = defaults.merge(*descs, **kwds)
-    desc = recurse.recurse(desc, aliases=desc['aliases'])
-    return construct.construct(**desc)
+    with load.extender(desc.get('path', '')):
+        desc = recurse.recurse(desc, aliases=desc['aliases'])
+        return construct.construct(**desc)
 
 
 def read_project(location, threaded=None, default=None, **kwds):
