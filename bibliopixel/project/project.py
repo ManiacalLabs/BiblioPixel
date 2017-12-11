@@ -1,5 +1,5 @@
 import copy
-from . import attributes, construct, cleanup, load, merge, recurse
+from . import attributes, construct, cleanup, defaults, load, recurse
 from .. util import exception
 
 
@@ -45,7 +45,7 @@ class Project:
 
 
 def project(*descs):
-    desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
+    desc = defaults.merge(*descs)
     desc = recurse.recurse(desc, aliases=desc['aliases'])
     return construct.construct(**desc)
 
