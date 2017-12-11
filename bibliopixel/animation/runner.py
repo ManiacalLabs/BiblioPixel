@@ -29,7 +29,6 @@ class Runner(object):
             max_steps = 0
 
         self.amt = amt
-        self.fps = fps
         self.sleep_time = 1 / fps if fps else sleep_time
         self.until_complete = until_complete
         self.seconds = seconds
@@ -39,3 +38,11 @@ class Runner(object):
         self.seconds = seconds
         self.threaded = threaded
         self.main = load.code(main)
+
+    @property
+    def fps(self):
+        return 1 / self.sleep_time
+
+    @fps.setter
+    def fps(self, fps):
+        self.sleep_time = 1 / fps
