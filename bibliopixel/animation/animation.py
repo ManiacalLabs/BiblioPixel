@@ -190,7 +190,7 @@ class BaseAnimation(object):
 def _report_framerate(timestamps):
     total_time = timestamps[-1] - timestamps[0]
     fps = int(1.0 / max(total_time, 0.001))
-    log.debug("%dms/%dfps / Frame: %dms / Update: %dms",
+    log.frame("%dms/%dfps / Frame: %dms / Update: %dms",
               1000 * total_time,
               fps,
               1000 * (timestamps[1] - timestamps[0]),
