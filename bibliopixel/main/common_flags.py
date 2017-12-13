@@ -94,7 +94,7 @@ def add_project_flags(parser):
         help='If true, bp fail if any subanimation fails to construct')
 
     parser.add_argument(
-        '-l', '--layout', default='matrix',
+        '-l', '--layout', default=None,
         help='Default layout class if no layout is specified')
 
     parser.add_argument(
