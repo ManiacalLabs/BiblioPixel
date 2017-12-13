@@ -59,11 +59,7 @@ def add_project_flags(parser):
         help='Default layout class if no layout is specified')
 
     parser.add_argument(
-        '-n', '--num', default=0,
-        help='Number of pixels controlled by the driver.')
-
-    parser.add_argument(
-        '--numpy_dtype', default=None, help='Use this numpy datatype.')
+        '--numpy_dtype', '-n', default=None, help='Use this numpy datatype.')
 
     parser.add_argument('-p', '--path', default=None, help=PATH_HELP)
 
@@ -105,9 +101,6 @@ def _make_project_flags(args):
 
     if args.brightness:
         project_flags['layout']['brightness'] = int(args.brightness)
-
-    if args.num:
-        project_flags['driver']['num'] = int(args.num)
 
     if args.numpy_dtype:
         project_flags['maker'] = {'numpy_dtype': args.numpy_dtype}

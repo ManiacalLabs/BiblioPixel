@@ -3,6 +3,7 @@ from ctypes import c_float, c_uint8
 from multiprocessing.sharedctypes import RawArray
 from .. util import log
 from .. util.color_list import numpy, numpy_array
+from . import importer
 
 NUMPY_DTYPE = os.environ.get('BP_NUMPY_DTYPE')
 
@@ -14,8 +15,8 @@ class Maker:
             if numpy_array:
                 log.info('Using numpy')
             else:
-                log.error('numpy module is not available.')
-                numpy_dtype = None
+                log.error('The numpy module is not available.')
+                print(importer.MISSING_MESSAGE % ('numpy', 'numpy'))
 
         if shared_memory and numpy_dtype:
             log.error('Shared memory for numpy arrays is not yet supported.')
