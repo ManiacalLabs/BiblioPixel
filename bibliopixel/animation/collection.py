@@ -17,8 +17,17 @@ class Collection(animation.BaseAnimation):
                 animation = a.pop('animation')
             animation = construct.to_type_constructor(
                 animation, 'bibliopixel.animation')
-            run = a.pop('run', {})
-            animation['run'] = dict(run, **animation.get('run', {}))
+            arun = a.pop('run', {})
+            arun = animation['run'] = dict(arun, **animation.get('run', {}))
+            drun = desc['run']
+
+            # Children without fps or sleep_time get it from their parents.
+            if not ('fps' in arun or 'sleep_time' in arun):
+                if 'fps' in drun:
+                    arun.update(fps=drun['fps'])
+                elif 'sleep_time' in drun:
+                    arun.update(sleep_time=drun['sleep_time'])
+
             if a:
                 raise ValueError('Extra fields in animation: ' + ', '.join(a))
             return animation

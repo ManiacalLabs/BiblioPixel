@@ -11,186 +11,39 @@
     },
 
     "run": {
+        "fps": 30,
         "seconds": 14
     },
 
     "animation": {
         "typename": "sequence",
+        "slideshow": 2,
         "animations": [
-            {
-                "animation": "BiblioPixelAnimations.matrix.ImageAnim.ImageAnim",
-                "run": {
-                    "seconds": 0.5
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.ImageShow.ImageShow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 5
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.ImageDissolve.ImageDissolve",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.ScreenGrab.ScreenGrab",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.AnalogClock.RGBAnalogClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.BinaryClock.MatrixBinaryClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.CPUUsage.CPUUsage",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.GameOfLife.GameOfLife",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.GradientClock.GradientClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAnt",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAntRainbow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.Mainframe.Mainframe",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.MatrixRain.MatrixRain",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.SpinningTriangle.SpinningTriangle",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.TallClock.TallClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.Text.BounceText",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.Text.ScrollText",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.TicTacToe.TicTacToe",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.bloom.Bloom",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.circlepop.CirclePop",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.perlin_simplex.PerlinSimplex",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            }
+            "BiblioPixelAnimations.matrix.ImageAnim.ImageAnim",
+            "BiblioPixelAnimations.matrix.ImageShow.ImageShow",
+            "BiblioPixelAnimations.matrix.ImageDissolve.ImageDissolve",
+            "BiblioPixelAnimations.matrix.ScreenGrab.ScreenGrab",
+            "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
+            "BiblioPixelAnimations.matrix.AnalogClock.RGBAnalogClock",
+            "BiblioPixelAnimations.matrix.BinaryClock.MatrixBinaryClock",
+            "BiblioPixelAnimations.matrix.CPUUsage.CPUUsage",
+            "BiblioPixelAnimations.matrix.GameOfLife.GameOfLife",
+            "BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB",
+            "BiblioPixelAnimations.matrix.GradientClock.GradientClock",
+            "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAnt",
+            "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAntRainbow",
+            "BiblioPixelAnimations.matrix.Mainframe.Mainframe",
+            "BiblioPixelAnimations.matrix.MatrixRain.MatrixRain",
+            "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
+            "BiblioPixelAnimations.matrix.SpinningTriangle.SpinningTriangle",
+            "BiblioPixelAnimations.matrix.TallClock.TallClock",
+            "BiblioPixelAnimations.matrix.Text.BounceText",
+            "BiblioPixelAnimations.matrix.Text.ScrollText",
+            "BiblioPixelAnimations.matrix.TicTacToe.TicTacToe",
+            "BiblioPixelAnimations.matrix.bloom.Bloom",
+            "BiblioPixelAnimations.matrix.circlepop.CirclePop",
+            "BiblioPixelAnimations.matrix.perlin_simplex.PerlinSimplex",
+            "BiblioPixelAnimations.matrix.pinwheel.Pinwheel"
         ]
     }
 }

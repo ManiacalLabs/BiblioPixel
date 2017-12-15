@@ -10,82 +10,23 @@
     },
 
     "run": {
+        "fps": 30,
         "seconds": 12
     },
 
     "animation": {
         "typename": "sequence",
         "animations": [
-            {
-                "animation": "BiblioPixelAnimations.circle.arc_clock.ArcClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.arc_rotate.ArcRotate",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.bloom.CircleBloom",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.circle_clock.CircleClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.diag.Diag",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.fireflies.FireFlies",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.hyperspace.Hyperspace",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.hyperspace.HyperspaceRainbow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.pinwheel.PinWheel",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.circle.swirl.Swirl",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            }
+            "BiblioPixelAnimations.circle.arc_clock.ArcClock",
+            "BiblioPixelAnimations.circle.arc_rotate.ArcRotate",
+            "BiblioPixelAnimations.circle.bloom.CircleBloom",
+            "BiblioPixelAnimations.circle.circle_clock.CircleClock",
+            "BiblioPixelAnimations.circle.diag.Diag",
+            "BiblioPixelAnimations.circle.fireflies.FireFlies",
+            "BiblioPixelAnimations.circle.hyperspace.Hyperspace",
+            "BiblioPixelAnimations.circle.hyperspace.HyperspaceRainbow",
+            "BiblioPixelAnimations.circle.pinwheel.PinWheel",
+            "BiblioPixelAnimations.circle.swirl.Swirl"
         ]
     }
 }

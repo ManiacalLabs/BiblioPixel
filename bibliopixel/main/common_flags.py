@@ -119,6 +119,10 @@ def add_project_flags(parser):
         '--simpixel', help='Run SimPixel at a specific URL')
 
     parser.add_argument(
+        '--slideshow', default=0, help='Run `bp` sequence in slideshow mode, '
+        'where each animation is shown for this many seconds')
+
+    parser.add_argument(
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
 
@@ -149,6 +153,10 @@ def _make_project_flags(args):
 
     if args.run_for is not None:
         project_flags.setdefault('run', {})['seconds'] = float(args.run_for)
+
+    if args.slideshow is not None:
+        project_flags.setdefault('animation', {})['slideshow'] = float(
+            args.slideshow)
 
     if args.dimensions is not None:
         dimensions = args.dimensions.split(',')

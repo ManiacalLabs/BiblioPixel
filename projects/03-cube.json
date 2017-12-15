@@ -12,39 +12,18 @@
     },
 
     "run": {
+        "fps": 30,
         "seconds": 9
     },
+
     "animation": {
         "typename": "sequence",
+        "slideshow": 2,
         "animations": [
-            {
-                "animation": "BiblioPixelAnimations.cube.Rain.RainBow",
-                "run": {
-                    "seconds": 2.0,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.cube.bloom.CubeBloom",
-                "run": {
-                    "seconds": 2.0,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.cube.simplex.Simplex",
-                "run": {
-                    "seconds": 2.0,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.cube.wave_spiral.WaveSpiral",
-                "run": {
-                    "seconds": 2.0,
-                    "fps": 30
-                }
-            }
+            "BiblioPixelAnimations.cube.Rain.RainBow",
+            "BiblioPixelAnimations.cube.bloom.CubeBloom",
+            "BiblioPixelAnimations.cube.simplex.Simplex",
+            "BiblioPixelAnimations.cube.wave_spiral.WaveSpiral"
          ]
     }
 }
