@@ -1,161 +1,40 @@
 {
-    "dimensions": 50,
-    "layout": "strip",
-
-    "run": {
-        "seconds": 12
+    "driver": {
+        "num": 50,
+        "typename": "simpixel"
     },
+
+    "layout": "strip",
 
     "animation": {
         "typename": "sequence",
+        "run": {
+            "seconds": 23,
+            "fps": 30
+        },
+        "slideshow": 1,
         "animations": [
-            {
-                "animation": "BiblioPixelAnimations.strip.Alternates.Alternates",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.BinaryEpochClock.BEClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.ColorChase.ColorChase",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.ColorFade.ColorFade",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.ColorPattern.ColorPattern",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.ColorWipe.ColorWipe",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.FireFlies.FireFlies",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.HalvesRainbow.HalvesRainbow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.LarsonScanners.LarsonRainbow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.LarsonScanners.LarsonScanner",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.LinearRainbow.LinearRainbow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.PartyMode.PartyMode",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.PixelPingPong.PixelPingPong",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.RGBClock.RGBClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.Rainbows.Rainbow",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.Rainbows.RainbowCycle",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.Searchlights.Searchlights",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.Wave.Wave",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.Wave.WaveMove",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.WhiteTwinkle.WhiteTwinkle",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            },
-            {
-                "animation": "BiblioPixelAnimations.strip.hexclock.HEXClock",
-                "run": {
-                    "seconds": 0.5,
-                    "fps": 30
-                }
-            }
+            "BiblioPixelAnimations.strip.Alternates.Alternates",
+            "BiblioPixelAnimations.strip.BinaryEpochClock.BEClock",
+            "BiblioPixelAnimations.strip.ColorChase.ColorChase",
+            "BiblioPixelAnimations.strip.ColorFade.ColorFade",
+            "BiblioPixelAnimations.strip.ColorPattern.ColorPattern",
+            "BiblioPixelAnimations.strip.ColorWipe.ColorWipe",
+            "BiblioPixelAnimations.strip.FireFlies.FireFlies",
+            "BiblioPixelAnimations.strip.HalvesRainbow.HalvesRainbow",
+            "BiblioPixelAnimations.strip.LarsonScanners.LarsonRainbow",
+            "BiblioPixelAnimations.strip.LarsonScanners.LarsonScanner",
+            "BiblioPixelAnimations.strip.LinearRainbow.LinearRainbow",
+            "BiblioPixelAnimations.strip.PartyMode.PartyMode",
+            "BiblioPixelAnimations.strip.PixelPingPong.PixelPingPong",
+            "BiblioPixelAnimations.strip.RGBClock.RGBClock",
+            "BiblioPixelAnimations.strip.Rainbows.Rainbow",
+            "BiblioPixelAnimations.strip.Rainbows.RainbowCycle",
+            "BiblioPixelAnimations.strip.Searchlights.Searchlights",
+            "BiblioPixelAnimations.strip.Wave.Wave",
+            "BiblioPixelAnimations.strip.Wave.WaveMove",
+            "BiblioPixelAnimations.strip.WhiteTwinkle.WhiteTwinkle",
+            "BiblioPixelAnimations.strip.hexclock.HEXClock"
         ]
     }
 }
