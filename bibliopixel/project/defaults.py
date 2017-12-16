@@ -7,6 +7,7 @@ BYPASS_PROJECT_DEFAULTS = False
 
 USER_DEFAULTS_FILE = os.path.expanduser('~/.bibliopixel_defaults')
 USER_DEFAULTS = datafile.DataFile(USER_DEFAULTS_FILE)
+PROJECT_DEFAULTS = None
 
 SAVE_DIRECTORY = os.path.expanduser('~/.bibliopixel_save')
 
@@ -18,8 +19,11 @@ def merge(*projects):
     """
     if BYPASS_PROJECT_DEFAULTS:
         defaults = (_merge.DEFAULT_PROJECT,)
-    else:
+    elif PROJECT_DEFAULTS is None:
         defaults = (_merge.DEFAULT_PROJECT, USER_DEFAULTS.data)
+    else:
+        defaults = (_merge.DEFAULT_PROJECT, PROJECT_DEFAULTS)
+
     return _merge.merge(*(defaults + projects))
 
 
@@ -59,7 +63,7 @@ def set_defaults(sections):
 
 def load_defaults(name):
     if name in _defaults():
-        defaults = json.load(open(_default_file(name)))
+        defaults = _load_json(name)
         USER_DEFAULTS.set_items(defaults.items())
         print('Loaded project defaults from', name)
     else:
@@ -94,6 +98,14 @@ def list_saved_defaults():
             print('   ', i)
     else:
         print('(no project defaults saved)')
+
+
+def set_project_defaults(name):
+    if name not in _defaults():
+        raise ValueError('No such default: ' + name)
+
+    global PROJECT_DEFAULTS
+    PROJECT_DEFAULTS = _load_json(name)
 
 
 def _check_sections(sections):
@@ -161,3 +173,13 @@ def _defaults():
 
 def _default_file(name):
     return os.path.join(SAVE_DIRECTORY, name)
+
+
+def _load_json(name):
+    name = _default_file(name)
+    try:
+        return json.load(open(name))
+    except Exception as e:
+        e.args = ('There was a JSON error in file ' + name,
+                  'Did you edit this file by hand?') + e.args
+        raise

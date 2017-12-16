@@ -59,7 +59,7 @@ def cleanup_drivers(desc):
         else:
             drivers = [driver]
 
-    desc['drivers'] = drivers or DEFAULT_DRIVERS[:]
+    desc['drivers'] = drivers or DEFAULT_DRIVERS
     return desc
 
 
