@@ -3,6 +3,7 @@ from .. util import datafile, log
 
 USER_ALIAS_FILE = os.path.expanduser('~/.bibliopixel_aliases')
 USER_ALIASES = datafile.DataFile(USER_ALIAS_FILE)
+PROJECT_ALIASES = {}
 
 
 BUILTIN_ALIASES = {
@@ -43,7 +44,10 @@ BUILTIN_ALIASES = {
 
 
 def get_alias(alias, isolate=False):
-    return not isolate and USER_ALIASES.get(alias) or BUILTIN_ALIASES.get(alias)
+    return (
+        PROJECT_ALIASES.get(alias) or
+        (not isolate and USER_ALIASES.get(alias)) or
+        BUILTIN_ALIASES.get(alias))
 
 
 def print_alias(alias, value, printer=log.printer):

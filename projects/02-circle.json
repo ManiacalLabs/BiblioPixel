@@ -14,19 +14,23 @@
         "seconds": 12
     },
 
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.circle"
+    },
+
     "animation": {
         "typename": "sequence",
         "animations": [
-            "BiblioPixelAnimations.circle.arc_clock.ArcClock",
-            "BiblioPixelAnimations.circle.arc_rotate.ArcRotate",
-            "BiblioPixelAnimations.circle.bloom.CircleBloom",
-            "BiblioPixelAnimations.circle.circle_clock.CircleClock",
-            "BiblioPixelAnimations.circle.diag.Diag",
-            "BiblioPixelAnimations.circle.fireflies.FireFlies",
-            "BiblioPixelAnimations.circle.hyperspace.Hyperspace",
-            "BiblioPixelAnimations.circle.hyperspace.HyperspaceRainbow",
-            "BiblioPixelAnimations.circle.pinwheel.PinWheel",
-            "BiblioPixelAnimations.circle.swirl.Swirl"
+            "@bpa.arc_clock",
+            "@bpa.arc_rotate",
+            "@bpa.bloom.CircleBloom",
+            "@bpa.circle_clock",
+            "@bpa.diag",
+            "@bpa.fireflies",
+            "@bpa.hyperspace",
+            "@bpa.hyperspace.HyperspaceRainbow",
+            "@bpa.pinwheel",
+            "@bpa.swirl"
         ]
     }
 }

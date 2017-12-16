@@ -16,11 +16,9 @@ class Project:
             return construct(self, **kwds)
         return datatype(**kwds)
 
-    def __init__(
-            self, *, drivers, layout, maker, path, animation, aliases, **kwds):
+    def __init__(self, *, drivers, layout, maker, path, animation, **kwds):
         attributes.check(kwds, 'project')
         self.path = path
-        self.aliases = aliases
         layout = layout or cleanup.cleanup_layout(animation)
 
         self.maker = self.construct_child(**maker)
@@ -36,8 +34,7 @@ class Project:
                 animation,
                 pre=None,
                 post=post,
-                python_path='bibliopixel.animation',
-                aliases=self.aliases)
+                python_path='bibliopixel.animation')
 
     def make_animation(self):
         return self.animation
@@ -46,7 +43,7 @@ class Project:
 def project(*descs, **kwds):
     desc = defaults.merge(*descs, **kwds)
     with load.extender(desc.get('path', '')):
-        desc = recurse.recurse(desc, aliases=desc['aliases'])
+        desc = recurse.recurse(desc)
         return construct.construct(**desc)
 
 

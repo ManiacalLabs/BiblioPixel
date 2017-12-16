@@ -16,14 +16,18 @@
         "seconds": 9
     },
 
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.cube"
+    },
+
     "animation": {
         "typename": "sequence",
         "slideshow": 2,
         "animations": [
-            "BiblioPixelAnimations.cube.Rain.RainBow",
-            "BiblioPixelAnimations.cube.bloom.CubeBloom",
-            "BiblioPixelAnimations.cube.simplex.Simplex",
-            "BiblioPixelAnimations.cube.wave_spiral.WaveSpiral"
-         ]
+            "@bpa.Rain.RainBow",
+            "@bpa.bloom.CubeBloom",
+            "@bpa.simplex",
+            "@bpa.wave_spiral"
+        ]
     }
 }
