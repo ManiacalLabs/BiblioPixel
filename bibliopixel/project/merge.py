@@ -19,6 +19,9 @@ DEFAULT_PROJECT = collections.OrderedDict((
 ))
 PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
 
+NOT_MERGEABLE = (
+    'datatype', 'dimensions', 'drivers', 'numbers', 'path', 'typename')
+
 
 def merge(*projects):
     """
@@ -28,8 +31,7 @@ def merge(*projects):
     result = {}
     for project in projects:
         for name, section in (project or {}).items():
-            if name in (
-                    'datatype', 'drivers', 'path', 'typename', 'dimensions'):
+            if name in NOT_MERGEABLE:
                 result[name] = section
             else:
                 result.setdefault(name, {}).update(construct.to_type(section))

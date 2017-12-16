@@ -24,6 +24,14 @@ def cleanup_aliases(desc):
     return desc
 
 
+def cleanup_numbers(desc):
+    numbers = desc.pop('numbers', 'python')
+    if numbers != 'python':
+        desc.setdefault('maker', {})['numpy_dtype'] = numbers
+
+    return desc
+
+
 def cleanup_animation(desc):
     if not desc.get('animation'):
         raise ValueError('Missing "animation" section')
@@ -97,6 +105,7 @@ def cleanup(desc):
     desc = cleanup_aliases(desc)
     desc = cleanup_animation(desc)
     desc = cleanup_drivers(desc)
-    desc = cleanup_dimensions(desc)
+    desc = cleanup_dimensions(desc)  # Must come after cleanup_drivers
+    desc = cleanup_numbers(desc)
 
     return desc
