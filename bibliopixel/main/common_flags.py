@@ -1,5 +1,5 @@
 import json, os
-from .. project import data_maker, project
+from .. project import data_maker, defaults, project
 
 """Common command line arguments for run and demo."""
 
@@ -40,12 +40,8 @@ def add_project_flags(parser):
         help='Override project brightness value')
 
     parser.add_argument(
-        '--bypass_project_defaults', '--bypass', action='store_true',
-        help='Override project defaults')
-
-    parser.add_argument(
-        '-d', '--driver', default='simpixel',
-        help='Default driver type if no driver is specified')
+        '-d', '--defaults', default=None,
+        help='Use this default setting')
 
     parser.add_argument(
         '--dimensions', '--dim', default=None,
@@ -88,7 +84,7 @@ def add_project_flags(parser):
 
 def _make_project_flags(args):
     def get_value(name):
-        value = getattr(args, name)
+        value = getattr(args, name, None)
         if not value:
             return {}
 
@@ -103,6 +99,9 @@ def _make_project_flags(args):
 
     if args.brightness:
         project_flags['layout']['brightness'] = int(args.brightness)
+
+    if args.defaults:
+        defaults.set_project_defaults(args.defaults)
 
     if args.numbers != 'python':
         project_flags['numbers'] = args.numbers
