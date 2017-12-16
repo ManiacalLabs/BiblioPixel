@@ -3,7 +3,6 @@ from . import load
 from . import fields
 from distutils.version import LooseVersion
 
-
 MINIMUM_VERSIONS = {'serial': '2.7'}
 
 INSTALL_NAMES = {
@@ -13,24 +12,6 @@ INSTALL_NAMES = {
     'serial': 'pyserial',
 }
 
-VERSION_MESSAGE = """
-You have version %s of module '%s' but you need version %s.
-
-Please upgrade at the command line with:
-
-    $ pip install %s --upgrade
-
-"""
-
-MISSING_MESSAGE = """
-You are missing module '%s'.
-
-Please install it at the command line with:
-
-    $ pip install %s
-
-"""
-
 
 def _validate_typename(typename):
     root_module = typename.split('.')[0]
@@ -38,7 +19,13 @@ def _validate_typename(typename):
     if not min_version:
         return
 
-    version = __import__(root_module).VERSION
+    try:
+        version = __import__(root_module).VERSION
+    except AttributeError:
+        if root_module == 'serial':
+            raise ValueError(SERIAL_IS_INSTALLED_NOT_PYSERIAL_MESSAGE)
+        raise
+
     if LooseVersion(version) >= LooseVersion(min_version):
         return
 
@@ -78,3 +65,31 @@ def make_object(*args, typename=None, python_path=None, datatype=None, **kwds):
     datatype = datatype or import_symbol(typename, python_path)
     field_types = getattr(datatype, 'FIELD_TYPES', fields.FIELD_TYPES)
     return datatype(*args, **fields.component(kwds, field_types))
+
+
+VERSION_MESSAGE = """
+You have version %s of module '%s' but you need version %s.
+
+Please upgrade at the command line with:
+
+    $ pip install %s --upgrade
+"""
+
+MISSING_MESSAGE = """
+You are missing module '%s'.
+
+Please install it at the command line with:
+
+    $ pip install %s
+"""
+
+SERIAL_IS_INSTALLED_NOT_PYSERIAL_MESSAGE = """
+You have the module `serial` installed, but you need the package `pyserial`
+instead.  Sorry, it's not our fault that there are two packages whose names are
+so close!
+
+To uninstall that module and install the correct one from the command line:
+
+    $ pip uninstall -y serial
+    $ pip install pyserial
+"""
