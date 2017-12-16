@@ -18,45 +18,6 @@ LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
 ENABLE_PRESETS = False
 
 
-# Help messages.
-
-PATH_HELP = """\
-A list of directories, separated by colons, 'which are added to the end of
-`sys.path`.
-
-You can also use loady-style paths which start with `//git/` to
-dynamically load a library from a public git repository.
-
-See https://github.com/ManiacalLabs/BiblioPixel/wiki/BiblioPixel-Paths
-for more information.
-"""
-
-LOGLEVEL_HELP = """\
-Set what level of events to log. Higher log levels print less."""
-
-ISOLATE_HELP = """\
-Run BiblioPixel in isolated mode, where it cannot see your local files.
-This means that it will not see any local Python classes in your directories
-and it won't see your local aliases.
-
-Running your project in isolated mode help makes sure that your project will
-work on other machines without modification.
-"""
-
-PRESET_HELP = """Filenames for preset library"""
-
-RUN_FOR_HELP = """How long to run the animation (overrides runner.seconds)."""
-
-VERBOSE_HELP = """\
-If this is set, then errors are reported with a full stack trace.
-If not set, just the exception message is printed.
-"""
-
-VERSION_HELP = """\
-Print the current version number of BiblioPixel (%s).
-""" % VERSION
-
-
 def add_common_flags(parser):
     parser.add_argument(
         '--loglevel', choices=LOG_LEVELS, default='info', help=LOGLEVEL_HELP)
@@ -176,3 +137,42 @@ def make_project(args, desc):
 
 def make_animation(args, desc):
     return make_project(args, desc).make_animation()
+
+
+# Help messages.
+
+PATH_HELP = """\
+A list of directories, separated by colons, 'which are added to the end of
+`sys.path`.
+
+You can also use loady-style paths which start with `//git/` to
+dynamically load a library from a public git repository.
+
+See https://github.com/ManiacalLabs/BiblioPixel/wiki/BiblioPixel-Paths
+for more information.
+"""
+
+LOGLEVEL_HELP = """\
+Set what level of events to log. Higher log levels print less."""
+
+ISOLATE_HELP = """\
+Run BiblioPixel in isolated mode, where it cannot see your local files.
+This means that it will not see any local Python classes in your directories
+and it won't see your local aliases.
+
+Running your project in isolated mode help makes sure that your project will
+work on other machines without modification.
+"""
+
+PRESET_HELP = """Filenames for preset library"""
+
+RUN_FOR_HELP = """How long to run the animation (overrides runner.seconds)."""
+
+VERBOSE_HELP = """\
+If this is set, then errors are reported with a full stack trace, and
+loglevel is by default set to debug..
+"""
+
+VERSION_HELP = """\
+Print the current version number of BiblioPixel (%s).
+""" % VERSION
