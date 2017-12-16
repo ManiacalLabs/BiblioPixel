@@ -1,5 +1,5 @@
 import json, os
-from .. project import project
+from .. project import data_maker, project
 
 """Common command line arguments for run and demo."""
 
@@ -16,6 +16,7 @@ COMPONENTS = 'driver', 'layout', 'animation'
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
 ENABLE_PRESETS = False
+NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 
 def add_common_flags(parser):
@@ -59,7 +60,8 @@ def add_project_flags(parser):
         help='Default layout class if no layout is specified')
 
     parser.add_argument(
-        '--numpy_dtype', '-n', default=None, help='Use this numpy datatype.')
+        '--numbers', '-n', default='python', choices=NUMBER_TYPES,
+        help=NUMBERS_HELP)
 
     parser.add_argument('-p', '--path', default=None, help=PATH_HELP)
 
@@ -102,8 +104,8 @@ def _make_project_flags(args):
     if args.brightness:
         project_flags['layout']['brightness'] = int(args.brightness)
 
-    if args.numpy_dtype:
-        project_flags['maker'] = {'numpy_dtype': args.numpy_dtype}
+    if args.numbers != 'python':
+        project_flags['numbers'] = args.numbers
 
     if args.run_for is not None:
         project_flags.setdefault('run', {})['seconds'] = float(args.run_for)
@@ -156,6 +158,17 @@ and it won't see your local aliases.
 Running your project in isolated mode help makes sure that your project will
 work on other machines without modification.
 """
+
+NUMBERS_HELP = """
+The type of numbers that are used in color list calculations.
+
+  `python` means to use the classic Python lists of (r, g, b) tuples.
+
+  Anything else is a numpy type, which means that bp uses numpy arrays, which
+  use much faster arithmetic.
+
+  numpy types include:
+    """ + ' '.join(data_maker.NUMPY_TYPES)
 
 PRESET_HELP = """Filenames for preset library"""
 
