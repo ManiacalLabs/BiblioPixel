@@ -35,6 +35,7 @@ class MergeTest(unittest.TestCase):
             'driver': {'typename': 'bar'},
             'drivers': ['bang', 'bop'],
             'layout': {},
+            'numbers': 'python',
             'maker': {
                 'numpy_dtype': 'float',
                 'typename': 'bibliopixel.project.data_maker.Maker'

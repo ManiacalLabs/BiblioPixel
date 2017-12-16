@@ -65,6 +65,7 @@ class CleanupTest(unittest.TestCase):
                 'height': 32,
                 'datatype': Matrix,
             },
+            'numbers': 'python',
             'run': {},
         }
         expected = dict(source, **expected)

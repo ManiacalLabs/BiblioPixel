@@ -9,6 +9,7 @@ DEFAULT_PROJECT = collections.OrderedDict((
     ('aliases', {}),
     ('path', ''),
     ('typename', 'bibliopixel.project.project.Project'),
+    ('numbers', 'python'),
     ('maker', 'bibliopixel.project.data_maker.Maker'),
     ('driver', {}),
     ('drivers', []),
