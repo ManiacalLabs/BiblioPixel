@@ -44,7 +44,7 @@ def _load_py(filename):
 def _get_animations(args):
     animations, failed = [], []
 
-    for filename in args.name or ['']:
+    for filename in args.name:
         saved_path = sys.path[:]
         desc = '(not loaded)'
         try:
@@ -75,9 +75,11 @@ def _get_animations(args):
     raise ValueError('Run aborted')
 
 
-def _run_animations(animations, pause):
+def _run_animations(animations, pause, names):
     needs_pause = False
-    for animation in animations:
+    assert len(animations) == len(names)
+    for animation, name in zip(animations, names):
+        log.debug('Running file %s', name)
         if needs_pause:
             pause and time.sleep(float(pause))
         else:
@@ -98,6 +100,7 @@ def run(args):
     if args.fail_on_exception:
         Collection.FAIL_ON_EXCEPTION = True
 
+    args.name = args.name or ['']
     animations = _get_animations(args)
 
     if args.simpixel:
@@ -105,7 +108,7 @@ def run(args):
     elif args.s:
         simpixel.open_simpixel()
 
-    _run_animations(animations, args.pause)
+    _run_animations(animations, args.pause, args.name)
 
 
 def set_parser(parser):
