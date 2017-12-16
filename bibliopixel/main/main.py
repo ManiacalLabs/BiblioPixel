@@ -63,7 +63,11 @@ def main():
         sys.exit(-1)
 
     aliases.ISOLATE = args.isolate
-    log.set_log_level(args.loglevel)
+
+    if args.verbose and args.loglevel != 'frame':
+        log.set_log_level('debug')
+    else:
+        log.set_log_level(args.loglevel)
 
     try:
         return run(args) or 0
