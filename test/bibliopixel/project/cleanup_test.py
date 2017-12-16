@@ -6,7 +6,6 @@ from bibliopixel.animation.off import OffAnim
 from bibliopixel.layout import Cube, Matrix, Strip
 
 BASE = {
-    'aliases': {},
     'animation': {
         'run': {},
         'datatype': OffAnim,
@@ -55,8 +54,9 @@ class CleanupTest(unittest.TestCase):
                 'wombat': 7,
             },
         }
-        actual = cleanup_after(source)
+        actual = cleanup_after(copy.deepcopy(source))
         expected = {
+            'aliases': {},
             'dimensions': (),
             'driver': {},
             'drivers': [],

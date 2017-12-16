@@ -1,4 +1,4 @@
-from . import aliases, construct
+from . import construct
 
 """
 In order to validate project descriptions, we need to recurse through project
@@ -17,8 +17,7 @@ children.
 """
 
 
-def recurse(
-        desc, pre='pre_recursion', post=None, python_path=None, aliases=None):
+def recurse(desc, pre='pre_recursion', post=None, python_path=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
@@ -35,7 +34,6 @@ def recurse(
     pre -- called before children are visited node in the recursion
     post -- called after children are visited in the recursion
     python_path -- relative path to start resolving typenames
-    aliases -- a dictionary of aliases
 
     """
     def call(f, desc):
@@ -44,7 +42,7 @@ def recurse(
             f = getattr(datatype, f, None)
         return f and f(desc)
 
-    desc = construct.to_type_constructor(desc, python_path, aliases)
+    desc = construct.to_type_constructor(desc, python_path)
     datatype = desc.get('datatype')
 
     desc = call(pre, desc) or desc
@@ -55,8 +53,8 @@ def recurse(
             new_path = python_path or ('bibliopixel.' + child_name)
             if child_name.endswith('s'):
                 for i, c in enumerate(child):
-                    child[i] = recurse(c, pre, post, new_path, aliases)
+                    child[i] = recurse(c, pre, post, new_path)
             else:
-                desc[child_name] = recurse(child, pre, post, new_path, aliases)
+                desc[child_name] = recurse(child, pre, post, new_path)
 
     return call(post, desc) or desc

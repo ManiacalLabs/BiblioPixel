@@ -6,6 +6,10 @@
 
     "layout": "strip",
 
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.strip"
+    },
+
     "animation": {
         "typename": "sequence",
         "run": {
@@ -14,27 +18,27 @@
         },
         "slideshow": 1,
         "animations": [
-            "BiblioPixelAnimations.strip.Alternates.Alternates",
-            "BiblioPixelAnimations.strip.BinaryEpochClock.BEClock",
-            "BiblioPixelAnimations.strip.ColorChase.ColorChase",
-            "BiblioPixelAnimations.strip.ColorFade.ColorFade",
-            "BiblioPixelAnimations.strip.ColorPattern.ColorPattern",
-            "BiblioPixelAnimations.strip.ColorWipe.ColorWipe",
-            "BiblioPixelAnimations.strip.FireFlies.FireFlies",
-            "BiblioPixelAnimations.strip.HalvesRainbow.HalvesRainbow",
-            "BiblioPixelAnimations.strip.LarsonScanners.LarsonRainbow",
-            "BiblioPixelAnimations.strip.LarsonScanners.LarsonScanner",
-            "BiblioPixelAnimations.strip.LinearRainbow.LinearRainbow",
-            "BiblioPixelAnimations.strip.PartyMode.PartyMode",
-            "BiblioPixelAnimations.strip.PixelPingPong.PixelPingPong",
-            "BiblioPixelAnimations.strip.RGBClock.RGBClock",
-            "BiblioPixelAnimations.strip.Rainbows.Rainbow",
-            "BiblioPixelAnimations.strip.Rainbows.RainbowCycle",
-            "BiblioPixelAnimations.strip.Searchlights.Searchlights",
-            "BiblioPixelAnimations.strip.Wave.Wave",
-            "BiblioPixelAnimations.strip.Wave.WaveMove",
-            "BiblioPixelAnimations.strip.WhiteTwinkle.WhiteTwinkle",
-            "BiblioPixelAnimations.strip.hexclock.HEXClock"
+            "@bpa.Alternates",
+            "@bpa.BinaryEpochClock.BEClock",
+            "@bpa.ColorChase",
+            "@bpa.ColorFade",
+            "@bpa.ColorPattern",
+            "@bpa.ColorWipe",
+            "@bpa.FireFlies",
+            "@bpa.HalvesRainbow",
+            "@bpa.LarsonScanners.LarsonRainbow",
+            "@bpa.LarsonScanners.LarsonScanner",
+            "@bpa.LinearRainbow",
+            "@bpa.PartyMode",
+            "@bpa.PixelPingPong",
+            "@bpa.RGBClock",
+            "@bpa.Rainbows.Rainbow",
+            "@bpa.Rainbows.RainbowCycle",
+            "@bpa.Searchlights",
+            "@bpa.Wave",
+            "@bpa.Wave.WaveMove",
+            "@bpa.WhiteTwinkle",
+            "@bpa.hexclock"
         ]
     }
 }

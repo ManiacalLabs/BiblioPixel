@@ -15,35 +15,39 @@
         "seconds": 14
     },
 
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.matrix"
+    },
+
     "animation": {
         "typename": "sequence",
         "slideshow": 2,
         "animations": [
-            "BiblioPixelAnimations.matrix.ImageAnim.ImageAnim",
-            "BiblioPixelAnimations.matrix.ImageShow.ImageShow",
-            "BiblioPixelAnimations.matrix.ImageDissolve.ImageDissolve",
-            "BiblioPixelAnimations.matrix.ScreenGrab.ScreenGrab",
-            "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
-            "BiblioPixelAnimations.matrix.AnalogClock.RGBAnalogClock",
-            "BiblioPixelAnimations.matrix.BinaryClock.MatrixBinaryClock",
-            "BiblioPixelAnimations.matrix.CPUUsage.CPUUsage",
-            "BiblioPixelAnimations.matrix.GameOfLife.GameOfLife",
-            "BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB",
-            "BiblioPixelAnimations.matrix.GradientClock.GradientClock",
-            "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAnt",
-            "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAntRainbow",
-            "BiblioPixelAnimations.matrix.Mainframe.Mainframe",
-            "BiblioPixelAnimations.matrix.MatrixRain.MatrixRain",
-            "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
-            "BiblioPixelAnimations.matrix.SpinningTriangle.SpinningTriangle",
-            "BiblioPixelAnimations.matrix.TallClock.TallClock",
-            "BiblioPixelAnimations.matrix.Text.BounceText",
-            "BiblioPixelAnimations.matrix.Text.ScrollText",
-            "BiblioPixelAnimations.matrix.TicTacToe.TicTacToe",
-            "BiblioPixelAnimations.matrix.bloom.Bloom",
-            "BiblioPixelAnimations.matrix.circlepop.CirclePop",
-            "BiblioPixelAnimations.matrix.perlin_simplex.PerlinSimplex",
-            "BiblioPixelAnimations.matrix.pinwheel.Pinwheel"
+            "@bpa.ImageAnim",
+            "@bpa.ImageShow",
+            "@bpa.ImageDissolve",
+            "@bpa.ScreenGrab",
+            "@bpa.AnalogClock",
+            "@bpa.AnalogClock",
+            "@bpa.BinaryClock.MatrixBinaryClock",
+            "@bpa.CPUUsage",
+            "@bpa.GameOfLife",
+            "@bpa.GameOfLife.GameOfLifeRGB",
+            "@bpa.GradientClock",
+            "@bpa.LangtonsAnt",
+            "@bpa.LangtonsAnt.LangtonsAntRainbow",
+            "@bpa.Mainframe",
+            "@bpa.MatrixRain",
+            "@bpa.MatrixRain.MatrixRainBow",
+            "@bpa.SpinningTriangle",
+            "@bpa.TallClock",
+            "@bpa.Text.BounceText",
+            "@bpa.Text.ScrollText",
+            "@bpa.TicTacToe",
+            "@bpa.bloom",
+            "@bpa.circlepop",
+            "@bpa.perlin_simplex",
+            "@bpa.pinwheel"
         ]
     }
 }

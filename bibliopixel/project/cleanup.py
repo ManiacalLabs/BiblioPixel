@@ -1,5 +1,5 @@
 import copy
-from . import construct, merge
+from . import alias_lists, construct, merge
 from .. import layout
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
@@ -19,12 +19,17 @@ def cleanup_layout(animation):
     return dict(args, datatype=layout_cl)
 
 
+def cleanup_aliases(desc):
+    alias_lists.PROJECT_ALIASES = desc.pop('aliases', {})
+    return desc
+
+
 def cleanup_animation(desc):
     if not desc.get('animation'):
         raise ValueError('Missing "animation" section')
 
     desc['animation'] = construct.to_type_constructor(
-        desc['animation'], 'bibliopixel.animation', desc['aliases'])
+        desc['animation'], 'bibliopixel.animation')
     datatype = desc['animation'].get('datatype')
     if not datatype:
         raise ValueError('Missing "datatype" in "animation" section')
@@ -89,4 +94,9 @@ def cleanup_dimensions(desc):
 
 
 def cleanup(desc):
-    return cleanup_dimensions(cleanup_drivers(cleanup_animation(desc)))
+    desc = cleanup_aliases(desc)
+    desc = cleanup_animation(desc)
+    desc = cleanup_drivers(desc)
+    desc = cleanup_dimensions(desc)
+
+    return desc
