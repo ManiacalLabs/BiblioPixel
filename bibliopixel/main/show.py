@@ -2,7 +2,7 @@ from .. project import defaults
 
 
 def run(args):
-    defaults.list_defaults()
+    defaults.show_defaults()
 
 
 def set_parser(parser):

@@ -2,10 +2,13 @@ import json, os, sys
 from . import merge as _merge
 from .. util import datafile
 
+# This set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
 
 USER_DEFAULTS_FILE = os.path.expanduser('~/.bibliopixel_defaults')
 USER_DEFAULTS = datafile.DataFile(USER_DEFAULTS_FILE)
+
+SAVE_DIRECTORY = os.path.expanduser('~/.bibliopixel_save')
 
 
 def merge(*projects):
@@ -20,8 +23,8 @@ def merge(*projects):
     return _merge.merge(*(defaults + projects))
 
 
-def list_defaults():
-    """List all user defaults in JSON format"""
+def show_defaults():
+    """List current user defaults in JSON format"""
     _warn_if_empty()
     json.dump(USER_DEFAULTS.data, sys.stdout, indent=2, sort_keys=True)
     print()
@@ -34,7 +37,7 @@ def reset_defaults(sections):
     sections = sorted(_check_sections(sections) or USER_DEFAULTS.data)
 
     print('Before reset:')
-    list_defaults()
+    show_defaults()
 
     for s in sections:
         try:
@@ -52,6 +55,45 @@ def set_defaults(sections):
     """
     assignments = _sections_to_assignments(sections)
     USER_DEFAULTS.set_items(assignments.items())
+
+
+def load_defaults(name):
+    if name in _defaults():
+        defaults = json.load(open(_default_file(name)))
+        USER_DEFAULTS.set_items(defaults.items())
+        print('Loaded project defaults from', name)
+    else:
+        print('No such default:', name)
+        list_saved_defaults()
+
+
+def save_defaults(name):
+    if name in _defaults():
+        yn = input('Default', name, 'already exists.  Overwrite? (y/N) ')
+        if not yn.lower().startswith('y'):
+            return
+    os.makedirs(SAVE_DIRECTORY, exist_ok=True)
+    fp = open(_default_file(name), 'w')
+    json.dump(USER_DEFAULTS.data, fp, indent=2, sort_keys=True)
+    print('Written project defaults to', name)
+
+
+def remove_defaults(name):
+    if name in _defaults():
+        os.remove(_default_file(name))
+    else:
+        print('No such default:', name)
+        list_saved_defaults()
+
+
+def list_saved_defaults():
+    defaults = _defaults()
+    if defaults:
+        print('Saved project defaults:')
+        for i in defaults:
+            print('   ', i)
+    else:
+        print('(no project defaults saved)')
 
 
 def _check_sections(sections):
@@ -109,3 +151,13 @@ def _warn_if_empty():
     if not USER_DEFAULTS.data:
         print('(no entries in defaults file)', file=sys.stderr)
         return True
+
+
+def _defaults():
+    if not os.path.exists(SAVE_DIRECTORY):
+        return []
+    return [f for f in os.listdir(SAVE_DIRECTORY) if not f.startswith('.')]
+
+
+def _default_file(name):
+    return os.path.join(SAVE_DIRECTORY, name)
