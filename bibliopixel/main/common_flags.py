@@ -182,3 +182,19 @@ loglevel is by default set to debug..
 VERSION_HELP = """\
 Print the current version number of BiblioPixel (%s).
 """ % VERSION
+
+
+# TODO: this should go somewhere else
+"""
+Set defaults for projects using JSON.
+
+A Project is a JSON file or equivalently a Python dictionary that describes
+a BibliopPixel installation.  The top-level keys in a Project are called the
+sections and a Project might have the following sections:
+
+    {sections}
+
+Often some sections of your project correspond to hardware and thus rarely
+change, so the `bp default` command allows you to set defaults so you
+don't have to mention these from your project at all.
+"""
