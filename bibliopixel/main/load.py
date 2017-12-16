@@ -2,9 +2,9 @@ from .. project import defaults
 
 
 def run(args):
-    defaults.show_defaults()
+    defaults.load_defaults(args.name)
 
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.description = 'Show all default values'
+    parser.add_argument('name', help='Load a defaults setting')
