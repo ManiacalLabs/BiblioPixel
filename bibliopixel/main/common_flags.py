@@ -78,7 +78,7 @@ def add_project_flags(parser):
         '--pause', default=0, help='Time to pause between running animations')
 
     parser.add_argument(
-        '-r', '--run_for', default=None, help=RUN_FOR_HELP)
+        '--project_lengths', '--pl', default=None, help=PROJECT_LENGTHS_HELP)
 
     parser.add_argument(
         '-s', action='store_true', help='Run SimPixel at the default URL')
@@ -87,8 +87,8 @@ def add_project_flags(parser):
         '--simpixel', help='Run SimPixel at a specific URL')
 
     parser.add_argument(
-        '--slideshow', default=0, help='Run `bp` sequence in slideshow mode, '
-        'where each animation is shown for this many seconds')
+        '--animation_lengths', '--at', default=None,
+        help='Set run length for each animation')
 
     parser.add_argument(
         '-t', '--ledtype', default=None,
@@ -122,12 +122,14 @@ def _make_project_flags(args):
     if args.numbers != 'python':
         project_flags['numbers'] = args.numbers
 
-    if args.run_for is not None:
-        project_flags.setdefault('run', {})['seconds'] = float(args.run_for)
+    if args.project_lengths is not None:
+        run = project_flags.setdefault('run', {})
+        run['seconds'] = float(args.project_lengths)
 
-    if args.slideshow:
-        project_flags.setdefault('animation', {})['slideshow'] = float(
-            args.slideshow)
+    if args.animation_lengths is not None:
+        animation = project_flags.setdefault('animation', {})
+        length = [float(i) for i in args.animation_lengths.split(',')]
+        animation['length'] = length
 
     if args.dimensions is not None:
         dimensions = args.dimensions.split(',')
@@ -183,7 +185,8 @@ The type of numbers that are used in color list calculations.
 
 PRESET_HELP = """Filenames for preset library"""
 
-RUN_FOR_HELP = """How long to run the animation (overrides runner.seconds)."""
+PROJECT_LENGTHS_HELP = """\
+How long to run the animation (overrides runner.seconds)."""
 
 VERBOSE_HELP = """\
 If this is set, then errors are reported with a full stack trace, and

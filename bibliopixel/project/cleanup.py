@@ -33,7 +33,7 @@ def cleanup_numbers(desc):
 
 
 def cleanup_animation(desc):
-    if not desc.get('animation'):
+    if not desc['animation']:
         raise ValueError('Missing "animation" section')
 
     desc['animation'] = construct.to_type_constructor(
@@ -41,6 +41,14 @@ def cleanup_animation(desc):
     datatype = desc['animation'].get('datatype')
     if not datatype:
         raise ValueError('Missing "datatype" in "animation" section')
+
+    from .. animation import sequence
+    if not issubclass(datatype, sequence.Sequence):
+        # Magic here to allow this to work for non-sequences.
+        length = desc['animation'].pop('length', [])
+        if length:
+            desc['run']['seconds'] = length[0]
+
     desc = merge.merge(getattr(datatype, 'PROJECT', {}), desc)
 
     run = desc.pop('run')

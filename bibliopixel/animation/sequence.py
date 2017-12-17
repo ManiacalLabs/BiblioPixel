@@ -4,22 +4,21 @@ import random as rand
 
 
 class Sequence(collection.Collection):
-    def __init__(
-            self, layout, random=False, slideshow=None, **kwds):
+    def __init__(self, layout, random=False, length=None, **kwds):
         """
         Arguments
 
         random -- If True, a random animation is selected each step
-        slideshow -- if slideshow is a number, run all the animations in a loop
-            for `slideshow` seconds each.  If `slideshow` is a list of numbers,
+        length -- if length is a number, run all the animations in a loop
+            for `length` seconds each.  If `length` is a list of numbers,
             use the numbers successively as times.
         """
         super().__init__(layout, **kwds)
         self.random = random
-        if isinstance(slideshow, (list, tuple)):
-            self.slideshow = slideshow
+        if isinstance(length, (list, tuple)):
+            self.length = length
         else:
-            self.slideshow = slideshow and [slideshow]
+            self.length = length and [length]
 
     def restart(self):
         self.random and rand.shuffle(self.animations)
@@ -34,9 +33,9 @@ class Sequence(collection.Collection):
 
         if not self.completed:
             log.debug('Sequence: %s', self.current_animation.title)
-            if self.slideshow:
-                seconds = self.slideshow[self.cur_step % len(self.slideshow)]
-                self.current_animation.runner.seconds = seconds
+            if self.length:
+                length = self.length[self.cur_step % len(self.length)]
+                self.current_animation.runner.seconds = length
             self.current_animation.run_all_frames(clean_layout=False)
 
         self.index += 1

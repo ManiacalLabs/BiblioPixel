@@ -16,7 +16,7 @@
             "seconds": 23,
             "fps": 30
         },
-        "slideshow": 1,
+        "length": 1,
         "animations": [
             "@bpa.Alternates",
             "@bpa.BinaryEpochClock.BEClock",
