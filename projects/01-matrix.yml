@@ -16,7 +16,7 @@ aliases:
 
 animation:
     typename: sequence
-    slideshow: 2
+    length: 2
     animations:
         - "@bpa.ImageAnim"
         - "@bpa.ImageShow"
