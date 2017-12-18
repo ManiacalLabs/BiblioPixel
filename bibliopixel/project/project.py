@@ -22,19 +22,22 @@ class Project:
         layout = layout or cleanup.cleanup_layout(animation)
 
         self.maker = self.construct_child(**maker)
-        self.drivers = [self.construct_child(**d) for d in drivers]
-        with exception.add('Unable to create layout'):
-            self.layout = self.construct_child(**layout)
 
         def post(desc):
             return self.construct_child(**desc)
 
-        with exception.add('Unable to create animation'):
-            self.animation = recurse.recurse(
-                animation,
-                pre=None,
-                post=post,
-                python_path='bibliopixel.animation')
+        def create(root, name):
+            with exception.add('Unable to create ' + name):
+                return recurse.recurse(
+                    root,
+                    pre=None,
+                    post=post,
+                    python_path='bibliopixel.' + name)
+
+        self.drivers = [create(d, 'drivers') for d in drivers]
+        with exception.add('Unable to create layout'):
+            self.layout = self.construct_child(**layout)
+        self.animation = create(animation, 'animation')
 
     def make_animation(self):
         return self.animation

@@ -20,7 +20,7 @@ class ProjectTest(unittest.TestCase):
         self.assertEquals(kwds['c_order'], (1, 2, 0))
         self.assertEquals(kwds['color'], (0, 255, 0))
         self.assertEquals(kwds['duration'], 3720)
-        self.assertEquals(kwds['gamma'], gamma.APA102)
+        self.assertEquals(kwds['gamma'].table, gamma.APA102.table)
         self.assertEquals(kwds['time'], 35000)
         self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
 

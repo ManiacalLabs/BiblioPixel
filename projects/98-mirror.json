@@ -1,0 +1,53 @@
+{
+    "driver": {
+        "num": 50,
+        "typename": "mirror",
+        "drivers": [
+            "simpixel",
+            {
+                "ledtype": "LPD8806",
+                "typename": "serial",
+                "gamma": [1.1, 0.5, 0],
+                "c_order": "BRG"
+            }
+        ]
+    },
+
+    "layout": "strip",
+
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.strip"
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "run": {
+            "seconds": 23,
+            "fps": 30
+        },
+        "slideshow": 1,
+        "animations": [
+            "@bpa.Alternates",
+            "@bpa.BinaryEpochClock.BEClock",
+            "@bpa.ColorChase",
+            "@bpa.ColorFade",
+            "@bpa.ColorPattern",
+            "@bpa.ColorWipe",
+            "@bpa.FireFlies",
+            "@bpa.HalvesRainbow",
+            "@bpa.LarsonScanners.LarsonRainbow",
+            "@bpa.LarsonScanners.LarsonScanner",
+            "@bpa.LinearRainbow",
+            "@bpa.PartyMode",
+            "@bpa.PixelPingPong",
+            "@bpa.RGBClock",
+            "@bpa.Rainbows.Rainbow",
+            "@bpa.Rainbows.RainbowCycle",
+            "@bpa.Searchlights",
+            "@bpa.Wave",
+            "@bpa.Wave.WaveMove",
+            "@bpa.WhiteTwinkle",
+            "@bpa.hexclock"
+        ]
+    }
+}

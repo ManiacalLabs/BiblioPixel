@@ -13,6 +13,7 @@ BUILTIN_ALIASES = {
     'dummy': 'bibliopixel.drivers.dummy_driver.Dummy',
     'hue': 'bibliopixel.drivers.hue.Hue',
     'lpd8806': 'bibliopixel.drivers.SPI.LPD8806.LPD8806',
+    'mirror': 'bibliopixel.drivers.mirror.MirrorDriver',
     'network': 'bibliopixel.drivers.network.Network',
     'network_udp': 'bibliopixel.drivers.network_udp.NetworkUDP',
     'serial': 'bibliopixel.drivers.serial.Serial',

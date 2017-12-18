@@ -92,7 +92,8 @@ class BadProjectTest(unittest.TestCase):
             make(BAD_DRIVER_ATTRIBUTE)
         self.assertEquals(
             e.exception.args,
-            ('Unknown attribute for driver SimPixel: "bad_attribute"',))
+            ('Unable to create drivers',
+             'Unknown attribute for driver SimPixel: "bad_attribute"',))
 
     def test_bad_layout_attribute(self):
         with self.assertRaises(ValueError) as e:
