@@ -109,7 +109,7 @@ def _make_project_flags(args):
     if args.run_for is not None:
         project_flags.setdefault('run', {})['seconds'] = float(args.run_for)
 
-    if args.slideshow is not None:
+    if args.slideshow:
         project_flags.setdefault('animation', {})['slideshow'] = float(
             args.slideshow)
 
