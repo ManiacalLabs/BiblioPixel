@@ -30,7 +30,7 @@ def merge(*projects):
 def show_defaults():
     """List current user defaults in JSON format"""
     _warn_if_empty()
-    json.dump(USER_DEFAULTS.data, sys.stdout, indent=2, sort_keys=True)
+    _json_dump(USER_DEFAULTS.data, sys.stdout)
     print()
 
 
@@ -62,23 +62,26 @@ def set_defaults(sections):
 
 
 def load_defaults(name):
-    if name in _defaults():
-        defaults = _load_json(name)
-        USER_DEFAULTS.set_items(defaults.items())
-        print('Loaded project defaults from', name)
-    else:
-        print('No such default:', name)
-        list_saved_defaults()
+    defaults = _load_defaults(name)
+    USER_DEFAULTS.set_items(defaults.items())
+    print('Loaded project defaults from', name)
 
 
 def save_defaults(name):
-    if name in _defaults():
-        yn = input('Default', name, 'already exists.  Overwrite? (y/N) ')
+    if '/' in name or '.' in name:
+        path = name
+    else:
+        os.makedirs(SAVE_DIRECTORY, exist_ok=True)
+        path = _default_file(name)
+
+    if os.path.exists(path):
+        yn = input('Default %s already exists.  Overwrite? (y/N) ' % name)
         if not yn.lower().startswith('y'):
             return
-    os.makedirs(SAVE_DIRECTORY, exist_ok=True)
-    fp = open(_default_file(name), 'w')
-    json.dump(USER_DEFAULTS.data, fp, indent=2, sort_keys=True)
+
+    with open(path, 'w') as fp:
+        _json_dump(USER_DEFAULTS.data, fp)
+
     print('Written project defaults to', name)
 
 
@@ -101,11 +104,8 @@ def list_saved_defaults():
 
 
 def set_project_defaults(name):
-    if name not in _defaults():
-        raise ValueError('No such default: ' + name)
-
     global PROJECT_DEFAULTS
-    PROJECT_DEFAULTS = _load_json(name)
+    PROJECT_DEFAULTS = _load_defaults(name)
 
 
 def _check_sections(sections):
@@ -175,10 +175,19 @@ def _default_file(name):
     return os.path.join(SAVE_DIRECTORY, name)
 
 
-def _load_json(name):
-    name = _default_file(name)
+def _json_dump(data, fp):
+    json.dump(data, fp, indent=4, sort_keys=True)
+
+
+def _load_defaults(name):
+    n = name
+    if not os.path.exists(n):
+        n = _default_file(n)
+        if not os.path.exists(n):
+            list_saved_defaults()
+            raise ValueError('No such default: ' + name)
     try:
-        return json.load(open(name))
+        return json.load(open(n))
     except Exception as e:
         e.args = ('There was a JSON error in file ' + name,
                   'Did you edit this file by hand?') + e.args
