@@ -60,7 +60,8 @@ def _get_animations(args):
                 raise
             if args.verbose:
                 exception = traceback.format_exc()
-            failed.append(RUN_ERROR.format(**locals()))
+            msg = RUN_ERROR.format(**locals())
+            failed.append((msg, exception.args))
 
         finally:
             sys.path[:] = saved_path
@@ -70,8 +71,8 @@ def _get_animations(args):
 
     log.error(FAILURE_ERROR.format(
         count=len(failed), s='' if len(failed) == 1 else 's'))
-    for f in failed:
-        log.error(f)
+    for msg, args in failed:
+        log.error(msg + '\n' + '\n'.join(str(a) for a in args))
     raise ValueError('Run aborted')
 
 
