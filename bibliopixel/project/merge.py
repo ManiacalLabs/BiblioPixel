@@ -23,6 +23,8 @@ PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
 NOT_MERGEABLE = (
     'datatype', 'dimensions', 'drivers', 'numbers', 'path', 'typename')
 
+SECTION_ISNT_DICT_ERROR = 'Project section "%s" is %s, should be dictionary'
+
 
 def merge(*projects):
     """
@@ -34,6 +36,9 @@ def merge(*projects):
         for name, section in (project or {}).items():
             if name in NOT_MERGEABLE:
                 result[name] = section
+            elif section and not isinstance(section, (dict, str)):
+                cname = section.__class__.__name__
+                raise ValueError(SECTION_ISNT_DICT_ERROR % (name, cname))
             else:
                 result.setdefault(name, {}).update(construct.to_type(section))
 
