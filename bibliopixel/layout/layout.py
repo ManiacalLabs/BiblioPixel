@@ -63,6 +63,10 @@ class Layout(object):
     def color_list(self):
         return self._colors
 
+    @color_list.setter
+    def color_list(self, cl):
+        self._colors[:] = cl
+
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
             return self._colors[pixel]
