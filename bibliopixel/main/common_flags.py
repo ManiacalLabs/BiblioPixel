@@ -40,8 +40,8 @@ def add_project_flags(parser):
         help='Override project brightness value')
 
     parser.add_argument(
-        '-d', '--defaults', default=None,
-        help='Use this default setting')
+        '-d', '--defaults', default=None, nargs='*',
+        action='append', help='Use this default setting')
 
     parser.add_argument(
         '--dimensions', '--dim', default=None,
@@ -101,7 +101,10 @@ def _make_project_flags(args):
         project_flags['layout']['brightness'] = int(args.brightness)
 
     if args.defaults:
-        defaults.set_project_defaults(args.defaults)
+        # Arguments come in like: [['foo'], ['bar'], ['baz'], ...]
+        # I have no idea why.
+        defs = [(a[0] if isinstance(a, list) else a) for a in args.defaults]
+        defaults.set_project_defaults(defs)
 
     if args.numbers != 'python':
         project_flags['numbers'] = args.numbers
