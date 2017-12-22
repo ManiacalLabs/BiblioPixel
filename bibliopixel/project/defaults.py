@@ -2,12 +2,12 @@ import json, os, sys
 from . import merge as _merge
 from .. util import datafile
 
-# This set to true during testing.
+# This is set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
 
 USER_DEFAULTS_FILE = os.path.expanduser('~/.bibliopixel_defaults')
 USER_DEFAULTS = datafile.DataFile(USER_DEFAULTS_FILE)
-PROJECT_DEFAULTS = None
+PROJECT_DEFAULTS = []
 
 SAVE_DIRECTORY = os.path.expanduser('~/.bibliopixel_save')
 
@@ -17,14 +17,11 @@ def merge(*projects):
     Merge the global project defaults and the user project defaults with a list
     of projects
     """
-    if BYPASS_PROJECT_DEFAULTS:
-        defaults = (_merge.DEFAULT_PROJECT,)
-    elif PROJECT_DEFAULTS is None:
-        defaults = (_merge.DEFAULT_PROJECT, USER_DEFAULTS.data)
-    else:
-        defaults = (_merge.DEFAULT_PROJECT, PROJECT_DEFAULTS)
+    defaults = [_merge.DEFAULT_PROJECT]
+    if not BYPASS_PROJECT_DEFAULTS:
+        defaults += PROJECT_DEFAULTS or [USER_DEFAULTS.data]
 
-    return _merge.merge(*(defaults + projects))
+    return _merge.merge(*(defaults + list(projects)))
 
 
 def show_defaults():
@@ -103,9 +100,8 @@ def list_saved_defaults():
         print('(no project defaults saved)')
 
 
-def set_project_defaults(name):
-    global PROJECT_DEFAULTS
-    PROJECT_DEFAULTS = _load_defaults(name)
+def set_project_defaults(names):
+    PROJECT_DEFAULTS[:] = [_load_defaults(n) for n in names]
 
 
 def _check_sections(sections):
