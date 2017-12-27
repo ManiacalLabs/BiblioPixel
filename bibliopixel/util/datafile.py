@@ -1,22 +1,20 @@
-import copy, json
+import copy
+from . import json
 
 
 class DataFile(object):
-    def __init__(self, filename, open=open):
+    def __init__(self, filename):
         self.filename = filename
-        self.open = open
         self.read()
 
     def read(self):
         try:
-            fp = self.open(self.filename)
+            self.data = json.load(self.filename)
         except FileNotFoundError:
             self.data = {}
-        else:
-            self.data = json.load(fp)
 
     def write(self):
-        json.dump(self.data, self.open(self.filename, 'w'))
+        json.dump(self.data, self.filename)
 
     def get(self, key):
         return self.data.get(key)

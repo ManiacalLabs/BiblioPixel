@@ -1,4 +1,3 @@
-import json
 from . import load
 from . import fields
 from distutils.version import LooseVersion

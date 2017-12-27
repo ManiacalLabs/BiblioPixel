@@ -2,7 +2,6 @@
 Converts its arguments between color names and color tuples.
 """
 
-import json
 from .. colors import names
 from .. util import log
 
