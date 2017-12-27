@@ -1,4 +1,4 @@
-import json, sys
+import sys
 from .. project import merge, defaults
 
 

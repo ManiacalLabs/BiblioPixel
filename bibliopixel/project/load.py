@@ -1,5 +1,6 @@
 from . import aliases
-import json, loady, os
+import loady, os
+from .. util import json
 
 ISNT_GIT_PATH_ERROR = """\
 Because the --isolate flag is set, all paths must start with //git.

@@ -1,6 +1,6 @@
-import io, json, unittest
-from .. mock import mock_open
-
+import io, unittest
+from .. import mock
+from bibliopixel.util import json
 from bibliopixel.util.datafile import DataFile
 
 DEFAULTS = {
@@ -16,11 +16,11 @@ JSON_TEST = """
 
 class DatafileTest(unittest.TestCase):
     def test_reader_writer_json(self):
-        context = {'test.json': JSON_TEST}
-        mopen = mock_open(context)
-        datafile = DataFile('test.json', open=mopen)
-        datafile.read()
-        self.assertEqual(datafile.data, {'a': {'foo': 'bar', 'bang': 1}})
-        datafile.data = {'bang': {'hi': 'there'}}
-        datafile.write()
-        self.assertEqual(json.loads(context['test.json']), datafile.data)
+        filesystem = {'test.json': JSON_TEST}
+        with mock.patch_open(filesystem, json):
+            datafile = DataFile('test.json')
+            datafile.read()
+            self.assertEqual(datafile.data, {'a': {'foo': 'bar', 'bang': 1}})
+            datafile.data = {'bang': {'hi': 'there'}}
+            datafile.write()
+            self.assertEqual(json.loads(filesystem['test.json']), datafile.data)

@@ -1,6 +1,6 @@
-import json, os, sys
+import os, sys
 from . import merge as _merge
-from .. util import datafile
+from .. util import datafile, json
 
 # This is set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
@@ -27,7 +27,7 @@ def merge(*projects):
 def show_defaults():
     """List current user defaults in JSON format"""
     _warn_if_empty()
-    _json_dump(USER_DEFAULTS.data, sys.stdout)
+    json.dump(USER_DEFAULTS.data, sys.stdout)
     print()
 
 
@@ -77,7 +77,7 @@ def save_defaults(name):
             return
 
     with open(path, 'w') as fp:
-        _json_dump(USER_DEFAULTS.data, fp)
+        json.dump(USER_DEFAULTS.data, fp)
 
     print('Written project defaults to', name)
 
@@ -171,10 +171,6 @@ def _default_file(name):
     return os.path.join(SAVE_DIRECTORY, name)
 
 
-def _json_dump(data, fp):
-    json.dump(data, fp, indent=4, sort_keys=True)
-
-
 def _load_defaults(name):
     n = name
     if not os.path.exists(n):
@@ -183,7 +179,7 @@ def _load_defaults(name):
             list_saved_defaults()
             raise ValueError('No such default: ' + name)
     try:
-        return json.load(open(n))
+        return json.load(n)
     except Exception as e:
         e.args = ('There was a JSON error in file ' + name,
                   'Did you edit this file by hand?') + e.args

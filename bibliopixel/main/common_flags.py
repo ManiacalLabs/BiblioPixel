@@ -1,5 +1,6 @@
-import json, os
+import os
 from .. project import data_maker, defaults, project
+from .. util import json
 
 """Common command line arguments for run and demo."""
 
