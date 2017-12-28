@@ -2,7 +2,7 @@ import argparse, os, sys
 from . import common_flags
 from .. util import log
 from .. project.importer import import_module
-from .. project import aliases
+from .. project import aliases, project
 
 
 __all__ = ['main']
@@ -64,6 +64,7 @@ def main():
         sys.exit(-1)
 
     aliases.ISOLATE = args.isolate
+    project.DUMP = args.dump
 
     if args.verbose and args.loglevel != 'frame':
         log.set_log_level('debug')

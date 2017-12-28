@@ -9,7 +9,7 @@ class Collection(animation.BaseAnimation):
 
     @staticmethod
     def pre_recursion(desc):
-        def make_animation(a):
+        def cleanup_animation(a):
             if callable(a) or isinstance(a, str) or 'animation' not in a:
                 animation = a
                 a = {}
@@ -32,7 +32,7 @@ class Collection(animation.BaseAnimation):
                 raise ValueError('Extra fields in animation: ' + ', '.join(a))
             return animation
 
-        desc['animations'] = [make_animation(a) for a in desc['animations']]
+        desc['animations'] = [cleanup_animation(a) for a in desc['animations']]
         return desc
 
     CHILDREN = 'animations',
