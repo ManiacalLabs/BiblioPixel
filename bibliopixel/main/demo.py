@@ -38,7 +38,8 @@ def make_runnable_animation(demo, args):
         if 'z' in layout:
             layout['z'] = layout['z'] or args.depth
 
-    return common_flags.make_animation(args, demo)
+    project, _ = common_flags.make_animation(args, demo)
+    return project.animation
 
 
 def usage():

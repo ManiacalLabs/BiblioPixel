@@ -1,5 +1,5 @@
-import json, tempfile
-from bibliopixel.project import project
+import copy, json, tempfile
+from bibliopixel.project import load, project
 from .. mark_tests import SKIP_LONG_TESTS
 
 
@@ -10,8 +10,9 @@ def make(data, run_start=not SKIP_LONG_TESTS):
         fp.seek(0)
         data = fp.name
 
-    pr = project.read_project(data)
-    animation = pr.make_animation()
+    project_data = load.data(data)
+    pr, _ = project.project(copy.deepcopy(project_data))
+    animation = pr.animation
     if run_start:
         animation.start()
 

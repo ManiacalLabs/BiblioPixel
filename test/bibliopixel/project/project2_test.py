@@ -26,7 +26,7 @@ class Project2Test(unittest.TestCase):
             }
         }
         with patch.patch(defaults, 'BYPASS_PROJECT_DEFAULTS', True):
-            pr = project.project(source)
+            pr, _ = project.project(source)
 
         self.assertEquals(
             [BaseMatrixAnim, 1, Matrix, Maker, 23, 32],

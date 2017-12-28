@@ -49,6 +49,14 @@ def add_project_flags(parser):
         help='x, (x, y) or (x, y, z) dimensions for project')
 
     parser.add_argument(
+        '--dump', action='store_true',
+        help='Dump the full project after loading but before running')
+
+    parser.add_argument(
+        '--dry_run', action='store_true',
+        help='Load projects but do not run them')
+
+    parser.add_argument(
         '-f', '--fail_on_exception', action='store_true',
         help='If true, bp fail if any subanimation fails to construct')
 
@@ -128,13 +136,9 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_project(args, desc):
+def make_animation(args, desc, **kwds):
     project_flags = _make_project_flags(args)
-    return project.project(project_flags, desc)
-
-
-def make_animation(args, desc):
-    return make_project(args, desc).make_animation()
+    return project.project(project_flags, desc, **kwds)
 
 
 # Help messages.

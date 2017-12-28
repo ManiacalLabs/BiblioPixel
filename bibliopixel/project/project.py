@@ -1,6 +1,5 @@
-import copy
 from . import attributes, construct, cleanup, defaults, load, recurse
-from .. util import exception
+from .. util import exception, json
 
 
 class Project:
@@ -39,20 +38,16 @@ class Project:
             self.layout = self.construct_child(**layout)
         self.animation = create(animation, 'animation')
 
-    def make_animation(self):
-        return self.animation
-
 
 def project(*descs, **kwds):
+    def default(o):
+        if isinstance(o, type):
+            return str(o)
+        return str(o.__class__).replace('<class ', '<').replace('>', ' object>')
+
     desc = defaults.merge(*descs, **kwds)
+
     with load.extender(desc.get('path', '')):
         desc = recurse.recurse(desc)
-        return construct.construct(**desc)
 
-
-def read_project(location, threaded=None, default=None, **kwds):
-    project_data = load.data(location)
-    if threaded is not None:
-        project_data.setdefault('run', {})['threaded'] = threaded
-
-    return project(default, copy.deepcopy(project_data), **kwds)
+    return construct.construct(**desc), desc

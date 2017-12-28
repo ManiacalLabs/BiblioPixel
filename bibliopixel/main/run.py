@@ -4,7 +4,7 @@ Run a project description file.
 
 import os, sys, time, traceback
 from . import common_flags, simpixel
-from .. util import log
+from .. util import json, log
 from .. animation.collection import Collection
 from .. project import load
 
@@ -52,8 +52,10 @@ def _get_animations(args):
                 desc = _load_py(filename)
             else:
                 desc = load.data(filename)
-            animation = common_flags.make_animation(args, desc)
-            animations.append(animation)
+            project, desc = common_flags.make_animation(args, desc)
+            animations.append(project.animation)
+            if args.dump:
+                json.dump(desc)
 
         except Exception as exception:
             if filename.endswith('.py'):
@@ -104,6 +106,9 @@ def run(args):
     args.name = args.name or ['']
     animations = _get_animations(args)
 
+    if args.dry_run:
+        print('(dry run - nothing executed)')
+        return
     if args.simpixel:
         simpixel.open_simpixel(args.simpixel)
     elif args.s:
