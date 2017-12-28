@@ -39,12 +39,7 @@ class Collection(animation.BaseAnimation):
 
     def __init__(self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)
-        if animations:
-            if isinstance(animations[0], (str, dict)):
-                self.animations = [self._make_animation(i) for i in animations]
-            else:
-                self.animations = animations
-
+        self.animations = animations or []
         self.index = 0
         self.internal_delay = 0  # never wait
 
@@ -68,28 +63,6 @@ class Collection(animation.BaseAnimation):
     def current_animation(self):
         if 0 <= self.index < len(self.animations):
             return self.animations[self.index]
-
-    def _make_animation(self, a):
-        if isinstance(a, str):
-            animation = a
-            run = None
-
-        else:
-            animation = a.get('animation')
-            if animation:
-                # Looks like {'animation': ..., 'run': }
-                run = a.get('run')
-            else:
-                # It's an animation itself.
-                animation, run = a, None
-
-        try:
-            return project.make_animation(self.layout, animation, run)
-        except:
-            if self.FAIL_ON_EXCEPTION:
-                raise
-
-            log.error(traceback.format_exc())
 
 
 class Parallel(Collection):
