@@ -1,8 +1,14 @@
-import json, sys
-loads = json.loads
+import json, sys, yaml
+
 
 # Allow open to be patched for tests.
 open = __builtins__['open']
+
+
+def loads(s, filename=''):
+    if filename.endswith('.yml'):
+        return yaml.load(s)
+    return json.loads(s)
 
 
 def dump(data, file=sys.stdout, **kwds):
@@ -17,10 +23,19 @@ def dump(data, file=sys.stdout, **kwds):
         return dump(fp)
 
 
-def load(file):
-    """Load JSON data from a file or file handle"""
-    if not isinstance(file, str):
-        return json.load(file)
+def load(filename):
+    """
+    Loads not only JSON files but also YAML files ending in .yml.
+    """
+    if isinstance(filename, str):
+        fp = open(filename)
+    else:
+        fp = filename
+        filename = getattr(fp, 'name', '')
 
-    with open(file) as fp:
-        return json.load(fp)
+    try:
+        return loads(fp.read(), filename)
+
+    except Exception as e:
+        e.args = ('There was a error in the data file', filename) + e.args
+        raise

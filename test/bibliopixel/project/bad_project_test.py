@@ -65,19 +65,14 @@ class BadProjectTest(unittest.TestCase):
 
         self.assertEquals(
             e.exception.args[0::2],
-            ('There was a JSON error in the file',
+            ('There was a error in the data file',
              'Expecting value: line 1 column 1 (char 0)'))
 
     def test_cant_open(self):
         with self.assertRaises(FileNotFoundError) as e:
             make('this-file-does-not-exist.json')
 
-        intro = e.exception.args[:2]
-        tail = e.exception.args[-2:]
-        self.assertEquals(
-            intro, ('There was an error reading the file',
-                    'this-file-does-not-exist.json'))
-        self.assertEquals(tail, (2, 'No such file or directory'))
+        self.assertEquals(e.exception.args, (2, 'No such file or directory'))
 
     def test_bad_section(self):
         with self.assertRaises(ValueError) as e:

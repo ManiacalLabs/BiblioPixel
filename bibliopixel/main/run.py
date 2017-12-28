@@ -51,19 +51,22 @@ def _get_animations(args):
             if filename.endswith('.py'):
                 desc = _load_py(filename)
             else:
-                desc = load.data(filename)
-            project, desc = common_flags.make_animation(args, desc)
-            animations.append(project.animation)
+                desc = load.data(filename, False)
+                desc = json.loads(desc, filename)
+
+            animation = common_flags.make_animation(args, desc)
+            animations.append(animation)
             if args.dump:
                 json.dump(desc)
 
         except Exception as exception:
             if filename.endswith('.py'):
                 raise
+            eargs = exception.args
             if args.verbose:
                 exception = traceback.format_exc()
             msg = RUN_ERROR.format(**locals())
-            failed.append((msg, exception.args))
+            failed.append((msg, eargs))
 
         finally:
             sys.path[:] = saved_path

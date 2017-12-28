@@ -64,7 +64,6 @@ def main():
         sys.exit(-1)
 
     aliases.ISOLATE = args.isolate
-    project.DUMP = args.dump
 
     if args.verbose and args.loglevel != 'frame':
         log.set_log_level('debug')

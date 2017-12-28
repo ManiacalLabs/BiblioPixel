@@ -1,4 +1,5 @@
-loady
-flask
 BiblioPixelAnimations
 BiblioPixelTriggers
+flask
+loady
+pyyaml

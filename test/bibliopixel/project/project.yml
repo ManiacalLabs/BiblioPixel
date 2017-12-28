@@ -1,0 +1,13 @@
+driver:
+    typename: bibliopixel.drivers.dummy_driver.Dummy
+    num: 12
+
+layout:
+    typename: bibliopixel.layout.strip.Strip
+
+
+animation:
+    typename: bibliopixel.animation.tests.StripChannelTest
+
+run:
+    max_steps: 5

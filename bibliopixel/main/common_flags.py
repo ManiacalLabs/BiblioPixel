@@ -138,7 +138,8 @@ def _make_project_flags(args):
 
 def make_animation(args, desc, **kwds):
     project_flags = _make_project_flags(args)
-    return project.project(project_flags, desc, **kwds)
+    pr, _ = project.project(project_flags, desc, **kwds)
+    return pr.animation
 
 
 # Help messages.

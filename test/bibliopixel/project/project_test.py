@@ -27,6 +27,9 @@ class ProjectTest(unittest.TestCase):
     def test_file(self):
         make('test/bibliopixel/project/project.json', False)
 
+    def test_yaml_file(self):
+        make('test/bibliopixel/project/project.yml', False)
+
     def test_multi(self):
         animation = make(PROJECT_MULTI)
         k = [d._kwds for d in animation.layout.drivers]

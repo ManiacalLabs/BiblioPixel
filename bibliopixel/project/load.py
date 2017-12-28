@@ -9,14 +9,14 @@ Your path was %s."""
 guess_name = loady.importer.guess_name
 
 
-def data(name):
+def data(name, use_json=True):
     if not name:
         return {}
 
     try:
         return json.loads(name)
     except:
-        return loady.data.load(name, True)
+        return loady.data.load(name, use_json)
 
 
 def code(name, python_path=None):
