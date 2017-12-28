@@ -181,6 +181,6 @@ def _load_defaults(name):
     try:
         return json.load(n)
     except Exception as e:
-        e.args = ('There was a JSON error in file ' + name,
+        e.args = ('There was an error in data file ' + name,
                   'Did you edit this file by hand?') + e.args
         raise
