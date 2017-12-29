@@ -1,10 +1,21 @@
-## 3.3.6 2017-11-24
+## v3.4.0 - 2017-12-29
+- default settings for projects
+- saved defaults
+- better numpy integration and new "numbers" project section
+- new "slideshow" mode for sequences
+- per project aliases and many improvements and bugfixes to aliases
+- bp can now run .py files
+- Debug logging is streamlined
+- Animations can now set their own default projects
+- Many more
+
+## v3.3.6 - 2017-11-24
 - Fixed #485 even yet more
 
-## 3.3.5 2017-11-24
+## v3.3.5 - 2017-11-24
 - Fixed #485 somewhat more
 
-## 3.3.4 2017-11-23
+## v3.3.4 - 2017-11-23
 - Fixed #485, #471, network brightness, and ring_rotation
 
 ## v3.3.1 - 2017-08-23
