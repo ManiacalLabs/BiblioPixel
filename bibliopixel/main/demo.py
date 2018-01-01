@@ -14,7 +14,7 @@ from .. util import log
 DEMO_OPTS = ', '.join(sorted(demo_table.DEMO_TABLE.keys()))
 
 
-def make_runnable(demo, args):
+def make_runnable_animation(demo, args):
     if callable(demo):
         return demo(args).run
 
@@ -38,7 +38,7 @@ def make_runnable(demo, args):
         if 'z' in layout:
             layout['z'] = layout['z'] or args.depth
 
-    return common_flags.make_animation(args, demo).start
+    return common_flags.make_animation(args, demo)
 
 
 def usage():
@@ -60,9 +60,10 @@ def run(args):
     except KeyError:
         raise KeyError('Unknown demo %s' % args.name)
 
-    runnable = make_runnable(demo, args)
+    animation = make_runnable_animation(demo, args)
     simpixel.open_simpixel(args.simpixel)
-    runnable()
+    animation.layout.start()
+    animation.start()
 
 
 def set_parser(parser):
