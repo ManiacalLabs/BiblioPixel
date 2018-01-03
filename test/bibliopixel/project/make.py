@@ -12,7 +12,7 @@ def make(data, run_start=not SKIP_LONG_TESTS):
         data = fp.name
 
     desc = json.load(data)
-    pr, desc = project.project(desc)
+    pr = project.project(desc)
     animation = pr.animation
     if run_start:
         animation.start()

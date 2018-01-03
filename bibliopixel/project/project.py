@@ -50,4 +50,6 @@ def project(*descs, **kwds):
     with load.extender(desc.get('path', '')):
         desc = recurse.recurse(desc)
 
-    return construct.construct(**desc), desc
+    project = construct.construct(**desc)
+    project.desc = desc
+    return project
