@@ -50,7 +50,11 @@ def add_project_flags(parser):
 
     parser.add_argument(
         '--dump', action='store_true',
-        help='Dump the full project after loading but before running')
+        help='Dump the full project as JSON after loading but before running')
+
+    parser.add_argument(
+        '--dumpy', action='store_true',
+        help='Dump the full project as YAML after loading but before running')
 
     parser.add_argument(
         '--dry_run', action='store_true',
@@ -136,10 +140,9 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_animation(args, desc, **kwds):
+def make_project(args, desc, **kwds):
     project_flags = _make_project_flags(args)
-    pr, _ = project.project(project_flags, desc, **kwds)
-    return pr.animation
+    return project.project(project_flags, desc, **kwds)
 
 
 # Help messages.

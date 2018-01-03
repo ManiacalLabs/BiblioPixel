@@ -54,10 +54,12 @@ def _get_animations(args):
                 desc = load.data(filename, False)
                 desc = json.loads(desc, filename)
 
-            animation = common_flags.make_animation(args, desc)
-            animations.append(animation)
+            project = common_flags.make_project(args, desc)
+            animations.append(project.animation)
             if args.dump:
-                json.dump(desc)
+                json.dump(project.desc)
+            if args.dumpy:
+                print(json.yaml.dump(project.desc))
 
         except Exception as exception:
             if filename.endswith('.py'):
