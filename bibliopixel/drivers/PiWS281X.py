@@ -26,7 +26,7 @@ Install rpi_ws281x with the following shell commands:
 try:
     from neopixel import Adafruit_NeoPixel, Color as NeoColor
 except:
-    Color = None
+    NeoColor = None
 
 
 PIN_CHANNEL = {
@@ -64,7 +64,7 @@ class PiWS281X(DriverBase):
         ledDma - DMA channel to use for generating signal (Between 1 and 14)
         ledInvert - True to invert the signal (when using NPN transistor level shift)
         """
-        if not Color:
+        if not NeoColor:
             raise ValueError(WS_ERROR)
         super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.gamma = gamma
