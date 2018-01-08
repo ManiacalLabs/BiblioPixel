@@ -5,11 +5,11 @@ from .. util import datafile, json
 # This is set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
 
-USER_DEFAULTS_FILE = os.path.expanduser('~/.bibliopixel_defaults')
+USER_DEFAULTS_FILE = os.path.expanduser('~/.bibliopixel/default.json')
 USER_DEFAULTS = datafile.DataFile(USER_DEFAULTS_FILE)
 PROJECT_DEFAULTS = []
 
-SAVE_DIRECTORY = os.path.expanduser('~/.bibliopixel_save')
+SAVE_DIRECTORY = os.path.expanduser('~/.bibliopixel/project_defaults')
 
 
 def merge(*projects):
