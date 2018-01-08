@@ -7,6 +7,7 @@ Because the --isolate flag is set, all paths must start with //git.
 Your path was %s."""
 
 guess_name = loady.importer.guess_name
+CACHE = os.path.expanduser('~/.bibliopixel/code_cache')
 
 
 def data(name, use_json=True):

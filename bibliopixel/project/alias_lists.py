@@ -1,7 +1,7 @@
 import operator, os
 from .. util import datafile, log
 
-USER_ALIAS_FILE = os.path.expanduser('~/.bibliopixel_aliases')
+USER_ALIAS_FILE = os.path.expanduser('~/.bibliopixel/aliases.json')
 USER_ALIASES = datafile.DataFile(USER_ALIAS_FILE)
 PROJECT_ALIASES = {}
 

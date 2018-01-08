@@ -1,4 +1,4 @@
-import json, sys, yaml
+import json, os, sys, yaml
 
 
 # Allow open to be patched for tests.
@@ -18,6 +18,11 @@ def dump(data, file=sys.stdout, **kwds):
 
     if not isinstance(file, str):
         return dump(file)
+
+    if os.path.isabs(file):
+        parent = os.path.dirname(file)
+        if not os.path.exists(parent):
+            os.makedirs(parent, exist_ok=True)
 
     with open(file, 'w') as fp:
         return dump(fp)
