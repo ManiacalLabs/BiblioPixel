@@ -20,7 +20,7 @@ def no_command(*_):
 
 
 def get_args(argv=sys.argv):
-    argv = ['--help' if i == 'help' else i for i in argv[1:]]
+    argv = argv[1:]
 
     # argparse doesn't give command-specific help for `bp --help <command>`
     # so we use `bp <command> --help` (#429)
@@ -36,11 +36,12 @@ def get_args(argv=sys.argv):
         if not argv:
             return
 
-    if argv and not argv[0].isidentifier():
+    if argv and not argv[0].isidentifier() and '--help' not in argv:
         # The first argument can't be a command so try to run it.
         argv.insert(0, 'run')
 
-    if argv and argv[0].startswith('-'):
+    if argv and argv[0].startswith('-') and any(
+            not a.startswith('-') for a in argv):
         log.printer(
             'bibliopixel: error: command line flags must appear at the end.')
 
@@ -60,7 +61,12 @@ def main():
     run = getattr(args, 'run', None)
     if not run:
         log.printer('ERROR: No command entered')
-        log.printer('Valid:', ', '.join(COMMANDS))
+        log.printer('Valid commands are:')
+        log.printer('    ', ', '.join(COMMANDS))
+        log.printer()
+        log.printer('For more help, type')
+        log.printer()
+        log.printer('    bp --help')
         sys.exit(-1)
 
     aliases.ISOLATE = args.isolate
