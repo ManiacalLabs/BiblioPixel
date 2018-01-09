@@ -1,13 +1,16 @@
-from .. drivers import ledtype
-from . import run as _run
-
 """
 Test the all_pixel.
+"""
 
+DESCRIPTION = """
 Equivalent to
+
     bp --num=10 --loglevel=debug --animation=strip_test \
       --driver=serial --fail_on_exception --layout=strip  --ledtype=<argument>
 """
+
+from .. drivers import ledtype
+from . import run as _run
 
 LEDTYPES = """
 BiblioPixel currently understands the following types of LED strips:

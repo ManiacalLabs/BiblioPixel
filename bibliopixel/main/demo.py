@@ -1,8 +1,11 @@
 """
-Run a demo.  For the list of possible demos, type
+Run a bibliopixel demo.
+"""
 
-  $ bibliopixel demo list
+DESCRIPTION = """
+For the list of possible demos, type
 
+    `bp demo list`
 """
 
 import random
@@ -69,8 +72,6 @@ def run(args):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.description = 'Run demo in SimPixel'
-
     common_flags.add_project_flags(parser)
     parser.add_argument(
         'name', nargs='?', default='',

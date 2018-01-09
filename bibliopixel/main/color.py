@@ -1,5 +1,5 @@
 """
-Converts its arguments between color names and color tuples.
+Convert between color names and color tuples
 """
 
 from .. colors import names

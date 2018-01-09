@@ -1,5 +1,5 @@
 """
-Run a project description file.
+Run specified project from file or URL.
 """
 
 import os, sys, time, traceback
@@ -124,8 +124,6 @@ def run(args):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.description = 'Run specified BiblioPixel project from file or URL.'
-
     common_flags.add_project_flags(parser)
 
     parser.add_argument(

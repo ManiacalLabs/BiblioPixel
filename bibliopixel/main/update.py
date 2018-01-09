@@ -1,5 +1,5 @@
 """
-Update BiblioPixel's dependencies.
+Update BiblioPixel's dependencies
 """
 
 import os, sys, subprocess

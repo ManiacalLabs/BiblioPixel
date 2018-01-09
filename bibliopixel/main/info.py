@@ -1,9 +1,14 @@
+"""
+Print information about BiblioPixel
+"""
+
+DESCRIPTION = """
+Prints the versions of BiblioPixel's dependencies, and the platform
+that the program is running on.
+"""
+
 import datetime, os, platform, sys
 import bibliopixel, BiblioPixelAnimations, loady
-
-"""
-Print out information about BiblioPixel, its dependencies, and the platform
-that the program is running on."""
 
 NONE = '(none)'
 
