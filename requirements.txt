@@ -2,4 +2,5 @@ BiblioPixelAnimations
 BiblioPixelTriggers
 flask
 loady
+pyserial
 pyyaml
