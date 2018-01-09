@@ -1,8 +1,8 @@
-import loady
+"""
+Clear the loady git repository library cache
+"""
 
-"""
-Clear the git repository library cache.
-"""
+import loady
 
 
 def run(args):

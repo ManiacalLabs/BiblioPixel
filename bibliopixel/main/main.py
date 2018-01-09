@@ -49,9 +49,11 @@ def get_args(argv=sys.argv):
     subparsers = parser.add_subparsers()
 
     for name, module in sorted(MODULES.items()):
-        subparser = subparsers.add_parser(name, help=module.__doc__)
+        doc = module.__doc__
+        subparser = subparsers.add_parser(name, help=doc)
         common_flags.add_common_flags(subparser)
         module.set_parser(subparser)
+        subparser.description = doc + getattr(module, 'DESCRIPTION', '')
 
     return parser.parse_args(argv)
 

@@ -179,7 +179,7 @@ How long to run the animation (overrides runner.seconds)."""
 
 VERBOSE_HELP = """\
 If this is set, then errors are reported with a full stack trace, and
-loglevel is by default set to debug..
+loglevel is by default set to debug
 """
 
 VERSION_HELP = """\

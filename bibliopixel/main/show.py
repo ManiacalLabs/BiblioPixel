@@ -1,3 +1,7 @@
+"""
+Show all project default values
+"""
+
 from .. project import defaults
 
 
@@ -7,4 +11,3 @@ def run(args):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    parser.description = 'Show all default values'

@@ -1,3 +1,7 @@
+"""
+Save the current project defaults to a file
+"""
+
 from .. project import defaults
 
 
