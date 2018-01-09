@@ -1,6 +1,10 @@
 import unittest
+import test.bibliopixel.patch
 from bibliopixel.project import aliases, alias_lists, importer
-from test.bibliopixel import patch
+
+
+def patch(**kwds):
+    return test.bibliopixel.patch.patch(alias_lists, 'PROJECT_ALIASES', kwds)
 
 
 class AliasTest(unittest.TestCase):
@@ -12,7 +16,7 @@ class AliasTest(unittest.TestCase):
             aliases.resolve('off'), 'bibliopixel.animation.off.OffAnim')
         self.assertEquals(aliases.resolve('foo'), 'foo')
 
-        with patch.patch(aliases.alias_lists, 'USER_ALIASES', {'foo': 'bar'}):
+        with patch(foo='bar'):
             self.assertEquals(aliases.resolve('foo'), 'bar')
             self.assertEquals(aliases.resolve('@foo.bing'), 'bar.bing')
             self.assertEquals(aliases.resolve('bar.bing.@foo'), 'bar.bing.bar')
@@ -23,12 +27,8 @@ class AliasTest(unittest.TestCase):
         self.assertEqual(aliases.resolve(s), s)
 
     def test_marker(self):
-        old_user = aliases.alias_lists.USER_ALIASES
-        aliases.alias_lists.USER_ALIASES = {'foo': 'bar.com/a.html'}
-        try:
+        with patch(foo='bar.com/a.html'):
             result = aliases.resolve('https://@foo#tag')
-        finally:
-            aliases.alias_lists.USER_ALIASES = old_user
 
         self.assertEqual(result, 'https://bar.com/a.html#tag')
 

@@ -7,7 +7,7 @@ from .. project import aliases, project
 
 __all__ = ['main']
 COMMANDS = (
-    'alias', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
+    'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
     'devices', 'info', 'load', 'list', 'remove', 'reset', 'run', 'save', 'set',
     'show', 'update')
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
@@ -68,8 +68,6 @@ def main():
         log.printer()
         log.printer('    bp --help')
         sys.exit(-1)
-
-    aliases.ISOLATE = args.isolate
 
     if args.verbose and args.loglevel != 'frame':
         log.set_log_level('debug')
