@@ -27,8 +27,6 @@ def add_common_flags(parser):
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
     parser.add_argument(
         '--version', action='store_true', help=VERSION_HELP)
-    parser.add_argument(
-        '-x', '--isolate', action='store_true', help=ISOLATE_HELP)
 
 
 def add_project_flags(parser):
@@ -162,15 +160,6 @@ for more information.
 
 LOGLEVEL_HELP = """\
 Set what level of events to log. Higher log levels print less."""
-
-ISOLATE_HELP = """\
-Run BiblioPixel in isolated mode, where it cannot see your local files.
-This means that it will not see any local Python classes in your directories
-and it won't see your local aliases.
-
-Running your project in isolated mode help makes sure that your project will
-work on other machines without modification.
-"""
 
 NUMBERS_HELP = """
 The type of numbers that are used in color list calculations.

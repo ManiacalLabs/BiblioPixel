@@ -1,8 +1,6 @@
 import operator, os
 from .. util import datafile, log
 
-USER_ALIAS_FILE = os.path.expanduser('~/.bibliopixel/aliases.json')
-USER_ALIASES = datafile.DataFile(USER_ALIAS_FILE)
 PROJECT_ALIASES = {}
 
 
@@ -44,36 +42,5 @@ BUILTIN_ALIASES = {
 }
 
 
-def get_alias(alias, isolate=False):
-    return (
-        PROJECT_ALIASES.get(alias) or
-        (not isolate and USER_ALIASES.get(alias)) or
-        BUILTIN_ALIASES.get(alias))
-
-
-def print_alias(alias, value, printer=log.printer):
-    if value:
-        printer('%s = %s' % (alias, value))
-    else:
-        printer('# %s is not defined.' % alias)
-
-
-def print_aliases(builtin, by_value=False, printer=log.printer):
-    """
-    Args:
-        by_value: sort either by alias name, or by alias value
-    """
-
-    aliases = BUILTIN_ALIASES if builtin else USER_ALIASES.data
-    if not aliases:
-        printer('(no aliases)')
-        return
-
-    key_func = operator.itemgetter(int(by_value))
-    for alias, value in sorted(aliases.items(), key=key_func):
-        print_alias(alias, value, print)
-
-
-set_alias = USER_ALIASES.set
-delete_alias = USER_ALIASES.delete
-delete_all_alias = USER_ALIASES.delete_all
+def get_alias(alias):
+    return PROJECT_ALIASES.get(alias) or BUILTIN_ALIASES.get(alias)
