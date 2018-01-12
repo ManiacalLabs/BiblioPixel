@@ -10,9 +10,8 @@
         "height": 32
     },
 
-    "animation": {
-        "typename": "sequence",
-        "random": true,
-        "animations": ["31-clock.json", "32-pinwheel.json", "33-bloom.json"]
+    "animation": "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
+    "run": {
+        "seconds": 2
     }
 }
