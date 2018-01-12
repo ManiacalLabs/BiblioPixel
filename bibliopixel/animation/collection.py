@@ -1,7 +1,7 @@
-import traceback
+import os, traceback
 from .. project import aliases, construct, project
 from . import animation
-from .. util import log
+from .. util import json, log
 
 
 class Collection(animation.BaseAnimation):
@@ -10,6 +10,16 @@ class Collection(animation.BaseAnimation):
     @staticmethod
     def pre_recursion(desc):
         def cleanup_animation(a):
+            if isinstance(a, str) and (
+                    a.endswith('.yml') or a.endswith('.json')):
+                if not os.path.isabs(a):
+                    a = os.path.join(project.ROOT_DIRECTORY, a)
+                a = json.load(a)
+                if 'animation' in a:
+                    # Dump other cruft.  This is useful if you want to load just
+                    # the animation from a complete project.
+                    a = {'animation': a['animation'], 'run': a.get('run', {})}
+
             if callable(a) or isinstance(a, str) or 'animation' not in a:
                 animation = a
                 a = {}

@@ -140,9 +140,9 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_project(args, desc, **kwds):
+def make_project(args, desc, root_directory):
     project_flags = _make_project_flags(args)
-    return project.project(project_flags, desc, **kwds)
+    return project.project(project_flags, desc, root_directory=root_directory)
 
 
 # Help messages.

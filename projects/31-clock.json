@@ -1,0 +1,17 @@
+{
+    "driver": {
+        "num": 1024,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
+    "animation": "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
+    "run": {
+        "seconds": 2
+    }
+}

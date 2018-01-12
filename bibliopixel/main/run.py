@@ -50,11 +50,13 @@ def _get_animations(args):
         try:
             if filename.endswith('.py'):
                 desc = _load_py(filename)
+                root_directory = None
             else:
                 desc = load.data(filename, False)
                 desc = json.loads(desc, filename)
+                root_directory = os.path.dirname(os.path.abspath(filename))
 
-            project = common_flags.make_project(args, desc)
+            project = common_flags.make_project(args, desc, root_directory)
             animations.append(project.animation)
             if args.dump:
                 json.dump(project.desc)

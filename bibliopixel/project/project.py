@@ -1,6 +1,8 @@
 from . import attributes, construct, cleanup, defaults, load, recurse
 from .. util import exception, json
 
+ROOT_DIRECTORY = None
+
 
 class Project:
     CHILDREN = 'maker', 'drivers', 'layout', 'animation'
@@ -39,13 +41,16 @@ class Project:
         self.animation = create(animation, 'animation')
 
 
-def project(*descs, **kwds):
+def project(*descs, root_directory=None):
     def default(o):
         if isinstance(o, type):
             return str(o)
         return str(o.__class__).replace('<class ', '<').replace('>', ' object>')
 
-    desc = defaults.merge(*descs, **kwds)
+    desc = defaults.merge(*descs)
+
+    global ROOT_DIRECTORY
+    ROOT_DIRECTORY = root_directory
 
     with load.extender(desc.get('path', '')):
         desc = recurse.recurse(desc)
