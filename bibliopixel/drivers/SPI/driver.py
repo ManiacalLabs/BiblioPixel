@@ -27,6 +27,7 @@ def SPI(ledtype=None, num=0, **kwargs):
     from ...project.types.ledtype import make
     if ledtype is None:
         raise ValueError('Must provide ledtype value!')
+    ledtype = make(ledtype)
 
     if num == 0:
         raise ValueError('Must provide num value >0!')
