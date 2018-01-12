@@ -1,3 +1,6 @@
+## v3.4.2 - 2018-01-12
+- Fix SPI Driver
+
 ## v3.4.1 - 2018-01-04
 - Fix broken PiWS281X
 - Fix `bp demo`
