@@ -1,6 +1,6 @@
 import os
 from .. project import data_maker, defaults, project
-from .. util import json
+from .. util import json, log
 
 """Common command line arguments for run and demo."""
 
@@ -15,14 +15,14 @@ def _get_version():
 VERSION = _get_version()
 COMPONENTS = 'driver', 'layout', 'animation'
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
-LOG_LEVELS = ('debug', 'info', 'warning', 'error', 'critical')
 ENABLE_PRESETS = False
 NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 
 def add_common_flags(parser):
     parser.add_argument(
-        '--loglevel', choices=LOG_LEVELS, default='info', help=LOGLEVEL_HELP)
+        '--loglevel', choices=log.SORTED_NAMES, default='info',
+        help=LOGLEVEL_HELP)
     parser.add_argument(
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
     parser.add_argument(

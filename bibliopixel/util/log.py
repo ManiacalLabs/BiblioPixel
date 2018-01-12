@@ -1,9 +1,11 @@
 import logging, sys
-from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
+from logging import DEBUG, INFO, WARNING, ERROR
 
 FRAME = DEBUG - 5
 LOG_NAMES = {'frame': FRAME, 'debug': DEBUG, 'info': INFO, 'warning': WARNING,
-             'error': ERROR, 'critical': CRITICAL}
+             'error': ERROR}
+
+SORTED_NAMES = tuple(k for k, v in sorted(LOG_NAMES.items()))
 
 
 # From https://stackoverflow.com/a/35804945/43839
@@ -58,29 +60,28 @@ def addLoggingLevel(levelName, levelNum, methodName=None):
     setattr(logging, methodName, logToRoot)
 
 
-class InfoFilter(logging.Filter):
-    def filter(self, rec):
-        return rec.levelno in (DEBUG, INFO)
-
-
 def _new_custom_logger(name='BiblioPixel',
                        fmt='%(levelname)s - %(module)s - %(message)s'):
     logger = logging.getLogger(name)
     formatter = logging.Formatter(fmt=fmt)
 
+    def add_handler(level, outfile):
+        class Filter(logging.Filter):
+            def filter(self, rec):
+                return rec.levelno == level
+
+        h = logging.StreamHandler(outfile)
+        h.setLevel(level)
+        h.addFilter(Filter())
+        h.setFormatter(formatter)
+        logger.addHandler(h)
+
     if not logger.handlers:
         logger.setLevel(INFO)
-        h1 = logging.StreamHandler(sys.stdout)
-        h1.setLevel(DEBUG)
-        h1.addFilter(InfoFilter())
-        h1.setFormatter(formatter)
-
-        h2 = logging.StreamHandler(sys.stderr)
-        h2.setLevel(WARNING)
-        h2.setFormatter(formatter)
-
-        logger.addHandler(h1)
-        logger.addHandler(h2)
+        add_handler(FRAME, sys.stdout)
+        add_handler(DEBUG, sys.stdout)
+        add_handler(WARNING, sys.stderr)
+        add_handler(ERROR, sys.stderr)
 
     else:  # pragma: no cover
         pass
@@ -96,12 +97,12 @@ def set_log_level(level):
 
 
 # Add a new logging level FRAME for messages which appear on every frame.
-addLoggingLevel('FRAME', FRAME - 5)
+addLoggingLevel('FRAME', FRAME)
 logger = _new_custom_logger()
 
-frame, debug, info, warning, error, critical, exception = (
-    logger.frame, logger.debug, logger.info, logger.warning, logger.error,
-    logger.critical, logger.exception)
+frame, debug, info, warning, error = (
+    logger.frame, logger.debug, logger.info, logger.warning, logger.error)
+
 
 # The function `printer` emits text no matter what the loglevel, and without any
 # introducers like "INFO".  By default this is the same as the global `print` -
