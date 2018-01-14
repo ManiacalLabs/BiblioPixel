@@ -2,15 +2,19 @@
 Test the all_pixel.
 """
 
+from .. drivers import ledtype
+from .. util import log
+from bibliopixel.animation.tests import StripChannelTest
+from bibliopixel.layout.strip import Strip
+from bibliopixel.drivers.serial import Serial
+from bibliopixel.project.types import ledtype
+
 DESCRIPTION = """
 Equivalent to
 
     bp --num=10 --loglevel=debug --animation=strip_test \
       --driver=serial --fail_on_exception --layout=strip  --ledtype=<argument>
 """
-
-from .. drivers import ledtype
-from . import run as _run
 
 LEDTYPES = """
 BiblioPixel currently understands the following types of LED strips:
@@ -21,32 +25,24 @@ LEDTYPE_HELP = """\
 The type of the LED strip that is connected to your AllPixel.
 """ + LEDTYPES
 
-NO_LED_ERROR = """No ledtype provided.
+NO_LED_ERROR = """ERROR: No ledtype provided.
 """ + LEDTYPES
 
 
-ARGUMENTS = {
-    'animation': 'strip_test',
-    'driver': 'serial',
-    'fail_on_exception': True,
-    'layout': 'strip',
-    'loglevel': 'debug',
-    'num': 10,
-}
-
-
 def run(args):
-    for key, value in ARGUMENTS.items():
-        setattr(args, key, value)
-
-    args.ledtype = args.ledtype or args.ledtype_arg
     if not args.ledtype:
-        raise ValueError(NO_LED_ERROR)
+        print(NO_LED_ERROR)
+        return -1
 
-    _run.run(args)
+    log.set_log_level('DEBUG')
+
+    driver = Serial(ledtype=ledtype.make(args.ledtype), num=10)
+    layout = Strip([driver])
+    animation = StripChannelTest(layout)
+    animation.set_runner(None)
+    animation.start()
 
 
 def set_parser(args):
-    _run.set_parser(args)
     args.set_defaults(run=run)
-    args.add_argument('ledtype_arg', help=LEDTYPE_HELP, default='')
+    args.add_argument('ledtype', help=LEDTYPE_HELP, nargs='?')

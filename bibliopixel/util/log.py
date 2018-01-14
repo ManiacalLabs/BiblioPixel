@@ -91,7 +91,7 @@ def _new_custom_logger(name='BiblioPixel',
 
 def set_log_level(level):
     if isinstance(level, str):
-        level = LOG_NAMES[level]
+        level = LOG_NAMES[level.lower()]
 
     logger.setLevel(level)
 
