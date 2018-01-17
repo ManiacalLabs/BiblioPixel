@@ -2,16 +2,15 @@ import functools, numbers
 from ...util import duration
 
 
-USAGE = """A time can be initialized with:
+USAGE = """
+A time can be initialized with:
 
 * A number that is greater than or equal to zero, representing a time in
   seconds.
 
 * A string:
 
-2 weeks, 1 day, 1 hours, 3 minutes, 45 seconds, 340.4ms....
-
-"""
+2 weeks, 1 day, 1 hours, 3 minutes, 45 seconds, 340.4ms..."""
 
 
 @functools.singledispatch

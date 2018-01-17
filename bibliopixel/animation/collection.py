@@ -13,7 +13,7 @@ class Collection(animation.BaseAnimation):
             if isinstance(a, str) and (
                     a.endswith('.yml') or a.endswith('.json')):
                 if not os.path.isabs(a):
-                    a = os.path.join(project.ROOT_DIRECTORY, a)
+                    a = os.path.join(os.path.dirname(project.ROOT_FILE), a)
                 a = json.load(a)
                 if 'animation' in a:
                     # Dump other cruft.  This is useful if you want to load just

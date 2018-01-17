@@ -1,7 +1,8 @@
 import functools
 from ...drivers.spi_interfaces import SPI_INTERFACES
 
-USAGE = """A spi_interface is represented by a string.
+USAGE = """
+A spi_interface is represented by a string.
 
 Possible values are """ + ', '.join(sorted(SPI_INTERFACES.__members__))
 

@@ -1,19 +1,19 @@
 import functools, numbers
 from ... util import colors
 
-USAGE = """A Color can be initialized with:
+USAGE = """
+A Color can be initialized with:
 
 * A list of three numbers: [0, 0, 0] or [255, 0, 255].
 * A single number which represents a brightness/gray level: 0, 255, 127
 * A string:  "red", "yellow", "gold" naming a color from ...colors.COLORS.
 
-All numbers must be in the range [0, 256) - 0 <= x < 256
-"""
+All numbers must be in the range [0, 256) - 0 <= x < 256"""
 
 
 @functools.singledispatch
 def make(c):
-    raise ValueError("Don't understand type %s" % type(c), USAGE)
+    raise ValueError('Don\'t understand color name "%s"' % c, USAGE)
 
 
 @make.register(tuple)
@@ -44,4 +44,4 @@ def _(c):
     try:
         return colors.COLORS[c]
     except:
-        raise ValueError("Don't understand color name", c, USAGE)
+        raise ValueError('Don\'t understand color name "%s"' % c, USAGE)
