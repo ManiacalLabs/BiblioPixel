@@ -1,11 +1,11 @@
 import functools
 from ...drivers.channel_order import ChannelOrder
 
-USAGE = """A ChannelOrder can be initialized with:
+USAGE = """
+A ChannelOrder can be initialized with:
 
 * A list, tuple or string of lengths three: '012', 'bgr', (0, 2, 1)
-* An integer from 0 to 5.
-"""
+* An integer from 0 to 5."""
 
 NAMES = {
     'r': 0,

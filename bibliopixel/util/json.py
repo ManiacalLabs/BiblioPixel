@@ -1,8 +1,11 @@
 import json, os, sys, yaml
 
-
 # Allow open to be patched for tests.
 open = __builtins__['open']
+
+
+def dumps(data, **kwds):
+    return json.dumps(data, indent=4, sort_keys=True, **kwds)
 
 
 def loads(s, filename=''):
@@ -14,7 +17,7 @@ def loads(s, filename=''):
 def dump(data, file=sys.stdout, **kwds):
     """Dump JSON data to a file or file handle"""
     def dump(fp):
-        return json.dump(data, fp, indent=4, sort_keys=True, **kwds)
+        json.dump(data, fp, indent=4, sort_keys=True, **kwds)
 
     if not isinstance(file, str):
         return dump(file)

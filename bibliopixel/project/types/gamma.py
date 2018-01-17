@@ -3,7 +3,8 @@ from ... util.colors import gamma
 
 NAMES = [d for d in dir(gamma) if d.isupper()]
 
-USAGE = """A Gamma table is represented by one of:
+USAGE = """
+A Gamma table is represented by one of:
 
 * A number, representing a floating gamma correction value
 * A string, representing a name of a standard gamma function

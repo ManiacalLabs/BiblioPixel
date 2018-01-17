@@ -51,10 +51,6 @@ def add_project_flags(parser):
         help='Dump the full project as JSON after loading but before running')
 
     parser.add_argument(
-        '--dumpy', action='store_true',
-        help='Dump the full project as YAML after loading but before running')
-
-    parser.add_argument(
         '--dry_run', action='store_true',
         help='Load projects but do not run them')
 
@@ -91,6 +87,10 @@ def add_project_flags(parser):
     parser.add_argument(
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
+
+    parser.add_argument(
+        '-y', '--yaml', action='store_true',
+        help='Use Yaml when dumping description data')
 
 
 def _make_project_flags(args):
@@ -140,9 +140,9 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_project(args, desc, root_directory):
+def make_project(args, desc, root_file):
     project_flags = _make_project_flags(args)
-    return project.project(project_flags, desc, root_directory=root_directory)
+    return project.project(project_flags, desc, root_file=root_file)
 
 
 # Help messages.

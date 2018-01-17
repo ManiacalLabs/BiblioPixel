@@ -8,13 +8,14 @@ from .. util import json, log
 from .. animation.collection import Collection
 from .. project import load
 
-RUN_ERROR = """When reading description:
+RUN_ERROR = """When reading file {filename}:
 {desc}
-encountered exception
-{exception}
 """
 
-FAILURE_ERROR = '{count} project{s} failed'
+FAILURE_ERROR = """\
+{count} project{s} failed
+____________________
+"""
 
 
 def _load_py(filename):
@@ -41,6 +42,12 @@ def _load_py(filename):
     return project
 
 
+def _dump(args, desc):
+    if not isinstance(desc, str):
+        desc = json.yaml.dump(desc) if args.yaml else json.dumps(desc)
+    return desc.strip()
+
+
 def _get_animations(args):
     animations, failed = [], []
 
@@ -50,18 +57,19 @@ def _get_animations(args):
         try:
             if filename.endswith('.py'):
                 desc = _load_py(filename)
-                root_directory = None
+                root_file = None
             else:
                 desc = load.data(filename, False)
                 desc = json.loads(desc, filename)
-                root_directory = os.path.dirname(os.path.abspath(filename))
+                root_file = os.path.abspath(filename)
 
-            project = common_flags.make_project(args, desc, root_directory)
+            project = common_flags.make_project(args, desc, root_file)
             animations.append(project.animation)
             if args.dump:
-                json.dump(project.desc)
-            if args.dumpy:
-                print(json.yaml.dump(project.desc))
+                print(_dump(args, project.desc))
+
+        except FileNotFoundError as e:
+            failed.append(('%s: %s' % (e.strerror, e.filename), ()))
 
         except Exception as exception:
             if filename.endswith('.py'):
@@ -69,6 +77,7 @@ def _get_animations(args):
             eargs = exception.args
             if args.verbose:
                 exception = traceback.format_exc()
+            desc = desc and _dump(args, desc)
             msg = RUN_ERROR.format(**locals())
             failed.append((msg, eargs))
 
@@ -81,7 +90,10 @@ def _get_animations(args):
     log.error(FAILURE_ERROR.format(
         count=len(failed), s='' if len(failed) == 1 else 's'))
     for msg, args in failed:
-        log.error(msg + '\n' + '\n'.join(str(a) for a in args))
+        if args:
+            log.error(msg + '\n' + '\n'.join(str(a) for a in args) + '\n')
+        else:
+            log.error(msg + '\n')
     raise ValueError('Run aborted')
 
 

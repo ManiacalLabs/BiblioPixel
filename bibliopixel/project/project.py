@@ -1,7 +1,7 @@
 from . import attributes, construct, cleanup, defaults, load, recurse
 from .. util import exception, json
 
-ROOT_DIRECTORY = None
+ROOT_FILE = None
 
 
 class Project:
@@ -41,7 +41,7 @@ class Project:
         self.animation = create(animation, 'animation')
 
 
-def project(*descs, root_directory=None):
+def project(*descs, root_file=None):
     def default(o):
         if isinstance(o, type):
             return str(o)
@@ -49,8 +49,8 @@ def project(*descs, root_directory=None):
 
     desc = defaults.merge(*descs)
 
-    global ROOT_DIRECTORY
-    ROOT_DIRECTORY = root_directory
+    global ROOT_FILE
+    ROOT_FILE = root_file
 
     with load.extender(desc.get('path', '')):
         desc = recurse.recurse(desc)
