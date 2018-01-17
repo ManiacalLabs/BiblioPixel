@@ -80,6 +80,7 @@ def _new_custom_logger(name='BiblioPixel',
         logger.setLevel(INFO)
         add_handler(FRAME, sys.stdout)
         add_handler(DEBUG, sys.stdout)
+        add_handler(INFO, sys.stdout)
         add_handler(WARNING, sys.stderr)
         add_handler(ERROR, sys.stderr)
 
