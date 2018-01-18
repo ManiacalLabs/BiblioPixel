@@ -1,0 +1,32 @@
+{
+    "driver": {
+        "num": 1024,
+        "typename": "simpixel"
+    },
+
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32
+    },
+
+    "run": {
+        "fps": 30,
+        "seconds": 28
+    },
+
+    "aliases": {
+        "simple": "bibliopixel.animation.simple"
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "length": 4,
+        "animations": [
+            {"typename": "@simple.Fill", "color": "red"},
+            {"typename": "@simple.LogFade", "color": "green"},
+            {"typename": "@simple.Fill", "color": "blue"},
+            {"typename": "@simple.LogFade"}
+        ]
+    }
+}
