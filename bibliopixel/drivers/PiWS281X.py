@@ -1,5 +1,6 @@
 # Original code by msurguy: https://github.com/ManiacalLabs/BiblioPixel/issues/51#issuecomment-228662943
 
+import os, sys
 from . channel_order import ChannelOrder
 from . driver_base import DriverBase
 from .. util import log
@@ -21,6 +22,11 @@ Install rpi_ws281x with the following shell commands:
     sudo python3 setup.py build install
     # If using virtualenv, enter env then run
     python setup.py build install
+"""
+
+SUDO_ERROR = """
+The PiWS281X driver needs to be run as sudo.  Rerun it with sudo, like this:
+    sudo {command}
 """
 
 try:
@@ -46,6 +52,13 @@ STRIP_TYPES = {
     3: 0x00100800,
     4: 0x18100800,
 }
+
+"""
+This driver needs to be run as sudo:
+
+https://groups.google.com/d/msg/maniacal-labs-users/6hV-2_-Xmqc/wmWJK709AQAJ
+https://github.com/jgarff/rpi_ws281x/blob/master/python/neopixel.py#L106
+"""
 
 
 class PiWS281X(DriverBase):
@@ -79,7 +92,17 @@ class PiWS281X(DriverBase):
             num, gpio, ledFreqHz, ledDma, ledInvert, brightness,
             PIN_CHANNEL[gpio], strip_type)
         # Intialize the library (must be called once before other functions).
-        self._strip.begin()
+        try:
+            self._strip.begin()
+        except RuntimeError as e:
+            if os.geteuid():
+                if os.path.basename(sys.argv[0]) in ('bp', 'bibliopixel'):
+                    command = ['bp'] + sys.argv[1:]
+                else:
+                    command = ['python'] + sys.argv
+                error = SUDO_ERROR.format(command=' '.join(command))
+                e.args = (error,) + e.args
+            raise
 
     def set_brightness(self, brightness):
         self._strip.setBrightness(brightness)
