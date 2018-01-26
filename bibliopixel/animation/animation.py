@@ -76,7 +76,7 @@ class BaseAnimation(object):
         return self.__class__.__name__
 
     def step(self, amt=1):
-        raise RuntimeError("Base class step() called. This shouldn't happen")
+        pass
 
     def cleanup(self, clean_layout=True):
         # if current thread is animation thread this was called
