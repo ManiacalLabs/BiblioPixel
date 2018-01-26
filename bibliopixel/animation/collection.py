@@ -90,8 +90,8 @@ class Parallel(Collection):
 
 
 class Wrapper(Collection):
-    def __init__(self, *args, source, **kwds):
-        super()(*args, animations=[source], **kwds)
+    def __init__(self, *args, animation, **kwds):
+        super()(*args, animations=[animation], **kwds)
         self.animation = self.animations[0]
 
     def step(self, amt=1):

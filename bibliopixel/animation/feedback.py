@@ -4,9 +4,9 @@ from .. util import color_list
 
 
 class Feedback(Wrapper):
-    def __init__(self, *args, source,
+    def __init__(self, *args, animation,
                  master=1, inputs=None, outputs=None, **kwds):
-        super().__init__(*args, source=source, **kwds)
+        super().__init__(*args, animation=animation, **kwds)
         self.master = master
 
         inputs = inputs or [0]
