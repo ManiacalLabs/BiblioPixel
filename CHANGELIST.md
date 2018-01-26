@@ -1,3 +1,7 @@
+## v3.4.3 - 2018-01-26
+- Fix log.info
+- Much more information from `bp --help`
+
 ## v3.4.2 - 2018-01-12
 - Fix SPI Driver
 
