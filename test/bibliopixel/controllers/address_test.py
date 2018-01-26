@@ -19,7 +19,7 @@ class AddressTest(unittest.TestCase):
         self.assertIs(address.get(self), 'bang')
 
     def test_attrib_error(self):
-        address = Address('attr')
+        address = Address('.attr')
         with self.assertRaises(AttributeError):
             address.get(AddressTest)
 
@@ -50,7 +50,7 @@ class AddressTest(unittest.TestCase):
         self.attr2 = self
         self.attr3 = 'bingo'
 
-        address = Address('attr1[0][test][1][heck].attr2.attr3')
+        address = Address('.attr1[0][test][1][heck].attr2.attr3')
         self.assertEqual(len(address.address), 7)
         self.assertEqual(address.get(self), 'bingo')
         address.set(self, 'bang')
