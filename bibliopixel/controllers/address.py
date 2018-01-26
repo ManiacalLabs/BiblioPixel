@@ -1,12 +1,14 @@
 """
-An address identifies the location data within a Python object.
+An address identifies how to get or set a piece of data within a Python object
+using attributes and indexing.
 
-An address looks like
+An address description is a string looking like:
 
-    foo.bar[32][5][baz].bang
+    .foo.bar[32][5][baz].bang
 
-That address would mean "given some object x, the value of
-x.foo.bar[32][5]['baz'].bang".
+which would mean
+
+"given an object x, the value x.foo.bar[32][5]['baz'].bang".
 
 Addresses are divided into "segments".  Segments in brackets are indexes or keys;
 otherwise they are attributes.  In the example above, the segments are
@@ -30,24 +32,32 @@ class Address:
         def __init__(self, name):
             self.name = name
 
+        def set(self, x, *value):
+            return self._set(x, (value[0] if len(value) == 1 else value))
+
     class Attribute(Segment):
         def get(self, x):
             return getattr(x, self.name)
 
-        def set(self, x, value):
+        def _set(self, x, value):
             return setattr(x, self.name, value)
 
     class Index(Segment):
         def get(self, x):
             return x[self.name]
 
-        def set(self, x, value):
+        def _set(self, x, value):
             x[self.name] = value
 
     def __init__(self, s):
-        def generate():
-            # First split on dots, then use [ and ] to split out indices.
-            for i, part in enumerate(s.strip().split('.')):
+        def generate(s):
+            # Split on dots, then use [ and ] to split out indices
+            s = s.strip()
+            while s.startswith('.'):
+                s = s[1:]
+            while s.endswith('.'):
+                s = s[:-1]
+            for i, part in enumerate(s.split('.')):
                 head, *rest = part.split('[')
 
                 # Suppose our address was 'xxx[yyy][zzz]'
@@ -73,7 +83,7 @@ class Address:
                     yield Address.Index(index)
 
         try:
-            self.address = list(generate())
+            self.address = list(generate(s))
         except:
             raise ValueError('%s is not a legal address' % s)
 
@@ -89,7 +99,7 @@ class Address:
     def get(self, x):
         return self._get(x, self.address)
 
-    def set(self, x, value):
+    def set(self, x, *value):
         *first, last = self.address
         parent = self._get(x, first)
-        last.set(parent, value)
+        last.set(parent, *value)
