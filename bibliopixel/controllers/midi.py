@@ -22,12 +22,18 @@ class Midi(control_source.ExtractedSource):
     # mido MIDI messages.
     # There are more mido message types that we haven't used yet.
     KEYS_BY_TYPE = {
-        'aftertouch': ('channel', 'type', 'value'),
-        'control_change': ('channel', 'type', 'control', 'value'),
-        'note_off': ('channel', 'type', 'note', 'velocity'),
-        'note_on': ('channel', 'type', 'note', 'velocity'),
-        'pitchwheel': ('channel', 'type', 'pitch'),
-        'program_change': ('channel', 'type', 'program'),
+        'aftertouch': (
+            'port', 'channel', 'type', 'value'),
+        'control_change': (
+            'port', 'channel', 'type', 'control', 'value'),
+        'note_off': (
+            'port', 'channel', 'type', 'note', 'velocity'),
+        'note_on': (
+            'port', 'channel', 'type', 'note', 'velocity'),
+        'pitchwheel': (
+            'port', 'channel', 'type', 'pitch'),
+        'program_change': (
+            'port', 'channel', 'type', 'program'),
     }
 
     # Some numeric fields (channel, control, program and note) don't get
@@ -39,7 +45,16 @@ class Midi(control_source.ExtractedSource):
         'velocity': lambda x: fractions.Fraction(x) / 127,
     }
 
+    def __init__(self, omit=('port', 'channel'), use_note_off=False, **kwds):
+        super().__init__(omit=omit, **kwds)
+        self.use_note_off = use_note_off
+
     def __iter__(self):
-        inputs = mido.get_input_names()
-        for msg in mido.ports.MultiPort(mido.open_input(i) for i in inputs):
-            yield vars(msg)
+        ports = [mido.open_input(i) for i in mido.get_input_names()]
+
+        for port, msg in mido.ports.MultiPort(ports, yield_ports=True):
+            mdict = dict(vars(msg), port=port)
+            if self.use_note_off or msg.type != 'note_off':
+                yield mdict
+            else:
+                yield dict(mdict, type='note_on', velocity=0)

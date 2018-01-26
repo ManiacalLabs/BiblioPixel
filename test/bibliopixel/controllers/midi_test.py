@@ -14,8 +14,14 @@ OTHER = Namespace(type='other', channel=32, thing='stuff')
 
 class FakeMido:
     def __init__(self, msgs):
+        def multi_port(x, yield_ports=False):
+            if yield_ports:
+                return (('fake_port', i) for i in msgs)
+            else:
+                return msgs
+
         self.ports = self
-        self.ports.MultiPort = lambda x: msgs
+        self.ports.MultiPort = multi_port
 
     def get_input_names(self):
         return ['one', 'two']
@@ -33,18 +39,23 @@ class MidiTest(unittest.TestCase):
             m.start()
             m.thread.join()
             actual = [list(i.items()) for i in actual]
+            if actual != expected:
+                print('FAIL')
+                print(actual)
+                print(expected)
             self.assertEquals(actual, expected)
 
     def test_one(self):
         expected = [
+            ('port', 'fake_port'),
             ('channel', 1),
             ('type', 'note_on'),
             ('note', 32),
             ('velocity', fractions.Fraction(96) / 127)]
 
-        self.run_test([C3], [expected])
-        self.run_test([C3, C3], [expected, expected])
-        self.run_test([C3, C3], [expected[1:], expected[1:]], omit='channel')
+        self.run_test([C3], [expected[2:]])
+        self.run_test([C3, C3], [expected[2:], expected[2:]])
+        self.run_test([C3], [expected], omit=None)
 
     def test_accept(self):
         accept = {'channel': 2, 'type': 'control_change', 'control': 2}
