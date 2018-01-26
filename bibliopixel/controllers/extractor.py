@@ -3,7 +3,7 @@ import collections
 
 class Extractor:
     """
-    MessageToDict is a class that extracts and normalizes values from
+    Extractor is a class that extracts and normalizes values from
     incoming message dictionaries into ordered dictionaries based on the
     `type` key of each message.
     """
