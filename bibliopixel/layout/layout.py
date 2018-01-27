@@ -14,7 +14,18 @@ class Layout(object):
 
     def __init__(self, drivers, threadedUpdate=False, brightness=255,
                  maker=data_maker.MAKER, color_list=None, **kwds):
-        """Base LED class. Use Strip or Matrix instead!"""
+        """
+        Base LED class. Use Strip or Matrix instead!
+
+        Arguments
+            drivers -- a list of drivers
+            threadedUpdate -- if True, updates to this layout are done in a
+                separate thread
+            brightness - a brightness multiple from 0 to 255
+            maker - a data maker to make color_lists
+            color_list -- if non-Null, the layout uses this color_list instead
+                of creating its own
+        """
         attributes.set_reserved(self, 'layout', **kwds)
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
         self.maker = maker

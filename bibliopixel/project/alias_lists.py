@@ -34,6 +34,7 @@ BUILTIN_ALIASES = {
     'matrix_calibration': 'bibliopixel.animation.tests.MatrixCalibrationTest',
     'matrix_test': 'bibliopixel.animation.tests.MatrixChannelTest',
     'mixer': 'bibliopixel.animation.mixer.Mixer',
+    'split': 'bibliopixel.animation.split.Split',
     'receiver': 'bibliopixel.animation.receiver.BaseReceiver',
     'reprocess': 'bibliopixel.animation.reprocess.reprocess.Reprocess',
     'remote': 'bibliopixel.animation.remote.control.RemoteControl',
