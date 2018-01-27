@@ -57,8 +57,7 @@ class Collection(animation.BaseAnimation):
     def cleanup(self, clean_layout=True):
         self.state = animation.STATE.canceled
         for a in self.animations:
-            if a:
-                a.cleanup()
+            a and a.cleanup()
         super().cleanup(clean_layout)
 
     def add_animation(self, anim, **kwds):
@@ -68,6 +67,8 @@ class Collection(animation.BaseAnimation):
 
     def pre_run(self):
         self.index = -1
+        for a in self.animations:
+            a and a.pre_run()
 
     @property
     def current_animation(self):
@@ -86,7 +87,7 @@ class Parallel(Collection):
 
     def step(self, amt=1):
         for a in self.animations:
-            a.step(amt)
+            a and a.step(amt)
 
 
 class Wrapper(Collection):
@@ -95,4 +96,4 @@ class Wrapper(Collection):
         self.animation = self.animations[0]
 
     def step(self, amt=1):
-        self.animation.step(amt)
+        self.animation and self.animation.step(amt)
