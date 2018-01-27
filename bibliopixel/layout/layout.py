@@ -12,19 +12,22 @@ class Layout(object):
         """Construct a layout."""
         return cls(project.drivers, maker=project.maker, **desc)
 
-    def __init__(self, drivers, threadedUpdate, brightness,
-                 maker=data_maker.MAKER, **kwds):
+    def __init__(self, drivers, threadedUpdate=False, brightness=255,
+                 maker=data_maker.MAKER, color_list=None, **kwds):
         """Base LED class. Use Strip or Matrix instead!"""
         attributes.set_reserved(self, 'layout', **kwds)
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
         self.maker = maker
 
-        if not hasattr(self, 'numLEDs'):
-            self.numLEDs = sum(d.numLEDs for d in self.drivers)
-
-        # This buffer will always be the same list - i.e. is guaranteed to only
-        # be changed by list surgery, never assignment.
-        self._colors = maker.color_list(self.numLEDs)
+        # self._colors will always be the same list - i.e. is guaranteed only
+        # to be changed by list surgery, never assignment.
+        if color_list is None:
+            if not hasattr(self, 'numLEDs'):
+                self.numLEDs = sum(d.numLEDs for d in self.drivers)
+            self._colors = maker.color_list(self.numLEDs)
+        else:
+            self.numLEDs = len(color_list)
+            self._colors = color_list
 
         pos = 0
         for d in self.drivers:
