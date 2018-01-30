@@ -13,12 +13,16 @@ NUMPY_TYPES = (
     'uint', 'uint8', 'uint16', 'uint32', 'uint64',
     'float', 'float32', 'float64')
 
+NUMPY_DEFAULTS = (True, 'true', 'True', 'float')
+
 
 class Maker:
     def __init__(self, floating=None, shared_memory=False, numpy_dtype=None):
         if numpy_dtype:
             if numpy:
                 log.info('Using numpy')
+                if numpy_dtype in NUMPY_DEFAULTS:
+                    numpy_dtype = 'float32'
                 if numpy_dtype not in numpy.sctypeDict:
                     raise ValueError(BAD_NUMPY_TYPE_ERROR % numpy_dtype)
             else:
