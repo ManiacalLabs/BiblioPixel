@@ -16,6 +16,8 @@ class STATE(IntEnum):
 
 
 class BaseAnimation(object):
+    """All animations classes inherit from this class, which provides all core animation functionality.
+    """
     free_run = False
     pre_recursion = fields.default_converter
 
@@ -79,6 +81,11 @@ class BaseAnimation(object):
         pass
 
     def cleanup(self, clean_layout=True):
+        """
+        Handles end-of-animation data cleanup and thread shutdown.
+
+        :param bool clean_layout: If True (default), the layout will be cleared (blanked).
+        """
         # if current thread is animation thread this was called
         # by the context manager and thread is therefore already stopped
         if self.threading.thread != threading.current_thread():

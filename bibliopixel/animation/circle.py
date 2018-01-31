@@ -3,6 +3,9 @@ from .. layout import Circle
 
 
 class BaseCircleAnim(BaseAnimation):
+    """
+    Provides base functionality for animations comprised of concentric rings.
+    """
 
     def __init__(self, layout, **kwds):
         super().__init__(layout, **kwds)
