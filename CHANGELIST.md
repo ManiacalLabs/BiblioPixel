@@ -1,3 +1,9 @@
+## v3.4.4 - 2018-02-01
+- Split splits a Strip to run multiple animations at once
+- Make float32 the default float type
+- Report if we aren't using sudo for PiWS281X driver (fix #582)
+- scripts/new_version
+
 ## v3.4.3 - 2018-01-26
 - Fix log.info
 - Much more information from `bp --help`
