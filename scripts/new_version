@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+import datetime, os, subprocess, sys
+
+DRY_RUN = False
+ROOT = os.path.dirname(os.path.dirname(__file__))
+CHANGELIST_FILE = os.path.join(ROOT, 'CHANGELIST.md')
+VERSION_FILE = os.path.join(ROOT, 'bibliopixel', 'VERSION')
+
+
+def new_version(new_version_string=''):
+    def call(s, *args):
+        return subprocess.check_call(s.split() + list(args))
+
+    def split_version(s):
+        return tuple(int(i) for i in s.split('.'))
+
+    old_version = split_version(open(VERSION_FILE).read())
+
+    if new_version_string:
+        if new_version_string.startswith('v'):
+            new_version_string = new_version_string[1:]
+        new_version = split_version(new_version_string)
+    else:
+        new_version = old_version[:2] + (old_version[2] + 1,)
+        new_version_string = '.'.join(str(i) for i in new_version)
+
+    assert new_version > old_version
+
+    comments = []
+    print('Changes for CHANGELIST:')
+    while True:
+        comment = input('- ')
+        if not comment:
+            break
+        comments.append('- ' + comment + '\n')
+
+    if not comments:
+        raise ValueError(
+            'There must be at least one new change in CHANGELIST.md')
+
+    with open(VERSION_FILE, 'w') as fp:
+        fp.write(new_version_string)
+        fp.write('\n')
+
+    changelist = open(CHANGELIST_FILE).read()
+    with open(CHANGELIST_FILE, 'w') as fp:
+        date = datetime.datetime.now().strftime('%Y-%m-%d')
+        fp.write('## v%s - %s\n' % (new_version_string, date))
+        for c in comments:
+            fp.write(c)
+        fp.write('\n')
+        fp.write(changelist)
+
+    commit_comment = 'v' + new_version_string
+    call('git commit bibliopixel/VERSION CHANGELIST.md -m', commit_comment)
+    call('git push')
+
+
+if __name__ == '__main__':
+    new_version(*sys.argv[1:])
