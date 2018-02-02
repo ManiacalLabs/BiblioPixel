@@ -1,3 +1,4 @@
+import os
 from .. project.importer import import_module
 
 COMMANDS = (
@@ -46,14 +47,15 @@ The ``bp`` command line
 
 ``bp`` commands have *flags* that control how ``bp`` runs its commands.
 
-Examples of flags are -v, --verbose, --defaults, -d, --simpixel.  Flags either
-start with -, for one letter flags, or -- for multi-letter flags.
+Examples of flags are ``-v``, ``--verbose``, ``--defaults``, ``-d``,
+``--simpixel``.  Flags either start with ``-``, for one letter flags, or ``--``
+for multi-letter flags.
 
-Sometimes two flags have the same meaning, like --simpixel and -s,
---verbose and -v, or --dimensions and --dim.
+Sometimes two flags have the same meaning, like ``--simpixel`` and ``-s``,
+``--verbose`` and ``-v``, or ``--dimensions`` and ``--dim``.
 
-Some flags take an argument, like --dim=160 or --loglevel=frame.
-Other flags do not, like --verbose or -v.
+Some flags take an argument, like ``--dim=160`` or ``--loglevel=frame``.
+Other flags do not, like ``--verbose`` or ``-v``.
 
 A ``bp`` command line can optionally include a command, a list of arguments,
 and a list of flags:
@@ -77,4 +79,42 @@ Examples of ``bp`` command lines
            ', '.join(COMMANDS[0:8]),
            ', '.join(COMMANDS[8:]))
 
-HELP = RST_HELP.replace('\n::\n', '').replace('``', '`')
+SEP = '\n::\n'
+
+
+def un_rst(s):
+    return s.replace(SEP, '').replace('``', '`')
+
+
+HELP = un_rst(RST_HELP)
+
+COMMAND_HELP_PREFIX = """
+APPENDIX: ``bp <command> --help`` for each command
+-----------------------------------------------------
+"""
+
+
+def help_text():
+    def helper():
+        yield RST_HELP
+        yield COMMAND_HELP_PREFIX
+
+        for i, c in enumerate(COMMANDS):
+            if i:
+                yield ''
+                yield '______________________________________________'
+                yield ''
+
+            module = MODULES[c]
+            yield '``bp %s``' % c
+            yield ''
+            yield '*%s*' % module.__doc__.strip()
+            yield ''
+            yield getattr(module, 'DESCRIPTION', '')
+
+    return '\n'.join(helper()) + '\n'
+
+
+def extract_help(filename):
+    with open(filename, 'w') as fp:
+        fp.write(help_text())

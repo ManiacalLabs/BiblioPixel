@@ -5,6 +5,8 @@ Reset sections in the project defaults
 DESCRIPTION = """
 Example:
 
+::
+
     # Reset the layout and animation sections
     $ bp default reset layout animation
 
