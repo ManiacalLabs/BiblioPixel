@@ -5,7 +5,9 @@ Run a bibliopixel demo.
 DESCRIPTION = """
 For the list of possible demos, type
 
-    `bp demo list`
+::
+
+    bp demo list
 """
 
 import random

@@ -23,6 +23,7 @@ User Guide
    Installation
    Display-Setup
    SPI-Setup
+   The-bp-Command
 
 API Reference
 -------------

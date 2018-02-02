@@ -40,7 +40,8 @@ def get_args(argv=sys.argv):
         subparser = subparsers.add_parser(name, help=doc)
         common_flags.add_common_flags(subparser)
         module.set_parser(subparser)
-        subparser.description = doc + getattr(module, 'DESCRIPTION', '')
+        description = getattr(module, 'DESCRIPTION', '')
+        subparser.description = doc + commands.un_rst(description)
 
     if argv == ['-h']:
         log.printer(commands.HELP)
