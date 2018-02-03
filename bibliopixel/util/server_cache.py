@@ -19,7 +19,7 @@ but keywords {kwds} were requested.
 """
 
 
-class CachedServer:
+class _CachedServer:
     def __init__(self, port, constructor, **kwds):
         self.server = self._make_server(port, constructor, **kwds)
         self.port = port
@@ -55,23 +55,34 @@ class CachedServer:
 
 
 class ServerCache:
+    """
+    A class that caches TCP/IP servers by port number so that you don't keep
+    closing and re-opening the same server and interrupting your connection.
+    """
     ENABLE = True
 
-    def __init__(self, **kwds):
+    def __init__(self, constructor, **kwds):
+        """
+        :param constructor: a function which takes a port and some keywords
+                            and returns a new TCP/IP server
+        :param kwds: keywords to the ``constructor`` function
+        """
         self.servers = {}
-        self.kwds = kwds
+        self.kwds = dict(kwds, constructor=constructor)
 
-    def get_server(self, port, **kwds):
-        kwds = dict(self.kwds, **kwds)
-
+    def get_server(self, port):
+        """
+        Get a new or existing server for this port.
+        :param port: TCP/IP port for the server to use
+        """
         if not self.ENABLE:
-            return CachedServer._make_server(port, **kwds)
+            return _CachedServer._make_server(port, **self.kwds)
 
         server = self.servers.get(port)
         if server:
-            server.check_keywords(**kwds)
+            server.check_keywords(**self.kwds)
         else:
-            server = CachedServer(port, **kwds)
+            server = _CachedServer(port, **self.kwds)
             self.servers[port] = server
 
         return server

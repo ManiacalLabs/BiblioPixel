@@ -5,6 +5,14 @@ open = __builtins__['open']
 
 
 def dumps(data, **kwds):
+    """
+    Dumps data into a nicely formatted JSON string.
+
+    :param dict data: a dictionary to dump
+    :param kwds: keywords to pass to json.dumps
+    :returns: a string with formatted data
+    :rtype: str
+    """
     return json.dumps(data, indent=4, sort_keys=True, **kwds)
 
 
@@ -15,7 +23,13 @@ def loads(s, filename=''):
 
 
 def dump(data, file=sys.stdout, **kwds):
-    """Dump JSON data to a file or file handle"""
+    """
+    Dumps data as nicely formatted JSON string to a file or file handle
+
+    :param dict data: a dictionary to dump
+    :param file: a filename or file handle to write to
+    :param kwds: keywords to pass to json.dump
+    """
     def dump(fp):
         json.dump(data, fp, indent=4, sort_keys=True, **kwds)
 
@@ -31,14 +45,19 @@ def dump(data, file=sys.stdout, **kwds):
         return dump(fp)
 
 
-def load(filename):
+def load(file):
     """
     Loads not only JSON files but also YAML files ending in .yml.
+
+    :param file: a filename or file handle to read from
+    :returns: the data loaded from the JSON or YAML file
+    :rtype: dict
     """
-    if isinstance(filename, str):
-        fp = open(filename)
+    if isinstance(file, str):
+        fp = open(file)
+        filename = file
     else:
-        fp = filename
+        fp = file
         filename = getattr(fp, 'name', '')
 
     try:

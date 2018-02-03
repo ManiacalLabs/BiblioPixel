@@ -9,7 +9,7 @@ SORTED_NAMES = tuple(k for k, v in sorted(LOG_NAMES.items()))
 
 
 # From https://stackoverflow.com/a/35804945/43839
-def addLoggingLevel(levelName, levelNum, methodName=None):
+def _addLoggingLevel(levelName, levelNum, methodName=None):
     """
     Comprehensively adds a new logging level to the `logging` module and the
     currently configured logging class.
@@ -91,6 +91,12 @@ def _new_custom_logger(name='BiblioPixel',
 
 
 def set_log_level(level):
+    """
+    :param level: the level to set - either a string level name from
+                  'frame', 'debug', 'info', 'warning', 'error'
+                  or an integer log level from:
+                  log.FRAME, log.DEBUG, log.INFO, log.WARNING, log.ERROR
+    """
     if isinstance(level, str):
         level = LOG_NAMES[level.lower()]
 
@@ -98,7 +104,7 @@ def set_log_level(level):
 
 
 # Add a new logging level FRAME for messages which appear on every frame.
-addLoggingLevel('FRAME', FRAME)
+_addLoggingLevel('FRAME', FRAME)
 logger = _new_custom_logger()
 
 frame, debug, info, warning, error = (
