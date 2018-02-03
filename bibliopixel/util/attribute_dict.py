@@ -1,5 +1,9 @@
 class AttributeDict(object):
-    """A dict that exposes its values as attributes."""
+    """
+    A dict that exposes its values as attributes.
+
+    DEPRECATED: use argparse.Namespace, or just a dict.
+    """
 
     def __init__(self, *args, **kwds):
         for k, v in dict(*args, **kwds).items():
