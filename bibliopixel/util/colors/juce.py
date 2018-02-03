@@ -1,7 +1,11 @@
-# These colors come from:
-# https://github.com/timedata-org/timedata/blob/master/src/cpp/timedata
-# /color/names_table_inl.h
-# which come from Juce: http://juce.com.
+"""
+A longer list of color names.
+
+These colors come from:
+https://github.com/timedata-org/timedata/blob
+    /master/src/cpp/timedata/color/names_table_inl.h
+which came from Juce: http://juce.com.
+"""
 
 COLORS = {
     'alice blue': 0xf0f8ff,
@@ -487,9 +491,11 @@ COLORS = {
     'yellow': 0xffff00,
 }
 
-# Some colors have more than one name.  This is a list of secondary names for
-# Juce colors.  We need this to reliably go from color back to color name and
-# get the same result each time.
+"""
+Some colors have more than one name.  This is a list of the secondary names for
+Juce colors.  We need this to reliably go from color back to color name and
+get the same result each time.
+"""
 SECONDARY_NAMES = {
     'aqua',
     'aquamarine 1',

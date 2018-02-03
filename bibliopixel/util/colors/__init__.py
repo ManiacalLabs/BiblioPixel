@@ -50,7 +50,7 @@ from . conversions import hsv2rgb_spectrum, hsv2rgb_rainbow, hsv2rgb_360
 from . conversions import hsv2rgb, hue2rgb, hue_gradient, hue2rgb_360
 from . conversions import hue_helper, hue_helper360
 from . wheel import wheel_color, wheel_helper
-from . names import COLORS
+from . names import COLORS, COLOR_DICT, toggle
 
 # DEPRECATED methods and module name
 hex2rgb = COLORS.__getitem__
