@@ -1,11 +1,6 @@
-import io, unittest
-from .. import mock
+import io, tempfile, unittest
 from bibliopixel.util import json
 from bibliopixel.util.persistent_dict import PersistentDict
-
-DEFAULTS = {
-    'a': {'foo': 0, 'bang': 0, 'burt': 0},
-}
 
 JSON_TEST = """
 {
@@ -14,13 +9,18 @@ JSON_TEST = """
 """
 
 
-class Persistent_dictTest(unittest.TestCase):
+class PersistentDictTest(unittest.TestCase):
     def test_reader_writer_json(self):
-        filesystem = {'test.json': JSON_TEST}
-        with mock.patch_open(filesystem, json):
-            pd = PersistentDict('test.json')
-            pd.read()
-            self.assertEqual(pd.data, {'a': {'foo': 'bar', 'bang': 1}})
-            pd.data = {'bang': {'hi': 'there'}}
-            pd.write()
-            self.assertEqual(json.loads(filesystem['test.json']), pd.data)
+        with tempfile.NamedTemporaryFile('w') as tf:
+            tf.write(JSON_TEST)
+            tf.seek(0)
+
+            pd = PersistentDict(tf.name)
+            self.assertEqual(pd, {'a': {'foo': 'bar', 'bang': 1}})
+            pd.clear()
+            self.assertEqual(pd, {})
+            self.assertEqual(json.load(tf.name), pd)
+
+            pd.update(bang={'hi': 'there'})
+            self.assertEqual(pd, {'bang': {'hi': 'there'}})
+            self.assertEqual(json.load(tf.name), pd)

@@ -1,37 +1,50 @@
-import copy
+import os
 from . import json
 
 
-class PersistentDict(object):
+class PersistentDict(dict):
+    """A dictionary that persists as a JSON file on the filesystem.
+
+    PersistentDict is constructed with a filename, which either does not exist,
+    or contains JSON representing a previously stored value.
+
+    Each time a PersistentDict is mutated, the file is rewritten with the new
+    stored JSON data.
+    """
+
     def __init__(self, filename):
-        self.filename = filename
-        self.read()
+        """
+        :param c: the filename to store the JSON in
+        """
+        self.__filename = filename
+        data = json.load(filename) if os.path.exists(filename) else {}
+        super().__init__(data)
 
-    def read(self):
-        try:
-            self.data = json.load(self.filename)
-        except FileNotFoundError:
-            self.data = {}
+    def clear(self):
+        super().clear()
+        self.__write()
 
-    def write(self):
-        json.dump(self.data, self.filename)
+    def pop(self, *args):
+        super().pop(*args)
+        self.__write()
 
-    def get(self, key):
-        return self.data.get(key)
+    def popitem(self):
+        super().popitem()
+        self.__write()
 
-    def set(self, key, value):
-        self.data[key] = value
-        self.write()
+    def update(self, *args, **kwds):
+        super().update(*args, **kwds)
+        self.__write()
 
-    def set_items(self, items):
-        for k, v in items:
-            self.data[k] = v
-        self.write()
+    def __setitem__(self, key, value):
+        if not isinstance(key, str):
+            raise ValueError('Keys for PersistentDict must be strings')
+        super().__setitem__(key, value)
+        self.__write()
 
-    def delete(self, key):
-        del self.data[key]
-        self.write()
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self.__write()
 
-    def delete_all(self):
-        self.data.clear()
-        self.write()
+    def __write(self):
+        json.dump(self, self.__filename)
