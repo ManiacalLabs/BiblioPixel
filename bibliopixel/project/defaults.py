@@ -19,7 +19,7 @@ def merge(*projects):
     """
     defaults = [_merge.DEFAULT_PROJECT]
     if not BYPASS_PROJECT_DEFAULTS:
-        defaults += PROJECT_DEFAULTS or [USER_DEFAULTS.data]
+        defaults += PROJECT_DEFAULTS or [USER_DEFAULTS]
 
     return _merge.merge(*(defaults + list(projects)))
 
@@ -27,7 +27,7 @@ def merge(*projects):
 def show_defaults():
     """List current user defaults in JSON format"""
     _warn_if_empty()
-    json.dump(USER_DEFAULTS.data, sys.stdout)
+    json.dump(USER_DEFAULTS, sys.stdout)
     print()
 
 
@@ -35,14 +35,14 @@ def reset_defaults(sections):
     """Reset some or all sections of the user defaults file"""
     if _warn_if_empty():
         return
-    sections = sorted(_check_sections(sections) or USER_DEFAULTS.data)
+    sections = sorted(_check_sections(sections) or USER_DEFAULTS)
 
     print('Before reset:')
     show_defaults()
 
     for s in sections:
         try:
-            USER_DEFAULTS.delete(s)
+            del USER_DEFAULTS[s]
         except:
             pass
 
@@ -55,12 +55,13 @@ def set_defaults(sections):
     at once.
     """
     assignments = _sections_to_assignments(sections)
-    USER_DEFAULTS.set_items(assignments.items())
+    USER_DEFAULTS.update(assignments)
 
 
 def load_defaults(name):
     defaults = _load_defaults(name)
-    USER_DEFAULTS.set_items(defaults.items())
+    USER_DEFAULTS.clear()
+    USER_DEFAULTS.update(defaults)
     print('Loaded project defaults from', name)
 
 
@@ -77,7 +78,7 @@ def save_defaults(name):
             return
 
     with open(path, 'w') as fp:
-        json.dump(USER_DEFAULTS.data, fp)
+        json.dump(USER_DEFAULTS, fp)
 
     print('Written project defaults to', name)
 
@@ -116,7 +117,7 @@ def _check_sections(sections):
 
 # Fail immediately if the user preferences contain unknown sections.
 # This should only ever happen if the user edited the file by hand.
-_check_sections(USER_DEFAULTS.data)
+_check_sections(USER_DEFAULTS)
 
 
 def _sections_to_assignments(sections):
@@ -156,7 +157,7 @@ def _sections_to_assignments(sections):
 
 
 def _warn_if_empty():
-    if not USER_DEFAULTS.data:
+    if not USER_DEFAULTS:
         print('(no entries in defaults file)', file=sys.stderr)
         return True
 
