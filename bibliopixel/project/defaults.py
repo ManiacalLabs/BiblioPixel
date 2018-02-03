@@ -1,12 +1,12 @@
 import os, sys
 from . import merge as _merge
-from .. util import datafile, json
+from .. util import json, persistent_dict
 
 # This is set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
 
 USER_DEFAULTS_FILE = os.path.expanduser('~/.bibliopixel/default.json')
-USER_DEFAULTS = datafile.DataFile(USER_DEFAULTS_FILE)
+USER_DEFAULTS = persistent_dict.PersistentDict(USER_DEFAULTS_FILE)
 PROJECT_DEFAULTS = []
 
 SAVE_DIRECTORY = os.path.expanduser('~/.bibliopixel/project_defaults')
