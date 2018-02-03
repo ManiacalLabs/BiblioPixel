@@ -1,7 +1,7 @@
-import re
-
-"""Convert a string duration to a number of seconds.
 """
+Convert a string duration to a number of seconds.
+"""
+import re
 
 SI_PREFIXES = (
     (10 ** 24, 'yotta', 'Y'),
@@ -49,7 +49,7 @@ UNITS = {
 PART_MATCH = re.compile(r'([0-9.]+)([a-zA-Z]+)').fullmatch
 
 
-def get_units(s):
+def _get_units(s):
     # Some subtleties to handle the possibility of plural units.
     if s.endswith('ss'):
         raise ValueError('Unknown unit')
@@ -79,7 +79,14 @@ def get_units(s):
 
 
 def parse(s):
-    """Parse a string into a duration in seconds or raise an exception."""
+    """
+    Parse a string representing a time interval or duration into seconds,
+    or raise an exception
+
+    :param str s: a string representation of a time interval
+    :raises ValueError: if ``s`` can't be interpreted as a duration
+
+    """
 
     parts = s.replace(',', ' ').split()
     if not parts:
@@ -101,6 +108,6 @@ def parse(s):
         number = float(number)
         if number < 0:
             raise ValueError('Durations cannot have negative components')
-        result += number * get_units(units)
+        result += number * _get_units(units)
 
     return result
