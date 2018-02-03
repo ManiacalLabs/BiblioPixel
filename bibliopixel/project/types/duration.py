@@ -1,5 +1,5 @@
 import functools, numbers
-from ...util import duration
+from ... util import duration
 
 
 USAGE = """
