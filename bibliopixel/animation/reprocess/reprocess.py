@@ -2,6 +2,7 @@ from .. import collection
 from ... project import importer
 from ... layout import cutter
 from . import functions
+from ... util import class_name
 
 
 class MatrixIndexer:
@@ -21,7 +22,7 @@ class Reprocess(collection.Collection):
         super().__init__(*args, **kwds)
         self.preclear = False
 
-        pname = '%s.%s' % (self.__module__, MatrixIndexer.__name__)
+        pname = class_name.class_name(MatrixIndexer)
 
         process = process or pname
         if isinstance(process, str):
