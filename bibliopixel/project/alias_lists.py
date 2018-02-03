@@ -1,8 +1,7 @@
 import operator, os
-from .. util import datafile, log
+from .. util import log
 
 PROJECT_ALIASES = {}
-
 
 BUILTIN_ALIASES = {
     # drivers

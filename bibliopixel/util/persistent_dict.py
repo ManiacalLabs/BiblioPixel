@@ -2,7 +2,7 @@ import copy
 from . import json
 
 
-class DataFile(object):
+class PersistentDict(object):
     def __init__(self, filename):
         self.filename = filename
         self.read()
