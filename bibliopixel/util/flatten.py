@@ -1,5 +1,9 @@
 def flatten(master):
     """
+    :param dict master: a multilevel dictionary
+    :return: a flattened dictionary
+    :rtype: dict
+
     Flattens a multilevel dictionary into a single-level one so that::
 
         {'foo':
@@ -46,6 +50,10 @@ def flatten(master):
 
 def unflatten(master):
     """
+    :param dict master: a multilevel dictionary
+    :return: a unflattened dictionary
+    :rtype: dict
+
     Unflattens a single-level dictionary a multilevel into one so that::
 
         {'foo.bar.a': 1,
@@ -78,4 +86,11 @@ def unflatten(master):
 
 
 def canonical(master):
+    """
+    :param dict master: a multilevel dictionary
+    :return: a canonicalized dictionary that has been completely flattened
+             and then unflattened
+    :rtype: dict
+    """
+
     return unflatten(flatten(master))

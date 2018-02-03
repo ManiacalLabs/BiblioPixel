@@ -5,9 +5,7 @@ from ... util import log, server_cache
 
 
 class SimPixel(DriverBase):
-    CACHE = server_cache.ServerCache(
-        constructor=websocket.Server,
-        selectInterval=0.001)
+    CACHE = server_cache.ServerCache(websocket.Server, selectInterval=0.001)
 
     def __init__(self, num=1024, port=1337, pixel_positions=None, **kwds):
         """
