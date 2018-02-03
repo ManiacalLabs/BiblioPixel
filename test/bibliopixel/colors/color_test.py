@@ -24,8 +24,8 @@ class ArithmeticTest(unittest.TestCase):
 class ClassicTest(unittest.TestCase):
     def test_classic(self):
         # Make sure that the classic and new color names are the same.
-        cc = names.CLASSIC_COLORS
-        jc = names.JUCE_COLORS
+        cc = names._CLASSIC_COLORS
+        jc = names._JUCE_COLORS
         for name, color in cc.items():
             self.assertEquals(color, jc.get(name, color), name)
 

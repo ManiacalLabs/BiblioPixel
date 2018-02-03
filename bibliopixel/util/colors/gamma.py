@@ -1,5 +1,15 @@
 class Gamma(object):
+    """
+    Compute a fixed gamma table with 256 entries.
+    """
     def __init__(self, gamma=1.0, offset=0, lower_bound=0):
+        """
+        :param float gamma: the root for gamma computation
+        :param float offset: an offset added to the result
+        :param int lower_bound: The lowest possible output value - the highest
+                                is always 255.
+
+        """
         self.gamma = gamma
         self.offset = offset
         self.lower_bound = lower_bound
@@ -11,6 +21,10 @@ class Gamma(object):
         self.table = tuple(gam(i) for i in range(256))
 
     def get(self, i):
+        """
+        :returns: The gamma table entry
+        :param int i: the index into the table
+        """
         return self.table[max(0, min(255, int(i)))]
 
 

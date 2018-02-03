@@ -1,14 +1,13 @@
 """
-Convert between color names and color tuples
+Toggle between color names and color tuples
 """
 
-from .. colors import names
-from .. util import log
+from .. util import colors, log
 
 
 def run(args):
     if args.list:
-        log.printer(*sorted(names.COLOR_DICT.items()), sep='\n')
+        log.printer(*sorted(colors.COLOR_DICT.items()), sep='\n')
 
     if not args.colors:
         if not args.list:
@@ -17,7 +16,7 @@ def run(args):
     failures = []
     for c in args.colors:
         try:
-            log.printer(c, names.toggle(c), sep=': ')
+            log.printer(c, colors.toggle(c), sep=': ')
         except Exception as e:
             failures.append(c)
     if failures:

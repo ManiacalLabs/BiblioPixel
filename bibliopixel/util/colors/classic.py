@@ -1,4 +1,9 @@
-# "Classic" colors from BP3.0.
+"""
+"Classic" colors from BP3.0
+
+This is a list of hardcoded colors as tuples from the original BP3.0.
+
+"""
 
 AliceBlue = (240, 248, 255)
 Amethyst = (153, 102, 204)
