@@ -58,10 +58,11 @@ class Devices(object):
                  device, id, version)
         return id, device, version
 
-    def error(self):
+    def error(self, fail=True):
         error = "There was an unknown error communicating with the device."
         log.error(error)
-        raise IOError(error)
+        if fail:
+            raise IOError(error)
 
     def set_device_id(self, dev, id, baudrate=921600):
         if id < 0 or id > 255:
