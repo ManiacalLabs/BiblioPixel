@@ -12,7 +12,3 @@ __pycache__
 htmlcov
 .eggs
 .cache
-doc/_build
-doc/_static
-doc/_templates
-doc/api

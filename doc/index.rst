@@ -11,7 +11,7 @@ and even a high performance LED simulator!
 BiblioPixel allows many different display geometries. Many of the
 existing hardware models are LED strips, matrixes or circles, but there
 are no real limits on what the output device can be, due to the output
-:doc:`Drivers <Drivers>` model.
+drivers model.
 
 User Guide
 ----------
@@ -19,11 +19,7 @@ User Guide
 .. toctree::
    :maxdepth: 2
 
-   Porting-from-2.x-to-3.x
-   Installation
-   Display-Setup
-   SPI-Setup
-   The-bp-Command
+   bp-Command
 
 API Reference
 -------------
