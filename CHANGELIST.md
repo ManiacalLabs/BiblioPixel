@@ -1,3 +1,7 @@
+## v3.4.5 - 2018-02-09
+- Add fail parameter to serial.Devices.error
+- Lots of documentation
+
 ## v3.4.4 - 2018-02-01
 - Split splits a Strip to run multiple animations at once
 - Make float32 the default float type
