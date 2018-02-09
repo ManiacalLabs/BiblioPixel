@@ -185,3 +185,14 @@ texinfo_documents = [
      author, 'BiblioPixel', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+
+def run_apidoc(_):
+    from sphinx.apidoc import main
+    import os
+    import sys
+    main(['./run_apidoc.sh'])
+
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)

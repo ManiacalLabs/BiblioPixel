@@ -1,2 +1,4 @@
+Sphinx
+sphinx-autobuild
 sphinxcontrib-fulltoc
-sphinx
+sphinxcontrib-websupport

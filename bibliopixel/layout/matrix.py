@@ -222,10 +222,9 @@ class Matrix(MultiLayout):
         """
         Draw a between x0, y0 and x1, y1 in an RGB color.
 
-        Arguments:
-        colorFunc -- a function that takes an integer from x0 to x1 and returns
+        :param colorFunc: a function that takes an integer from x0 to x1 and returns
             a color corresponding to that point
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
 
         """
@@ -245,10 +244,9 @@ class Matrix(MultiLayout):
         """
         Draw a between x0, y0 and x1, y1 in an RGB color.
 
-        Arguments:
-        colorFunc -- a function that takes an integer from x0 to x1 and returns
+        :param colorFunc: a function that takes an integer from x0 to x1 and returns
             a color corresponding to that point
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
         """
         matrix.wu_line(self.set, x0, y0, x1, y1, color, colorFunc)
@@ -257,8 +255,7 @@ class Matrix(MultiLayout):
         """
         Draw rectangle with top-left corner at x,y, width w and height h
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
         """
         matrix.draw_rect(self.set, x, y, w, h, color, aa)
@@ -268,8 +265,7 @@ class Matrix(MultiLayout):
         Draw a solid rectangle with top-left corner at (x, y), width w and
         height h.
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
         """
         matrix.fill_rect(self.set, x, y, w, h, color, aa)
@@ -283,8 +279,7 @@ class Matrix(MultiLayout):
         Draw a rounded rectangle with top-left corner at (x, y), width w,
         height h, and corner radius r
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
 
         """
@@ -295,8 +290,7 @@ class Matrix(MultiLayout):
         Draw a rounded rectangle with top-left corner at (x, y), width w,
         height h, and corner radius r
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
 
         """
@@ -306,8 +300,7 @@ class Matrix(MultiLayout):
         """
         Draw triangle with vertices (x0, y0), (x1, y1) and (x2, y2)
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
 
         """
@@ -317,8 +310,7 @@ class Matrix(MultiLayout):
         """
         Draw filled triangle with points x0,y0 - x1,y1 - x2,y2
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
 
         """
@@ -339,10 +331,9 @@ class Matrix(MultiLayout):
         """
         Draw a line of text starting at (x, y) in an RGB color.
 
-        Arguments:
-        aa -- if True, use Bresenham's algorithm for line drawing; otherwise use
+        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
-        bg -- if not None, draw a background of this color in the bounding
+        :param bg: if not None, draw a background of this color in the bounding
             rectangle for the text block.
 
         """

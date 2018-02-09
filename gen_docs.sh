@@ -1,10 +1,10 @@
 #!/bin/bash
 
-scripts/extract_bp_help doc/The-bp-Command.rst
+scripts/extract_bp_help doc/bp-Command.rst
 pushd ./doc/
 
-# delete ./api/ dir if exists
-rm -rf ./api/ ./_build/ || true
+# delete ./_build/ dir if exists
+rm -rf ./_build/ || true
 
 sphinx-apidoc \
     -o api \

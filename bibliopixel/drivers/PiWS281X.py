@@ -53,19 +53,19 @@ STRIP_TYPES = {
     4: 0x18100800,
 }
 
-"""
-This driver needs to be run as sudo:
-
-https://groups.google.com/d/msg/maniacal-labs-users/6hV-2_-Xmqc/wmWJK709AQAJ
-https://github.com/jgarff/rpi_ws281x/blob/master/python/neopixel.py#L106
-"""
-
 
 class PiWS281X(DriverBase):
     """
     Driver for controlling WS281X LEDs via the rpi_ws281x C-extension.
-    Only supported on the Raspberry Pi 2 & 3
+    Only supported on the Raspberry Pi 2, 3, and Zero
+
+    This driver needs to be run as sudo.
     """
+    # Including follow as comment as URLs in docstrings don't play well with sphinx
+    # Discussion re: running as sudo
+    # https://groups.google.com/d/msg/maniacal-labs-users/6hV-2_-Xmqc/wmWJK709AQAJ
+    # https://github.com/jgarff/rpi_ws281x/blob/master/python/neopixel.py#L106
+
     def __init__(
             self, num, gamma=gamma.NEOPIXEL, c_order=ChannelOrder.RGB, gpio=18,
             ledFreqHz=800000, ledDma=5, ledInvert=False,
