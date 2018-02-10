@@ -1,3 +1,6 @@
+## v3.4.6 - 2018-02-10
+- Fix crash in `bp demo`
+
 ## v3.4.5 - 2018-02-09
 - Add fail parameter to serial.Devices.error
 - Lots of documentation
