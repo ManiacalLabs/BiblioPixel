@@ -140,7 +140,7 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_project(args, desc, root_file):
+def make_project(args, desc, root_file=None):
     project_flags = _make_project_flags(args)
     return project.project(project_flags, desc, root_file=root_file)
 
