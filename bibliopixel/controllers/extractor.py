@@ -61,13 +61,15 @@ class Extractor:
     def extract(self, msg):
         """Yield an ordered dictionary if msg['type'] is in keys_by_type."""
         def normal(key):
-            v = msg[key]
-            normalizer = self.normalizers.get(key)
-            return normalizer(v) if (normalizer and v is not None) else v
+            v = msg.get(key)
+            if v is None:
+                return v
+            normalizer = self.normalizers.get(key, lambda x: x)
+            return normalizer(v)
 
         def match(m):
             return (msg.get(k) in v for k, v in m.items()) if m else ()
 
         keys = self.keys_by_type.get(msg.get('type'))
         if keys and all(match(self.accept)) and not any(match(self.reject)):
-            yield collections.OrderedDict((k, normal(k)) for k in keys)
+            return collections.OrderedDict((k, normal(k)) for k in keys)
