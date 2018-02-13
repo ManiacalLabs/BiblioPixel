@@ -51,6 +51,9 @@ class Ops:
             x = op(x)
         return x
 
+    def __bool__(self):
+        return bool(self.ops)
+
 
 def _make_ops(ops):
     op, values = None, []
