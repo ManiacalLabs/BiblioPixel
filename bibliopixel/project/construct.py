@@ -43,3 +43,8 @@ def to_type_constructor(value, python_path=None):
         value['datatype'] = importer.import_symbol(r, python_path=python_path)
 
     return value
+
+
+def construct_type(desc, python_path=None):
+    tc = to_type_constructor(desc, python_path)
+    return construct(**tc)

@@ -1,4 +1,4 @@
-from . import construct
+from . import construct, load
 
 """
 In order to validate project descriptions, we need to recurse through project
@@ -42,6 +42,8 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
             f = getattr(datatype, f, None)
         return f and f(desc)
 
+    # Automatically load strings that look like JSON or Yaml filenames.
+    desc = load.load_if_filename(desc) or desc
     desc = construct.to_type_constructor(desc, python_path)
     datatype = desc.get('datatype')
 
@@ -52,6 +54,8 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
         if child:
             new_path = python_path or ('bibliopixel.' + child_name)
             if child_name.endswith('s'):
+                if isinstance(child, (dict, str)):
+                    child = [child]
                 for i, c in enumerate(child):
                     child[i] = recurse(c, pre, post, new_path)
             else:
