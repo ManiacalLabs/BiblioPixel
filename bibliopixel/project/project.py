@@ -1,8 +1,6 @@
 from . import attributes, construct, cleanup, defaults, load, recurse
 from .. util import exception, json
 
-ROOT_FILE = None
-
 
 class Project:
     CHILDREN = 'maker', 'drivers', 'layout', 'animation'
@@ -49,9 +47,7 @@ def project(*descs, root_file=None):
 
     desc = defaults.merge(*descs)
 
-    global ROOT_FILE
-    ROOT_FILE = root_file
-
+    load.ROOT_FILE = root_file
     with load.extender(desc.get('path', '')):
         desc = recurse.recurse(desc)
 
