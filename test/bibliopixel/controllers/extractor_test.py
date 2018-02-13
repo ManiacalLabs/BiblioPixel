@@ -1,4 +1,4 @@
-import fractions, unittest
+import collections, fractions, unittest
 from bibliopixel.controllers import extractor
 
 KEYS_BY_TYPE = {
@@ -30,11 +30,8 @@ class ExtractorTest(unittest.TestCase):
             keys_by_type=KEYS_BY_TYPE,
             normalizers=NORMALIZERS, **kwds)
 
-        actual = list(md.extract(msg))
-        if expected is None:
-            self.assertEquals(actual, [])
-        else:
-            self.assertEquals(list(actual[0].items()), expected)
+        expected = expected and collections.OrderedDict(expected)
+        self.assertEquals(md.extract(msg), expected)
 
     def test_one(self):
         expected = [
