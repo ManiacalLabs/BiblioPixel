@@ -4,27 +4,31 @@ using attributes and indexing.
 
 An address description is a string looking like:
 
+::
+
     .foo.bar[32][5][baz].bang
 
 which would mean
 
-"given an object x, the value x.foo.bar[32][5]['baz'].bang".
+"given an object target, the value ``target.foo.bar[32][5]['baz'].bang``".
 
-Addresses are divided into "segments".  Segments in brackets are indexes or keys;
-otherwise they are attributes.  In the example above, the segments are
-foo, bar, [32], [5], [baz] and bang; foo and bar are attributes.
-baz is a string index, and 32 and 5 are numeric indexes.
+Addresses are divided into "segments".
 
-You can use addresses to either get or set values in an object. Getting or
-setting throw a ValueError if the address can't be get or set, so calling code
-that needs to be robust even in the face of bad user data will have to catch and
-report or handle the error.
+A segment contained in brackets ``[]`` is an index (for a list) or a key (for
+a dictionary) - otherwise, it's an attribute.
 
-Numerical indexes are automatically distinguished from string indexes.  This is
-convenient for the user but prevents them from having dictionaries like
-{1: 'number one', '1': 'string one'} - they probably didn't want to do that
-anyway.
+In the example above, the segments are ``foo``, ``bar``, ``[32]``, ``[5]``,
+``[baz]`` and ``bang``; ``foo`` and ``bar`` are attributes.
+``baz`` is a string index, and ``32`` and ``5`` are numeric indexes.
+
+You can use an Address to either get or set values in a target object.
+
+Any key that's entirely numeric is taken to be an integer index.  This is
+convenient but prevents the creation of dictionaries like ``{1: 'x', '1': 'y'}``
+which probably didn't want to do that anyway.
 """
+
+from .. util import log
 
 
 class Address:
@@ -32,58 +36,37 @@ class Address:
         def __init__(self, name):
             self.name = name
 
-        def set(self, x, *value):
-            return self._set(x, (value[0] if len(value) == 1 else value))
+        def set(self, target, *value):
+            self._set(target, (value[0] if len(value) == 1 else value))
 
     class Attribute(Segment):
-        def get(self, x):
-            return getattr(x, self.name)
+        def get(self, target):
+            return getattr(target, self.name)
 
-        def _set(self, x, value):
-            return setattr(x, self.name, value)
+        def _set(self, target, value):
+            setattr(target, self.name, value)
 
     class Index(Segment):
-        def get(self, x):
-            return x[self.name]
+        def get(self, target):
+            return target[self.name]
 
-        def _set(self, x, value):
-            x[self.name] = value
+        def _set(self, target, value):
+            target[self.name] = value
+
+    class Call(Segment):
+        def __init__(self):
+            pass
+
+        def get(self, target):
+            return target()
+
+        def set(self, target, *value):
+            print('!!!', target)
+            target(*value)
 
     def __init__(self, s):
-        def generate(s):
-            # Split on dots, then use [ and ] to split out indices
-            s = s.strip()
-            while s.startswith('.'):
-                s = s[1:]
-            while s.endswith('.'):
-                s = s[:-1]
-            for i, part in enumerate(s.split('.')):
-                head, *rest = part.split('[')
-
-                # Suppose our address was 'xxx[yyy][zzz]'
-                # Now we have first='xxx' and rest = 'yyy]', 'zzz]'
-                if head:
-                    yield Address.Attribute(head)
-                elif i:
-                    # An index [] is only allowed to start the *first* segment -
-                    # for example, an address like a.[2] is forbidden.
-                    raise ValueError
-
-                for r in rest:
-                    # A segment must have exactly one ']', exactly at the end.
-                    index, between = r.split(']')
-                    if between:
-                        raise ValueError
-
-                    try:
-                        index = int(index)
-                    except ValueError:
-                        pass
-
-                    yield Address.Index(index)
-
         try:
-            self.address = list(generate(s))
+            self.address = list(_generate(s))
         except:
             raise ValueError('%s is not a legal address' % s)
 
@@ -91,15 +74,79 @@ class Address:
             raise ValueError('Empty Addresses are not allowed')
 
     @staticmethod
-    def _get(x, address):
+    def _get(target, address):
         for a in address:
-            x = a.get(x)
-        return x
+            target = a.get(target)
+        return target
 
-    def get(self, x):
-        return self._get(x, self.address)
+    def get(self, target):
+        return self._get(target, self.address)
 
-    def set(self, x, *value):
+    def set(self, target, *value):
         *first, last = self.address
-        parent = self._get(x, first)
+        parent = self._get(target, first)
         last.set(parent, *value)
+
+
+def _generate(s):
+    def extract_calls(p):
+        # Extract () pairs from start and finish of a string
+        before, after = [], []
+        while p.startswith('()'):
+            before.append(Address.Call())
+            p = p[2:]
+
+        while p.endswith('()'):
+            after.append(Address.Call())
+            p = p[:-2]
+
+        return before, p, after
+
+    # Split on dots, then use [ and ] to split out indices
+    s = s.strip()
+    if s.startswith('.'):
+        s = s[1:]
+    if s.endswith('.'):
+        raise ValueError
+
+    for i, part in enumerate(s.split('.')):
+        if not part:
+            raise ValueError
+
+        head, *rest = part.split('[')
+
+        # If we had e.g. 'xxx()()[yyy]()[zzz]()()'
+        # Now we have first='xxx()' and rest = 'yyy]()', 'zzz]()()'
+        # They might have written: ()xxx by mistake
+        before, head, after = extract_calls(head)
+
+        if before:
+            # A call () is only allowed to start the first segment -
+            # for example, an address like a.() is forbidden.
+            if i or head:
+                raise ValueError
+            yield from before
+
+        elif head:
+            yield Address.Attribute(head)
+            yield from after
+
+        elif i:
+            # An index [] is only allowed to start the first segment -
+            # for example, an address like a.[2] is forbidden.
+            raise ValueError
+
+        for r in rest:
+            before, r, after = extract_calls(r)
+            if before:
+                # A segment cannot contain a () - they must all be at top level.
+                raise ValueError
+
+            # A segment must have exactly one ']', exactly at the end.
+            index, between = r.split(']', 1)
+            if between:
+                raise ValueError
+
+            index = int(index) if index.isdigit() else index
+            yield Address.Index(index)
+            yield from after

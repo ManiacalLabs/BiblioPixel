@@ -5,10 +5,8 @@ from bibliopixel.controllers.address import Address
 class AddressTest(unittest.TestCase):
 
     def test_empty_error(self):
-        with self.assertRaises(ValueError) as e:
+        with self.assertRaises(ValueError):
             Address('')
-        print(dir(e.exception))
-        self.assertIn('Empty Address', e.exception.args[0])
 
     def test_attrib(self):
         address = Address('attr')
@@ -55,6 +53,33 @@ class AddressTest(unittest.TestCase):
         self.assertEqual(address.get(self), 'bingo')
         address.set(self, 'bang')
         self.assertEqual(self.attr3, 'bang')
+
+    def call(self, x):
+        self.call_result = 23
+
+    def test_trivial_call(self):
+        address = Address('()')
+        self.assertEqual(len(address.address), 1)
+        result = []
+
+        address.set(result.append, 'value')
+        self.assertEqual(result, ['value'])
+
+    def test_call(self):
+        address = Address('.call()')
+        self.assertEqual(len(address.address), 2)
+        address.set(self, 23)
+        self.assertEqual(self.call_result, 23)
+
+    def call2(self):
+        return None, lambda: self
+
+    def test_call_complex(self):
+        self.results = []
+        address = Address('.call2()[1]().call()')
+        self.assertEqual(len(address.address), 6)
+        address.set(self, 23)
+        self.assertEqual(self.call_result, 23)
 
     def test_compound_error(self):
         address = Address('attr1[0][test][1][heck].attr2.attr3')
