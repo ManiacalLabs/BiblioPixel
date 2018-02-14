@@ -23,6 +23,7 @@ class Circle(Layout):
             self.ringSteps = calc_ring_steps(self.rings)
 
         self.ringCount = len(self.rings)
+        # DEPRECATED
         self.lastRing = self.ringCount - 1
 
         self.set_pixel_positions(make_circle_coord_map_positions(self.rings))
@@ -82,8 +83,8 @@ class Circle(Layout):
     def drawRadius(self, angle, color, startRing=0, endRing=-1):
         if startRing < 0:
             startRing = 0
-        if endRing < 0 or endRing > self.lastRing:
-            endRing = self.lastRing
+        if endRing < 0 or endRing > self.ringCount - 1:
+            endRing = self.ringCount - 1
         for ring in range(startRing, endRing + 1):
             self.set(ring, angle, color)
 
