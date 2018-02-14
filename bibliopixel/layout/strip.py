@@ -33,6 +33,11 @@ class Strip(MultiLayout):
 
         self.set_pixel_positions(make_strip_coord_map_positions(self.numLEDs))
 
+    @property
+    def dimensions(self):
+        """Returns a 1-tuple with the length of the strip"""
+        return self.numLEDs,
+
     def get(self, pixel):
         """Get RGB color tuple of color at index pixel"""
         return self._get_base(pixel * self.pixelWidth)

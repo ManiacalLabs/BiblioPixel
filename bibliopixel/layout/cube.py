@@ -32,6 +32,11 @@ class Cube(Layout):
     def get_pixel_positions(self):
         return make_cube_coord_map_positions(self.coord_map)
 
+    @property
+    def dimensions(self):
+        """Returns ``x, y, z``"""
+        return self.x, self.y, self.z
+
     def set(self, x, y, z, color):
         try:
             pixel = self.coord_map[z][y][x]

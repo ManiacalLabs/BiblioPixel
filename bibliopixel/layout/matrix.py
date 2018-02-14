@@ -112,6 +112,11 @@ class Matrix(MultiLayout):
 
         self.fonts = font.fonts
 
+    @property
+    def dimensions(self):
+        """Returns ``width, height``"""
+        return self.width, self.height
+
     def get(self, x, y):
         """
         Return the pixel color at position (x, y), or Colors.black if that
