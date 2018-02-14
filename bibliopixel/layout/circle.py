@@ -37,6 +37,11 @@ class Circle(Layout):
             raise ValueError(
                 "Total ring LED count does not equal driver LED count!")
 
+    @property
+    def dimensions(self):
+        """Returns ``ringCount, ringSteps``."""
+        return self.ringCount, self.ringSteps
+
     def __genOffsetFromAngle(self, angle, ring):
         if ring >= self.ringCount:
             return -1

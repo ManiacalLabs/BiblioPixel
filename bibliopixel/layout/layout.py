@@ -74,6 +74,15 @@ class Layout(object):
         self.threading.wait_for_update()
 
     @property
+    def dimensions(self):
+        """
+        Return a tuple indicating the dimensions of the layout - (x,) for a
+        strip, (x, y) for an array, (x, y, z) for a cube, and
+        (ring_count, ring_steps) for a circle.
+        """
+        raise NotImplementedError
+
+    @property
     def color_list(self):
         return self._colors
 
