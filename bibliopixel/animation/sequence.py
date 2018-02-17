@@ -23,8 +23,10 @@ class Sequence(collection.Collection):
     def restart(self):
         self.random and rand.shuffle(self.animations)
         self.index = 0
+        self._load_animation()
 
     def pre_run(self):
+        self.offset = 0
         self.restart()
 
     def step(self, amt=1):
@@ -32,15 +34,26 @@ class Sequence(collection.Collection):
             return
 
         if not self.completed:
-            log.debug('Sequence: %s', self.current_animation.title)
-            if self.length:
-                length = self.length[self.cur_step % len(self.length)]
-                self.current_animation.runner.seconds = length
-            self.current_animation.run_all_frames(clean_layout=False)
+            if self.current_animation:
+                self.current_animation.run_all_frames(clean_layout=False)
 
         self.index += 1
-        if self.index >= len(self.animations):
-            if self.runner.until_complete:
-                self.completed = True
-            else:
-                self.restart()
+        if self.index < len(self.animations):
+            self._load_animation()
+
+        elif self.runner.until_complete:
+            self.completed = True
+
+        else:
+            self.offset += len(self.animations)
+            self.restart()
+
+    def _load_animation(self):
+        if self.current_animation:
+            log.debug('Sequence: %s', self.current_animation.title)
+            if self.length:
+                step = self.offset + self.index
+                length = self.length[step % len(self.length)]
+                self.current_animation.runner.seconds = length
+        else:
+            log.debug('Sequence: None')
