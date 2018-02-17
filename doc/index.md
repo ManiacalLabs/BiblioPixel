@@ -1,7 +1,4 @@
-:orphan:
-
-Welcome to BiblioPixel
-======================
+# Welcome to BiblioPixel
 
 BiblioPixel is a pure Python 3 library for all your LED animations
 needs. Through its fully output agnostic design you can write your code
@@ -13,26 +10,12 @@ existing hardware models are LED strips, matrixes or circles, but there
 are no real limits on what the output device can be, due to the output
 drivers model.
 
-User Guide
-----------
+Contents
+--------
 
-.. toctree::
-   :maxdepth: 2
+* [bp Command](bp-Command.md)
+* [Aliases and Defaults](Aliases-and-defaults.md)
 
-   bp-Command
+## Getting Started
 
-API Reference
--------------
-
-.. toctree::
-    :maxdepth: 1
-    :glob:
-
-    api/*
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Read the Docs

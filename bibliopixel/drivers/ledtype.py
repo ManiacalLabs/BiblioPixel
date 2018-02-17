@@ -2,6 +2,10 @@ from enum import IntEnum
 
 
 class LEDTYPE(IntEnum):
+    """Enumerated LED type names to be used with
+    :py:mod:`bibliopixel.drivers.serial` and
+    :py:mod:`bibliopixel.drivers.SPI`
+    """
     GENERIC = 0  # Use if the serial device only supports one chipset
     LPD8806 = 1
     WS2801 = 2

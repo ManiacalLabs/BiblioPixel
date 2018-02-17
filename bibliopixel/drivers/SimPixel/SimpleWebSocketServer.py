@@ -1,7 +1,3 @@
-'''
-The MIT License (MIT)
-Copyright (c) 2013 Dave P.
-'''
 # flake8: noqa
 import sys
 VER = sys.version_info[0]

@@ -12,7 +12,18 @@ class CMDTYPE:
 
 
 class NetworkUDP(DriverBase):
-    """Driver for communicating with another device on the network."""
+    """Driver for communicating with another device on the network via UDP
+
+    To be used with either BiblioPixelAnimations.receivers.GenericNetworkReceiver
+    or :py:class:`.network_receiver.NetworkReceiver`
+
+    Provides the same parameters of :py:class:`.driver_base.DriverBase` as
+    well as those below:
+
+    :param str host: Network hostname or IP address of receiver.
+    :param int port: Network port of receiver
+    :param bool broadcast: If True, broadcast to subnet instead of specific host
+    """
 
     def __init__(self, num=0, width=0, height=0, host="localhost",
                  broadcast=False, port=3142, broadcast_interface='', **kwds):

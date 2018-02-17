@@ -4,7 +4,12 @@ from . base import SPIBase
 
 
 class APA102(SPIBase):
-    """Driver for APA102/SK9822 based LED strips on devices like the Raspberry Pi and BeagleBone"""
+    """Driver for APA102/SK9822 based LED strips on devices like
+    the Raspberry Pi and BeagleBone
+
+    Provides the same parameters as
+    :py:class:`bibliopixel.drivers.SPI.SPIBase`
+    """
 
     def __init__(self, num, gamma=gamma.APA102, **kwargs):
         super().__init__(num, gamma=gamma, **kwargs)

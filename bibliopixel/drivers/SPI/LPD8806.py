@@ -5,7 +5,11 @@ from . base import SPIBase
 
 class LPD8806(SPIBase):
     """Main driver for LPD8806 based LED strips on devices like the Raspberry Pi
-       and BeagleBone."""
+       and BeagleBone.
+
+    Provides the same parameters as
+    :py:class:`bibliopixel.drivers.SPI.SPIBase`
+    """
 
     def __init__(self, num, gamma=gamma.LPD8806, **kwargs):
         super().__init__(num, gamma=gamma, **kwargs)

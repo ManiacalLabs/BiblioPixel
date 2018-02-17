@@ -13,12 +13,15 @@ class SpiBaseInterface(object):
         self._spi_speed = spi_speed
 
     def send_packet(self, data):
+        """SHOULD BE PRIVATE"""
         raise NotImplementedError
 
     def compute_packet(self, data):
+        """SHOULD BE PRIVATE"""
         return data
 
     def error(self, text):
+        """SHOULD BE PRIVATE"""
         msg = 'Error with dev: {}, spi_speed: {} - {}'.format(self._dev, self._spi_speed, text)
         log.error(msg)
         raise IOError(msg)
@@ -37,6 +40,7 @@ class SpiFileInterface(SpiBaseInterface):
         log.info('file io spi dev {:s}'.format(self._dev))
 
     def send_packet(self, data):
+        """SHOULD BE PRIVATE"""
         package_size = 4032  # bit smaller than 4096 because of headers
         for i in range(int(math.ceil(len(data) / package_size))):
             start = i * package_size
@@ -63,6 +67,7 @@ class SpiPeripheryInterface(SpiBaseInterface):
             self._dev, self._spi.max_speed / 1e6))
 
     def send_packet(self, data):
+        """SHOULD BE PRIVATE"""
         package_size = 4032  # bit smaller than 4096 because of headers
         for i in range(int(math.ceil(len(data) / package_size))):
             start = i * package_size
@@ -106,6 +111,7 @@ class SpiPyDevInterface(SpiBaseInterface):
             'py-spidev dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed_hz / 1e6))
 
     def send_packet(self, data):
+        """SHOULD BE PRIVATE"""
         self._spi.xfer2(list(data))
 
 

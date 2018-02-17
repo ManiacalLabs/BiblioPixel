@@ -1,4 +1,8 @@
 class ChannelOrder(object):
+    """
+    Helper class to automatically convert string values into tuple
+    values needed to define color channel order.
+    """
 
     RGB = 0, 1, 2
     RBG = 0, 2, 1
