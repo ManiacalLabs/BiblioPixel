@@ -42,7 +42,7 @@ class Project:
         class Empty(BaseAnimation):
             def __init__(self, desc, exception):
                 super().__init__(layout)
-                self.set_runner({})
+                self._set_runner({})
                 log.error('Unable to create animation for %s', desc)
                 debug = log.get_log_level() <= log.DEBUG
                 msg = traceback.format_exc() if debug else str(exception)

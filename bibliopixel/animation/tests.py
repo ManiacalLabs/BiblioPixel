@@ -19,10 +19,8 @@ class StripChannelTest(BaseStripAnim):
         self.layout.set(4, colors.Blue)
         self.layout.set(5, colors.Blue)
 
-        color = self._step % 4
+        color = self.cur_step % 4
         self.layout.fill(self.colors[color], 7, 9)
-
-        self._step += 1
 
 
 class MatrixChannelTest(BaseMatrixAnim):
@@ -41,10 +39,8 @@ class MatrixChannelTest(BaseMatrixAnim):
         self.layout.drawLine(4, 0, 4, self.height - 1, colors.Blue)
         self.layout.drawLine(5, 0, 5, self.height - 1, colors.Blue)
 
-        color = self._step % 4
+        color = self.cur_step % 4
         self.layout.fillRect(7, 0, 3, self.height, self.colors[color])
-
-        self._step += 1
 
 
 class MatrixCalibrationTest(BaseMatrixAnim):
@@ -57,11 +53,9 @@ class MatrixCalibrationTest(BaseMatrixAnim):
 
     def step(self, amt=1):
         self.layout.all_off()
-        i = self._step % self.width
+        i = self.cur_step % self.width
         for x in range(i + 1):
             c = self.colors[x % len(self.colors)]
             self.layout.drawLine(x, 0, x, i, c)
 
         self.completed = (i == (self.width - 1))
-
-        self._step += 1
