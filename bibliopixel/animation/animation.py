@@ -26,7 +26,7 @@ class BaseAnimation(object):
         "reserved fields" `name` and `data`.
         """
         a = cls(project.layout, **desc)
-        a.set_runner(run or {})
+        a._set_runner(run or {})
         a.name = name
         a.data = data
         return a
@@ -63,10 +63,7 @@ class BaseAnimation(object):
 
     @completed.setter
     def completed(self, state):
-        if state:
-            self.state = STATE.complete
-        else:
-            self.state = STATE.running
+        self.state = STATE.complete if state else STATE.running
 
     def pre_run(self):
         pass
@@ -88,7 +85,20 @@ class BaseAnimation(object):
         if clean_layout:
             self.layout.cleanup()
 
-    def compute_state(self):
+    def start(self):
+        self.threading.start()
+
+    def run_all_frames(self, clean_layout=True):
+        with self._run_context(clean_layout):
+            while self.state == STATE.running:
+                self._run_one_frame()
+
+    def run(self, **kwds):
+        # DEPRECATED
+        self._set_runner(kwds)
+        self.start()
+
+    def _compute_state(self):
         if self.threading.stop_event.isSet():
             self.state = STATE.canceled
 
@@ -106,7 +116,7 @@ class BaseAnimation(object):
                 # Ignore STATE.complete if until_complete is False
                 self.state = STATE.running
 
-    def check_delay(self):
+    def _check_delay(self):
         if self.free_run:
             self.sleep_time = None
         elif self.internal_delay:
@@ -115,25 +125,16 @@ class BaseAnimation(object):
             self.sleep_time = self.runner.sleep_time
         self.layout.animation_sleep_time = self.sleep_time or 0
 
-    def run_one_frame(self):
-        timestamps = []
-
-        def stamp():
-            timestamps.append(time.time())
-
-        self.check_delay()
-
-        stamp()
+    def _run_one_frame(self):
+        timestamps = [time.time()]
 
         self.step(self.runner.amt)
-
-        stamp()
+        timestamps.append(time.time())
 
         self.layout.frame_render_time = timestamps[1] - timestamps[0]
         self.layout.push_to_driver()
 
-        stamp()
-
+        timestamps.append(time.time())
         _report_framerate(timestamps)
 
         self.cur_step += 1
@@ -142,53 +143,34 @@ class BaseAnimation(object):
                 self.cycle_count += 1
                 self.state = STATE.running
 
-        stamp()
-
         self.threading.wait(self.sleep_time, timestamps)
-
-        self.compute_state()
+        self._compute_state()
 
     @contextlib.contextmanager
-    def run_context(self, clean_layout=True):
+    def _run_context(self, clean_layout=True):
         self.state = STATE.running
         self.runner.run_start_time = time.time()
         self.threading.stop_event.clear()
-        self._step = 0
+
+        self._step = 0  # DEPRECATED
         self.cur_step = 0
         self.cycle_count = 0
 
-        self.check_delay()
-
+        self._check_delay()
         self.preclear and self.layout.all_off()
         self.pre_run()
+
         try:
             yield
         finally:
             self.cleanup(clean_layout)
 
         self.on_completion and self.on_completion(self.state)
-
         self.state = STATE.ready
 
-    def run_all_frames(self, clean_layout=True):
-        with self.run_context(clean_layout):
-            while self.state == STATE.running:
-                self.run_one_frame()
-
-    def set_runner(self, runner):
-        if isinstance(runner, Runner):
-            self.runner = runner
-        else:
-            self.runner = Runner(**(runner or {}))
+    def _set_runner(self, runner):
+        self.runner = Runner(**(runner or {}))
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
-
-    def start(self):
-        self.threading.start()
-
-    def run(self, **kwds):
-        # DEPRECATED
-        self.set_runner(kwds)
-        self.start()
 
 
 def _report_framerate(timestamps):
