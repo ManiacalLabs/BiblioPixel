@@ -13,7 +13,17 @@ class CMDTYPE:
 
 
 class Network(DriverBase):
-    """Driver for communicating with another device on the network."""
+    """Driver for communicating with another device on the network.
+
+    To be used with either BiblioPixelAnimations.receivers.GenericNetworkReceiver
+    or :py:class:`.network_receiver.NetworkReceiver`
+
+    Provides the same parameters of :py:class:`.driver_base.DriverBase` as
+    well as those below:
+
+    :param str host: Network hostname or IP address of receiver.
+    :param int port: Network port of receiver
+    """
 
     def __init__(self, num=0, width=0, height=0, host="localhost", port=3142, **kwds):
         super().__init__(num, width, height, **kwds)
@@ -58,6 +68,15 @@ class Network(DriverBase):
             raise IOError(error)
 
     def set_device_brightness(self, brightness):
+        """Hardware specific method to set the global brightness for
+        this driver's output. This method is required to be implemented,
+        however, users should call
+        :py:meth:`.driver_base.DriverBase.set_brightness`
+        instead of calling this method directly.
+
+        :param int brightness: 0-255 value representing the desired
+            brightness level
+        """
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         s = self._connect()

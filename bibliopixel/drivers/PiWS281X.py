@@ -59,7 +59,30 @@ class PiWS281X(DriverBase):
     Driver for controlling WS281X LEDs via the rpi_ws281x C-extension.
     Only supported on the Raspberry Pi 2, 3, and Zero
 
-    This driver needs to be run as sudo.
+    This driver needs to be run as sudo and requires the rpi_ws281x C extension.
+
+    Install rpi_ws281x with the following shell commands:
+
+        git clone https://github.com/jgarff/rpi_ws281x.git
+        cd rpi_ws281x
+
+        sudo apt-get install python-dev swig scons
+        sudo scons
+
+        cd python
+        # If using default system python3
+        sudo python3 setup.py build install
+        # If using virtualenv, enter env then run
+        python setup.py build install
+
+    Provides the same parameters of :py:class:`.driver_base.DriverBase` as
+    well as those below:
+
+    :param int gpio: GPIO pin to output to. Typically 18 or 13
+    :param int ledFreqHz: WS2812B base data frequency in Hz. Only change to
+        400000 if using very old WS218B LEDs
+    :param int ledDma: DMA channel to use for generating signal (Between 1 and 14)
+    :param bool ledInvert: True to invert the signal (when using NPN transistor level shift)
     """
     # Including follow as comment as URLs in docstrings don't play well with sphinx
     # Discussion re: running as sudo
@@ -67,16 +90,10 @@ class PiWS281X(DriverBase):
     # https://github.com/jgarff/rpi_ws281x/blob/master/python/neopixel.py#L106
 
     def __init__(
-            self, num, gamma=gamma.NEOPIXEL, c_order=ChannelOrder.RGB, gpio=18,
+            self, num, gamma=gamma.NEOPIXEL, c_order="RGB", gpio=18,
             ledFreqHz=800000, ledDma=5, ledInvert=False,
             color_channels=3, brightness=255, **kwds):
-        """
-        num - Number of LED pixels.
-        gpio - GPIO pin connected to the pixels (must support PWM! GPIO 13 or 18 (pins 33 or 12) on RPi 3).
-        ledFreqHz - LED signal frequency in hertz (800khz or 400khz)
-        ledDma - DMA channel to use for generating signal (Between 1 and 14)
-        ledInvert - True to invert the signal (when using NPN transistor level shift)
-        """
+
         if not NeoColor:
             raise ValueError(WS_ERROR)
         super().__init__(num, c_order=c_order, gamma=gamma, **kwds)

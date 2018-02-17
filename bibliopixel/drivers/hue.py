@@ -12,6 +12,15 @@ import colorsys
 
 
 class Hue(DriverBase):
+    """
+    Driver for interacting with Philips Hue lights.
+
+    Provides the same parameters of :py:class:`.driver_base.DriverBase` as
+    well as those below:
+
+    :param str ip: Network hostname or IP address of the Hue base.
+    :param list nameMap: List of names to map to each pixel index
+    """
 
     def __init__(self, num, ip, nameMap=None, **kwds):
         super().__init__(num, **kwds)

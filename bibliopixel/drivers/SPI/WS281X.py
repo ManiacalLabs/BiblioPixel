@@ -11,6 +11,9 @@ class WS281X(SPIBase):
     """
     SPI driver for WS2812(b) based LED strips on devices like
     Raspberry Pi, OrangePi, BeagleBone,..
+
+    Provides the same parameters as
+    :py:class:`bibliopixel.drivers.SPI.SPIBase`
     """
 
     def __init__(self, num, gamma=_gamma.WS2812, spi_speed=3.2, **kwargs):

@@ -10,10 +10,26 @@ from ... drivers.return_codes import (
 
 
 class Serial(DriverBase):
-    """Main driver for Serial based LED strips"""
+    """Main driver for Serial based LED strips and devices like the AllPixel
+
+    Provides the same parameters of
+    :py:class:`bibliopixel.drivers.driver_base.DriverBase` as
+    well as those below:
+
+    :param ledtype: LED protocol type. One of
+        :py:func:`bibliopixel.drivers.ledtype.LEDTYPE`
+    :param str dev: Serial device address/path. If left empty, first device
+        found will be used.
+    :param int spi_speed: SPI datarate for applicable LED types, in MHz
+    :param int restart_timeout: Seconds to wait between reconfigure reboot
+        and reconnection attempt
+    :param int device_id: Device ID to connect to.
+    :param str hardwareID: A valid USB VID:PID pair such as "1D50:60AB"
+    :param int baudrate: Baud rate to connect to serial device
+    """
 
     def __init__(self, ledtype=None, num=0, dev="",
-                 c_order=ChannelOrder.RGB, spi_speed=2,
+                 c_order='RGB', spi_speed=2,
                  gamma=None, restart_timeout=3,
                  device_id=None, hardwareID="1D50:60AB",
                  baudrate=921600, **kwds):
@@ -63,6 +79,9 @@ class Serial(DriverBase):
         self.set_device_brightness = self.set_brightness
 
     def cleanup(self):
+        """
+        SHOULD BE PRIVATE
+        """
         if self._com:
             log.info("Closing connection to: %s", self.dev)
             self._close()
@@ -178,6 +197,16 @@ DriverSerial = Serial
 
 
 class TeensySmartMatrix(Serial):
+    """Variant of :py:class:`Serial` for use with the Teensy and
+    SmartMatrix library. The following provides compatible firmware:
+    https://github.com/ManiacalLabs/BiblioPixelSmartMatrix
+
+    All parameters are the same as with :py:class:`Serial`, except the
+    default hardwareID is changed to match the Teensy.
+
+    The main difference is that SmartMatrix requires a sync command to keep multiple
+    instances of this driver running smoothly.
+    """
     def __init__(self, width, height, dev="", device_id=None,
                  hardwareID="16C0:0483", **kwds):
         super().__init__(ledtype=LEDTYPE.GENERIC, num=width * height,

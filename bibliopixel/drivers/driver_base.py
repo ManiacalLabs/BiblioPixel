@@ -5,7 +5,15 @@ import threading, time
 
 
 class DriverBase(object):
-    """Base driver class to build other drivers from."""
+    """
+    Base driver class to build other drivers from.
+
+    :param int num: Number of total pixels held by this driver
+    :param int width: Width of matrix, for use with :py:class:`bibliopixel.layout.matrix.Matrix`
+    :param int height: Height of matrix, for use with :py:class:`bibliopixel.layout.matrix.Matrix`
+    :param str c_order: Color channel order
+    :param gamma: Gamma correction table. Preset tables available in :py:mod:`bibliopixel.util.colors.gamma`
+    """
 
     # If set_device_brightness is not empty, it's a method that allows you
     # to directly set the brightness for the device.
@@ -21,7 +29,7 @@ class DriverBase(object):
         """Construct a driver from a project and a description."""
         return cls(maker=project.maker, **desc)
 
-    def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
+    def __init__(self, num=0, width=0, height=0, c_order="RGB",
                  gamma=None, maker=data_maker.MAKER, **kwds):
         attributes.set_reserved(self, 'driver', **kwds)
 
@@ -53,9 +61,23 @@ class DriverBase(object):
         self._waiting_brightness = None
 
     def set_pixel_positions(self, pixel_positions):
+        """
+        Internal Use Only
+
+        Placeholder callback for sending physical pixel layout data to the
+        :py:mod:`.SimPixel` driver.
+        """
         pass
 
     def set_colors(self, colors, pos):
+        """
+        Use with caution!
+
+        Directly set the pixel buffers.
+
+        :param colors: A list of color tuples
+        :param int pos: Position in color list to begin set operation.
+        """
         self._colors = colors
         self._pos = pos
 
@@ -78,6 +100,11 @@ class DriverBase(object):
         pass
 
     def bufByteCount(self):
+        """
+        Total number of bytes that the pixel buffer represents.
+        Mainly used for drivers such as :py:mod:`bibliopixel.drivers.serial`
+        and :py:mod:`.network`
+        """
         return 3 * self.numLEDs
 
     def sync(self):
@@ -107,6 +134,11 @@ class DriverBase(object):
         pass
 
     def update_colors(self):
+        """Apply any corrections to the current color list
+        and send the results to the driver output. This function primarily
+        provided as a wrapper for each driver's implementation of
+        :py:func:`_compute_packet` and :py:func:`_send_packet`.
+        """
         start = time.time()
 
         with self.brightness_lock:
@@ -125,10 +157,19 @@ class DriverBase(object):
         self.lastUpdate = time.time() - start
 
     def set_brightness(self, brightness):
+        """Set the global brightness for this driver's output.
+
+        :param int brightness: 0-255 value representing the desired
+            brightness level
+        """
         with self.brightness_lock:
             self._waiting_brightness = brightness
 
     def _render(self):
+        """Typically called from :py:func:`_compute_packet` this applies
+        brightness and gamma correction to the pixels controlled by this
+        driver.
+        """
         if self.set_device_brightness:
             level = 1.0
         else:

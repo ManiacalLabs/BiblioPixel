@@ -21,6 +21,9 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../'))
 
+import recommonmark
+from recommonmark.parser import CommonMarkParser
+from recommonmark.transform import AutoStructify
 
 # -- General configuration ------------------------------------------------
 
@@ -44,18 +47,22 @@ extensions = [
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
+
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
 project = 'BiblioPixel'
-copyright = '2017, Maniacal Labs'
+copyright = '2018, Maniacal Labs'
 author = 'Maniacal Labs'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -100,10 +107,10 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "classic"
+html_theme = "sphinx_rtd_theme"
 html_theme_options = {
     # "rightsidebar": "true",
-    "relbarbgcolor": "black"
+    # "relbarbgcolor": "black"
 }
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -186,13 +193,55 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+API_EXCLUDES = [
+    'main/',
+    'util/threads/',
+    'util/colors/arithmetic.py',
+    'util/colors/conversions.py',
+    'util/colors/classic.py',
+    'util/colors/juce.py',
+    'drivers/return_codes.py',
+    'drivers/serial/codes.py',
+    'drivers/SimPixel/SimpleWebSocketServer.py',
+    'drivers/SimPixel/websocket.py',
+    'drivers/SPI/errors.py',
+]
+
 
 def run_apidoc(_):
     from sphinx.apidoc import main
     import os
     import sys
-    main(['./run_apidoc.sh'])
+    import shutil
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+    cur_dir = os.path.abspath(os.path.dirname(__file__))
+    api_dir = os.path.join(cur_dir, 'api')
+    shutil.rmtree(api_dir)  # clear out anything old
+    try:
+        os.mkdir(api_dir)  # make it if not exists
+    except:
+        pass
+    module = os.path.abspath(os.path.join(cur_dir, '..', 'bibliopixel'))
+    args = ['-e', '-o', api_dir, module]
+    for ex in API_EXCLUDES:
+        args.append(os.path.join(module, ex))
+
+    main(args)
+
+# No longer going to build API docs
+# Leaving in case we ever want it back
+# def setup(app):
+#     app.connect('builder-inited', run_apidoc)
+
+
+github_doc_root = 'https://github.com/ManiacalLabs/BiblioPixel/tree/master/doc'
 
 
 def setup(app):
-    app.connect('builder-inited', run_apidoc)
+    app.add_config_value('recommonmark_config', {
+        'url_resolver': lambda url: github_doc_root + url,
+        'auto_toc_tree_section': 'Contents',
+        'enable_eval_rst': True,
+        'enable_auto_doc_ref': True,
+    }, True)
+    app.add_transform(AutoStructify)

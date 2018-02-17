@@ -5,13 +5,13 @@ Reset sections in the project defaults
 DESCRIPTION = """
 Example:
 
-::
+``````
+# Reset the layout and animation sections
+$ bp default reset layout animation
 
-    # Reset the layout and animation sections
-    $ bp default reset layout animation
-
-    # Reset all sections
-    $ bp default reset
+# Reset all sections
+$ bp default reset
+``````
 """
 
 from .. project import defaults

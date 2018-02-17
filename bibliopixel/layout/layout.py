@@ -5,27 +5,32 @@ from .. util.threads.update_threading import UpdateThreading
 
 
 class Layout(object):
+    """
+    Base Layer class. Use Strip, Matrix, Cube, or Circle instead!
+
+    :param drivers: A list of drivers
+    :param threadedUpdate: If True, updates to this layout are done in a
+        separate thread
+    :param brightness: An initial brightness value from 0 to 255
+    :param maker: A data maker to make color_lists. TODO: Link to what a maker
+        is.
+    :param color_list: If non-Null, the layout uses this color_list instead
+        of creating its own
+
+    :ivar int numLEDs: Total number of pixels held by this layout instance
+    """
+
     pre_recursion = fields.default_converter
 
     @classmethod
     def construct(cls, project, **desc):
-        """Construct a layout."""
+        """Construct a layout.
+        SHOULD BE PRIVATE
+        """
         return cls(project.drivers, maker=project.maker, **desc)
 
     def __init__(self, drivers, threadedUpdate=False, brightness=255,
                  maker=data_maker.MAKER, color_list=None, **kwds):
-        """
-        Base LED class. Use Strip or Matrix instead!
-
-        Arguments
-            drivers -- a list of drivers
-            threadedUpdate -- if True, updates to this layout are done in a
-                separate thread
-            brightness - a brightness multiple from 0 to 255
-            maker - a data maker to make color_lists
-            color_list -- if non-Null, the layout uses this color_list instead
-                of creating its own
-        """
         attributes.set_reserved(self, 'layout', **kwds)
         self.drivers = drivers if isinstance(drivers, list) else [drivers]
         self.maker = maker
@@ -53,11 +58,12 @@ class Layout(object):
         self.set_brightness(brightness)
 
     def set_pixel_positions(self, pixel_positions):
+        """SHOULD BE PRIVATE"""
         for d in self.drivers:
             d.set_pixel_positions(pixel_positions)
 
     def update(self):
-        """DEPRECATED - use self.push_to_driver()"""
+        """DEPRECATED - use :py:func:`push_to_driver`"""
         return self.push_to_driver()
 
     def start(self):

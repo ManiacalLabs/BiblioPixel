@@ -5,15 +5,15 @@ Set some or all sections of the project defaults
 DESCRIPTION = """
 Each argument to `bp default set` has to look like
 
-::
-
-  section=value
+``````
+section=value
+``````
 
 Example:
 
-::
-
-   bp set numbers=float dimensions=80
+``````
+bp set numbers=float dimensions=80
+``````
 """
 
 import sys
