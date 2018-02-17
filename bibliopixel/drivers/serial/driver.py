@@ -47,7 +47,7 @@ class Serial(DriverBase):
         if resp == RETURN_CODES.REBOOT:  # reboot needed
             log.info(
                 "Reconfigure and reboot needed, waiting for controller to restart...")
-            self._com.close()
+            self._close()
             time.sleep(restart_timeout)
             resp = self._connect()
             if resp != RETURN_CODES.SUCCESS:
@@ -65,7 +65,7 @@ class Serial(DriverBase):
     def cleanup(self):
         if self._com:
             log.info("Closing connection to: %s", self.dev)
-            self._com.close()
+            self._close()
 
     def _connect(self):
         try:
@@ -98,9 +98,9 @@ class Serial(DriverBase):
             packet.append(byteCount & 0xFF)  # set 1st byte of byteCount
             packet.append(byteCount >> 8)  # set 2nd byte of byteCount
             packet.append(self._spi_speed)
-            self._com.write(packet)
+            self._write(packet)
 
-            resp = self._com.read(1)
+            resp = self._read(1) or ''
             if len(resp) == 0:
                 self.devices.error()
 
@@ -117,22 +117,24 @@ class Serial(DriverBase):
         super().set_brightness(brightness)
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
-        self._com.write(packet)
-        resp = ord(self._com.read(1))
+        self._write(packet)
+        resp = self._read(1) or chr(RETURN_CODES.ERROR)
         if resp == RETURN_CODES.SUCCESS:
             return True
         print_error(resp)
 
     def _send_packet(self):
-        self._com.write(self._packet)
+        self._write(self._packet)
 
-        resp = self._com.read(1)
+        resp = self._read(1)
+        if resp is None:
+            return
         if len(resp) == 0:
             self.devices.error(fail=False)
         elif ord(resp) != RETURN_CODES.SUCCESS:
             print_error(ord(resp))
         else:
-            self._com.flushInput()
+            self._flushInput()
             return True
 
     def _compute_packet(self):
@@ -144,7 +146,31 @@ class Serial(DriverBase):
         self._packet.extend([0] * self._bufPad)
 
     def _send_sync(self):
-        self._com.write(self._sync_packet)
+        self._write(self._sync_packet)
+
+    def _read(self, *args):
+        try:
+            return self._com.read(*args)
+        except Exception as e:
+            log.error('Serial exception %s in read', e)
+
+    def _close(self):
+        try:
+            return self._com.close()
+        except Exception as e:
+            log.error('Serial exception %s in close', e)
+
+    def _write(self, packet):
+        try:
+            return self._com.write(packet)
+        except Exception as e:
+            log.error('Serial exception %s in write', e)
+
+    def _flushInput(self):
+        try:
+            return self._com._flushInput()
+        except Exception as e:
+            log.error('Serial exception %s in write', e)
 
 
 # This is DEPRECATED.
