@@ -97,22 +97,31 @@ def _get_animations(args):
     raise ValueError('Run aborted')
 
 
-def _run_animations(animations, pause, names):
+def _run_animations(animations, args):
     needs_pause = False
-    assert len(animations) == len(names)
-    for animation, name in zip(animations, names):
+    assert len(animations) == len(args.name)
+    for animation, name in zip(animations, args.name):
         log.debug('Running file %s', name)
         if needs_pause:
-            pause and time.sleep(float(pause))
+            args.pause and time.sleep(float(args.pause))
         else:
             needs_pause = True
 
         try:
             animation.layout.start()
             animation.start()
+
         except KeyboardInterrupt:
+            if not args.ignore_exceptions:
+                raise
             log.warning('\nTermination requested by user.')
             needs_pause = False
+
+        except Exception as e:
+            if not args.ignore_exceptions:
+                raise
+            log.error('Exception %s', e)
+            traceback.print_exc()
 
         animation.cleanup()
         animation.layout.cleanup_drivers()
@@ -133,7 +142,7 @@ def run(args):
     elif args.s:
         simpixel.open_simpixel()
 
-    _run_animations(animations, args.pause, args.name)
+    _run_animations(animations, args)
 
 
 def set_parser(parser):
