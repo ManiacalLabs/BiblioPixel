@@ -15,11 +15,13 @@ class AnimationThreading(object):
         self.thread = None
         self.frame_overrun = False
 
-    def stop_thread(self, wait=False):
-        # run regardless of threaded, used to stop sequences
-        self.stop_event.set()
-        if self.thread and wait:
-            self.thread.join()
+    def cleanup(self, wait=False):
+        # if current thread is animation thread this was called
+        # by the context manager and thread is therefore already stopped
+        if self.thread != threading.current_thread():
+            self.stop_event.set()
+            if self.thread and wait:
+                self.thread.join()
 
     def stopped(self):
         return not (self.thread and self.thread.isAlive())

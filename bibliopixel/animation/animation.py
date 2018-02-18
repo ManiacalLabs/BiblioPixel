@@ -1,18 +1,8 @@
 import contextlib, threading, time
-from . runner import Runner
+from . runner import Runner, STATE
 from .. util import log
 from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
-from enum import IntEnum
-
-
-class STATE(IntEnum):
-    ready = 0
-    running = 1
-    complete = 2
-    canceled = 3
-    max_steps = 4
-    timeout = 5
 
 
 class BaseAnimation(object):
@@ -76,10 +66,7 @@ class BaseAnimation(object):
         pass
 
     def cleanup(self, clean_layout=True):
-        # if current thread is animation thread this was called
-        # by the context manager and thread is therefore already stopped
-        if self.threading.thread != threading.current_thread():
-            self.threading.stop_thread(wait=True)
+        self.threading.cleanup()
         # Some cases we may not want to clear the screen
         # Like with the remote, it would flash between anims
         if clean_layout:
@@ -97,24 +84,6 @@ class BaseAnimation(object):
         # DEPRECATED
         self._set_runner(kwds)
         self.start()
-
-    def _compute_state(self):
-        if self.threading.stop_event.isSet():
-            self.state = STATE.canceled
-
-        elif self.runner.seconds:
-            elapsed = time.time() - self.runner.run_start_time
-            if elapsed >= self.runner.seconds:
-                self.state = STATE.timeout
-
-        elif self.runner.max_steps:
-            if self.cur_step >= self.runner.max_steps:
-                self.state = STATE.max_steps
-
-        elif not self.runner.until_complete:
-            if self.state == STATE.complete:
-                # Ignore STATE.complete if until_complete is False
-                self.state = STATE.running
 
     def _check_delay(self):
         if self.free_run:
@@ -144,7 +113,10 @@ class BaseAnimation(object):
                 self.state = STATE.running
 
         self.threading.wait(self.sleep_time, timestamps)
-        self._compute_state()
+        if self.threading.stop_event.isSet():
+            self.state = STATE.canceled
+        else:
+            self.state = self.runner.compute_state(self.cur_step, self.state)
 
     @contextlib.contextmanager
     def _run_context(self, clean_layout=True):
