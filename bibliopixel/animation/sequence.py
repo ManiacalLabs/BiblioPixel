@@ -30,12 +30,14 @@ class Sequence(collection.Collection):
         self.restart()
 
     def step(self, amt=1):
-        if not self.animations:
+        if not self.animations or self.completed:
             return
 
-        if not self.completed:
-            if self.current_animation:
-                self.current_animation.run_all_frames(clean_layout=False)
+        try:
+            next(self.frames)
+            return
+        except StopIteration:
+            pass
 
         self.index += 1
         if self.index < len(self.animations):
@@ -49,11 +51,9 @@ class Sequence(collection.Collection):
             self.restart()
 
     def _load_animation(self):
-        if self.current_animation:
-            log.debug('Sequence: %s', self.current_animation.title)
-            if self.length:
-                step = self.offset + self.index
-                length = self.length[step % len(self.length)]
-                self.current_animation.runner.seconds = length
-        else:
-            log.debug('Sequence: None')
+        log.debug('Sequence: %s', self.current_animation.title)
+        if self.length:
+            step = self.offset + self.index
+            length = self.length[step % len(self.length)]
+            self.current_animation.runner.seconds = length
+        self.frames = self.current_animation.generate_frames(False)

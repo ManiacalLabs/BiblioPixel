@@ -75,10 +75,15 @@ class BaseAnimation(object):
     def start(self):
         self.threading.start()
 
-    def run_all_frames(self, clean_layout=True):
+    def run_all_frames(self):
+        for i in self.generate_frames():
+            pass
+
+    def generate_frames(self, clean_layout=True):
         with self._run_context(clean_layout):
             while self.state == STATE.running:
                 self._run_one_frame()
+                yield
 
     def run(self, **kwds):
         # DEPRECATED
