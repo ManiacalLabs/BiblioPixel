@@ -1,5 +1,16 @@
+import time
+from enum import IntEnum
 from .. util import log
 from .. project import attributes, load
+
+
+class STATE(IntEnum):
+    ready = 0
+    running = 1
+    complete = 2
+    canceled = 3
+    max_steps = 4
+    timeout = 5
 
 
 class Runner(object):
@@ -46,3 +57,20 @@ class Runner(object):
     @fps.setter
     def fps(self, fps):
         self.sleep_time = 1 / fps
+
+    def compute_state(self, cur_step, state):
+        if self.seconds:
+            elapsed = time.time() - self.run_start_time
+            if elapsed >= self.seconds:
+                return STATE.timeout
+
+        elif self.max_steps:
+            if cur_step >= self.max_steps:
+                return STATE.max_steps
+
+        elif not self.until_complete:
+            if state == STATE.complete:
+                # Ignore STATE.complete if until_complete is False
+                return STATE.running
+
+        return state
