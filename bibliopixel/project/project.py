@@ -1,5 +1,7 @@
+import traceback
 from . import attributes, construct, cleanup, defaults, load, recurse
-from .. util import exception, json
+from .. util import exception, json, log
+from .. animation import BaseAnimation
 
 
 class Project:
@@ -16,27 +18,40 @@ class Project:
         return datatype(**kwds)
 
     def __init__(self, *, drivers, layout, maker, path, animation, **kwds):
-        attributes.check(kwds, 'project')
-        self.path = path
-        layout = layout or cleanup.cleanup_layout(animation)
-
-        self.maker = self.construct_child(**maker)
-
         def post(desc):
             return self.construct_child(**desc)
 
-        def create(root, name):
+        def create(root, name, recover=None):
             with exception.add('Unable to create ' + name):
                 return recurse.recurse(
                     root,
                     pre=None,
                     post=post,
-                    python_path='bibliopixel.' + name)
+                    python_path='bibliopixel.' + name,
+                    recover=recover)
 
+        attributes.check(kwds, 'project')
+        self.path = path
+        layout = layout or cleanup.cleanup_layout(animation)
+
+        self.maker = self.construct_child(**maker)
         self.drivers = [create(d, 'drivers') for d in drivers]
         with exception.add('Unable to create layout'):
-            self.layout = self.construct_child(**layout)
-        self.animation = create(animation, 'animation')
+            layout = self.layout = self.construct_child(**layout)
+
+        class Empty(BaseAnimation):
+            def __init__(self, desc, exception):
+                super().__init__(layout)
+                self.set_runner({})
+                log.error('Unable to create animation for %s', desc)
+                debug = log.get_log_level() <= log.DEBUG
+                msg = traceback.format_exc() if debug else str(exception)
+                log.error('\n%s', msg)
+                self.desc = desc
+                self.exception = exception
+                self.empty = True
+
+        self.animation = create(animation, 'animation', Empty)
 
 
 def project(*descs, root_file=None):

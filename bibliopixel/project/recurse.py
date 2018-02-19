@@ -17,7 +17,8 @@ children.
 """
 
 
-def recurse(desc, pre='pre_recursion', post=None, python_path=None):
+def recurse(desc, pre='pre_recursion', post=None, python_path=None,
+            recover=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
@@ -42,23 +43,28 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
             f = getattr(datatype, f, None)
         return f and f(desc)
 
-    # Automatically load strings that look like JSON or Yaml filenames.
-    desc = load.load_if_filename(desc) or desc
-    desc = construct.to_type_constructor(desc, python_path)
-    datatype = desc.get('datatype')
+    try:
+        # Automatically load strings that look like JSON or Yaml filenames.
+        desc = load.load_if_filename(desc) or desc
+        desc = construct.to_type_constructor(desc, python_path)
+        datatype = desc.get('datatype')
 
-    desc = call(pre, desc) or desc
+        desc = call(pre, desc) or desc
 
-    for child_name in getattr(datatype, 'CHILDREN', []):
-        child = desc.get(child_name)
-        if child:
-            new_path = python_path or ('bibliopixel.' + child_name)
-            if child_name.endswith('s'):
-                if isinstance(child, (dict, str)):
-                    child = [child]
-                for i, c in enumerate(child):
-                    child[i] = recurse(c, pre, post, new_path)
-            else:
-                desc[child_name] = recurse(child, pre, post, new_path)
+        for child_name in getattr(datatype, 'CHILDREN', []):
+            child = desc.get(child_name)
+            if child:
+                new_path = python_path or ('bibliopixel.' + child_name)
+                if child_name.endswith('s'):
+                    if isinstance(child, (dict, str)):
+                        child = [child]
+                    for i, c in enumerate(child):
+                        child[i] = recurse(c, pre, post, new_path)
+                else:
+                    desc[child_name] = recurse(child, pre, post, new_path)
 
-    return call(post, desc) or desc
+        return call(post, desc) or desc
+    except Exception as e:
+        if recover:
+            return recover(desc, e)
+        raise

@@ -85,7 +85,7 @@ class RemoteControl(collection.Collection):
             name = cfg['name']
             if name in self.name_map:
                 raise ValueError('Cannot have multiple animations with the same name: ' + name)
-            if anim:
+            if getattr(anim, 'empty', False):
                 anim.on_completion = self.on_completion
                 self.name_map[name] = i
             else:
