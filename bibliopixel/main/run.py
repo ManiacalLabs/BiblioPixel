@@ -72,7 +72,7 @@ def _get_animations(args):
             failed.append(('%s: %s' % (e.strerror, e.filename), ()))
 
         except Exception as exception:
-            if filename.endswith('.py'):
+            if args.verbose or filename.endswith('.py'):
                 raise
             eargs = exception.args
             if args.verbose:
