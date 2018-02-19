@@ -9,7 +9,9 @@ class Collection(animation.BaseAnimation):
 
     @staticmethod
     def pre_recursion(desc):
-        def cleanup_animation(a):
+        animations = []
+
+        for a in desc['animations']:
             ld = load.load_if_filename(a)
             if ld:
                 a = {k: v for k, v in ld.items() if k in ('animation', 'run')}
@@ -18,9 +20,11 @@ class Collection(animation.BaseAnimation):
                 animation = a
                 a = {}
             else:
+                a = dict(a)
                 animation = a.pop('animation')
             animation = construct.to_type_constructor(
                 animation, 'bibliopixel.animation')
+
             arun = a.pop('run', {})
             arun = animation['run'] = dict(arun, **animation.get('run', {}))
             drun = desc['run']
@@ -34,9 +38,9 @@ class Collection(animation.BaseAnimation):
 
             if a:
                 raise ValueError('Extra fields in animation: ' + ', '.join(a))
-            return animation
+            animations.append(animation)
 
-        desc['animations'] = [cleanup_animation(a) for a in desc['animations']]
+        desc['animations'] = animations
         return desc
 
     CHILDREN = 'animations',
@@ -51,7 +55,7 @@ class Collection(animation.BaseAnimation):
     def cleanup(self, clean_layout=True):
         self.state = animation.STATE.canceled
         for a in self.animations:
-            a and a.cleanup()
+            a.cleanup()
         super().cleanup(clean_layout)
 
     def add_animation(self, anim, **kwds):
@@ -62,7 +66,7 @@ class Collection(animation.BaseAnimation):
     def pre_run(self):
         self.index = -1
         for a in self.animations:
-            a and a.pre_run()
+            a.pre_run()
 
     @property
     def current_animation(self):
@@ -79,15 +83,19 @@ class Parallel(Collection):
         for a in self.animations:
             a.layout = a.layout.mutable_copy()
 
-    def step(self, amt=1):
-        for a in self.animations:
-            a and a.step(amt)
-
 
 class Wrapper(Collection):
-    def __init__(self, *args, animation, **kwds):
-        super()(*args, animations=[animation], **kwds)
-        self.animation = self.animations[0]
+    # TODO: No unit tests cover any of this.
+    @staticmethod
+    def pre_recursion(desc):
+        if 'animations' in desc:
+            raise ValueError('Cannot specify animations in a Wrapper')
+        desc['animations'] = [desc.pop('animation')]
+        return Collection.pre_recursion(desc)
+
+    @property
+    def animation(self):
+        return self.animations[0]
 
     def step(self, amt=1):
-        self.animation and self.animation.step(amt)
+        self.animation.step(amt)
