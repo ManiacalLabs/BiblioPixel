@@ -18,7 +18,7 @@ class DriverBase(object):
 
     @classmethod
     def construct(cls, project, **desc):
-        """Construct a layout from a project and a description."""
+        """Construct a driver from a project and a description."""
         return cls(maker=project.maker, **desc)
 
     def __init__(self, num=0, width=0, height=0, c_order=ChannelOrder.RGB,
