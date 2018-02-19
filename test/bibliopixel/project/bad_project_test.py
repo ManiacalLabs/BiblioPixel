@@ -99,20 +99,16 @@ class BadProjectTest(unittest.TestCase):
              'Unknown attribute for layout Matrix: "bad_attribute"'))
 
     def test_bad_animation_attribute(self):
-        with self.assertRaises(ValueError) as e:
-            make(BAD_ANIMATION_ATTRIBUTE)
+        animation = make(BAD_ANIMATION_ATTRIBUTE, run_start=False)
         self.assertEquals(
-            e.exception.args,
-            ('Unable to create animation',
-             'Unknown attribute for animation OffAnim: "bad_attribute"'))
+            animation.exception.args,
+            ('Unknown attribute for animation OffAnim: "bad_attribute"',))
 
     def test_bad_run_attribute(self):
-        with self.assertRaises(ValueError) as e:
-            make(BAD_RUN_ATTRIBUTE)
+        animation = make(BAD_RUN_ATTRIBUTE, run_start=False)
         self.assertEquals(
-            e.exception.args,
-            ('Unable to create animation',
-             'Unknown attribute for run: "bad_attribute"'))
+            animation.exception.args,
+            ('Unknown attribute for run: "bad_attribute"',))
 
     def test_missing_layout(self):
         with self.assertRaises(ValueError) as e:

@@ -103,6 +103,10 @@ def set_log_level(level):
     logger.setLevel(level)
 
 
+def get_log_level():
+    return logger.getEffectiveLevel()
+
+
 # Add a new logging level FRAME for messages which appear on every frame.
 _addLoggingLevel('FRAME', FRAME)
 logger = _new_custom_logger()
