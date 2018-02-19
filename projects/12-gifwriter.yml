@@ -1,0 +1,30 @@
+dimensions: [16, 16]
+
+aliases:
+  bpa: BiblioPixelAnimations.matrix
+
+run:
+  until_complete: true
+
+animation:
+  typename: bibliopixel.animation.gif_writer.GifWriter
+
+  time: 23
+
+  run:
+    fps: 24
+
+  render:
+    pixel_width: 32
+    frame: 8
+    padding: 4
+    ellipse: true
+
+  animation:
+    typename: sequence
+    length: 2
+    animations:
+      - "@bpa.bloom"
+      - "@bpa.circlepop"
+      - "@bpa.perlin_simplex"
+      - "@bpa.pinwheel"
