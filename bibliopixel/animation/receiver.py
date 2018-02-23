@@ -19,7 +19,7 @@ HOST_MAP = {
 }
 
 
-class BaseReceiver(BaseAnimation):
+class Receiver(BaseAnimation):
     free_run = True
 
     def __init__(self, layout, **kwds):
@@ -65,3 +65,7 @@ class BaseReceiver(BaseAnimation):
         if not self._stop_event.isSet():
             self._hold_for_data.wait()
             self._hold_for_data.clear()
+
+
+# DEPRECATED
+BaseReceiver = Receiver
