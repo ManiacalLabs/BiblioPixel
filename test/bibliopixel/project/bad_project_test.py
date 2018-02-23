@@ -102,7 +102,7 @@ class BadProjectTest(unittest.TestCase):
         animation = make(BAD_ANIMATION_ATTRIBUTE, run_start=False)
         self.assertEquals(
             animation.exception.args,
-            ('Unknown attribute for animation OffAnim: "bad_attribute"',))
+            ('Unknown attribute for animation Off: "bad_attribute"',))
 
     def test_bad_run_attribute(self):
         animation = make(BAD_RUN_ATTRIBUTE, run_start=False)

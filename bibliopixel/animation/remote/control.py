@@ -4,7 +4,7 @@ from .. animation import STATE
 from .. import collection
 from ... project import load
 from ... util import log
-from bibliopixel.animation.off import OffAnim
+from bibliopixel.animation.off import Off
 
 DEFAULT_OFF = 'OFF_ANIM'
 DEFAULT_ANIM_CONFIG = {
@@ -106,7 +106,7 @@ class RemoteControl(collection.Collection):
                 self.default = DEFAULT_OFF
 
         if self.default == DEFAULT_OFF:
-            off = OffAnim(self.layout)
+            off = Off(self.layout)
             off.set_runner({'threaded': True})
             self.animations.append(off)
             self.name_map[DEFAULT_OFF] = len(self.animations) - 1

@@ -4,7 +4,7 @@ from . driver_base import DriverBase
 import copy
 
 
-class MirrorDriver(DriverBase):
+class Mirror(DriverBase):
     @staticmethod
     def pre_recursion(desc):
         if 'drivers' not in desc:
@@ -42,3 +42,7 @@ class MirrorDriver(DriverBase):
         self.start = forward('start')
         self.sync = forward('sync')
         self.update_colors = forward('update_colors')
+
+
+# DEPRECATED
+MirrorDriver = Mirror

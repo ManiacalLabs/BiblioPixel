@@ -1,7 +1,7 @@
 import math, threading, time
 
 from .. util import colors, log
-from . import matrix_drawing as matrix
+from . import matrix_drawing as md
 from . import font
 from . layout import MultiLayout
 from . geometry import make_matrix_coord_map_multi
@@ -215,13 +215,13 @@ class Matrix(MultiLayout):
         """
         Draw a circle in an RGB color, with center x0, y0 and radius r.
         """
-        matrix.draw_circle(self.set, x0, y0, r, color)
+        md.draw_circle(self.set, x0, y0, r, color)
 
     def fillCircle(self, x0, y0, r, color=None):
         """
         Draw a filled circle in an RGB color, with center x0, y0 and radius r.
         """
-        matrix.fill_circle(self.set, x0, y0, r, color)
+        md.fill_circle(self.set, x0, y0, r, color)
 
     def drawLine(self, x0, y0, x1, y1, color=None, colorFunc=None, aa=False):
         """
@@ -233,7 +233,7 @@ class Matrix(MultiLayout):
             Xiaolin Wu's algorithm
 
         """
-        matrix.draw_line(self.set, x0, y0, x1, y1, color, colorFunc, aa)
+        md.draw_line(self.set, x0, y0, x1, y1, color, colorFunc, aa)
 
     # Bresenham's algorithm
     def bresenham_line(self, x0, y0, x1, y1, color=None, colorFunc=None):
@@ -242,7 +242,7 @@ class Matrix(MultiLayout):
 
         Will draw beyond matrix bounds.
         """
-        matrix.bresenham_line(self.set, x0, y0, x1, y1, color, colorFunc)
+        md.bresenham_line(self.set, x0, y0, x1, y1, color, colorFunc)
 
     # Xiaolin Wu's Line Algorithm
     def wu_line(self, x0, y0, x1, y1, color=None, colorFunc=None):
@@ -254,7 +254,7 @@ class Matrix(MultiLayout):
         :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
         """
-        matrix.wu_line(self.set, x0, y0, x1, y1, color, colorFunc)
+        md.wu_line(self.set, x0, y0, x1, y1, color, colorFunc)
 
     def drawRect(self, x, y, w, h, color=None, aa=False):
         """
@@ -263,7 +263,7 @@ class Matrix(MultiLayout):
         :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
         """
-        matrix.draw_rect(self.set, x, y, w, h, color, aa)
+        md.draw_rect(self.set, x, y, w, h, color, aa)
 
     def fillRect(self, x, y, w, h, color=None, aa=False):
         """
@@ -273,11 +273,11 @@ class Matrix(MultiLayout):
         :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
             Xiaolin Wu's algorithm
         """
-        matrix.fill_rect(self.set, x, y, w, h, color, aa)
+        md.fill_rect(self.set, x, y, w, h, color, aa)
 
     def fillScreen(self, color=None):
         """Fill the matrix with the given RGB color"""
-        matrix.fill_rect(self.set, 0, 0, self.width, self.height, color)
+        md.fill_rect(self.set, 0, 0, self.width, self.height, color)
 
     def drawRoundRect(self, x, y, w, h, r, color=None, aa=False):
         """
@@ -288,7 +288,7 @@ class Matrix(MultiLayout):
             Xiaolin Wu's algorithm
 
         """
-        matrix.draw_round_rect(self.set, x, y, w, h, r, color, aa)
+        md.draw_round_rect(self.set, x, y, w, h, r, color, aa)
 
     def fillRoundRect(self, x, y, w, h, r, color=None, aa=False):
         """
@@ -299,7 +299,7 @@ class Matrix(MultiLayout):
             Xiaolin Wu's algorithm
 
         """
-        matrix.fill_round_rect(self.set, x, y, w, h, r, color, aa)
+        md.fill_round_rect(self.set, x, y, w, h, r, color, aa)
 
     def drawTriangle(self, x0, y0, x1, y1, x2, y2, color=None, aa=False):
         """
@@ -309,7 +309,7 @@ class Matrix(MultiLayout):
             Xiaolin Wu's algorithm
 
         """
-        matrix.draw_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
+        md.draw_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
     def fillTriangle(self, x0, y0, x1, y1, x2, y2, color=None, aa=False):
         """
@@ -319,7 +319,7 @@ class Matrix(MultiLayout):
             Xiaolin Wu's algorithm
 
         """
-        matrix.fill_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
+        md.fill_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
     fillTrangle = fillTriangle  # DEPRECATED!
 
@@ -328,8 +328,8 @@ class Matrix(MultiLayout):
         """
         Draw a single character c at at (x, y) in an RGB color.
         """
-        matrix.draw_char(self.fonts, self.set, self.width, self.height,
-                         x, y, c, color, bg, aa, font, font_scale)
+        md.draw_char(self.fonts, self.set, self.width, self.height,
+                     x, y, c, color, bg, aa, font, font_scale)
 
     def drawText(self, text, x=0, y=0, color=None,
                  bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
@@ -342,8 +342,8 @@ class Matrix(MultiLayout):
             rectangle for the text block.
 
         """
-        matrix.draw_text(self.fonts, self.set, text, self.width, self.height,
-                         x, y, color, bg, aa, font, font_scale)
+        md.draw_text(self.fonts, self.set, text, self.width, self.height,
+                     x, y, color, bg, aa, font, font_scale)
 
 
 # This is DEPRECATED
