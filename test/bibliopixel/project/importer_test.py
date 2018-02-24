@@ -52,7 +52,7 @@ class ImporterTest(unittest.TestCase):
             import_symbol('nonexistent')
         e = str(cm.exception)
         self.assertFalse('pip install' in e)
-        self.assertTrue('No module named \'nonexistent\'' in e)
+        self.assertEqual("Cannot import symbol 'nonexistent'", e)
 
     def test_exception_known(self):
         names = dict(importer.INSTALL_NAMES, nonexistent='pynone')
@@ -63,4 +63,4 @@ class ImporterTest(unittest.TestCase):
                 import_symbol('nonexistent')
             e = str(cm.exception)
             self.assertTrue('pip install pynone' in e)
-            self.assertTrue('No module named \'nonexistent\'' in e)
+            self.assertTrue('You are missing module \'nonexistent\'' in e)
