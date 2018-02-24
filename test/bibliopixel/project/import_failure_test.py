@@ -65,7 +65,7 @@ class ImportFailureTest(unittest.TestCase):
     def test_failure1(self):
         with self.assertRaises(ImportError) as e:
             make(PROJECT_FAILURE1)
-        self.assertEquals(e.exception.name, 'nonexistent_module')
+        self.assertEquals(e.exception.name, 'test.bibliopixel.failure.Failure')
 
     def test_failure2(self):
         with self.assertRaises(ImportError) as e:
@@ -76,4 +76,4 @@ class ImportFailureTest(unittest.TestCase):
     def test_failure3(self):
         with self.assertRaises(ImportError) as e:
             make(PROJECT_FAILURE3)
-        self.assertEquals(e.exception.name, 'test.NON_EXISTENT')
+        self.assertEquals(e.exception.name, 'test.NON_EXISTENT.Failure')
