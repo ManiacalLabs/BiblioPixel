@@ -48,3 +48,35 @@ class AliasTest(unittest.TestCase):
         additional = {'foo': 'bar', 'remote': 'distance'}
         self.assertEqual(aliases.resolve('foo', additional), 'bar')
         self.assertEqual(aliases.resolve('remote', additional), 'distance')
+
+    def test_not_needed(self):
+        just_one = ''
+        failed, not_equal = [], []
+
+        for alias, path in alias_lists.BUILTIN_ALIASES.items():
+            if just_one and alias != just_one:
+                continue
+            python_path = '.'.join(path.split('.', 2)[:2])
+            expected = importer.import_symbol(path)
+            try:
+                actual = importer.import_symbol(alias, python_path=python_path)
+            except:
+                failed.append(alias)
+                if just_one:
+                    raise
+            else:
+                if actual is not expected:
+                    not_equal.append(alias)
+
+        self.assertEquals([sorted(failed), sorted(not_equal)],
+                          [sorted(FAILED), sorted(NOT_EQUAL)])
+
+
+# Aliases that would fail to load at all if they were removed
+FAILED = (
+    'apa102', 'dummy', 'lpd8806', 'matrix_calibration', 'matrix_test',
+    'mirror', 'off', 'pi_ws281x', 'receiver', 'remote', 'simpixel',
+    'sk9822', 'spi', 'strip_test', 'ws2801', 'ws281x')
+
+# Aliases that load and get the wrong value
+NOT_EQUAL = 'matrix', 'reprocess', 'serial'
