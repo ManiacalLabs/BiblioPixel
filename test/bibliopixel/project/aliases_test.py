@@ -13,7 +13,7 @@ class AliasTest(unittest.TestCase):
 
     def test_resolve(self):
         self.assertEqual(
-            aliases.resolve('off'), 'bibliopixel.animation.off.OffAnim')
+            aliases.resolve('serial'), 'bibliopixel.drivers.serial.Serial')
         self.assertEquals(aliases.resolve('foo'), 'foo')
 
         with patch(foo='bar'):
