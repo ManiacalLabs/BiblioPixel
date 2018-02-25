@@ -1,7 +1,6 @@
-import traceback
 from . import attributes, construct, cleanup, defaults, load, recurse
-from .. util import exception, json, log
-from .. animation import BaseAnimation
+from .. util import exception, json
+from .. animation import BaseAnimation, failed
 
 
 class Project:
@@ -37,21 +36,12 @@ class Project:
         self.maker = self.construct_child(**maker)
         self.drivers = [create(d, 'drivers') for d in drivers]
         with exception.add('Unable to create layout'):
-            layout = self.layout = self.construct_child(**layout)
+            self.layout = self.construct_child(**layout)
 
-        class Empty(BaseAnimation):
-            def __init__(self, desc, exception):
-                super().__init__(layout)
-                self._set_runner({})
-                log.error('Unable to create animation for %s', desc)
-                debug = log.get_log_level() <= log.DEBUG
-                msg = traceback.format_exc() if debug else str(exception)
-                log.error('\n%s', msg)
-                self.desc = desc
-                self.exception = exception
-                self.empty = True
+        def Failed(*args):
+            return failed.Failed(self.layout, *args)
 
-        self.animation = create(animation, 'animation', Empty)
+        self.animation = create(animation, 'animation', Failed)
 
 
 def project(*descs, root_file=None):
