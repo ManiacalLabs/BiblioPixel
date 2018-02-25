@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.controllers.ops import Ops, OPS
+from bibliopixel.control.ops import Ops, OPS
 
 
 class OpsTest(unittest.TestCase):

@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.controllers.address import Address
+from bibliopixel.control.address import Address
 
 
 class AddressTest(unittest.TestCase):
