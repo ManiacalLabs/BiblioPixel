@@ -1,5 +1,5 @@
 import fractions
-from . import controls
+from . import control
 
 try:
     import mido
@@ -10,7 +10,7 @@ except:
     MESSAGE_TYPES = set()
 
 
-class Midi(controls.ExtractedControls):
+class Midi(control.ExtractedControl):
     EXTRACTOR = {
         # There are more mido message types that we haven't used yet.
         'keys_by_type': {

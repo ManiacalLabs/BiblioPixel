@@ -18,7 +18,7 @@ class OpsAddress(Address):
             super().set(target, first, *rest)
 
 
-class Controls:
+class Control:
     DEFAULT = {'datatype': OpsAddress}
 
     def __init__(self, routing, default=None, max_errors=16,
@@ -77,7 +77,7 @@ class Controls:
         return threading.Thread(target=self.loop, daemon=True)
 
 
-class ExtractedControls(Controls):
+class ExtractedControl(Control):
     EXTRACTOR = {}
 
     def __init__(self, extractor=None, **kwds):
