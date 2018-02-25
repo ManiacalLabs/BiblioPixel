@@ -11,6 +11,7 @@ BASE = {
         'datatype': OffAnim,
         'typename': 'off',
     },
+    'controls': [],
     'drivers': [{'typename': 'simpixel'}],
     'layout': {},
     'maker': {'typename': 'bibliopixel.project.data_maker.Maker'},

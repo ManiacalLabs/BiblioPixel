@@ -4,7 +4,7 @@ from .. animation import BaseAnimation, failed
 
 
 class Project:
-    CHILDREN = 'maker', 'drivers', 'layout', 'animation'
+    CHILDREN = 'maker', 'drivers', 'layout', 'animation', 'controls'
 
     @staticmethod
     def pre_recursion(desc):
@@ -16,7 +16,8 @@ class Project:
             return construct(self, **kwds)
         return datatype(**kwds)
 
-    def __init__(self, *, drivers, layout, maker, path, animation, **kwds):
+    def __init__(self, *,
+                 drivers, layout, maker, path, animation, controls, **kwds):
         def post(desc):
             return self.construct_child(**desc)
 
@@ -42,6 +43,7 @@ class Project:
             return failed.Failed(self.layout, *args)
 
         self.animation = create(animation, 'animation', Failed)
+        self.controls = [create(c, 'control') for c in controls]
 
 
 def project(*descs, root_file=None):
