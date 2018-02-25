@@ -1,5 +1,5 @@
 import fractions, unittest
-from bibliopixel.controllers import midi
+from bibliopixel.control import midi
 from argparse import Namespace
 from test.bibliopixel import patch
 

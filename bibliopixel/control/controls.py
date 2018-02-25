@@ -22,7 +22,7 @@ class Controls:
     DEFAULT = {'datatype': OpsAddress}
 
     def __init__(self, routing, default=None, max_errors=16,
-                 python_path='bibliopixel.controllers'):
+                 python_path='bibliopixel.control'):
         default = dict(self.DEFAULT, **(default or {}))
         self.routing = _make(routing, python_path, default, 'control')
         self.safe_receive = LogErrors(self.receive, max_errors)

@@ -1,5 +1,5 @@
 import collections, fractions, unittest
-from bibliopixel.controllers import extractor
+from bibliopixel.control import extractor
 
 KEYS_BY_TYPE = {
     'note_on': ('channel', 'type', 'note', 'velocity'),
