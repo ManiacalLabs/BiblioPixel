@@ -1,6 +1,6 @@
 import getpass, platform, sys
 from .. util import log
-from . controls import ExtractedControls
+from . control import ExtractedControl
 
 # See https://stackoverflow.com/questions/42603000
 DARWIN_ROOT_WARNING = """
@@ -23,7 +23,7 @@ def keyname(key):
     return getattr(key, 'name', None) or getattr(key, 'char')
 
 
-class Keyboard(ExtractedControls):
+class Keyboard(ExtractedControl):
     EXTRACTOR = {
         'keys_by_type': {
             'press': ['type', 'key'],
