@@ -1,6 +1,10 @@
-from . import attributes, construct, cleanup, defaults, load, recurse
+import queue
+from . import (
+    attributes, construct, cleanup, defaults, event_queue, load, recurse)
 from .. util import exception, json
 from .. animation import BaseAnimation, failed
+
+EVENT_QUEUE_MAXSIZE = 1000
 
 
 class Project:
@@ -17,7 +21,12 @@ class Project:
         return datatype(**kwds)
 
     def __init__(self, *,
-                 drivers, layout, maker, path, animation, controls, **kwds):
+                 drivers, layout, maker, path, animation, controls,
+                 event_queue_maxsize=EVENT_QUEUE_MAXSIZE, **kwds):
+        """
+        :param int event_queue_maxsize: maxsize parameter to queue.Queue.
+            0 means an unbounded queue.
+        """
         def post(desc):
             return self.construct_child(**desc)
 
@@ -43,15 +52,33 @@ class Project:
             return failed.Failed(self.layout, *args)
 
         self.animation = create(animation, 'animation', Failed)
+
+        self.event_queue = event_queue.EventQueue(maxsize=event_queue_maxsize)
+        self.animation.preframe_callback = self.event_queue.get_and_run_events
+
+        # Unfortunately, the whole animation cycle is controlled by methods on
+        # the topmost animation - but we need to get called back at a certain
+        # point in that animation cycle in order to run the event queue safely -
+        # and animations don't know about the Project!
+        #
+        # So the monkey-patch above.  Ugly.  When we rewrite the
+        # animation cycle, it will be freed from the topmost animation, and
+        # this problem will go away.  (Also, animations should have access to
+        # the Project, but that's a whole separate issue.)
+
         self.controls = [create(c, 'control') for c in controls]
+        for c in self.controls:
+            c.target = self
+
+    def deferred_set(self, address, *value):
+        """
+        Use an Address to set a value within the project, but defer it to
+        happen on the event queue.
+        """
+        self.event_queue.defer_event(address.set, self, *value)
 
 
 def project(*descs, root_file=None):
-    def default(o):
-        if isinstance(o, type):
-            return str(o)
-        return str(o.__class__).replace('<class ', '<').replace('>', ' object>')
-
     desc = defaults.merge(*descs)
 
     load.ROOT_FILE = root_file

@@ -72,6 +72,17 @@ class BaseAnimation(object):
         if clean_layout:
             self.layout.cleanup()
 
+    def preframe_callback(self):
+        """
+        preframe_callback is called right before the start of a frame rendering
+        pass.
+
+        The ``Project`` writes over this method, for the top-level animation
+        only, in order to drain its event_queue at a moment where no rendering
+        is happening to avoid race conditions.
+        """
+        pass
+
     def start(self):
         self.threading.start()
 
@@ -100,6 +111,9 @@ class BaseAnimation(object):
         self.layout.animation_sleep_time = self.sleep_time or 0
 
     def _run_one_frame(self):
+        timestamps = [time.time()]
+
+        self.preframe_callback()
         timestamps = [time.time()]
 
         self.step(self.runner.amt)
