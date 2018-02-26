@@ -6,11 +6,11 @@ An address description is a string looking like:
 
 ::
 
-    .foo.bar[32][5][baz].bang
+    .foo.bar[32][5][baz].bang()
 
 which would mean
 
-"given an object target, the value ``target.foo.bar[32][5]['baz'].bang``".
+"given an object target, the value ``target.foo.bar[32][5]['baz'].bang()``".
 
 Addresses are divided into "segments".
 
@@ -61,17 +61,20 @@ class Address:
             return target()
 
         def set(self, target, *value):
-            print('!!!', target)
             target(*value)
 
-    def __init__(self, s):
+    def __init__(self, name):
+        self.name = name
         try:
-            self.address = list(_generate(s))
+            self.address = list(_generate(name))
         except:
-            raise ValueError('%s is not a legal address' % s)
+            raise ValueError('%s is not a legal address' % name)
 
         if not self.address:
             raise ValueError('Empty Addresses are not allowed')
+
+    def __str__(self):
+        return self.name
 
     @staticmethod
     def _get(target, address):
