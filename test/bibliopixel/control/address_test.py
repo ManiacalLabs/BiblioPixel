@@ -98,3 +98,8 @@ class AddressTest(unittest.TestCase):
         Address('[1]')
         with self.assertRaises(ValueError):
             Address('foo.[1]')
+
+    def test_assignment(self):
+        self.attr = None
+        Address('.attr = 1').set(self)
+        self.assertEqual(self.attr, 1)
