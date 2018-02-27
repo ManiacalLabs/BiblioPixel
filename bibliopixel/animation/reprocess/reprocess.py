@@ -17,7 +17,7 @@ class MatrixIndexer:
         self.cutter.apply(self.function)
 
 
-class Reprocess(collection.Collection):
+class Reprocess(collection.Wrapper):
     def __init__(self, *args, process=None, **kwds):
         super().__init__(*args, **kwds)
         self.preclear = False
@@ -36,6 +36,5 @@ class Reprocess(collection.Collection):
         self.process = datatype(layout=self.layout, **process)
 
     def step(self, amt=1):
-        anim = self.current_animation
-        anim and anim.step(amt)
+        super().step(amt)
         self.process()

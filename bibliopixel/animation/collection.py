@@ -5,6 +5,9 @@ from .. util import json, log
 
 
 class Collection(animation.BaseAnimation):
+    """
+    A ``Collection`` is a list of ``BaseAnimation``s
+    """
     FAIL_ON_EXCEPTION = False
 
     @staticmethod
@@ -48,7 +51,6 @@ class Collection(animation.BaseAnimation):
     def __init__(self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)
         self.animations = animations or []
-        self.index = 0
         self.internal_delay = 0  # never wait
 
     # Override to handle all the animations
@@ -64,14 +66,57 @@ class Collection(animation.BaseAnimation):
         self.animations.append(anim)
 
     def pre_run(self):
-        self.index = -1
         for a in self.animations:
             a.pre_run()
 
+
+class Indexed(Collection):
+    """
+    An ``Indexed`` is a :py:class:`bibliopixel.animation.Collection`
+    which keeps track of the current animation through an index into the list of
+    animations, and gets a callback after that index changes.
+
+    An ``Indexed`` has two properties.
+
+    ``index`` is a mutable property indexing the current animation in the list
+    of animations.
+
+    ``current_animation`` returns the animation at position ``index`` or None
+    if it is out of the bounds of the ``Collection``.
+    """
+    _index = -1
+
+    @property
+    def index(self):
+        """
+        :returns int: index of the current animation within the Collection.
+        """
+        return self._index
+
+    @index.setter
+    def index(self, index):
+        self._index, old_index = index, self._index
+        self._on_index(old_index)
+
+    def _on_index(self, old_index):
+        """
+        Override this method to get called right after ``self.index`` is set.
+
+        :param int old_index: the previous index, before it was changed.
+        """
+        if self.current_animation:
+            log.debug('%s: %s',
+                      self.__class__.__name__, self.current_animation.title)
+            self.frames = self.current_animation.generate_frames(False)
+
     @property
     def current_animation(self):
-        if 0 <= self.index < len(self.animations):
-            return self.animations[self.index]
+        """
+        :returns: the selected animation based on self.index, or None if
+            self.index is out of bounds
+        """
+        if 0 <= self._index < len(self.animations):
+            return self.animations[self._index]
 
 
 class Parallel(Collection):
@@ -84,7 +129,7 @@ class Parallel(Collection):
             a.layout = a.layout.mutable_copy()
 
 
-class Wrapper(Collection):
+class Wrapper(Indexed):
     # TODO: No unit tests cover any of this.
     @staticmethod
     def pre_recursion(desc):
@@ -93,9 +138,11 @@ class Wrapper(Collection):
         desc['animations'] = [desc.pop('animation')]
         return Collection.pre_recursion(desc)
 
+    def pre_run(self):
+        super().pre_run()
+        self.index = 0
+
     @property
     def animation(self):
-        return self.animations[0]
-
-    def step(self, amt=1):
-        self.animation.step(amt)
+        # This is used elsewhere in client code.  TODO: pick one or the other!
+        return self.current_animation
