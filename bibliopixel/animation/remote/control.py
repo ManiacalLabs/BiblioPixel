@@ -23,7 +23,7 @@ def normalize_name(name):
     return ''.join('_' if e is ' ' else e for e in name if e.isalnum() or e is ' ')
 
 
-class RemoteControl(collection.Collection):
+class RemoteControl(collection.Indexed):
     @staticmethod
     def pre_recursion(desc):
         collection.Collection.pre_recursion(desc)

@@ -3,7 +3,7 @@ from .. util import log
 import random as rand
 
 
-class Sequence(collection.Collection):
+class Sequence(collection.Indexed):
     def __init__(self, layout, random=False, length=None, **kwds):
         """
         Arguments
@@ -23,7 +23,6 @@ class Sequence(collection.Collection):
     def restart(self):
         self.random and rand.shuffle(self.animations)
         self.index = 0
-        self._load_animation()
 
     def pre_run(self):
         self.offset = 0
@@ -40,20 +39,17 @@ class Sequence(collection.Collection):
             pass
 
         self.index += 1
-        if self.index < len(self.animations):
-            self._load_animation()
+        if self.index >= len(self.animations):
+            if self.runner.until_complete:
+                self.completed = True
+            else:
+                self.offset += len(self.animations)
+                self.restart()
 
-        elif self.runner.until_complete:
-            self.completed = True
-
-        else:
-            self.offset += len(self.animations)
-            self.restart()
-
-    def _load_animation(self):
-        log.debug('Sequence: %s', self.current_animation.title)
-        if self.length:
-            step = self.offset + self.index
-            length = self.length[step % len(self.length)]
-            self.current_animation.runner.seconds = length
-        self.frames = self.current_animation.generate_frames(False)
+    def _on_index(self, old_index):
+        if self.current_animation:
+            super()._on_index(old_index)
+            if self.length:
+                step = self.offset + self.index
+                length = self.length[step % len(self.length)]
+                self.current_animation.runner.seconds = length
