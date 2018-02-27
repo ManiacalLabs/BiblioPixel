@@ -64,14 +64,25 @@ class Address:
             target(*value)
 
     def __init__(self, name):
-        self.name = name
+        self.name, *assignment = name.split('=', 1)
+        self.name = self.name.strip()
+
         try:
-            self.address = list(_generate(name))
+            self.address = list(_generate(self.name))
         except:
             raise ValueError('%s is not a legal address' % name)
 
         if not self.address:
             raise ValueError('Empty Addresses are not allowed')
+
+        if assignment:
+            if isinstance(self.address[-1], Address.Call):
+                raise ValueError('Cannot assign to a call operation')
+            assignment = [s.strip() for s in assignment[0].split(',')]
+            assignment = [int(s) if s.isnumeric() else s for s in assignment]
+            self.assignment = tuple(assignment)
+        else:
+            self.assignment = ()
 
     def __str__(self):
         return self.name
@@ -85,10 +96,10 @@ class Address:
     def get(self, target):
         return self._get(target, self.address)
 
-    def set(self, target, *value):
+    def set(self, target, *values):
         *first, last = self.address
         parent = self._get(target, first)
-        last.set(parent, *value)
+        last.set(parent, *(self.assignment + values))
 
 
 def _generate(s):
