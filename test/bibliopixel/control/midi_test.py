@@ -43,7 +43,8 @@ class MidiTest(unittest.TestCase):
     def run_test(self, msgs, expected, routing=None, **kwds):
         with patch.patch(midi, 'mido', FakeMido(msgs)):
             class Settable:
-                pass
+                def deferred_set(self, address, *value):
+                    address.set(self, *value)
 
             settable = Settable()
             m = midi.Midi(routing=routing or self.routing, **kwds)

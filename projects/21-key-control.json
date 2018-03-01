@@ -1,0 +1,52 @@
+{
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.strip"
+    },
+
+    "controls": {
+        "typename": "keyboard",
+        "verbose": true,
+        "extractor": {
+            "accept": {"type": "press"}
+        },
+        "routing": {
+            "a": "animation.index = 0",
+            "s": "animation.index = 1",
+            "d": "animation.index = 2",
+            "f": "animation.index = 3"
+        }
+    },
+
+    "dimensions": [50],
+
+    "run": {
+        "fps": 30
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "animations": [
+            "@bpa.Alternates",
+            "@bpa.BinaryEpochClock.BEClock",
+            "@bpa.ColorChase",
+            "@bpa.ColorFade",
+            "@bpa.ColorPattern",
+            "@bpa.ColorWipe",
+            "@bpa.FireFlies",
+            "@bpa.HalvesRainbow",
+            "@bpa.LarsonScanners.LarsonRainbow",
+            "@bpa.LarsonScanners.LarsonScanner",
+            "@bpa.LinearRainbow",
+            "@bpa.PartyMode",
+            "@bpa.PixelPingPong",
+            "@bpa.RGBClock",
+            "@bpa.Rainbows.Rainbow",
+            "@bpa.Rainbows.RainbowCycle",
+            "@bpa.Searchlights",
+            "@bpa.Wave",
+            "@bpa.Wave.WaveMove",
+            "@bpa.WhiteTwinkle",
+            "@bpa.hexclock"
+        ]
+    }
+}

@@ -35,6 +35,12 @@ class Keyboard(ExtractedControl):
         },
     }
 
+    def _press(self, key):
+        self.receive({'type': 'press', 'key': key})
+
+    def _release(self, key):
+        self.receive({'type': 'release', 'key': key})
+
     def _make_thread(self):
         try:
             import pynput
@@ -46,15 +52,17 @@ class Keyboard(ExtractedControl):
             if getpass.getuser() != 'root':
                 log.warning(DARWIN_ROOT_WARNING, sys.argv[0])
 
-        return pynput.keyboard.Listener(
-            lambda key: self.receive({'type': 'press', 'key': key}),
-            lambda key: self.receive({'type': 'release', 'key': key}))
+        return pynput.keyboard.Listener(self._press, self._release)
 
 
 class KeyboardTester:
     def __setattr__(self, k, v):
         super().__setattr__(k, v)
         print(k, '=', v)
+
+    def deferred_set(self, address, key):
+        print(address, key)
+        setattr(self, str(address), key)
 
 
 def test_keyboard():
