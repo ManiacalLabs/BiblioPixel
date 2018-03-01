@@ -48,8 +48,8 @@ def _dump(args, desc):
     return desc.strip()
 
 
-def _get_animations(args):
-    animations, failed = [], []
+def _get_projects(args):
+    projects, failed = [], []
 
     for filename in args.name:
         saved_path = sys.path[:]
@@ -64,7 +64,7 @@ def _get_animations(args):
                 root_file = os.path.abspath(filename)
 
             project = common_flags.make_project(args, desc, root_file)
-            animations.append(project.animation)
+            projects.append(project)
             if args.dump:
                 print(_dump(args, project.desc))
 
@@ -85,7 +85,7 @@ def _get_animations(args):
             sys.path[:] = saved_path
 
     if not failed:
-        return animations
+        return projects
 
     log.error(FAILURE_ERROR.format(
         count=len(failed), s='' if len(failed) == 1 else 's'))
@@ -97,10 +97,10 @@ def _get_animations(args):
     raise ValueError('Run aborted')
 
 
-def _run_animations(animations, args):
+def _run_projects(projects, args):
     needs_pause = False
-    assert len(animations) == len(args.name)
-    for animation, name in zip(animations, args.name):
+    assert len(projects) == len(args.name)
+    for project, name in zip(projects, args.name):
         log.debug('Running file %s', name)
         if needs_pause:
             args.pause and time.sleep(float(args.pause))
@@ -108,13 +108,12 @@ def _run_animations(animations, args):
             needs_pause = True
 
         try:
-            animation.layout.start()
-            animation.start()
+            project.run()
 
         except KeyboardInterrupt:
             if not args.ignore_exceptions:
                 raise
-            log.warning('\nTermination requested by user.')
+            log.warning('\nKeyboardInterrupt terminated project.')
             needs_pause = False
 
         except Exception as e:
@@ -123,16 +122,13 @@ def _run_animations(animations, args):
             log.error('Exception %s', e)
             traceback.print_exc()
 
-        animation.cleanup()
-        animation.layout.cleanup_drivers()
-
 
 def run(args):
     if args.fail_on_exception:
         Collection.FAIL_ON_EXCEPTION = True
 
     args.name = args.name or ['']
-    animations = _get_animations(args)
+    projects = _get_projects(args)
 
     if args.dry_run:
         print('(dry run - nothing executed)')
@@ -142,7 +138,7 @@ def run(args):
     elif args.s:
         simpixel.open_simpixel()
 
-    _run_animations(animations, args)
+    _run_projects(projects, args)
 
 
 def set_parser(parser):

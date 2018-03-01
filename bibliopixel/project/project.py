@@ -67,18 +67,38 @@ class Project:
         # the Project, but that's a whole separate issue.)
 
         self.controls = [create(c, 'control') for c in controls]
+
+    def start(self):
+        self.layout.start()
         for c in self.controls:
-            c.target = self
+            c.start(self)
+        self.animation.start()
+
+    def cleanup(self):
+        self.animation.cleanup()
+        for c in self.controls:
+            c.cleanup()
+        self.layout.cleanup_drivers()
+
+    def run(self):
+        try:
+            self.start()
+        finally:
+            self.cleanup()
 
     def deferred_set(self, address, *value):
         """
         Use an Address to set a value within the project, but defer it to
         happen on the event queue.
         """
-        self.event_queue.defer_event(address.set, self, *value)
+        self.event_queue.put_event(address.set, self, *value)
 
 
 def project(*descs, root_file=None):
+    """
+    Make a project with recursion and alias resolution.  Use this
+    instead of calling Project() directly.
+    """
     desc = defaults.merge(*descs)
 
     load.ROOT_FILE = root_file
