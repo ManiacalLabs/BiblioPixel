@@ -39,7 +39,7 @@ class Extractor:
             want to see channel=1, type=note_on with each message.
         """
         def to_set(x):
-            if x is None:
+            if not x:
                 return set()
             if isinstance(x, (list, tuple)):
                 return set(x)
@@ -56,6 +56,8 @@ class Extractor:
         self.normalizers = normalizers or {}
         self.keys_by_type = {}
         for k, v in (keys_by_type or {}).items():
+            if isinstance(v, str):
+                v = [v]
             self.keys_by_type[k] = tuple(i for i in v if i not in omit)
 
     def extract(self, msg):
