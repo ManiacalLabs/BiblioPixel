@@ -46,6 +46,7 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None,
     try:
         # Automatically load strings that look like JSON or Yaml filenames.
         desc = load.load_if_filename(desc) or desc
+
         desc = construct.to_type_constructor(desc, python_path)
         datatype = desc.get('datatype')
 
@@ -54,12 +55,20 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None,
         for child_name in getattr(datatype, 'CHILDREN', []):
             child = desc.get(child_name)
             if child:
-                new_path = python_path or ('bibliopixel.' + child_name)
-                if child_name.endswith('s'):
+                is_plural = child_name.endswith('s')
+                remove_s = is_plural and child_name != 'drivers'
+                # This is because it's the "drivers" directory, whereas
+                # the others are animation, control, layout, project
+                # without the s. TODO: rename drivers/ to driver/ in v4
+
+                cname = child_name[:-1] if remove_s else child_name
+                new_path = python_path or ('bibliopixel.' + cname)
+                if is_plural:
                     if isinstance(child, (dict, str)):
                         child = [child]
                     for i, c in enumerate(child):
                         child[i] = recurse(c, pre, post, new_path)
+                    desc[child_name] = child
                 else:
                     desc[child_name] = recurse(child, pre, post, new_path)
 
