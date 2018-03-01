@@ -107,6 +107,10 @@ def get_log_level():
     return logger.getEffectiveLevel()
 
 
+def is_debug():
+    return get_log_level() <= DEBUG
+
+
 # Add a new logging level FRAME for messages which appear on every frame.
 _addLoggingLevel('FRAME', FRAME)
 logger = _new_custom_logger()
