@@ -63,7 +63,11 @@ class Address:
         def set(self, target, *value):
             target(*value)
 
-    def __init__(self, name):
+    def __init__(self, name=None):
+        if not name:
+            self.address = self.assignment = ()
+            return
+
         self.name, *assignment = name.split('=', 1)
         self.name = self.name.strip()
 
@@ -76,6 +80,8 @@ class Address:
             raise ValueError('Empty Addresses are not allowed')
 
         if assignment:
+            if not self.address:
+                raise ValueError('Cannot assign to an empty address')
             if isinstance(self.address[-1], Address.Call):
                 raise ValueError('Cannot assign to a call operation')
             assignment = [s.strip() for s in assignment[0].split(',')]
@@ -83,6 +89,9 @@ class Address:
             self.assignment = tuple(assignment)
         else:
             self.assignment = ()
+
+    def __bool__(self):
+        return bool(self.address)
 
     def __str__(self):
         return self.name

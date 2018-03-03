@@ -4,9 +4,14 @@ from bibliopixel.control.address import Address
 
 class AddressTest(unittest.TestCase):
 
-    def test_empty_error(self):
+    def test_empty(self):
+        address = Address('')
+        self.assertFalse(address)
+        self.assertFalse(address.address)
+        self.assertFalse(address.assignment)
+        self.assertEqual(address.get(23), 23)
         with self.assertRaises(ValueError):
-            Address('')
+            address.set(self, 23)
 
     def test_attrib(self):
         address = Address('attr')
