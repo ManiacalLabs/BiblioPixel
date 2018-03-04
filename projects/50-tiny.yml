@@ -1,0 +1,23 @@
+driver:
+    num: 1024
+    typename: simpixel
+
+layout:
+    typename: matrix
+    width: 32
+    height: 32
+
+run:
+    fps: 30
+    seconds: 3
+
+aliases:
+    bpa: BiblioPixelAnimations.matrix
+
+animation:
+    typename: sequence
+    length: 1
+    animations:
+        - "@bpa.ImageAnim"
+        - "@bpa.ImageShow"
+        - "@bpa.ImageDissolve"
