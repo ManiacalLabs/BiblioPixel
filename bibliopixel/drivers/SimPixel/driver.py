@@ -1,10 +1,9 @@
 import struct
 from . import websocket
-from .. driver_base import DriverBase
-from ... util import log, server_cache
+from .. server_driver import ServerDriver
 
 
-class SimPixel(DriverBase):
+class SimPixel(ServerDriver):
     """Output a simulation of your displat to the web-based
     simulator at http://simpixel.io
 
@@ -18,37 +17,25 @@ class SimPixel(DriverBase):
         :py:mod:`bibliopixel.layout.geometry`
     """
 
-    CACHE = server_cache.ServerCache(websocket.Server, selectInterval=0.001)
+    SERVER_CLASS = websocket.Server
+    SERVER_KWDS = {'selectInterval': 0.001}
 
-    def __init__(self, num=1024, port=1337, pixel_positions=None, **kwds):
+    def __init__(self, num=1024, port=1337, **kwds):
+        """
+        Args:
+            num:  number of LEDs being visualizer.
+            port:  the port on which the SimPixel server is running.
+            pixel_positions:  the positions of the LEDs in 3-d space.
+            **kwds:  keywords passed to DriverBase.
+        """
+        super().__init__(num, address=port, **kwds)
 
-        super().__init__(num, **kwds)
-        self.port = port
-        self.pixel_positions = self.server = self.thread = None
-
-        if pixel_positions:
-            self.set_pixel_positions(pixel_positions)
-
-    def start(self):
-        """SHOULD BE PRIVATE"""
-        self.server = self.CACHE.get_server(self.port)
-        if self.pixel_positions:
-            self.server.update(positions=self.pixel_positions)
-
-    def set_pixel_positions(self, pixel_positions):
-        """SHOULD BE PRIVATE"""
+    def _on_positions(self):
         # Flatten list of led positions.
-        pl = [c for p in pixel_positions for c in p]
-        self.pixel_positions = bytearray(struct.pack('<%sh' % len(pl), *pl))
         if self.server:
-            self.server.update(positions=self.pixel_positions)
-
-    def cleanup(self):
-        """SHOULD BE PRIVATE"""
-        self.server.close()
-
-    def _compute_packet(self):
-        self._render()
+            pl = [c for p in self.pixel_positions for c in p]
+            positions = bytearray(struct.pack('<%sh' % len(pl), *pl))
+            self.server.update(positions=positions)
 
     def _send_packet(self):
         self.server.update(pixels=self._buf)
