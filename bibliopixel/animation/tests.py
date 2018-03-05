@@ -2,22 +2,21 @@ from . strip import BaseStripAnim
 from . matrix import BaseMatrixAnim
 from .. util import colors
 
+BASE_COLORS = [colors.Red, colors.Green, colors.Green,
+               colors.Blue, colors.Blue, colors.Blue]
+CYCLE_COLORS = [colors.Red, colors.Green, colors.Blue, colors.White]
+
 
 class StripChannelTest(BaseStripAnim):
 
     def __init__(self, layout):
         super().__init__(layout)
         self.internal_delay = 0.500
-        self.colors = [colors.Red, colors.Green, colors.Blue, colors.White]
+        self.colors = CYCLE_COLORS
 
     def step(self, amt=1):
-
-        self.layout.set(0, colors.Red)
-        self.layout.set(1, colors.Green)
-        self.layout.set(2, colors.Green)
-        self.layout.set(3, colors.Blue)
-        self.layout.set(4, colors.Blue)
-        self.layout.set(5, colors.Blue)
+        for i, c in enumerate(BASE_COLORS):
+            self.layout.set(i, c)
 
         color = self.cur_step % 4
         self.layout.fill(self.colors[color], 7, 9)

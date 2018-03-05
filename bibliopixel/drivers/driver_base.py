@@ -60,7 +60,7 @@ class DriverBase(object):
         self.width = width
         self.height = height
         self.maker = maker
-        self._buf = maker.bytes(self.bufByteCount())
+        self._buf = self._make_buffer()
 
         self.lastUpdate = 0
         self.brightness_lock = threading.Lock()
@@ -182,6 +182,9 @@ class DriverBase(object):
         else:
             level = self._brightness / 255.0
         gam, (r, g, b) = self.gamma.get, self.c_order
-        for i in range(self.numLEDs):
+        for i in range(min(self.numLEDs, len(self._buf) / 3)):
             c = [int(level * x) for x in self._colors[i + self._pos]]
             self._buf[i * 3:(i + 1) * 3] = gam(c[r]), gam(c[g]), gam(c[b])
+
+    def _make_buffer(self):
+        return self.maker.bytes(self.bufByteCount())
