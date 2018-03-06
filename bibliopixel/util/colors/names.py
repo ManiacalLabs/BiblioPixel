@@ -41,7 +41,7 @@ def name_to_color(name):
     return color
 
 
-def color_to_name(color):
+def color_to_name(color, use_hex=False):
     """
     :param tuple color: an RGB 3-tuple of integer colors
     :returns: a string name for this color
@@ -49,10 +49,14 @@ def color_to_name(color):
     ``name_to_color(color_to_name(c)) == c`` is guaranteed to be true (but the
     reverse is not true, because name_to_color is a many-to-one function).
     """
+    if use_hex:
+        return '#%02x%02x%02x' % color
+    if not isinstance(color, tuple):
+        color = tuple(color)
     try:
-        return TO_NAME[tuple(color)]
+        return TO_NAME[color]
     except:
-        return str(tuple(color))
+        return str(color)
 
 
 def toggle(s):
