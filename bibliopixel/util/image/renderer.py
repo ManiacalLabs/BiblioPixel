@@ -9,17 +9,17 @@ def renderer(layout, color, pixel_width, pixel_height,
 
     from PIL import Image, ImageDraw
 
-    dims = layout.dimensions
-    if len(dims) == 1:
+    shape = layout.shape
+    if len(shape) == 1:
         if vertical:
-            dims, getter = (1, dims[0]), lambda x, y: layout.get(y)
+            shape, getter = (1, shape[0]), lambda x, y: layout.get(y)
         else:
-            dims, getter = (dims[0], 1), lambda x, y: layout.get(x)
+            shape, getter = (shape[0], 1), lambda x, y: layout.get(x)
     else:
         getter = layout.get
 
     # LED width and height
-    width, height = dims
+    width, height = shape
 
     # width and height for individual pixels
     pw, ph = pixel_width, pixel_width

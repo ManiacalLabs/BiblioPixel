@@ -56,6 +56,10 @@ def add_project_flags(parser):
 
     parser.add_argument(
         '--dimensions', '--dim', default=None,
+        help='DEPRECATED: x, (x, y) or (x, y, z) dimensions for project')
+
+    parser.add_argument(
+        '--shape', default=None,
         help='x, (x, y) or (x, y, z) dimensions for project')
 
     parser.add_argument(
@@ -146,11 +150,15 @@ def _make_project_flags(args):
         animation['length'] = length
 
     if args.dimensions is not None:
-        dimensions = args.dimensions.split(',')
+        deprecate.deprecate('Use --shape: --dimensions')
+
+    shape = args.shape or args.dimensions
+    if shape is not None:
+        shape = shape.split(',')
         try:
-            project_flags['dimensions'] = [int(i) for i in dimensions]
+            project_flags['shape'] = [int(i) for i in shape]
         except:
-            raise ValueError('--dimensions must be one to three numbers '
+            raise ValueError('--shape must be one to three numbers '
                              'separated by commas.')
 
     return project_flags

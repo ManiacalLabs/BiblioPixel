@@ -50,8 +50,8 @@ Examples of flags are ``-v``, ``--verbose``, ``--defaults``, ``-d``,
 ``--simpixel``.  Flags either start with ``-``, for one letter flags, or ``--``
 for multi-letter flags.
 
-Sometimes two flags have the same meaning, like ``--simpixel`` and ``-s``,
-``--verbose`` and ``-v``, or ``--dimensions`` and ``--dim``.
+Sometimes two flags have the same meaning, like ``--simpixel`` and ``-s``
+or ``--verbose`` and ``-v``.
 
 Some flags take an argument, like ``--dim=160`` or ``--loglevel=frame``.
 Other flags do not, like ``--verbose`` or ``-v``.

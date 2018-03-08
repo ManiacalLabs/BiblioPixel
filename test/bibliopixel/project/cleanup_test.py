@@ -58,7 +58,7 @@ class CleanupTest(unittest.TestCase):
         actual = cleanup_after(copy.deepcopy(source))
         expected = {
             'aliases': {},
-            'dimensions': (),
+            'shape': (),
             'driver': {},
             'drivers': [],
             'layout': {
@@ -73,7 +73,7 @@ class CleanupTest(unittest.TestCase):
         self.assertEqual(actual, dict(BASE, **expected))
 
     def test_1_dimension(self):
-        source = {'dimensions': 3}
+        source = {'shape': 3}
         actual = cleanup_before(source)
         expected = {
             'drivers': [{'num': 3, 'typename': 'simpixel'}],
@@ -81,12 +81,12 @@ class CleanupTest(unittest.TestCase):
         }
         self.assertEqual(actual, dict(BASE, **expected))
 
-        source = {'dimensions': [3]}
+        source = {'shape': [3]}
         actual = cleanup_before(source)
         self.assertEqual(actual, dict(BASE, **expected))
 
-    def test_2_dimensions(self):
-        source = {'dimensions': [2, 5]}
+    def test_2_shape(self):
+        source = {'shape': [2, 5]}
         actual = cleanup_before(source)
         expected = {
             'drivers': [{'num': 10, 'typename': 'simpixel'}],
@@ -94,8 +94,8 @@ class CleanupTest(unittest.TestCase):
         }
         self.assertEqual(actual, dict(BASE, **expected))
 
-    def test_3_dimensions(self):
-        source = {'dimensions': [2, 3, 7]}
+    def test_3_shape(self):
+        source = {'shape': [2, 3, 7]}
         actual = cleanup_before(source)
         expected = {
             'drivers': [{'num': 42, 'typename': 'simpixel'}],

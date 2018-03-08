@@ -16,12 +16,12 @@ class DefaultsTest(unittest.TestCase):
         self.run_failure()
 
     def test_json(self):
-        self.run_test({"dimensions": 5}, '{"dimensions": 5}')
-        self.run_failure('{"dimensionX": 5}')
+        self.run_test({"shape": 5}, '{"shape": 5}')
+        self.run_failure('{"shapeX": 5}')
 
     def test_sections1(self):
-        self.run_test({"dimensions": 5}, 'dimensions=5')
-        self.run_failure('dimensionX=5')
+        self.run_test({"shape": 5}, 'shape=5')
+        self.run_failure('shapeX=5')
 
     def test_sections2(self):
         data = 'animation={"typename": "feedback", "master": 2}'

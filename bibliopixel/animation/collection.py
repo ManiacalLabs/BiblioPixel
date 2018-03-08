@@ -61,7 +61,7 @@ class Collection(animation.BaseAnimation):
         super().cleanup(clean_layout)
 
     def add_animation(self, anim, **kwds):
-        deprecate('Collection.add_animation')
+        deprecate.deprecate('Collection.add_animation')
         anim.set_runner(kwds)
         self.animations.append(anim)
 

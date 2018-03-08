@@ -37,11 +37,11 @@ class Circle(Layout):
 
     @property
     def lastRing(self):
-        deprecate('Circle.lastRing')
+        deprecate.deprecate('Circle.lastRing')
         return self.ringCount - 1
 
     @property
-    def dimensions(self):
+    def shape(self):
         """Returns ``ringCount, ringSteps``."""
         return self.ringCount, self.ringSteps
 

@@ -26,7 +26,7 @@ class SPIBase(DriverBase):
         from ...project.types.spi_interface import make
         # See https://github.com/ManiacalLabs/BiblioPixel/issues/419
         if interface:
-            deprecate('SPIBase.interface')
+            deprecate.deprecate('SPIBase.interface')
         else:
             interface = 'FILE'
 
