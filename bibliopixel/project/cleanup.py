@@ -1,6 +1,6 @@
 import copy
 from . import alias_lists, construct, merge
-from .. import layout
+from .. import layout, util
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
@@ -71,19 +71,23 @@ def cleanup_drivers(desc):
     return desc
 
 
-def cleanup_dimensions(desc):
+def cleanup_shape(desc):
     desc = copy.deepcopy(desc)
     dimensions = desc.pop('dimensions', None)
-    if not dimensions:
+    if dimensions:
+        util.deprecate.deprecate('Project section "dimensions"')
+
+    shape = desc.pop('shape', dimensions)
+    if not shape:
         return desc
 
     if len(desc['drivers']) != 1:
         raise ValueError('Cannot use dimensions with more than one driver')
 
     try:
-        d = [int(dimensions)]
+        d = [int(shape)]
     except:
-        d = list(dimensions)
+        d = list(shape)
 
     ldesc = construct.to_type_constructor(desc.get('layout') or {})
     driver = desc['drivers'][0]
@@ -113,7 +117,7 @@ def cleanup(desc):
     desc = cleanup_aliases(desc)
     desc = cleanup_animation(desc)
     desc = cleanup_drivers(desc)
-    desc = cleanup_dimensions(desc)  # Must come after cleanup_drivers
+    desc = cleanup_shape(desc)  # Must come after cleanup_drivers
     desc = cleanup_numbers(desc)
 
     return desc

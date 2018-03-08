@@ -69,7 +69,7 @@ def main():
         log.printer('    bp --help')
         sys.exit(-1)
 
-    common_flags.execute_flags(args)
+    common_flags.execute_args(args)
 
     try:
         return run(args) or 0

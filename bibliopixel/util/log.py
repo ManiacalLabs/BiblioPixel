@@ -127,5 +127,5 @@ printer = print
 
 def setLogLevel(level):
     from . import deprecate
-    deprecate('util.setLogLevel')
+    deprecate.deprecate('util.setLogLevel')
     set_log_level(level)

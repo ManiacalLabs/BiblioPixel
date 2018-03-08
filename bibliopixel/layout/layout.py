@@ -64,7 +64,7 @@ class Layout(object):
 
     def update(self):
         """DEPRECATED: Use :py:func:`push_to_driver` instead"""
-        util.deprecate('Layout.update')
+        util.deprecate.deprecate('Layout.update')
         return self.push_to_driver()
 
     def start(self):
@@ -81,13 +81,18 @@ class Layout(object):
         self.threading.wait_for_update()
 
     @property
-    def dimensions(self):
+    def shape(self):
         """
         Return a tuple indicating the dimensions of the layout - (x,) for a
         strip, (x, y) for an array, (x, y, z) for a cube, and
         (ring_count, ring_steps) for a circle.
         """
         raise NotImplementedError
+
+    @property
+    def dimensions(self):
+        util.deprecate.deprecate('Layout.dimensions')
+        return self.shape
 
     @property
     def color_list(self):
@@ -134,7 +139,7 @@ class Layout(object):
         self._colors[:] = buf
 
     def setBuffer(self, buf):
-        util.deprecate('layout.setBuffer')
+        util.deprecate.deprecate('layout.setBuffer')
 
         # https://stackoverflow.com/questions/1624883
         self.set_colors(buf=list(zip(*(iter(buf),) * 3)))

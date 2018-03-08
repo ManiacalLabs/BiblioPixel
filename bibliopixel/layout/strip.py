@@ -34,7 +34,7 @@ class Strip(MultiLayout):
         self.set_pixel_positions(make_strip_coord_map_positions(self.numLEDs))
 
     @property
-    def dimensions(self):
+    def shape(self):
         """Returns a 1-tuple with the length of the strip"""
         return self.numLEDs,
 

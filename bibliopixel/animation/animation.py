@@ -97,7 +97,7 @@ class BaseAnimation(object):
                 yield
 
     def run(self, **kwds):
-        deprecate('BaseAnimation.run')
+        deprecate.deprecate('BaseAnimation.run')
         self._set_runner(kwds)
         self.start()
 

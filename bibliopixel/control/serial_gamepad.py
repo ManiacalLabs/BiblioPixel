@@ -49,7 +49,7 @@ class SerialGamePad(BaseGamePad):
             self._com.close()
 
     def close(self):
-        deprecate('SerialGamePad.close')
+        deprecate.deprecate('SerialGamePad.close')
         self.cleanup()
 
     @staticmethod
