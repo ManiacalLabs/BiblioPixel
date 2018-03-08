@@ -12,7 +12,7 @@ section=value
 Example:
 
 ``````
-bp set numbers=float dimensions=80
+bp set numbers=float shape=80
 ``````
 """
 

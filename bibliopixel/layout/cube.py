@@ -33,7 +33,7 @@ class Cube(Layout):
         return make_cube_coord_map_positions(self.coord_map)
 
     @property
-    def dimensions(self):
+    def shape(self):
         """Returns ``x, y, z``"""
         return self.x, self.y, self.z
 

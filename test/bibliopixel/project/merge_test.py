@@ -32,7 +32,7 @@ class MergeTest(unittest.TestCase):
             'aliases': {},
             'animation': {'typename': 'bfoo'},
             'controls': [],
-            'dimensions': (),
+            'shape': (),
             'driver': {'typename': 'bar'},
             'drivers': ['bang', 'bop'],
             'layout': {},

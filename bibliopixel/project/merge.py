@@ -13,7 +13,7 @@ DEFAULT_PROJECT = collections.OrderedDict((
     ('maker', 'bibliopixel.project.data_maker.Maker'),
     ('driver', {}),
     ('drivers', []),
-    ('dimensions', ()),
+    ('shape', ()),
     ('layout', {}),
     ('run', {}),
     ('animation', {}),
@@ -22,7 +22,7 @@ DEFAULT_PROJECT = collections.OrderedDict((
 PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
 
 NOT_MERGEABLE = (
-    'controls', 'datatype', 'dimensions', 'drivers', 'numbers', 'path',
+    'controls', 'datatype', 'shape', 'drivers', 'numbers', 'path',
     'typename')
 
 SECTION_ISNT_DICT_ERROR = 'Project section "%s" is %s, should be dictionary'
