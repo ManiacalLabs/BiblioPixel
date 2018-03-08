@@ -5,7 +5,7 @@ from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
 
 
-class BaseAnimation(object):
+class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
 
@@ -162,6 +162,10 @@ class BaseAnimation(object):
     def _set_runner(self, runner):
         self.runner = Runner(**(runner or {}))
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
+
+
+# DEPRECATED
+BaseAnimation = Animation
 
 
 def _report_framerate(timestamps):

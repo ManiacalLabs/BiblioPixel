@@ -1,7 +1,7 @@
-from . animation import BaseAnimation
+from . animation import Animation
 
 
-class Off(BaseAnimation):
+class Off(Animation):
     """A trivial animation that turns all pixels in a layout off."""
 
     def __init__(self, layout, timeout=1, **kwds):

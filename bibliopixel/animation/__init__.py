@@ -1,4 +1,4 @@
-from . animation import BaseAnimation
+from . animation import Animation
 from . circle import BaseCircleAnim
 from . game import BaseGameAnim
 from . matrix import BaseMatrixAnim
@@ -15,3 +15,4 @@ strip_test = StripChannelTest
 matrix_calibration = MatrixCalibrationTest
 matrix_test = MatrixChannelTest
 from . off import OffAnim
+from . animation import BaseAnimation

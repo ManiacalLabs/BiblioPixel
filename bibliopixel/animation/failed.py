@@ -3,7 +3,7 @@ from .. util import log
 from . import animation
 
 
-class Failed(animation.BaseAnimation):
+class Failed(animation.Animation):
     """
     An animation that's created when we fail to load or construct the
     animation that was originally specified

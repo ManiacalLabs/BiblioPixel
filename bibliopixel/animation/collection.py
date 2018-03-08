@@ -4,9 +4,9 @@ from . import animation
 from .. util import deprecate, json, log
 
 
-class Collection(animation.BaseAnimation):
+class Collection(animation.Animation):
     """
-    A ``Collection`` is a list of ``BaseAnimation``s
+    A ``Collection`` is a list of ``Animation``s
     """
     FAIL_ON_EXCEPTION = False
 
