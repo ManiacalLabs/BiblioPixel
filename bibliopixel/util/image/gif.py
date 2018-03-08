@@ -1,5 +1,5 @@
 import os, pathlib
-from .. import log
+from .. import log, deprecate
 
 
 # PIL has a limit on how many image files can be open at once - you get an
@@ -79,16 +79,22 @@ in BiblioPixelAnimations.matrix.ImageAnim
 
 def convert_mode(image, mode='RGB'):
     """Return an image in the given mode."""
+    deprecate('util.gif.convert_model')
+
     return image if (image.mode == mode) else image.convert(mode=mode)
 
 
 def image_to_colorlist(image, container=list):
     """Given a PIL.Image, returns a ColorList of its pixels."""
+    deprecate('util.gif.image_to_colorlist')
+
     return container(convert_mode(image).getdata())
 
 
 def animated_gif_to_colorlists(image, container=list):
     """Given an animated GIF, return a list with a colorlist for each frame."""
+    deprecate('util.gif.animated_gif_to_colorlists')
+
     from PIL import ImageSequence
 
     it = ImageSequence.Iterator(image)

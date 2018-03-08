@@ -1,6 +1,6 @@
 import contextlib, threading, time
 from . runner import Runner, STATE
-from .. util import log
+from .. util import deprecate, log
 from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
 
@@ -97,7 +97,7 @@ class BaseAnimation(object):
                 yield
 
     def run(self, **kwds):
-        # DEPRECATED
+        deprecate('BaseAnimation.run')
         self._set_runner(kwds)
         self.start()
 

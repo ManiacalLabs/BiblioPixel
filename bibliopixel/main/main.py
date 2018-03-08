@@ -52,6 +52,7 @@ def get_args(argv=sys.argv):
 
     if argv == ['-h']:
         log.printer(commands.HELP)
+
     return parser.parse_args(argv)
 
 
@@ -68,10 +69,7 @@ def main():
         log.printer('    bp --help')
         sys.exit(-1)
 
-    if args.verbose and args.loglevel != 'frame':
-        log.set_log_level('debug')
-    else:
-        log.set_log_level(args.loglevel)
+    common_flags.execute_flags(args)
 
     try:
         return run(args) or 0
