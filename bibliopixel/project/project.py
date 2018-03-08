@@ -2,7 +2,7 @@ import queue
 from . import (
     attributes, construct, cleanup, defaults, event_queue, load, recurse)
 from .. util import exception, json
-from .. animation import BaseAnimation, failed
+from .. animation import Animation, failed
 
 EVENT_QUEUE_MAXSIZE = 1000
 

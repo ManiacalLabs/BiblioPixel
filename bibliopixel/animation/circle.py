@@ -1,8 +1,8 @@
-from . animation import BaseAnimation
+from . animation import Animation
 from .. layout import Circle
 
 
-class BaseCircleAnim(BaseAnimation):
+class BaseCircleAnim(Animation):
 
     def __init__(self, layout, **kwds):
         super().__init__(layout, **kwds)

@@ -1,8 +1,8 @@
-from . animation import BaseAnimation
+from . animation import Animation
 from .. layout import Matrix
 
 
-class BaseMatrixAnim(BaseAnimation):
+class BaseMatrixAnim(Animation):
     LAYOUT_CLASS = Matrix
     LAYOUT_ARGS = 'width', 'height'
 

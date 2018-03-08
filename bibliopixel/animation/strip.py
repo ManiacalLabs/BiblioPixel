@@ -1,8 +1,8 @@
-from . animation import BaseAnimation
+from . animation import Animation
 from .. layout import Strip
 
 
-class BaseStripAnim(BaseAnimation):
+class BaseStripAnim(Animation):
     LAYOUT_CLASS = Strip
     LAYOUT_ARGS = 'num',
 

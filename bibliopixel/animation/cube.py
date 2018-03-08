@@ -1,8 +1,8 @@
-from . animation import BaseAnimation
+from . animation import Animation
 from .. layout import Cube
 
 
-class BaseCubeAnim(BaseAnimation):
+class BaseCubeAnim(Animation):
     LAYOUT_CLASS = Cube
     LAYOUT_ARGS = 'x', 'y', 'z'
 

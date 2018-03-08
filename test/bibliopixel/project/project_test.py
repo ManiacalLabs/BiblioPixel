@@ -290,7 +290,7 @@ PROJECT_ANIMATION = """
 """
 
 
-class AnimationTest(animation.BaseAnimation):
+class AnimationTest(animation.Animation):
     PROJECT = {
         "driver": "dummy",
         "layout": {

@@ -5,7 +5,7 @@ class EventQueue(queue.Queue):
     """
     ``Event``s are thread-unsafe operations to be executed later at a
     thread-safe time.  In the animation loop, this happens in
-    :py:method:`bibliopixel.animation.BaseAnimation.preframe_callback`.
+    :py:method:`bibliopixel.animation.Animation.preframe_callback`.
 
     The typical `Event` is a change to some parameter of an animation,
     but in general is represented by a call to a function with fixed parameters.

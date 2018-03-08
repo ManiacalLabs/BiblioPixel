@@ -1,4 +1,4 @@
-from . animation import BaseAnimation
+from . animation import Animation
 from .. util import log
 import threading
 from enum import IntEnum
@@ -19,7 +19,7 @@ HOST_MAP = {
 }
 
 
-class Receiver(BaseAnimation):
+class Receiver(Animation):
     free_run = True
 
     def __init__(self, layout, **kwds):

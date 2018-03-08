@@ -5,7 +5,7 @@ from .. import log
 class AnimationThreading(object):
     """
     AnimationThreading handles threading - and eventually multiprocessing - for
-    BaseAnimation.
+    Animation.
     """
 
     def __init__(self, runner, run):
