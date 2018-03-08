@@ -23,7 +23,14 @@ def get_args(argv=sys.argv):
         if not argv:
             return
 
-    if argv and not argv[0].isidentifier() and '-h' not in argv:
+    # Move all the flags to the end.
+    args = [], []
+    for a in argv:
+        args[a.startswith('-')].append(a)
+
+    argv = args[0] + args[1]
+
+    if not argv[0].isidentifier() and '-h' not in argv:
         # The first argument can't be a command so try to run it.
         argv.insert(0, 'run')
 
