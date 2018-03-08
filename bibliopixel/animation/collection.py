@@ -1,7 +1,7 @@
 import os, traceback
 from .. project import aliases, construct, load, project
 from . import animation
-from .. util import json, log
+from .. util import deprecate, json, log
 
 
 class Collection(animation.BaseAnimation):
@@ -61,7 +61,7 @@ class Collection(animation.BaseAnimation):
         super().cleanup(clean_layout)
 
     def add_animation(self, anim, **kwds):
-        # DEPRECATED.
+        deprecate('Collection.add_animation')
         anim.set_runner(kwds)
         self.animations.append(anim)
 

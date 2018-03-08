@@ -2,6 +2,7 @@ from . layout import Layout
 from . geometry.circle import (
     make_circle_coord_map, calc_ring_steps, calc_ring_pixel_count,
     make_circle_coord_map_positions)
+from .. util import deprecate
 
 
 class Circle(Layout):
@@ -23,9 +24,6 @@ class Circle(Layout):
             self.ringSteps = calc_ring_steps(self.rings)
 
         self.ringCount = len(self.rings)
-        # DEPRECATED
-        self.lastRing = self.ringCount - 1
-
         self.set_pixel_positions(make_circle_coord_map_positions(self.rings))
 
         num = calc_ring_pixel_count(self.rings)
@@ -36,6 +34,11 @@ class Circle(Layout):
         if self.numLEDs != num:
             raise ValueError(
                 "Total ring LED count does not equal driver LED count!")
+
+    @property
+    def lastRing(self):
+        deprecate('Circle.lastRing')
+        return self.ringCount - 1
 
     @property
     def dimensions(self):

@@ -63,7 +63,8 @@ class Layout(object):
             d.set_pixel_positions(pixel_positions)
 
     def update(self):
-        """DEPRECATED - use :py:func:`push_to_driver`"""
+        """DEPRECATED: Use :py:func:`push_to_driver` instead"""
+        util.deprecate('Layout.update')
         return self.push_to_driver()
 
     def start(self):
@@ -133,7 +134,8 @@ class Layout(object):
         self._colors[:] = buf
 
     def setBuffer(self, buf):
-        """DEPRECATED!"""
+        util.deprecate('layout.setBuffer')
+
         # https://stackoverflow.com/questions/1624883
         self.set_colors(buf=list(zip(*(iter(buf),) * 3)))
 

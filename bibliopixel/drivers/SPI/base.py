@@ -1,6 +1,7 @@
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... util.colors import gamma as _gamma
+from ... util import deprecate
 from . import interfaces
 
 
@@ -20,11 +21,14 @@ class SPIBase(DriverBase):
     """
     def __init__(self, num, dev='/dev/spidev0.0',
                  spi_interface=None, spi_speed=1,
-                 interface='FILE',  # DEPRECATED
-                 **kwargs):
+                 interface=None, **kwargs):
         super().__init__(num, **kwargs)
         from ...project.types.spi_interface import make
         # See https://github.com/ManiacalLabs/BiblioPixel/issues/419
+        if interface:
+            deprecate('SPIBase.interface')
+        else:
+            interface = 'FILE'
 
         maker = interfaces._SPI_INTERFACES[make(spi_interface or interface)]
         self._interface = maker(dev=dev, spi_speed=spi_speed)

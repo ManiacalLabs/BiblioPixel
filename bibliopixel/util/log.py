@@ -124,5 +124,8 @@ frame, debug, info, warning, error = (
 # re-assign this variable if you need to redirect your printing.
 printer = print
 
-# DEPRECATED
-setLogLevel = set_log_level
+
+def setLogLevel(level):
+    from . import deprecate
+    deprecate('util.setLogLevel')
+    set_log_level(level)

@@ -1,6 +1,6 @@
 import os
 from .. project import data_maker, defaults, project
-from .. util import json, log
+from .. util import deprecate, json, log
 
 """Common command line arguments for run and demo."""
 
@@ -21,12 +21,24 @@ NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 def add_common_flags(parser):
     parser.add_argument(
+        '--deprecate', choices=deprecate.CHOICES, default=deprecate.DEFAULT,
+        help=deprecate.HELP)
+    parser.add_argument(
         '--loglevel', choices=log.SORTED_NAMES, default='info',
         help=LOGLEVEL_HELP)
     parser.add_argument(
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
     parser.add_argument(
         '--version', action='store_true', help=VERSION_HELP)
+
+
+def execute_args(args):
+    if args.verbose and args.loglevel != 'frame':
+        log.set_log_level('debug')
+    else:
+        log.set_log_level(args.loglevel)
+
+    deprecate.ACTION = args.deprecate
 
 
 def add_project_flags(parser):

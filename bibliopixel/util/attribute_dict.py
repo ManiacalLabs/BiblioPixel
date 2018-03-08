@@ -1,3 +1,6 @@
+from . import deprecate
+
+
 class AttributeDict(object):
     """
     A dict that exposes its values as attributes.
@@ -6,6 +9,7 @@ class AttributeDict(object):
     """
 
     def __init__(self, *args, **kwds):
+        deprecate.deprecate('util.AttributeDict')
         for k, v in dict(*args, **kwds).items():
             setattr(self, k, v)
 
