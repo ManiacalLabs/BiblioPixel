@@ -1,5 +1,5 @@
 from . animation import Animation
-from . circle import BaseCircleAnim
+from . circle import Circle
 from . game import BaseGameAnim
 from . matrix import BaseMatrixAnim
 from . cube import BaseCubeAnim
@@ -16,3 +16,4 @@ matrix_calibration = MatrixCalibrationTest
 matrix_test = MatrixChannelTest
 from . off import OffAnim
 from . animation import BaseAnimation
+from . circle import BaseCircleAnim

@@ -2,7 +2,7 @@ from . animation import Animation
 from .. layout import Circle
 
 
-class BaseCircleAnim(Animation):
+class Circle(Animation):
 
     def __init__(self, layout, **kwds):
         super().__init__(layout, **kwds)
@@ -15,3 +15,7 @@ class BaseCircleAnim(Animation):
         self.ringCount = layout.ringCount
         self.lastRing = layout.lastRing
         self.ringSteps = layout.ringSteps
+
+
+# DEPRECATED
+BaseCircleAnim = Circle
