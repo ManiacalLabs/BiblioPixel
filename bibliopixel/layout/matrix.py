@@ -113,7 +113,7 @@ class Matrix(MultiLayout):
         self.fonts = font.fonts
 
     @property
-    def dimensions(self):
+    def shape(self):
         """Returns ``width, height``"""
         return self.width, self.height
 

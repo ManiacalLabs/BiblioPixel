@@ -38,7 +38,7 @@ class Circle(Layout):
                 "Total ring LED count does not equal driver LED count!")
 
     @property
-    def dimensions(self):
+    def shape(self):
         """Returns ``ringCount, ringSteps``."""
         return self.ringCount, self.ringSteps
 
