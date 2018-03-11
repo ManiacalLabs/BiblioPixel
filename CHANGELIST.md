@@ -1,3 +1,11 @@
+## v3.4.7 - 2018-03-11
+- Better error reporting
+- More documentation
+- Fine-grained steps in Sequence
+- More work on general controls
+- UDP framework
+- Project event queue
+
 ## v3.4.6 - 2018-02-10
 - Fix crash in `bp demo`
 
