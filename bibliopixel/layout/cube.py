@@ -60,5 +60,6 @@ class Cube(Layout):
         self._set(x, y, z, color)
 
 
-# This is DEPRECATED
-LEDCube = Cube
+from .. util import deprecated
+if deprecated.allowed():
+    LEDCube = Cube

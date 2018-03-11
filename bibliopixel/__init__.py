@@ -9,10 +9,11 @@ from . util.colors import gamma
 from . drivers import return_codes
 from . project import data_maker
 
-# These are DEPRECATED
-from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
-from . layout import matrix_drawing as matrix
-from . layout.geometry.rotation import Rotation
+from . util import deprecated
+if deprecated.allowed():
+    from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
+    from . layout import matrix_drawing as matrix
+    from . layout.geometry.rotation import Rotation
 
 
 def _get_version():

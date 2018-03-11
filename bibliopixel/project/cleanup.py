@@ -75,7 +75,7 @@ def cleanup_shape(desc):
     desc = copy.deepcopy(desc)
     dimensions = desc.pop('dimensions', None)
     if dimensions:
-        util.deprecate.deprecate('Project section "dimensions"')
+        util.deprecated.deprecated('Project section "dimensions"')
 
     shape = desc.pop('shape', None) or dimensions
     if not shape:

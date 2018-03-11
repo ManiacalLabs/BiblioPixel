@@ -12,5 +12,6 @@ class Off(Animation):
         self.layout.all_off()
 
 
-# DEPRECATED
-OffAnim = Off
+from .. util import deprecated
+if deprecated.allowed():
+    OffAnim = Off

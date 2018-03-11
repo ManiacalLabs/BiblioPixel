@@ -44,5 +44,6 @@ class Mirror(DriverBase):
         self.update_colors = forward('update_colors')
 
 
-# DEPRECATED
-MirrorDriver = Mirror
+from .. util import deprecated
+if deprecated.allowed():
+    MirrorDriver = Mirror

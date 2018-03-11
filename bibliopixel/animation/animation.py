@@ -1,6 +1,6 @@
 import contextlib, threading, time
 from . runner import Runner, STATE
-from .. util import deprecate, log
+from .. util import deprecated, log
 from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
 
@@ -97,7 +97,7 @@ class Animation(object):
                 yield
 
     def run(self, **kwds):
-        deprecate.deprecate('BaseAnimation.run')
+        deprecated.deprecated('BaseAnimation.run')
         self._set_runner(kwds)
         self.start()
 
@@ -143,7 +143,8 @@ class Animation(object):
         self.runner.run_start_time = time.time()
         self.threading.stop_event.clear()
 
-        self._step = 0  # DEPRECATED
+        if deprecated.allowed():
+            self._step = 0
         self.cur_step = 0
         self.cycle_count = 0
 
@@ -164,8 +165,8 @@ class Animation(object):
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
 
 
-# DEPRECATED
-BaseAnimation = Animation
+if deprecated.allowed():
+    BaseAnimation = Animation
 
 
 def _report_framerate(timestamps):

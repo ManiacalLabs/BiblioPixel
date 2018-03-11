@@ -82,5 +82,6 @@ class Strip(MultiLayout):
         self.set(pixel, (0, 0, 0))
 
 
-# This is DEPRECATED
-LEDStrip = Strip
+from .. util import deprecated
+if deprecated.allowed():
+    LEDStrip = Strip

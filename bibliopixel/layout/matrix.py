@@ -1,6 +1,6 @@
 import math, threading, time
 
-from .. util import colors, log
+from .. util import colors, deprecated, log
 from . import matrix_drawing as md
 from . import font
 from . layout import MultiLayout
@@ -321,7 +321,8 @@ class Matrix(MultiLayout):
         """
         md.fill_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
-    fillTrangle = fillTriangle  # DEPRECATED!
+    if deprecated.allowed():
+        fillTrangle = fillTriangle
 
     def drawChar(self, x, y, c, color, bg,
                  aa=False, font=font.default_font, font_scale=1):
@@ -346,5 +347,5 @@ class Matrix(MultiLayout):
                      x, y, color, bg, aa, font, font_scale)
 
 
-# This is DEPRECATED
-LEDMatrix = Matrix
+if deprecated.allowed():
+    LEDMatrix = Matrix

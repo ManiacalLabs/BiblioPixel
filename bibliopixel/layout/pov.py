@@ -40,5 +40,6 @@ class POV(Matrix):
                 time.sleep(max(0, sleep - sendTime))
 
 
-# This is DEPRECATED
-LEDPOV = POV
+from .. util import deprecated
+if deprecated.allowed():
+    LEDPOV = POV

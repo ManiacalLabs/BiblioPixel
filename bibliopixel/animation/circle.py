@@ -1,5 +1,5 @@
 from . animation import Animation
-from .. layout import Circle
+from .. layout import Circle as CircleLayout
 
 
 class Circle(Animation):
@@ -7,9 +7,10 @@ class Circle(Animation):
     def __init__(self, layout, **kwds):
         super().__init__(layout, **kwds)
 
-        if not isinstance(layout, Circle):
-            raise RuntimeError('Must use bibliopixel.layout.Circle with ' +
-                               'Circle Animations!')
+        if not isinstance(layout, CircleLayout):
+            raise RuntimeError(
+                'Must use %s with Circle animations, not %s' %
+                CircleLayout, type(layout))
 
         self.rings = layout.rings
         self.ringCount = layout.ringCount
@@ -17,5 +18,6 @@ class Circle(Animation):
         self.ringSteps = layout.ringSteps
 
 
-# DEPRECATED
-BaseCircleAnim = Circle
+from .. util import deprecated
+if deprecated.allowed():
+    BaseCircleAnim = Circle

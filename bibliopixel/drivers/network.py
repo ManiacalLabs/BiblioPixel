@@ -85,5 +85,6 @@ class Network(DriverBase):
         return resp == RETURN_CODES.SUCCESS
 
 
-# This is DEPRECATED.
-DriverNetwork = Network
+from .. util import deprecated
+if deprecated.allowed():
+    DriverNetwork = Network

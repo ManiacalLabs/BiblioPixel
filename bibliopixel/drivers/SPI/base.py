@@ -1,7 +1,6 @@
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... util.colors import gamma as _gamma
-from ... util import deprecate
 from . import interfaces
 
 
@@ -26,7 +25,8 @@ class SPIBase(DriverBase):
         from ...project.types.spi_interface import make
         # See https://github.com/ManiacalLabs/BiblioPixel/issues/419
         if interface:
-            deprecate.deprecate('SPIBase.interface')
+            from ... util import deprecated
+            deprecated.deprecated('SPIBase.interface')
         else:
             interface = 'FILE'
 

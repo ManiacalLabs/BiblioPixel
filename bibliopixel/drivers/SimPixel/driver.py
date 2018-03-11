@@ -41,5 +41,6 @@ class SimPixel(ServerDriver):
         self.server.update(pixels=self._buf)
 
 
-# This is DEPRECATED.
-DriverSimPixel = SimPixel
+from ... util import deprecated
+if deprecated.allowed():
+    DriverSimPixel = SimPixel

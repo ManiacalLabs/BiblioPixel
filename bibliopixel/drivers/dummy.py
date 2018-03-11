@@ -23,5 +23,6 @@ class Dummy(DriverBase):
             pass
 
 
-# This is DEPRECATED.
-DriverDummy = Dummy
+from .. util import deprecated
+if deprecated.allowed():
+    DriverDummy = Dummy

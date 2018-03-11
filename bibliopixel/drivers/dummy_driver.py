@@ -1,4 +1,4 @@
-# This whole file is DEPRECATED.
-
-from . dummy import Dummy
-DriverDummy = Dummy
+from .. util import deprecated
+if deprecated.allowed():
+    from . dummy import Dummy
+    DriverDummy = Dummy

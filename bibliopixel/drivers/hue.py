@@ -79,5 +79,6 @@ class Hue(DriverBase):
             self._bridge.set_light(self._ids[i], cmd)
 
 
-# This is DEPRECATED.
-DriverHue = Hue
+from .. util import deprecated
+if deprecated.allowed():
+    DriverHue = Hue

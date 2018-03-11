@@ -12,9 +12,10 @@ def rotate_and_flip(coord_map, rotation, flip):
     return coord_map
 
 
-# This is DEPRECATED
-class Rotation(IntEnum):
-    ROTATE_0 = 0  # no rotation
-    ROTATE_90 = 90  # rotate 90 degrees
-    ROTATE_180 = 180  # rotate 180 degrees
-    ROTATE_270 = 270  # rotate 270 degrees
+from ... util import deprecated
+if deprecated.allowed():
+    class Rotation(IntEnum):
+        ROTATE_0 = 0  # no rotation
+        ROTATE_90 = 90  # rotate 90 degrees
+        ROTATE_180 = 180  # rotate 180 degrees
+        ROTATE_270 = 270  # rotate 270 degrees
