@@ -1,6 +1,6 @@
 import os
 from .. project import data_maker, defaults, project
-from .. util import deprecate, json, log
+from .. util import deprecated, json, log
 
 """Common command line arguments for run and demo."""
 
@@ -21,9 +21,6 @@ NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 def add_common_flags(parser):
     parser.add_argument(
-        '--deprecate', choices=deprecate.CHOICES, default=deprecate.DEFAULT,
-        help=deprecate.HELP)
-    parser.add_argument(
         '--loglevel', choices=log.SORTED_NAMES, default='info',
         help=LOGLEVEL_HELP)
     parser.add_argument(
@@ -37,8 +34,6 @@ def execute_args(args):
         log.set_log_level('debug')
     else:
         log.set_log_level(args.loglevel)
-
-    deprecate.ACTION = args.deprecate
 
 
 def add_project_flags(parser):
@@ -54,9 +49,10 @@ def add_project_flags(parser):
         '-d', '--defaults', default=None, nargs='*',
         action='append', help='Use this default setting')
 
-    parser.add_argument(
-        '--dimensions', '--dim', default=None,
-        help='DEPRECATED: x, (x, y) or (x, y, z) dimensions for project')
+    if deprecated.allowed():
+        parser.add_argument(
+            '--dimensions', '--dim', default=None,
+            help='DEPRECATED: x, (x, y) or (x, y, z) dimensions for project')
 
     parser.add_argument(
         '--shape', default=None,
@@ -150,7 +146,7 @@ def _make_project_flags(args):
         animation['length'] = length
 
     if args.dimensions is not None:
-        deprecate.deprecate('Use --shape: --dimensions')
+        deprecated.deprecated('Use --shape: --dimensions')
 
     shape = args.shape or args.dimensions
     if shape is not None:

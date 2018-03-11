@@ -1,3 +1,3 @@
-# This is DEPRECATED
-
-from .. util.colors import *  # noqa: F403
+from .. util import deprecated
+if deprecated.allowed():
+    from .. util.colors import *  # noqa: F403

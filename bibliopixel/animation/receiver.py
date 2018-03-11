@@ -67,5 +67,6 @@ class Receiver(Animation):
             self._hold_for_data.clear()
 
 
-# DEPRECATED
-BaseReceiver = Receiver
+from .. util import deprecated
+if deprecated.allowed():
+    BaseReceiver = Receiver

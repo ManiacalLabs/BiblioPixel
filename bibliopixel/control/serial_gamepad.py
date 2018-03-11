@@ -1,5 +1,5 @@
 from distutils.version import LooseVersion
-from .. util import AttributeDict, deprecate, generate_header, log
+from .. util import AttributeDict, generate_header, log
 from .. drivers.return_codes import RETURN_CODES, print_error
 from . gamepad import BaseGamePad
 
@@ -49,7 +49,8 @@ class SerialGamePad(BaseGamePad):
             self._com.close()
 
     def close(self):
-        deprecate.deprecate('SerialGamePad.close')
+        from .. util import deprecated
+        deprecated.deprecated('SerialGamePad.close')
         self.cleanup()
 
     @staticmethod

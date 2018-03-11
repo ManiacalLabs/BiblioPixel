@@ -2,7 +2,7 @@ from . layout import Layout
 from . geometry.circle import (
     make_circle_coord_map, calc_ring_steps, calc_ring_pixel_count,
     make_circle_coord_map_positions)
-from .. util import deprecate
+from .. util import deprecated
 
 
 class Circle(Layout):
@@ -37,7 +37,7 @@ class Circle(Layout):
 
     @property
     def lastRing(self):
-        deprecate.deprecate('Circle.lastRing')
+        deprecated.deprecated('Circle.lastRing')
         return self.ringCount - 1
 
     @property
@@ -128,5 +128,5 @@ class Circle(Layout):
             self._set_base(i, color)
 
 
-# This is DEPRECATED
-LEDCircle = Circle
+if deprecated.allowed():
+    LEDCircle = Circle

@@ -1,5 +1,5 @@
 import os, pathlib
-from .. import log, deprecate
+from .. import log
 
 
 # PIL has a limit on how many image files can be open at once - you get an
@@ -69,33 +69,32 @@ def write_animation_windowed(filename, frames, window_size, **gif_options):
 
 
 """
-DEPRECATED!
-
 This is probably not used and should likely be replaced by the code
 in BiblioPixelAnimations.matrix.ImageAnim
-
 """
 
 
-def convert_mode(image, mode='RGB'):
-    """Return an image in the given mode."""
-    deprecate.deprecate('util.gif.convert_model')
+from .. import deprecated
+if deprecated.allowed():
+    def convert_mode(image, mode='RGB'):
+        """Return an image in the given mode."""
+        deprecated.deprecated('util.gif.convert_model')
 
-    return image if (image.mode == mode) else image.convert(mode=mode)
+        return image if (image.mode == mode) else image.convert(mode=mode)
 
+    def image_to_colorlist(image, container=list):
+        """Given a PIL.Image, returns a ColorList of its pixels."""
+        deprecated.deprecated('util.gif.image_to_colorlist')
 
-def image_to_colorlist(image, container=list):
-    """Given a PIL.Image, returns a ColorList of its pixels."""
-    deprecate.deprecate('util.gif.image_to_colorlist')
+        return container(convert_mode(image).getdata())
 
-    return container(convert_mode(image).getdata())
+    def animated_gif_to_colorlists(image, container=list):
+        """
+        Given an animated GIF, return a list with a colorlist for each frame.
+        """
+        deprecated.deprecated('util.gif.animated_gif_to_colorlists')
 
+        from PIL import ImageSequence
 
-def animated_gif_to_colorlists(image, container=list):
-    """Given an animated GIF, return a list with a colorlist for each frame."""
-    deprecate.deprecate('util.gif.animated_gif_to_colorlists')
-
-    from PIL import ImageSequence
-
-    it = ImageSequence.Iterator(image)
-    return [image_to_colorlist(i, container) for i in it]
+        it = ImageSequence.Iterator(image)
+        return [image_to_colorlist(i, container) for i in it]

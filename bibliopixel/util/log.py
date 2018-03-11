@@ -125,7 +125,9 @@ frame, debug, info, warning, error = (
 printer = print
 
 
-def setLogLevel(level):
-    from . import deprecate
-    deprecate.deprecate('util.setLogLevel')
-    set_log_level(level)
+from . import deprecated
+
+if deprecated.allowed():
+    def setLogLevel(level):
+        deprecated.deprecated('util.setLogLevel')
+        set_log_level(level)

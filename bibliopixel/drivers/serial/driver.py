@@ -192,10 +192,6 @@ class Serial(DriverBase):
             log.error('Serial exception %s in write', e)
 
 
-# This is DEPRECATED.
-DriverSerial = Serial
-
-
 class TeensySmartMatrix(Serial):
     """Variant of :py:class:`Serial` for use with the Teensy and
     SmartMatrix library. The following provides compatible firmware:
@@ -214,5 +210,7 @@ class TeensySmartMatrix(Serial):
         self.sync = self._send_sync
 
 
-# This is DEPRECATED.
-DriverTeensySmartMatrix = TeensySmartMatrix
+from ... util import deprecated
+if deprecated.allowed():
+    DriverSerial = Serial
+    DriverTeensySmartMatrix = TeensySmartMatrix

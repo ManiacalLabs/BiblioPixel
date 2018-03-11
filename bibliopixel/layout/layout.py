@@ -64,7 +64,7 @@ class Layout(object):
 
     def update(self):
         """DEPRECATED: Use :py:func:`push_to_driver` instead"""
-        util.deprecate.deprecate('Layout.update')
+        util.deprecated.deprecated('Layout.update')
         return self.push_to_driver()
 
     def start(self):
@@ -91,7 +91,7 @@ class Layout(object):
 
     @property
     def dimensions(self):
-        util.deprecate.deprecate('Layout.dimensions')
+        util.deprecated.deprecated('Layout.dimensions')
         return self.shape
 
     @property
@@ -139,7 +139,7 @@ class Layout(object):
         self._colors[:] = buf
 
     def setBuffer(self, buf):
-        util.deprecate.deprecate('layout.setBuffer')
+        util.deprecated.deprecated('layout.setBuffer')
 
         # https://stackoverflow.com/questions/1624883
         self.set_colors(buf=list(zip(*(iter(buf),) * 3)))

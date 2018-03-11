@@ -52,9 +52,11 @@ from . conversions import hue_helper, hue_helper360
 from . wheel import wheel_color, wheel_helper
 from . names import COLORS, COLOR_DICT, toggle
 
-# DEPRECATED methods and module name
-hex2rgb = COLORS.__getitem__
-from . import conversions as hue
+from .. import deprecated
 
-# Legacy color names.  DEPRECATED
-from . classic import *  # noqa: F403
+if deprecated.allowed():
+    hex2rgb = COLORS.__getitem__
+    from . import conversions as hue
+
+    # Legacy color names
+    from . classic import *  # noqa: F403
