@@ -72,11 +72,8 @@ class ProjectTest(unittest.TestCase):
 
 PROJECT = """
 {
-    "driver": {
-        "typename": "dummy",
-        "num": 12
-    },
-
+    "driver": "dummy",
+    "dimensions": 12,
     "layout": "strip",
     "animation": "strip_test",
     "run": {
@@ -89,8 +86,6 @@ PROJECT_TYPES = """
 {
     "driver": {
         "typename": "dummy",
-        "num": 12,
-
         "c_order": "GBR",
         "color": "green",
         "duration": "1 hour, 2 minutes",
@@ -99,6 +94,7 @@ PROJECT_TYPES = """
         "ledtype": "GENERIC"
     },
 
+    "shape": 12,
     "layout": "strip",
     "animation": "strip_test",
     "run": {

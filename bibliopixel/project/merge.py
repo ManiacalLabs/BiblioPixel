@@ -22,7 +22,7 @@ DEFAULT_PROJECT = collections.OrderedDict((
 PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
 
 NOT_MERGEABLE = (
-    'controls', 'datatype', 'shape', 'drivers', 'numbers', 'path',
+    'controls', 'datatype', 'dimensions', 'shape', 'drivers', 'numbers', 'path',
     'typename')
 
 SECTION_ISNT_DICT_ERROR = 'Project section "%s" is %s, should be dictionary'
