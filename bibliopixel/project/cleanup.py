@@ -77,7 +77,7 @@ def cleanup_shape(desc):
     if dimensions:
         util.deprecate.deprecate('Project section "dimensions"')
 
-    shape = desc.pop('shape', dimensions)
+    shape = desc.pop('shape', None) or dimensions
     if not shape:
         return desc
 
@@ -89,7 +89,8 @@ def cleanup_shape(desc):
     except:
         d = list(shape)
 
-    ldesc = construct.to_type_constructor(desc.get('layout') or {})
+    ldesc = construct.to_type_constructor(desc.get('layout') or {},
+                                          python_path='bibliopixel.layout')
     driver = desc['drivers'][0]
 
     if len(d) == 1:
