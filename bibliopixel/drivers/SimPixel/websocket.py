@@ -69,7 +69,7 @@ class Server:
 
     def update(self, **state):
         self.state.update(state)
-        for client in self.clients:
+        for client in self.clients.copy():
             client.update(**state)
 
     def add_client(self, client):
