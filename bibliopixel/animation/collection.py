@@ -64,7 +64,7 @@ class Collection(animation.Animation):
         from .. util import deprecated
         deprecated.deprecated('Collection.add_animation')
 
-        anim.set_runner(kwds)
+        anim._set_runner(kwds)
         self.animations.append(anim)
 
     def pre_run(self):
