@@ -41,7 +41,7 @@ def run(args):
     driver = Serial(ledtype=ledtype.make(args.ledtype), num=10)
     layout = Strip([driver])
     animation = StripChannelTest(layout)
-    animation.set_runner(None)
+    animation._set_runner(None)
     animation.start()
 
 

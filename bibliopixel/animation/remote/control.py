@@ -107,7 +107,7 @@ class RemoteControl(collection.Indexed):
 
         if self.default == DEFAULT_OFF:
             off = Off(self.layout)
-            off.set_runner({'threaded': True})
+            off._set_runner({'threaded': True})
             self.animations.append(off)
             self.name_map[DEFAULT_OFF] = len(self.animations) - 1
 
