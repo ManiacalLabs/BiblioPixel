@@ -9,6 +9,9 @@ __all__ = ['main']
 def get_args(argv=sys.argv):
     argv = ['-h' if a == '--help' else a for a in argv[1:]]
 
+    if not argv:
+        argv = ['-h']
+
     # argparse doesn't give command-specific help for `bp --help <command>`
     # so we use `bp <command> --help` (#429)
     if len(argv) == 2 and argv[0] == '-h':
