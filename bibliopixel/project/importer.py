@@ -18,12 +18,7 @@ def _validate_typename(typename):
     if not min_version:
         return
 
-    try:
-        version = __import__(root_module).VERSION
-    except AttributeError:
-        if root_module == 'serial':
-            raise ValueError(SERIAL_IS_INSTALLED_NOT_PYSERIAL_MESSAGE)
-        raise
+    version = __import__(root_module).VERSION
 
     if LooseVersion(version) >= LooseVersion(min_version):
         return

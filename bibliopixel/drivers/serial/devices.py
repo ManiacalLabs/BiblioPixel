@@ -1,3 +1,4 @@
+import serial, serial.tools.list_ports
 from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from ... drivers.return_codes import RETURN_CODES, raise_error
@@ -15,9 +16,6 @@ class Devices(object):
     def __init__(self, hardware_id, baudrate):
         self.hardware_id = hardware_id
         self.baudrate = baudrate
-        self.serial = import_module('serial')
-        self.Serial = self.serial.Serial
-        self.list_ports = import_module('serial.tools.list_ports')
 
     def find_serial_devices(self):
         """Scan and report all compatible serial devices on system.
@@ -27,7 +25,7 @@ class Devices(object):
         self.devices = {}
         hardware_id = "(?i)" + self.hardware_id  # forces case insensitive
 
-        for ports in self.list_ports.grep(hardware_id):
+        for ports in serial.tools.list_ports.grep(hardware_id):
             port = ports[0]
             try:
                 id = self.get_device_id(port, self.baudrate)
@@ -92,7 +90,7 @@ class Devices(object):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
 
-        com = self.Serial(dev, baudrate=baudrate, timeout=5)
+        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
 
         packet = util.generate_header(CMDTYPE.SETID, 1)
         packet.append(id)
@@ -111,14 +109,14 @@ class Devices(object):
         :param baudrate: Baudrate to use when connectinh (optional)
         """
         packet = util.generate_header(CMDTYPE.GETID, 0)
-        com = self.Serial(dev, baudrate=baudrate, timeout=5)
+        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
         com.write(packet)
         resp = ord(com.read(1))
         return resp
 
     def _get_device_version(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETVER, 0)
-        com = self.Serial(dev, baudrate=baudrate, timeout=0.5)
+        com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
         com.write(packet)
         ver = 0
         resp = com.read(1)

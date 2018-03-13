@@ -9,10 +9,17 @@ class DriverBase(object):
     Base driver class to build other drivers from.
 
     :param int num: Number of total pixels held by this driver
-    :param int width: Width of matrix, for use with :py:class:`bibliopixel.layout.matrix.Matrix`
-    :param int height: Height of matrix, for use with :py:class:`bibliopixel.layout.matrix.Matrix`
+
+    :param int width: Width of matrix, for use
+        with :py:class:`bibliopixel.layout.matrix.Matrix`
+
+    :param int height: Height of matrix, for use
+        with :py:class:`bibliopixel.layout.matrix.Matrix`
+
     :param str c_order: Color channel order
-    :param gamma: Gamma correction table. Preset tables available in :py:mod:`bibliopixel.util.colors.gamma`
+
+    :param gamma: Gamma correction table. Preset tables available
+        in :py:mod:`bibliopixel.util.colors.gamma`
     """
 
     # If set_device_brightness is not empty, it's a method that allows you

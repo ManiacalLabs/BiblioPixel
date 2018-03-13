@@ -1,21 +1,20 @@
-import unittest
-from ... mark_tests import serial_test
+import time, unittest
+
+from ... mark_tests import allpixel_test
+
+from bibliopixel import Strip
+from bibliopixel.animation import StripChannelTest
+from bibliopixel.drivers.channel_order import ChannelOrder
+from bibliopixel.drivers.serial import Serial, LEDTYPE
+from bibliopixel.drivers.serial.devices import Devices
+from bibliopixel.util import log
 
 
 class DevicesTest(unittest.TestCase):
-    @serial_test
+    @allpixel_test
     def test_serial(self):
         # Code taken from
         # https://gist.github.com/adammhaile/1b43fdde6ae6cbbd35560c68a9b90beb
-
-        from bibliopixel import Strip
-        from bibliopixel.drivers.channel_order import ChannelOrder
-        from bibliopixel.drivers.serial import Serial, LEDTYPE
-        from bibliopixel.drivers.serial.devices import Devices
-        from bibliopixel.animation import StripChannelTest
-
-        from bibliopixel import log
-        import time
 
         log.setLogLevel(log.DEBUG)
 
