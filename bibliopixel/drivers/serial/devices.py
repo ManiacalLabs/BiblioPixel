@@ -33,6 +33,8 @@ class Devices(object):
             except:
                 log.debug('Error getting device_id for %s, %s',
                           port, self.baudrate)
+                if True:
+                    raise
                 continue
 
             if getattr(ports, '__len__', lambda: 0)():
