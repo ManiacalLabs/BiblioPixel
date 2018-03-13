@@ -1,4 +1,4 @@
-import os, sys, time, traceback
+import os, sys, serial, time, traceback
 
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from . devices import Devices
@@ -42,7 +42,6 @@ class Serial(DriverBase):
 
         super().__init__(num, c_order=c_order, gamma=gamma, **kwds)
         self.devices = Devices(hardwareID, baudrate)
-        self.serial = self.devices.serial
 
         if not (1 <= spi_speed <= 24 and ledtype in SPIChipsets):
             spi_speed = 1
@@ -61,8 +60,7 @@ class Serial(DriverBase):
 
         resp = self._connect()
         if resp == RETURN_CODES.REBOOT:  # reboot needed
-            log.info(
-                "Reconfigure and reboot needed, waiting for controller to restart...")
+            log.info(REBOOT_MESSAGE)
             self._close()
             time.sleep(restart_timeout)
             resp = self._connect()
@@ -92,9 +90,9 @@ class Serial(DriverBase):
             idv = self.devices.get_device(self.device_id)
             self.device_id, self.dev, self.device_version = idv
             try:
-                self._com = self.serial.Serial(
+                self._com = serial.Serial(
                     self.dev, baudrate=self.devices.baudrate, timeout=5)
-            except self.serial.SerialException as e:
+            except serial.SerialException as e:
                 ports = self.devices.devices.values()
                 error = "Invalid port specified. No COM ports available."
                 if ports:
@@ -125,7 +123,7 @@ class Serial(DriverBase):
 
             return ord(resp)
 
-        except self.serial.SerialException as e:
+        except serial.SerialException as e:
             error = ("Unable to connect to the device. Please check that "
                      "it is connected and the correct port is selected.")
             log.error(traceback.format_exc())
@@ -200,8 +198,8 @@ class TeensySmartMatrix(Serial):
     All parameters are the same as with :py:class:`Serial`, except the
     default hardwareID is changed to match the Teensy.
 
-    The main difference is that SmartMatrix requires a sync command to keep multiple
-    instances of this driver running smoothly.
+    The main difference is that SmartMatrix requires a sync command to keep
+    multiple instances of this driver running smoothly.
     """
     def __init__(self, width, height, dev="", device_id=None,
                  hardwareID="16C0:0483", **kwds):
@@ -209,6 +207,9 @@ class TeensySmartMatrix(Serial):
                          device_id=device_id, hardwareID=hardwareID, **kwds)
         self.sync = self._send_sync
 
+
+REBOOT_MESSAGE = """Reconfigure and reboot needed!
+Waiting for controller to restart..."""
 
 from ... util import deprecated
 if deprecated.allowed():
