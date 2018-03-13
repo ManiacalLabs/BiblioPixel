@@ -1,8 +1,8 @@
 import unittest
-from ..mark_tests import serial_test
+from ... mark_tests import serial_test
 
 
-class SerialTest(unittest.TestCase):
+class DevicesTest(unittest.TestCase):
     @serial_test
     def test_serial(self):
         # Code taken from
