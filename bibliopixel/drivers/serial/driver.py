@@ -185,9 +185,9 @@ class Serial(DriverBase):
 
     def _flushInput(self):
         try:
-            return self._com._flushInput()
+            return self._com.flushInput()
         except Exception as e:
-            log.error('Serial exception %s in write', e)
+            log.error('Serial exception %s in flushInput', e)
 
 
 class TeensySmartMatrix(Serial):
