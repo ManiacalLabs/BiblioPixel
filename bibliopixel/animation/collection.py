@@ -8,7 +8,6 @@ class Collection(animation.Animation):
     """
     A ``Collection`` is a list of ``Animation``s
     """
-    FAIL_ON_EXCEPTION = False
 
     @staticmethod
     def pre_recursion(desc):

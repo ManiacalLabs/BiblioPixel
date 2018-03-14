@@ -5,7 +5,7 @@ Run specified project from file or URL.
 import os, sys, time, traceback
 from . import common_flags, simpixel
 from .. util import json, log
-from .. animation.collection import Collection
+from .. animation import Animation
 from .. project import load
 
 RUN_ERROR = """When reading file {filename}:
@@ -124,8 +124,7 @@ def _run_projects(projects, args):
 
 
 def run(args):
-    if args.fail_on_exception:
-        Collection.FAIL_ON_EXCEPTION = True
+    Animation.FAIL_ON_EXCEPTION = args.fail_on_exception
 
     args.name = args.name or ['']
     projects = _get_projects(args)

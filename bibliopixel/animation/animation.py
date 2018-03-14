@@ -8,6 +8,7 @@ from .. project import attributes, fields
 class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
+    FAIL_ON_EXCEPTION = False
 
     @classmethod
     def construct(cls, project, *, run=None, name=None, data=None, **desc):
@@ -15,8 +16,15 @@ class Animation(object):
         Construct an animation, set the runner, and add in the two
         "reserved fields" `name` and `data`.
         """
-        a = cls(project.layout, **desc)
-        a._set_runner(run or {})
+        try:
+            a = cls(project.layout, **desc)
+            a._set_runner(run or {})
+        except Exception as e:
+            if cls.FAIL_ON_EXCEPTION:
+                raise
+            from . failed import Failed
+            a = Failed(project.layout, desc, e)
+
         a.name = name
         a.data = data
         return a

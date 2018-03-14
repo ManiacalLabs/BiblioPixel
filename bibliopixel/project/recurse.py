@@ -17,8 +17,7 @@ children.
 """
 
 
-def recurse(desc, pre='pre_recursion', post=None, python_path=None,
-            recover=None):
+def recurse(desc, pre='pre_recursion', post=None, python_path=None):
     """
     Depth first recursion through a dictionary containing type constructors
 
@@ -43,37 +42,32 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None,
             f = getattr(datatype, f, None)
         return f and f(desc)
 
-    try:
-        # Automatically load strings that look like JSON or Yaml filenames.
-        desc = load.load_if_filename(desc) or desc
+    # Automatically load strings that look like JSON or Yaml filenames.
+    desc = load.load_if_filename(desc) or desc
 
-        desc = construct.to_type_constructor(desc, python_path)
-        datatype = desc.get('datatype')
+    desc = construct.to_type_constructor(desc, python_path)
+    datatype = desc.get('datatype')
 
-        desc = call(pre, desc) or desc
+    desc = call(pre, desc) or desc
 
-        for child_name in getattr(datatype, 'CHILDREN', []):
-            child = desc.get(child_name)
-            if child:
-                is_plural = child_name.endswith('s')
-                remove_s = is_plural and child_name != 'drivers'
-                # This is because it's the "drivers" directory, whereas
-                # the others are animation, control, layout, project
-                # without the s. TODO: rename drivers/ to driver/ in v4
+    for child_name in getattr(datatype, 'CHILDREN', []):
+        child = desc.get(child_name)
+        if child:
+            is_plural = child_name.endswith('s')
+            remove_s = is_plural and child_name != 'drivers'
+            # This is because it's the "drivers" directory, whereas
+            # the others are animation, control, layout, project
+            # without the s. TODO: rename drivers/ to driver/ in v4
 
-                cname = child_name[:-1] if remove_s else child_name
-                new_path = python_path or ('bibliopixel.' + cname)
-                if is_plural:
-                    if isinstance(child, (dict, str)):
-                        child = [child]
-                    for i, c in enumerate(child):
-                        child[i] = recurse(c, pre, post, new_path)
-                    desc[child_name] = child
-                else:
-                    desc[child_name] = recurse(child, pre, post, new_path)
+            cname = child_name[:-1] if remove_s else child_name
+            new_path = python_path or ('bibliopixel.' + cname)
+            if is_plural:
+                if isinstance(child, (dict, str)):
+                    child = [child]
+                for i, c in enumerate(child):
+                    child[i] = recurse(c, pre, post, new_path)
+                desc[child_name] = child
+            else:
+                desc[child_name] = recurse(child, pre, post, new_path)
 
-        return call(post, desc) or desc
-    except Exception as e:
-        if recover:
-            return recover(desc, e)
-        raise
+    return call(post, desc) or desc

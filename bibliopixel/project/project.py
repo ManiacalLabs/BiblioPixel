@@ -2,7 +2,6 @@ import queue
 from . import (
     attributes, construct, cleanup, defaults, event_queue, load, recurse)
 from .. util import exception, json
-from .. animation import Animation, failed
 
 EVENT_QUEUE_MAXSIZE = 1000
 
@@ -30,14 +29,13 @@ class Project:
         def post(desc):
             return self.construct_child(**desc)
 
-        def create(root, name, recover=None):
+        def create(root, name):
             with exception.add('Unable to create ' + name):
                 return recurse.recurse(
                     root,
                     pre=None,
                     post=post,
-                    python_path='bibliopixel.' + name,
-                    recover=recover)
+                    python_path='bibliopixel.' + name)
 
         attributes.check(kwds, 'project')
         self.path = path
@@ -48,10 +46,7 @@ class Project:
         with exception.add('Unable to create layout'):
             self.layout = self.construct_child(**layout)
 
-        def Failed(*args):
-            return failed.Failed(self.layout, *args)
-
-        self.animation = create(animation, 'animation', Failed)
+        self.animation = create(animation, 'animation')
 
         self.event_queue = event_queue.EventQueue(maxsize=event_queue_maxsize)
         self.animation.preframe_callback = self.event_queue.get_and_run_events
