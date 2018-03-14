@@ -12,6 +12,8 @@ DEFAULT_ANIM_CONFIG = {
     'font_color': '#ffffff',
     'valid': True
 }
+DEFAULT_AUTO_DEMO_TIME = 10
+DEFAULT_AUTO_DEMO_NAME = 'DEMO_ANIM'
 
 
 BAD_DEFAULT_ERROR = """\
@@ -30,44 +32,35 @@ class RemoteControl(collection.Indexed):
 
         animations = desc['animations']
         auto_demo = desc.pop('auto_demo', None)
-        desc['anim_cfgs'] = []
+        if auto_demo:
+            auto_demo.setdefault('name', DEFAULT_AUTO_DEMO_NAME)
+            animations.insert(0, auto_demo)
+
+        for i, anim in enumerate(animations):
+            anim.setdefault('run', {}).update(threaded=not auto_demo)
+
+            display_name = anim.get('name') or str(i)
+
+            anim['data'] = dict(DEFAULT_ANIM_CONFIG, **anim.get('data', {}))
+            anim['data'].setdefault('display', display_name)
+
+            # Get the normalized name - with only URL-safe characters in it.
+            # The two assignments seem like a defect - name is in two places.
+            anim['name'] = anim['data']['name'] = normalize_name(display_name)
+
+        desc['anim_cfgs'] = [a['data'] for a in animations]
 
         if auto_demo:
-            auto_demo_run = auto_demo.pop('run', 10)  # default to 10 seconds per
-            auto_demo['typename'] = 'sequence'
-            auto_demo['data'] = dict(DEFAULT_ANIM_CONFIG, **auto_demo.get('data', {}))
-            if 'name' not in auto_demo:
-                auto_demo['name'] = 'DEMO_ANIM'
-            auto_demo['data']['display'] = auto_demo['data'].get('display', auto_demo['name'])
-            auto_demo['name'] = normalize_name(auto_demo['name'])
-            auto_demo['animations'] = []
-            animations.insert(0, {'animation': auto_demo, 'run': {'threaded': True}})
+            # Not sure this is right, but this is how the original behaved.
+            desc['anim_cfgs'].pop(0)
 
-        # normalize name and display first
-        for i, anim in enumerate(animations):
-            anim['data'] = dict(DEFAULT_ANIM_CONFIG, **anim.get('data', {}))
-            if not anim.get('name'):
-                log.error('All animations should have the `name` parameter: {}'.format(anim))
-                anim['name'] = str(i)
-            anim['data']['display'] = anim['data'].get('display', anim['name'])
-            anim['name'] = normalize_name(anim['name'])
+            auto_demo.setdefault('typename', 'sequence')
+            seconds = auto_demo['run'].get('seconds', DEFAULT_AUTO_DEMO_TIME)
+            auto_demo.setdefault('length', seconds)
 
-            # This was originally done later as a side-effect.
-            # Moved it here so it's obvious.  Seems like a defect - name is in
-            # two places.
-            anim['data']['name'] = anim['name']
-            anim['run'] = anim.get('run', {})
-
-            if auto_demo:
-                demo_sub = copy.deepcopy(anim)
-                demo_sub['run'].update(auto_demo_run)
-                demo_sub['animation'].pop('name')
-                demo_sub['animation'].pop('data')
-                demo_sub['run']['threaded'] = False  # no threading allowed for internal sequences
-                auto_demo['animations'].append(demo_sub)
-
-            anim['run']['threaded'] = True  # threaded required
-            desc['anim_cfgs'].append(anim['data'])
+            auto_demo['animations'] = [copy.deepcopy(a) for a in animations[1:]]
+            for a in auto_demo['animations']:
+                a['run']['threaded'] = False
 
         return desc
 
