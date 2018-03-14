@@ -1,0 +1,198 @@
+{
+    "shape": 1024,
+    "layout": {
+        "typename": "matrix",
+        "width": 32,
+        "height": 32,
+        "serpentine": false,
+        "threadedUpdate": true
+    },
+    "animation": {
+        "title": "1K Adam",
+        "typename": "remote",
+        "auto_demo": {
+            "name": "Demo Mode",
+            "random": true,
+            "run": {
+                "seconds": 30
+            },
+            "data": {
+                "bgcolor": "blue"
+            }
+        },
+        "animations": [
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.ImageAnim.ImageAnim",
+                    "name": "GIFs",
+                    "imagePath": "/home/pi/AnimatedGifs/32x32/",
+                    "random": true,
+                    "seconds": 5
+                },
+                "run": {
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.ImageDissolve.ImageDissolve",
+                    "name": "ImageDissolve",
+                    "imageFiles": [
+                        "/home/pi/DisplayGraphics/32x32/ml_logo.bmp",
+                        "/home/pi/DisplayGraphics/32x32/RedHat.png"
+                    ],
+                    "pixelRate": 20,
+                    "waitFrames": 30
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
+                    "name": "AnalogClock"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.MathFunc.MathFunc",
+                    "name": "MathFunc"
+                },
+                "run": {
+                    "fps": 30
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.GameOfLife.GameOfLife",
+                    "name": "GameOfLife"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB",
+                    "name": "GameOfLifeRGB"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAnt",
+                    "name": "LangtonsAnt"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.LangtonsAnt.LangtonsAntRainbow",
+                    "name": "LangtonsAntRainbow"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.Mainframe.Mainframe",
+                    "name": "Mainframe",
+                    "scroll": false
+                },
+                "run": {
+                    "fps": 5
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.MatrixRain.MatrixRain",
+                    "name": "MatrixRain"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow",
+                    "name": "MatrixRainBow"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.OneKClock.OneKClock",
+                    "name": "Digital Clock"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.Text.ScrollText",
+                    "name": "ScrollText",
+                    "text": "Welcome to SPARKcon 2017!",
+                    "color": "#f36926",
+                    "xPos": 32,
+                    "yPos": 0,
+                    "font_scale": 4
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.bloom.Bloom",
+                    "name": "Bloom"
+                },
+                "run": {
+                    "fps": 15,
+                    "amt": 4
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.circlepop.CirclePop",
+                    "name": "CirclePop"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.perlin_simplex.PerlinSimplex",
+                    "name": "PerlinSimplex"
+                },
+                "run": {
+                    "fps": 15
+                }
+            },
+            {
+                "animation": {
+                    "typename": "BiblioPixelAnimations.matrix.pinwheel.Pinwheel",
+                    "name": "Pinwheel"
+                },
+                "run": {
+                    "fps": 15
+                }
+            }
+        ],
+        "default": null,
+        "bgcolor": "black",
+        "external_access": true,
+        "port": 5000
+    }
+}
