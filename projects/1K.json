@@ -23,17 +23,6 @@
         "animations": [
             {
                 "animation": {
-                    "typename": "BiblioPixelAnimations.matrix.ImageAnim.ImageAnim",
-                    "name": "GIFs",
-                    "imagePath": "/home/pi/AnimatedGifs/32x32/",
-                    "random": true,
-                    "seconds": 5
-                },
-                "run": {
-                }
-            },
-            {
-                "animation": {
                     "typename": "BiblioPixelAnimations.matrix.ImageDissolve.ImageDissolve",
                     "name": "ImageDissolve",
                     "imageFiles": [
