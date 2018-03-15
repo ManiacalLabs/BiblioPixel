@@ -14,28 +14,13 @@
             "name": "Demo Mode",
             "random": true,
             "run": {
-                "seconds": 30
+                "seconds": 3
             },
             "data": {
                 "bgcolor": "blue"
             }
         },
         "animations": [
-            {
-                "animation": {
-                    "typename": "BiblioPixelAnimations.matrix.ImageDissolve.ImageDissolve",
-                    "name": "ImageDissolve",
-                    "imageFiles": [
-                        "/home/pi/DisplayGraphics/32x32/ml_logo.bmp",
-                        "/home/pi/DisplayGraphics/32x32/RedHat.png"
-                    ],
-                    "pixelRate": 20,
-                    "waitFrames": 30
-                },
-                "run": {
-                    "fps": 15
-                }
-            },
             {
                 "animation": {
                     "typename": "BiblioPixelAnimations.matrix.AnalogClock.AnalogClock",
@@ -179,7 +164,6 @@
                 }
             }
         ],
-        "default": null,
         "bgcolor": "black",
         "external_access": true,
         "port": 5000
