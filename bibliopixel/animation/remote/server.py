@@ -1,4 +1,4 @@
-import flask, logging, os, queue, sys
+import bibliopixel, flask, logging, os, queue, sys
 from ... util import log
 
 MESSAGE = """\
@@ -11,14 +11,14 @@ External: http://<system_ip>:{0}"""
 if '--verbose' not in sys.argv:
     logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
+ROOT_DIR = os.path.dirname(os.path.dirname(bibliopixel.__file__))
+STATIC_DIR = os.path.join(ROOT_DIR, 'ui', 'web_remote')
+
 
 class RemoteServer:
     def __init__(self, q_send, q_recv):
-        cdir = os.path.dirname(os.path.realpath(__file__))
-        static_dir = os.path.abspath(os.path.join(cdir, '../../ui/web_remote'))
-
-        self.app = flask.Flask('BP Remote', static_folder=static_dir)
-
+        assert os.path.exists(STATIC_DIR)
+        self.app = flask.Flask('BP Remote', static_folder=STATIC_DIR)
         self._set_routes()
         self.q_send = q_send
         self.q_recv = q_recv
@@ -32,9 +32,11 @@ class RemoteServer:
         self.app.route('/api/<string:request>/<data>')(self.api)
 
     def index(self):
+        log.debug('index.html')
         return self.app.send_static_file('index.html')
 
     def static_files(self, path):
+        log.debug('static_files: %s', path)
         return self.app.send_static_file(path)
 
     def run_animation(self, animation):
@@ -44,7 +46,13 @@ class RemoteServer:
         return self.api('stop_animation')
 
     def api(self, request, data=None):
-        self.q_send.put({'req': request.lower(), 'data': data, 'sender': 'RemoteServer'})
+        log.debug('api: %s, %s', request, data)
+        msg = {
+            'req': request.lower(),
+            'data': data,
+            'sender': 'RemoteServer'}
+
+        self.q_send.put(msg)
 
         try:
             status, data = self.q_recv.get(timeout=5)
