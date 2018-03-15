@@ -22,7 +22,7 @@ It must be one of the configured animation names."""
 
 
 def normalize_name(name):
-    return ''.join('_' if e is ' ' else e for e in name if e.isalnum() or e is ' ')
+    return ''.join('_' if e is ' ' else e for e in name if e.isalnum() or e is ' ' or e is '_')
 
 
 class RemoteControl(collection.Indexed):
@@ -32,12 +32,14 @@ class RemoteControl(collection.Indexed):
 
         animations = desc['animations']
         auto_demo = desc.pop('auto_demo', None)
+
         if auto_demo:
             auto_demo.setdefault('name', DEFAULT_AUTO_DEMO_NAME)
             animations.insert(0, auto_demo)
 
+        desc['name_map'] = {}
         for i, anim in enumerate(animations):
-            anim.setdefault('run', {}).update(threaded=not auto_demo)
+            anim.setdefault('run', {}).update(threaded=True)
 
             display_name = anim.get('name') or str(i)
 
@@ -45,64 +47,66 @@ class RemoteControl(collection.Indexed):
             anim['data'].setdefault('display', display_name)
 
             # Get the normalized name - with only URL-safe characters in it.
-            # The two assignments seem like a defect - name is in two places.
-            anim['name'] = anim['data']['name'] = normalize_name(display_name)
+            name = normalize_name(display_name)
+            # It's a defect that we have name in two places but...?
+            anim['name'] = anim['data']['name'] = name
+            desc['name_map'][name] = i
 
-        desc['anim_cfgs'] = [a['data'] for a in animations]
+        if len(desc['name_map']) < len(animations):
+            log.warning('There are multiple animations with the same name. '
+                        'Only the last will work.')
 
         if auto_demo:
-            # Not sure this is right, but this is how the original behaved.
-            desc['anim_cfgs'].pop(0)
-
             auto_demo.setdefault('typename', 'sequence')
-            seconds = auto_demo['run'].get('seconds', DEFAULT_AUTO_DEMO_TIME)
+            seconds = auto_demo['run'].pop('seconds', DEFAULT_AUTO_DEMO_TIME)
             auto_demo.setdefault('length', seconds)
 
             auto_demo['animations'] = [copy.deepcopy(a) for a in animations[1:]]
             for a in auto_demo['animations']:
                 a['run']['threaded'] = False
 
+            desc.setdefault('default', auto_demo['name'])
+
+        default = desc.get('default', None)
+        if default is not None:
+            default = normalize_name(default)
+            index = desc['name_map'].get(default)
+            if index is None:
+                log.warning('Do not understand default "%s"', default)
+                log.warning('Names are %s', ', '.join(desc['name_map']))
+            desc['default'] = index
+
         return desc
 
-    def __init__(self, *args, anim_cfgs,
-                 external_access=False, port=5000,
+    def __init__(self, *args, name_map, external_access=False, port=5000,
                  title='BiblioPixel Remote', bgcolor='black',
                  font_color='white', default=None,
                  triggers=[], **kwds):
         super().__init__(*args, **kwds)
         self.internal_delay = 0  # never wait
-        self.name_map = {}
-        self.anim_cfgs = anim_cfgs
 
-        for i, (anim, cfg) in enumerate(zip(self.animations, self.anim_cfgs)):
-            name = cfg['name']
-            if name in self.name_map:
-                raise ValueError('Cannot have multiple animations with the same name: ' + name)
+        self.anim_cfgs = [a.data for a in self.animations]
+        self.name_map = name_map
+
+        for anim in self.animations:
+            anim.on_completion = self.on_completion
+
             if getattr(anim, 'empty', False):
-                anim.on_completion = self.on_completion
-                self.name_map[name] = i
-            else:
                 # The animation failed to load.
-                cfg.update(
+                display_name = anim.data.get('display', '(no error)')
+                anim.data.update(
                     valid=False,
-                    display='FAILED: ' + cfg.get('display', '(no error)'),
+                    display='FAILED: ' + display_name,
                     bgcolor='rgb(48, 48, 48)',
                     font_color='white')
-                self.name_map[name] = None
 
         if default is None:
-            self.default = DEFAULT_OFF
-        else:
-            self.default = normalize_name(default)
-            self.name_map[DEFAULT_OFF] = self.name_map[self.default]
-            if self.default is None:
-                self.default = DEFAULT_OFF
-
-        if self.default == DEFAULT_OFF:
             off = Off(self.layout)
             off._set_runner({'threaded': True})
+            self.name_map[DEFAULT_OFF] = len(self.animations)
             self.animations.append(off)
-            self.name_map[DEFAULT_OFF] = len(self.animations) - 1
+        else:
+            self.name_map[DEFAULT_OFF] = default
 
         self.index = self.name_map[DEFAULT_OFF]  # start with default animation
 
@@ -167,9 +171,8 @@ class RemoteControl(collection.Indexed):
             self.stop_animation()
 
     # API Handlers
-    def run_animation(self, name=None):
-        if name is None:
-            name = self.default
+    def run_animation(self, name=DEFAULT_OFF):
+        log.debug('run_animation %s', name)
 
         if name not in self.name_map:
             error = 'Invalid animation name: {}'.format(name)
@@ -180,8 +183,8 @@ class RemoteControl(collection.Indexed):
             self.current_animation.cleanup(clean_layout=False)
             self.index = -1
 
-        log.info('Running animation: {}'.format(name))
         self.index = self.name_map[name]
+        log.info('Running animation: {}'.format(name))
         self.current_animation.start()
         return True, None
 
@@ -202,7 +205,7 @@ class RemoteControl(collection.Indexed):
         resp = {
             'ui': self.ui_config,
             'brightness': self.layout.brightness,
-            'animations': list(self.anim_cfgs)
+            'animations': self.anim_cfgs,
         }
         return True, resp
 
@@ -212,7 +215,9 @@ class RemoteControl(collection.Indexed):
             proc.start()
 
     def step(self, amt=None):
-        self.run_animation()
+        if not self.cur_step:
+            self.run_animation()
+        super().step(amt)
         while not self.threading.stop_event.isSet():
             recv = self.q_recv.get()
             req = recv['req']
