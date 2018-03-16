@@ -135,7 +135,7 @@ class Serial(DriverBase):
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         self._write(packet)
-        resp = self._read(1) or chr(RETURN_CODES.ERROR)
+        resp = ord(self._read(1) or chr(RETURN_CODES.ERROR))
         if resp == RETURN_CODES.SUCCESS:
             return True
         print_error(resp)
