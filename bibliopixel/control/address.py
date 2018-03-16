@@ -46,12 +46,18 @@ class Address:
         def _set(self, target, value):
             setattr(target, self.name, value)
 
+        def __str__(self):
+            return '.%s' % self.name
+
     class Index(Segment):
         def get(self, target):
             return target[self.name]
 
         def _set(self, target, value):
             target[self.name] = value
+
+        def __str__(self):
+            return '[%s]' % self.name
 
     class Call(Segment):
         def __init__(self):
@@ -63,26 +69,29 @@ class Address:
         def set(self, target, *value):
             target(*value)
 
+        def __str__(self):
+            return '()'
+
     def __init__(self, name=None):
         if not name:
-            self.address = self.assignment = ()
+            self.segments = self.assignment = ()
             return
 
         self.name, *assignment = name.split('=', 1)
         self.name = self.name.strip()
 
         try:
-            self.address = list(_generate(self.name))
+            self.segments = list(_generate(self.name))
         except:
             raise ValueError('%s is not a legal address' % name)
 
-        if not self.address:
+        if not self.segments:
             raise ValueError('Empty Addresses are not allowed')
 
         if assignment:
-            if not self.address:
+            if not self.segments:
                 raise ValueError('Cannot assign to an empty address')
-            if isinstance(self.address[-1], Address.Call):
+            if isinstance(self.segments[-1], Address.Call):
                 raise ValueError('Cannot assign to a call operation')
             assignment = [s.strip() for s in assignment[0].split(',')]
             assignment = [int(s) if s.isnumeric() else s for s in assignment]
@@ -91,7 +100,7 @@ class Address:
             self.assignment = ()
 
     def __bool__(self):
-        return bool(self.address)
+        return bool(self.segments)
 
     def __str__(self):
         return self.name
@@ -103,10 +112,10 @@ class Address:
         return target
 
     def get(self, target):
-        return self._get(target, self.address)
+        return self._get(target, self.segments)
 
     def set(self, target, *values):
-        *first, last = self.address
+        *first, last = self.segments
         parent = self._get(target, first)
         last.set(parent, *(self.assignment + values))
 

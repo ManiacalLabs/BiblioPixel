@@ -7,7 +7,7 @@ class AddressTest(unittest.TestCase):
     def test_empty(self):
         address = Address('')
         self.assertFalse(address)
-        self.assertFalse(address.address)
+        self.assertFalse(address.segments)
         self.assertFalse(address.assignment)
         self.assertEqual(address.get(23), 23)
         with self.assertRaises(ValueError):
@@ -15,7 +15,7 @@ class AddressTest(unittest.TestCase):
 
     def test_attrib(self):
         address = Address('attr')
-        self.assertEqual(len(address.address), 1)
+        self.assertEqual(len(address.segments), 1)
         self.attr = 'bingo'
         self.assertIs(address.get(self), 'bingo')
         address.set(self, 'bang')
@@ -31,7 +31,7 @@ class AddressTest(unittest.TestCase):
 
     def test_array(self):
         address = Address('[1]')
-        self.assertEqual(len(address.address), 1)
+        self.assertEqual(len(address.segments), 1)
         data = [2, 4, 6]
         self.assertEqual(address.get(data), 4)
         address.set(data, 3)
@@ -54,7 +54,7 @@ class AddressTest(unittest.TestCase):
         self.attr3 = 'bingo'
 
         address = Address('.attr1[0][test][1][heck].attr2.attr3')
-        self.assertEqual(len(address.address), 7)
+        self.assertEqual(len(address.segments), 7)
         self.assertEqual(address.get(self), 'bingo')
         address.set(self, 'bang')
         self.assertEqual(self.attr3, 'bang')
@@ -64,7 +64,7 @@ class AddressTest(unittest.TestCase):
 
     def test_trivial_call(self):
         address = Address('()')
-        self.assertEqual(len(address.address), 1)
+        self.assertEqual(len(address.segments), 1)
         result = []
 
         address.set(result.append, 'value')
@@ -72,7 +72,7 @@ class AddressTest(unittest.TestCase):
 
     def test_call(self):
         address = Address('.call()')
-        self.assertEqual(len(address.address), 2)
+        self.assertEqual(len(address.segments), 2)
         address.set(self, 23)
         self.assertEqual(self.call_result, 23)
 
@@ -82,7 +82,7 @@ class AddressTest(unittest.TestCase):
     def test_call_complex(self):
         self.results = []
         address = Address('.call2()[1]().call()')
-        self.assertEqual(len(address.address), 6)
+        self.assertEqual(len(address.segments), 6)
         address.set(self, 23)
         self.assertEqual(self.call_result, 23)
 
