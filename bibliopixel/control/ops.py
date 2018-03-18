@@ -41,6 +41,10 @@ class Op:
     def __call__(self, x):
         return self.op(x, *self.values)
 
+    def __str__(self):
+        values = ', '.join(str(v) for v in self.values)
+        return '%s(%s)' % self.opname, values
+
 
 class Ops:
     def __init__(self, *ops):
@@ -53,6 +57,9 @@ class Ops:
 
     def __bool__(self):
         return bool(self.ops)
+
+    def __str__(self):
+        return '->'.join(str(i) for i in self.ops)
 
 
 def _make_ops(ops):
