@@ -3,7 +3,7 @@ import contextlib, queue, time, unittest
 from bibliopixel.util import udp
 
 TEST_ADDRESS = '127.0.0.1', 5678
-TIMEOUT = 0.2
+TIMEOUT = 0.3
 
 
 @contextlib.contextmanager
