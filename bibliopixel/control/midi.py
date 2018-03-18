@@ -64,11 +64,11 @@ def _print_midi(*args, **kwds):
     print('MIDI:', *args)
 
 
-def test_midi():
+def main():
     midi = Midi(pre_routing='()')
     midi.start(_print_midi)
     midi.thread.join()
 
 
 if __name__ == '__main__':
-    test_midi()
+    main()

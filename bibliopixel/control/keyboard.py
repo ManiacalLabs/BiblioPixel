@@ -61,11 +61,11 @@ class KeyboardTester:
         log.printer(k, '=', v)
 
 
-def test_keyboard():
+def main():
     keyboard = Keyboard(routing={'press': 'press', 'release': 'release'})
     keyboard.start(KeyboardTester())
     keyboard.thread.join()
 
 
 if __name__ == '__main__':
-    test_keyboard()
+    main()
