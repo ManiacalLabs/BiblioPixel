@@ -28,7 +28,6 @@ class LogErrors:
             return self.function(*args, **kwds)
         except Exception as e:
             args = (class_name.class_name(e),) + e.args
-            raise
 
         self.errors += 1
         if self.max_errors < 0 or self.errors <= self.max_errors:
