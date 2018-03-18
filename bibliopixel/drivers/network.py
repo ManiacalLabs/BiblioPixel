@@ -67,7 +67,7 @@ class Network(DriverBase):
             log.error(error)
             raise IOError(error)
 
-    def set_device_brightness(self, brightness):
+    def _set_device_brightness(self, brightness):
         """Hardware specific method to set the global brightness for
         this driver's output. This method is required to be implemented,
         however, users should call

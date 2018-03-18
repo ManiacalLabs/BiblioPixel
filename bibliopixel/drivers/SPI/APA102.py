@@ -25,9 +25,9 @@ class APA102(SPIBase):
         self._packet = self.maker.bytes(self._start_frame + self._pixel_bytes +
                                         self._reset_frame + self._end_frame)
 
-        self.set_device_brightness(0xFF)  # required to setup _packet
+        self._set_device_brightness(0xFF)  # required to setup _packet
 
-    def set_device_brightness(self, val):
+    def _set_device_brightness(self, val):
         """
         APA102 & SK9822 support on chip brightness control allowing greater color depth.
         APA102 superimposes a 440Hz PWM on the 19kHz base PWM to control brightness.

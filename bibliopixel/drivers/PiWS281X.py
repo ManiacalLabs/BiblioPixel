@@ -121,7 +121,7 @@ class PiWS281X(DriverBase):
                 e.args = (error,) + e.args
             raise
 
-    def set_device_brightness(self, brightness):
+    def _set_device_brightness(self, brightness):
         self._strip.set_brightness(brightness)
         return True
 
