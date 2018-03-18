@@ -1,38 +1,37 @@
 import collections, functools, sys, threading
-from . address import Address
 from . extractor import Extractor
-from . ops import Ops
 from .. project import construct, importer
 from .. util.log_errors import LogErrors
 from .. util import flatten, log, json
-
-
-class OpsAddress(Address):
-    def __init__(self, address, ops=()):
-        super().__init__(address)
-        self.ops = Ops(*ops)
-
-    def set(self, project, *args):
-        if args and self.ops and len(args) == 1:
-            args = [self.ops(args[0])]
-        return super().set(project, *args)
+from . routing import ActionList, Routing
 
 
 class Control:
-    DEFAULT = {'datatype': OpsAddress}
+    DEFAULT = {'datatype': ActionList}
 
-    def __init__(self, routing, default=None, max_errors=16,
-                 python_path='bibliopixel.control', verbose=False):
-        default = dict(self.DEFAULT, **(default or {}))
+    def __init__(self, routing=None, default=None, max_errors=16,
+                 python_path='bibliopixel.control', verbose=False,
+                 pre_routing=None):
+        """
+        :param Address pre_routing: This Address is set with with the message
+            after the message is received and converted, but before it is
+            routed.
+        """
         self.verbose = verbose
-        routing = flatten.unflatten(routing)
-        self.routing = _make(routing, python_path, default, 'control')
-        self.safe_receive = LogErrors(self.receive, max_errors)
+        self.receive = LogErrors(self._receive, max_errors)
+        default = dict(self.DEFAULT, **(default or {}))
+        self.pre_routing = ActionList(pre_routing)
+        self.routing = Routing(routing or {}, default or {}, python_path)
+        self.running = False
 
     def start(self, project):
         if self.verbose:
             log.info('Starting %s', self)
-        self.project = project
+
+        self.project = project  # Can I now delete this?
+        self.pre_routing.set_target(project)
+        self.routing.set_target(project)
+        self.running = True
         self.thread = self._make_thread()
         self.thread.start()
 
@@ -40,46 +39,42 @@ class Control:
         self.stop()
 
     def stop(self):
-        self.thread.stop()
+        self.running = False
 
     def loop(self):
         for msg in self:
-            self.safe_receive(msg)
+            self.receive(msg)
+            if not self.running:
+                return
 
-    def receive(self, msg):
+    def _receive(self, msg):
         """
-        Receive a message from the input source.
+        Receive a message from the input source and perhaps raise an Exception.
         """
-        routing, msg = self.routing, self._convert(msg)
+        msg = self._convert(msg)
+
+        str_msg = self.verbose and self._msg_to_str(msg)
         if self.verbose and log.is_debug():
-            log.debug('Message %s', self._msg_to_str(msg))
+            log.debug('Message %s', str_msg)
 
-        while routing:
-            if isinstance(routing, list):
-                if self.verbose:
-                    log.info('Routed message %s to %s',
-                             self._msg_to_str(msg), routing)
-                for address in routing:
-                    self.project.deferred_set(address, *msg.values())
-                return
+        if self.pre_routing:
+            self.pre_routing.receive(msg)
 
-            if not msg:
-                return
-            if not isinstance(routing, dict):
-                raise ValueError('Unexpected type %s' % type(routing))
-
-            k, v = msg.popitem(last=False)
-            routing = routing.get(str(v))
+        receiver, msg = self.routing.receive(msg)
+        if receiver:
+            receiver.receive(msg)
+            if self.verbose:
+                log.info('Routed message %s to %s', str_msg, receiver)
 
     def _convert(self, msg):
         """
-        Convert the message to a new ``collections.OrderedDict``.
+        Convert the message to a Control-specific format
         """
-        return collections.OrderedDict(msg)
+        raise NotImplementedError
 
     def __iter__(self):
         """Should yield a sequence of messages from the input source."""
-        raise NotImplemented
+        raise NotImplementedError
 
     def _make_thread(self):
         """
@@ -92,7 +87,12 @@ class Control:
         return threading.Thread(target=self.loop, daemon=True)
 
     def _msg_to_str(self, msg):
+        if msg is None:
+            return '(None)'
         return '.'.join(msg.values()) or '.'
+
+    def __bool__(self):
+        return bool(self.routing or self.pre_routing)
 
 
 class ExtractedControl(Control):
@@ -102,26 +102,3 @@ class ExtractedControl(Control):
         super().__init__(**kwds)
         extractor = dict(self.EXTRACTOR, **(extractor or {}))
         self._convert = Extractor(**extractor).extract
-
-
-def _make(value, python_path, default, *keys):
-    assert isinstance(default, dict)
-
-    if isinstance(value, dict):
-        if not (value.get('address') or value.get('typename')):
-            return {k: _make(v, k, default, *keys) for k, v in value.items()}
-
-        value = [value]
-
-    elif isinstance(value, str):
-        value = [{'address': value}]
-
-    elif not isinstance(value, list):
-        raise ValueError('Keyed value is not dict, list, or str',
-                         '.'.join(reversed(keys)))
-
-    result = []
-    for v in value:
-        result.append(construct.construct_type(dict(default, **v), python_path))
-
-    return result
