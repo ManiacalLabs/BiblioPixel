@@ -122,7 +122,7 @@ class PiWS281X(DriverBase):
             raise
 
     def set_brightness(self, brightness):
-        self._strip.setBrightness(brightness)
+        self._strip.set_brightness(brightness)
         return True
 
     def _compute_packet(self):
