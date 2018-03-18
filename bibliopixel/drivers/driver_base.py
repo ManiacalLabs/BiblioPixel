@@ -22,12 +22,12 @@ class DriverBase(object):
         in :py:mod:`bibliopixel.util.colors.gamma`
     """
 
-    # If set_device_brightness is not empty, it's a method that allows you
+    # If _set_device_brightness is not empty, it's a method that allows you
     # to directly set the brightness for the device.
     #
     # If it is empty, then the brightness is used as a scale factor in rendering
     # the pixels.
-    set_device_brightness = None
+    _set_device_brightness = None
 
     pre_recursion = fields.default_converter
 
@@ -155,8 +155,8 @@ class DriverBase(object):
 
         if brightness is not None:
             self._brightness = brightness
-            if self.set_device_brightness:
-                self.set_device_brightness(brightness)
+            if self._set_device_brightness:
+                self._set_device_brightness(brightness)
 
         self._compute_packet()
         self._send_packet()
@@ -177,7 +177,7 @@ class DriverBase(object):
         brightness and gamma correction to the pixels controlled by this
         driver.
         """
-        if self.set_device_brightness:
+        if self._set_device_brightness:
             level = 1.0
         else:
             level = self._brightness / 255.0
