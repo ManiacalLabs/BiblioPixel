@@ -1,5 +1,6 @@
 import fractions
 from . import control
+from .. util import log
 
 try:
     import mido
@@ -46,9 +47,28 @@ class Midi(control.ExtractedControl):
     def __iter__(self):
         ports = [mido.open_input(i) for i in mido.get_input_names()]
 
+        if not ports:
+            log.error('control.midi: no MIDI ports found')
+            return
+
+        log.info('Starting to listen for MIDI')
         for port, msg in mido.ports.MultiPort(ports, yield_ports=True):
             mdict = dict(vars(msg), port=port)
             if self.use_note_off or msg.type != 'note_off':
                 yield mdict
             else:
                 yield dict(mdict, type='note_on', velocity=0)
+
+
+def _print_midi(*args, **kwds):
+    print('MIDI:', *args)
+
+
+def test_midi():
+    midi = Midi(pre_routing='()')
+    midi.start(_print_midi)
+    midi.thread.join()
+
+
+if __name__ == '__main__':
+    test_midi()
