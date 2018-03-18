@@ -48,8 +48,9 @@ class Project:
 
         self.animation = create(animation, 'animation')
 
-        self.event_queue = event_queue.EventQueue(maxsize=event_queue_maxsize)
-        self.animation.preframe_callback = self.event_queue.get_and_run_events
+        eq = event_queue.EventQueue(maxsize=event_queue_maxsize)
+        self.animation.event_queue = eq
+        self.animation.preframe_callback = eq.get_and_run_events
 
         # Unfortunately, the whole animation cycle is controlled by methods on
         # the topmost animation - but we need to get called back at a certain
@@ -80,13 +81,6 @@ class Project:
             self.start()
         finally:
             self.cleanup()
-
-    def deferred_set(self, address, *value):
-        """
-        Use an Address to set a value within the project, but defer it to
-        happen on the event queue.
-        """
-        self.event_queue.put_event(address.set, self, *value)
 
 
 def project(*descs, root_file=None):

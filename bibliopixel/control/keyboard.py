@@ -58,11 +58,7 @@ class Keyboard(ExtractedControl):
 class KeyboardTester:
     def __setattr__(self, k, v):
         super().__setattr__(k, v)
-        print(k, '=', v)
-
-    def deferred_set(self, address, key):
-        print(address, key)
-        setattr(self, str(address), key)
+        log.printer(k, '=', v)
 
 
 def test_keyboard():
