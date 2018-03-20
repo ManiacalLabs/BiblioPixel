@@ -27,6 +27,8 @@ def add_common_flags(parser):
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
     parser.add_argument(
         '--version', action='store_true', help=VERSION_HELP)
+    parser.add_argument(
+        deprecated.V4_FLAG, action='store_true', help=V4_HELP)
 
 
 def execute_args(args):
@@ -133,7 +135,10 @@ def _make_project_flags(args):
         defs = [(a[0] if isinstance(a, list) else a) for a in args.defaults]
         defaults.set_project_defaults(defs)
 
-    if args.numbers != 'python':
+    if args.v4:
+        log.printer('*** Using v4 forward compatibility mode.')
+        project_flags['numbers'] = 'float'
+    elif args.numbers != 'python':
         project_flags['numbers'] = args.numbers
 
     if args.project_lengths is not None:
@@ -205,6 +210,11 @@ loglevel is by default set to debug
 VERSION_HELP = """\
 Print the current version number of BiblioPixel (%s).
 """ % VERSION
+
+V4_HELP = """\
+Run BiblioPixel in v4 compatibility mode, to see if it will work with
+future releases v4.x
+"""
 
 
 # TODO: this should go somewhere else
