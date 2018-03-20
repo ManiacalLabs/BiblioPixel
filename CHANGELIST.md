@@ -1,4 +1,4 @@
-## v3.4.7 - 2018-03-11
+## v3.4.7 - 2018-03-19
 - Adding preliminary ArtNet support
 - Better error reporting
 - More documentation
