@@ -15,6 +15,22 @@ Specify what to do when a project uses deprecated features:
 
 DEPRECATED = set()
 FLAG = '--deprecated'
+V4_FLAG = '--v4'
+DEPRECATION_ON = None
+
+
+def _deprecation_on():
+    global DEPRECATION_ON
+
+    if DEPRECATION_ON is None:
+        try:
+            sys.argv.remove(FLAG)
+            DEPRECATION_ON = True
+        except:
+            pass
+        DEPRECATION_ON = DEPRECATION_ON or V4_FLAG in sys.argv
+
+    return DEPRECATION_ON
 
 
 def allowed():
