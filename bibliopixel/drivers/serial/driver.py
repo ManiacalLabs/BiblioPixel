@@ -74,8 +74,6 @@ class Serial(DriverBase):
         if type in SPIChipsets:
             log.info("Using SPI Speed: %sMHz", self._spi_speed)
 
-        self.set_device_brightness = self.set_brightness
-
     def cleanup(self):
         """
         SHOULD BE PRIVATE
@@ -130,8 +128,7 @@ class Serial(DriverBase):
             log.error(error)
             raise e
 
-    def set_brightness(self, brightness):
-        super().set_brightness(brightness)
+    def set_device_brightness(self, brightness):
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         self._write(packet)
