@@ -28,7 +28,7 @@ class DMXMessageTest(unittest.TestCase):
     @mark_tests.long_test
     def test_blackout(self):
         results = []
-        with udp_test.receive_udp(ADDRESS, results):
+        with udp_test.receive_udp(ADDRESS, results, MAX_STEPS + 1):
             project = make.make_project(PROJECT)
             project.start()
 
