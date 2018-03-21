@@ -3,22 +3,23 @@ import contextlib, queue, time, unittest
 from bibliopixel.util import udp
 
 TEST_ADDRESS = '127.0.0.1', 5678
-TIMEOUT = 0.3
+TIMEOUT = 0.1
 
 
 @contextlib.contextmanager
-def receive_udp(address, results):
+def receive_udp(address, results, expected):
     receiver = udp.QueuedReceiver(address)
     receiver.start()
 
     yield
 
-    results.append(receiver.queue.get())
+    results.extend(receiver.queue.get() for i in range(expected))
     try:
-        while True:
-            results.append(receiver.queue.get(timeout=TIMEOUT))
+        receiver.queue.get(timeout=TIMEOUT)
     except queue.Empty:
         pass
+    else:
+        raise ValueError
 
 
 class UDPTest(unittest.TestCase):
@@ -28,7 +29,7 @@ class UDPTest(unittest.TestCase):
         # Note that empty messages are either not sent, or not received.
 
         actual = []
-        with receive_udp(TEST_ADDRESS, actual):
+        with receive_udp(TEST_ADDRESS, actual, len(expected)):
             sender = udp.QueuedSender(TEST_ADDRESS)
             sender.start()
             for m in messages:
