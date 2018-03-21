@@ -13,6 +13,7 @@ def receive_udp(address, results):
 
     yield
 
+    results.append(receiver.queue.get())
     try:
         while True:
             results.append(receiver.queue.get(timeout=TIMEOUT))
