@@ -93,7 +93,7 @@ class Animation(object):
 
     def start(self):
         self.threading.start()
-    
+
     def stop(self):
         self.threading.stop_event.set()
 
