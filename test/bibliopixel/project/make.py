@@ -7,6 +7,7 @@ from .. mark_tests import SKIP_LONG_TESTS
 def make_project(data):
     if isinstance(data, dict):
         desc = data
+        name = None
 
     elif not isinstance(data, str):
         raise ValueError('Cannot understand data %s' % data)
@@ -16,11 +17,13 @@ def make_project(data):
             fp = tempfile.NamedTemporaryFile(mode='w')
             fp.write(data)
             fp.seek(0)
-            data = fp.name
+            name = fp.name
+        else:
+            name = data
 
-        desc = json.load(data)
+        desc = json.load(name)
 
-    return project.project(desc)
+    return project.project(desc, root_file=name)
 
 
 def make(data, run_start=not SKIP_LONG_TESTS):

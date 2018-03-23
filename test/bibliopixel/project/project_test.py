@@ -30,6 +30,11 @@ class ProjectTest(unittest.TestCase):
     def test_yaml_file(self):
         make('test/bibliopixel/project/project.yml', False)
 
+    def test_super(self):
+        animation = make('test/bibliopixel/project/super_project.json', False)
+        self.assertEquals(animation.__class__.__name__, 'StripChannelTest')
+        self.assertEquals(animation.layout.pixelWidth, 2)
+
     def test_multi(self):
         animation = make(PROJECT_MULTI)
         k = [d._kwds for d in animation.layout.drivers]

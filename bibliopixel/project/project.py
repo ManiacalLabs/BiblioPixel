@@ -85,12 +85,14 @@ class Project:
 
 def project(*descs, root_file=None):
     """
-    Make a project with recursion and alias resolution.  Use this
-    instead of calling Project() directly.
+    Make a new project, using recursion and alias resolution.
+
+    Use this function in preference to calling Project() directly.
     """
+    load.ROOT_FILE = root_file
+
     desc = defaults.merge(*descs)
 
-    load.ROOT_FILE = root_file
     with load.extender(desc.get('path', '')):
         desc = recurse.recurse(desc)
 
