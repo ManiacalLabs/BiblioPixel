@@ -1,5 +1,5 @@
 import collections
-from . import construct
+from . import construct, load
 
 # Elements in the DEFAULT_PROJECT are listed in order of dependency: sections
 # can only be dependent on sections that are above them in this list.
@@ -38,10 +38,19 @@ def merge(*projects):
         for name, section in (project or {}).items():
             if name in NOT_MERGEABLE:
                 result[name] = section
-            elif section and not isinstance(section, (dict, str)):
+                continue
+
+            if section and not isinstance(section, (dict, str)):
                 cname = section.__class__.__name__
                 raise ValueError(SECTION_ISNT_DICT_ERROR % (name, cname))
-            else:
-                result.setdefault(name, {}).update(construct.to_type(section))
+
+            if name == 'animation':
+                # Useful hack to allow you to load projects as animations.
+                adesc = load.load_if_filename(section)
+                if adesc:
+                    section = adesc.get('animation', {})
+                    section['run'] = adesc.get('run', {})
+
+            result.setdefault(name, {}).update(construct.to_type(section))
 
     return result

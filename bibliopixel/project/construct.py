@@ -1,5 +1,5 @@
 import copy
-from . import aliases, importer
+from . import aliases, importer, load
 
 
 def construct(*args, datatype, typename=None, **kwds):
@@ -14,6 +14,9 @@ def construct(*args, datatype, typename=None, **kwds):
 
 
 def to_type(d):
+    fn = load.load_if_filename(d)
+    if fn:
+        return fn
     return {'typename': d} if isinstance(d, str) else copy.deepcopy(d)
 
 

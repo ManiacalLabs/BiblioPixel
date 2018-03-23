@@ -14,32 +14,35 @@ class Collection(animation.Animation):
         animations = []
 
         for a in desc['animations']:
-            ld = load.load_if_filename(a)
-            if ld:
-                a = {k: v for k, v in ld.items() if k in ('animation', 'run')}
+            loaded = load.load_if_filename(a)
+            if loaded:
+                animation = loaded.get('animation', {})
+                run = loaded.get('run', {})
 
-            if callable(a) or isinstance(a, str) or 'animation' not in a:
+            elif callable(a) or isinstance(a, str) or 'animation' not in a:
                 animation = a
-                a = {}
+                run = {}
+
             else:
-                a = dict(a)
-                animation = a.pop('animation')
+                animation = a.pop('animation', {})
+                run = a.pop('run', {})
+                if a:
+                    raise ValueError(
+                        'Extra fields in animation: ' + ', '.join(a))
+
             animation = construct.to_type_constructor(
                 animation, 'bibliopixel.animation')
 
-            arun = a.pop('run', {})
-            arun = animation['run'] = dict(arun, **animation.get('run', {}))
-            drun = desc['run']
+            run.update(animation.get('run', {}))
+            animation['run'] = run
 
             # Children without fps or sleep_time get it from their parents.
-            if not ('fps' in arun or 'sleep_time' in arun):
-                if 'fps' in drun:
-                    arun.update(fps=drun['fps'])
-                elif 'sleep_time' in drun:
-                    arun.update(sleep_time=drun['sleep_time'])
+            if not ('fps' in run or 'sleep_time' in run):
+                if 'fps' in desc['run']:
+                    run.update(fps=desc['run']['fps'])
+                elif 'sleep_time' in desc['run']:
+                    run.update(sleep_time=desc['run']['sleep_time'])
 
-            if a:
-                raise ValueError('Extra fields in animation: ' + ', '.join(a))
             animations.append(animation)
 
         desc['animations'] = animations
