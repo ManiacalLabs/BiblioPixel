@@ -26,7 +26,10 @@ def module(name, python_path=None):
 
 
 def extender(path):
-    parts = [os.getcwd()] + path.split(':')
+    parts = [os.getcwd()]
+    if path:
+        parts.extend(path.split(':'))
+
     missing = [p for p in parts if not os.path.exists(p)]
     if missing:
         msg = ('This "path" entry does not exist' if len(missing) == 1
