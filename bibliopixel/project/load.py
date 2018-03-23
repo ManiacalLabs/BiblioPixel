@@ -1,6 +1,6 @@
 from . import aliases
 import loady, os
-from .. util import json
+from .. util import json, log
 
 guess_name = loady.importer.guess_name
 CACHE = os.path.expanduser('~/.bibliopixel/code_cache')
@@ -27,6 +27,14 @@ def module(name, python_path=None):
 
 def extender(path):
     parts = [os.getcwd()] + path.split(':')
+    missing = [p for p in parts if not os.path.exists(p)]
+    if missing:
+        msg = ('This "path" entry does not exist' if len(missing) == 1
+               else 'These "path" entries do not exist')
+        m2 = ['"%s"' % p for p in missing]
+        log.warning('%s: %s', msg, ', '.join(m2))
+        parts = [p for p in parts if os.path.exists(p)]
+
     return parts and loady.sys_path.extender(':'.join(parts))
 
 
