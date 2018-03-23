@@ -1,5 +1,5 @@
 import copy, multiprocessing
-from . import server, trigger_process
+from . import opener, server, trigger_process
 from .. animation import STATE
 from .. import collection
 from ... project import load
@@ -14,6 +14,7 @@ DEFAULT_ANIM_CONFIG = {
 }
 DEFAULT_AUTO_DEMO_TIME = 10
 DEFAULT_AUTO_DEMO_NAME = 'DEMO_ANIM'
+OPENER_TIMEOUT = 10
 
 
 BAD_DEFAULT_ERROR = """\
@@ -81,12 +82,14 @@ class RemoteControl(collection.Indexed):
     def __init__(self, *args, name_map, external_access=False, port=5000,
                  title='BiblioPixel Remote', bgcolor='black',
                  font_color='white', default=None,
-                 triggers=[], **kwds):
+                 triggers=[], open_page=False, **kwds):
         super().__init__(*args, **kwds)
         self.internal_delay = 0  # never wait
 
         self.anim_cfgs = [a.data for a in self.animations]
         self.name_map = name_map
+        self.port = port
+        self.open_page = open_page
 
         for anim in self.animations:
             anim.on_completion = self.on_completion
@@ -131,6 +134,8 @@ class RemoteControl(collection.Indexed):
 
         self.server = multiprocessing.Process(target=server.run_server,
                                               args=server_args)
+        if self.open_page:
+            opener.opener('localhost', port, OPENER_TIMEOUT)
 
         self.handlers = {
             'run_animation': self.run_animation,

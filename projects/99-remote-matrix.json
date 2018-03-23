@@ -13,15 +13,8 @@
     "animation": {
         "title": "Matrix Demo",
         "typename": "remote",
+        "open_page": true,
         "animations": [
-            {
-                "animation": {
-                    "typename": "MASSIVE FAILURE",
-                    "name": "ImageAnim"
-                },
-                "run": {
-                }
-            },
             {
                 "animation": {
                     "typename": "BiblioPixelAnimations.matrix.ImageShow.ImageShow",
