@@ -49,7 +49,7 @@ class Project:
         self.animation = create(animation, 'animation')
 
         eq = event_queue.EventQueue(maxsize=event_queue_maxsize)
-        self.animation.event_queue = eq
+        self.layout.event_queue = self.animation.event_queue = eq
         self.animation.preframe_callback = eq.get_and_run_events
 
         # Unfortunately, the whole animation cycle is controlled by methods on
