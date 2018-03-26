@@ -1,4 +1,5 @@
 import contextlib, queue, time, unittest
+from .. import mark_tests
 
 from bibliopixel.util import udp
 
@@ -23,6 +24,7 @@ def receive_udp(address, results, expected):
 
 
 class UDPTest(unittest.TestCase):
+    @mark_tests.travis_test
     def test_full(self):
         messages = [s.encode() for s in ('foo', '', 'bar', 'baz', '', 'bing')]
         expected = [s for s in messages if s]
