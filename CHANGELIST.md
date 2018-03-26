@@ -1,3 +1,8 @@
+## v3.4.8 - 2018-03-26
+- Fix #686 and #689
+- Allow animation.Remote to open the URL for its control page
+- --v4 flag
+
 ## v3.4.7 - 2018-03-19
 - Adding preliminary ArtNet support
 - Better error reporting
