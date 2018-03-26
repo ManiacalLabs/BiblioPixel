@@ -99,8 +99,32 @@ class Layout(object):
         return self._colors
 
     @color_list.setter
-    def color_list(self, cl):
-        self._colors[:] = cl
+    def color_list(self, color_list):
+        self.set_color_list(color_list)
+
+    def set_color_list(self, color_list, offset=0):
+        """
+        Set the internal colors starting at an optional offset.
+
+        If `color_list` is a list or other 1-dimensional array, it is reshaped
+        into an N x 3 list.
+
+        If `color_list` too long it is truncated; if it is too short then only
+        the initial colors are set.
+        """
+        if not len(color_list):
+            return
+        try:
+            color_list[0][0]
+        except TypeError:
+            # It's a 1-dimensional list
+            assert not (len(color_list) % 3)
+            color_list = list(zip(*[iter(color_list)] * 3))
+
+        size = len(self._colors) - offset
+        if len(color_list) > size:
+            color_list = color_list[:size]
+        self._colors[offset:offset + len(color_list)] = color_list
 
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
@@ -125,24 +149,6 @@ class Layout(object):
         """Push the current pixel state to the driver"""
         # This is overridden elsewhere.
         self.threading.push_to_driver()
-
-    # use with caution!
-    def set_colors(self, buf):
-        """Use with extreme caution!
-        Directly sets the internal buffer and bypasses all brightness and rotation control.
-        buf must also be in the exact format required by the display type.
-        """
-        if len(self._colors) != len(buf):
-            raise IOError("Data buffer size incorrect! "
-                          "Expected: {} bytes / Received: {} bytes"
-                          .format(len(self._colors), len(buf)))
-        self._colors[:] = buf
-
-    def setBuffer(self, buf):
-        util.deprecated.deprecated('layout.setBuffer')
-
-        # https://stackoverflow.com/questions/1624883
-        self.set_colors(buf=list(zip(*(iter(buf),) * 3)))
 
     def set_brightness(self, brightness):
         self.brightness = brightness
@@ -202,3 +208,22 @@ class MultiLayout(Layout):
 
     def gen_multi(self, *args, **kwds):
         raise NotImplementedError
+
+    def set_colors(self, buf):
+        """
+        DEPRECATED: use self.color_list
+
+        Use with extreme caution!
+        Directly sets the internal buffer and bypasses all brightness and rotation control.
+        buf must also be in the exact format required by the display type.
+        """
+        util.deprecated.deprecated('layout.set_colors')
+        if len(self._colors) != len(buf):
+            raise IOError("Data buffer size incorrect! "
+                          "Expected: {} bytes / Received: {} bytes"
+                          .format(len(self._colors), len(buf)))
+        self._colors[:] = buf
+
+    def setBuffer(self, buf):
+        util.deprecated.deprecated('layout.setBuffer')
+        self.color_list = buf

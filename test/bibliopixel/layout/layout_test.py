@@ -1,6 +1,11 @@
 import unittest
 from bibliopixel.layout import Strip
-from bibliopixel.util import colors
+from bibliopixel.util.colors import COLORS
+
+RED = COLORS.Red
+GREEN = COLORS.Green
+BLACK = COLORS.Black
+HOT_PINK = COLORS['hot pink']
 
 
 class MockDriver:
@@ -13,10 +18,34 @@ class MockDriver:
 
 
 class LayoutTest(unittest.TestCase):
-    def test_set_colors(self):
+    def test_set_individual_colors(self):
         strip = Strip(MockDriver(4))
         strip.set(0, 'red'),
-        strip.set(1, colors.Green)
+        strip.set(1, GREEN)
         strip.set(2, 'hot pink')
-        expected = [(255, 0, 0), (0, 255, 0), (255, 105, 180), (0, 0, 0)]
+        expected = [RED, GREEN, HOT_PINK, BLACK]
+        self.assertEquals(expected, strip.color_list)
+
+    def test_set_color(self):
+        strip = Strip(MockDriver(4))
+        strip.color_list = RED, GREEN, HOT_PINK
+        expected = [RED, GREEN, HOT_PINK, BLACK]
+        self.assertEquals(expected, strip.color_list)
+
+    def test_set_linear_color(self):
+        strip = Strip(MockDriver(4))
+        strip.color_list = RED + GREEN + HOT_PINK
+        expected = [RED, GREEN, HOT_PINK, BLACK]
+        self.assertEquals(expected, strip.color_list)
+
+    def test_set_too_much_color(self):
+        strip = Strip(MockDriver(4))
+        strip.color_list = RED + GREEN + HOT_PINK + GREEN + HOT_PINK
+        expected = [RED, GREEN, HOT_PINK, GREEN]
+        self.assertEquals(expected, strip.color_list)
+
+    def test_set_offset(self):
+        strip = Strip(MockDriver(4))
+        strip.set_color_list(RED + GREEN, 2)
+        expected = [BLACK, BLACK, RED, GREEN]
         self.assertEquals(expected, strip.color_list)
