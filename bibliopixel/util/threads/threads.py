@@ -33,7 +33,7 @@ class QueueHandler(Loop):
     def __init__(self, timeout=0.1, send=None, **kwds):
         super().__init__(**kwds)
         self.timeout = timeout
-        self.queue = queue.Queue
+        self.queue = queue.Queue()
         self.send = send or self.send
 
     def loop(self):
