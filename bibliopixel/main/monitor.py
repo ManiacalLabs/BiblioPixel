@@ -8,19 +8,16 @@ from .. util import log
 
 
 def run(args):
+    control = args.control[0]
     try:
-        tc = importer.import_module(args.control[0], 'bibliopixel.control')
+        tc = importer.import_symbol(control, 'bibliopixel.control')
     except:
-        log.error('Do not understand control "%s"', args.control[0])
+        log.error('Do not understand control "%s"', control)
         raise
 
-    try:
-        main = tc.main
-    except:
-        log.error('No main() function for control "%s"', args.control)
-        raise
-
-    main()
+    control_object = tc(pre_routing='()')
+    control_object.start(print)
+    control_object.thread.join()
 
 
 def set_parser(parser):

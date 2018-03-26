@@ -58,17 +58,3 @@ class Midi(control.ExtractedControl):
                 yield mdict
             else:
                 yield dict(mdict, type='note_on', velocity=0)
-
-
-def _print_midi(*args, **kwds):
-    print('MIDI:', *args)
-
-
-def main():
-    midi = Midi(pre_routing='()')
-    midi.start(_print_midi)
-    midi.thread.join()
-
-
-if __name__ == '__main__':
-    main()

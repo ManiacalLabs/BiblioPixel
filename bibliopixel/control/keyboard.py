@@ -53,19 +53,3 @@ class Keyboard(ExtractedControl):
                 log.warning(DARWIN_ROOT_WARNING, sys.argv[0])
 
         return pynput.keyboard.Listener(self._press, self._release)
-
-
-class KeyboardTester:
-    def __setattr__(self, k, v):
-        super().__setattr__(k, v)
-        log.printer(k, '=', v)
-
-
-def main():
-    keyboard = Keyboard(routing={'press': 'press', 'release': 'release'})
-    keyboard.start(KeyboardTester())
-    keyboard.thread.join()
-
-
-if __name__ == '__main__':
-    main()
