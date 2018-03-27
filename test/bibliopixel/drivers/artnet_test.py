@@ -8,7 +8,7 @@ from test.bibliopixel.util import udp_test
 from bibliopixel.drivers import artnet
 
 LOCALHOST = '127.0.0.1'
-ADDRESS = LOCALHOST, artnet.UDP_PORT
+ADDRESS = LOCALHOST, artnet_message.UDP_PORT
 MAX_STEPS = 3
 
 PROJECT = {
