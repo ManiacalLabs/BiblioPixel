@@ -1,13 +1,13 @@
 import copy
-from . import collection
+from . import parallel
 from .. util import color_list
 
 
-class Mixer(collection.Parallel):
+class Mixer(parallel.Parallel):
     def __init__(self, *args, levels=None, master=1, **kwds):
         self.master = master
 
-        super()(*args, **kwds)
+        super().__init__(*args, **kwds)
         self.mixer = color_list.Mixer(
             self.color_list,
             [a.color_list for a in self.animations],
