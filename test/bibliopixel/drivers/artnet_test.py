@@ -5,7 +5,7 @@ from bibliopixel.animation import tests as animation_tests
 from test.bibliopixel import mark_tests
 from test.bibliopixel.project import make
 from test.bibliopixel.util import udp_test
-from bibliopixel.drivers.artnet import artnet
+from bibliopixel.drivers import artnet
 
 LOCALHOST = '127.0.0.1'
 ADDRESS = LOCALHOST, artnet.UDP_PORT
@@ -13,7 +13,7 @@ MAX_STEPS = 3
 
 PROJECT = {
     "driver": {
-        "typename": ".artnet.artnet",
+        "typename": "artnet",
         "ip_address": LOCALHOST
     },
     "dimensions": 12,
