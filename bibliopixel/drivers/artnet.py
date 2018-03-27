@@ -2,8 +2,6 @@ import copy, ctypes, enum
 from . server_driver import ServerDriver
 from .. util import artnet_message, log, server_cache, udp
 
-UDP_PORT = 0x1936  # 6454
-
 
 class ArtNet(ServerDriver):
     SERVER_CLASS = udp.Sender
@@ -15,7 +13,7 @@ class ArtNet(ServerDriver):
         """
         self.msg = artnet_message.dmx_message()
 
-        address = ip_address, UDP_PORT
+        address = ip_address, artnet_message.UDP_PORT
         super().__init__(*args, address=address, **kwds)
 
     def _make_buffer(self):
