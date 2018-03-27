@@ -1,6 +1,6 @@
 import copy, ctypes, enum
-from .. server_driver import ServerDriver
-from ... util import artnet_message, log, server_cache, udp
+from . server_driver import ServerDriver
+from .. util import artnet_message, log, server_cache, udp
 
 UDP_PORT = 0x1936  # 6454
 
