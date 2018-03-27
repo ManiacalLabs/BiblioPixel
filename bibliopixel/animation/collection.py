@@ -123,16 +123,6 @@ class Indexed(Collection):
             return self.animations[self._index]
 
 
-class Parallel(Collection):
-    def __init__(self, *args, levels, **kwds):
-        super()(*args, **kwds)
-
-        # Give each animation a unique, mutable layout so they can
-        # run independently.
-        for a in self.animations:
-            a.layout = a.layout.mutable_copy()
-
-
 class Wrapper(Indexed):
     # TODO: No unit tests cover any of this.
     @staticmethod
