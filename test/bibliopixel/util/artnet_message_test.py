@@ -1,11 +1,11 @@
 import struct, unittest
 
-from bibliopixel.drivers.artnet import dmx_message
+from bibliopixel.util.artnet_message import dmx_message
 
 
 class DMXMessageTest(unittest.TestCase):
     def do_test(self, data, sequence=1, **kwds):
-        msg = dmx_message.dmx_message(data=data, sequence=sequence, **kwds)
+        msg = dmx_message(data=data, sequence=sequence, **kwds)
         original = Original(data, sequence, **kwds).broadcast()
         self.assertEqual(len(bytes(msg)), len(original))
 

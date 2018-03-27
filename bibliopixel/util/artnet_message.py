@@ -62,4 +62,4 @@ def dmx_message(data=None, length=None, net=0, subnet=0, universe=0,
     return msg
 
 
-Message = type(dmx_message())
+DMXMessage = type(dmx_message())

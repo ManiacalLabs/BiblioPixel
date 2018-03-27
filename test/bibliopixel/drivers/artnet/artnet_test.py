@@ -1,11 +1,11 @@
 import struct, unittest
-from bibliopixel.util import udp
+from bibliopixel.util import artnet_message, udp
 from bibliopixel.util.colors import printer
 from bibliopixel.animation import tests as animation_tests
 from test.bibliopixel import mark_tests
 from test.bibliopixel.project import make
 from test.bibliopixel.util import udp_test
-from bibliopixel.drivers.artnet import artnet, dmx_message
+from bibliopixel.drivers.artnet import artnet
 
 LOCALHOST = '127.0.0.1'
 ADDRESS = LOCALHOST, artnet.UDP_PORT
@@ -35,13 +35,13 @@ class DMXMessageTest(unittest.TestCase):
 
         self.assertEquals(len(results), MAX_STEPS + 1)
 
-        make_msg = dmx_message.Message.from_buffer_copy
+        make_msg = artnet_message.DMXMessage.from_buffer_copy
 
         failures = []
         blackout = make_msg(results.pop())
         for i, result in enumerate(results):
             actual = make_msg(result)
-            expected = dmx_message.dmx_message()
+            expected = artnet_message.dmx_message()
 
             for j, color in enumerate(animation_tests.BASE_COLORS):
                 expected.data[3 * j:3 * (j + 1)] = color
@@ -55,4 +55,4 @@ class DMXMessageTest(unittest.TestCase):
                     failures.append((i, j, e, a))
 
         self.assertEquals(failures, [])
-        self.assertEquals(bytes(blackout), bytes(dmx_message.dmx_message()))
+        self.assertEquals(bytes(blackout), bytes(artnet_message.dmx_message()))
