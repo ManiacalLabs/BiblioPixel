@@ -1,7 +1,6 @@
 import copy, ctypes, enum
 from .. server_driver import ServerDriver
-from ... util import log, server_cache, udp
-from . import dmx_message
+from ... util import artnet_message, log, server_cache, udp
 
 UDP_PORT = 0x1936  # 6454
 
@@ -14,7 +13,7 @@ class ArtNet(ServerDriver):
         :param dict channel_map: maps DMX channels to positions in
             the color_list
         """
-        self.msg = dmx_message.dmx_message()
+        self.msg = artnet_message.dmx_message()
 
         address = ip_address, UDP_PORT
         super().__init__(*args, address=address, **kwds)
