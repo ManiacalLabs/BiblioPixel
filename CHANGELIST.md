@@ -1,3 +1,9 @@
+## v3.4.9 - 2018-03-28
+- Add numpy to requirements
+- Fix `bp demo circle`
+- Make layout.color_list setter more flexible
+- Refactorings
+
 ## v3.4.8 - 2018-03-26
 - Fix #686 and #689
 - Allow animation.Remote to open the URL for its control page
