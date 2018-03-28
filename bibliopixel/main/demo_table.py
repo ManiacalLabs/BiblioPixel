@@ -156,7 +156,7 @@ CIRCLE_PROJECT = {
 
     'animation': {
         'typename': 'sequence',
-        'slideshow': 8,
+        'length': 8,
         'animations': [CircleBloom, Swirl, HyperspaceRainbow]
     }
 }
