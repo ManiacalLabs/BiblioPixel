@@ -10,6 +10,16 @@ except:
     mido = None
     MESSAGE_TYPES = set()
 
+MIDO_ERROR = """You need to install mido.  Try
+    pip install mido
+"""
+
+
+MIDO_BACKEND_ERROR = """You have the wrong rtmidi installed.  Try
+    pip uninstall -y rtmidi
+    pip install -y python-rtmidi
+"""
+
 
 class Midi(control.ExtractedControl):
     EXTRACTOR = {
@@ -45,7 +55,15 @@ class Midi(control.ExtractedControl):
         self.use_note_off = use_note_off
 
     def __iter__(self):
-        ports = [mido.open_input(i) for i in mido.get_input_names()]
+        if not mido:
+            raise ValueError(MIDO_ERROR)
+        try:
+            input_names = mido.get_input_names()
+        except AttributeError as e:
+            e.args = (MIDO_ERROR,) + e.args
+            raise
+
+        ports = [mido.open_input(i) for i in input_names]
 
         if not ports:
             log.error('control.midi: no MIDI ports found')
