@@ -1,5 +1,6 @@
 from . animation import Animation
 from .. layout import Circle as CircleLayout
+from .. util import deprecated
 
 
 class Circle(Animation):
@@ -14,10 +15,10 @@ class Circle(Animation):
 
         self.rings = layout.rings
         self.ringCount = layout.ringCount
-        self.lastRing = layout.lastRing
+        if deprecated.allowed():
+            self.lastRing = layout.lastRing
         self.ringSteps = layout.ringSteps
 
 
-from .. util import deprecated
 if deprecated.allowed():
     BaseCircleAnim = Circle
