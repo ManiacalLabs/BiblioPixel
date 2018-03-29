@@ -89,7 +89,7 @@ class Control:
     def _msg_to_str(self, msg):
         if msg is None:
             return '(None)'
-        return '.'.join(msg.values()) or '.'
+        return '.'.join(str(s) for s in msg.values()) or '.'
 
     def __bool__(self):
         return bool(self.routing or self.pre_routing)
