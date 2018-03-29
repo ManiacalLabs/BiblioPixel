@@ -12,6 +12,7 @@ class Mixer(parallel.Parallel):
             self.color_list,
             [a.color_list for a in self.animations],
             levels)
+        self.levels = self.mixer.levels
 
     def step(self, amt=1):
         super().step(amt)
