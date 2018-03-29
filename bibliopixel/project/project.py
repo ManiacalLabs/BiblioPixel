@@ -40,13 +40,13 @@ class Project:
         attributes.check(kwds, 'project')
         self.path = path
         layout = layout or cleanup.cleanup_layout(animation)
-
         self.maker = self.construct_child(**maker)
         self.drivers = [create(d, 'drivers') for d in drivers]
         with exception.add('Unable to create layout'):
             self.layout = self.construct_child(**layout)
 
         self.animation = create(animation, 'animation')
+        cleanup.cleanup_names(self.animation)
 
         eq = event_queue.EventQueue(maxsize=event_queue_maxsize)
         self.layout.event_queue = self.animation.event_queue = eq

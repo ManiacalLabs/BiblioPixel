@@ -56,6 +56,13 @@ class ProjectTest(unittest.TestCase):
         self.assertEquals(animation.name, 'mt')
         self.assertEquals(animation.layout.rotation, 90)
 
+    def test_sub_animation_names(self):
+        animation = make(PROJECT_SUB_ANIMATIONS, run_start=False)
+        self.assertEquals(animation.name, 'Sequence')
+        self.assertEquals(len(animation.animations), 4)
+        self.assertEquals(animation.animations[0].name, 'StripChannelTest_0')
+        self.assertEquals(animation.animations[3].name, 'StripChannelTest_3')
+
     def test_numpy(self):
         make(PROJECT_NUMPY)
 
@@ -266,7 +273,6 @@ PROJECT_ALIASES = """
 }
 """
 
-
 PROJECT_PIXELWIDTH = """
 {
     "driver": {
@@ -280,6 +286,29 @@ PROJECT_PIXELWIDTH = """
     },
 
     "animation": "strip_test",
+    "run": {
+        "max_steps": 2
+    }
+}
+"""
+
+PROJECT_SUB_ANIMATIONS = """
+{
+    "driver": {
+        "typename": "dummy",
+        "num": 12
+    },
+
+    "layout": {
+        "typename": "strip",
+        "pixelWidth": 3
+    },
+
+    "animation": {
+        "typename": "sequence",
+        "animations": ["strip_test", "strip_test", "strip_test", "strip_test"]
+    },
+
     "run": {
         "max_steps": 2
     }
