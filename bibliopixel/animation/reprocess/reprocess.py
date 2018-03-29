@@ -1,4 +1,4 @@
-from .. import collection
+from .. import wrapper
 from ... project import importer
 from ... layout import cutter
 from . import functions
@@ -17,7 +17,7 @@ class MatrixIndexer:
         self.cutter.apply(self.function)
 
 
-class Reprocess(collection.Wrapper):
+class Reprocess(wrapper.Wrapper):
     def __init__(self, *args, process=None, **kwds):
         super().__init__(*args, **kwds)
         self.preclear = False

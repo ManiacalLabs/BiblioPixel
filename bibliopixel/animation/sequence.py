@@ -1,9 +1,9 @@
-from . import collection
+from . import wrapper
 from .. util import log
 import random as rand
 
 
-class Sequence(collection.Indexed):
+class Sequence(wrapper.Indexed):
     def __init__(self, layout, random=False, length=None, **kwds):
         """
         Arguments

@@ -1,7 +1,7 @@
 import copy, multiprocessing
 from . import opener, server, trigger_process
 from .. animation import STATE
-from .. import collection
+from .. import wrapper
 from ... project import load
 from ... util import log
 from bibliopixel.animation.off import Off
@@ -26,10 +26,10 @@ def normalize_name(name):
     return ''.join('_' if e is ' ' else e for e in name if e.isalnum() or e is ' ' or e is '_')
 
 
-class RemoteControl(collection.Indexed):
+class RemoteControl(wrapper.Indexed):
     @staticmethod
     def pre_recursion(desc):
-        collection.Collection.pre_recursion(desc)
+        wrapper.Indexed.pre_recursion(desc)
 
         animations = desc['animations']
         auto_demo = desc.pop('auto_demo', None)
