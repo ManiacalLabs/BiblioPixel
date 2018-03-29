@@ -78,8 +78,13 @@ class Mixer:
     def __init__(self, color_list, sources, levels=None):
         self.color_list = ColorList(color_list)
         self.sources = sources
-        self.levels = levels or []
-        self.clear = self.color_list.clear
+        self.levels = list(levels or [])
+        needed = len(self.sources) - len(self.levels)
+        if needed > 0:
+            self.levels.extend(0 for i in range(needed))
+
+    def clear(self):
+        self.color_list.clear()
 
     def mix(self, master=1):
         for source, level in zip(self.sources, self.levels):

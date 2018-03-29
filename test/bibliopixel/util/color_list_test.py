@@ -102,7 +102,7 @@ class ColorListTest(TestBase):
 
 class MixerTest(TestBase):
     def do_test(self, mixer, thirds):
-        self.assertEqual(mixer.levels, [])
+        self.assertEqual(mixer.levels, [0, 0, 0])
         self.assert_list_equal(mixer.color_list, COLORS1)
 
         mixer.mix()
