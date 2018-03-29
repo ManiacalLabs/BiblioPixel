@@ -10,10 +10,10 @@
             "accept": {"type": "press"}
         },
         "routing": {
-            "a": "animation.index = 0",
-            "s": "animation.index = 1",
-            "d": "animation.index = 2",
-            "f": "animation.index = 3"
+            "a": "animation.index = Alternates",
+            "s": "animation.index = FireFlies",
+            "d": "animation.index = Wave",
+            "f": "animation.index = WhiteTwinkle"
         }
     },
 
