@@ -58,10 +58,14 @@ class ProjectTest(unittest.TestCase):
 
     def test_sub_animation_names(self):
         animation = make(PROJECT_SUB_ANIMATIONS, run_start=False)
+
         self.assertEquals(animation.name, 'Sequence')
-        self.assertEquals(len(animation.animations), 4)
-        self.assertEquals(animation.animations[0].name, 'StripChannelTest_0')
-        self.assertEquals(animation.animations[3].name, 'StripChannelTest_3')
+        a, b, c, d = animation.animations
+        self.assertEquals(a.name, 'StripChannelTest_0')
+        self.assertEquals(d.name, 'StripChannelTest_3')
+        animation.pre_run()
+        self.assertEquals(animation.animations.StripChannelTest_2, c)
+        self.assertEquals(animation.animations['StripChannelTest_1'], b)
 
     def test_numpy(self):
         make(PROJECT_NUMPY)

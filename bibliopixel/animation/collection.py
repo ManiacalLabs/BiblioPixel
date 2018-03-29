@@ -70,5 +70,27 @@ class Collection(animation.Animation):
         self.animations.append(anim)
 
     def pre_run(self):
+        self.animations = _AnimationList(self.animations)
         for a in self.animations:
             a.pre_run()
+
+
+class _AnimationList:
+    def __init__(self, animations):
+        self._animations = list(animations)
+        self._names = {a.name: i for i, a in enumerate(self._animations)}
+
+    def _index(self, i):
+        return i if isinstance(i, int) else self._names[i]
+
+    def __getitem__(self, i):
+        return self._animations[self._index(i)]
+
+    def __getattr__(self, i):
+        return self[i]
+
+    def __iter__(self):
+        return iter(self._animations)
+
+    def __len__(self):
+        return len(self._animations)

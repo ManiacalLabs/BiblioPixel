@@ -27,6 +27,7 @@ class Indexed(Collection):
 
     @index.setter
     def index(self, index):
+        index = self.animations._index(index)
         self._index, old_index = index, self._index
         self._on_index(old_index)
 
