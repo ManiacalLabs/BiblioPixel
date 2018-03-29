@@ -114,6 +114,22 @@ def cleanup_shape(desc):
     return desc
 
 
+def cleanup_names(animation):
+    animation.name = animation.name or animation.title
+    subs = getattr(animation, 'animations', [])
+    counter = {}
+    for a in subs:
+        cleanup_names(a)
+        counter[a.name] = counter.get(a.name, 0) + 1
+
+    dupes = {k: 1 for k, v in counter.items() if v > 1}
+    for a in subs:
+        count = dupes.get(a.name)
+        if count:
+            dupes[a.name] += 1
+            a.name = '%s_%d' % (a.name, count - 1)
+
+
 def cleanup(desc):
     desc = cleanup_aliases(desc)
     desc = cleanup_animation(desc)
