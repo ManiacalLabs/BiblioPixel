@@ -1,0 +1,36 @@
+{
+    "aliases": {
+        "bpa": "BiblioPixelAnimations.strip"
+    },
+
+    "controls": {
+        "typename": "midi",
+        "verbose": false,
+        "extractor": {
+            "accept": {"type": "control_change"}
+        },
+        "routing": {
+            "0": "animation.levels[0]",
+            "1": "animation.levels[1]",
+            "2": "animation.levels[2]",
+            "3": "animation.levels[3]"
+        }
+    },
+
+    "dimensions": [50],
+
+    "run": {
+        "fps": 30
+    },
+
+    "animation": {
+        "typename": "mixer",
+        "levels": [1, 0, 0, 0],
+        "animations": [
+            "@bpa.Rainbows.RainbowCycle",
+            "@bpa.Wave",
+            "@bpa.HalvesRainbow",
+            "@bpa.PartyMode"
+        ]
+    }
+}

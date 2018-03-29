@@ -1,4 +1,4 @@
-import time
+import copy, time
 from .. import util
 from .. project import attributes, data_maker, fields
 from .. util.threads.update_threading import UpdateThreading
@@ -19,6 +19,8 @@ class Layout(object):
 
     :ivar int numLEDs: Total number of pixels held by this layout instance
     """
+
+    CLONE_ATTRS = 'maker', 'brightness'
 
     pre_recursion = fields.default_converter
 
@@ -79,6 +81,15 @@ class Layout(object):
         self.all_off()
         self.push_to_driver()
         self.threading.wait_for_update()
+
+    def clone(self):
+        """
+        Return an independent copy of this layout with a completely separate
+        color_list and no drivers.
+        """
+        args = {k: getattr(self, k) for k in self.CLONE_ATTRS}
+        args['color_list'] = copy.copy(self.color_list)
+        return self.__class__([], **args)
 
     @property
     def shape(self):
@@ -195,8 +206,11 @@ class Layout(object):
 
 
 class MultiLayout(Layout):
+    CLONE_ATTRS = Layout.CLONE_ATTRS + ('gen_coord_map', 'coord_map')
+
     def __init__(self, *args, gen_coord_map=None, coord_map=None, **kwds):
         super().__init__(*args, **kwds)
+        self.gen_coord_map = gen_coord_map
         if gen_coord_map:
             if coord_map:
                 util.log.warning('Cannot set both coord_map and gen_coord_map')

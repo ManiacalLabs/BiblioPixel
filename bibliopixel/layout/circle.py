@@ -6,6 +6,8 @@ from .. util import deprecated
 
 
 class Circle(Layout):
+    CLONE_ATTRS = Layout.CLONE_ATTRS + (
+        'rings', 'pixels_per', 'maxAngleDiff', 'rotation', 'reverse_angle')
 
     def __init__(self, drivers, rings=[], pixels_per=None,
                  maxAngleDiff=0, rotation=0, reverse_angle=False,

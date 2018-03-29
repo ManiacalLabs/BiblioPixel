@@ -15,6 +15,9 @@ It was rounded to %s degrees."""
 
 
 class Matrix(MultiLayout):
+    CLONE_ATTRS = MultiLayout.CLONE_ATTRS + (
+        'width', 'height', 'rotation', 'vert_flip', 'y_flip', 'serpentine',
+        'pixelSize')
 
     def __init__(self, drivers, width=0, height=0,
                  rotation=0, vert_flip=False, y_flip=False,
