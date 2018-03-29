@@ -1,5 +1,5 @@
 import math, os, shutil, tempfile, time
-from . import collection
+from . import wrapper
 from .. util.image import gif, renderer
 from .. util import colors, log
 
@@ -15,7 +15,7 @@ DEFAULT_RENDER = {
 }
 
 
-class GifWriter(collection.Wrapper):
+class GifWriter(wrapper.Wrapper):
     """Write animated GIFs for each frame in the contained animation"""
 
     def __init__(self, *args, filename='gif_writer', render=None,

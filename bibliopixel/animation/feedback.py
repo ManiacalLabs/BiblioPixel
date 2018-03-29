@@ -1,5 +1,5 @@
 import copy
-from . collection import Wrapper
+from . wrapper import Wrapper
 from .. util import color_list
 
 
