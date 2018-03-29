@@ -1,4 +1,3 @@
-import copy
 from . import collection
 
 
@@ -18,6 +17,10 @@ class Parallel(collection.Collection):
         # Give each animation a unique, mutable layout so they can
         # run independently.
         for i, a in enumerate(self.animations):
-            a.layout = copy.deepcopy(a.layout)
+            a.layout = a.layout.clone()
             if overlay and i:
                 a.preclear = False
+
+    def step(self, amt=1):
+        for a in self.animations:
+            a.step(amt)

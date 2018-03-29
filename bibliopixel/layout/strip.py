@@ -5,6 +5,7 @@ from . geometry.strip import make_strip_coord_map_positions
 
 
 class Strip(MultiLayout):
+    CLONE_ATTRS = MultiLayout.CLONE_ATTRS + ('brightness', 'pixelWidth')
 
     def __init__(self, drivers, threadedUpdate=False,
                  brightness=255, pixelWidth=1, **kwargs):

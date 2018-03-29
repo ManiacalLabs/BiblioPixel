@@ -49,3 +49,10 @@ class LayoutTest(unittest.TestCase):
         strip.set_color_list(RED + GREEN, 2)
         expected = [BLACK, BLACK, RED, GREEN]
         self.assertEquals(expected, strip.color_list)
+
+    def test_clone(self):
+        strip = Strip(MockDriver(4))
+        clone = strip.clone()
+        clone.set(1, RED)
+        self.assertEquals(clone.get(1), RED)
+        self.assertEquals(strip.get(1), BLACK)

@@ -7,6 +7,7 @@ from . geometry.cube import make_cube_coord_map, make_cube_coord_map_positions
 
 
 class Cube(Layout):
+    CLONE_ATTRS = Layout.CLONE_ATTRS + ('x', 'y', 'z')
 
     def __init__(self, drivers, x, y, z, coord_map=None,
                  threadedUpdate=False, brightness=255, **kwargs):
