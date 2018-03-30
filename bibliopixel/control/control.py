@@ -9,16 +9,21 @@ from . routing import ActionList, Routing
 class Control:
     DEFAULT = {'datatype': ActionList}
 
-    def __init__(self, routing=None, default=None, max_errors=16,
+    def __init__(self, routing=None, default=None, errors=16,
                  python_path='bibliopixel.control', verbose=False,
                  pre_routing=None):
         """
         :param Address pre_routing: This Address is set with with the message
             after the message is received and converted, but before it is
             routed.
+        :param errors: either a number, indicating how many errors to report
+           before ignoring them, or one of these strings:
+           'raise', meaning to raise an exception
+           'ignore', meaning to ignore all errors
+           'report', meaning to report all errors
         """
         self.verbose = verbose
-        self.receive = LogErrors(self._receive, max_errors)
+        self.receive = LogErrors(self._receive, errors)
         default = dict(self.DEFAULT, **(default or {}))
         self.pre_routing = ActionList(pre_routing)
         self.routing = Routing(routing or {}, default or {}, python_path)
