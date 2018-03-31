@@ -1,3 +1,9 @@
+## v3.4.10 - 2018-03-31
+- Fix PiWS281X.set_brightness (fix #715)
+- Allow controls to raise exceptions (fix #711)
+- Allow animations to be retrieved by name
+- Better error messages
+
 ## v3.4.9 - 2018-03-28
 - Add numpy to requirements
 - Fix `bp demo circle`
