@@ -1,4 +1,5 @@
 import copy
+from . limit import Limit
 
 try:
     import numpy
@@ -34,6 +35,14 @@ class ListMath:
     def copy(color_list, source):
         color_list[:] = source
 
+    @staticmethod
+    def scale(color_list, gain):
+        color_list[:] = [tuple(gain * i for i in c) for c in color_list]
+
+    @staticmethod
+    def sum(color_list):
+        return sum(sum(c) for c in color_list)
+
 
 class NumpyMath:
     @staticmethod
@@ -51,15 +60,23 @@ class NumpyMath:
     def copy(color_list, source):
         numpy.copyto(color_list, source, casting='unsafe')
 
+    @staticmethod
+    def scale(color_list, gain):
+        color_list *= gain
 
-def Math(is_numpy):
-    return NumpyMath if is_numpy else ListMath
+    @staticmethod
+    def sum(color_list):
+        return sum(sum(c) for c in color_list)
+
+
+def Math(color_list):
+    return NumpyMath if is_numpy(color_list) else ListMath
 
 
 class Mixer:
     def __init__(self, color_list, sources, levels=None):
         self.color_list = color_list
-        self.math = Math(is_numpy(color_list))
+        self.math = Math(color_list)
         self.sources = sources
         self.levels = list(levels or [])
         needed = len(self.sources) - len(self.levels)
