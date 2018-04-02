@@ -30,14 +30,8 @@ class Sequence(wrapper.Indexed):
         self.restart()
 
     def step(self, amt=1):
-        if not self.animations or self.completed:
+        if (not self.animations) or super().step(amt):
             return
-
-        try:
-            next(self.frames)
-            return
-        except StopIteration:
-            pass
 
         self.index += 1
         if self.index >= len(self.animations):
