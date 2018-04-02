@@ -11,10 +11,10 @@ BLACKS = [colors.Black, colors.Black, colors.Black, colors.Black]
 
 
 def make_numpy(cl):
-    return numpy.array(cl, dtype='uint8')
+    return numpy.array(cl, dtype='float')
 
 
-class TestBase(unittest.TestCase):
+class TestBase:
     def assert_list_equal(self, actual, expected):
         x, y = actual, expected
         if hasattr(x, 'shape'):
@@ -31,15 +31,15 @@ class TestBase(unittest.TestCase):
         self.assertTrue(equals)
 
 
-class ColorListTest(TestBase):
+class ColorListTest(unittest.TestCase, TestBase):
     def test_simple(self):
         self.assertIs(numpy, color_list.numpy)
 
         self.assertFalse(color_list.is_numpy([]))
         self.assertTrue(color_list.is_numpy(make_numpy([])))
 
-        self.assertIs(color_list.Math(False), ListMath)
-        self.assertIs(color_list.Math(True), NumpyMath)
+        self.assertIs(color_list.Math([]), ListMath)
+        self.assertIs(color_list.Math(make_numpy([])), NumpyMath)
 
     def test_lists(self):
         cl1 = COLORS1[:]
@@ -78,8 +78,34 @@ class ColorListTest(TestBase):
         NumpyMath.copy(cl, make_numpy(COLORS2))
         self.assert_list_equal(cl, COLORS2)
 
+    def test_sum_list(self):
+        self.assertEquals(ListMath.sum(COLORS1), 6 * 255)
 
-class MixerTest(TestBase):
+    def test_sum_numpy(self):
+        self.assertEquals(NumpyMath.sum(make_numpy(COLORS1)), 6 * 255)
+
+    def test_scale_list(self):
+        cl = COLORS1[:]
+        ListMath.scale(cl, 0.5)
+        self.assert_list_equal(
+            cl,
+            [(127.5, 0.0, 0.0),
+             (0.0, 127.5, 0.0),
+             (0.0, 0.0, 127.5),
+             (127.5, 127.5, 127.5)])
+
+    def test_scale_numpy(self):
+        cl = make_numpy(COLORS1)
+        NumpyMath.scale(cl, 0.5)
+        self.assert_list_equal(
+            cl,
+            [(127.5, 0.0, 0.0),
+             (0.0, 127.5, 0.0),
+             (0.0, 0.0, 127.5),
+             (127.5, 127.5, 127.5)])
+
+
+class MixerTest(unittest.TestCase, TestBase):
     def do_test(self, mixer, thirds):
         self.assertEqual(mixer.levels, [0, 0, 0])
         self.assert_list_equal(mixer.color_list, COLORS1)
@@ -124,9 +150,7 @@ class MixerTest(TestBase):
 
     def test_numpy(self):
         mixer = color_list.Mixer(
-            make_numpy(COLORS1), [make_numpy(COLORS2), make_numpy(WHITES), make_numpy(BLACKS)])
+            make_numpy(COLORS1),
+            [make_numpy(COLORS2), make_numpy(WHITES), make_numpy(BLACKS)])
         self.do_test(mixer,
                      [(85, 85, 85), (85, 85, 170), (170, 85, 85), (85, 85, 85)])
-
-
-del TestBase
