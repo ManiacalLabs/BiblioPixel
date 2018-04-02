@@ -37,19 +37,36 @@ class Indexed(Collection):
 
         :param int old_index: the previous index, before it was changed.
         """
-        if self.current_animation:
+        if self.animation:
             log.debug('%s: %s',
                       self.__class__.__name__, self.current_animation.title)
-            self.frames = self.current_animation.generate_frames(False)
+            self.frames = self.animation.generate_frames(False)
+
+    def step(self, amt=1):
+        try:
+            next(self.frames)
+            return True
+        except StopIteration:
+            pass
+        except Exception as e:
+            log.error('Exception %s in wrapper.step()', e)
 
     @property
-    def current_animation(self):
+    def animation(self):
         """
         :returns: the selected animation based on self.index, or None if
             self.index is out of bounds
         """
         if 0 <= self._index < len(self.animations):
             return self.animations[self._index]
+
+    @property
+    def current_animation(self):
+        """
+        DEPRECATED:
+        :returns: self.animation
+        """
+        return self.animation
 
 
 class Wrapper(Indexed):
@@ -61,11 +78,10 @@ class Wrapper(Indexed):
         desc['animations'] = [desc.pop('animation')]
         return Collection.pre_recursion(desc)
 
+    @property
+    def animation(self):
+        return self.animations[0]
+
     def pre_run(self):
         super().pre_run()
         self.index = 0
-
-    @property
-    def animation(self):
-        # This is used elsewhere in client code.  TODO: pick one or the other!
-        return self.current_animation
