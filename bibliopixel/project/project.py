@@ -65,10 +65,20 @@ class Project:
         self.controls = [create(c, 'control') for c in controls]
 
     def start(self):
+        self.PROJECTS_RUNNING.add(self)
         self.layout.start()
         for c in self.controls:
             c.start(self)
         self.animation.start()
+
+    def stop(self):
+        if self in self.PROJECTS_RUNNING:
+            self.PROJECTS_RUNNING.remove(self)
+
+        self.animation.stop()
+        for c in self.controls:
+            c.stop()
+        self.layout.stop()
 
     def cleanup(self):
         self.animation.cleanup()
@@ -81,6 +91,13 @@ class Project:
             self.start()
         finally:
             self.cleanup()
+
+    @staticmethod
+    def stop_all():
+        for p in list(Project.PROJECTS_RUNNING):
+            p.stop()
+
+    PROJECTS_RUNNING = set()
 
 
 def project(*descs, root_file=None):

@@ -100,6 +100,11 @@ class DriverBase(object):
         """
         pass
 
+    def stop(self):
+        """
+        Called to request any threads or resources to shut down.
+        """
+
     def cleanup(self):
         """
         Called to shut this driver down, and stop all threads and processes.
