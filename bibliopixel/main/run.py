@@ -4,9 +4,10 @@ Run specified project from file or URL.
 
 import os, sys, time, traceback
 from . import common_flags, simpixel
-from .. util import json, log
+from .. util import json, log, restarter
 from .. animation import Animation
 from .. project import load
+from .. project.project import Project
 
 RUN_ERROR = """When reading file {filename}:
 {desc}
@@ -98,15 +99,24 @@ def _get_projects(args):
 
 
 def _run_projects(projects, args):
+    global _RUNNING
+    _RUNNING = True
+
     needs_pause = False
     assert len(projects) == len(args.name)
     for project, name in zip(projects, args.name):
-        log.debug('Running file %s', name)
+        if not _RUNNING:
+            break
+
         if needs_pause:
-            args.pause and time.sleep(float(args.pause))
+            if args.pause:
+                time.sleep(float(args.pause))
+                if not _RUNNING:
+                    break
         else:
             needs_pause = True
 
+        log.debug('Running file %s', name)
         try:
             project.run()
 
@@ -123,7 +133,7 @@ def _run_projects(projects, args):
             traceback.print_exc()
 
 
-def run(args):
+def run_once(args):
     Animation.FAIL_ON_EXCEPTION = args.fail_on_exception
 
     args.name = args.name or ['']
@@ -140,6 +150,16 @@ def run(args):
     _run_projects(projects, args)
 
 
+def stop():
+    global _RUNNING
+    _RUNNING = False
+    Project.stop_all()
+
+
+def run(args):
+    restarter.restarter(lambda: run_once(args), stop)
+
+
 def set_parser(parser):
     parser.set_defaults(run=run)
     common_flags.add_project_flags(parser)
@@ -151,3 +171,6 @@ def set_parser(parser):
     parser.add_argument(
         '-j', '--json', action='store_true',
         help='Enter JSON directly as a command line argument.')
+
+
+_RUNNING = False
