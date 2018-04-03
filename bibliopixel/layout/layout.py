@@ -73,6 +73,10 @@ class Layout(object):
         for d in self.drivers:
             d.start()
 
+    def stop(self):
+        for d in self.drivers:
+            d.stop()
+
     def cleanup_drivers(self):
         for d in self.drivers:
             d.cleanup()
