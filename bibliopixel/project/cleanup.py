@@ -42,6 +42,8 @@ def cleanup_animation(desc):
     if not datatype:
         raise ValueError('Missing "datatype" in "animation" section')
 
+    desc['animation'].setdefault('name', datatype.__name__)
+
     from .. animation import sequence
     if not issubclass(datatype, sequence.Sequence):
         # Magic here to allow this to work for non-sequences.
@@ -112,22 +114,6 @@ def cleanup_shape(desc):
 
     desc['layout'] = ldesc
     return desc
-
-
-def cleanup_names(animation):
-    animation.name = animation.name or animation.title
-    subs = getattr(animation, 'animations', [])
-    counter = {}
-    for a in subs:
-        cleanup_names(a)
-        counter[a.name] = counter.get(a.name, 0) + 1
-
-    dupes = {k: 1 for k, v in counter.items() if v > 1}
-    for a in subs:
-        count = dupes.get(a.name)
-        if count:
-            dupes[a.name] += 1
-            a.name = '%s_%d' % (a.name, count - 1)
 
 
 def cleanup(desc):

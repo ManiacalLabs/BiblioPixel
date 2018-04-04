@@ -12,6 +12,7 @@ class Collection(animation.Animation):
     @staticmethod
     def pre_recursion(desc):
         animations = []
+        name_count = {}
 
         for a in desc['animations']:
             loaded = load.load_if_filename(a)
@@ -36,6 +37,10 @@ class Collection(animation.Animation):
             run.update(animation.get('run', {}))
             animation['run'] = run
 
+            datatype = animation['datatype']
+            name = animation.setdefault('name', datatype.__name__)
+            name_count[name] = 1 + name_count.get(name, 0)
+
             # Children without fps or sleep_time get it from their parents.
             if not ('fps' in run or 'sleep_time' in run):
                 if 'fps' in desc['run']:
@@ -45,6 +50,14 @@ class Collection(animation.Animation):
 
             animations.append(animation)
 
+        dupes = {k: 1 for k, v in name_count.items() if v > 1}
+        for a in animations:
+            name = a['name']
+            count = dupes.get(name)
+            if count:
+                dupes[name] += 1
+                a['name'] += '_' + str(count - 1)
+
         desc['animations'] = animations
         return desc
 
@@ -52,7 +65,7 @@ class Collection(animation.Animation):
 
     def __init__(self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)
-        self.animations = animations or []
+        self.animations = _AnimationList(animations or [])
         self.internal_delay = 0  # never wait
 
     # Override to handle all the animations
@@ -70,7 +83,6 @@ class Collection(animation.Animation):
         self.animations.append(anim)
 
     def pre_run(self):
-        self.animations = _AnimationList(self.animations)
         for a in self.animations:
             a.pre_run()
 
@@ -82,6 +94,29 @@ class _AnimationList:
 
     def _index(self, i):
         return i if isinstance(i, int) else self._names[i]
+
+    def append(self, animation):
+        # We're forced to do the "fill in a name and make sure it's
+        # unique" in two different ways, because of this method.
+        #
+        # TODO: We should disallow APIs from doing surgery on
+        # self.animations after construction.  Right now only
+        # Remote does this, or legacy code that calls add_animation.
+        # That code should go on `cls.pre_recursion( )`.
+        self._animations.append(animation)
+        try:
+            base_name = animation.name
+        except AttributeError:
+            base_name = animation.__class__.__name__
+
+        count = 0
+        name = base_name
+
+        while name in self._names:
+            name = '%s_%d' % (base_name, count)
+            count += 1
+
+        animation.name = name
 
     def __getitem__(self, i):
         return self._animations[self._index(i)]
