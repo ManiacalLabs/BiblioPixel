@@ -22,7 +22,6 @@ def code(name, python_path=None):
 
 
 def module(name, python_path=None):
-    print('load.module', True)
     return name and loady.code.load_module(name, python_path)
 
 
