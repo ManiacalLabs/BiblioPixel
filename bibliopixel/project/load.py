@@ -18,10 +18,11 @@ def data(name, use_json=True):
 
 
 def code(name, python_path=None):
-    return name and loady.code.load_code(name, python_path)
+    return name and loady.code.load_code(name, python_path, recurse=True)
 
 
 def module(name, python_path=None):
+    print('load.module', True)
     return name and loady.code.load_module(name, python_path)
 
 

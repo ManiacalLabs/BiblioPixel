@@ -74,6 +74,4 @@ class AliasTest(unittest.TestCase):
 
 # Aliases that would fail to load at all if they were removed
 FAILED = 'apa102', 'lpd8806', 'pi_ws281x', 'sk9822', 'spi', 'ws2801', 'ws281x'
-
-# Aliases that load and get the wrong value
-NOT_EQUAL = 'reprocess', 'serial'
+NOT_EQUAL = 'serial',
