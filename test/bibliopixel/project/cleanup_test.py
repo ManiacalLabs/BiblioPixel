@@ -9,6 +9,7 @@ BASE = {
     'animation': {
         'run': {},
         'datatype': OffAnim,
+        'name': 'Off',
         'typename': 'off',
     },
     'controls': [],

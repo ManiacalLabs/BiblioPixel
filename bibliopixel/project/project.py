@@ -46,7 +46,6 @@ class Project:
             self.layout = self.construct_child(**layout)
 
         self.animation = create(animation, 'animation')
-        cleanup.cleanup_names(self.animation)
 
         eq = event_queue.EventQueue(maxsize=event_queue_maxsize)
         self.layout.event_queue = self.animation.event_queue = eq
