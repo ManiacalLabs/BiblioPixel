@@ -1,3 +1,9 @@
+## v3.4.11 - 2018-04-04
+- Restart `bp` on SIGHUP (fix #724)
+- Command line flags override project files (fix #694)
+- Use recursive name-guessing (fix #652)
+- Compute animation.name in Animation.pre_recursion (fix #722 and #723)
+
 ## v3.4.10 - 2018-03-31
 - Fix PiWS281X.set_brightness (fix #715)
 - Allow controls to raise exceptions (fix #711)
