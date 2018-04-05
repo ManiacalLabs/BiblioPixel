@@ -39,6 +39,8 @@ call "%py_exe%" %pyscript% %*
 NO_PYTHON_ERROR = """
 WARNING: No #!python executable found in %s, skipping .bat wrapper'"""
 
+printer = print  # noqa: T001
+
 
 class InstallScripts(install_scripts):
     def run(self):
@@ -53,7 +55,7 @@ class InstallScripts(install_scripts):
                 first_line = fobj.readline().lower()
 
             if not (first_line.startswith('#!') and 'python' in first_line):
-                print(NO_PYTHON_ERROR % filepath)
+                printer(NO_PYTHON_ERROR % filepath)
                 continue
 
             path, fname = os.path.split(filepath)
@@ -61,7 +63,7 @@ class InstallScripts(install_scripts):
             bat_file = os.path.join(path, froot + '.bat')
             bat_contents = BAT_TEMPLATE.replace('{FNAME}', fname)
 
-            print('Making %s wrapper for %s' % (bat_file, filepath))
+            printer('Making %s wrapper for %s' % (bat_file, filepath))
             if self.dry_run:
                 continue
 
@@ -103,8 +105,8 @@ class RunCoverage(RunTests):
         coverage = cov.html_report(directory='htmlcov')
         fail_under = cov.get_option('report:fail_under')
         if coverage < fail_under:
-            print('ERROR: coverage %.2f%% was less than fail_under=%s%%' % (
-                  coverage, fail_under))
+            printer('ERROR: coverage %.2f%% was less than fail_under=%s%%' % (
+                    coverage, fail_under))
             raise SystemExit(1)
 
 
@@ -115,7 +117,7 @@ def _get_version():
 
 
 if sys.version_info.major != 3:
-    print(INSTALLATION_ERROR.format(sys.version_info))
+    printer(INSTALLATION_ERROR.format(sys.version_info))
     sys.exit(1)
 
 VERSION = _get_version()

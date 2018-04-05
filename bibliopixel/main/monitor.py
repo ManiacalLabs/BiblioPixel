@@ -16,7 +16,7 @@ def run(args):
         raise
 
     control_object = tc(pre_routing='()')
-    control_object.start(print)
+    control_object.start(print)  # noqa: T002
     control_object.thread.join()
 
 

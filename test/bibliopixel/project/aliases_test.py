@@ -1,6 +1,7 @@
 import unittest
 import test.bibliopixel.patch
 from bibliopixel.project import aliases, alias_lists, importer
+from bibliopixel.util import log
 
 
 def patch(**kwds):
@@ -41,7 +42,7 @@ class AliasTest(unittest.TestCase):
                 failed.append(cl)
 
         if failed:
-            print('Failed', *failed, sep='\n')
+            log.printer('Failed', *failed, sep='\n')
         self.assertFalse(failed)
 
     def test_additional_aliases(self):

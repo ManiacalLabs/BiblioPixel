@@ -2,6 +2,7 @@ import pytest
 
 from bibliopixel.layout import Matrix
 from bibliopixel.drivers.driver_base import DriverBase
+from bibliopixel.util import log
 
 WHITE = (255, 255, 255)
 
@@ -14,7 +15,7 @@ def make_matrix(width, height, **kwds):
 def assert_changed(matrix, expected):
     changed = [i for i, c in enumerate(matrix._colors) if c[0]]
     if changed != expected:
-        print(changed)
+        log.error(changed)
     assert changed == expected
 
 

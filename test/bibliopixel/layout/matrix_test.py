@@ -1,9 +1,9 @@
 import contextlib, itertools, os, time, unittest
-
-from bibliopixel.project import data_maker
-from bibliopixel.layout import Matrix
-from bibliopixel.drivers.driver_base import DriverBase
 from . import matrix_results
+from bibliopixel.drivers.driver_base import DriverBase
+from bibliopixel.layout import Matrix
+from bibliopixel.project import data_maker
+from bibliopixel.util import log
 
 
 WHITE = (255, 255, 255)
@@ -50,8 +50,8 @@ class BaseMatrixTest(unittest.TestCase):
         expected = getattr(matrix_results, self.name_of_test())
         actual = self.to_strings()
         if expected != actual:
-            print('Expected:', *(repr(s) for s in expected), sep='\n')
-            print('Actual:', *(repr(s) for s in actual), sep='\n')
+            log.printer('Expected:', *(repr(s) for s in expected), sep='\n')
+            log.printer('Actual:', *(repr(s) for s in actual), sep='\n')
             self.assertTrue(False)
 
     def test_empty(self):

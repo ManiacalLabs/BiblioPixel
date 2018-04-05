@@ -67,7 +67,7 @@ def _get_projects(args):
             project = common_flags.make_project(args, desc, root_file)
             projects.append(project)
             if args.dump:
-                print(_dump(args, project.desc))
+                log.printer(_dump(args, project.desc))
 
         except FileNotFoundError as e:
             failed.append(('%s: %s' % (e.strerror, e.filename), ()))
@@ -140,7 +140,7 @@ def run_once(args):
     projects = _get_projects(args)
 
     if args.dry_run:
-        print('(dry run - nothing executed)')
+        log.printer('(dry run - nothing executed)')
         return
     if args.simpixel:
         simpixel.open_simpixel(args.simpixel)

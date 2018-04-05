@@ -33,7 +33,7 @@ NO_LED_ERROR = """ERROR: No ledtype provided.
 
 def run(args):
     if not args.ledtype:
-        print(NO_LED_ERROR)
+        log.error(NO_LED_ERROR)
         return -1
 
     log.set_log_level('DEBUG')
