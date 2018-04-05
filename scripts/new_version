@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+"""
+Make a new release version of BiblioPixel by editing CHANGELIST.md
+
+"""
+
 import datetime, os, subprocess, sys
 
 DRY_RUN = False
