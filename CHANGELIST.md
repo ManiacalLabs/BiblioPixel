@@ -1,3 +1,6 @@
+## v3.4.12 - 2018-04-05
+- Remove print statement
+
 ## v3.4.11 - 2018-04-04
 - Restart `bp` on SIGHUP (fix #724)
 - Command line flags override project files (fix #694)
