@@ -27,7 +27,7 @@ class Maker:
                     raise ValueError(BAD_NUMPY_TYPE_ERROR % numpy_dtype)
             else:
                 log.error('The numpy module is not available.')
-                print(importer.MISSING_MESSAGE % ('numpy', 'numpy'))
+                log.error(importer.MISSING_MESSAGE % ('numpy', 'numpy'))
 
         if shared_memory and numpy_dtype:
             log.error('Shared memory for numpy arrays is not yet supported.')

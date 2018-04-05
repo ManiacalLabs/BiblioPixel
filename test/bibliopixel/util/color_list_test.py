@@ -1,8 +1,7 @@
 import numpy, unittest
 from numpy import array_equal
 
-from bibliopixel.util import color_list
-from bibliopixel.util import colors
+from bibliopixel.util import color_list, colors, log
 
 COLORS1 = [colors.Red, colors.Green, colors.Blue, colors.White]
 COLORS2 = [colors.Black, colors.Blue, colors.Red, colors.Black]
@@ -31,11 +30,11 @@ class TestBase(unittest.TestCase):
         else:
             equals = (x == y)
         if not equals:
-            print('____')
-            print(x)
-            print('NOT EQUAL')
-            print(y)
-            print('____')
+            log.printer('____')
+            log.printer(x)
+            log.printer('NOT EQUAL')
+            log.printer(y)
+            log.printer('____')
         self.assertTrue(equals)
 
 
@@ -47,9 +46,9 @@ class ColorListTest(TestBase):
         else:
             equals = (x == y)
         if not equals:
-            print('NOT EQUAL')
-            print(x)
-            print(y)
+            log.printer('NOT EQUAL')
+            log.printer(x)
+            log.printer(y)
         self.assertTrue(equals)
 
     def test_simple(self):

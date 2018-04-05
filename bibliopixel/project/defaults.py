@@ -1,6 +1,6 @@
 import os, sys
 from . import merge as _merge
-from .. util import json, persistent_dict
+from .. util import json, log, persistent_dict
 
 # This is set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
@@ -28,7 +28,7 @@ def show_defaults():
     """List current user defaults in JSON format"""
     _warn_if_empty()
     json.dump(USER_DEFAULTS, sys.stdout)
-    print()
+    log.printer()
 
 
 def reset_defaults(sections):
@@ -37,7 +37,7 @@ def reset_defaults(sections):
         return
     sections = sorted(_check_sections(sections) or USER_DEFAULTS)
 
-    print('Before reset:')
+    log.printer('Before reset:')
     show_defaults()
 
     for s in sections:
@@ -46,7 +46,7 @@ def reset_defaults(sections):
         except:
             pass
 
-    print('Reset', *sections)
+    log.printer('Reset', *sections)
 
 
 def set_defaults(sections):
@@ -62,7 +62,7 @@ def load_defaults(name):
     defaults = _load_defaults(name)
     USER_DEFAULTS.clear()
     USER_DEFAULTS.update(defaults)
-    print('Loaded project defaults from', name)
+    log.printer('Loaded project defaults from', name)
 
 
 def save_defaults(name):
@@ -80,25 +80,25 @@ def save_defaults(name):
     with open(path, 'w') as fp:
         json.dump(USER_DEFAULTS, fp)
 
-    print('Written project defaults to', name)
+    log.printer('Written project defaults to', name)
 
 
 def remove_defaults(name):
     if name in _defaults():
         os.remove(_default_file(name))
     else:
-        print('No such default:', name)
+        log.printer('No such default:', name)
         list_saved_defaults()
 
 
 def list_saved_defaults():
     defaults = _defaults()
     if defaults:
-        print('Saved project defaults:')
+        log.printer('Saved project defaults:')
         for i in defaults:
-            print('   ', i)
+            log.printer('   ', i)
     else:
-        print('(no project defaults saved)')
+        log.printer('(no project defaults saved)')
 
 
 def set_project_defaults(names):
@@ -158,7 +158,7 @@ def _sections_to_assignments(sections):
 
 def _warn_if_empty():
     if not USER_DEFAULTS:
-        print('(no entries in defaults file)', file=sys.stderr)
+        log.printer('(no entries in defaults file)', file=sys.stderr)
         return True
 
 

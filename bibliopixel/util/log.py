@@ -122,7 +122,7 @@ frame, debug, info, warning, error = (
 # The function `printer` emits text no matter what the loglevel, and without any
 # introducers like "INFO".  By default this is the same as the global `print` -
 # re-assign this variable if you need to redirect your printing.
-printer = print
+printer = print  # noqa: T001, T002
 
 
 from . import deprecated
