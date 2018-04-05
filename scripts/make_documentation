@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Makes the whole bibliopixel documentation tree, writing it to doc/
+
+scripts/make_bp_help_documentation
+
+pushd doc
+rm -rf ./_build || true
+make html
+popd

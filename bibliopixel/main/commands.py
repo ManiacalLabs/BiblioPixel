@@ -1,5 +1,6 @@
 import os
 from .. project.importer import import_module
+from .. util import log
 
 COMMANDS = (
     'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
@@ -115,3 +116,4 @@ def help_text():
 def extract_help(filename):
     with open(filename, 'w') as fp:
         fp.write(help_text())
+    log.printer('Extracted `bp help` to', filename)
