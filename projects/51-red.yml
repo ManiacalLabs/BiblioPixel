@@ -1,0 +1,5 @@
+shape: [32, 32]
+
+animation:
+    typename: BiblioPixelAnimations.simple.Fill
+    color: red
