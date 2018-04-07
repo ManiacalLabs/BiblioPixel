@@ -3,9 +3,9 @@ from .. project.importer import import_module
 from .. util import log
 
 COMMANDS = (
-    'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
-    'devices', 'info', 'load', 'list', 'monitor', 'remove', 'reset', 'run',
-    'save', 'set', 'show', 'update')
+    'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo', 'devices',
+    'info', 'load', 'list', 'monitor', 'pid', 'remove', 'reset', 'run', 'save',
+    'set', 'signal', 'show', 'update')
 
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 

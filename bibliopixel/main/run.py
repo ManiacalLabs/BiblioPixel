@@ -4,7 +4,7 @@ Run specified project from file or URL.
 
 import os, sys, time, traceback
 from . import common_flags, simpixel
-from .. util import json, log, restarter
+from .. util import json, log, pid_context, signal_handler
 from .. animation import Animation
 from .. project import load
 from .. project.project import Project
@@ -157,7 +157,16 @@ def stop():
 
 
 def run(args):
-    restarter.restarter(lambda: run_once(args), stop)
+    with pid_context.pid_context(args.pid_filename):
+        with signal_handler.context(
+                SIGHUP=stop, SIGINT=stop, SIGTERM=stop) as signals:
+            while True:
+                run_once(args)
+                if signals:
+                    log.info('Received signal %s', ' '.join(signals))
+
+                if not signals.pop('SIGHUP', False):
+                    break
 
 
 def set_parser(parser):
