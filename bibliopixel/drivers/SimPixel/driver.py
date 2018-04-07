@@ -38,6 +38,9 @@ class SimPixel(ServerDriver):
             self.server.update(positions=positions)
 
     def _send_packet(self):
+        if not self.server:
+            raise ValueError(
+                'Tried to send a packet before Layout.start() was called')
         self.server.update(pixels=self._buf)
 
 
