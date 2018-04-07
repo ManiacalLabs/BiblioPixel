@@ -14,7 +14,7 @@ import random
 
 from . import common_flags, demo_table, simpixel
 from .. project import project
-from .. util import log
+from .. util import log, pid_context
 
 DEMO_OPTS = ', '.join(sorted(demo_table.DEMO_TABLE.keys()))
 

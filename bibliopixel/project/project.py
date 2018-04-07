@@ -1,7 +1,7 @@
 import queue
 from . import (
     attributes, construct, cleanup, defaults, event_queue, load, recurse)
-from .. util import exception, json
+from .. util import exception, json, log
 
 EVENT_QUEUE_MAXSIZE = 1000
 
@@ -71,6 +71,7 @@ class Project:
         self.animation.start()
 
     def stop(self):
+        log.debug('Project %s stop called', self)
         if self in self.PROJECTS_RUNNING:
             self.PROJECTS_RUNNING.remove(self)
 
@@ -90,6 +91,7 @@ class Project:
             self.start()
         finally:
             self.cleanup()
+        log.debug('Project %s finishes run()', self)
 
     @staticmethod
     def stop_all():
