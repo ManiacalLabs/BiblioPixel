@@ -1,7 +1,7 @@
 import numpy, unittest
-from numpy import array_equal
 
-from bibliopixel.util import color_list, colors, log
+from bibliopixel.util import colors, color_list, log
+from bibliopixel.util.color_list import ListMath, NumpyMath
 
 COLORS1 = [colors.Red, colors.Green, colors.Blue, colors.White]
 COLORS2 = [colors.Black, colors.Blue, colors.Red, colors.Black]
@@ -10,24 +10,17 @@ WHITES = [colors.White, colors.White, colors.White, colors.White]
 BLACKS = [colors.Black, colors.Black, colors.Black, colors.Black]
 
 
-def array(cl):
-    return numpy.array(cl, dtype='uint8')
-
-
-def make_list(cl):
-    return color_list.ColorList(cl[:])
-
-
 def make_numpy(cl):
-    return color_list.ColorList(array(cl))
+    return numpy.array(cl, dtype='uint8')
 
 
 class TestBase(unittest.TestCase):
     def assert_list_equal(self, actual, expected):
-        x, y = actual.color_list, expected
-        if isinstance(x, color_list.numpy_array):
-            equals = array_equal(x, array(y))
+        x, y = actual, expected
+        if hasattr(x, 'shape'):
+            equals = numpy.array_equal(x, make_numpy(y))
         else:
+            log.printer(type(x), type(y))
             equals = (x == y)
         if not equals:
             log.printer('____')
@@ -39,63 +32,50 @@ class TestBase(unittest.TestCase):
 
 
 class ColorListTest(TestBase):
-    def assert_list_equal(self, actual, expected):
-        x, y = actual.color_list, expected
-        if isinstance(x, color_list.numpy_array):
-            equals = array_equal(x, array(y))
-        else:
-            equals = (x == y)
-        if not equals:
-            log.printer('NOT EQUAL')
-            log.printer(x)
-            log.printer(y)
-        self.assertTrue(equals)
-
     def test_simple(self):
         self.assertIs(numpy, color_list.numpy)
-        self.assertIs(numpy.ndarray, color_list.numpy_array)
 
-        cl = make_list([])
-        self.assertIs(cl.math, color_list.ListMath)
+        self.assertFalse(color_list.is_numpy([]))
+        self.assertTrue(color_list.is_numpy(make_numpy([])))
 
-        cl = make_numpy([])
-        self.assertIs(cl.math, color_list.NumpyMath)
+        self.assertIs(color_list.Math(False), ListMath)
+        self.assertIs(color_list.Math(True), NumpyMath)
 
     def test_lists(self):
-        cl1 = make_list(COLORS1)
-        cl2 = make_list(COLORS2)
-        cl1.add(cl2.color_list, 0)
+        cl1 = COLORS1[:]
+        cl2 = COLORS2[:]
+        ListMath.add(cl1, cl2, 0)
         self.assert_list_equal(cl1, COLORS1)
-        cl1.add(cl2.color_list, 1)
+        ListMath.add(cl1, cl2)
         self.assert_list_equal(cl1, SUM12)
 
     def test_numpy(self):
         cl1 = make_numpy(COLORS1)
         cl2 = make_numpy(COLORS2)
-        cl1.add(cl2.color_list, 0)
+        NumpyMath.add(cl1, cl2, 0)
         self.assert_list_equal(cl1, COLORS1)
-        cl1.add(cl2.color_list, 1)
-        self.assertTrue(cl1, SUM12)
+        NumpyMath.add(cl1, cl2, 1)
+        self.assert_list_equal(cl1, SUM12)
 
     def test_clear_list(self):
-        cl = make_list(COLORS1)
-        cl.clear()
+        cl = COLORS1[:]
+        ListMath.clear(cl)
         self.assert_list_equal(cl, BLACKS)
 
     def test_clear_numpy(self):
         cl = make_numpy(COLORS1)
-        cl.clear()
+        NumpyMath.clear(cl)
+        self.assert_list_equal(cl, BLACKS)
         self.assert_list_equal(cl, BLACKS)
 
     def test_copy_list(self):
-        cl = make_list(COLORS1)
-        cl = make_numpy(COLORS1)
-        cl.copy_from(array(COLORS2))
+        cl = COLORS1[:]
+        ListMath.copy(cl, COLORS2)
         self.assert_list_equal(cl, COLORS2)
 
     def test_copy_numpy(self):
         cl = make_numpy(COLORS1)
-        cl.copy_from(array(COLORS2))
+        NumpyMath.copy(cl, make_numpy(COLORS2))
         self.assert_list_equal(cl, COLORS2)
 
 
@@ -144,7 +124,7 @@ class MixerTest(TestBase):
 
     def test_numpy(self):
         mixer = color_list.Mixer(
-            array(COLORS1), [array(COLORS2), array(WHITES), array(BLACKS)])
+            make_numpy(COLORS1), [make_numpy(COLORS2), make_numpy(WHITES), make_numpy(BLACKS)])
         self.do_test(mixer,
                      [(85, 85, 85), (85, 85, 170), (170, 85, 85), (85, 85, 85)])
 

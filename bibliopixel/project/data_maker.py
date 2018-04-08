@@ -1,7 +1,7 @@
 from ctypes import c_float, c_uint8
 from multiprocessing.sharedctypes import RawArray
 from .. util import log
-from .. util.color_list import numpy, numpy_array
+from .. util.color_list import numpy
 from . import importer
 
 
