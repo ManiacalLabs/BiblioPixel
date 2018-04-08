@@ -1,3 +1,9 @@
+## v3.4.13 - 2018-04-08
+- Re-read project files on SIGHUP
+- Better signal handling (SIGHUP, SIGINT, SIGETERM)
+- Fix `bp run --dump` option
+- Give a better warning if Layout.start() is not called
+
 ## v3.4.12 - 2018-04-05
 - Remove print statement
 
