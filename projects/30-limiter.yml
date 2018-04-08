@@ -1,0 +1,14 @@
+aliases:
+    bpa: BiblioPixelAnimations.matrix
+
+shape: [50, 50]
+
+run:
+    fps: 30
+
+animation:
+    typename: limiter
+    limit:
+      ratio: 0.6
+      knee: 0.4
+    animation: "@bpa.bloom"
