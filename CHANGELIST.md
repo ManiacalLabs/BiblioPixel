@@ -1,3 +1,7 @@
+## v3.4.14 - 2018-04-08
+- Add RemoteServer.shutdown_server() classmethod and SIGHUP fix
+- Always exit from main using sys.exit()
+
 ## v3.4.13 - 2018-04-08
 - Re-read project files on SIGHUP
 - Better signal handling (SIGHUP, SIGINT, SIGETERM)
