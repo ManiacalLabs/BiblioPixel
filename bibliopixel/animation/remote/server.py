@@ -23,6 +23,15 @@ class RemoteServer:
         self.q_send = q_send
         self.q_recv = q_recv
 
+    @classmethod
+    def shutdown_server(cls):
+        log.warning('Shutting down UI server.')
+        func = flask.request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            return False
+        func()
+        return True
+
     def _set_routes(self):
         self.app.route('/')(self.index)
         self.app.route('/<path:path>')(self.static_files)

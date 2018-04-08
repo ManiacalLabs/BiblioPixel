@@ -17,11 +17,13 @@ def context(**handlers):
         handler()
 
     for signame in handlers:
-        signal.signal(SIGNAL_NUMBERS[signame], handler)
+        if signame in SIGNAL_NUMBERS:  # Windows doesn't have all signals
+            signal.signal(SIGNAL_NUMBERS[signame], handler)
 
     try:
         yield signals
 
     finally:
         for signame in handlers:
-            signal.signal(SIGNAL_NUMBERS[signame], signal.SIG_DFL)
+            if signame in SIGNAL_NUMBERS:  # Windows doesn't have all signals
+                signal.signal(SIGNAL_NUMBERS[signame], signal.SIG_DFL)
