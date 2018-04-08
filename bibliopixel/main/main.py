@@ -75,7 +75,7 @@ def main():
     common_flags.execute_args(args)
 
     try:
-        return run(args) or 0
+        result = run(args) or 0
     except Exception as e:
         if args.verbose:
             raise
