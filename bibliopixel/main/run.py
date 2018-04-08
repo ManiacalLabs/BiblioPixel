@@ -45,7 +45,8 @@ def _load_py(filename):
 
 def _dump(args, desc):
     if not isinstance(desc, str):
-        desc = json.yaml.dump(desc) if args.yaml else json.dumps(desc)
+        dump = json.yaml.dump if args.yaml else json.dumps
+        desc = dump(desc, default=repr)
     return desc.strip()
 
 
