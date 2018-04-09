@@ -1,5 +1,5 @@
 """
-Send a signal to a BiblioPixel process running on this
+Send a restart signal to a BiblioPixel process running on this
 machine.
 """
 
@@ -38,6 +38,6 @@ def run(args):
 def set_parser(parser):
     parser.add_argument(
         'signal', nargs='?', default='SIGHUP', choices=CHOICES,
-        help='Signal to send.')
+        help='Signal to send.  Default SIGHUP restarts bp')
 
     parser.set_defaults(run=run)
