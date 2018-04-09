@@ -13,6 +13,7 @@ class Cutter:
     The entries are iterated forward or backwards, depending on the
     value of forward.
     """
+
     def __init__(self, layout, by_row=True):
         self.layout = layout
         cuts = layout.height if by_row else layout.width
@@ -37,6 +38,7 @@ class Slicer(Cutter):
     Does not work if the Matrix layout is serpentine or has any reflections
     or rotations.
     """
+
     def cut_row(self, i):
         return slice(self.layout.width * i, self.layout.width * (i + 1))
 
@@ -55,6 +57,7 @@ class Indexer(Cutter):
     Slower implementation of Cutter that uses lists of indices and the
     Matrix interface.
     """
+
     def cut_row(self, i):
         return [(column, i) for column in range(self.layout.width)]
 

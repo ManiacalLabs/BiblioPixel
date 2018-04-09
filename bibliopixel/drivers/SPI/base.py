@@ -18,6 +18,7 @@ class SPIBase(DriverBase):
     :param int spi_speed: Output data rate, in MHz
     :param interface: DEPRECATED - Use spi_interface
     """
+
     def __init__(self, num, dev='/dev/spidev0.0',
                  spi_interface=None, spi_speed=1,
                  interface=None, **kwargs):

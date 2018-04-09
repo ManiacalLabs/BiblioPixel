@@ -2,6 +2,7 @@ class Gamma(object):
     """
     Compute a fixed gamma table with 256 entries.
     """
+
     def __init__(self, gamma=1.0, offset=0, lower_bound=0):
         """
         :param float gamma: the root for gamma computation

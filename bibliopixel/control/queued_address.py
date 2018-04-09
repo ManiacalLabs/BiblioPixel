@@ -12,6 +12,7 @@ class QueuedAddress(Receiver):
     method it finds.
 
     """
+
     def __init__(self, address=None):
         self.address = Address(address)
 

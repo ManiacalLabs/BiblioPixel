@@ -64,6 +64,7 @@ class ServerCache:
     number, whereas for a UDP connection like Art-Net, it would be a
     port, ip_address pair.
     """
+
     def __init__(self, constructor, **kwds):
         """
         :param constructor: a function which takes a key and some keywords,

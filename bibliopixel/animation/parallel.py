@@ -7,6 +7,7 @@ class Parallel(collection.Collection):
     time - as opposed to the base Collection where only one animation runs
     at any time.
     """
+
     def __init__(self, *args, overlay=False, **kwds):
         """
         If overlay is True, then preclear is set to False for everything
