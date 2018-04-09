@@ -46,6 +46,9 @@ class Matrix(MultiLayout):
 
         self.width = width or getattr(self.drivers[0], 'width') or 32
         self.height = height or getattr(self.drivers[0], 'height') or 32
+        self.vert_flip = vert_flip
+        self.y_flip = y_flip
+        self.serpentine = serpentine
         self.pixelSize = pixelSize
         pw, ph = self.pixelSize
 
