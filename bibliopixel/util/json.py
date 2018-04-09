@@ -17,9 +17,18 @@ def dumps(data, **kwds):
 
 
 def loads(s, filename=''):
-    if filename.endswith('.yml'):
-        return yaml.load(s)
-    return json.loads(s)
+    if not filename.endswith('.yml'):
+        return json.loads(s)
+
+    def fix(d):
+        if isinstance(d, dict):
+            return {str(k): fix(v) for k, v in d.items()}
+        if isinstance(d, list):
+            return [fix(i) for i in d]
+        assert isinstance(d, (int, float, bool, str))
+        return d
+
+    return fix(yaml.load(s))
 
 
 def dump(data, file=sys.stdout, **kwds):
