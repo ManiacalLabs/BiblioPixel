@@ -198,6 +198,7 @@ class TeensySmartMatrix(Serial):
     The main difference is that SmartMatrix requires a sync command to keep
     multiple instances of this driver running smoothly.
     """
+
     def __init__(self, width, height, dev="", device_id=None,
                  hardwareID="16C0:0483", **kwds):
         super().__init__(ledtype=LEDTYPE.GENERIC, num=width * height,

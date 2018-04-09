@@ -8,6 +8,7 @@ class Routing(Receiver):
     """
     A dict that routes a message to an ActionList.
     """
+
     def __init__(self, routing, default, python_path):
         """
         :param dict routing: `routing` is a dict that maps addresses

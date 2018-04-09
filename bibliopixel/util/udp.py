@@ -45,6 +45,7 @@ class QueuedSender(threads.QueueHandler):
     from a new thread.
 
     """
+
     def __init__(self, address, **kwds):
         """
         :param str address: a pair (port, ip_address) to pass to socket.connect
@@ -69,6 +70,7 @@ class Receiver(threads.Loop):
     """
     Receive UDP messages in a thread
     """
+
     def __init__(self, address, bufsize=0x1000, receive=None, **kwds):
         super().__init__(**kwds)
         self.address = address
@@ -94,6 +96,7 @@ class QueuedReceiver(Receiver):
     """
     Receive UDP messages in a thread and put them on a queue.
     """
+
     def run(self):
         self.queue = queue.Queue()
         super().run()

@@ -8,6 +8,7 @@ class Action(Receiver):
     An Action takes an incoming message, applies Ops to it, and then
     uses it to set a value on a QueuedAddress.
     """
+
     def __init__(self, address, ops=()):
         self.address = QueuedAddress(address)
         self.ops = Ops(*ops)
@@ -44,6 +45,7 @@ class Action(Receiver):
 
 class ActionList(Receiver):
     """A list of Actions."""
+
     def __init__(self, actions=None):
         if isinstance(actions, (str, dict)):
             actions = [actions]
