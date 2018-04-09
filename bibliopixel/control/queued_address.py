@@ -25,6 +25,10 @@ class QueuedAddress(Receiver):
             self.queue = getattr(self.subtarget, 'event_queue', self.queue)
             if segment is not self.last_segment:
                 self.subtarget = segment.get(self.subtarget)
+                if self.subtarget is None:
+                    raise ValueError(
+                        'Resolving the address "%s" failed at "%s"' %
+                        (self.address, segment))
 
     def receive(self, msg):
         """
