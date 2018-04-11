@@ -1,3 +1,9 @@
+## v3.4.15 - 2018-04-11
+- New `bp restart` and `bp shutdown` commands replace `bp signal`
+- layout.Matrix now stores parameters needed for cloning
+- Better error message in QueuedAddress
+- Make all project keys strings (fix #752)
+
 ## v3.4.14 - 2018-04-08
 - Add RemoteServer.shutdown_server() classmethod and SIGHUP fix
 - Always exit from main using sys.exit()
