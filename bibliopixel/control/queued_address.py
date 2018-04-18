@@ -7,7 +7,7 @@ class QueuedAddress(Receiver):
     A `QueuedAddress` is a `Receiver` which sets `Address`es, perhaps using an
     an optional `EventQueue`.
 
-    When the `set_target` method is called, `QueuedAddress` searches
+    When the `set_root` method is called, `QueuedAddress` searches
     down through the address and stores the most recent `event_queue`
     method it finds.
 
@@ -16,16 +16,16 @@ class QueuedAddress(Receiver):
     def __init__(self, address=None):
         self.address = Address(address)
 
-    def set_target(self, target):
+    def set_root(self, root):
         self.last_segment = self.address.segments[-1]
         self.queue = None
-        self.subtarget = target
+        self.subroot = root
 
         for segment in self.address.segments:
-            self.queue = getattr(self.subtarget, 'event_queue', self.queue)
+            self.queue = getattr(self.subroot, 'event_queue', self.queue)
             if segment is not self.last_segment:
-                self.subtarget = segment.get(self.subtarget)
-                if self.subtarget is None:
+                self.subroot = segment.get(self.subroot)
+                if self.subroot is None:
                     raise ValueError(
                         'Resolving the address "%s" failed at "%s"' %
                         (self.address, segment))
@@ -48,8 +48,8 @@ class QueuedAddress(Receiver):
         return str(self.address)
 
     def get(self):
-        return self.last_segment.get(self.subtarget)
+        return self.last_segment.get(self.subroot)
 
     def _set(self, values):
         args = self.address.assignment + values
-        self.last_segment.set(self.subtarget, *args)
+        self.last_segment.set(self.subroot, *args)

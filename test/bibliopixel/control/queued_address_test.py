@@ -31,7 +31,7 @@ class QueuedAddressTest(unittest.TestCase):
     def test_no_queue(self):
         test = Base()
         qa = QueuedAddress('baz.bar.foo.foo')
-        qa.set_target(test)
+        qa.set_root(test)
         self.assertEqual(qa.get(), 12)
         qa.receive(('hello', ))
         self.assertEqual(qa.get(), 'hello')
@@ -39,7 +39,7 @@ class QueuedAddressTest(unittest.TestCase):
     def test_queued_address(self):
         test = Base()
         qa = QueuedAddress('baz.barq.foo.foo')
-        qa.set_target(test)
+        qa.set_root(test)
         self.assertEqual(qa.get(), 12)
         qa.receive(('hello',))
         self.assertEqual(qa.get(), 12)

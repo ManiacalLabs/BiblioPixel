@@ -38,13 +38,13 @@ class Routing(Receiver):
         routing = flatten.unflatten(routing)
         self.routing = make(routing)
 
-    def set_target(self, project):
+    def set_root(self, root):
         """Set the base project for routing."""
         def visit(x):
-            # Try to set_target, then recurse through any values()
-            set_target = getattr(x, 'set_target', None)
-            if set_target:
-                set_target(project)
+            # Try to set_root, then recurse through any values()
+            set_root = getattr(x, 'set_root', None)
+            if set_root:
+                set_root(root)
             values = getattr(x, 'values', lambda: ())
             for v in values():
                 visit(v)

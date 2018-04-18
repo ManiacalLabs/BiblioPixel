@@ -13,8 +13,8 @@ class Action(Receiver):
         self.address = QueuedAddress(address)
         self.ops = Ops(*ops)
 
-    def set_target(self, project):
-        self.address.set_target(project)
+    def set_root(self, root):
+        self.address.set_root(root)
 
     def receive(self, values):
         if self.ops:
@@ -51,9 +51,9 @@ class ActionList(Receiver):
             actions = [actions]
         self.actions = tuple(Action.make(a) for a in actions or ())
 
-    def set_target(self, project):
+    def set_root(self, root):
         for a in self.actions:
-            a.set_target(project)
+            a.set_root(root)
 
     def receive(self, msg):
         values = tuple(msg.values())
