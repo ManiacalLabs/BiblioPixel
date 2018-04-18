@@ -16,7 +16,7 @@ PROJECT = {
         "typename": "artnet",
         "ip_address": LOCALHOST
     },
-    "dimensions": 12,
+    "shape": 12,
     "animation": ".tests.StripChannelTest",
     "run": {
         "max_steps": MAX_STEPS

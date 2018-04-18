@@ -17,7 +17,7 @@
         }
     },
 
-    "dimensions": [50],
+    "shape": [50],
 
     "run": {
         "fps": 30
