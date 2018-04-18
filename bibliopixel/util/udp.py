@@ -4,7 +4,7 @@ separate thread.
 """
 
 import queue, socket
-from .. util.threads import threads
+from .. util.threads import runnable
 
 
 class Sender:
@@ -37,7 +37,7 @@ class Sender:
             # sock.sendto(msg, self.address)
 
 
-class QueuedSender(threads.QueueHandler):
+class QueuedSender(runnable.QueueHandler):
     """
     The UPD protocol is stateless but not necessarily thread-safe.
 
@@ -66,7 +66,7 @@ def sender(address, use_queue=True, **kwds):
     return QueuedSender(address, **kwds) if use_queue else Sender(address)
 
 
-class Receiver(threads.Loop):
+class Receiver(runnable.Loop):
     """
     Receive UDP messages in a thread
     """

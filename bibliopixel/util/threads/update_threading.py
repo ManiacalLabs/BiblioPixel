@@ -1,9 +1,9 @@
 import threading, time
 from .. import log
-from . import compose_events, threads
+from . import compose_events, runnable
 
 
-class UpdateDriverThread(threads.Loop):
+class UpdateDriverThread(runnable.Loop):
 
     def __init__(self, driver):
         super().__init__()
@@ -35,7 +35,7 @@ class UpdateDriverThread(threads.Loop):
         self._updating.set()
 
 
-class UpdateThread(threads.Loop):
+class UpdateThread(runnable.Loop):
 
     def __init__(self, drivers):
         super().__init__()
