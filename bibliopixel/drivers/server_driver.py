@@ -1,12 +1,9 @@
 from . driver_base import DriverBase
-from .. util.server_cache import ServerCache
+from .. util.server_cache import StaticCache
 from .. project import construct
 
 
-class ServerDriver(DriverBase):
-    SERVER_CLASS = None
-    SERVER_KWDS = {}
-
+class ServerDriver(DriverBase, StaticCache):
     def __init__(self, *args, address, pixel_positions=None, **kwds):
         """
         Args:
@@ -31,15 +28,6 @@ class ServerDriver(DriverBase):
         if self.pixel_positions is None:
             self.pixel_positions = pixel_positions
             self._on_positions()
-
-    @classmethod
-    def cache(cls):
-        try:
-            return cls.CACHE
-        except AttributeError:
-            pass
-        cls.CACHE = ServerCache(cls.SERVER_CLASS, **cls.SERVER_KWDS)
-        return cls.CACHE
 
     def _send_packet(self):
         pass
