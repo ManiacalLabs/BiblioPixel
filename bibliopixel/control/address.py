@@ -1,6 +1,6 @@
 """
-An address identifies how to get or set a piece of data within a Python object
-using attributes and indexing.
+An address identifies how to get or set a piece of data within a Python object,
+called the "root", using attributes and indexing.
 
 An address description is a string looking like:
 
@@ -10,7 +10,7 @@ An address description is a string looking like:
 
 which would mean
 
-"given an object target, the value ``target.foo.bar[32][5]['baz'].bang()``".
+"given an object "root", the value ``root.foo.bar[32][5]['baz'].bang()``".
 
 Addresses are divided into "segments".
 
@@ -21,7 +21,7 @@ In the example above, the segments are ``foo``, ``bar``, ``[32]``, ``[5]``,
 ``[baz]`` and ``bang``; ``foo`` and ``bar`` are attributes.
 ``baz`` is a string index, and ``32`` and ``5`` are numeric indexes.
 
-You can use an Address to either get or set values in a target object.
+You can use an Address to either get or set values in the root object.
 
 Any key that's entirely numeric is taken to be an integer index.  This is
 convenient but prevents the creation of dictionaries like ``{1: 'x', '1': 'y'}``
@@ -36,25 +36,25 @@ class Address:
         def __init__(self, name):
             self.name = name
 
-        def set(self, target, *value):
-            self._set(target, (value[0] if len(value) == 1 else value))
+        def set(self, root, *value):
+            self._set(root, (value[0] if len(value) == 1 else value))
 
     class Attribute(Segment):
-        def get(self, target):
-            return getattr(target, self.name)
+        def get(self, root):
+            return getattr(root, self.name)
 
-        def _set(self, target, value):
-            setattr(target, self.name, value)
+        def _set(self, root, value):
+            setattr(root, self.name, value)
 
         def __str__(self):
             return '.%s' % self.name
 
     class Index(Segment):
-        def get(self, target):
-            return target[self.name]
+        def get(self, root):
+            return root[self.name]
 
-        def _set(self, target, value):
-            target[self.name] = value
+        def _set(self, root, value):
+            root[self.name] = value
 
         def __str__(self):
             return '[%s]' % self.name
@@ -63,11 +63,11 @@ class Address:
         def __init__(self):
             pass
 
-        def get(self, target):
-            return target()
+        def get(self, root):
+            return root()
 
-        def set(self, target, *value):
-            target(*value)
+        def set(self, root, *value):
+            root(*value)
 
         def __str__(self):
             return '()'
@@ -106,17 +106,17 @@ class Address:
         return self.name
 
     @staticmethod
-    def _get(target, address):
+    def _get(root, address):
         for a in address:
-            target = a.get(target)
-        return target
+            root = a.get(root)
+        return root
 
-    def get(self, target):
-        return self._get(target, self.segments)
+    def get(self, root):
+        return self._get(root, self.segments)
 
-    def set(self, target, *values):
+    def set(self, root, *values):
         *first, last = self.segments
-        parent = self._get(target, first)
+        parent = self._get(root, first)
         last.set(parent, *(self.assignment + values))
 
 

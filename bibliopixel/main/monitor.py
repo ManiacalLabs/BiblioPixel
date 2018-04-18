@@ -16,7 +16,7 @@ def run(args):
         raise
 
     control_object = tc(pre_routing='()')
-    control_object.set_target(log.printer)
+    control_object.set_root(log.printer)
     control_object.start()
     control_object.thread.join()
 

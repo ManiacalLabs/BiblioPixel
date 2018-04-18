@@ -29,9 +29,9 @@ class Control:
         self.routing = Routing(routing or {}, default or {}, python_path)
         self.running = False
 
-    def set_target(self, target):
-        self.pre_routing.set_target(target)
-        self.routing.set_target(target)
+    def set_root(self, root):
+        self.pre_routing.set_root(root)
+        self.routing.set_root(root)
 
     def start(self):
         if self.verbose:
