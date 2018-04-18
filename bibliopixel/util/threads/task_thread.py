@@ -1,5 +1,5 @@
 import collections, threading
-from . import threads
+from . import runnable
 
 
 class Task(object):
@@ -16,7 +16,7 @@ class Task(object):
         next_task.event.set()
 
 
-class TaskThread(threads.Loop):
+class TaskThread(runnable.Loop):
     def __init__(self, producer_task, consumer_task, daemon=True, **kwds):
         super().__init__(daemon=daemon, **kwds)
         self.producer_task = producer_task
