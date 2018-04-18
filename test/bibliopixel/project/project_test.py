@@ -89,7 +89,7 @@ class ProjectTest(unittest.TestCase):
 PROJECT = """
 {
     "driver": "dummy",
-    "dimensions": 12,
+    "shape": 12,
     "layout": "strip",
     "animation": "strip_test",
     "run": {

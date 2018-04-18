@@ -1,4 +1,4 @@
-dimensions: [16, 16]
+shape: [16, 16]
 
 aliases:
   bpa: BiblioPixelAnimations.matrix
