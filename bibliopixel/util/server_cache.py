@@ -97,3 +97,15 @@ class ServerCache:
         if server:
             server.server.close()
             return True
+
+
+class StaticCache:
+    SERVER_CLASS = None
+    SERVER_KWDS = {}
+    CACHE = None
+
+    @classmethod
+    def cache(cls):
+        if not cls.CACHE:
+            cls.CACHE = ServerCache(cls.SERVER_CLASS, **cls.SERVER_KWDS)
+        return cls.CACHE
