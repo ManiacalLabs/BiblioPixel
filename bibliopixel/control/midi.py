@@ -54,7 +54,7 @@ class Midi(control.ExtractedControl):
         super().__init__(**kwds)
         self.use_note_off = use_note_off
 
-    def __iter__(self):
+    def messages(self):
         if not mido:
             raise ValueError(MIDO_ERROR)
         try:

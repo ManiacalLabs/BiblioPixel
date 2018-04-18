@@ -42,15 +42,15 @@ class MidiTest(unittest.TestCase):
 
     def run_test(self, msgs, expected, routing=None, **kwds):
         with patch.patch(midi, 'mido', FakeMido(msgs)):
-            class Settable:
-                def deferred_set(self, address, *value):
-                    address.set(self, *value)
+            class Target:
+                pass
 
-            settable = Settable()
+            target = Target()
             m = midi.Midi(routing=routing or self.routing, **kwds)
-            m.start(settable)
+            m.set_target(target)
+            m.start()
             m.thread.join()
-            self.assertEqual(vars(settable), expected)
+            self.assertEqual(vars(target), expected)
 
     def test_one(self):
         expected = {'note': (32, fractions.Fraction(96, 127))}

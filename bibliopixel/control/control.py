@@ -29,13 +29,14 @@ class Control:
         self.routing = Routing(routing or {}, default or {}, python_path)
         self.running = False
 
-    def start(self, project):
+    def set_target(self, target):
+        self.pre_routing.set_target(target)
+        self.routing.set_target(target)
+
+    def start(self):
         if self.verbose:
             log.info('Starting %s', self)
 
-        self.project = project  # Can I now delete this?
-        self.pre_routing.set_target(project)
-        self.routing.set_target(project)
         self.running = True
         self.thread = self._make_thread()
         self.thread.start()
@@ -47,7 +48,7 @@ class Control:
         self.running = False
 
     def loop(self):
-        for msg in self:
+        for msg in self.messages():
             self.receive(msg)
             if not self.running:
                 return
@@ -77,7 +78,7 @@ class Control:
         """
         raise NotImplementedError
 
-    def __iter__(self):
+    def messages(self):
         """Should yield a sequence of messages from the input source."""
         raise NotImplementedError
 
