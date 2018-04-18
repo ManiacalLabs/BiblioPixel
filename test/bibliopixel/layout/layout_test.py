@@ -44,6 +44,12 @@ class LayoutTest(unittest.TestCase):
         expected = [RED, GREEN, HOT_PINK, GREEN]
         self.assertEquals(expected, strip.color_list)
 
+    def test_set_partial_color(self):
+        strip = Strip(MockDriver(4))
+        strip.color_list = (RED + GREEN + HOT_PINK + GREEN)[:-1]
+        expected = [RED, GREEN, HOT_PINK, BLACK]
+        self.assertEquals(expected, strip.color_list)
+
     def test_set_offset(self):
         strip = Strip(MockDriver(4))
         strip.set_color_list(RED + GREEN, 2)

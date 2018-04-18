@@ -133,7 +133,9 @@ class Layout(object):
             color_list[0][0]
         except TypeError:
             # It's a 1-dimensional list
-            assert not (len(color_list) % 3)
+            extra = len(color_list) % 3
+            if extra:
+                color_list = color_list[:-extra]
             color_list = list(zip(*[iter(color_list)] * 3))
 
         size = len(self._colors) - offset
