@@ -7,31 +7,17 @@ import queue, socket
 from .. util.threads import runnable
 
 
-class Sender:
+class Sender(runnable.Runnable):
     def __init__(self, address):
         """
-        :param str address: a pair (port, ip_address) to pass to socket.connect
+        :param str address: a pair (ip_address, port) to pass to socket.connect
         """
         super().__init__()
         self.address = address
-        self.running = True
-        self._socket = None
-        self.reuse_socket = True
-
-    @property
-    def socket(self):
-        if not (self.reuse_socket and self._socket):
-            self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        return self._socket
-
-    def start(self):
-        pass
-
-    def stop(self):
-        pass
 
     def send(self, msg):
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.settimeout(self.timeout)
             sock.connect(self.address)
             sock.send(msg)
             # sock.sendto(msg, self.address)
@@ -48,9 +34,7 @@ class QueuedSender(runnable.QueueHandler):
 
     def __init__(self, address, **kwds):
         """
-        :param str address: a pair (port, ip_address) to pass to socket.connect
-        :param bool use_queue: if True, run the connection in a different thread
-            with a queue
+        :param str address: a pair (ip_address, port) to pass to socket.connect
         """
         super().__init__(**kwds)
         self.sender = Sender(address)
@@ -61,7 +45,9 @@ class QueuedSender(runnable.QueueHandler):
 
 def sender(address, use_queue=True, **kwds):
     """
-    :param tuple address:
+    :param str address: a pair (ip_address, port) to pass to socket.connect
+    :param bool use_queue: if True, run the connection in a different thread
+        with a queue
     """
     return QueuedSender(address, **kwds) if use_queue else Sender(address)
 
@@ -80,11 +66,15 @@ class Receiver(runnable.Loop):
     def run(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(self.address)
+        self.socket.settimeout(self.timeout)
 
         super().run()
 
     def loop(self):
-        data, addr = self.socket.recvfrom(self.bufsize)
+        try:
+            data, addr = self.socket.recvfrom(self.bufsize)
+        except socket.timeout:
+            return
         if data:
             self.receive(data)
 
