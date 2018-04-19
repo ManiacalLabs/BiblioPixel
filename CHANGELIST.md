@@ -1,3 +1,8 @@
+## v3.4.16 - 2018-04-19
+- Better error handling
+- Add a timeout to UDP sockets
+- Better handling of partial colors and component color lists
+
 ## v3.4.15 - 2018-04-11
 - New `bp restart` and `bp shutdown` commands replace `bp signal`
 - layout.Matrix now stores parameters needed for cloning
