@@ -1,5 +1,5 @@
 from .. import log
-import contextlib, functools, threading, queue
+import contextlib, functools, threading, traceback, queue
 
 
 class Runnable:
@@ -53,6 +53,8 @@ class RunnableTarget(Runnable):
     def run(self):
         try:
             self.target()
+        except:
+            log.error('Exception at %s: \n%s', str(self), traceback.format_tb())
         finally:
             self.cleanup()
 
