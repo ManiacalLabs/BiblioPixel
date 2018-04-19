@@ -1,5 +1,6 @@
 import functools
 from . import color
+from ... util import color_list
 
 USAGE = """
 Colors is a list of colors.  Each color can be:
@@ -19,4 +20,9 @@ def make(c):
 @make.register(tuple)
 @make.register(list)
 def _(c):
-    return [color.make(i) for i in c]
+    return [color.make(i) for i in color_list.to_triplets(c)]
+
+
+@make.register(str)
+def _(s):
+    return make([s])

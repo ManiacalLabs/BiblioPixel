@@ -2,6 +2,7 @@ import copy, time
 from .. import util
 from .. project import attributes, data_maker, fields
 from .. util.threads.update_threading import UpdateThreading
+from .. util.color_list import to_triplets
 
 
 class Layout(object):
@@ -129,14 +130,7 @@ class Layout(object):
         """
         if not len(color_list):
             return
-        try:
-            color_list[0][0]
-        except TypeError:
-            # It's a 1-dimensional list
-            extra = len(color_list) % 3
-            if extra:
-                color_list = color_list[:-extra]
-            color_list = list(zip(*[iter(color_list)] * 3))
+        color_list = to_triplets(color_list)
 
         size = len(self._colors) - offset
         if len(color_list) > size:
