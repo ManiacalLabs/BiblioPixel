@@ -24,7 +24,7 @@ def receive_udp(address, results, expected):
 
 
 class UDPTest(unittest.TestCase):
-    @mark_tests.travis_test
+    @mark_tests.fails_in_travis
     def test_full(self):
         messages = [s.encode() for s in ('foo', '', 'bar', 'baz', '', 'bing')]
         expected = [s for s in messages if s]
