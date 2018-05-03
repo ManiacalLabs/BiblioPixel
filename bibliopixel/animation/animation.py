@@ -52,7 +52,7 @@ class Animation(object):
 
     @color_list.setter
     def color_list(self, cl):
-        self.layout.color_list[:] = cl
+        self.layout.color_list = cl
 
     @property
     def completed(self):
