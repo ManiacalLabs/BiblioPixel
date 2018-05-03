@@ -21,7 +21,7 @@ class Action(Receiver):
             if len(values) == 1:
                 values = [self.ops(values[0])]
             else:
-                # TODO:They specified ops, but we can't use it.
+                # TODO: They specified ops, but we can't use it.
                 # Should we warn here?  Can we use the ops somehow?
                 pass
         return self.address.receive(values)
