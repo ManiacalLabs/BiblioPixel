@@ -46,7 +46,7 @@ class ExtractorTest(unittest.TestCase):
     def test_accept(self):
         accept = {'channel': 2, 'type': 'control_change', 'control': 2}
         for msg in C3, C3_OFF, BC3, MOD, OTHER:
-            self.run_test(msg, None, accept=accept)
+            self.run_test(msg, collections.OrderedDict(), accept=accept)
 
         self.run_test(
             BC,

@@ -25,5 +25,5 @@ class TaskThread(runnable.Loop):
     def produce(self):
         self.producer_task.run(self.consumer_task)
 
-    def loop(self):
+    def loop_once(self):
         self.consumer_task.run(self.producer_task)

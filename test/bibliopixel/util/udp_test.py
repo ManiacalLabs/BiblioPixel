@@ -10,9 +10,8 @@ TIMEOUT = 0.1
 @contextlib.contextmanager
 def receive_udp(address, results, expected):
     receiver = udp.QueuedReceiver(address)
-    receiver.start()
-
-    yield
+    with receiver.joiner():
+        yield
 
     results.extend(receiver.queue.get() for i in range(expected))
     try:
@@ -36,5 +35,6 @@ class UDPTest(unittest.TestCase):
             sender.start()
             for m in messages:
                 sender.send(m)
-
         self.assertEquals(actual, expected)
+        # TODO: if I don't have something here, this hangs!
+        time.sleep(0.001)

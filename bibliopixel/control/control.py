@@ -3,13 +3,14 @@ from . extractor import Extractor
 from .. project import construct, importer
 from .. util.log_errors import LogErrors
 from .. util import flatten, log, json
+from .. util.threads import runnable
 from . routing import ActionList, Routing
 
 
-class Control:
+class Control(runnable.Runnable):
     DEFAULT = {'datatype': ActionList}
 
-    def __init__(self, routing=None, default=None, errors=16,
+    def __init__(self, routing=None, default=None, errors='raise',
                  python_path='bibliopixel.control', verbose=False,
                  pre_routing=None):
         """
@@ -27,31 +28,26 @@ class Control:
         default = dict(self.DEFAULT, **(default or {}))
         self.pre_routing = ActionList(pre_routing)
         self.routing = Routing(routing or {}, default or {}, python_path)
-        self.running = False
 
     def set_root(self, root):
         self.pre_routing.set_root(root)
         self.routing.set_root(root)
 
     def start(self):
+        super().start()
         if self.verbose:
             log.info('Starting %s', self)
 
-        self.running = True
         self.thread = self._make_thread()
         self.thread.start()
 
-    def cleanup(self):
-        self.stop()
+    def join(self, timeout=None):
+        self.thread.join(timeout)
 
     def stop(self):
-        self.running = False
-
-    def loop(self):
-        for msg in self.messages():
-            self.receive(msg)
-            if not self.running:
-                return
+        super().stop()
+        stop_thread = getattr(self.thread, 'stop', None)
+        stop_thread and stop_thread()
 
     def _receive(self, msg):
         """
@@ -70,7 +66,8 @@ class Control:
         if receiver:
             receiver.receive(msg)
             if self.verbose:
-                log.info('Routed message %s to %s', str_msg, receiver)
+                log.info('Routed message %s (%s) to %s', str_msg, msg,
+                         repr(receiver))
 
     def _convert(self, msg):
         """
@@ -78,19 +75,11 @@ class Control:
         """
         raise NotImplementedError
 
-    def messages(self):
-        """Should yield a sequence of messages from the input source."""
-        raise NotImplementedError
-
     def _make_thread(self):
         """
-        Returns the thread that run the loop for this control source.
-
-        If the underlying source has its own thread or process, override this
-        method.  The object returned needs to have two methods:  ``start()``
-        and ``stop()``.
+        Returns a new thread to run the loop for this control source.
         """
-        return threading.Thread(target=self.loop, daemon=True)
+        raise NotImplementedError
 
     def _msg_to_str(self, msg):
         if msg is None:
@@ -101,10 +90,29 @@ class Control:
         return bool(self.routing or self.pre_routing)
 
 
+class ControlLoop:
+    """Mixin class for looping controls"""
+    def _receive_all_messages(self):
+        for msg in self.messages():
+            self.receive(msg)
+            if not self.running:
+                return
+
+    def messages(self):
+        """Should yield a sequence of messages from the input source."""
+        raise NotImplementedError
+
+    def _make_thread(self):
+        return threading.Thread(target=self._receive_all_messages, daemon=True)
+
+
 class ExtractedControl(Control):
     EXTRACTOR = {}
 
     def __init__(self, extractor=None, **kwds):
         super().__init__(**kwds)
         extractor = dict(self.EXTRACTOR, **(extractor or {}))
-        self._convert = Extractor(**extractor).extract
+        self.extractor = Extractor(**extractor)
+
+    def _convert(self, msg):
+        return self.extractor.extract(msg)

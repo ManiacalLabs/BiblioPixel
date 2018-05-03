@@ -17,8 +17,8 @@ def run(args):
 
     control_object = tc(pre_routing='()')
     control_object.set_root(log.printer)
-    control_object.start()
-    control_object.thread.join()
+    with control_object.joiner(stop=False):
+        pass
 
 
 def set_parser(parser):

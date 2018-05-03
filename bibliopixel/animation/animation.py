@@ -97,6 +97,9 @@ class Animation(object):
     def stop(self):
         self.threading.stop_event.set()
 
+    def join(self, timeout=None):
+        self.threading.join(timeout)
+
     def run_all_frames(self):
         for i in self.generate_frames():
             pass

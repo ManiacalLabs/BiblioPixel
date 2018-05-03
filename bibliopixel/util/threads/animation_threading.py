@@ -2,7 +2,7 @@ import threading, time
 from .. import log
 
 
-class AnimationThreading(object):
+class AnimationThreading:
     """
     AnimationThreading handles threading - and eventually multiprocessing - for
     Animation.
@@ -15,6 +15,12 @@ class AnimationThreading(object):
         self.thread = None
         self.frame_overrun = False
 
+    def join(self, timeout=None):
+        self.thread and self.thread.join(timeout)
+
+    def is_alive(self):
+        return self.thread and self.thread.is_alive()
+
     def cleanup(self, wait=False):
         # if current thread is animation thread this was called
         # by the context manager and thread is therefore already stopped
@@ -22,9 +28,6 @@ class AnimationThreading(object):
             self.stop_event.set()
             if self.thread and wait:
                 self.thread.join()
-
-    def stopped(self):
-        return not (self.thread and self.thread.isAlive())
 
     def target(self):
         is_main = threading.current_thread() is threading.main_thread()
@@ -72,3 +75,7 @@ class AnimationThreading(object):
             self.target()
 
         self.thread and self.runner.main and self.thread.join()
+
+    def stopped(self):
+        # DEPRECATED
+        return not self.is_alive()

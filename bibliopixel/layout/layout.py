@@ -75,8 +75,14 @@ class Layout(object):
             d.start()
 
     def stop(self):
+        self.threading.stop()
         for d in self.drivers:
             d.stop()
+
+    def join(self, timeout=None):
+        self.threading.join(timeout)
+        for d in self.drivers:
+            d.join(timeout)
 
     def cleanup_drivers(self):
         for d in self.drivers:
