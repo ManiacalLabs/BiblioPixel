@@ -1,4 +1,4 @@
-import os, traceback
+import os
 from .. project import aliases, construct, load, project
 from . import animation
 from .. util import json, log
