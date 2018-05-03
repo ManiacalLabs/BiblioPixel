@@ -1,4 +1,4 @@
-import queue
+import queue, weakref
 from . import (
     attributes, construct, cleanup, defaults, event_queue, load, recurse)
 from .. util import exception, json, log
@@ -67,13 +67,16 @@ class Project:
         self.PROJECTS_RUNNING.add(self)
         self.layout.start()
         for c in self.controls:
-            c.start(self)
+            c.set_root(self)
+            c.start()
         self.animation.start()
 
     def stop(self):
-        log.debug('Project %s stop called', self)
-        if self in self.PROJECTS_RUNNING:
+        try:
             self.PROJECTS_RUNNING.remove(self)
+        except KeyError:
+            return
+        log.debug('Project %s stop called', self)
 
         self.animation.stop()
         for c in self.controls:
@@ -86,9 +89,22 @@ class Project:
             c.cleanup()
         self.layout.cleanup_drivers()
 
+    def join(self, timeout=None):
+        self.animation.join(timeout)
+
+        # TODO: This is a hack.  We only need to do this because we don't
+        # know if we exited through stop(), or naturally through running out of
+        # the thread.
+        self.stop()
+
+        for c in self.controls:
+            c.join(timeout)
+        self.layout.join(timeout)
+
     def run(self):
         try:
             self.start()
+            self.join()
         finally:
             self.cleanup()
         log.debug('Project %s finishes run()', self)
@@ -97,8 +113,9 @@ class Project:
     def stop_all():
         for p in list(Project.PROJECTS_RUNNING):
             p.stop()
+        Project.PROJECTS_RUNNING.clear()
 
-    PROJECTS_RUNNING = set()
+    PROJECTS_RUNNING = weakref.WeakSet()
 
 
 def project(*descs, root_file=None):

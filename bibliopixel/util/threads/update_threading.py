@@ -26,7 +26,7 @@ class UpdateDriverThread(runnable.Loop):
     def sending(self):
         return self._wait.isSet()
 
-    def loop(self):
+    def loop_once(self):
         self._wait.wait()
         self._updating.clear()
         self._driver.update_colors()
@@ -59,7 +59,7 @@ class UpdateThread(runnable.Loop):
         self._reading.clear()
         self._wait.set()
 
-    def loop(self):
+    def loop_once(self):
         self._wait.wait()
         self._updated.wait()
 
@@ -71,7 +71,7 @@ class UpdateThread(runnable.Loop):
         self._reading.set()
 
 
-class NoThreading(object):
+class NoThreading(runnable.Runnable):
     """
     """
 
@@ -105,6 +105,12 @@ class UseThreading(NoThreading):
     def wait_for_update(self):
         while all([d._thread.sending() for d in self.layout.drivers]):
             time.sleep(0.000001)
+
+    def join(self, timeout=None):
+        self.update_thread.join(timeout)
+
+    def stop(self):
+        self.update_thread.stop()
 
 
 def UpdateThreading(enable, layout):

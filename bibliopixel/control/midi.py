@@ -21,7 +21,7 @@ MIDO_BACKEND_ERROR = """You have the wrong rtmidi installed.  Try
 """
 
 
-class Midi(control.ExtractedControl):
+class Midi(control.ExtractedControl, control.ControlLoop):
     EXTRACTOR = {
         # There are more mido message types that we haven't used yet.
         'keys_by_type': {
@@ -51,8 +51,11 @@ class Midi(control.ExtractedControl):
     }
 
     def __init__(self, use_note_off=False, **kwds):
-        super().__init__(**kwds)
+        control.ExtractedControl.__init__(self, **kwds)
         self.use_note_off = use_note_off
+
+    def _make_thread(self):
+        return control.ControlLoop._make_thread(self)
 
     def messages(self):
         if not mido:
@@ -69,7 +72,9 @@ class Midi(control.ExtractedControl):
             log.error('control.midi: no MIDI ports found')
             return
 
-        log.info('Starting to listen for MIDI')
+        port_names = ', '.join('"%s"' % p.name for p in ports)
+        log.info('Starting to listen for MIDI on port%s %s',
+                 '' if len(ports) == 1 else 's', port_names)
         for port, msg in mido.ports.MultiPort(ports, yield_ports=True):
             mdict = dict(vars(msg), port=port)
             if self.use_note_off or msg.type != 'note_off':

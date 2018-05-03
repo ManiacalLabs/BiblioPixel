@@ -1,4 +1,4 @@
-import getpass, platform, sys
+import getpass, platform, sys, threading
 from .. util import log
 from . control import ExtractedControl
 
@@ -17,6 +17,20 @@ Please install the pynput library with
     $ pip install pynput
 
 """
+
+
+try:
+    import pynput
+
+except ImportError:
+    pynput = Listener = None
+
+else:
+    class Listener(pynput.keyboard.Listener):
+        def join(self, timeout=None):
+            # join() on pynput.keyboard.Listener waits on a queue...
+            self._queue.put(None)
+            return super().join(timeout)
 
 
 def keyname(key):
@@ -42,14 +56,12 @@ class Keyboard(ExtractedControl):
         self.receive({'type': 'release', 'key': key})
 
     def _make_thread(self):
-        try:
-            import pynput
-        except Exception as e:
-            e.args = (INSTALL_ERROR,) + e.args
-            raise
+        if not pynput:
+            raise ValueError(INSTALL_ERROR)
 
         if platform.platform().startswith('Darwin'):
             if getpass.getuser() != 'root':
                 log.warning(DARWIN_ROOT_WARNING, sys.argv[0])
 
-        return pynput.keyboard.Listener(self._press, self._release)
+        log.info('Starting to listen for keyboard input')
+        return Listener(self._press, self._release)

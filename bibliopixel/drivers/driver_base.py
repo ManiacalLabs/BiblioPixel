@@ -98,7 +98,6 @@ class DriverBase(object):
         Called right before this driver will run.  This is the place
         to do things like start threads, not in the constructor.
         """
-        pass
 
     def stop(self):
         """
@@ -109,7 +108,11 @@ class DriverBase(object):
         """
         Called to shut this driver down, and stop all threads and processes.
         """
-        pass
+
+    def join(self, timeout=None):
+        """
+        Called to join threads.
+        """
 
     def bufByteCount(self):
         """
@@ -129,21 +132,18 @@ class DriverBase(object):
         one display which all need to display the next frame at exactly the same
         time.
         """
-        pass
 
     def _compute_packet(self):
         """Compute the packet from the colors and position.
 
         Eventually, this will run on the compute thread.
         """
-        pass
 
     def _send_packet(self):
         """Send the packet to the driver.
 
         Eventually, this will run on an I/O thread.
         """
-        pass
 
     def update_colors(self):
         """Apply any corrections to the current color list

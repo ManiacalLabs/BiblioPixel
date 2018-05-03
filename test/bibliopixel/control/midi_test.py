@@ -1,4 +1,4 @@
-import fractions, unittest
+import fractions, time, unittest
 from bibliopixel.control import midi
 from argparse import Namespace
 from test.bibliopixel import patch
@@ -24,7 +24,11 @@ class FakeMido:
         self.ports.MultiPort = multi_port
 
     def get_input_names(self):
-        return ['one', 'two']
+        class Port(str):
+            def name(self):
+                return self
+
+        return [Port('one'), Port('two')]
 
     def open_input(self, x):
         return x
@@ -48,8 +52,9 @@ class MidiTest(unittest.TestCase):
             root = Root()
             m = midi.Midi(routing=routing or self.routing, **kwds)
             m.set_root(root)
-            m.start()
-            m.thread.join()
+            with m.joiner(stop=True):
+                time.sleep(0.1)
+
             self.assertEqual(vars(root), expected)
 
     def test_one(self):
