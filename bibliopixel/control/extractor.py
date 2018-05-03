@@ -49,16 +49,19 @@ class Extractor:
             return m and {k: to_set(v) for k, v in m.items()}
 
         self.accept, self.reject = make_match(accept), make_match(reject)
-        omit = to_set(omit)
+        self.omit = to_set(omit)
         if auto_omit and self.accept:
-            omit.update(k for k, v in self.accept.items() if len(v) == 1)
+            self.omit.update(k for k, v in self.accept.items() if len(v) == 1)
 
         self.normalizers = normalizers or {}
-        self.keys_by_type = {}
-        for k, v in (keys_by_type or {}).items():
-            if isinstance(v, str):
-                v = [v]
-            self.keys_by_type[k] = tuple(i for i in v if i not in omit)
+        if keys_by_type is None:
+            self.keys_by_type = None
+        else:
+            self.keys_by_type = {}
+            for k, v in keys_by_type.items():
+                if isinstance(v, str):
+                    v = [v]
+                self.keys_by_type[k] = tuple(i for i in v if i not in self.omit)
 
     def extract(self, msg):
         """Yield an ordered dictionary if msg['type'] is in keys_by_type."""
@@ -69,9 +72,19 @@ class Extractor:
             normalizer = self.normalizers.get(key, lambda x: x)
             return normalizer(v)
 
+        def odict(keys):
+            return collections.OrderedDict((k, normal(k)) for k in keys)
+
         def match(m):
             return (msg.get(k) in v for k, v in m.items()) if m else ()
 
-        keys = self.keys_by_type.get(msg.get('type'))
-        if keys and all(match(self.accept)) and not any(match(self.reject)):
-            return collections.OrderedDict((k, normal(k)) for k in keys)
+        accept = all(match(self.accept))
+        reject = any(match(self.reject))
+
+        if reject or not accept:
+            keys = ()
+        elif self.keys_by_type is None:
+            keys = [k for k in msg.keys() if k not in self.omit]
+        else:
+            keys = self.keys_by_type.get(msg.get('type'))
+        return odict(keys)
