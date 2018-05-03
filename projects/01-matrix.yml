@@ -10,6 +10,7 @@ layout:
 run:
     fps: 30
     seconds: 14
+    threaded: true  # This is the only place we test threaded animations.
 
 aliases:
     bpa: BiblioPixelAnimations.matrix
