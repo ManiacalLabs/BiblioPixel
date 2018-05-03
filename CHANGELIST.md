@@ -1,3 +1,7 @@
+## v3.4.17 - 2018-05-03
+- Rework Runnable and threads for better shutdown
+- New ArtNet control
+
 ## v3.4.16 - 2018-04-19
 - Better error handling
 - Add a timeout to UDP sockets
