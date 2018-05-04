@@ -1,0 +1,25 @@
+{
+    "shape": 85,
+    "animation": "animation",
+
+    "controls": {
+        "typename": "artnet",
+        "verbose": true,
+
+        "extractor": {
+            "omit": ["net", "subUni"]
+        },
+
+        "routing": {
+            "dmx": "animation.color_list"
+        },
+
+        "ip_address": "127.0.0.1"
+    },
+
+    "run": {
+        "fps": 30
+    },
+
+    "driver": "simpixel"
+}
