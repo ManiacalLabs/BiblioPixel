@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+import time
+from bibliopixel.util import udp, artnet_message
+
+ADDRESS = '127.0.0.1', artnet_message.UDP_PORT
+
+
+def send_artnet():
+    message = artnet_message.dmx_message()
+    with udp.Sender(ADDRESS).joiner() as sender:
+        while True:
+            message.data[:] = [255 - i for i in message.data]
+            sender.send(message)
+            print('sent', message.data[0])
+            time.sleep(1)
+
+
+if __name__ == '__main__':
+    send_artnet()
