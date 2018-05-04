@@ -12,7 +12,6 @@ class ArtNet(control.ExtractedControl):
 
     def _convert(self, msg):
         msg = artnet_message.bytes_to_message(msg)
-        assert any(i for i in msg.data)
         msg = collections.OrderedDict((
             ('type', 'dmx'),
             ('net', msg.net),
