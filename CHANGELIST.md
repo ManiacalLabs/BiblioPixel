@@ -1,3 +1,7 @@
+## v3.4.18 - 2018-05-04
+- Remove test that crashes ArtNet
+- Test project for ArtNet
+
 ## v3.4.17 - 2018-05-03
 - Rework Runnable and threads for better shutdown
 - New ArtNet control
