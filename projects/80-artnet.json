@@ -12,9 +12,7 @@
 
         "routing": {
             "dmx": "animation.color_list"
-        },
-
-        "ip_address": "127.0.0.1"
+        }
     },
 
     "run": {

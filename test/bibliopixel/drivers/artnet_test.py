@@ -12,10 +12,7 @@ ADDRESS = LOCALHOST, artnet_message.UDP_PORT
 MAX_STEPS = 3
 
 PROJECT = {
-    "driver": {
-        "typename": "artnet",
-        "ip_address": LOCALHOST
-    },
+    "driver": "artnet",
     "shape": 12,
     "animation": ".tests.StripChannelTest",
     "run": {
@@ -56,3 +53,31 @@ class DMXMessageTest(unittest.TestCase):
 
         self.assertEquals(failures, [])
         self.assertEquals(bytes(blackout), bytes(artnet_message.dmx_message()))
+
+    def _make_driver_and_copy(self, numLEDs, offset=0):
+        driver = artnet.ArtNet(numLEDs, offset=offset)
+        driver._buf[:] = (i % 256 for i in range(len(driver._buf)))
+        driver._copy_buffer_into_data()
+        return list(driver._buf), list(driver.msg.data)
+
+    def test_big(self):
+        buffer, data = self._make_driver_and_copy(500)
+        self.assertEquals(buffer[:len(data)], data)
+
+    def test_little(self):
+        buffer, data = self._make_driver_and_copy(8)
+        self.assertEquals(buffer, data[:len(buffer)])
+
+    def test_big_offset(self):
+        buffer, data = self._make_driver_and_copy(500, 4)
+        self.assertEquals(buffer[4:4 + len(data)], data)
+
+    def test_little_offset(self):
+        buffer, data = self._make_driver_and_copy(8, 4)
+        split_point = len(buffer) - 4
+        self.assertEquals(buffer[4:], data[:split_point])
+        self.assertTrue(all(d == 0 for d in data[split_point:]))
+
+    def test_big_offset_negative(self):
+        buffer, data = self._make_driver_and_copy(500, -4)
+        self.assertEquals(buffer[4:4 + len(data)], data)
