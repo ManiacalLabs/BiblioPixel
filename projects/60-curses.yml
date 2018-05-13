@@ -1,0 +1,45 @@
+shape: [32, 32]
+driver:
+    typename: .curses
+    width: 32
+    height: 32
+
+run:
+    fps: 5
+    seconds: 14
+    main: bibliopixel.drivers.curses.Curses.main
+    threaded: true
+
+aliases:
+    bpa: BiblioPixelAnimations.matrix
+    Fill: BiblioPixelAnimations.simple.Fill
+
+animation:
+    typename: sequence
+    length: 2
+    animations:
+        - "@bpa.ImageAnim"
+        - "@bpa.ImageShow"
+        - "@bpa.ImageDissolve"
+        - "@bpa.ScreenGrab"
+        - "@bpa.AnalogClock"
+        - "@bpa.AnalogClock"
+        - "@bpa.BinaryClock.MatrixBinaryClock"
+        - "@bpa.CPUUsage"
+        - "@bpa.GameOfLife"
+        - "@bpa.GameOfLife.GameOfLifeRGB"
+        - "@bpa.GradientClock"
+        - "@bpa.LangtonsAnt"
+        - "@bpa.LangtonsAnt.LangtonsAntRainbow"
+        - "@bpa.Mainframe"
+        - "@bpa.MatrixRain"
+        - "@bpa.MatrixRain.MatrixRainBow"
+        - "@bpa.SpinningTriangle"
+        - "@bpa.TallClock"
+        - "@bpa.Text.BounceText"
+        - "@bpa.Text.ScrollText"
+        - "@bpa.TicTacToe"
+        - "@bpa.bloom"
+        - "@bpa.circlepop"
+        - "@bpa.perlin_simplex"
+        - "@bpa.pinwheel"
