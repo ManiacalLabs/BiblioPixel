@@ -1,9 +1,10 @@
 import ctypes, functools
+from . import log
 
 DMX_LENGTH = 512
 ARTNET_DMX = 0x5000
 ARTNET_VERSION = 14
-NAME = 'Art-Net\x00'
+NAME = b'Art-Net\x00'
 MAX_NET = 0xFF
 MAX_SUBNET = 0xF
 MAX_UNIVERSE = 0xF
@@ -55,7 +56,7 @@ def dmx_message(
     hi, lo = divmod(length, 256)
 
     msg = Message(
-        id=NAME.encode(),
+        id=NAME,
         opCode=ARTNET_DMX,
         protVerLo=ARTNET_VERSION,
         sequence=sequence,
@@ -81,4 +82,9 @@ def bytes_to_message(b):
     length = len(b) - EMPTY_MESSAGE_SIZE
     assert 0 <= length <= DMX_LENGTH
 
-    return MessageClass(length).from_buffer(b)
+    result = MessageClass(length).from_buffer(b)
+    if result.id == NAME[:-1]:
+        return result
+    # For some reason, ctypes throws away that trailing \0 character
+    # when converting back to bytes().
+    log.error('Expected name %s but got name %s', NAME[:-1], result.id)

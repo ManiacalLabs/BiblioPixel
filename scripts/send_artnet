@@ -3,7 +3,7 @@
 import time
 from bibliopixel.util import udp, artnet_message
 
-ADDRESS = '127.0.0.1', artnet_message.UDP_PORT
+ADDRESS = '', artnet_message.UDP_PORT
 
 
 def send_artnet():

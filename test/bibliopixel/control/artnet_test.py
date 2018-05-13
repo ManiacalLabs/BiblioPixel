@@ -53,6 +53,21 @@ class ArtNetControlTest(unittest.TestCase):
         self.assertEqual(actual[-2], 0)
         self.assertEqual(actual[-1], 0)
 
+    def offset_test(self, offset):
+        control = artnet.ArtNet(offset=offset)
+        msg = artnet_message.dmx_message()
+        msg.data[:] = [i % 256 for i in range(len(msg.data))]
+        result = control._convert(bytes(msg))
+        return list(msg.data), list(result['data'])
+
+    def test_offset_positive(self):
+        data, result = self.offset_test(4)
+        self.assertEqual(result, [0, 0, 0, 0] + data[:-4])
+
+    def test_offset_negative(self):
+        data, result = self.offset_test(-4)
+        self.assertEqual(result, data[4:] + [0, 0, 0, 0])
+
 
 def make_project(datafile):
     data = json.loads(datafile, '.yml')
@@ -64,11 +79,10 @@ TEST_DATA = bytearray(range(256)) + bytearray(range(256))
 OUTGOING_MESSAGE = artnet_message.dmx_message(data=TEST_DATA)
 PIXEL_COUNT = len(TEST_DATA) // 3
 
-IP_ADDRESS = '127.0.0.1'
 ARTNET_PORT = artnet_message.UDP_PORT
 ALTERNATE_PORT = ARTNET_PORT + 1
-SEND_ADDRESS = IP_ADDRESS, ARTNET_PORT
-RECEIVE_ADDRESS = IP_ADDRESS, ALTERNATE_PORT
+SEND_ADDRESS = '', ARTNET_PORT
+RECEIVE_ADDRESS = '', ALTERNATE_PORT
 
 
 ARTNET_CONTROL = """
@@ -78,7 +92,6 @@ animation: animation
 
 controls:
   typename: artnet
-  ip_address: {IP_ADDRESS}
   pre_routing: ".test_callback()"
   extractor:
     omit: [type, net, subUni]
@@ -96,7 +109,6 @@ animation: animation
 
 controls:
   typename: artnet
-  ip_address: {IP_ADDRESS}
   port: {ARTNET_PORT}
 
   extractor:
@@ -109,7 +121,6 @@ controls:
 
 driver:
   typename: artnet
-  ip_address: {IP_ADDRESS}
   port: {ALTERNATE_PORT}
 
 run:
