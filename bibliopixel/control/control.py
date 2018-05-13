@@ -54,6 +54,8 @@ class Control(runnable.Runnable):
         Receive a message from the input source and perhaps raise an Exception.
         """
         msg = self._convert(msg)
+        if msg is None:
+            return
 
         str_msg = self.verbose and self._msg_to_str(msg)
         if self.verbose and log.is_debug():
@@ -66,7 +68,7 @@ class Control(runnable.Runnable):
         if receiver:
             receiver.receive(msg)
             if self.verbose:
-                log.info('Routed message %s (%s) to %s', str_msg, msg,
+                log.info('Routed message %s (%s) to %s', str_msg[:128], msg,
                          repr(receiver))
 
     def _convert(self, msg):
