@@ -5,7 +5,7 @@ class RETURN_CODES:
     SUCCESS = 255  # All is well
     REBOOT = 42  # Device reboot needed after configuration
     ERROR = 0  # Generic error
-    ERROR_SIZE = 1  # Data receieved does not match given command length
+    ERROR_SIZE = 1  # Data received does not match given command length
     ERROR_UNSUPPORTED = 2  # Unsupported command
     ERROR_PIXEL_COUNT = 3  # Too many pixels for device
     ERROR_BAD_CMD = 4  # Unknown Command
