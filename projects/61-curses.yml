@@ -1,0 +1,17 @@
+shape: [32, 32]
+driver:
+    typename: .curses
+    width: 32
+    height: 32
+
+run:
+    fps: 20
+    seconds: 14
+    main: bibliopixel.drivers.curses.Curses.main
+    threaded: true
+
+aliases:
+    bpa: BiblioPixelAnimations.matrix
+    Fill: BiblioPixelAnimations.simple.Fill
+
+animation: "@bpa.bloom"
