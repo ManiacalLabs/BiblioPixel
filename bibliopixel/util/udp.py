@@ -18,6 +18,7 @@ class Sender(runnable.Runnable):
 
     def send(self, msg):
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.settimeout(self.timeout)
             sock.connect(self.address)
             sock.send(msg)
@@ -64,6 +65,7 @@ class Receiver(runnable.Loop):
         self.bufsize = bufsize
         self.receive = receive or self.receive
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(self.address)
 
     def __str__(self):
