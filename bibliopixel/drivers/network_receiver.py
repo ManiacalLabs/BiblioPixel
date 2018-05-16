@@ -1,14 +1,8 @@
-import threading
-import os
+import os, threading
 
-try:
-    import SocketServer
-except:
-    import socketserver as SocketServer
+import socketserver as SocketServer
 from .. drivers.return_codes import RETURN_CODES
 from . network import CMDTYPE
-
-os.sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from .. util import log
 
 
