@@ -4,6 +4,7 @@ from . import (
 from .. util import exception, json, log
 
 EVENT_QUEUE_MAXSIZE = 1000
+NO_DATATYPE_ERROR = 'No "datatype" field in section "%s"'
 
 
 class Project:
@@ -13,7 +14,11 @@ class Project:
     def pre_recursion(desc):
         return cleanup.cleanup(desc)
 
-    def construct_child(self, datatype, typename=None, **kwds):
+    def construct_child(self, section_name, datatype=None, typename=None,
+                        **kwds):
+        if not datatype:
+            raise ValueError(NO_DATATYPE_ERROR % section_name)
+
         construct = getattr(datatype, 'construct', None)
         if construct:
             return construct(self, **kwds)
@@ -26,13 +31,13 @@ class Project:
         :param int event_queue_maxsize: maxsize parameter to queue.Queue.
             0 means an unbounded queue.
         """
-        def post(desc):
-            exception = desc.get('_exception')
-            if exception:
-                raise exception
-            return self.construct_child(**desc)
-
         def create(root, name):
+            def post(desc):
+                exception = desc.get('_exception')
+                if exception:
+                    raise exception
+                return self.construct_child(name, **desc)
+
             with exception.add('Unable to create ' + name):
                 return recurse.recurse(
                     root,
@@ -43,10 +48,10 @@ class Project:
         attributes.check(kwds, 'project')
         self.path = path
         layout = layout or cleanup.cleanup_layout(animation)
-        self.maker = self.construct_child(**maker)
+        self.maker = self.construct_child('maker', **maker)
         self.drivers = [create(d, 'drivers') for d in drivers]
         with exception.add('Unable to create layout'):
-            self.layout = self.construct_child(**layout)
+            self.layout = self.construct_child('layout', **layout)
 
         self.animation = create(animation, 'animation')
 
