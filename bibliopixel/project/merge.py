@@ -26,6 +26,7 @@ NOT_MERGEABLE = (
     'typename')
 
 SECTION_ISNT_DICT_ERROR = 'Project section "%s" is %s, should be dictionary'
+UNKNOWN_SECTION_ERROR = 'There is no Project section named "%s"'
 
 
 def merge(*projects):
@@ -39,6 +40,9 @@ def merge(*projects):
             if name in NOT_MERGEABLE:
                 result[name] = section
                 continue
+
+            if name not in DEFAULT_PROJECT:
+                raise ValueError(UNKNOWN_SECTION_ERROR % name)
 
             if section and not isinstance(section, (dict, str)):
                 cname = section.__class__.__name__

@@ -8,10 +8,18 @@ PYTHON_FILE = 'driver = {"a": "b"}'
 MISSING_LAYOUT = '{"animation": "off", "driver": "dummy"}'
 
 
-# This one works, but prints a warning.
 BAD_SECTION = """
 {
     "bad_section": {"foo": true},
+    "driver": "dummy",
+    "layout": "matrix",
+    "animation": "off"
+}
+"""
+
+BAD_SECTION2 = """
+{
+    "verbose": true,
     "driver": "dummy",
     "layout": "matrix",
     "animation": "off"
@@ -24,7 +32,7 @@ BAD_DRIVER_ATTRIBUTE = """
          "typename": "simpixel",
          "width": 16,
          "height": 16,
-        "bad_attribute": 16
+         "bad_attribute": 16
     },
     "layout": "matrix",
     "animation": "off"
@@ -79,7 +87,16 @@ class BadProjectTest(unittest.TestCase):
 
         self.assertEquals(
             e.exception.args,
-            ('Unknown attribute for project: "bad_section"',))
+            ('There is no Project section named "bad_section"',))
+
+    def test_bad_section2(self):
+        # See https://github.com/ManiacalLabs/BiblioPixel/issues/787
+        with self.assertRaises(ValueError) as e:
+            make(BAD_SECTION2)
+
+        self.assertEquals(
+            e.exception.args,
+            ('There is no Project section named "verbose"',))
 
     def test_bad_driver_attribute(self):
         with self.assertRaises(ValueError) as e:
