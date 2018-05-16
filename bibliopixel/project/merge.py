@@ -16,7 +16,7 @@ DEFAULT_PROJECT = collections.OrderedDict((
     ('shape', ()),
     ('layout', {}),
     ('run', {}),
-    ('animation', {}),
+    ('animation', {'typename': 'animation'}),
     ('controls', []),
 ))
 PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
@@ -52,5 +52,7 @@ def merge(*projects):
                     section['run'] = adesc.get('run', {})
 
             result.setdefault(name, {}).update(construct.to_type(section))
+            if 'datatype' in result[name]:
+                result[name].pop('typename', None)
 
     return result

@@ -17,7 +17,15 @@ def to_type(d):
     fn = load.load_if_filename(d)
     if fn:
         return fn
-    return {'typename': d} if isinstance(d, str) else copy.deepcopy(d)
+    if isinstance(d, str):
+        return {'typename': d}
+
+    result = copy.deepcopy(d)
+
+    # 'datatype' always overrides 'typename'
+    if 'datatype' in result:
+        result.pop('typename', None)
+    return result
 
 
 def to_type_constructor(value, python_path=None):
@@ -46,6 +54,7 @@ def to_type_constructor(value, python_path=None):
         try:
             value['datatype'] = importer.import_symbol(
                 r, python_path=python_path)
+            del value['typename']
         except Exception as e:
             value['_exception'] = e
 

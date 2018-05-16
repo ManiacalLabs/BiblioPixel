@@ -35,7 +35,6 @@ class RecurseTest(unittest.TestCase):
             'bing': 'bang',
         }
         expected = {
-            'typename': '%s.%s' % (Tester.__module__, Tester.__name__),
             'datatype': Tester,
             'foo': {'datatype': RecurseTest, 'foo': 'bar', 'color': colors.Red},
             'bing': 'post-bang',
