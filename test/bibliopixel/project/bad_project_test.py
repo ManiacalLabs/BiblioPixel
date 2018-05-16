@@ -6,7 +6,6 @@ from . make import make
 
 PYTHON_FILE = 'driver = {"a": "b"}'
 MISSING_LAYOUT = '{"animation": "off", "driver": "dummy"}'
-MISSING_ANIMATION = '{"layout": "matrix", "driver": "dummy"}'
 
 
 # This one works, but prints a warning.
@@ -117,16 +116,9 @@ class BadProjectTest(unittest.TestCase):
             e.exception.args,
             ('Missing "layout" section',))
 
-    def test_missing_animation(self):
-        with self.assertRaises(ValueError) as e:
-            make(MISSING_ANIMATION)
-        self.assertEquals(
-            e.exception.args,
-            ('Missing "animation" section',))
-
     def test_missing_everything(self):
         with self.assertRaises(ValueError) as e:
             make('{}')
         self.assertEquals(
             e.exception.args,
-            ('Missing "animation" section',))
+            ('Missing "layout" section',))

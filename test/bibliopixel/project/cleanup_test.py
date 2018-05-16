@@ -10,7 +10,6 @@ BASE = {
         'run': {},
         'datatype': OffAnim,
         'name': 'Off',
-        'typename': 'off',
     },
     'controls': [],
     'drivers': [{'typename': 'simpixel'}],
