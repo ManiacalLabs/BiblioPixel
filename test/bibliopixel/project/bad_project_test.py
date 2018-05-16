@@ -26,6 +26,17 @@ BAD_SECTION2 = """
 }
 """
 
+MISSING_DATATYPE = """
+{
+    "driver": {
+         "width": 16,
+         "height": 16
+    },
+    "layout": "matrix",
+    "animation": "off"
+}
+"""
+
 BAD_DRIVER_ATTRIBUTE = """
 {
     "driver": {
@@ -97,6 +108,14 @@ class BadProjectTest(unittest.TestCase):
         self.assertEquals(
             e.exception.args,
             ('There is no Project section named "verbose"',))
+
+    def test_missing_datatype(self):
+        with self.assertRaises(ValueError) as e:
+            make(MISSING_DATATYPE)
+        self.assertEquals(
+            e.exception.args,
+            ('Unable to create drivers',
+             'No "datatype" field in section "drivers"'))
 
     def test_bad_driver_attribute(self):
         with self.assertRaises(ValueError) as e:
