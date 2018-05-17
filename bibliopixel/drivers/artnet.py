@@ -1,6 +1,6 @@
 import copy, ctypes, enum
 from . server_driver import ServerDriver
-from .. util import artnet_message, log, server_cache, udp
+from .. util import artnet_message, log, offset_range, server_cache, udp
 
 
 class ArtNet(ServerDriver):
@@ -15,7 +15,7 @@ class ArtNet(ServerDriver):
         """
         super().__init__(*args, address=(ip_address, port), **kwds)
         self.filter_dupes = filter_dupes
-        self.offset = offset
+        self.offset = offset_range.DMXChannel(offset)
         self.msg = artnet_message.dmx_message()
         self.last_message = None
 
@@ -27,18 +27,7 @@ class ArtNet(ServerDriver):
             self.last_message = msg
 
     def _copy_buffer_into_data(self):
-        buf, offset, data = self._buf, self.offset, self.msg.data
-        if offset < 0:
-            buf = buf[-offset:]
-            offset = 0
-
-        delta = len(data) - len(buf) - offset
-        if delta <= 0:
-            # data is shorter
-            data[:] = buf[offset:offset + len(data)]
-        else:
-            # data is longer
-            data[:len(buf) - offset] = buf[offset:]
+        self.offset.copy_to(self._buf, self.msg.data)
 
     def _on_positions(self):
         pass
