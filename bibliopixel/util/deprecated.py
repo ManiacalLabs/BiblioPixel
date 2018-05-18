@@ -16,21 +16,7 @@ Specify what to do when a project uses deprecated features:
 DEPRECATED = set()
 FLAG = '--deprecated'
 V4_FLAG = '--v4'
-DEPRECATION_ON = None
-
-
-def _deprecation_on():
-    global DEPRECATION_ON
-
-    if DEPRECATION_ON is None:
-        try:
-            sys.argv.remove(FLAG)
-            DEPRECATION_ON = True
-        except:
-            pass
-        DEPRECATION_ON = DEPRECATION_ON or V4_FLAG in sys.argv
-
-    return DEPRECATION_ON
+ENVIRONMENT_VARIABLE = 'BP_DEPRECATED'
 
 
 def allowed():
@@ -65,12 +51,15 @@ def _compute_action():
         raise ValueError('%s needs an argument (one of %s)' %
                          (FLAG, ', '.join(CHOICES)))
 
-    d = [i for i, v in enumerate(sys.argv) if v.startswith(FLAG + '=')]
-    if not d:
-        ACTION = DEFAULT
+    if V4_FLAG in sys.argv:
+        ACTION = 'fail'
 
-    elif len(d) > 1:
+    d = [i for i, v in enumerate(sys.argv) if v.startswith(FLAG + '=')]
+    if len(d) > 1:
         raise ValueError('Only one %s argument can be used' % FLAG)
+
+    if not d:
+        ACTION = os.getenv(ENVIRONMENT_VARIABLE, ACTION or DEFAULT)
 
     else:
         arg = sys.argv.pop(d[0])
@@ -82,12 +71,9 @@ def _compute_action():
         if not (rest and rest[0].strip()):
             raise ValueError('%s needs an argument (one of %s)' %
                              (FLAG, ', '.join(CHOICES)))
-
-        if rest[0] not in CHOICES:
-            raise ValueError('Unknown argument to %s (must be one of %s)' %
-                             (FLAG, ', '.join(CHOICES)))
-            raise ValueError('Bad deprecated value %s' % rest[0])
-
         ACTION = rest[0]
 
-    return ACTION
+    if ACTION not in CHOICES:
+        ACTION = None
+        raise ValueError('Unknown deprecation value (must be one of %s)' %
+                         ', '.join(CHOICES))
