@@ -48,15 +48,15 @@ class BaseGameAnim(BaseMatrixAnim):
             val = self._keys[key]
             if key in kf:
                 cfg = kf[key]
-                speedPass = self._checkSpeed(cfg.speed)
+                speed_pass = self._checkSpeed(cfg.speed)
 
                 if cfg.hold:
-                    if speedPass:
+                    if speed_pass:
                         if (val or cfg.inter):
                             cfg.func()
                         else:
                             cfg.inter = cfg.last = val
-                elif speedPass:
+                elif speed_pass:
                     if (val or cfg.inter) and not cfg.last:
                         cfg.func()
                     cfg.inter = cfg.last = val

@@ -372,26 +372,26 @@ def draw_char(fonts, setter, width, height, x, y, c, color, bg, aa=False, font=f
 
     fw = len(c_data)
     for i in range(fw + f['sep']):
-        xPos = x + (i * font_scale)
-        if max(0, 1 - font_scale * fw) <= xPos < width:
+        x_pos = x + (i * font_scale)
+        if max(0, 1 - font_scale * fw) <= x_pos < width:
             if i >= fw:
                 line = 0
             else:
                 line = FONT[c][i]
             for j in range(fh):
-                yPos = y + (j * font_scale)
-                if ((yPos < height) and
-                        (yPos + fh * font_scale - 1) >= 0):
+                y_pos = y + (j * font_scale)
+                if ((y_pos < height) and
+                        (y_pos + fh * font_scale - 1) >= 0):
                     if line & 0x1:
                         if font_scale == 1:
-                            setter(xPos, yPos, color)
+                            setter(x_pos, y_pos, color)
                         else:
-                            fill_rect(setter, xPos, yPos, font_scale, font_scale, color, aa)
+                            fill_rect(setter, x_pos, y_pos, font_scale, font_scale, color, aa)
                     elif bg != color and bg is not None:
                         if font_scale == 1:
-                            setter(xPos, yPos, bg)
+                            setter(x_pos, y_pos, bg)
                         else:
-                            fill_rect(setter, xPos, yPos, font_scale, font_scale, bg, aa)
+                            fill_rect(setter, x_pos, y_pos, font_scale, font_scale, bg, aa)
                 line >>= 1
     return fw + f['sep']
 
