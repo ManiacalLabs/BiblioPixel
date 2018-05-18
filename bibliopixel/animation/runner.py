@@ -3,6 +3,8 @@ from enum import IntEnum
 from .. util import log
 from .. project import attributes, load
 
+DEFAULT_FPS = 24
+
 
 class STATE(IntEnum):
     ready = 0
@@ -15,7 +17,7 @@ class STATE(IntEnum):
 
 class Runner(object):
 
-    def __init__(self, *, amt=1, fps=None, sleep_time=0, max_steps=0,
+    def __init__(self, *, amt=1, fps=0, sleep_time=0, max_steps=0,
                  until_complete=False, max_cycles=0, seconds=None,
                  threaded=False, main=None, **kwds):
         attributes.check(kwds, 'run')
@@ -29,6 +31,9 @@ class Runner(object):
         if max_cycles < 0:
             log.error('max_cycles %s < 0', max_cycles)
             max_cycles = 0
+        if fps < 0:
+            log.error('fps %s < 0', fps)
+            fps = 0
 
         if sleep_time and fps:
             log.error('sleep_time=%s and fps=%s cannot both be set',
@@ -40,7 +45,14 @@ class Runner(object):
             max_steps = 0
 
         self.amt = amt
-        self.sleep_time = 1 / fps if fps else sleep_time
+
+        if fps:
+            self.sleep_time = 1 / fps
+        elif sleep_time:
+            self.sleep_time = sleep_time
+        else:
+            self.sleep_time = 1 / DEFAULT_FPS
+
         self.until_complete = until_complete
         self.seconds = seconds
         self.run_start_time = 0
