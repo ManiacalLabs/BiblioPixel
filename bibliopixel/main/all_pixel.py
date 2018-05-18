@@ -83,15 +83,15 @@ def run(args):
             raise ValueError()
 
         spi = 2
-        useSPI = t[0] in SPIChipsets
-        if useSPI:
+        use_spi = t[0] in SPIChipsets
+        if use_spi:
             spi = get_int('SPI Speed (1-24): ', invalid=0)
             if spi <= 0:
                 log.printer('\nInvalid choice!')
                 raise ValueError()
 
         details = 'Device: {}\nLED Type: {}\nNum LEDs: {}'.format(d, t[1], num)
-        if useSPI:
+        if use_spi:
             details += '\nSPI Speed: {}'.format(spi)
 
         log.printer('\n' + details + '\n')

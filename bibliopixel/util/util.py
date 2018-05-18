@@ -60,7 +60,7 @@ def genVector(width, height, x_mult=1, y_mult=1):
     x_mult - value to scale x-axis by
     y_mult - value to scale y-axis by
     """
-    centerX = (width - 1) / 2.0
-    centerY = (height - 1) / 2.0
+    center_x = (width - 1) / 2.0
+    center_y = (height - 1) / 2.0
 
-    return [[int(math.sqrt(math.pow(x - centerX, 2 * x_mult) + math.pow(y - centerY, 2 * y_mult))) for x in range(width)] for y in range(height)]
+    return [[int(math.sqrt(math.pow(x - center_x, 2 * x_mult) + math.pow(y - center_y, 2 * y_mult))) for x in range(width)] for y in range(height)]
