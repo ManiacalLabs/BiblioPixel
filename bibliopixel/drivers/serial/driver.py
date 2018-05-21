@@ -84,9 +84,10 @@ class Serial(DriverBase):
 
     def _connect(self):
         try:
-            self.devices.find_serial_devices()
-            idv = self.devices.get_device(self.device_id)
-            self.device_id, self.dev, self.device_version = idv
+            if not self.dev:
+                self.devices.find_serial_devices()
+                idv = self.devices.get_device(self.device_id)
+                self.device_id, self.dev, self.device_version = idv
             try:
                 self._com = serial.Serial(
                     self.dev, baudrate=self.devices.baudrate, timeout=5)
