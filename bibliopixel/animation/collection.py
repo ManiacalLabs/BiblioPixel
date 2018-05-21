@@ -1,6 +1,6 @@
 import os
 from .. project import aliases, construct, load, project
-from . import animation
+from . import animation, failed
 from .. util import json, log
 
 
@@ -37,7 +37,7 @@ class Collection(animation.Animation):
             run.update(animation.get('run', {}))
             animation['run'] = run
 
-            datatype = animation['datatype']
+            datatype = animation.setdefault('datatype', failed.Failed)
             name = animation.setdefault('name', datatype.__name__)
             name_count[name] = 1 + name_count.get(name, 0)
 

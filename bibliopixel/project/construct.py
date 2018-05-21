@@ -43,7 +43,11 @@ def to_type_constructor(value, python_path=None):
     typename = value.get('typename')
     if typename:
         r = aliases.resolve(typename)
-        value['datatype'] = importer.import_symbol(r, python_path=python_path)
+        try:
+            value['datatype'] = importer.import_symbol(
+                r, python_path=python_path)
+        except Exception as e:
+            value['_exception'] = e
 
     return value
 
