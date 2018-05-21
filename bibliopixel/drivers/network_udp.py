@@ -14,7 +14,8 @@ class CMDTYPE:
 class NetworkUDP(DriverBase):
     """Driver for communicating with another device on the network via UDP
 
-    To be used with either BiblioPixelAnimations.receivers.GenericNetworkReceiver
+    To be used with either
+    BiblioPixelAnimations.receivers.GenericNetworkReceiver
     or :py:class:`.network_receiver.NetworkReceiver`
 
     Provides the same parameters of :py:class:`.driver_base.DriverBase` as

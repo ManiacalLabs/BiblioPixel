@@ -27,7 +27,8 @@ class Hue(DriverBase):
 
         if nameMap and len(nameMap) != self.numLEDs:
             raise ValueError(
-                "nameMap must have the same number of entries as the number of LEDs.")
+                "nameMap must have the same number of entries as the number "
+                "of LEDs.")
 
         self._bridge = Bridge(ip)
         self._bridge.connect()
@@ -54,7 +55,7 @@ class Hue(DriverBase):
         self._transitionTime = int(time * 10)
 
     def _mapRange(self, value, minFrom, maxFrom, minTo, maxTo):
-        return minTo + (maxTo - minTo) * ((value - minFrom) / (maxFrom - minFrom))
+        return minTo + (maxTo - minTo) * (value - minFrom) / (maxFrom - minFrom)
 
     def _rgb2hs(self, rgb):
         r = rgb[0] / 255.0

@@ -106,7 +106,8 @@ CUBE_PROJECT = {
         'animations': [
             {
                 'animation': {
-                    'typename': 'BiblioPixelAnimations.cube.wave_spiral.WaveSpiral',
+                    'typename':
+                        'BiblioPixelAnimations.cube.wave_spiral.WaveSpiral',
                     'dir': False,
                     'offset': 6
                 },

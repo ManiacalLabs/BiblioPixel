@@ -22,7 +22,9 @@ It must be one of the configured animation names."""
 
 
 def normalize_name(name):
-    return ''.join('_' if e is ' ' else e for e in name if e.isalnum() or e is ' ' or e is '_')
+    return ''.join('_' if e is ' ' else e
+                   for e in name
+                   if e.isalnum() or e is ' ' or e is '_')
 
 
 class RemoteControl(wrapper.Indexed):
@@ -158,7 +160,8 @@ class RemoteControl(wrapper.Indexed):
                 load.code(typename)  # attempt early to fail early
                 self.triggers.setdefault(typename, []).extend((events, trigger))
             else:
-                raise ValueError('Triggers require `typename` and `events` fields!')
+                raise ValueError(
+                    'Triggers require `typename` and `events` fields!')
 
         for typename, trigger in self.triggers.items():
             events, kwargs = trigger

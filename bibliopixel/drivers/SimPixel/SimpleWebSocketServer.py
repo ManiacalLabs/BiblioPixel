@@ -567,8 +567,8 @@ class WebSocket(object):
 
 
 class SimpleWebSocketServer(object):
-
-    def __init__(self, host, port, websocketclass, selectInterval=0.1, **kwargs):
+    def __init__(
+            self, host, port, websocketclass, selectInterval=0.1, **kwargs):
         self.websocketclass = websocketclass
         self.websock_kwargs = kwargs
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -614,7 +614,8 @@ class SimpleWebSocketServer(object):
 
             if self.selectInterval:
                 rList, wList, xList = select(
-                    self.listeners, writers, self.listeners, self.selectInterval)
+                    self.listeners, writers,
+                    self.listeners, self.selectInterval)
             else:
                 rList, wList, xList = select(
                     self.listeners, writers, self.listeners)

@@ -15,7 +15,8 @@ class CMDTYPE:
 class Network(DriverBase):
     """Driver for communicating with another device on the network.
 
-    To be used with either BiblioPixelAnimations.receivers.GenericNetworkReceiver
+    To be used with either
+    BiblioPixelAnimations.receivers.GenericNetworkReceiver
     or :py:class:`.network_receiver.NetworkReceiver`
 
     Provides the same parameters of :py:class:`.driver_base.DriverBase` as
@@ -25,7 +26,8 @@ class Network(DriverBase):
     :param int port: Network port of receiver
     """
 
-    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142, **kwds):
+    def __init__(self, num=0, width=0, height=0, host="localhost", port=3142,
+                 **kwds):
         super().__init__(num, width, height, **kwds)
 
         self._host = host

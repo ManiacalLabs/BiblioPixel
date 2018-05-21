@@ -4,11 +4,22 @@ import serial, serial.tools.list_ports
 from .. drivers.return_codes import RETURN_CODES, print_error
 from . gamepad import BaseGamePad
 
+VERSION_ERROR = """
+pyserial v{} found, please upgrade to v2.7+!
+    pip install pyserial --upgrade
+"""
+
+UNABLE_TO_CONNECT_ERROR = """
+Unable to connect to the device.
+Please check that it is connected and the correct port is selected.
+"""
+
 if LooseVersion(serial.VERSION) < LooseVersion('2.7'):
-    error = "pyserial v{} found, please upgrade to v2.7+! pip install pyserial --upgrade".format(
-        serial.VERSION)
+    error = VERSION_ERROR.format(serial.VERSION)
     log.error(error)
     raise ImportError(error)
+
+BTN_MAP = ('A', 'B', 'SELECT', 'START', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'X', 'Y')
 
 
 class CMDTYPE:
@@ -25,7 +36,7 @@ class SerialPadError(Exception):
 class SerialGamePad(BaseGamePad):
     devices = []
 
-    def __init__(self, btn_map=["A", "B", "SELECT", "START", "UP", "DOWN", "LEFT", "RIGHT", "X", "Y"], dev="", hardwareID="1B4F:9206"):
+    def __init__(self, btn_map=BTN_MAP, dev="", hardwareID="1B4F:9206"):
         super().__init__()
         self._map = btn_map
         self._hardwareID = hardwareID
@@ -103,7 +114,7 @@ class SerialGamePad(BaseGamePad):
             return resp and ord(resp)
 
         except serial.SerialException as e:
-            error = "Unable to connect to the device. Please check that it is connected and the correct port is selected."
+            error = UNABLE_TO_CONNECT_ERROR
             log.exception(e)
             log.error(error)
             raise e

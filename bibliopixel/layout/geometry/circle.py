@@ -31,7 +31,8 @@ def make_circle_coord_map(rings=None, pixels_per=None, offset=0, invert=False):
         out_rings = []
         for r in rings:
             if len(r) != 2:
-                raise ValueError('"rings" values must only be first and last index.')
+                raise ValueError(
+                    '"rings" values must only be first and last index.')
             if r[0] < r[1]:
                 indices = list(range(r[0], r[1]))
             else:
@@ -45,7 +46,8 @@ def make_circle_coord_map(rings=None, pixels_per=None, offset=0, invert=False):
         return (out_rings, calc_ring_steps(out_rings))
 
 
-def make_circle_coord_map_positions(rings, origin=(0, 0, 0), z_diff=0, radii=None):
+def make_circle_coord_map_positions(
+        rings, origin=(0, 0, 0), z_diff=0, radii=None):
     if len(origin) not in [2, 3]:
         raise ValueError('origin must be (x,y) or (x,y,z)')
 

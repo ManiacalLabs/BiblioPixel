@@ -15,7 +15,8 @@ class Strip(MultiLayout):
         self.pixelWidth = pixelWidth
         if self.pixelWidth < 1 or self.pixelWidth > self.numLEDs:
             raise ValueError(
-                "pixelWidth must be greater than 0 and less than or equal to the total LED count!")
+                "pixelWidth must be greater than 0 and less than or equal to "
+                "the total LED count!")
         if self.numLEDs % self.pixelWidth != 0:
             raise ValueError(
                 "Total LED count must be evenly divisible by pixelWidth!")
@@ -27,7 +28,8 @@ class Strip(MultiLayout):
 
         if self.coord_map:
             if len(self.coord_map) != self.numLEDs:
-                raise ValueError('coord_map length must equal total number of pixels!')
+                raise ValueError(
+                    'coord_map length must equal total number of pixels!')
             self.set_base = self._set_strip_mapped
         else:
             self.set_base = self._set_base

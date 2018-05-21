@@ -237,8 +237,9 @@ class MultiLayout(Layout):
         DEPRECATED: use self.color_list
 
         Use with extreme caution!
-        Directly sets the internal buffer and bypasses all brightness and rotation control.
-        buf must also be in the exact format required by the display type.
+        Directly sets the internal buffer and bypasses all brightness and
+        rotation control buf must also be in the exact format required by the
+        display type.
         """
         util.deprecated.deprecated('layout.set_colors')
         if len(self._colors) != len(buf):

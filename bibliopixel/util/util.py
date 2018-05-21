@@ -34,7 +34,10 @@ def even_dist(start, stop, steps):
 
 
 def pointOnCircle(cx, cy, radius, angle):
-    """Calculates the coordinates of a point on a circle given the center point, radius, and angle"""
+    """
+    Calculates the coordinates of a point on a circle given the center point,
+    radius, and angle.
+    """
     angle = math.radians(angle) - (math.pi / 2)
     x = cx + radius * math.cos(angle)
     if x < cx:
@@ -53,14 +56,20 @@ def pointOnCircle(cx, cy, radius, angle):
 
 
 def genVector(width, height, x_mult=1, y_mult=1):
-    """Generates a map of vector lengths from the center point to each coordinate
+    """
+    Generates a map of vector lengths from the center point to each coordinate.
 
-    widht - width of matrix to generate
+    width - width of matrix to generate
     height - height of matrix to generate
     x_mult - value to scale x-axis by
     y_mult - value to scale y-axis by
     """
-    center_x = (width - 1) / 2.0
-    center_y = (height - 1) / 2.0
+    center_x = (width - 1) / 2
+    center_y = (height - 1) / 2
 
-    return [[int(math.sqrt(math.pow(x - center_x, 2 * x_mult) + math.pow(y - center_y, 2 * y_mult))) for x in range(width)] for y in range(height)]
+    def length(x, y):
+        dx = math.pow(x - center_x, 2 * x_mult)
+        dy = math.pow(y - center_y, 2 * y_mult)
+        return int(math.sqrt(dx + dy))
+
+    return [[length(x, y) for x in range(width)] for y in range(height)]

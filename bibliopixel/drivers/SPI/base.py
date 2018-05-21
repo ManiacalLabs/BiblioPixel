@@ -14,7 +14,8 @@ class SPIBase(DriverBase):
 
     :param str dev: SPI device path
     :param str spi_interface: Interface API with which to connect to the SPI
-        device. One of :py:class:`bibliopixel.drivers.spi_interfaces.SPI_INTERFACES`
+        device. One of
+        :py:class:`bibliopixel.drivers.spi_interfaces.SPI_INTERFACES`
     :param int spi_speed: Output data rate, in MHz
     :param interface: DEPRECATED - Use spi_interface
     """
