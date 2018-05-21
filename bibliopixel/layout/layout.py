@@ -90,7 +90,10 @@ class Layout(object):
 
     def cleanup(self):
         self.all_off()
-        self.push_to_driver()
+        try:
+            self.push_to_driver()
+        except:
+            pass
         self.threading.wait_for_update()
 
     def clone(self):

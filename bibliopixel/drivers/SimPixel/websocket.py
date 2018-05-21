@@ -37,13 +37,19 @@ class Client(WebSocket):
 
 
 class Server:
-
     def __init__(self, port, selectInterval):
         self.clients = set()
         self.state = {}
 
-        self.ws_server = SimpleWebSocketServer(
-            '', port, Client, server=self, selectInterval=selectInterval)
+        try:
+            self.ws_server = SimpleWebSocketServer(
+                '', port, Client, server=self, selectInterval=selectInterval)
+        except PermissionError as e:
+            if port < 1024:
+                msg = PORT_BELOW_1024_ERROR.format(**locals())
+                raise ValueError(msg, *e.args)
+            raise e
+
         self.thread = threading.Thread(target=self.target, daemon=True)
         self.thread.start()
 
@@ -81,3 +87,11 @@ class Server:
             self.clients.remove(client)
         except:
             pass
+
+
+PORT_BELOW_1024_ERROR = """
+SimPixel attempted to open a port at {port} and got a PermissionError.
+
+Many systems disallow binding to any port below 1024 for non-root users.
+Try again with a port number that's 1024 or greater.
+"""

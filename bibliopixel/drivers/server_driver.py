@@ -36,7 +36,7 @@ class ServerDriver(DriverBase, StaticCache):
         pass
 
     def cleanup(self):
-        self.server.close()
+        self.server and self.server.close()
 
     def _compute_packet(self):
         self._render()
