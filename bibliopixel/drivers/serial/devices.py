@@ -73,14 +73,16 @@ class Devices(object):
                  device, id, version)
         return id, device, version
 
-    def error(self, fail=True):
+    def error(self, fail=True, action=''):
         """
         SHOULD BE PRIVATE METHOD
         """
-        error = "There was an unknown error communicating with the device."
-        log.error(error)
+        e = 'There was an unknown error communicating with the device.'
+        if action:
+            e = 'While %s: %s' % (action, e)
+        log.error(e)
         if fail:
-            raise IOError(error)
+            raise IOError(e)
 
     def set_device_id(self, dev, id, baudrate=921600):
         """Set device ID to new value.
@@ -100,7 +102,7 @@ class Devices(object):
 
         resp = com.read(1)
         if len(resp) == 0:
-            self.error()
+            self.error(action='set_device_id')
         elif ord(resp) != RETURN_CODES.SUCCESS:
             raise_error(ord(resp))
 
@@ -113,8 +115,10 @@ class Devices(object):
         packet = util.generate_header(CMDTYPE.GETID, 0)
         com = serial.Serial(dev, baudrate=baudrate, timeout=5)
         com.write(packet)
-        resp = ord(com.read(1))
-        return resp
+        resp = com.read(1)
+        if resp:
+            return resp
+        self.error(action='get_device_id')
 
     def _get_device_version(self, dev, baudrate=921600):
         packet = util.generate_header(CMDTYPE.GETVER, 0)
