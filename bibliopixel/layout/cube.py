@@ -23,10 +23,10 @@ class Cube(Layout):
             self.coord_map = coord_map
         else:
             if len(self.drivers) == 1:
-                log.info('Auto generating coordinate map. Use make_cube_coord_map directly if more control needed.')
                 self.coord_map = make_cube_coord_map(x, y, z)
             else:
-                raise TypeError("Must provide coord_map if using multiple drivers!")
+                raise TypeError(
+                    "Must provide coord_map if using multiple drivers!")
 
         self.set_pixel_positions(make_cube_coord_map_positions(self.coord_map))
 

@@ -10,7 +10,9 @@ from . import font
 
 
 def draw_circle(setter, x0, y0, r, color=None):
-    """Draws a circle at point x0, y0 with radius r of the specified RGB color"""
+    """
+    Draws a circle at point x0, y0 with radius r of the specified RGB color
+    """
     f = 1 - r
     ddF_x = 1
     ddF_y = -2 * r
@@ -99,7 +101,7 @@ def _fill_circle_helper(setter, x0, y0, r, cornername, delta, color=None):
 
 
 def fill_circle(setter, x0, y0, r, color=None):
-    """Draws a fillayout circle at point x0,y0 with radius r and specified color"""
+    """Draws a filled circle at point x0,y0 with radius r and specified color"""
     _draw_fast_vline(setter, x0, y0 - r, 2 * r + 1, color)
     _fill_circle_helper(setter, x0, y0, r, 3, 0, color)
 
@@ -356,7 +358,8 @@ def fill_triangle(setter, x0, y0, x1, y1, x2, y2, color=None, aa=False):
             _draw_fast_hline(setter, a, y, b - a + 1, color, aa)
 
 
-def draw_char(fonts, setter, width, height, x, y, c, color, bg, aa=False, font=font.default_font, font_scale=1):
+def draw_char(fonts, setter, width, height, x, y, c, color, bg,
+              aa=False, font=font.default_font, font_scale=1):
     if font_scale < 1:
         log.error('font_scale %s must be >= 1', font_scale)
         font_scale = 1
@@ -386,17 +389,21 @@ def draw_char(fonts, setter, width, height, x, y, c, color, bg, aa=False, font=f
                         if font_scale == 1:
                             setter(x_pos, y_pos, color)
                         else:
-                            fill_rect(setter, x_pos, y_pos, font_scale, font_scale, color, aa)
+                            fill_rect(setter, x_pos, y_pos, font_scale,
+                                      font_scale, color, aa)
                     elif bg != color and bg is not None:
                         if font_scale == 1:
                             setter(x_pos, y_pos, bg)
                         else:
-                            fill_rect(setter, x_pos, y_pos, font_scale, font_scale, bg, aa)
+                            fill_rect(setter, x_pos, y_pos, font_scale,
+                                      font_scale, bg, aa)
                 line >>= 1
     return fw + f['sep']
 
 
-def draw_text(fonts, setter, text, width, height, x=0, y=0, color=None, bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+def draw_text(fonts, setter, text, width, height, x=0, y=0,
+              color=None, bg=colors.Off, aa=False,
+              font=font.default_font, font_scale=1):
     fh = fonts[font]['height']
     for c in text:
         if c == '\n':
@@ -405,7 +412,8 @@ def draw_text(fonts, setter, text, width, height, x=0, y=0, color=None, bg=color
         elif c == '\r':
             pass  # skip it
         else:
-            fw = draw_char(fonts, setter, width, height, x, y, c, color, bg, aa, font, font_scale)
+            fw = draw_char(fonts, setter, width, height,
+                           x, y, c, color, bg, aa, font, font_scale)
             x += font_scale * fw
             if x >= width:
                 break

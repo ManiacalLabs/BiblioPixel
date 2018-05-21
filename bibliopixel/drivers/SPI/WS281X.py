@@ -17,13 +17,14 @@ class WS281X(SPIBase):
     """
 
     def __init__(self, num, gamma=_gamma.WS2812, spi_speed=3.2, **kwargs):
-        # WS281x need a base clock of ~1MHz with the encoding we need 3 times this clock
-        # After testing 3.0 to 3.2 looks like a good value
+        # WS281x need a base clock of ~1MHz - with the encoding, we need 3 times
+        # this clock.  After testing 3.0 to 3.2 looks like a good value
         super().__init__(num, gamma=gamma, spi_speed=spi_speed, **kwargs)
         if isinstance(self._interface, interfaces.SpiFileInterface):
             raise ValueError('SPI File interface is unsupported by WS281X')
         if num > MAX_PIXELS:
-            raise ValueError('WS2812X SPI driver only supports {} pixels max.'.format(MAX_PIXELS))
+            raise ValueError('WS2812X SPI driver only supports {} pixels max.'
+                             .format(MAX_PIXELS))
 
     # WS2812 requires gamma correction so we run it through gamma as the
     # channels are ordered

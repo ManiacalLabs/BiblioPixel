@@ -233,11 +233,10 @@ class Matrix(MultiLayout):
         """
         Draw a between x0, y0 and x1, y1 in an RGB color.
 
-        :param colorFunc: a function that takes an integer from x0 to x1 and returns
-            a color corresponding to that point
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
-
+        :param colorFunc: a function that takes an integer from x0 to x1 and
+            returns a color corresponding to that point
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.draw_line(self.set, x0, y0, x1, y1, color, colorFunc, aa)
 
@@ -255,10 +254,10 @@ class Matrix(MultiLayout):
         """
         Draw a between x0, y0 and x1, y1 in an RGB color.
 
-        :param colorFunc: a function that takes an integer from x0 to x1 and returns
-            a color corresponding to that point
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
+        :param colorFunc: a function that takes an integer from x0 to x1 and
+            returns a color corresponding to that point
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.wu_line(self.set, x0, y0, x1, y1, color, colorFunc)
 
@@ -266,8 +265,8 @@ class Matrix(MultiLayout):
         """
         Draw rectangle with top-left corner at x,y, width w and height h
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.draw_rect(self.set, x, y, w, h, color, aa)
 
@@ -276,8 +275,8 @@ class Matrix(MultiLayout):
         Draw a solid rectangle with top-left corner at (x, y), width w and
         height h.
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.fill_rect(self.set, x, y, w, h, color, aa)
 
@@ -290,9 +289,8 @@ class Matrix(MultiLayout):
         Draw a rounded rectangle with top-left corner at (x, y), width w,
         height h, and corner radius r
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
-
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.draw_round_rect(self.set, x, y, w, h, r, color, aa)
 
@@ -301,9 +299,8 @@ class Matrix(MultiLayout):
         Draw a rounded rectangle with top-left corner at (x, y), width w,
         height h, and corner radius r
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
-
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.fill_round_rect(self.set, x, y, w, h, r, color, aa)
 
@@ -311,9 +308,8 @@ class Matrix(MultiLayout):
         """
         Draw triangle with vertices (x0, y0), (x1, y1) and (x2, y2)
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
-
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            Otherwise use Xiaolin Wu's algorithm
         """
         md.draw_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
@@ -321,9 +317,8 @@ class Matrix(MultiLayout):
         """
         Draw filled triangle with points x0,y0 - x1,y1 - x2,y2
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
-
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.fill_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
@@ -343,11 +338,10 @@ class Matrix(MultiLayout):
         """
         Draw a line of text starting at (x, y) in an RGB color.
 
-        :param aa: if True, use Bresenham's algorithm for line drawing; otherwise use
-            Xiaolin Wu's algorithm
-        :param bg: if not None, draw a background of this color in the bounding
-            rectangle for the text block.
-
+        :param colorFunc: a function that takes an integer from x0 to x1 and
+            returns a color corresponding to that point
+        :param aa: if True, use Bresenham's algorithm for line drawing;
+            otherwise use Xiaolin Wu's algorithm
         """
         md.draw_text(self.fonts, self.set, text, self.width, self.height,
                      x, y, color, bg, aa, font, font_scale)

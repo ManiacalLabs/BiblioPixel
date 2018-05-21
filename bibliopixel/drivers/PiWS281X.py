@@ -1,4 +1,5 @@
-# Original code by msurguy: https://github.com/ManiacalLabs/BiblioPixel/issues/51#issuecomment-228662943
+# Original code by msurguy:
+# https://github.com/ManiacalLabs/BiblioPixel/issues/51#issuecomment-228662943
 
 import os, sys
 from . channel_order import ChannelOrder
@@ -54,6 +55,13 @@ STRIP_TYPES = {
 }
 
 
+# Including follow as comment as URLs in docstrings don't play well with
+# sphinx
+# Discussion re: running as sudo
+# https://groups.google.com/d/msg/maniacal-labs-users/6hV-2_-Xmqc/wmWJK709AQAJ
+# https://github.com/jgarff/rpi_ws281x/blob/master/python/neopixel.py#L106
+
+
 class PiWS281X(DriverBase):
     """
     Driver for controlling WS281X LEDs via the rpi_ws281x C-extension.
@@ -81,13 +89,11 @@ class PiWS281X(DriverBase):
     :param int gpio: GPIO pin to output to. Typically 18 or 13
     :param int ledFreqHz: WS2812B base data frequency in Hz. Only change to
         400000 if using very old WS218B LEDs
-    :param int ledDma: DMA channel to use for generating signal (Between 1 and 14)
-    :param bool ledInvert: True to invert the signal (when using NPN transistor level shift)
+    :param int ledDma: DMA channel to use for generating signal
+                       (between 1 and 14)
+    :param bool ledInvert: True to invert the signal
+                       (when using NPN transistor level shift)
     """
-    # Including follow as comment as URLs in docstrings don't play well with sphinx
-    # Discussion re: running as sudo
-    # https://groups.google.com/d/msg/maniacal-labs-users/6hV-2_-Xmqc/wmWJK709AQAJ
-    # https://github.com/jgarff/rpi_ws281x/blob/master/python/neopixel.py#L106
 
     def __init__(
             self, num, gamma=gamma.NEOPIXEL, c_order="RGB", gpio=18,
@@ -103,7 +109,7 @@ class PiWS281X(DriverBase):
         try:
             strip_type = STRIP_TYPES[color_channels]
         except:
-            raise ValueError('In PiWS281X, color_channels must be either 3 or 4')
+            raise ValueError('In PiWS281X, color_channels can only be 3 or 4')
 
         self._strip = Adafruit_NeoPixel(
             num, gpio, ledFreqHz, ledDma, ledInvert, brightness,
@@ -128,7 +134,8 @@ class PiWS281X(DriverBase):
     def _compute_packet(self):
         self._render()
         data = self._buf
-        self._packet = [tuple(data[(p * 3):(p * 3) + 3]) for p in range(len(data) // 3)]
+        self._packet = [tuple(data[(p * 3):(p * 3) + 3])
+                        for p in range(len(data) // 3)]
 
     def _send_packet(self):
         for i, p in enumerate(self._packet):

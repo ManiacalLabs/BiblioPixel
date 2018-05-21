@@ -23,7 +23,9 @@ class ThreadedDataHandler(SocketServer.BaseRequestHandler):
                         empty_count += 1
                     if empty_count >= 5:
                         log.exception(
-                            "Failed to receive expected amount of data! Expected: %s bytes / Received: %s bytes", size, len(data))
+                            "Failed to receive expected amount of data! "
+                            "Expected: %s bytes / Received: %s bytes",
+                            size, len(data))
                         self.request.sendall(RETURN_CODES.ERROR_SIZE)
                         return
 

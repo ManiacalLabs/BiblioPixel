@@ -22,7 +22,8 @@ class SpiBaseInterface(object):
 
     def error(self, text):
         """SHOULD BE PRIVATE"""
-        msg = 'Error with dev: {}, spi_speed: {} - {}'.format(self._dev, self._spi_speed, text)
+        msg = 'Error with dev: {}, spi_speed: {} - {}'.format(
+            self._dev, self._spi_speed, text)
         log.error(msg)
         raise IOError(msg)
 
@@ -108,7 +109,8 @@ class SpiPyDevInterface(SpiBaseInterface):
         self._spi.open(self._device_id, self._device_cs)
         self._spi.max_speed_hz = int(self._spi_speed * 1e6)
         log.info(
-            'py-spidev dev {:s} speed @ {:.2f} MHz'.format(self._dev, self._spi.max_speed_hz / 1e6))
+            'py-spidev dev {:s} speed @ {:.2f} MHz'.format(
+                self._dev, self._spi.max_speed_hz / 1e6))
 
     def send_packet(self, data):
         """SHOULD BE PRIVATE"""
