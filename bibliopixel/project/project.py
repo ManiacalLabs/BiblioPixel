@@ -27,6 +27,9 @@ class Project:
             0 means an unbounded queue.
         """
         def post(desc):
+            exception = desc.get('_exception')
+            if exception:
+                raise exception
             return self.construct_child(**desc)
 
         def create(root, name):

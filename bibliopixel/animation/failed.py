@@ -14,7 +14,14 @@ class Failed(animation.Animation):
         self._set_runner({})
         log.error('Unable to create animation for %s', desc)
         debug = log.get_log_level() <= log.DEBUG
-        msg = traceback.format_exc() if debug else str(exception)
+        if debug:
+            try:
+                msg = traceback.format_exc()
+            except:
+                msg = str(exception)
+        else:
+            msg = str(exception)
+
         log.error('\n%s', msg)
         self.desc = desc
         self.exception = exception
