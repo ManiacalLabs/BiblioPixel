@@ -14,8 +14,7 @@ DEFAULT_ANIM_CONFIG = {
 }
 DEFAULT_AUTO_DEMO_TIME = 10
 DEFAULT_AUTO_DEMO_NAME = 'DEMO_ANIM'
-OPENER_TIMEOUT = 10
-
+OPENER_TIMEOUT = 2
 
 BAD_DEFAULT_ERROR = """\
 `{}` is not a valid default!
@@ -89,7 +88,12 @@ class RemoteControl(wrapper.Indexed):
         self.anim_cfgs = [a.data for a in self.animations]
         self.name_map = name_map
         self.port = port
-        self.open_page = open_page
+        if open_page is False:
+            self.open_page = False
+        elif open_page is True:
+            self.open_page = OPENER_TIMEOUT
+        else:
+            self.open_page = float(open_page)
 
         for anim in self.animations:
             anim.on_completion = self.on_completion
@@ -134,8 +138,8 @@ class RemoteControl(wrapper.Indexed):
 
         self.server = multiprocessing.Process(target=server.run_server,
                                               args=server_args)
-        if self.open_page:
-            opener.opener('localhost', port, OPENER_TIMEOUT)
+        if self.open_page is not False:
+            opener.opener('localhost', port, self.open_page)
 
         self.handlers = {
             'run_animation': self.run_animation,
