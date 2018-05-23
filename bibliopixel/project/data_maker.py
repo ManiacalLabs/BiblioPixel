@@ -1,7 +1,7 @@
+import numpy
 from ctypes import c_float, c_uint8
 from multiprocessing.sharedctypes import RawArray
 from .. util import log
-from .. util.color_list import numpy
 from . import importer
 
 
@@ -19,15 +19,11 @@ NUMPY_DEFAULTS = (True, 'true', 'True', 'float')
 class Maker:
     def __init__(self, floating=None, shared_memory=False, numpy_dtype=None):
         if numpy_dtype:
-            if numpy:
-                log.info('Using numpy')
-                if numpy_dtype in NUMPY_DEFAULTS:
-                    numpy_dtype = 'float32'
-                if numpy_dtype not in numpy.sctypeDict:
-                    raise ValueError(BAD_NUMPY_TYPE_ERROR % numpy_dtype)
-            else:
-                log.error('The numpy module is not available.')
-                log.error(importer.MISSING_MESSAGE % ('numpy', 'numpy'))
+            log.info('Using numpy')
+            if numpy_dtype in NUMPY_DEFAULTS:
+                numpy_dtype = 'float32'
+            if numpy_dtype not in numpy.sctypeDict:
+                raise ValueError(BAD_NUMPY_TYPE_ERROR % numpy_dtype)
 
         if shared_memory and numpy_dtype:
             log.error('Shared memory for numpy arrays is not yet supported.')
@@ -53,7 +49,10 @@ class Maker:
 
 
 MAKER = Maker()
+NUMPY_MAKER = Maker(numpy_dtype='float')
+
 ColorList = MAKER.color_list
+NumpyColorList = NUMPY_MAKER.color_list
 
 BAD_NUMPY_TYPE_ERROR = """
 Bad numpy_type "%s"
