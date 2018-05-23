@@ -1,17 +1,9 @@
-import copy
+import copy, numpy
 from . limit import Limit
 
-try:
-    import numpy
 
-    def is_numpy(x):
-        return isinstance(x, numpy.ndarray)
-
-except:
-    numpy = None
-
-    def is_numpy(x):
-        return False
+def is_numpy(x):
+    return isinstance(x, numpy.ndarray)
 
 
 class ListMath:
