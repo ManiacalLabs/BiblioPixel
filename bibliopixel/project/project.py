@@ -1,4 +1,4 @@
-import queue, weakref
+import os, queue, threading, weakref
 from . import (
     attributes, construct, cleanup, defaults, event_queue, load, recurse)
 from .. util import exception, json, log
@@ -8,6 +8,7 @@ EVENT_QUEUE_MAXSIZE = 1000
 
 class Project:
     CHILDREN = 'maker', 'drivers', 'layout', 'animation', 'controls'
+    LOCK = threading.Lock()
 
     @staticmethod
     def pre_recursion(desc):
@@ -49,6 +50,7 @@ class Project:
             self.layout = self.construct_child(**layout)
 
         self.animation = create(animation, 'animation')
+        self.running = False
 
         eq = event_queue.EventQueue(maxsize=event_queue_maxsize)
         self.layout.event_queue = self.animation.event_queue = eq
@@ -67,7 +69,13 @@ class Project:
         self.controls = [create(c, 'control') for c in controls]
 
     def start(self):
-        self.PROJECTS_RUNNING.add(self)
+        with self.LOCK:
+            if self.running:
+                return
+
+            self.running = True
+            self.PROJECTS_RUNNING.add(self)
+
         self.layout.start()
         for c in self.controls:
             c.set_root(self)
@@ -75,11 +83,13 @@ class Project:
         self.animation.start()
 
     def stop(self):
-        try:
+        with self.LOCK:
+            if not self.running:
+                return
+            self.running = False
             self.PROJECTS_RUNNING.remove(self)
-        except KeyError:
-            return
-        log.debug('Project %s stop called', self)
+
+        log.debug('Project %s stop called on pid %d', self, os.getpid())
 
         self.animation.stop()
         for c in self.controls:
@@ -94,10 +104,6 @@ class Project:
 
     def join(self, timeout=None):
         self.animation.join(timeout)
-
-        # TODO: This is a hack.  We only need to do this because we don't
-        # know if we exited through stop(), or naturally through running out of
-        # the thread.
         self.stop()
 
         for c in self.controls:
