@@ -50,7 +50,13 @@ class Midi(control.ExtractedControl, control.ControlLoop):
         'omit': ('port', 'channel'),
     }
 
-    def __init__(self, use_note_off=False, **kwds):
+    def __init__(self, use_note_off=True, **kwds):
+        """
+        :param use_note_off:
+            If False, map note_offs to note_ons with velocity 0
+            If True, map note_ons with velocity 0 to note_offs
+            If None, do not change none_ons or note_offs
+        """
         control.ExtractedControl.__init__(self, **kwds)
         self.use_note_off = use_note_off
 
@@ -77,7 +83,12 @@ class Midi(control.ExtractedControl, control.ControlLoop):
                  '' if len(ports) == 1 else 's', port_names)
         for port, msg in mido.ports.MultiPort(ports, yield_ports=True):
             mdict = dict(vars(msg), port=port)
-            if self.use_note_off or msg.type != 'note_off':
-                yield mdict
-            else:
-                yield dict(mdict, type='note_on', velocity=0)
+
+            if self.use_note_off:
+                if msg.type == 'note_on' and not msg.velocity:
+                    mdict.update(type='note_off')
+            elif self.use_note_off is False:
+                if msg.type == 'note_off':
+                    mdict.update(type='note_on', velocity=0)
+
+            yield mdict
