@@ -108,3 +108,7 @@ class AddressTest(unittest.TestCase):
         self.attr = None
         Address('.attr = 1').set(self)
         self.assertEqual(self.attr, 1)
+
+        self.attr = None
+        Address('.attr = 1, 2.5, 3').set(self)
+        self.assertEqual(self.attr, (1, 2.5, 3))
