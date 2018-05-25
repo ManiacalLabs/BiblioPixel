@@ -78,6 +78,8 @@ class Address:
             return
 
         self.name, *assignment = name.split('=', 1)
+        assignment = assignment and assignment[0].strip()
+
         self.name = self.name.strip()
 
         try:
@@ -88,16 +90,25 @@ class Address:
         if not self.segments:
             raise ValueError('Empty Addresses are not allowed')
 
-        if assignment:
-            if not self.segments:
-                raise ValueError('Cannot assign to an empty address')
-            if isinstance(self.segments[-1], Address.Call):
-                raise ValueError('Cannot assign to a call operation')
-            assignment = [s.strip() for s in assignment[0].split(',')]
-            assignment = [int(s) if s.isnumeric() else s for s in assignment]
-            self.assignment = tuple(assignment)
-        else:
+        if not assignment:
             self.assignment = ()
+            return
+
+        if isinstance(self.segments[-1], Address.Call):
+            raise ValueError('Cannot assign to a call operation')
+
+        def number(s):
+            try:
+                return int(s)
+            except ValueError:
+                pass
+            try:
+                return float(s)
+            except ValueError:
+                pass
+            return s
+
+        self.assignment = tuple(number(s) for s in assignment.split(','))
 
     def __bool__(self):
         return bool(self.segments)
