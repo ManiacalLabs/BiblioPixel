@@ -1,8 +1,14 @@
+import re
+import os
+import sys
+import glob
+import codecs
+import shutil
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from setuptools.command.install_scripts import install_scripts
-from setuptools.command.install import install as _install
-import os, sys
+from setuptools.command.install import install
+from distutils.command.clean import clean
 
 
 INSTALLATION_ERROR = """INSTALLATION ERROR!
@@ -42,7 +48,28 @@ WARNING: No #!python executable found in %s, skipping .bat wrapper'"""
 printer = print  # noqa: T001
 
 
+class SetupClean(clean):
+
+    def run(self):
+        clean.run(self)
+        for filename in glob.glob('bibliopixel/*.pyc'):
+            os.remove(filename)
+        cleanup_dirs = ("build",
+                        "dist",
+                        "bibliopixel.egg-info")
+        for directory in cleanup_dirs:
+            if os.path.isdir(directory):
+                shutil.rmtree(directory)
+
+
+class SetupInstall(install):
+
+    def run(self):
+        install.run(self)
+
+
 class InstallScripts(install_scripts):
+
     def run(self):
         install_scripts.run(self)
         if not os.name == 'nt':
@@ -93,6 +120,7 @@ class RunBenchmark(RunTests):
 
 
 class RunCoverage(RunTests):
+
     def run_tests(self):
         import coverage
         cov = coverage.Coverage(config_file=True)
@@ -110,48 +138,72 @@ class RunCoverage(RunTests):
             raise SystemExit(1)
 
 
-def _get_version():
-    from os.path import abspath, dirname, join
-    filename = join(dirname(abspath(__file__)), 'bibliopixel', 'VERSION')
-    return open(filename).read().strip()
+def open_local(paths, mode='r', encoding='utf8'):
+    path = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        *paths
+    )
 
+    return codecs.open(path, mode, encoding)
+
+
+with open_local(['bibliopixel', '__init__.py'], encoding='utf8') as fp:
+    try:
+        init = fp.read()
+        __version__ = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+        __author__ = re.search(r'__author__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+        __author_email__ = re.search(r'__author_email__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+        __license__ = re.search(r'__license__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+        __status__ = re.search(r'__status__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+        __url__ = re.search(r'__url__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+    except IndexError:
+        raise RuntimeError('Unable to determine details of package.')
+
+with open_local(['README.rst']) as fr:
+    long_description = fr.read()
 
 if sys.version_info.major != 3:
     printer(INSTALLATION_ERROR.format(sys.version_info))
     sys.exit(1)
 
-VERSION = _get_version()
-
 with open('requirements.txt') as f:
     REQUIRED = f.read().splitlines()
 
-setup(
-    name='BiblioPixel',
-    version=VERSION,
-    description=(
+setup_kwargs = {
+    'name': 'BiblioPixel',
+    'version': __version__,
+    'description': [
         'BiblioPixel is a pure python library for manipulating a wide variety '
-        'of LED strip based displays, both in strip and matrix form.'),
-    long_description=open('README.rst').read(),
-    author='Adam Haile',
-    author_email='adam@maniacallabs.com',
-    url='http://github.com/maniacallabs/bibliopixel/',
-    license='MIT',
-    packages=find_packages(exclude=['test']) + ['ui', 'scripts'],
-    classifiers=[
+        'of LED strip based displays, both in strip and matrix form.'
+    ],
+    'long_description': long_description,
+    'author': __author__,
+    'author_email': __author_email__,
+    'url': __url__,
+    'license': __license__,
+    'packages': find_packages(exclude=['test']) + ['ui', 'scripts'],
+    'classifiers': [
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.6'
     ],
-    tests_require=['pytest'],
-    cmdclass={
+    'tests_require': ['pytest'],
+    'cmdclass': {
         'benchmark': RunBenchmark,
+        'clean': SetupClean,
         'coverage': RunCoverage,
         'test': RunTests,
-        'install_scripts': InstallScripts
+        'install_scripts': InstallScripts,
+        'install': SetupInstall
     },
-    include_package_data=True,
-    scripts=['scripts/bp', 'scripts/bibliopixel'],
-    install_requires=REQUIRED
-)
+    'include_package_data': True,
+    # 'scripts': ['scripts/bp', 'scripts/bibliopixel'],
+    'entry_points': {
+        'console_scripts': ['bibliopixel = bibliopixel.__main__:main', 'bp = bibliopixel.__main__:main']
+    },
+    'install_requires': REQUIRED
+}
+
+setup(**setup_kwargs)

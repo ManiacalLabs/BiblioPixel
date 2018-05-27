@@ -4,13 +4,23 @@
 Make a new release version of BiblioPixel by editing CHANGELIST.md
 
 """
+# TODO: Migrate to https://github.com/olivierlacan/keep-a-changelog
 
 import datetime, os, subprocess, sys
+import re
 
 DRY_RUN = False
 ROOT = os.path.dirname(os.path.dirname(__file__))
 CHANGELIST_FILE = os.path.join(ROOT, 'CHANGELIST.md')
-VERSION_FILE = os.path.join(ROOT, 'bibliopixel', 'VERSION')
+INIT_FILE = os.path.join(ROOT, 'bibliopixel', '__init__.py')
+
+
+with open(INIT_FILE) as fp:
+    try:
+        init = fp.read()
+        __version__ = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', init).group(1)
+    except IndexError:
+        raise RuntimeError('Unable to determine details of package.')
 
 
 def new_version(new_version_string=''):
@@ -20,7 +30,7 @@ def new_version(new_version_string=''):
     def split_version(s):
         return tuple(int(i) for i in s.split('.'))
 
-    old_version = split_version(open(VERSION_FILE).read())
+    old_version = split_version(__version__)
 
     if new_version_string:
         if new_version_string.startswith('v'):
@@ -44,9 +54,14 @@ def new_version(new_version_string=''):
         raise ValueError(
             'There must be at least one new change in CHANGELIST.md')
 
-    with open(VERSION_FILE, 'w') as fp:
-        fp.write(new_version_string)
-        fp.write('\n')
+    with open(INIT_FILE, 'r+', encoding='utf8') as fp:
+        init = fp.read()
+        sub = re.subn(r"__version__\s*=\s*\\*[\'\"]([^\'\"]*)\\*[\'\"]",
+                      "__version__ = '{}'".format(new_version_string),
+                      init)
+        fp.seek(0)
+        fp.write(sub[0])
+        fp.truncate()
 
     changelist = open(CHANGELIST_FILE).read()
     with open(CHANGELIST_FILE, 'w') as fp:
