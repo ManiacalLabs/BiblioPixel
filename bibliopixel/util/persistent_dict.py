@@ -1,23 +1,23 @@
 import os
-from . import json
+from . import data_file
 
 
 class PersistentDict(dict):
-    """A dictionary that persists as a JSON file on the filesystem.
+    """A dictionary that persists as a data_file on the filesystem.
 
     PersistentDict is constructed with a filename, which either does not exist,
-    or contains JSON representing a previously stored value.
+    or contains YAML representing a previously stored value.
 
     Each time a PersistentDict is mutated, the file is rewritten with the new
-    stored JSON data.
+    stored YAML data.
     """
 
     def __init__(self, filename):
         """
-        :param c: the filename to store the JSON in
+        :param c: the filename to store the DATA_FILE in
         """
         self.__filename = filename
-        data = json.load(filename) if os.path.exists(filename) else {}
+        data = data_file.load(filename) if os.path.exists(filename) else {}
         super().__init__(data)
 
     def clear(self):
@@ -47,4 +47,4 @@ class PersistentDict(dict):
         self.__write()
 
     def __write(self):
-        json.dump(self, self.__filename)
+        data_file.dump(self, self.__filename)

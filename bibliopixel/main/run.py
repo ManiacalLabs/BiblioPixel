@@ -4,7 +4,7 @@ Run specified project from file or URL.
 
 import os, sys, time, traceback
 from . import common_flags, simpixel
-from .. util import json, log, pid_context, signal_handler
+from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
 from .. project import load
 from .. project.project import Project
@@ -45,7 +45,7 @@ def _load_py(filename):
 
 def _dump(args, desc):
     if not isinstance(desc, str):
-        dump = json.yaml.dump if args.yaml else json.dumps
+        dump = data_file.yaml.dump if args.yaml else data_file.dumps
         desc = dump(desc, default=repr)
     return desc.strip()
 
@@ -62,7 +62,7 @@ def _get_projects(args):
                 root_file = None
             else:
                 desc = load.data(filename, False)
-                desc = json.loads(desc, filename)
+                desc = data_file.loads(desc, filename)
                 root_file = os.path.abspath(filename)
 
             project = common_flags.make_project(args, desc, root_file)

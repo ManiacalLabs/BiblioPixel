@@ -1,7 +1,7 @@
 import os
 from .. project import aliases, construct, load, project
 from . import animation, failed
-from .. util import json, log
+from .. util import log
 
 
 class Collection(animation.Animation):

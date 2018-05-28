@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.util import json
+from bibliopixel.util import data_file
 
 DATA = """
 controls:
@@ -20,25 +20,25 @@ controls:
 """
 
 
-class JsonTest(unittest.TestCase):
+class Data_fileTest(unittest.TestCase):
     def test_yaml_keys(self):
-        result = json.loads(DATA, 'test.yml')
+        result = data_file.loads(DATA, 'test.yml')
         routing = result['controls'][0]['routing']
         self.assertEqual(routing['0'], 'animation.limit.ratio')
         self.assertEqual(
             set(routing),
             set(('0', '1', '2', '09', '10', '16')))
 
-        self.assertEqual(json.loads(DATA, use_yaml=True), result)
+        self.assertEqual(data_file.loads(DATA, use_yaml=True), result)
 
-    def test_round_trip_json(self):
-        result = json.loads(DATA, 'test.yml')
-        saved = json.dumps(result)
-        restored = json.loads(saved)
+    def test_round_trip_data_file(self):
+        result = data_file.loads(DATA, 'test.yml')
+        saved = data_file.dumps(result)
+        restored = data_file.loads(saved)
         self.assertEqual(result, restored)
 
     def test_round_trip_yaml(self):
-        result = json.loads(DATA, 'test.yml')
-        saved = json.dumps(result, use_yaml=True)
-        restored = json.loads(saved, use_yaml=True)
+        result = data_file.loads(DATA, 'test.yml')
+        saved = data_file.dumps(result, use_yaml=True)
+        restored = data_file.loads(saved, use_yaml=True)
         self.assertEqual(result, restored)
