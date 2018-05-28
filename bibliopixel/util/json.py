@@ -1,10 +1,17 @@
-import json, os, sys, yaml
+import collections, json, os, sys, yaml
 
 # Allow open to be patched for tests.
 open = __builtins__['open']
 
+ALWAYS_LOAD_YAML, ALWAYS_DUMP_YAML = False, False
 
-def dumps(data, **kwds):
+
+def _dump_yaml(data, default_flow_style=True, **kwds):
+    ordered = collections.OrderedDict(sorted(data.items()))
+    return yaml.dump(ordered, default_flow_style=default_flow_style, **kwds)
+
+
+def dumps(data, use_yaml=ALWAYS_DUMP_YAML, **kwds):
     """
     Dumps data into a nicely formatted JSON string.
 
@@ -13,10 +20,13 @@ def dumps(data, **kwds):
     :returns: a string with formatted data
     :rtype: str
     """
+    if use_yaml:
+        return _dump_yaml(data, **kwds)
+
     return json.dumps(data, indent=4, sort_keys=True, **kwds)
 
 
-def dump(data, file=sys.stdout, **kwds):
+def dump(data, file=sys.stdout, use_yaml=ALWAYS_DUMP_YAML, **kwds):
     """
     Dumps data as nicely formatted JSON string to a file or file handle
 
@@ -25,7 +35,10 @@ def dump(data, file=sys.stdout, **kwds):
     :param kwds: keywords to pass to json.dump
     """
     def dump(fp):
-        json.dump(data, fp, indent=4, sort_keys=True, **kwds)
+        if use_yaml:
+            _dump_yaml(data, stream=fp, **kwds)
+        else:
+            json.dump(data, fp, indent=4, sort_keys=True, **kwds)
 
     if not isinstance(file, str):
         return dump(file)
@@ -39,8 +52,8 @@ def dump(data, file=sys.stdout, **kwds):
         return dump(fp)
 
 
-def loads(s, filename=''):
-    if not filename.endswith('.yml'):
+def loads(s, use_yaml=ALWAYS_LOAD_YAML, filename=''):
+    if not (filename.endswith('.yml') or use_yaml):
         return json.loads(s)
 
     def fix(d):
@@ -54,7 +67,7 @@ def loads(s, filename=''):
     return fix(yaml.load(s))
 
 
-def load(file):
+def load(file, use_yaml=ALWAYS_LOAD_YAML):
     """
     Loads not only JSON files but also YAML files ending in .yml.
 
@@ -70,7 +83,7 @@ def load(file):
         filename = getattr(fp, 'name', '')
 
     try:
-        return loads(fp.read(), filename)
+        return loads(fp.read(), use_yaml, filename)
 
     except Exception as e:
         e.args = ('There was a error in the data file', filename) + e.args
