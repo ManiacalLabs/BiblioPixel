@@ -12,3 +12,4 @@ __pycache__
 htmlcov
 .eggs
 .cache
+.pytest_cache

@@ -1,4 +1,4 @@
-import json, os, sys, yaml
+import json, os, sys, yaml, io
 
 # Allow open to be patched for tests.
 open = __builtins__['open']
@@ -17,8 +17,8 @@ def dumps(data, **kwds):
 
 
 def loads(s, filename=''):
-    if not filename.endswith('.yml'):
-        return json.loads(s)
+    if isinstance(s, io.IOBase):  # is file stream
+        s = s.read()  # convert to raw str
 
     def fix(d):
         if isinstance(d, dict):
@@ -28,7 +28,16 @@ def loads(s, filename=''):
         assert isinstance(d, (int, float, bool, str))
         return d
 
-    return fix(yaml.load(s))
+    yaml_error = None
+    try:
+        res = fix(yaml.load(s))
+    except (yaml.scanner.ScannerError, yaml.parser.ParserError) as e:
+        yaml_error = str(e).replace('<unicode string>', filename)
+
+    if yaml_error:
+        raise Exception(yaml_error)
+
+    return res
 
 
 def dump(data, file=sys.stdout, **kwds):
@@ -62,9 +71,11 @@ def load(file):
     :returns: the data loaded from the JSON or YAML file
     :rtype: dict
     """
+    open_local = False
     if isinstance(file, str):
         fp = open(file)
         filename = file
+        open_local = True
     else:
         fp = file
         filename = getattr(fp, 'name', '')
@@ -73,5 +84,8 @@ def load(file):
         return loads(fp.read(), filename)
 
     except Exception as e:
-        e.args = ('There was a error in the data file', filename) + e.args
+        e.args = ('There was an error in the data file', filename) + e.args
         raise
+    finally:
+        if open_local:
+            fp.close()

@@ -83,7 +83,7 @@ class BadProjectTest(unittest.TestCase):
 
         self.assertEquals(
             e.exception.args[0::2],
-            ('There was a error in the data file',
+            ('There was an error in the data file',
              'Expecting value: line 1 column 1 (char 0)'))
 
     def test_cant_open(self):

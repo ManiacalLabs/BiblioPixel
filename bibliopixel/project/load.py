@@ -12,8 +12,9 @@ def data(name, use_json=True):
         return {}
 
     try:
-        return json.loads(name)
+        return json.load(name)
     except:
+        raise
         return loady.data.load(name, use_json)
 
 

@@ -1,0 +1,4 @@
+animation: BiblioPixelAnimations.matrix.bloom.Bloom
+run:
+  seconds: 2
+  fps: 30
