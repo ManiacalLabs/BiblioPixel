@@ -1,6 +1,6 @@
 import os, tempfile
 from .. project import data_maker, defaults, project
-from .. util import deprecated, json, log
+from .. util import data_file, deprecated, log
 
 """Common command line arguments for run and demo."""
 
@@ -66,7 +66,7 @@ def add_project_flags(parser):
 
     parser.add_argument(
         '--dump', action='store_true',
-        help='Dump the full project as JSON after loading but before running')
+        help='Dump the full project as DATA_FILE after loading but before running')
 
     parser.add_argument(
         '--dry_run', action='store_true',
@@ -122,7 +122,7 @@ def _make_project_flags(args):
             return {}
 
         if '{' in value:
-            return json.loads(value)
+            return data_file.loads(value)
 
         return {'typename': value}
 
@@ -223,9 +223,9 @@ future releases v4.x
 
 # TODO: this should go somewhere else
 """
-Set defaults for projects using JSON.
+Set defaults for projects using YAML or JSON data files.
 
-A Project is a JSON file or equivalently a Python dictionary that describes
+A Project is a data file or equivalently a Python dictionary that describes
 a BibliopPixel installation.  The top-level keys in a Project are called the
 sections and a Project might have the following sections:
 

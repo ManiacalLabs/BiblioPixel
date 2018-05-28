@@ -1,6 +1,6 @@
 import os, sys
 from . import merge as _merge
-from .. util import json, log, persistent_dict
+from .. util import data_file, log, persistent_dict
 
 # This is set to true during testing.
 BYPASS_PROJECT_DEFAULTS = False
@@ -25,9 +25,9 @@ def merge(*projects):
 
 
 def show_defaults():
-    """List current user defaults in JSON format"""
+    """List current user defaults in data_file format (JSON or YAML)"""
     _warn_if_empty()
-    json.dump(USER_DEFAULTS, sys.stdout)
+    data_file.dump(USER_DEFAULTS, sys.stdout)
     log.printer()
 
 
@@ -78,7 +78,7 @@ def save_defaults(name):
             return
 
     with open(path, 'w') as fp:
-        json.dump(USER_DEFAULTS, fp)
+        data_file.dump(USER_DEFAULTS, fp)
 
     log.printer('Written project defaults to', name)
 
@@ -126,7 +126,7 @@ def _sections_to_assignments(sections):
 
     is_json = sections[0].startswith('{')
     if is_json:
-        return _check_sections(json.loads(' '.join(sections)))
+        return _check_sections(data_file.loads(' '.join(sections)))
 
     assignments = {}
     for s in sections:
@@ -142,9 +142,9 @@ def _sections_to_assignments(sections):
             value = '"%s"' % value
 
         try:
-            value = json.loads(value)
+            value = data_file.loads(value)
         except Exception as e:
-            e.args += ('Bad JSON in `set` for %s=%s' % (section, value),)
+            e.args += ('Bad data in `set` for %s=%s' % (section, value),)
             raise
 
         *first, last = section.split('.')
@@ -180,7 +180,7 @@ def _load_defaults(name):
             list_saved_defaults()
             raise ValueError('No such default: ' + name)
     try:
-        return json.load(n)
+        return data_file.load(n)
     except Exception as e:
         e.args = ('There was an error in data file ' + name,
                   'Did you edit this file by hand?') + e.args

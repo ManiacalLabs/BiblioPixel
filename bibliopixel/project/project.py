@@ -1,7 +1,7 @@
 import os, queue, threading, weakref
 from . import (
     attributes, construct, cleanup, defaults, event_queue, load, recurse)
-from .. util import exception, json, log
+from .. util import exception, log
 
 EVENT_QUEUE_MAXSIZE = 1000
 NO_DATATYPE_ERROR = 'No "datatype" field in section "%s"'

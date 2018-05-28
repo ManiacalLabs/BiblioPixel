@@ -1,6 +1,6 @@
 import os, time, queue, unittest
 from bibliopixel.control import artnet
-from bibliopixel.util import artnet_message, udp, json
+from bibliopixel.util import artnet_message, data_file, udp
 from .. project import make
 from .. import mark_tests
 from test.bibliopixel.util import udp_test
@@ -69,8 +69,8 @@ class ArtNetControlTest(unittest.TestCase):
         self.assertEqual(result, data[4:] + [0, 0, 0, 0])
 
 
-def make_project(datafile):
-    data = json.loads(datafile, '.yml')
+def make_project(f):
+    data = data_file.loads(f, '.yml')
     return make.make_project(data)
 
 

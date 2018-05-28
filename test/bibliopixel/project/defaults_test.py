@@ -1,4 +1,4 @@
-import json, unittest
+import unittest
 
 from bibliopixel.project import defaults
 

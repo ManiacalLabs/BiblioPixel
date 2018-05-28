@@ -2,7 +2,7 @@ import collections, functools, sys, threading
 from . extractor import Extractor
 from .. project import construct, importer
 from .. util.log_errors import LogErrors
-from .. util import flatten, log, json
+from .. util import flatten, log
 from .. util.threads import runnable
 from . routing import ActionList, Routing
 

@@ -1,6 +1,6 @@
 import tempfile
 from bibliopixel.project import project
-from bibliopixel.util import json
+from bibliopixel.util import data_file
 from .. mark_tests import SKIP_LONG_TESTS
 
 
@@ -21,7 +21,7 @@ def make_project(data):
         else:
             name = data
 
-        desc = json.load(name)
+        desc = data_file.load(name)
 
     return project.project(desc, root_file=name)
 

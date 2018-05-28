@@ -1,6 +1,6 @@
 from . import aliases
 import loady, os
-from .. util import json, log
+from .. util import data_file, log
 
 guess_name = loady.importer.guess_name
 CACHE = os.path.expanduser('~/.bibliopixel/code_cache')
@@ -12,7 +12,7 @@ def data(name, use_json=True):
         return {}
 
     try:
-        return json.loads(name)
+        return data_file.loads(name)
     except:
         return loady.data.load(name, use_json)
 
@@ -46,4 +46,4 @@ def load_if_filename(s):
         if not os.path.isabs(s):
             s = os.path.join(os.path.dirname(ROOT_FILE), s)
 
-        return json.load(s)
+        return data_file.load(s)
