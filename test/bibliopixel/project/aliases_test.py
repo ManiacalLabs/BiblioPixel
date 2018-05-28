@@ -20,8 +20,11 @@ class AliasTest(unittest.TestCase):
         with patch(foo='bar'):
             self.assertEquals(aliases.resolve('foo'), 'bar')
             self.assertEquals(aliases.resolve('@foo.bing'), 'bar.bing')
+            self.assertEquals(aliases.resolve('$foo.bing'), 'bar.bing')
             self.assertEquals(aliases.resolve('bar.bing.@foo'), 'bar.bing.bar')
+            self.assertEquals(aliases.resolve('bar.bing.$foo'), 'bar.bing.bar')
             self.assertEquals(aliases.resolve('x@foo'), 'x@foo')
+            self.assertEquals(aliases.resolve('x$foo'), 'x$foo')
 
     def test_preserve_separators(self):
         s = '.asdfa./#fahdwrdr./#435'
@@ -30,6 +33,12 @@ class AliasTest(unittest.TestCase):
     def test_marker(self):
         with patch(foo='bar.com/a.html'):
             result = aliases.resolve('https://@foo#tag')
+
+        self.assertEqual(result, 'https://bar.com/a.html#tag')
+
+    def test_marker_dollar(self):
+        with patch(foo='bar.com/a.html'):
+            result = aliases.resolve('https://$foo#tag')
 
         self.assertEqual(result, 'https://bar.com/a.html#tag')
 
