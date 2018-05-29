@@ -1,15 +1,32 @@
 import unittest
+from unittest import mock
 
 from . make import make
 from bibliopixel.animation import animation
 from bibliopixel.util.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
 
+BAD_JSON_ERROR = """
+while parsing a flow node
+expected the node content, but found ']'
+  in "<unicode string>", line 1, column 2:
+    {]
+     ^
+"""
+
 
 class ProjectTest(unittest.TestCase):
-    def test_bad_json(self):
-        with self.assertRaises(ValueError):
+    @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', False)
+    def test_bad_project_json(self):
+        with self.assertRaises(Exception) as e:
             make('{]')
+
+    @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', True)
+    def test_bad_project_yaml(self):
+        with self.assertRaises(Exception) as e:
+            make('{]')
+
+        self.assertEquals(str(e.exception).strip(), BAD_JSON_ERROR.strip())
 
     def test_simple(self):
         make(PROJECT)
