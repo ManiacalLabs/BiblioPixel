@@ -65,10 +65,11 @@ expected the node content, but found ']'
      ^
 """
 
+
 class ImportFailureTest(unittest.TestCase):
     @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', False)
     def test_bad_import_json(self):
-        with self.assertRaises(Exception) as e:
+        with self.assertRaises(Exception):
             make('{]')
 
     @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', True)
