@@ -1,5 +1,7 @@
 import unittest
+from unittest import mock
 from bibliopixel.project import project
+from bibliopixel.util import data_file
 
 from . make import make
 
@@ -70,21 +72,41 @@ BAD_RUN_ATTRIBUTE = """
 {
     "driver": "dummy",
     "layout": "matrix",
-    "animation": "off",
+ "animation": "off",
     "run": {"bad_attribute": 23.5}
 }
 """
 
+BAD_PROJECT_ERROR = """
+while parsing a block mapping
+  in "<unicode string>", line 1, column 1:
+    driver = {"a": "b"}
+    ^
+expected <block end>, but found '}'
+  in "<unicode string>", line 1, column 19:
+    driver = {"a": "b"}
+                      ^
+"""
+
 
 class BadProjectTest(unittest.TestCase):
-    def test_bad_json(self):
-        with self.assertRaises(ValueError) as e:
+    @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', False)
+    def test_bad_project_json(self):
+        with self.assertRaises(Exception) as e:
             make(PYTHON_FILE)
 
         self.assertEquals(
             e.exception.args[0::2],
             ('There was a error in the data file',
              'Expecting value: line 1 column 1 (char 0)'))
+
+    @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', True)
+    def test_bad_project_yaml(self):
+        with self.assertRaises(Exception) as e:
+            make(PYTHON_FILE)
+
+        self.assertEquals(
+            str(e.exception).strip(), BAD_PROJECT_ERROR.strip())
 
     def test_cant_open(self):
         with self.assertRaises(FileNotFoundError) as e:

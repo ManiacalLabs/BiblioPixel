@@ -1,4 +1,5 @@
 import unittest
+from unittest import mock
 
 from . make import make
 
@@ -56,11 +57,26 @@ PROJECT_FAILURE3 = """
 }
 """
 
+BAD_JSON_ERROR = """
+while parsing a flow node
+expected the node content, but found ']'
+  in "<unicode string>", line 1, column 2:
+    {]
+     ^
+"""
 
 class ImportFailureTest(unittest.TestCase):
-    def test_bad_json(self):
-        with self.assertRaises(ValueError):
+    @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', False)
+    def test_bad_import_json(self):
+        with self.assertRaises(Exception) as e:
             make('{]')
+
+    @mock.patch('bibliopixel.util.data_file.ALWAYS_LOAD_YAML', True)
+    def test_bad_import_yaml(self):
+        with self.assertRaises(Exception) as e:
+            make('{]')
+
+        self.assertEquals(str(e.exception).strip(), BAD_JSON_ERROR.strip())
 
     def test_failure1(self):
         with self.assertRaises(ImportError) as e:
