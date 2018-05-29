@@ -3,7 +3,7 @@ import collections, json, os, sys, yaml
 # Allow open to be patched for tests.
 open = __builtins__['open']
 
-ALWAYS_LOAD_YAML, ALWAYS_DUMP_YAML = False, False
+ALWAYS_LOAD_YAML, ALWAYS_DUMP_YAML = True, True
 
 
 def _dump_yaml(data, default_flow_style=True, **kwds):
