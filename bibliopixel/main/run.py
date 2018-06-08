@@ -62,7 +62,7 @@ def _get_projects(args):
                 root_file = None
             else:
                 desc = load.data(filename, False)
-                desc = data_file.loads(desc, filename)
+                desc = data_file.load(desc, filename)
                 root_file = os.path.abspath(filename)
 
             project = common_flags.make_project(args, desc, root_file)
