@@ -84,9 +84,6 @@ def load(file, use_yaml=None):
     :returns: the data loaded from the JSON or YAML file
     :rtype: dict
     """
-    if use_yaml is None:
-        use_yaml = ALWAYS_LOAD_YAML
-
     if isinstance(file, str):
         fp = open(file)
         filename = file
