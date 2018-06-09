@@ -78,8 +78,8 @@ class Runnable:
     def stop(self):
         self.stop_event.set()
 
-    def wait(self, timeout=None):
-        self.stop_event.wait(timeout)
+    def wait(self):
+        self.stop_event.wait()
 
     def cleanup(self):
         """
@@ -87,9 +87,6 @@ class Runnable:
 
         self.cleanup() may not throw an exception.
         """
-
-    def join(self, timeout=None):
-        """Join this thread, or timeout in `timeout` seconds"""
 
     def run(self):
         try:
@@ -107,20 +104,16 @@ class Runnable:
         pass
 
     @contextlib.contextmanager
-    def joiner(self, stop=True):
+    def run_until_stop(self):
+        """
+        A context manager that starts this Runnable, yields,
+        and then waits for it to finish."""
         self.start()
-
         try:
             yield self
         finally:
-            stop and self.stop()
-
-        while self.is_alive():
-            try:
-                self.join(self.timeout)
-            except Exception as e:
-                log.error('Unable to join thread %s: %s', self, e)
-                return
+            self.stop()
+        self.wait()
 
 
 class LoopThread(Runnable):

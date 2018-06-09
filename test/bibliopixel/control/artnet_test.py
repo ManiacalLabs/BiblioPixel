@@ -10,16 +10,16 @@ class ArtNetControlTest(unittest.TestCase):
     @mark_tests.fails_in_travis
     def test_artnet_control(self):
         project = make_project(ARTNET_CONTROL)
-        results = []
-        project.test_callback = results.append
+        q = queue.Queue()
+        project.test_callback = q.put
         project.controls[0].set_root(project)
         sender = udp.QueuedSender(SEND_ADDRESS)
 
-        with project.controls[0].joiner(), sender.joiner():
+        with project.controls[0].run_until_stop(), sender.run_until_stop():
             sender.send(OUTGOING_MESSAGE)
+            results = q.get(timeout=3)
 
-        self.assertTrue(results)
-        self.assertEquals(results[0], TEST_DATA)
+        self.assertEquals(results, TEST_DATA)
 
     @mark_tests.fails_in_travis
     def test_artnet_integration(self):
@@ -27,18 +27,12 @@ class ArtNetControlTest(unittest.TestCase):
         receiver = udp.QueuedReceiver(RECEIVE_ADDRESS)
         project = make_project(ARTNET_PROJECT)
 
-        with sender.joiner(), receiver.joiner():
+        with sender.run_until_stop(), receiver.run_until_stop():
             project.start()
             time.sleep(0.01)
             sender.queue.put(OUTGOING_MESSAGE)
-            project.join()
-
-        result = []
-        while True:
-            try:
-                result.append(receiver.queue.get(timeout=0.1))
-            except queue.Empty:
-                break
+            get = receiver.queue.get
+            result = [get(), get(), get()]
 
         msgs = [artnet_message.bytes_to_message(i) for i in result]
         data = [m.data for m in msgs]

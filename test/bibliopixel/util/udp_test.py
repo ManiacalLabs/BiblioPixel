@@ -10,7 +10,7 @@ TIMEOUT = 0.1
 @contextlib.contextmanager
 def receive_udp(address, results, expected):
     receiver = udp.QueuedReceiver(address)
-    with receiver.joiner():
+    with receiver.run_until_stop():
         yield
 
     results.extend(receiver.queue.get() for i in range(expected))
