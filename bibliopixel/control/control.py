@@ -23,6 +23,7 @@ class Control(runnable.Runnable):
            'ignore', meaning to ignore all errors
            'report', meaning to report all errors
         """
+        super().__init__()
         self.verbose = verbose
         self.receive = LogErrors(self._receive, errors)
         default = dict(self.DEFAULT, **(default or {}))

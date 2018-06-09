@@ -3,7 +3,7 @@ from .. import log
 from . import compose_events, runnable
 
 
-class UpdateDriverThread(runnable.Loop):
+class UpdateDriverThread(runnable.LoopThread):
 
     def __init__(self, driver):
         super().__init__()
@@ -26,7 +26,7 @@ class UpdateDriverThread(runnable.Loop):
     def sending(self):
         return self._wait.isSet()
 
-    def loop_once(self):
+    def run_once(self):
         self._wait.wait()
         self._updating.clear()
         self._driver.update_colors()
@@ -35,7 +35,7 @@ class UpdateDriverThread(runnable.Loop):
         self._updating.set()
 
 
-class UpdateThread(runnable.Loop):
+class UpdateThread(runnable.LoopThread):
 
     def __init__(self, drivers):
         super().__init__()
@@ -59,7 +59,7 @@ class UpdateThread(runnable.Loop):
         self._reading.clear()
         self._wait.set()
 
-    def loop_once(self):
+    def run_once(self):
         self._wait.wait()
         self._updated.wait()
 
@@ -76,6 +76,7 @@ class NoThreading(runnable.Runnable):
     """
 
     def __init__(self, layout):
+        super().__init__()
         self.layout = layout
 
     def update_colors(self):

@@ -54,7 +54,7 @@ def sender(address, use_queue=True, **kwds):
     return QueuedSender(address, **kwds) if use_queue else Sender(address)
 
 
-class Receiver(runnable.Loop):
+class Receiver(runnable.LoopThread):
     """
     Receive UDP messages in a thread
     """
@@ -71,7 +71,7 @@ class Receiver(runnable.Loop):
     def __str__(self):
         return 'udp.Receiver(%s, %s)' % (self.address[0], hex(self.address[1]))
 
-    def loop_once(self):
+    def run_once(self):
         try:
             data, addr = self.socket.recvfrom(self.bufsize)
         except OSError as e:

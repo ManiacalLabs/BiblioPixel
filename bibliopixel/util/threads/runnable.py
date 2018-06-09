@@ -48,37 +48,62 @@ class Runnable:
     category = NEW
 
     timeout = 0.1
-    running = False
+
+    def __init__(self):
+        self.run_event = threading.Event()
+        self.stop_event = threading.Event()
+
+    @property
+    def running(self):
+        """
+        Is this Runnable expected to make any progress from here?
+
+        The Runnable might still execute a little code after it has stopped
+        running.
+        """
+        return self.run_event.is_set() and not self.stop_event.is_set()
+
+    def is_alive(self):
+        """
+        Is this Runnable still executing code?
+
+        In some cases, such as threads, self.is_alive() might be true for some
+        time after self.running has turned False.
+        """
+        return self.running
 
     def start(self):
-        self.running = True
+        self.run_event.set()
 
     def stop(self):
-        self.running = False
+        self.stop_event.set()
+
+    def wait(self, timeout=None):
+        self.stop_event.wait(timeout)
 
     def cleanup(self):
-        pass
+        """
+        Cleans up resources after the Runnable.
+
+        self.cleanup() may not throw an exception.
+        """
 
     def join(self, timeout=None):
         """Join this thread, or timeout in `timeout` seconds"""
 
-    def wait(self, timeout=None):
-        """Wait until this runnable has started, or time out."""
-
-    def is_alive(self):
-        return self.running
-
     def run(self):
         try:
-            self.target()
+            while self.running:
+                self.run_once()
         except:
             log.error('Exception at %s: \n%s',
                       str(self), traceback.format_exc())
         finally:
+            self.stop()
             self.cleanup()
 
-    def target(self):
-        """The target code that is actually executed in the run method"""
+    def run_once(self):
+        """The target code that is repeatedly executed in the run method"""
         pass
 
     @contextlib.contextmanager
@@ -98,72 +123,30 @@ class Runnable:
                 return
 
 
-class RunnableThread(threading.Thread, Runnable):
+class LoopThread(Runnable):
     def __init__(self, daemon=True, **kwds):
-        super().__init__(daemon=daemon, **kwds)
-        self.event = threading.Event()
+        super().__init__()
+        self.thread = threading.Thread(daemon=daemon, target=self.run, **kwds)
 
     def start(self):
-        Runnable.start(self)
-        threading.Thread.start(self)
-
-    def wait(self, timeout=None):
-        self.event.wait(timeout)
+        self.thread.start()
 
     def run(self):
-        self.event.set()
-        Runnable.run(self)
-
-
-class Loop(RunnableThread):
-    def __init__(self, loop_once=None, **kwds):
-        super().__init__(**kwds)
-        self.loop_once = loop_once or self.loop_once
-
-    def target(self):
-        while self.running:
-            self.loop_once()
-
-    def loop_once(self):
-        raise NotImplementedError
-
-
-class RunnableCollection(Runnable):
-    def __init__(self, runnables):
-        self.runnables = tuple(runnables)
-
-    def start(self):
-        for r in self.runnables:
-            r.start()
-
-    def stop(self):
-        for r in self.runnables:
-            r.stop()
-
-    def join(self, timeout=None):
-        for r in self.runnables:
-            r.join(timeout)
-
-    def wait(self, timeout=None):
-        for r in self.runnables:
-            r.wait(timeout)
-
-    def cleanup(self):
-        for r in self.runnables:
-            r.cleanup()
+        super().start()
+        super().run()
 
     def is_alive(self):
-        return any(r.is_alive() for r in self.runnables)
+        return self.thread.is_alive()
 
 
-class QueueHandler(Loop):
+class QueueHandler(LoopThread):
     def __init__(self, timeout=0.1, send=None, **kwds):
         super().__init__(**kwds)
         self.timeout = timeout
         self.queue = queue.Queue()
         self.send = send or self.send
 
-    def loop_once(self):
+    def run_once(self):
         try:
             msg = self.queue.get(timeout=self.timeout)
         except queue.Empty:
