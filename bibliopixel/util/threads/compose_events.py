@@ -21,6 +21,7 @@ def compose_events(events, condition=all):
         def wrapped():
             f()
             changed()
+
         return wrapped
 
     for e in events:
