@@ -1,3 +1,8 @@
+"""
+Fill in missing parts of a project and cleans up its sections
+so they have exactly the right constructor.
+"""
+
 import copy
 from . import alias_lists, construct, merge
 from .. import layout, util
@@ -5,7 +10,7 @@ from .. import layout, util
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 
-def cleanup_layout(animation):
+def fill_layout(animation):
     # Try to fill in the layout if it's missing.
     datatype = animation['datatype']
 
@@ -19,12 +24,12 @@ def cleanup_layout(animation):
     return dict(args, datatype=layout_cl)
 
 
-def cleanup_aliases(desc):
+def fill_aliases(desc):
     alias_lists.PROJECT_ALIASES = desc.pop('aliases', {})
     return desc
 
 
-def cleanup_numbers(desc):
+def fill_numbers(desc):
     numbers = desc.pop('numbers', 'python')
     if numbers != 'python':
         desc.setdefault('maker', {})['numpy_dtype'] = numbers
@@ -32,7 +37,7 @@ def cleanup_numbers(desc):
     return desc
 
 
-def cleanup_animation(desc):
+def fill_animation(desc):
     if not desc['animation']:
         raise ValueError('Missing "animation" section')
 
@@ -60,7 +65,7 @@ def cleanup_animation(desc):
     return desc
 
 
-def cleanup_drivers(desc):
+def fill_drivers(desc):
     driver = construct.to_type(desc.pop('driver', {}))
     drivers = [construct.to_type(d) for d in desc['drivers']]
     if driver:
@@ -73,7 +78,7 @@ def cleanup_drivers(desc):
     return desc
 
 
-def cleanup_shape(desc):
+def fill_shape(desc):
     desc = copy.deepcopy(desc)
     dimensions = desc.pop('dimensions', None)
     if dimensions:
@@ -116,11 +121,11 @@ def cleanup_shape(desc):
     return desc
 
 
-def cleanup(desc):
-    desc = cleanup_aliases(desc)
-    desc = cleanup_animation(desc)
-    desc = cleanup_drivers(desc)
-    desc = cleanup_shape(desc)  # Must come after cleanup_drivers
-    desc = cleanup_numbers(desc)
+def fill(desc):
+    desc = fill_aliases(desc)
+    desc = fill_animation(desc)
+    desc = fill_drivers(desc)
+    desc = fill_shape(desc)  # Must come after fill_drivers
+    desc = fill_numbers(desc)
 
     return desc
