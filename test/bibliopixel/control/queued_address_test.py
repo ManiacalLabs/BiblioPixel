@@ -1,6 +1,6 @@
 import unittest
 from bibliopixel.control.queued_address import QueuedAddress
-from bibliopixel.project.event_queue import EventQueue
+from bibliopixel.project.edit_queue import EditQueue
 
 
 class Base:
@@ -15,7 +15,7 @@ class Base:
     class BarQ(Bar):
         def __init__(self):
             super().__init__()
-            self.event_queue = EventQueue()
+            self.edit_queue = EditQueue()
 
     class Baz:
         def __init__(self):
@@ -43,5 +43,5 @@ class QueuedAddressTest(unittest.TestCase):
         self.assertEqual(qa.get(), 12)
         qa.receive(('hello',))
         self.assertEqual(qa.get(), 12)
-        test.baz.barq.event_queue.get_and_run_events()
+        test.baz.barq.edit_queue.get_and_run_edits()
         self.assertEqual(qa.get(), 'hello')
