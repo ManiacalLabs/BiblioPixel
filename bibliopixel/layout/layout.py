@@ -80,7 +80,7 @@ class Layout(object):
             d.stop()
 
     def join(self, timeout=None):
-        self.threading.join(timeout)
+        self.threading.wait()
         for d in self.drivers:
             d.join(timeout)
 

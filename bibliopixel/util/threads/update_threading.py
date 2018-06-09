@@ -107,8 +107,8 @@ class UseThreading(NoThreading):
         while all([d._thread.sending() for d in self.layout.drivers]):
             time.sleep(0.000001)
 
-    def join(self, timeout=None):
-        self.update_thread.join(timeout)
+    def wait(self):
+        self.update_thread.wait()
 
     def stop(self):
         self.update_thread.stop()
