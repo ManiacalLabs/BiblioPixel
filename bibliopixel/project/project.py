@@ -1,9 +1,9 @@
 import os, queue, threading, weakref
 from . import (
-    attributes, construct, cleanup, defaults, event_queue, load, recurse)
+    attributes, construct, cleanup, defaults, edit_queue, load, recurse)
 from .. util import exception, log
 
-EVENT_QUEUE_MAXSIZE = 1000
+EDIT_QUEUE_MAXSIZE = 1000
 NO_DATATYPE_ERROR = 'No "datatype" field in section "%s"'
 
 
@@ -27,9 +27,9 @@ class Project:
 
     def __init__(self, *,
                  drivers, layout, maker, path, animation, controls,
-                 event_queue_maxsize=EVENT_QUEUE_MAXSIZE, **kwds):
+                 edit_queue_maxsize=EDIT_QUEUE_MAXSIZE, **kwds):
         """
-        :param int event_queue_maxsize: maxsize parameter to queue.Queue.
+        :param int edit_queue_maxsize: maxsize parameter to queue.Queue.
             0 means an unbounded queue.
         """
         def create(root, name):
@@ -57,13 +57,13 @@ class Project:
         self.animation = create(animation, 'animation')
         self.running = False
 
-        eq = event_queue.EventQueue(maxsize=event_queue_maxsize)
-        self.layout.event_queue = self.animation.event_queue = eq
-        self.animation.preframe_callback = eq.get_and_run_events
+        eq = edit_queue.EditQueue(maxsize=edit_queue_maxsize)
+        self.layout.edit_queue = self.animation.edit_queue = eq
+        self.animation.preframe_callback = eq.get_and_run_edits
 
         # Unfortunately, the whole animation cycle is controlled by methods on
         # the topmost animation - but we need to get called back at a certain
-        # point in that animation cycle in order to run the event queue safely -
+        # point in that animation cycle in order to run the edit queue safely -
         # and animations don't know about the Project!
         #
         # So the monkey-patch above.  Ugly.  When we rewrite the

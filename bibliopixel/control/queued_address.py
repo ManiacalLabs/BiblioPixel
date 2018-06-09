@@ -5,10 +5,10 @@ from . receiver import Receiver
 class QueuedAddress(Receiver):
     """
     A `QueuedAddress` is a `Receiver` which sets `Address`es, perhaps using an
-    an optional `EventQueue`.
+    an optional `EditQueue`.
 
     When the `set_root` method is called, `QueuedAddress` searches
-    down through the address and stores the most recent `event_queue`
+    down through the address and stores the most recent `edit_queue`
     method it finds.
 
     """
@@ -22,7 +22,7 @@ class QueuedAddress(Receiver):
         self.subroot = root
 
         for segment in self.address.segments:
-            self.queue = getattr(self.subroot, 'event_queue', self.queue)
+            self.queue = getattr(self.subroot, 'edit_queue', self.queue)
             if segment is not self.last_segment:
                 self.subroot = segment.get(self.subroot)
                 if self.subroot is None:
@@ -33,11 +33,11 @@ class QueuedAddress(Receiver):
     def receive(self, msg):
         """
         Receives a message, and either sets it immediately, or puts it on the
-        event queue if there is one.
+        edit queue if there is one.
 
         """
         if self.queue:
-            self.queue.put_event(self._set, msg)
+            self.queue.put_edit(self._set, msg)
         else:
             self._set(msg)
 

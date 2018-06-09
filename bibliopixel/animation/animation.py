@@ -90,7 +90,7 @@ class Animation(object):
         pass.
 
         The ``Project`` writes over this method, for the top-level animation
-        only, in order to drain its event_queue at a moment where no rendering
+        only, in order to drain its edit_queue at a moment where no rendering
         is happening to avoid race conditions.
         """
         pass
