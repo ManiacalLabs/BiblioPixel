@@ -112,7 +112,7 @@ class Project:
         self.stop()
 
         for c in self.controls:
-            c.join(timeout)
+            c.stop_event.wait()
         self.layout.join(timeout)
 
     def run(self):
