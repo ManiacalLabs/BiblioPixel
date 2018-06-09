@@ -54,7 +54,7 @@ class MidiTest(unittest.TestCase):
             root = Root()
             m = midi.Midi(routing=routing or self.routing, **kwds)
             m.set_root(root)
-            with m.joiner(stop=True):
+            with m.run_until_stop():
                 time.sleep(0.1)
 
             self.assertEqual(vars(root), expected)
