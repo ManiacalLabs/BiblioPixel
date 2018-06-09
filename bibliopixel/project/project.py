@@ -1,6 +1,6 @@
 import os, queue, threading, weakref
 from . import (
-    attributes, construct, cleanup, defaults, edit_queue, load, recurse)
+    attributes, construct, fill, defaults, edit_queue, load, recurse)
 from .. util import exception, log
 
 EDIT_QUEUE_MAXSIZE = 1000
@@ -13,7 +13,7 @@ class Project:
 
     @staticmethod
     def pre_recursion(desc):
-        return cleanup.cleanup(desc)
+        return fill.fill(desc)
 
     def construct_child(self, section_name, datatype=None, typename=None,
                         **kwds):
@@ -48,7 +48,7 @@ class Project:
 
         attributes.check(kwds, 'project')
         self.path = path
-        layout = layout or cleanup.cleanup_layout(animation)
+        layout = layout or fill.fill_layout(animation)
         self.maker = self.construct_child('maker', **maker)
         self.drivers = [create(d, 'drivers') for d in drivers]
         with exception.add('Unable to create layout'):
