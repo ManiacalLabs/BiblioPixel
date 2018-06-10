@@ -3,5 +3,6 @@ BiblioPixelTriggers
 flask
 loady
 numpy
+pillow
 pyserial
 pyyaml
