@@ -119,3 +119,8 @@ class ExtractedControl(Control):
 
     def _convert(self, msg):
         return self.extractor.extract(msg)
+
+
+class ExtractedLoop(ExtractedControl, ControlLoop):
+    def _make_thread(self):
+        return ControlLoop._make_thread(self)

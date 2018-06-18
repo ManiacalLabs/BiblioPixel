@@ -14,14 +14,13 @@ MIDO_ERROR = """You need to install mido.  Try
     pip install mido
 """
 
-
 MIDO_BACKEND_ERROR = """You have the wrong rtmidi installed.  Try
     pip uninstall -y rtmidi
     pip install -y python-rtmidi
 """
 
 
-class Midi(control.ExtractedControl, control.ControlLoop):
+class Midi(control.ExtractedLoop):
     EXTRACTOR = {
         # There are more mido message types that we haven't used yet.
         'keys_by_type': {
@@ -59,9 +58,6 @@ class Midi(control.ExtractedControl, control.ControlLoop):
         """
         control.ExtractedControl.__init__(self, **kwds)
         self.use_note_off = use_note_off
-
-    def _make_thread(self):
-        return control.ControlLoop._make_thread(self)
 
     def messages(self):
         if not mido:
