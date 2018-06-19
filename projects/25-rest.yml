@@ -1,0 +1,18 @@
+aliases:
+  bpa: BiblioPixelAnimations.strip
+
+controls: rest
+
+shape: 50
+
+run:
+    fps: 30
+
+animation:
+    typename: mixer
+    levels: [1, 0, 0, 0]
+    animations:
+        - $bpa.Rainbows.RainbowCycle
+        - $bpa.Wave
+        - $bpa.HalvesRainbow
+        - $bpa.PartyMode
