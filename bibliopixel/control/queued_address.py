@@ -17,18 +17,20 @@ class QueuedAddress(Receiver):
         self.address = Address(address)
 
     def set_root(self, root):
+        self.root = root
         self.last_segment = self.address.segments[-1]
-        self.queue = None
-        self.subroot = root
+        edit_queue = None
 
         for segment in self.address.segments:
-            self.queue = getattr(self.subroot, 'edit_queue', self.queue)
+            edit_queue = getattr(self.subroot, 'edit_queue', edit_queue)
             if segment is not self.last_segment:
-                self.subroot = segment.get(self.subroot)
-                if self.subroot is None:
+                root = segment.get(root)
+                if root is None:
                     raise ValueError(
                         'Resolving the address "%s" failed at "%s"' %
                         (self.address, segment))
+        self.subroot = root
+        self.edit_queue = edit_queue
 
     def receive(self, msg):
         """
@@ -36,19 +38,22 @@ class QueuedAddress(Receiver):
         edit queue if there is one.
 
         """
-        if self.queue:
-            self.queue.put_edit(self._set, msg)
+        if self.edit_queue:
+            self.edit_queue.put_edit(self._set, msg)
         else:
             self._set(msg)
+
+    def get(self):
+        return self.last_segment.get(self.subroot)
+
+    def set(self, value):
+        self.receive((number(value),))
 
     def __bool__(self):
         return bool(self.address)
 
     def __str__(self):
         return str(self.address)
-
-    def get(self):
-        return self.last_segment.get(self.subroot)
 
     def _set(self, values):
         args = self.address.assignment + values
