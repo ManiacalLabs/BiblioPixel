@@ -121,11 +121,19 @@ def fill_shape(desc):
     return desc
 
 
+def fill_controls(desc):
+    controls = desc.get('controls', None)
+    if isinstance(controls, (str, dict)):
+        desc['controls'] = [controls]
+    return desc
+
+
 def fill(desc):
     desc = fill_aliases(desc)
     desc = fill_animation(desc)
     desc = fill_drivers(desc)
     desc = fill_shape(desc)  # Must come after fill_drivers
     desc = fill_numbers(desc)
+    desc = fill_controls(desc)
 
     return desc
