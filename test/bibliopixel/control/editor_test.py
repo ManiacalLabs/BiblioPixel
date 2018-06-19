@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.control.queued_address import QueuedAddress
+from bibliopixel.control.editor import Editor
 from bibliopixel.project.edit_queue import EditQueue
 
 
@@ -27,18 +27,18 @@ class Base:
         self.baz = Base.Baz()
 
 
-class QueuedAddressTest(unittest.TestCase):
+class EditorTest(unittest.TestCase):
     def test_no_queue(self):
         test = Base()
-        qa = QueuedAddress('baz.bar.foo.foo')
+        qa = Editor('baz.bar.foo.foo')
         qa.set_root(test)
         self.assertEqual(qa.get(), 12)
         qa.receive(('hello', ))
         self.assertEqual(qa.get(), 'hello')
 
-    def test_queued_address(self):
+    def test_with_queue(self):
         test = Base()
-        qa = QueuedAddress('baz.barq.foo.foo')
+        qa = Editor('baz.barq.foo.foo')
         qa.set_root(test)
         self.assertEqual(qa.get(), 12)
         qa.receive(('hello',))

@@ -1,13 +1,13 @@
-from . address import Address
+from . address import number, Address
 from . receiver import Receiver
 
 
-class QueuedAddress(Receiver):
+class Editor(Receiver):
     """
-    A `QueuedAddress` is a `Receiver` which sets `Address`es, perhaps using an
-    an optional `EditQueue`.
+    A `Editor` is a `Receiver` which gets and sets `Address`es, perhaps using an
+    an optional `EditQueue` for the setting.
 
-    When the `set_root` method is called, `QueuedAddress` searches
+    When the `set_root` method is called, `Editor` searches
     down through the address and stores the most recent `edit_queue`
     method it finds.
 
@@ -22,7 +22,7 @@ class QueuedAddress(Receiver):
         edit_queue = None
 
         for segment in self.address.segments:
-            edit_queue = getattr(self.subroot, 'edit_queue', edit_queue)
+            edit_queue = getattr(root, 'edit_queue', edit_queue)
             if segment is not self.last_segment:
                 root = segment.get(root)
                 if root is None:
