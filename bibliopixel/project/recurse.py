@@ -70,4 +70,5 @@ def recurse(desc, pre='pre_recursion', post=None, python_path=None):
             else:
                 desc[child_name] = recurse(child, pre, post, new_path)
 
-    return call(post, desc) or desc
+    d = call(post, desc)
+    return desc if d is None else d
