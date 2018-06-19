@@ -31,6 +31,7 @@ class Control(runnable.Runnable):
         self.routing = Routing(routing or {}, default or {}, python_path)
 
     def set_root(self, root):
+        self.root = root
         self.pre_routing.set_root(root)
         self.routing.set_root(root)
 
@@ -42,13 +43,9 @@ class Control(runnable.Runnable):
         self.thread = self._make_thread()
         self.thread.start()
 
-    def join(self, timeout=None):
-        self.thread.join(timeout)
-
     def stop(self):
         super().stop()
-        stop_thread = getattr(self.thread, 'stop', None)
-        stop_thread and stop_thread()
+        getattr(self.thread, 'stop', lambda: None)()
 
     def _receive(self, msg):
         """
