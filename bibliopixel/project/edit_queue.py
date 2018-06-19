@@ -1,4 +1,5 @@
-import functools, queue
+import functools, queue, traceback
+from .. util import log
 
 
 class EditQueue(queue.Queue):
@@ -50,4 +51,8 @@ class EditQueue(queue.Queue):
                 break
 
         for e in edits:
-            e()
+            try:
+                e()
+            except:
+                log.error('Error on edit %s', e)
+                traceback.print_exc()
