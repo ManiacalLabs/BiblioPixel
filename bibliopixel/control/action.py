@@ -1,16 +1,16 @@
 from . ops import Ops
-from . queued_address import QueuedAddress
+from . editor import Editor
 from . receiver import Receiver
 
 
 class Action(Receiver):
     """
     An Action takes an incoming message, applies Ops to it, and then
-    uses it to set a value on a QueuedAddress.
+    uses it to set a value on a Editor.
     """
 
     def __init__(self, address, ops=()):
-        self.address = QueuedAddress(address)
+        self.address = Editor(address)
         self.ops = Ops(*ops)
 
     def set_root(self, root):
