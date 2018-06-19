@@ -31,6 +31,18 @@ which probably didn't want to do that anyway.
 from .. util import log
 
 
+def number(s):
+    try:
+        return int(s)
+    except ValueError:
+        pass
+    try:
+        return float(s)
+    except ValueError:
+        pass
+    return s
+
+
 class Address:
     class Segment:
         def __init__(self, name):
@@ -96,17 +108,6 @@ class Address:
 
         if isinstance(self.segments[-1], Address.Call):
             raise ValueError('Cannot assign to a call operation')
-
-        def number(s):
-            try:
-                return int(s)
-            except ValueError:
-                pass
-            try:
-                return float(s)
-            except ValueError:
-                pass
-            return s
 
         self.assignment = tuple(number(s) for s in assignment.split(','))
 
