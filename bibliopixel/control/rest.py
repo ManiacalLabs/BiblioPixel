@@ -10,13 +10,13 @@ class RestServer(runnable.LoopThread):
     def __init__(self, port, external_access, get, put):
         super().__init__()
         self.port = port
-        self.ip_address = '0.0.0.0' if external_access else 'localhost'
+        self.hostname = '0.0.0.0' if external_access else 'localhost'
         self.app = flask.Flask(__name__)
         self.app.route('/get/<address>')(get)
         self.app.route('/put/<address>/<value>')(put)
 
     def run_once(self):
-        werkzeug.serving.run_simple(self.ip_address, self.port, self.app)
+        werkzeug.serving.run_simple(self.hostname, self.port, self.app)
         super().stop()
 
     def stop(self):
@@ -46,7 +46,7 @@ class Rest(control.ExtractedControl):
         http://localhost:8787/get/animation.levels
         http://localhost:8787/put/animation.levels[2]/1
     """
-    def __init__(self, *args, port=8787, external_access=False, verbose=True,
+    def __init__(self, *args, port=PORT, external_access=False, verbose=True,
                  **kwds):
         super().__init__(*args, verbose=verbose, **kwds)
         self.server = RestServer(port, external_access, self.get, self.put)
