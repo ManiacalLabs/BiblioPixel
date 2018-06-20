@@ -1,0 +1,113 @@
+site_name: Bibliopixel Documentation
+site_description: Bibliopixel Lighting System Documentation
+site_author: Maniacal Labs
+#site_url: https://maniacallabs.github.io/bibliopixel
+
+repo_name: maniacallabs/bibliopixel
+repo_url: https://github.com/maniacallabs/bibliopixel
+
+copyright: Copyright &copy; 2018 Maniacal Labs
+
+# We're using the material theme for the master docs because it's beautiful
+# on ReadTheDocs, we'll default to the standard mkdocs theme.
+# This is OK, because ReadTheDocs will mainly be for older versions (2.x, 3.x, etc)
+theme:
+    name: material
+    language: en
+    palette:
+        primary: 'Blue'
+        accent: 'Amber'
+    font:
+        text: Roboto
+        code: Roboto Mono
+    feature:
+        tabs: false
+    favicon: assests/images/favicon.png
+
+# https://squidfunk.github.io/mkdocs-material/extensions
+# https://facelessuser.github.io/pymdown-extensions/extensions/keys/
+markdown_extensions:
+    - admonition # block-style content
+    - codehilite: # code highlighting
+        guess_lang: false
+    - footnotes # documentation footnotes
+    - meta # document metadata
+    - toc: # Table of contents, anchors
+        permalink: true
+    - pymdownx.betterem: # Better emphasis markup
+        smart_enable: all
+    - pymdownx.critic # Allow highlighting, text addition/deletion highlights
+    - pymdownx.details # Admonition-style blocks
+    - pymdownx.emoji: # Emojis!
+        emoji_generator: '!!python/name:pymdownx.emoji.to_svg'
+    - pymdownx.inlinehilite # Inline code highlighting
+    - pymdownx.keys # Styling keyboard keys
+    - pymdownx.magiclink # Automatically detect and generate links
+    - pymdownx.mark # Text highlighting
+    - pymdownx.smartsymbols # Convert markfup of special characters into their symbols
+    - pymdownx.snippets # Allow importing of markdown files
+    - pymdownx.superfences # nested code blocks
+    - pymdownx.tasklist: # styled checklists
+        custom_checkbox: true
+    - pymdownx.tilde # strike-through/cross-out text
+
+pages:
+    - Home: index.md
+    - Quick Start: quickstart.md
+    - Getting Started:
+        - Installation: installation.md
+        - Basics: user-guide/basics.md
+        - Hardware Setup:
+            - Display Setup: setup/display.md
+            - SPI Setup: setup/spi.md
+            - All Pixel: setup/all_pixel.md
+        - Demos: user-guide/demos.md
+    - Getting Involved:
+        - CLI: user-guide/cli.md
+        - Projects: user-guide/projects.md
+        - Using Drivers:
+            - Index: drivers/index.md
+            - Dummy: drivers/dummy.md
+            - Hue: drivers/hue.md
+            - Network: drivers/network.md
+            - PiWS281X: drivers/PiWs281X.md
+            - Serial: drivers/serial.md
+            - SPI: drivers/spi.md
+            - SimPixel: drivers/simpixel.md
+        - Using Layouts:
+            - Index: layouts/index.md
+            - Circle: layouts/circle.md
+            - Cube: layouts/cube.md
+            - Matrix: layouts/matrix.md
+            - POV: layouts/POV.md
+            - Strip: layouts/strip.md
+        - Using Multiple Drivers: layouts/multiple.md
+        - Threaded Updates: layouts/threaded.md
+    - Developers:
+        - Overview: developers/index.md
+        - Animations: 
+            - Writing Animations: developers/animations.md
+        - Drivers:
+            - DriverBase: drivers/driverbase.md
+            - Writing Drivers: developers/drivers.md
+        - Layouts: 
+            - Base Layout: layouts/base.md
+            - Writing Layouts: developers/layouts.md
+        - Projects: 
+            - Writing Projects: developers/projects.md
+        - Colors:
+            - Colors Module: developers/colors/colors_module.md
+            - HSV Colors: developers/colors/hsv_colors.md
+            - Gamma Correction: developers/colors/gamma_correction.md
+        - Logging: developers/logging.md
+        - Topics:
+            - Using Numpy: developers/topics/using_numpy.md
+        - Contributing: developers/contributing.md
+        - Migration:
+            - '2.x to 3.x': migration/2.x_to_3.x.md
+            - '3.x to 4.x': migration/3.x_to_4.x.md
+        - API: api/placeholder.md
+    - Troubleshooting: troubleshooting.md
+    - FAQ: faq.md
+    - About: about.md
+    - Changelog: changelog.md
