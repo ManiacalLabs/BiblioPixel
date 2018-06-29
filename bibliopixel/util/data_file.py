@@ -6,11 +6,6 @@ open = __builtins__['open']
 ALWAYS_LOAD_YAML, ALWAYS_DUMP_YAML = True, True
 
 
-def _dump_yaml(data, default_flow_style=True, **kwds):
-    ordered = collections.OrderedDict(sorted(data.items()))
-    return yaml.dump(ordered, default_flow_style=default_flow_style, **kwds)
-
-
 def dumps(data, use_yaml=None, **kwds):
     """
     Dumps data into a nicely formatted JSON string.
@@ -24,7 +19,7 @@ def dumps(data, use_yaml=None, **kwds):
         use_yaml = ALWAYS_DUMP_YAML
 
     if use_yaml:
-        return _dump_yaml(data, **kwds)
+        return yaml.safe_dump(data, canonical=True, **kwds)
     else:
         return json.dumps(data, indent=4, sort_keys=True, **kwds)
 
@@ -42,7 +37,7 @@ def dump(data, file=sys.stdout, use_yaml=None, **kwds):
 
     def dump(fp):
         if use_yaml:
-            _dump_yaml(data, stream=fp, **kwds)
+            yaml.safe_dump(data, stream=fp, canonical=True, **kwds)
         else:
             json.dump(data, fp, indent=4, sort_keys=True, **kwds)
 
@@ -73,7 +68,7 @@ def loads(s, use_yaml=None, filename=''):
         assert isinstance(d, (int, float, bool, str))
         return d
 
-    return fix(yaml.load(s))
+    return fix(yaml.safe_load(s))
 
 
 def load(file, use_yaml=None):

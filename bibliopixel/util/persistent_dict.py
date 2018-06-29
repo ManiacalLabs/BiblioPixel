@@ -47,4 +47,5 @@ class PersistentDict(dict):
         self.__write()
 
     def __write(self):
-        data_file.dump(self, self.__filename)
+        ordered = dict(sorted(self.items()))
+        data_file.dump(ordered, self.__filename)

@@ -20,7 +20,7 @@ controls:
 """
 
 
-class Data_fileTest(unittest.TestCase):
+class DataFileTest(unittest.TestCase):
     def test_yaml_keys(self):
         result = data_file.loads(DATA, 'test.yml')
         routing = result['controls'][0]['routing']
