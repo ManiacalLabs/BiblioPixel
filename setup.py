@@ -2,8 +2,17 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from setuptools.command.install_scripts import install_scripts
 from setuptools.command.install import install as _install
-import os, sys
+import os, platform, sys
 
+
+PYTHON_37_ERROR = """Sorry, BiblioPixel does not yet support Python 3.7
+because its dependency pyyaml does not.
+
+Please install Python 3.6 and use that!
+"""
+
+if platform.python_version() >= '3.7.0':
+    raise NotImplementedError(PYTHON_37_ERROR)
 
 INSTALLATION_ERROR = """INSTALLATION ERROR!
 
