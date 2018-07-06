@@ -12,8 +12,9 @@ class RestServer(runnable.LoopThread):
         self.port = port
         self.hostname = '0.0.0.0' if external_access else 'localhost'
         self.app = flask.Flask(__name__)
+        self.app.route('/')(lambda: 'BiblioPixel REST server')
         self.app.route('/get/<address>')(get)
-        self.app.route('/put/<address>/<value>')(put)
+        self.app.route('/put/<address>/<value>', methods=['GET', 'PUT'])(put)
 
     def run_once(self):
         werkzeug.serving.run_simple(self.hostname, self.port, self.app)
