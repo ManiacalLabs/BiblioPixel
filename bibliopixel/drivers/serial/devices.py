@@ -1,7 +1,8 @@
 import serial, serial.tools.list_ports
 from distutils.version import LooseVersion
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
-from ... drivers.return_codes import RETURN_CODES, raise_error
+from . import io
+from ... drivers.return_codes import raise_error
 from ... util import log, util
 from ... project.importer import import_module
 
@@ -94,40 +95,21 @@ class Devices(object):
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
 
-        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
-
-        packet = util.generate_header(CMDTYPE.SETID, 1)
-        packet.append(id)
-        com.write(packet)
-
-        resp = com.read(1)
-        if len(resp) == 0:
-            self.error(action='set_device_id')
-        elif ord(resp) != RETURN_CODES.SUCCESS:
-            raise_error(ord(resp))
+        com, code, ok = io.send_packet(CMDTYPE.SETID, 1, dev, baudrate, 5, id)
+        if not ok:
+            raise_error(code)
 
     def get_device_id(self, dev, baudrate=921600):
         """Get device ID at given address/path.
 
         :param str dev: Serial device address/path
-        :param baudrate: Baudrate to use when connectinh (optional)
+        :param baudrate: Baudrate to use when connecting (optional)
         """
-        packet = util.generate_header(CMDTYPE.GETID, 0)
-        com = serial.Serial(dev, baudrate=baudrate, timeout=5)
-        com.write(packet)
-        resp = com.read(1)
-        if resp:
-            return ord(resp)
-        self.error(action='get_device_id')
+        com, code, ok = io.send_packet(CMDTYPE.GETID, 0, dev, baudrate, 5)
+        if code is None:
+            self.error(action='get_device_id')
+        return code
 
     def _get_device_version(self, dev, baudrate=921600):
-        packet = util.generate_header(CMDTYPE.GETVER, 0)
-        com = serial.Serial(dev, baudrate=baudrate, timeout=0.5)
-        com.write(packet)
-        ver = 0
-        resp = com.read(1)
-        if len(resp) > 0:
-            resp = ord(resp)
-            if resp == RETURN_CODES.SUCCESS:
-                ver = ord(com.read(1))
-        return ver
+        com, code, ok = io.send_packet(CMDTYPE.GETVER, 0, dev, baudrate, 0.5)
+        return ok and io.read_byte(com) or 0
