@@ -117,7 +117,7 @@ class Devices(object):
         com.write(packet)
         resp = com.read(1)
         if resp:
-            return resp
+            return ord(resp)
         self.error(action='get_device_id')
 
     def _get_device_version(self, dev, baudrate=921600):
