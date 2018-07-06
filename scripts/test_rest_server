@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+#
+# This is not a unit test but an integration test which is run from the
+# command line and pops up
+
+
+import requests, subprocess, threading, time
+
+ADDRESS = 'http://localhost:8787/put/animation.levels[{0}]/{1}'
+START_BP = 'bp', '-vs', 'projects/26-simple-rest.yml'
+STOP_BP = 'bp', 'shutdown'
+
+
+def test_rest():
+    threading.Thread(
+        target=subprocess.check_call, args=(START_BP,)).start()
+
+    time.sleep(3)
+
+    requests.put(ADDRESS.format(0, 1))
+    time.sleep(1)
+
+    requests.get(ADDRESS.format(1, 1))
+    time.sleep(1)
+
+    requests.put(ADDRESS.format(2, 1))
+    time.sleep(1)
+
+    requests.get(ADDRESS.format(0, 0))
+    time.sleep(1)
+
+    requests.put(ADDRESS.format(1, 0))
+    time.sleep(1)
+
+    subprocess.check_call(STOP_BP)
+
+
+if __name__ == '__main__':
+    test_rest()
