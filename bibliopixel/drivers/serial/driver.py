@@ -2,6 +2,7 @@ import os, sys, serial, time, traceback
 
 from . codes import CMDTYPE, LEDTYPE, SPIChipsets, BufferChipsets
 from . devices import Devices
+from . import io
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
 from ... util import log, util
@@ -116,11 +117,11 @@ class Serial(DriverBase):
             packet.append(self._spi_speed)
             self._write(packet)
 
-            resp = self._read(1) or ''
-            if len(resp) == 0:
+            code = self._read()
+            if code is None:
                 self.devices.error()
 
-            return ord(resp)
+            return code
 
         except serial.SerialException as e:
             error = ("Unable to connect to the device. Please check that "
@@ -133,21 +134,19 @@ class Serial(DriverBase):
         packet = util.generate_header(CMDTYPE.BRIGHTNESS, 1)
         packet.append(self._brightness)
         self._write(packet)
-        resp = ord(self._read(1) or chr(RETURN_CODES.ERROR))
-        if resp == RETURN_CODES.SUCCESS:
+        code = self._read()
+        if code == RETURN_CODES.SUCCESS:
             return True
-        print_error(resp)
+        print_error(code)
 
     def _send_packet(self):
         self._write(self._packet)
 
-        resp = self._read(1)
-        if resp is None:
-            return
-        if len(resp) == 0:
+        code = self._read()
+        if code is None:
             self.devices.error(fail=False)
-        elif ord(resp) != RETURN_CODES.SUCCESS:
-            print_error(ord(resp))
+        elif code != RETURN_CODES.SUCCESS:
+            print_error(code)
         else:
             self._flushInput()
             return True
@@ -163,11 +162,8 @@ class Serial(DriverBase):
     def _send_sync(self):
         self._write(self._sync_packet)
 
-    def _read(self, *args):
-        try:
-            return self._com.read(*args)
-        except Exception as e:
-            log.error('Serial exception %s in read', e)
+    def _read(self):
+        return io.read_byte(self._com)
 
     def _close(self):
         try:
