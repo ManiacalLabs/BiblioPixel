@@ -28,19 +28,14 @@ convenient but prevents the creation of dictionaries like ``{1: 'x', '1': 'y'}``
 which you probably didn't want to do anyway.
 """
 
-from .. util import log
+from .. util import data_file, log
 
 
 def number(s):
     try:
-        return int(s)
-    except ValueError:
-        pass
-    try:
-        return float(s)
-    except ValueError:
-        pass
-    return s
+        return data_file.loads(s)
+    except:
+        return s
 
 
 class Address:

@@ -4,36 +4,74 @@
 # command line and pops up
 
 
-import requests, subprocess, threading, time
+import contextlib, requests, subprocess, threading, time
 
-ADDRESS = 'http://localhost:8787/put/animation.levels[{0}]/{1}'
 START_BP = 'bp', '-vs', 'projects/26-simple-rest.yml'
 STOP_BP = 'bp', 'shutdown'
 
+ROOT = 'http://localhost:8787/'
+PAUSE = 1
 
+
+def get(name, url, method='GET'):
+    print(method, name + ':', requests.get(ROOT + url).json())
+
+
+def put(name, url, data):
+    resp = requests.put(ROOT + url, data=data or {})
+    print('PUT', name + ':', resp.text)
+
+
+def bp(function):
+    def wrapped():
+        threading.Thread(
+            target=subprocess.check_call, args=(START_BP,)).start()
+        time.sleep(2 * PAUSE)
+
+        function()
+        subprocess.check_call(STOP_BP)
+
+    return wrapped
+
+@bp
+def test_other():
+    put('single', 'single/animation.levels', {'value': '[0, 0, 0]'})
+    time.sleep(PAUSE)
+    put('single', 'single/animation.levels', {'value': '[0, 1, 0]'})
+    time.sleep(PAUSE)
+    put('single', 'single/animation.levels', {'value': '[0, 0, 0]'})
+    time.sleep(PAUSE)
+    put('single', 'single/animation.levels', {'value': '[0, 1, 0]'})
+    time.sleep(PAUSE)
+
+@bp
 def test_rest():
-    threading.Thread(
-        target=subprocess.check_call, args=(START_BP,)).start()
+    get('basic', 'get/animation.levels')
+    get('single', 'single/animation.levels')
+    get('multi', 'multi?animation.levels=0')
+    get('multi2', 'multi/animation?levels=0')
+    time.sleep(PAUSE)
 
-    time.sleep(3)
+    get('basic', 'set/animation.levels[0]/0', method='PUT')
+    time.sleep(PAUSE)
 
-    requests.put(ADDRESS.format(0, 1))
-    time.sleep(1)
+    put('single', 'single/animation.levels[1]', {'value': 0})
+    time.sleep(PAUSE)
 
-    requests.get(ADDRESS.format(1, 1))
-    time.sleep(1)
+    data = {'animation.levels[0]': 1, 'animation.levels[1]': 1,
+            'animation.master': 0.5}
+    put('multi', 'multi', data)
+    time.sleep(PAUSE)
 
-    requests.put(ADDRESS.format(2, 1))
-    time.sleep(1)
+    put('multi', 'multi/animation', {'levels[0]': 0, 'master': 1.0})
+    time.sleep(PAUSE)
 
-    requests.get(ADDRESS.format(0, 0))
-    time.sleep(1)
-
-    requests.put(ADDRESS.format(1, 0))
-    time.sleep(1)
-
-    subprocess.check_call(STOP_BP)
+    put('multi', 'multi/animation', {'levels': '[1, 1, 1]'})
+    time.sleep(PAUSE)
 
 
 if __name__ == '__main__':
-    test_rest()
+    if True:
+        test_rest()
+    else:
+        test_other()

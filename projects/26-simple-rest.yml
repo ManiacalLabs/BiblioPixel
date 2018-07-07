@@ -4,13 +4,14 @@ aliases:
 controls: rest
 
 shape: [32, 32]
+numbers: float
 
 run:
     fps: 30
 
 animation:
     typename: mixer
-    levels: [0, 0, 0]
+    levels: [1, 1, 1]
     animations:
         - {typename: $fill, color: red}
         - {typename: $fill, color: green}
