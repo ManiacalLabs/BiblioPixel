@@ -10,11 +10,12 @@ class Editor(Receiver):
     When the `set_root` method is called, `Editor` searches
     down through the address and stores the most recent `edit_queue`
     method it finds.
-
     """
 
-    def __init__(self, address=None):
+    def __init__(self, address=None, root=None):
         self.address = Address(address)
+        if root is not None:
+            self.set_root(root)
 
     def set_root(self, root):
         self.root = root
