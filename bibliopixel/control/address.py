@@ -25,7 +25,7 @@ You can use an Address to either get or set values in the root object.
 
 Any key that's entirely numeric is taken to be an integer index.  This is
 convenient but prevents the creation of dictionaries like ``{1: 'x', '1': 'y'}``
-which probably didn't want to do that anyway.
+which you probably didn't want to do anyway.
 """
 
 from .. util import log
