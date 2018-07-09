@@ -44,10 +44,7 @@ def _load_py(filename):
 
 
 def _dump(args, desc):
-    if not isinstance(desc, str):
-        dump = data_file.yaml.dump if args.yaml else data_file.dumps
-        desc = dump(desc, default=repr)
-    return desc.strip()
+    return data_file.dumps(desc, args.yaml, safe=False)
 
 
 def _get_projects(args):
