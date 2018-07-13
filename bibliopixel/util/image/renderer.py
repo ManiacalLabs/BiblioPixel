@@ -1,11 +1,11 @@
-from ... util import colors
+from ... util import colors, log
 from ... layout import Matrix, Strip
 
 
 def renderer(layout, color, pixel_width, pixel_height,
              ellipse, vertical, frame, padding):
     if not isinstance(layout, (Matrix, Strip)):
-        return
+        raise ValueError('Cannot render a layout of type %s' % type(layout))
 
     from PIL import Image, ImageDraw
 

@@ -93,6 +93,9 @@ class DriverBase(object):
             raise ValueError('Needed %d colors but found %d' % (
                 end, len(self._colors)))
 
+    def set_project(self, project):
+        self.project = project
+
     def start(self):
         """
         Called right before this driver will run.  This is the place

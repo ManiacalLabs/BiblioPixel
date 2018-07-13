@@ -66,7 +66,8 @@ def add_project_flags(parser):
 
     parser.add_argument(
         '--dump', action='store_true',
-        help='Dump the full project as DATA_FILE after loading but before running')
+        help='Dump the full project as DATA_FILE after loading but ' +
+             'before running')
 
     parser.add_argument(
         '--dry_run', action='store_true',
@@ -75,6 +76,9 @@ def add_project_flags(parser):
     parser.add_argument(
         '-f', '--fail_on_exception', action='store_true',
         help='If true, bp fail if any subanimation fails to construct')
+
+    parser.add_argument(
+        '-g', '--gif', default='', nargs='?', help=GIF_HELP)
 
     parser.add_argument(
         '-i', '--ignore_exceptions', action='store_true',
@@ -220,6 +224,16 @@ Run BiblioPixel in v4 compatibility mode, to see if it will work with
 future releases v4.x
 """
 
+GIF_HELP = """
+Write an animated GIF file.
+
+If --gif has no argument, the name of the GIF file is the same as the name of
+the project.
+
+If it has a single string argument, then it's the name of the GIF file.
+
+Otherwise, the argument is read as JSON and used to construct a GifWriter class.
+"""
 
 # TODO: this should go somewhere else
 """

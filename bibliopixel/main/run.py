@@ -11,6 +11,7 @@ from .. project.project import Project
 
 RUN_ERROR = """When reading file {filename}:
 {desc}
+{exception}
 """
 
 FAILURE_ERROR = """\
@@ -50,6 +51,21 @@ def _dump(args, desc):
 def _get_projects(args):
     projects, failed = [], []
 
+    gif = args.gif
+    if gif is not '':
+        log.info('writing animated gifs')
+        if gif is None:
+            # --get appeared but without a value
+            gif = '{}'
+        if '{' in gif:
+            gif = data_file.loads(gif, filename='--gif')
+        if isinstance(gif, str):
+            gif = {'filename': gif}
+        if 'filename' in gif and len(args.name) > 1:
+            log.warning('Writing multiple documents to the same GIF file name')
+
+        gif['typename'] = '.gif_writer'
+
     for filename in args.name:
         saved_path = sys.path[:]
         desc = '(not loaded)'
@@ -62,6 +78,13 @@ def _get_projects(args):
                 desc = data_file.load(desc, filename)
                 root_file = os.path.abspath(filename)
 
+            if gif:
+                if 'filename' in gif:
+                    desc['driver'] = gif
+                else:
+                    f, suffix = os.path.splitext(filename)
+                    desc['driver'] = dict(gif, filename=f + '.gif')
+
             project = common_flags.make_project(args, desc, root_file)
             projects.append(project)
             if args.dump:
@@ -71,12 +94,12 @@ def _get_projects(args):
             failed.append(('%s: %s' % (e.strerror, e.filename), ()))
 
         except Exception as exception:
-            if args.verbose or filename.endswith('.py'):
+            if filename.endswith('.py'):
                 raise
             eargs = exception.args
+            desc = desc and _dump(args, desc)
             if args.verbose:
                 exception = traceback.format_exc()
-            desc = desc and _dump(args, desc)
             msg = RUN_ERROR.format(**locals())
             failed.append((msg, eargs))
 

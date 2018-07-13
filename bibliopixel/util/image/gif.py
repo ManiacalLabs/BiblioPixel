@@ -4,8 +4,8 @@ from .. import log
 
 # PIL has a limit on how many image files can be open at once - you get an
 # exception when you try to open more files than that in save_images.  The exact
-# number varies for some unknown reason but I consistently was able to get at
-# least 240, but I use 192 for safety.
+# number varies for some unknown reason - I consistently was able to get at
+# least 240 in informal testing - but we use 192 for safety.
 MAX_IMAGES_IN_MEMORY = 192
 WINDOW_SIZE = MAX_IMAGES_IN_MEMORY // 2
 

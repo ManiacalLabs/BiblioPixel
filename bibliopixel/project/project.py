@@ -73,6 +73,9 @@ class Project:
 
         self.controls = [create(c, 'control') for c in controls]
 
+        for d in self.drivers:
+            d.set_project(self)
+
     def start(self):
         with self.LOCK:
             if self.running:
