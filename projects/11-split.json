@@ -1,11 +1,5 @@
 {
-    "driver": {
-        "num": 200,
-        "typename": "simpixel"
-    },
-
-    "layout": "strip",
-
+    "shape": 200,
     "aliases": {
         "bpa": "BiblioPixelAnimations.strip",
         "Fill": "BiblioPixelAnimations.simple.Fill"
@@ -15,6 +9,8 @@
         "seconds": 23,
         "fps": 30
     },
+
+    "driver": "simpixel",
 
     "animation": {
         "typename": "split",
