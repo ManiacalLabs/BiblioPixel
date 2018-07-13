@@ -1,0 +1,22 @@
+shape: [8, 8]
+
+driver:
+  typename: .gif_writer.GifWriter
+#  tmp_dir: /tmp
+
+aliases:
+  bpa: BiblioPixelAnimations.matrix
+
+run:
+  until_complete: true
+  fps: 16
+  seconds: 3
+
+animation:
+  typename: sequence
+  length: 2
+  animations:
+    - $bpa.bloom
+    - $bpa.circlepop
+    - $bpa.perlin_simplex
+    - $bpa.pinwheel

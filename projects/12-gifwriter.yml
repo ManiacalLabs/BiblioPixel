@@ -7,9 +7,7 @@ run:
   until_complete: true
 
 animation:
-  typename: bibliopixel.animation.gif_writer.GifWriter
-
-  time: 23
+  typename: .gif_writer.GifWriter
 
   run:
     fps: 24
@@ -24,7 +22,7 @@ animation:
     typename: sequence
     length: 2
     animations:
-      - "@bpa.bloom"
-      - "@bpa.circlepop"
-      - "@bpa.perlin_simplex"
-      - "@bpa.pinwheel"
+      - $bpa.bloom
+      - $bpa.circlepop
+      - $bpa.perlin_simplex
+      - $bpa.pinwheel

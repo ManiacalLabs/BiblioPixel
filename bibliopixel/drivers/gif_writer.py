@@ -1,14 +1,14 @@
-from . import wrapper
+from . driver_base import DriverBase
 from .. util.image import gif_writer as _gif_writer
 
 
-class GifWriter(wrapper.Wrapper):
+class GifWriter(DriverBase):
     """
     An animation that writes animated GIFs for each frame in the contained
     animation."""
 
     def __init__(self, *args, filename='gif_writer', render=None,
-                 divide=1, frames=128, time=0, scale=1.0, gif_options=None,
+                 divide=1, frames=0, time=10, scale=1.0, gif_options=None,
                  tmp_dir=None, **kwds):
         """
         :param str filename: Base filename to write the animated GIF file
@@ -33,16 +33,23 @@ class GifWriter(wrapper.Wrapper):
         :param str tmp_dir: If set, write individual GIF frame files to this
             directory, and do not delete them when done.  For testing purposes.
         """
+        # TODO: this is duplicated here so that it's duplicated in the
+        # documentation.  Is there a better way to do this?
         super().__init__(*args, **kwds)
+        self.cur_step = 1
         self._writer = _gif_writer.GifWriter(
             filename, render, divide, frames, time, scale, gif_options, tmp_dir)
-        self._writer.set_layout(self.layout)
 
-    def step(self, amt=1):
-        super().step(amt)
+    def set_project(self, project):
+        super().set_project(project)
+        self._writer.set_layout(project.layout)
+
+    def update_colors(self):
+        super().update_colors()
         if self._writer.step(self.cur_step):
-            self.completed = True
+            self.project.stop()
+        else:
+            self.cur_step += 1
 
-    def cleanup(self, clean_layout=True):
-        super().cleanup(clean_layout)
+    def cleanup(self):
         self._writer.write()
