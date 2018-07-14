@@ -3,6 +3,7 @@ Run specified project from file or URL.
 """
 
 import os, sys, time, traceback
+from unittest.mock import patch
 from . import common_flags, simpixel
 from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
@@ -52,7 +53,7 @@ def _get_projects(args):
     projects, failed = [], []
 
     gif = args.gif
-    if gif is not '':
+    if gif != '':
         log.info('writing animated gifs')
         if gif is None:
             # --get appeared but without a value
@@ -84,6 +85,7 @@ def _get_projects(args):
                 else:
                     f, suffix = os.path.splitext(filename)
                     desc['driver'] = dict(gif, filename=f + '.gif')
+                desc.setdefault('run', {})['no_sleep'] = True
 
             project = common_flags.make_project(args, desc, root_file)
             projects.append(project)
@@ -125,6 +127,8 @@ def _run_projects(projects, args):
 
     needs_pause = False
     assert len(projects) == len(args.name)
+    is_gif = args.gif != ''
+
     for project, name in zip(projects, args.name):
         if not _RUNNING:
             break
@@ -139,7 +143,11 @@ def _run_projects(projects, args):
 
         log.debug('Running file %s', name)
         try:
-            project.run()
+            if is_gif:
+                with patch('time.sleep', autospec=True):
+                    project.run()
+            else:
+                project.run()
 
         except KeyboardInterrupt:
             if not args.ignore_exceptions:
