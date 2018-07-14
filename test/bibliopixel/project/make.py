@@ -1,4 +1,5 @@
 import tempfile
+from unittest.mock import patch
 from bibliopixel.project import project
 from bibliopixel.util import data_file
 from .. mark_tests import SKIP_LONG_TESTS
@@ -30,6 +31,7 @@ def make(data, run_start=not SKIP_LONG_TESTS):
     project = make_project(data)
 
     if run_start:
-        project.animation.start()
+        with patch('time.sleep', autospec=True):
+            project.animation.start()
 
     return project.animation
