@@ -5,12 +5,12 @@ from .. import colors, log
 
 DEFAULT_RENDER = {
     'color': colors.Black,
-    'pixel_width': 16,
+    'pixel_width': 12,
     'pixel_height': None,
     'ellipse': True,
     'vertical': False,
-    'frame': 4,
-    'padding': 2,
+    'frame': 3,
+    'padding': 1,
 }
 
 
