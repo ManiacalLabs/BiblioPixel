@@ -49,6 +49,11 @@ def write_animation(filename, frames, **gif_options):
     from PIL import Image
     images = [Image.open(f) for f in frames]
     im = images.pop(0)
+
+    if 'loop' not in gif_options:
+        gif_options['loop'] = 0
+        # See https://github.com/python-pillow/Pillow/issues/3255
+
     im.save(filename, save_all=True, append_images=images, **gif_options)
 
 
