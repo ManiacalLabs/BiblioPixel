@@ -19,18 +19,14 @@ class Editor(Receiver):
 
     def set_root(self, root):
         self.root = root
-        self.last_segment = self.address.segments[-1]
+        self.segments = self.address.segments[:]
+        self.last_segment = self.address.segments.pop()
         edit_queue = None
 
         for segment in self.address.segments:
             edit_queue = getattr(root, 'edit_queue', edit_queue)
-            if segment is not self.last_segment:
-                root = segment.get(root)
-                if root is None:
-                    raise ValueError(
-                        'Resolving the address "%s" failed at "%s"' %
-                        (self.address, segment))
-        self.subroot = root
+            root = segment.get(root)
+
         self.edit_queue = edit_queue
 
     def receive(self, msg):
@@ -45,7 +41,7 @@ class Editor(Receiver):
             self._set(msg)
 
     def get(self):
-        return self.last_segment.get(self.subroot)
+        return self.last_segment.get(self._get())
 
     def set(self, value):
         self.receive((number(value),))
@@ -56,6 +52,12 @@ class Editor(Receiver):
     def __str__(self):
         return str(self.address)
 
+    def _get(self):
+        root = self.root
+        for segment in self.address.segments:
+            root = segment.get(root)
+        return root
+
     def _set(self, values):
         args = self.address.assignment + values
-        self.last_segment.set(self.subroot, *args)
+        self.last_segment.set(self._get(), *args)
