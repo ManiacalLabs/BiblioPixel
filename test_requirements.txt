@@ -1,7 +1,7 @@
 pyserial>=2.7.0
 coverage
 flake8
-flake8-print
+# flake8-print # This is not available for Python 3.7
 phue
 pytest
 pytest-benchmark
@@ -10,4 +10,4 @@ Pillow>=2.4.0
 noise
 psutil
 websocket
-opencv-python
+# opencv-python

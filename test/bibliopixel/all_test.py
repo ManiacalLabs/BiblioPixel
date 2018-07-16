@@ -9,8 +9,9 @@ BPA_ROOT = os.path.dirname(os.path.dirname(BiblioPixelAnimations.__file__))
 BPA_BLACKLIST = [
     'BiblioPixelAnimations.cube.spectrum',
     'BiblioPixelAnimations.cube.spectrum.system_eq',
-    'BiblioPixelAnimations.matrix.kimotion',
     'BiblioPixelAnimations.matrix.ScreenGrab',
+    'BiblioPixelAnimations.matrix.kimotion',
+    'BiblioPixelAnimations.matrix.opencv_video',
     'BiblioPixelAnimations.matrix.spectrum',
     'BiblioPixelAnimations.matrix.spectrum.system_eq',
     'BiblioPixelAnimations.receivers.GenericNetworkReceiver',
