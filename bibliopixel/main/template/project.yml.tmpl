@@ -1,0 +1,62 @@
+# Lines that start with the # character are comments - they don't
+# get executed, but are simply there to document.
+#
+# When you're finished creating your project, you can delete all these
+# comment lines and put your own in.
+
+
+# The `shape` section is the arrangement of the lights in your system - change
+# this to match your actual lights.  The example is for a matrix that is 32
+# pixels wide and 48 high.
+#
+# Using `shape` only works if you have a strip, a matrix, or a cube.
+# For more complex shapes, you will use the `layout` section
+
+shape: [32, 48]
+
+
+# The `driver` section describes the hardware outputs you are using.
+#
+# In this sample file, the driver is the SimPixel LED simulator which runs
+# in the browser; in a real project, that would be replaced by the right
+# hardware driver and its settings.
+
+driver:
+  typename: simpixel
+
+
+# This is the alias section where you can have short aliases for
+# longer strings for convenience.
+
+aliases:
+  $bpa: BiblioPixelAnimations.matrix
+
+
+# This is the animation section, which describes how your lights change over
+# time.
+
+animation: $bpa.bloom
+
+
+# Here are alternative animation sections that are commented out that you
+# could edit and use.
+
+
+# # Here's the animation section for a looping sequence of animations, each 10
+# # seconds long.
+#
+# animation:
+#   typename: sequence
+#   length: 10
+#   animations:
+#     - $bpa.bloom
+#     - $bpa.pinwheel
+#     - $bpa.GameOfLife.GameOfLifeRGB
+#     - $bpa.SpinningTriangle
+
+
+# # Here is the animation section if you wanted to use a custom class.
+#
+# animation:
+#   typename: {py_name}.{class_name}
+#   color: blue

@@ -4,7 +4,7 @@ from .. util import log
 
 COMMANDS = (
     'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo', 'devices',
-    'info', 'kill', 'list', 'load', 'monitor', 'pid', 'remove', 'reset',
+    'info', 'kill', 'list', 'load', 'monitor', 'new', 'pid', 'remove', 'reset',
     'restart', 'run', 'save', 'set', 'show', 'shutdown', 'update')
 
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
