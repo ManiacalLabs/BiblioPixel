@@ -4,7 +4,7 @@ so they have exactly the right constructor.
 """
 
 import copy
-from . import alias_lists, construct, merge
+from . import aliases, alias_lists, construct, merge
 from .. import layout, util
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
@@ -25,7 +25,13 @@ def fill_layout(animation):
 
 
 def fill_aliases(desc):
-    alias_lists.PROJECT_ALIASES = desc.pop('aliases', {})
+    def unalias(k):
+        if any(k.startswith(m) for m in aliases.ALIAS_MARKERS):
+            return k[1:]
+        return k
+
+    al = desc.pop('aliases', {})
+    alias_lists.PROJECT_ALIASES = {unalias(k): v for k, v in al.items()}
     return desc
 
 
@@ -45,7 +51,8 @@ def fill_animation(desc):
         desc['animation'], 'bibliopixel.animation')
     datatype = desc['animation'].get('datatype')
     if not datatype:
-        raise ValueError('Missing "datatype" in "animation" section')
+        e = desc['animation'].get('_exception')
+        raise e or ValueError('Missing "datatype" in "animation" section')
 
     desc['animation'].setdefault('name', datatype.__name__)
 
