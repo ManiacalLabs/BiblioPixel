@@ -42,6 +42,10 @@ class Indexed(Collection):
                       self.__class__.__name__, self.current_animation.title)
             self.frames = self.animation.generate_frames(False)
 
+    def pre_run(self):
+        super().pre_run()
+        self.index = 0
+
     def step(self, amt=1):
         try:
             next(self.frames)
@@ -50,6 +54,12 @@ class Indexed(Collection):
             pass
         except Exception as e:
             log.error('Exception %s in wrapper.step()', e)
+
+    def forward(self, *unused):
+        self.index += 1
+
+    def backward(self, *unused):
+        self.index -= 1
 
     @property
     def animation(self):
@@ -81,7 +91,3 @@ class Wrapper(Indexed):
     @property
     def animation(self):
         return self.animations[0]
-
-    def pre_run(self):
-        super().pre_run()
-        self.index = 0
