@@ -1,0 +1,25 @@
+aliases:
+    bpa: BiblioPixelAnimations.strip
+
+controls:
+    typename: midi
+    extractor:
+        accept:
+          type: control_change
+
+    routing:
+        0: animation.forward()
+        1: animation.backward()
+
+shape: [50]
+
+run:
+    fps: 30
+
+animation:
+    typename: indexed
+    animations:
+        - $bpa.Rainbows.RainbowCycle
+        - $bpa.Wave
+        - $bpa.HalvesRainbow
+        - $bpa.PartyMode
