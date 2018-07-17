@@ -93,7 +93,9 @@ class _AnimationList:
         self._names = {a.name: i for i, a in enumerate(self._animations)}
 
     def _index(self, i):
-        return i if isinstance(i, int) else self._names[i]
+        if isinstance(i, int):
+            return i % len(self._animations)
+        return self._names[i]
 
     def append(self, animation):
         # We're forced to do the "fill in a name and make sure it's
