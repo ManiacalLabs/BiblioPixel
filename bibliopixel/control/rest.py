@@ -1,5 +1,6 @@
 import contextlib, flask, fractions, functools, traceback
 import http.client, werkzeug.serving
+from werkzeug.datastructures import ImmutableOrderedMultiDict
 
 from . import control, editor
 from .. util import log
@@ -93,12 +94,19 @@ form data `levels=[1, 1, 1]&master=0.5` does the same as the previous example.
 """
 
 
+class OrderedFlask(flask.Flask):
+    # http://flask.pocoo.org/docs/1.0/patterns/subclassing/
+
+    class request_class(flask.Request):
+        parameter_storage_class = ImmutableOrderedMultiDict
+
+
 class RestServer(runnable.LoopThread):
     def __init__(self, port, external_access):
         super().__init__()
         self.port = port
         self.hostname = '0.0.0.0' if external_access else 'localhost'
-        self.app = flask.Flask(__name__)
+        self.app = OrderedFlask(__name__)
 
     def run_once(self):
         werkzeug.serving.run_simple(self.hostname, self.port, self.app)
