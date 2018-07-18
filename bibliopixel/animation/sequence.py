@@ -25,8 +25,8 @@ class Sequence(wrapper.Indexed):
         self.index = 0
 
     def pre_run(self):
-        super().pre_run()
         self.offset = 0
+        super().pre_run()
         self.restart()
 
     def step(self, amt=1):
