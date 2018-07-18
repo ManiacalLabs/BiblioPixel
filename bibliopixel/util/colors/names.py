@@ -2,7 +2,7 @@
 Convert back and forth between colors and string names.
 """
 
-import re
+import numbers, re
 from . import juce, classic
 
 
@@ -33,7 +33,7 @@ def name_to_color(name):
     try:
         color = to_color(name)
     except:
-        raise ValueError('Unknown color name %s' % name)
+        raise ValueError('Unknown color name %s' % str(name))
 
     if not all(0 <= i <= 255 for i in color):
         raise ValueError('Component out of range: %s' % color)
@@ -49,10 +49,14 @@ def color_to_name(color, use_hex=False):
     ``name_to_color(color_to_name(c)) == c`` is guaranteed to be true (but the
     reverse is not true, because name_to_color is a many-to-one function).
     """
+    if isinstance(color, list):
+        color = tuple(color)
+    elif not isinstance(color, tuple):
+        raise ValueError('Not a color')
+
     if use_hex:
         return '#%02x%02x%02x' % color
-    if not isinstance(color, tuple):
-        color = tuple(color)
+
     try:
         return TO_NAME[color]
     except:
@@ -117,6 +121,30 @@ def _from_number(s):
             return int(s[len(prefix):], 16)
 
     return int(s)
+
+
+def to_color(c):
+    """Try to coerce the argument into a color - a 3-tuple of numbers-"""
+    if isinstance(c, numbers.Number):
+        return c, c, c
+
+    if not c:
+        raise ValueError('Cannot create color from empty "%s"' % c)
+
+    if isinstance(c, str):
+        return name_to_color(c)
+
+    if isinstance(c, list):
+        c = tuple(c)
+
+    if isinstance(c, tuple):
+        if len(c) > 3:
+            return c[:3]
+        while len(c) < 3:
+            c += (c[-1],)
+        return c
+
+    raise ValueError('Cannot create color from "%s"' % c)
 
 
 """
