@@ -1,0 +1,29 @@
+driver:
+  num: 99
+  typename: simpixel
+
+layout:
+  typename: circle
+  pixels_per: [1, 4, 8, 12, 18, 24, 32]
+
+run:
+  fps: 30
+  seconds: 12
+
+aliases:
+  bpa: BiblioPixelAnimations.circle
+
+
+animation:
+  typename: sequence
+  animations:
+    - $bpa.arc_clock
+    - $bpa.arc_rotate
+    - $bpa.bloom.CircleBloom
+    - $bpa.circle_clock
+    - $bpa.diag
+    - $bpa.fireflies
+    - $bpa.hyperspace
+    - $bpa.hyperspace.HyperspaceRainbow
+    - $bpa.pinwheel
+    - $bpa.swirl
