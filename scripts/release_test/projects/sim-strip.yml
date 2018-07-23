@@ -1,0 +1,17 @@
+shape: 50
+
+aliases:
+  bpa: BiblioPixelAnimations.strip
+
+animation:
+  typename: sequence
+  run:
+    seconds: 6
+    fps: 30
+
+  length: 1.5
+  animations:
+    - $bpa.LarsonScanners.LarsonRainbow
+    - $bpa.Wave
+    - $bpa.Wave.WaveMove
+    - $bpa.WhiteTwinkle

@@ -1,0 +1,8 @@
+shape: 12
+driver: serial
+
+run:
+  fps: 40
+  seconds: 9
+
+animation: tests.PixelTester

@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+#
+# Run a complete battery of tests
+
+
+import arguments, common, features, tests
+import getpass, platform, sys, threading
+
+SKIPPING_MESSAGE = '%-20s skipped due to missing feature%s: %s'
+RUNNING_MESSAGE = '%-20s running...'
+
+
+def run_tests():
+    all_tests, features = arguments.arguments()
+
+    common.printer('Features:', *sorted(features))
+
+    good_tests = []
+    for test in all_tests:
+        required_features = set(getattr(test, 'FEATURES', []))
+        missing = required_features - features
+
+        if missing:
+            plural = '' if len(missing) == 1 else 's'
+            missing = ', '.join(missing)
+            common.printer(SKIPPING_MESSAGE % (test.__name__, plural, missing))
+        else:
+            good_tests.append(test)
+
+    common.printer('Running tests:', *[t.__name__ for t in good_tests])
+
+    for test in good_tests:
+        name = test.__name__
+        common.printer(RUNNING_MESSAGE % name, end='', flush=True)
+        test.run()
+        common.printer('done', flush=True)
+
+
+if __name__ == '__main__':
+    run_tests()
