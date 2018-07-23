@@ -70,7 +70,8 @@ def loads(s, use_yaml=None, filename=''):
             return {str(k): fix(v) for k, v in d.items()}
         if isinstance(d, list):
             return [fix(i) for i in d]
-        assert isinstance(d, (int, float, bool, str))
+        if not isinstance(d, (int, float, bool, str, type(None))):
+            raise ValueError('Wrong type %s' % type(d))
         return d
 
     return fix(yaml.safe_load(s))
