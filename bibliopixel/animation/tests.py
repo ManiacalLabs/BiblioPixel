@@ -1,5 +1,6 @@
 from . strip import BaseStripAnim
 from . matrix import BaseMatrixAnim
+from . animation import Animation
 from .. util import colors
 
 BASE_COLORS = [colors.Red, colors.Green, colors.Green,
@@ -30,7 +31,6 @@ class MatrixChannelTest(BaseMatrixAnim):
         self.colors = [colors.Red, colors.Green, colors.Blue, colors.White]
 
     def step(self, amt=1):
-
         self.layout.drawLine(0, 0, 0, self.height - 1, colors.Red)
         self.layout.drawLine(1, 0, 1, self.height - 1, colors.Green)
         self.layout.drawLine(2, 0, 2, self.height - 1, colors.Green)
@@ -58,3 +58,32 @@ class MatrixCalibrationTest(BaseMatrixAnim):
             self.layout.drawLine(x, 0, x, i, c)
 
         self.completed = (i == (self.width - 1))
+
+
+class PixelTester(Animation):
+    """"""
+    BRIGHTNESS = 0.5
+    PAUSE = 10
+
+    def pre_run(self):
+        self.stepper = self.steps()
+
+    def step(self, amt=1):
+        try:
+            next(self.stepper)
+        except StopIteration:
+            self.completed = True
+
+    def steps(self):
+        for color in (colors.Red, colors.Green, colors.Blue, colors.Yellow,
+                      colors.Fuchsia, colors.Aqua, colors.White):
+            color = tuple(c * self.BRIGHTNESS for c in color)
+            for i in range(len(self.color_list)):
+                self.color_list[i] = color
+                yield
+
+            for i in range(self.PAUSE):
+                yield
+
+            self.color_list = [colors.Black] * len(self.color_list)
+            yield
