@@ -120,7 +120,7 @@ class RestServer(runnable.LoopThread):
         try:
             flask.request.environ.get('werkzeug.server.shutdown', error)()
         except Exception as e:
-            log.error('Exception shutting werkzeug down')
+            log.debug('Exception shutting werkzeug down')
 
 
 def _single(method):
