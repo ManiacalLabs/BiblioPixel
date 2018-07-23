@@ -1,0 +1,17 @@
+shape: [32, 32]
+
+run:
+  fps: 30
+  seconds: 6
+
+aliases:
+  bpa: BiblioPixelAnimations.matrix
+
+animation:
+  typename: sequence
+  length: 1.5
+  animations:
+    - $bpa.ImageAnim
+    - $bpa.MatrixRain
+    - $bpa.bloom
+    - $bpa.circlepop

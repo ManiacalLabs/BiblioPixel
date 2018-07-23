@@ -1,0 +1,41 @@
+shape: [50]
+
+aliases:
+  bpa: BiblioPixelAnimations.strip
+
+controls:
+  typename: keyboard
+  extractor:
+    accept:
+      type: press
+
+  routing:
+    1: 'animation.index = Alternates'
+    2: 'animation.index = 2'
+    3: 'animation.index = HalvesRainbow'
+    4: 'animation.index = 4'
+    5: 'animation.index = PixelPingPong'
+    6: 'animation.index = 6'
+    7: 'animation.index = Searchlights'
+    8: 'animation.index = 8'
+    9: 'animation.index = Wave.WaveMove'
+    0: 'animation.index = 0'
+
+run:
+  fps: 30
+  seconds: 20
+
+animation:
+  typename: indexed
+  animations:
+    - $bpa.Wave
+    - $bpa.Alternates
+    - $bpa.FireFlies
+    - $bpa.HalvesRainbow
+    - $bpa.PartyMode
+    - $bpa.PixelPingPong
+    - $bpa.Rainbows.Rainbow
+    - $bpa.Searchlights
+    - $bpa.Wave
+    - $bpa.Wave.WaveMove
+    - $bpa.WhiteTwinkle

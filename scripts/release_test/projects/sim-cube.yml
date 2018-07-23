@@ -1,0 +1,17 @@
+shape: [8, 8, 8]
+
+run:
+    fps: 30
+    seconds: 6
+
+aliases:
+    bpa: BiblioPixelAnimations.cube
+
+animation:
+    typename: sequence
+    length: 1.5
+    animations:
+      - $bpa.Rain.RainBow
+      - $bpa.bloom.CubeBloom
+      - $bpa.simplex
+      - $bpa.wave_spiral

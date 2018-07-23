@@ -1,0 +1,17 @@
+aliases:
+  fill: BiblioPixelAnimations.simple.Fill
+
+controls: rest
+
+shape: [32, 32]
+
+run:
+    fps: 30
+
+animation:
+    typename: mixer
+    levels: [1, 1, 1]
+    animations:
+        - {typename: $fill, color: red}
+        - {typename: $fill, color: green}
+        - {typename: $fill, color: blue}

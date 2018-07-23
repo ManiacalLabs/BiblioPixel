@@ -1,12 +1,8 @@
-#!/usr/bin/env python3
-#
-# This is not a unit test but an integration test which is run from the
-# command line and pops up
-
-
+import common
 import contextlib, requests, subprocess, threading, time
 
-START_BP = 'bp', '-vs', 'projects/26-simple-rest.yml'
+FEATURES = 'browser',
+START_BP = 'bp', '--loglevel=error', common.make_project('rest.yml')
 STOP_BP = 'bp', 'shutdown'
 
 ROOT = 'http://localhost:8787/'
@@ -14,12 +10,12 @@ PAUSE = 1
 
 
 def get(name, url, method='GET'):
-    print(method, name + ':', requests.get(ROOT + url).json())
+    common.printer(method, name + ':', requests.get(ROOT + url).json())
 
 
 def put(name, url, data):
     resp = requests.put(ROOT + url, data=data or {})
-    print('PUT', name + ':', resp.text)
+    common.printer('PUT', name + ':', resp.text)
 
 
 def bp(function):
@@ -33,6 +29,7 @@ def bp(function):
 
     return wrapped
 
+
 @bp
 def test_other():
     put('single', 'single/animation.levels', {'value': '[0, 0, 0]'})
@@ -44,8 +41,10 @@ def test_other():
     put('single', 'single/animation.levels', {'value': '[0, 1, 0]'})
     time.sleep(PAUSE)
 
+
 @bp
 def test_rest():
+    time.sleep(PAUSE * 10)
     get('basic', 'get/animation.levels')
     get('single', 'single/animation.levels')
     get('multi', 'multi?animation.levels=0')
@@ -70,7 +69,7 @@ def test_rest():
     time.sleep(PAUSE)
 
 
-if __name__ == '__main__':
+def run():
     if True:
         test_rest()
     else:
