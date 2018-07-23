@@ -1,3 +1,14 @@
+## v3.4.19 - 2018-07-23
+- Support Python 3.7
+- New `bp-pid` command
+- New `curses` and `text` drivers display LED colors in a terminal
+- New `release_test` integration test suite with hardware tests
+- Switch to using YAML as default data storage
+- Fix or implement #663, #720, #725, #786, #787, #788, #792, #793,
+  #795,  #796, #802, #813, #819, #827, #836, #861, #863, #863, #870, #872,
+  #874, #876, #878, #885, #892, #898, #910, #925, #927, #929 and #938
+- Much more...
+
 ## v3.4.18 - 2018-05-04
 - Remove test that crashes ArtNet
 - Test project for ArtNet
