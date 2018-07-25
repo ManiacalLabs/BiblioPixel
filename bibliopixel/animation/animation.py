@@ -123,11 +123,6 @@ class Animation(object):
                     self._run_one_frame()
                     yield
 
-    def run(self, **kwds):
-        deprecated.deprecated('BaseAnimation.run')
-        self._set_runner(kwds)
-        self.start()
-
     def _check_delay(self):
         if self.free_run:
             self.sleep_time = None
@@ -170,8 +165,6 @@ class Animation(object):
         self.runner.run_start_time = self.project.time()
         self.threading.stop_event.clear()
 
-        if deprecated.allowed():
-            self._step = 0
         self.cur_step = 0
         self.cycle_count = 0
 
@@ -193,6 +186,20 @@ class Animation(object):
         if self.project:
             self.runner.set_project(self.project)
             self.threading.set_project(self.project)
+
+    # DEPRECATED
+    @property
+    def _step(self):
+        return self.cur_step
+
+    @_step.setter
+    def _step(self, step):
+        self.cur_step = step
+
+    def run(self, **kwds):
+        deprecated.deprecated('BaseAnimation.run')
+        self._set_runner(kwds)
+        self.start()
 
 
 if deprecated.allowed():
