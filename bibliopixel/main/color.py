@@ -34,4 +34,4 @@ def set_parser(parser):
 
     parser.add_argument(
         '-l', '--list', action='store_true',
-        help='List all the color')
+        help='List all the colors')
