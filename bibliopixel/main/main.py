@@ -7,7 +7,8 @@ __all__ = ['main']
 
 
 def get_args(argv=sys.argv):
-    argv = ['-h' if a == '--help' else a for a in argv[1:]]
+    helps = '--help', 'help'
+    argv = ['-h' if a in helps else a for a in argv[1:]]
 
     if not argv:
         argv = ['-h']
