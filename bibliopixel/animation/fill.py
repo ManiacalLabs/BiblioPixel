@@ -11,6 +11,7 @@ class Fill(BaseAnimation):
 
         is_numpy = hasattr(self.color_list, 'dtype')
         self._set_color = self._set_numpy if is_numpy else self._set_classic
+        self._color = color
 
     def pre_run(self):
         self.color = self._color
@@ -21,7 +22,7 @@ class Fill(BaseAnimation):
 
     @color.setter
     def color(self, color):
-        self._color = colors.make_color(color)
+        self._color = colors.to_color(color)
         self._set_color()
 
     def _set_numpy(self):
