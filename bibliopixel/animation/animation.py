@@ -159,8 +159,7 @@ class Animation(object):
         else:
             self.state = self.runner.compute_state(self.cur_step, self.state)
 
-    @contextlib.contextmanager
-    def _run_context(self, clean_layout=True):
+    def _pre_run(self):
         self.state = STATE.running
         self.runner.run_start_time = self.project.time()
         self.threading.stop_event.clear()
@@ -170,7 +169,12 @@ class Animation(object):
 
         self._check_delay()
         self.preclear and self.layout.all_off()
+
         self.pre_run()
+
+    @contextlib.contextmanager
+    def _run_context(self, clean_layout=True):
+        self._pre_run()
 
         try:
             yield
