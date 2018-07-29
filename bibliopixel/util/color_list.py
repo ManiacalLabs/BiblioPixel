@@ -94,11 +94,10 @@ def to_triplets(colors):
     elements beyond a multiple of three.
     """
     try:
-        colors and colors[0][0]
-    except TypeError:
-        pass
-    else:
+        colors[0][0]
         return colors
+    except:
+        pass
 
     # It's a 1-dimensional list
     extra = len(colors) % 3
