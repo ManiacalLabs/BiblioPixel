@@ -117,11 +117,17 @@ class Animation(object):
             pass
 
     def generate_frames(self, clean_layout=True):
-        with self._run_context(clean_layout):
+        self._pre_run()
+        try:
             if self.runner.repeats != 0:
                 while self.state == STATE.running:
                     self._run_one_frame()
                     yield
+        finally:
+            self.cleanup(clean_layout)
+
+        self.on_completion and self.on_completion(self.state)
+        self.state = STATE.ready
 
     def _check_delay(self):
         if self.free_run:
@@ -171,18 +177,6 @@ class Animation(object):
         self.preclear and self.layout.all_off()
 
         self.pre_run()
-
-    @contextlib.contextmanager
-    def _run_context(self, clean_layout=True):
-        self._pre_run()
-
-        try:
-            yield
-        finally:
-            self.cleanup(clean_layout)
-
-        self.on_completion and self.on_completion(self.state)
-        self.state = STATE.ready
 
     def _set_runner(self, runner):
         self.runner = Runner(**(runner or {}))
