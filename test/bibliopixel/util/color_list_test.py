@@ -1,7 +1,7 @@
-import numpy, unittest
+import numpy, numpy.testing, unittest
 
 from bibliopixel.util import colors, color_list, log
-from bibliopixel.util.color_list import ListMath, NumpyMath
+from bibliopixel.util.color_list import ListMath, NumpyMath, to_triplets
 
 COLORS1 = [colors.Red, colors.Green, colors.Blue, colors.White]
 COLORS2 = [colors.Black, colors.Blue, colors.Red, colors.Black]
@@ -154,3 +154,29 @@ class MixerTest(unittest.TestCase, TestBase):
             [make_numpy(COLORS2), make_numpy(WHITES), make_numpy(BLACKS)])
         self.do_test(mixer,
                      [(85, 85, 85), (85, 85, 170), (170, 85, 85), (85, 85, 85)])
+
+
+class ToTripletsTest(unittest.TestCase):
+    def test_simple(self):
+        self.assertEqual(to_triplets(COLORS1), COLORS1)
+
+    def test_numpy(self):
+        cl = make_numpy(COLORS1)
+        numpy.testing.assert_array_equal(to_triplets(cl), cl)
+
+    def test_exact_count(self):
+        cl = list(sum(COLORS1, ()))
+        self.assertEqual(to_triplets(cl), COLORS1)
+
+    def test_overage(self):
+        cl = list(sum(COLORS1, ()))
+        self.assertEqual(to_triplets(cl), COLORS1)
+
+        cl.append(255)
+        self.assertEqual(to_triplets(cl), COLORS1)
+
+        cl.append(0)
+        self.assertEqual(to_triplets(cl), COLORS1)
+
+        cl.append(0)
+        self.assertEqual(to_triplets(cl), COLORS1 + [colors.Red])
