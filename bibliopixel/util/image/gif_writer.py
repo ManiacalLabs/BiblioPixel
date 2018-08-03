@@ -5,7 +5,7 @@ from .. import colors, log
 
 DEFAULT_RENDER = {
     'color': colors.Black,
-    'pixel_width': 12,
+    'pixel_width': 2,
     'pixel_height': None,
     'ellipse': True,
     'vertical': False,
@@ -103,5 +103,5 @@ class GifWriter:
             duration.append(duration[-1])
             go = dict(go, duration=duration)
 
-        gif.write_animation(self.filename, ff, **go)
+        gif.write_gif(self.filename, ff, **go)
         self.tmp_dir = None

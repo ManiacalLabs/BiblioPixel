@@ -1,16 +1,8 @@
-import os, pathlib
+import io, os, pathlib
 from .. import log
 
 
-# PIL has a limit on how many image files can be open at once - you get an
-# exception when you try to open more files than that in save_images.  The exact
-# number varies for some unknown reason - I consistently was able to get at
-# least 240 in informal testing - but we use 192 for safety.
-MAX_IMAGES_IN_MEMORY = 192
-WINDOW_SIZE = MAX_IMAGES_IN_MEMORY // 2
-
-
-def write_animation(filename, frames, **gif_options):
+def write_gif(filename, frames, **gif_options):
     """
     Write a series of frames as a single animated GIF.
 
@@ -42,12 +34,12 @@ def write_animation(filename, frames, **gif_options):
         the nearest power of two. Default 256.
     """
 
-    if len(frames) > MAX_IMAGES_IN_MEMORY:
-        log.warning('Number of frames %d exceeds MAX_IMAGES_IN_MEMORY %d',
-                    len(frames), MAX_IMAGES_IN_MEMORY)
-
     from PIL import Image
-    images = [Image.open(f) for f in frames]
+    images = []
+    for f in frames:
+        data = open(f, 'rb').read()
+        images.append(Image.open(io.BytesIO(data)))
+
     im = images.pop(0)
 
     if 'loop' not in gif_options:
@@ -55,22 +47,6 @@ def write_animation(filename, frames, **gif_options):
         # See https://github.com/python-pillow/Pillow/issues/3255
 
     im.save(filename, save_all=True, append_images=images, **gif_options)
-
-
-def write_animation_windowed(filename, frames, window_size, **gif_options):
-    first_time = True
-    while frames:
-        window = frames[:window_size]
-        if first_time:
-            first_time = False
-        else:
-            # Read the result of the previous step, and put it in at the start
-            # of the list.
-            window.insert(0, filename)
-
-        # TODO: cut up durations list here
-        write_animation(filename, window, **gif_options)
-        frames = frames[window_size:]
 
 
 """
@@ -103,3 +79,7 @@ if deprecated.allowed():
 
         it = ImageSequence.Iterator(image)
         return [image_to_colorlist(i, container) for i in it]
+
+
+if __name__ == '__main__':
+    pass
