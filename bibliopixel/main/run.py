@@ -85,7 +85,6 @@ def _get_projects(args):
                 else:
                     f, suffix = os.path.splitext(filename)
                     desc['driver'] = dict(gif, filename=f + '.gif')
-                desc.setdefault('run', {})['no_sleep'] = True
 
             project = common_flags.make_project(args, desc, root_file)
             projects.append(project)
