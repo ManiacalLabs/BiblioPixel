@@ -43,7 +43,7 @@ def extender(path):
 
 def load_if_filename(s):
     if isinstance(s, str) and (s.endswith('.yml') or s.endswith('.json')):
-        if not os.path.isabs(s):
+        if ROOT_FILE and not os.path.isabs(s):
             s = os.path.join(os.path.dirname(ROOT_FILE), s)
 
         return data_file.load(s)
