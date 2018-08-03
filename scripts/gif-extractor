@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+
+import argparse, os, subprocess, sys, tempfile
+from unittest import mock
+from bibliopixel.util import data_file, log
+from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
+from bibliopixel.project import project
+
+SUFFIXES = '.md', '.py'
+RAISE = True
+
+
+def walk(roots):
+    for root in roots:
+        for dirpath, dirnames, filenames in os.walk(root):
+            for f in filenames:
+                if any(f.endswith(s) for s in SUFFIXES):
+                    yield root, os.path.join(dirpath, f)
+
+
+def extract_one_gif(args, filename, desc):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    default = {
+        'driver': {
+            'typename': '.gif_writer',
+            'time': args.time,
+            'filename': filename,
+        },
+        'run': {
+            'fps': args.fps,
+        },
+    }
+
+    try:
+        project.project(default, desc).run()
+    except KeyboardInterrupt:
+        raise
+    except:
+        log.error('Error in project %s', filename)
+        if RAISE:
+            raise
+
+
+def extract(args):
+    for root, input_file in walk(args.roots):
+        relpath = os.path.relpath(input_file, root)
+        for filename, desc in extract_gif_lines(relpath, open(input_file)):
+            extract_one_gif(args, filename, desc)
+
+
+def args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--time', '-t', default=5, type=float)
+    parser.add_argument(
+        '--fps', '-f', default=24, type=float,
+        help='frames per second for the animation')
+    parser.add_argument(
+        'roots', nargs='*', default=('bibliopixel', 'doc'),
+        help='Directory roots to search from')
+    return parser.parse_args(sys.argv[1:])
+
+
+if __name__ == '__main__':
+    extract(args())
