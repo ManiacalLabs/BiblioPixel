@@ -17,7 +17,6 @@ animation:
         - $bpa.ImageDissolve
         - $bpa.ScreenGrab
         - $bpa.AnalogClock
-        - $bpa.AnalogClock
         - $bpa.BinaryClock.MatrixBinaryClock
         - $bpa.CPUUsage
         - $bpa.GameOfLife
