@@ -13,3 +13,4 @@ htmlcov
 .eggs
 .cache
 .pytest_cache
+site
