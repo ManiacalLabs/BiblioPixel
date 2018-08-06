@@ -29,7 +29,7 @@ class MergeTest(unittest.TestCase):
                 'path': 'path/to/dir'
             })
         expected = {
-            'aliases': {},
+            'aliases': {'bpa': 'BiblioPixelAnimations'},
             'animation': {'typename': 'bfoo'},
             'controls': [],
             'shape': (),
