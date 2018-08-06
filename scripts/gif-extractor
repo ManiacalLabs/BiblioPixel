@@ -2,20 +2,12 @@
 
 import argparse, os, subprocess, sys, tempfile
 from unittest import mock
-from bibliopixel.util import data_file, log
+from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
 from bibliopixel.project import project
 
 SUFFIXES = '.md', '.py'
 RAISE = True
-
-
-def walk(roots):
-    for root in roots:
-        for dirpath, dirnames, filenames in os.walk(root):
-            for f in filenames:
-                if any(f.endswith(s) for s in SUFFIXES):
-                    yield root, os.path.join(dirpath, f)
 
 
 def extract_one_gif(args, filename, desc):
@@ -42,7 +34,7 @@ def extract_one_gif(args, filename, desc):
 
 
 def extract(args):
-    for root, input_file in walk(args.roots):
+    for root, input_file in walk.walk_suffix(args.roots, SUFFIXES):
         relpath = os.path.relpath(input_file, root)
         for filename, desc in extract_gif_lines(relpath, open(input_file)):
             extract_one_gif(args, filename, desc)
