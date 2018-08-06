@@ -3,6 +3,7 @@ from .. project.importer import import_module
 from .. util import log
 
 COMMANDS = (
+    'animations',
     'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo', 'devices',
     'info', 'kill', 'list', 'load', 'monitor', 'new', 'pid', 'remove', 'reset',
     'restart', 'run', 'save', 'set', 'show', 'shutdown', 'update')
