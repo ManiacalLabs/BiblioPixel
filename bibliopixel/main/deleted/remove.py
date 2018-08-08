@@ -1,7 +1,7 @@
 """
 Remove a project default file
 """
-from .. project import defaults
+from ... project import defaults
 
 
 def run(args):

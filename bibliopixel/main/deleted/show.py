@@ -2,7 +2,7 @@
 Show all project default values
 """
 
-from .. project import defaults
+from ... project import defaults
 
 
 def run(args):

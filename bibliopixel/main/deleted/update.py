@@ -3,7 +3,7 @@ Update BiblioPixel's dependencies
 """
 
 import os, sys, subprocess
-from .. util import log
+from ... util import log
 
 
 def run(args):

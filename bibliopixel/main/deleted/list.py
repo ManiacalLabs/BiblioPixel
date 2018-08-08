@@ -2,7 +2,7 @@
 List all user project default files
 """
 
-from .. project import defaults
+from ... project import defaults
 
 
 def run(args):

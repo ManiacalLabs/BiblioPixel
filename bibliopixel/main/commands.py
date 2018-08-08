@@ -3,12 +3,21 @@ from .. project.importer import import_module
 from .. util import log
 
 COMMANDS = (
-    'animations',
-    'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo', 'devices',
-    'info', 'kill', 'list', 'load', 'monitor', 'new', 'pid', 'remove', 'reset',
-    'restart', 'run', 'save', 'set', 'show', 'shutdown', 'update')
+    'animations', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
+    'devices', 'info', 'kill', 'monitor', 'new', 'pid', 'restart', 'run',
+    'shutdown')
 
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
+
+
+BP_DELETED_COMMANDS = True
+
+if os.environ.get('BP_DELETED_COMMANDS', BP_DELETED_COMMANDS):
+    DELETED = (
+        'list', 'load', 'remove', 'reset', 'save', 'set', 'show', 'update')
+    MODULES.update({
+        c: import_module('bibliopixel.main.deleted.' + c) for c in DELETED})
+
 
 RST_HELP = """\
 ## ``bp`` - The BLiPS Project Runner
