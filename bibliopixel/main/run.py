@@ -67,26 +67,38 @@ def _get_projects(args):
 
         gif['typename'] = '.gif_writer'
 
-    for filename in args.name:
+    # Handle spaces around + signs.
+    names = []
+    for name in args.name:
+        if names and (name.startswith('+') or names[-1].endswith('+')):
+            names[-1] += name
+        else:
+            names.append(name)
+    args.name = names
+
+    for project_files in args.name:
         saved_path = sys.path[:]
-        desc = '(not loaded)'
+        descs = []
         try:
-            if filename.endswith('.py'):
-                desc = _load_py(filename)
-                root_file = None
-            else:
-                desc = load.data(filename, False)
-                desc = data_file.load(desc, filename)
-                root_file = os.path.abspath(filename)
-
-            if gif:
-                if 'filename' in gif:
-                    desc['driver'] = gif
+            for filename in project_files.split('+'):
+                if filename.endswith('.py'):
+                    desc = _load_py(filename)
+                    root_file = None
                 else:
-                    f, suffix = os.path.splitext(filename)
-                    desc['driver'] = dict(gif, filename=f + '.gif')
+                    desc = load.data(filename, False)
+                    desc = data_file.load(desc, filename)
+                    root_file = os.path.abspath(filename)
 
-            project = common_flags.make_project(args, desc, root_file)
+                if gif:
+                    if 'filename' in gif:
+                        desc['driver'] = gif
+                    else:
+                        f, suffix = os.path.splitext(filename)
+                        desc['driver'] = dict(gif, filename=f + '.gif')
+                descs.append(desc)
+
+            project = common_flags.make_project(
+                args, *descs, root_file=root_file)
             projects.append(project)
             if args.dump:
                 log.printer(_dump(args, project.desc))
@@ -98,7 +110,7 @@ def _get_projects(args):
             if filename.endswith('.py'):
                 raise
             eargs = exception.args
-            desc = desc and _dump(args, desc)
+            desc = _dump(args, descs)
             if args.verbose:
                 exception = traceback.format_exc()
             msg = RUN_ERROR.format(**locals())

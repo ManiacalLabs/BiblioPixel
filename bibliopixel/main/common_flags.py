@@ -173,9 +173,10 @@ def _make_project_flags(args):
     return project_flags
 
 
-def make_project(args, desc, root_file=None):
+def make_project(args, *descs, root_file=None):
     project_flags = _make_project_flags(args)
-    return project.project(desc, project_flags, root_file=root_file)
+    descs += (project_flags,)
+    return project.project(*descs, root_file=root_file)
 
 
 # Help messages.
