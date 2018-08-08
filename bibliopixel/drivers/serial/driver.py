@@ -140,6 +140,9 @@ class Serial(DriverBase):
         print_error(code)
 
     def _send_packet(self):
+        if not self._com:
+            return
+
         self._write(self._packet)
 
         code = self._read()
@@ -167,19 +170,21 @@ class Serial(DriverBase):
 
     def _close(self):
         try:
-            return self._com.close()
+            return self._com and self._com.close()
         except Exception as e:
             log.error('Serial exception %s in close', e)
+        finally:
+            self._com = None
 
     def _write(self, packet):
         try:
-            return self._com.write(packet)
+            return self._com and self._com.write(packet)
         except Exception as e:
             log.error('Serial exception %s in write', e)
 
     def _flushInput(self):
         try:
-            return self._com.flushInput()
+            return self._com and self._com.flushInput()
         except Exception as e:
             log.error('Serial exception %s in flushInput', e)
 
