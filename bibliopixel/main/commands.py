@@ -10,7 +10,7 @@ COMMANDS = (
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
 
-BP_DELETED_COMMANDS = True
+BP_DELETED_COMMANDS = False
 
 if os.environ.get('BP_DELETED_COMMANDS', BP_DELETED_COMMANDS):
     DELETED = (
