@@ -17,7 +17,7 @@ bp set numbers=float shape=80
 """
 
 import sys
-from .. project import merge, defaults
+from ... project import merge, defaults
 
 
 def run(args):
