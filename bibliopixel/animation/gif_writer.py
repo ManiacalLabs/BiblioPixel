@@ -43,6 +43,10 @@ class GifWriter(wrapper.Wrapper):
         if self._writer.step(self.cur_step):
             self.completed = True
 
+    def set_project(self, project):
+        super().set_project(project)
+        self._writer.set_project(project)
+
     def cleanup(self, clean_layout=True):
         super().cleanup(clean_layout)
         self._writer.write()

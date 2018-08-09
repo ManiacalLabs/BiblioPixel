@@ -86,6 +86,11 @@ class Collection(animation.Animation):
         for a in self.animations:
             a.pre_run()
 
+    def set_project(self, project):
+        super().set_project(project)
+        for a in self.animations:
+            a.set_project(project)
+
 
 class _AnimationList:
     def __init__(self, animations):

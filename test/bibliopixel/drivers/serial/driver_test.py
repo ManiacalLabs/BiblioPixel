@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 from bibliopixel.drivers.return_codes import RETURN_CODES
 from bibliopixel.drivers.serial import driver
+from test.bibliopixel.drivers.dummy_test import clock_only_project
 
 
 class DriverTest(unittest.TestCase):
@@ -22,6 +23,7 @@ class DriverTest(unittest.TestCase):
 
         colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
         sd = driver.Serial(ledtype=0, num=len(colors))
+        sd.set_project(clock_only_project())
         sd.set_colors(colors, 0)
         sd.start()
         sd.update_colors()

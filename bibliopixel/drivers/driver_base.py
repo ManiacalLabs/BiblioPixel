@@ -154,7 +154,7 @@ class DriverBase(object):
         provided as a wrapper for each driver's implementation of
         :py:func:`_compute_packet` and :py:func:`_send_packet`.
         """
-        start = time.time()
+        start = self.project.time()
 
         with self.brightness_lock:
             # Swap in a new brightness.
@@ -169,7 +169,7 @@ class DriverBase(object):
         self._compute_packet()
         self._send_packet()
 
-        self.lastUpdate = time.time() - start
+        self.lastUpdate = self.project.time() - start
 
     def set_brightness(self, brightness):
         """Set the global brightness for this driver's output.

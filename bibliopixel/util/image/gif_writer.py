@@ -45,8 +45,9 @@ class GifWriter:
         self.stop_after_write = True
         self.times = []
 
-    def set_layout(self, layout):
-        self.render = renderer.renderer(layout, **self.render)
+    def set_project(self, project):
+        self.project = project
+        self.render = renderer.renderer(project.layout, **self.render)
         assert self.render
 
     def step(self, cur_step):
@@ -54,7 +55,7 @@ class GifWriter:
             return True
 
         frame = cur_step / max(self.divide, 1)
-        self.times.append(time.time())
+        self.times.append(self.project.time())
 
         if self.time:
             elapsed = self.times[-1] - self.times[0]
