@@ -42,7 +42,7 @@ class GifWriter(DriverBase):
 
     def set_project(self, project):
         super().set_project(project)
-        self._writer.set_layout(project.layout)
+        self._writer.set_project(project)
 
     def update_colors(self):
         super().update_colors()

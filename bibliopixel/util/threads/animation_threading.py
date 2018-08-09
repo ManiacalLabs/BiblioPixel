@@ -15,6 +15,9 @@ class AnimationThreading:
         self.thread = None
         self.frame_overrun = False
 
+    def set_project(self, project):
+        self.project = project
+
     def join(self, timeout=None):
         self.thread and self.thread.join(timeout)
 
@@ -50,7 +53,7 @@ class AnimationThreading:
             self.stop_event.wait(wait_time - elapsed_time)
 
         else:
-            time.sleep(wait_time - elapsed_time)
+            self.project.sleep(wait_time - elapsed_time)
 
     def start(self):
         self.stop_event.clear()

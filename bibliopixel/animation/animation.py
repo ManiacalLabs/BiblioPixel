@@ -1,4 +1,4 @@
-import contextlib, threading, time
+import contextlib, threading
 from . runner import Runner, STATE
 from .. util import deprecated, log
 from .. util.threads.animation_threading import AnimationThreading
@@ -40,6 +40,14 @@ class Animation(object):
         self.on_completion = None
         self.state = STATE.ready
         self.preclear = preclear
+        self.project = None
+        self.runner = None
+
+    def set_project(self, project):
+        self.project = project
+        if self.runner:
+            self.runner.set_project(project)
+            self.threading.set_project(project)
 
     @property
     def _led(self):
@@ -129,18 +137,18 @@ class Animation(object):
         self.layout.animation_sleep_time = self.sleep_time or 0
 
     def _run_one_frame(self):
-        timestamps = [time.time()]
+        timestamps = [self.project.time()]
 
         self.preframe_callback()
-        timestamps = [time.time()]
+        timestamps = [self.project.time()]
 
         self.step(self.runner.amt)
-        timestamps.append(time.time())
+        timestamps.append(self.project.time())
 
         self.layout.frame_render_time = timestamps[1] - timestamps[0]
         self.layout.push_to_driver()
 
-        timestamps.append(time.time())
+        timestamps.append(self.project.time())
         _report_framerate(timestamps)
 
         self.cur_step += 1
@@ -158,7 +166,7 @@ class Animation(object):
     @contextlib.contextmanager
     def _run_context(self, clean_layout=True):
         self.state = STATE.running
-        self.runner.run_start_time = time.time()
+        self.runner.run_start_time = self.project.time()
         self.threading.stop_event.clear()
 
         if deprecated.allowed():
@@ -181,6 +189,9 @@ class Animation(object):
     def _set_runner(self, runner):
         self.runner = Runner(**(runner or {}))
         self.threading = AnimationThreading(self.runner, self.run_all_frames)
+        if self.project:
+            self.runner.set_project(self.project)
+            self.threading.set_project(self.project)
 
 
 if deprecated.allowed():

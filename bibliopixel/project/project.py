@@ -1,4 +1,4 @@
-import os, queue, threading, weakref
+import os, queue, threading, time, weakref
 from . import (
     attributes, construct, fill, defaults, edit_queue, load, recurse)
 from .. util import exception, log
@@ -56,6 +56,7 @@ class Project:
 
         self.animation = create(animation, 'animation')
         self.running = False
+        self.clock = time
 
         eq = edit_queue.EditQueue(maxsize=edit_queue_maxsize)
         self.layout.edit_queue = self.animation.edit_queue = eq
@@ -75,6 +76,8 @@ class Project:
 
         for d in self.drivers:
             d.set_project(self)
+
+        self.animation.set_project(self)
 
     def start(self):
         with self.LOCK:
@@ -125,6 +128,12 @@ class Project:
         finally:
             self.cleanup()
         log.debug('Project %s finishes run()', self)
+
+    def time(self):
+        return self.clock.time()
+
+    def sleep(self, delta_time):
+        return self.clock.sleep(delta_time)
 
     @staticmethod
     def stop_all():

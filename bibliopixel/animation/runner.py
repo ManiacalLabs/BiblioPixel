@@ -62,6 +62,9 @@ class Runner(object):
         self.threaded = threaded
         self.main = load.code(main)
 
+    def set_project(self, project):
+        self.project = project
+
     @property
     def fps(self):
         return 1 / self.sleep_time
@@ -72,7 +75,7 @@ class Runner(object):
 
     def compute_state(self, cur_step, state):
         if self.seconds:
-            elapsed = time.time() - self.run_start_time
+            elapsed = self.project.time() - self.run_start_time
             if elapsed >= self.seconds:
                 return STATE.timeout
 
