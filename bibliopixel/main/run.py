@@ -3,7 +3,6 @@ Run specified project from file or URL.
 """
 
 import os, sys, time, traceback
-from unittest.mock import patch
 from . import common_flags, simpixel
 from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
@@ -153,12 +152,11 @@ def _run_projects(projects, args):
             needs_pause = True
 
         log.debug('Running file %s', name)
+        if is_gif:
+            project.flat_out()
+
         try:
-            if is_gif:
-                with patch('time.sleep', autospec=True):
-                    project.run()
-            else:
-                project.run()
+            project.run()
 
         except KeyboardInterrupt:
             if not args.ignore_exceptions:

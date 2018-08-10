@@ -19,7 +19,7 @@ class Runner(object):
 
     def __init__(self, *, amt=1, fps=0, sleep_time=0, max_steps=0,
                  until_complete=False, max_cycles=0, seconds=None,
-                 threaded=False, main=None, **kwds):
+                 threaded=False, main=None, flat_out=False, **kwds):
         attributes.check(kwds, 'run')
 
         if max_steps < 0:
@@ -60,10 +60,13 @@ class Runner(object):
         self.max_cycles = max_cycles
         self.seconds = seconds
         self.threaded = threaded
+        self.flat_out = flat_out
         self.main = load.code(main)
 
     def set_project(self, project):
         self.project = project
+        if self.flat_out:
+            project.flat_out()
 
     @property
     def fps(self):
