@@ -135,6 +135,9 @@ class Project:
     def sleep(self, delta_time):
         return self.clock.sleep(delta_time)
 
+    def flat_out(self, time=0):
+        self.clock = FlatOutClock(time)
+
     @staticmethod
     def stop_all():
         for p in list(Project.PROJECTS_RUNNING):
@@ -160,3 +163,15 @@ def project(*descs, root_file=None):
     project = construct.construct(**desc)
     project.desc = desc
     return project
+
+
+class FlatOutClock:
+    def __init__(self, _time=0):
+        self._time = _time or time.time()
+
+    def time(self):
+        return self._time
+
+    def sleep(self, delta_time):
+        assert delta_time >= 0
+        self._time += delta_time

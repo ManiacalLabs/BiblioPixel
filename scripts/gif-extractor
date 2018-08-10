@@ -17,9 +17,11 @@ def extract_one_gif(args, filename, desc):
             'typename': '.gif_writer',
             'time': args.time,
             'filename': filename,
+            'tmp_dir': '/tmp',
         },
         'run': {
             'fps': args.fps,
+            'flat_out': True,
         },
     }
 
