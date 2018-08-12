@@ -1,5 +1,5 @@
 """
-Test the all_pixel.
+Test the all_pixel
 """
 
 from .. drivers import ledtype
@@ -24,10 +24,10 @@ BiblioPixel currently understands the following types of LED strips:
 """ + ', '.join(sorted(ledtype.LEDTYPE.__members__.keys()))
 
 LEDTYPE_HELP = """\
-The type of the LED strip that is connected to your AllPixel.
+The type of the LED strip that is connected to your AllPixel
 """ + LEDTYPES
 
-NO_LED_ERROR = """ERROR: No ledtype provided.
+NO_LED_ERROR = """ERROR: No ledtype provided
 """ + LEDTYPES
 
 

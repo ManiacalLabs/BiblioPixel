@@ -1,13 +1,13 @@
 """
-Run a bibliopixel demo.
+Run a bibliopixel demo
 """
 
 DESCRIPTION = """
 For the list of possible demos, type
 
-``````
+```
 bp demo list
-``````
+```
 """
 
 import random

@@ -1,4 +1,6 @@
-"""Find serial devices and update serial device IDs"""
+"""
+Find serial devices and update serial device IDs
+"""
 
 from .. util import log
 
