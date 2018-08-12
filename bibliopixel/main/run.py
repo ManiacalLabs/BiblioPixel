@@ -1,5 +1,5 @@
 """
-Run specified project from file or URL.
+Run specified project from file or URL
 """
 
 import os, sys, time, traceback

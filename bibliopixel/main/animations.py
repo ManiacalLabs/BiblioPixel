@@ -1,5 +1,5 @@
 """
-List all animations
+List all BiblioPixel Animations
 """
 
 import os, bibliopixel, inspect, BiblioPixelAnimations

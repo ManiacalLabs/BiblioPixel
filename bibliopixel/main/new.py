@@ -1,5 +1,5 @@
 """
-Create a new project
+Create a new BLiPS project
 """
 
 import os, re, string

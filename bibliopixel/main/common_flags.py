@@ -209,7 +209,7 @@ The type of numbers that are used in color list calculations.
 PRESET_HELP = """Filenames for preset library"""
 
 PROJECT_LENGTHS_HELP = """\
-How long to run the animation (overrides runner.seconds)."""
+How long to run the animation (overrides runner.seconds)"""
 
 VERBOSE_HELP = """\
 If this is set, then errors are reported with a full stack trace, and
@@ -217,7 +217,7 @@ loglevel is by default set to debug
 """
 
 VERSION_HELP = """\
-Print the current version number of BiblioPixel (%s).
+Print the current version number of BiblioPixel (%s)
 """ % VERSION
 
 V4_HELP = """\

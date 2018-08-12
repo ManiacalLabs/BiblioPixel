@@ -1,6 +1,6 @@
 """
 Send a kill signal to a BiblioPixel process running on this
-machine to abruptly kill it.
+machine to abruptly kill it
 """
 
 DESCRIPTION = """

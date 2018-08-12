@@ -11,7 +11,7 @@ COMMANDS = (
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
 RST_HELP = """\
-## ``bp`` - The BiblioPixel Project Runner
+## ``bp`` - The BLiPS Project Runner
 
 ``bp`` is a command-line script installed with Bibliopixel.  It can run
 projects and demos, configure hardware, save and load defaults, and more.
