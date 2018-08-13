@@ -156,8 +156,16 @@ def project(*descs, root_file=None):
     load.ROOT_FILE = root_file
 
     desc = defaults.merge(*descs)
+    path = desc.get('path', '')
 
-    with load.extender(desc.get('path', '')):
+    if root_file:
+        project_path = os.path.dirname(root_file)
+        if path:
+            path += ':' + project_path
+        else:
+            path = project_path
+
+    with load.extender(path):
         desc = recurse.recurse(desc)
 
     project = construct.construct(**desc)
