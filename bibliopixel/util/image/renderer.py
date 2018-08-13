@@ -39,7 +39,7 @@ def renderer(layout, color, pixel_width, pixel_height,
             px = offset + x * cw
             for y in range(height):
                 py = offset + y * ch
-                pcolor = tuple(getter(x, y))
+                pcolor = tuple(int(i) for i in getter(x, y))
                 draw_pixel((px, py, px + pw, py + ph), pcolor, pcolor)
 
         return image

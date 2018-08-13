@@ -1,7 +1,7 @@
 import os, re
-from .. import data_file
+from .. import data_file, log
 
-GIF_RE = re.compile(r'\b\w+.gif\b')
+GIF_RE = re.compile(r'\b[\w-]+\.gif\b')
 GIF_ROOT = 'doc/'
 PATTERNS = {GIF_ROOT: GIF_ROOT}
 
@@ -48,5 +48,10 @@ def extract_gif_lines(filename, lines):
     path = doc_path(filename)
     for base, code in _extract(lines):
         full_path = os.path.join(path, base)
-        project = data_file.loads('\n'.join(code))
-        yield full_path, project
+        codelines = '\n'.join(code)
+        try:
+            project = data_file.loads(codelines)
+        except:
+            log.error('Unable to load code: $s\n%s', filename, codelines)
+        else:
+            yield full_path, project
