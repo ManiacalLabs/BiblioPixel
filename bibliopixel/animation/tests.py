@@ -62,8 +62,11 @@ class MatrixCalibrationTest(BaseMatrixAnim):
 
 class PixelTester(Animation):
     """"""
-    BRIGHTNESS = 0.5
     PAUSE = 10
+
+    def __init__(self, *args, brightness=1.0, **kwds):
+        self.brightness = brightness
+        super().__init__(*args, **kwds)
 
     def pre_run(self):
         self.stepper = self.steps()
@@ -77,7 +80,7 @@ class PixelTester(Animation):
     def steps(self):
         for color in (colors.Red, colors.Green, colors.Blue, colors.Yellow,
                       colors.Fuchsia, colors.Aqua, colors.White):
-            color = tuple(c * self.BRIGHTNESS for c in color)
+            color = tuple(c * self.brightness for c in color)
             for i in range(len(self.color_list)):
                 self.color_list[i] = color
                 yield
