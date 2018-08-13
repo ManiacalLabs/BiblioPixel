@@ -68,7 +68,8 @@ class Matrix(MultiLayout):
 
         if not self.coord_map:
             if len(self.drivers) == 1:
-                log.info(
+                # TODO: this should really go into documentation
+                log.debug(
                     'Auto generating coordinate map. Use make_matrix_coord_map '
                     'directly if more control needed.')
 
