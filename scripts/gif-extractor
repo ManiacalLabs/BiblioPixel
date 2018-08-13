@@ -1,32 +1,70 @@
 #!/usr/bin/env python3
 
-import argparse, os, subprocess, sys, tempfile
+import argparse, copy, math, os, subprocess, sys, tempfile
 from unittest import mock
 from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
-from bibliopixel.project import project
+from bibliopixel.project import merge, project
 
 SUFFIXES = '.md', '.py'
 RAISE = True
+IMAGE_WIDTH = 384
+PADDING_RATIO = 1 / 4
 
 
 def extract_one_gif(args, filename, desc):
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    dirname, fname = os.path.split(filename)
+    dirname = os.path.join(dirname, 'img')
+    filename = os.path.join(dirname, fname)
+
+    os.makedirs(dirname, exist_ok=True)
+    shape = desc.get('shape')
+    if shape is None:
+        layout = desc.get('layout')
+        if not layout:
+            raise ValueError('Missing `shape` and `layout` sections')
+        width = layout.shape[0]
+    else:
+        try:
+            width = shape[0]
+        except TypeError:
+            width = shape
+
+    pixel_width = math.ceil(IMAGE_WIDTH / width)
+    padding = max(1, int(pixel_width * PADDING_RATIO))
+
     default = {
         'driver': {
-            'typename': '.gif_writer',
-            'time': args.time,
             'filename': filename,
-            'tmp_dir': '/tmp',
+            'render': {
+                'pixel_width': pixel_width,
+                'padding': padding,
+            },
+            'time': args.time,
+            'typename': '.gif_writer',
         },
         'run': {
-            'fps': args.fps,
             'flat_out': True,
-        },
+            'fps': args.fps,
+        }
     }
 
+    merged = merge.merge(default, desc)
+    saved_merged = copy.deepcopy(merged)
+    yml_name = filename + '.yml'
     try:
-        project.project(default, desc).run()
+        df = data_file.load(yml_name)
+        if df == merged:
+            log.printer('Cached', filename)
+            return
+    except:
+        pass
+
+    log.printer('--> Extracting', filename)
+    try:
+        pr = project.project(default, desc)
+        pr.run()
+        data_file.dump(saved_merged, yml_name)
     except KeyboardInterrupt:
         raise
     except:
@@ -45,7 +83,7 @@ def extract(args):
 def args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--time', '-t', default=5, type=float)
+        '--time', '-t', default=10, type=float)
     parser.add_argument(
         '--fps', '-f', default=24, type=float,
         help='frames per second for the animation')

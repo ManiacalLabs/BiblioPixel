@@ -37,19 +37,19 @@ class GifWriter(DriverBase):
         # documentation.  Is there a better way to do this?
         super().__init__(*args, **kwds)
         self.cur_step = 1
-        self._writer = _gif_writer.GifWriter(
+        self.gif_writer = _gif_writer.GifWriter(
             filename, render, divide, frames, time, scale, gif_options, tmp_dir)
 
     def set_project(self, project):
         super().set_project(project)
-        self._writer.set_project(project)
+        self.gif_writer.set_project(project)
 
     def update_colors(self):
         super().update_colors()
-        if self._writer.step(self.cur_step):
+        if self.gif_writer.step(self.cur_step):
             self.project.stop()
         else:
             self.cur_step += 1
 
     def cleanup(self):
-        self._writer.write()
+        self.gif_writer.write()
