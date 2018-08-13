@@ -25,17 +25,10 @@ driver:
   typename: simpixel
 
 
-# This is the alias section where you can have short aliases for
-# longer strings for convenience.
-
-aliases:
-  $bpa: BiblioPixelAnimations.matrix
-
-
 # This is the animation section, which describes how your lights change over
 # time.
 
-animation: $bpa.bloom
+animation: $bpa.matrix.bloom
 
 
 # Here are alternative animation sections that are commented out that you
@@ -49,10 +42,10 @@ animation: $bpa.bloom
 #   typename: sequence
 #   length: 10
 #   animations:
-#     - $bpa.bloom
-#     - $bpa.pinwheel
-#     - $bpa.GameOfLife.GameOfLifeRGB
-#     - $bpa.SpinningTriangle
+#     - $bpa.matrix.bloom
+#     - $bpa.matrix.pinwheel
+#     - $bpa.matrix.GameOfLife.GameOfLifeRGB
+#     - $bpa.matrix.SpinningTriangle
 
 
 # # Here is the animation section if you wanted to use a custom class.
