@@ -42,7 +42,7 @@ def dump(data, file=sys.stdout, use_yaml=None, **kwds):
 
     def dump(fp):
         if use_yaml:
-            yaml.safe_dump(data, stream=fp, canonical=True, **kwds)
+            yaml.safe_dump(data, stream=fp, **kwds)
         else:
             json.dump(data, fp, indent=4, sort_keys=True, **kwds)
 
