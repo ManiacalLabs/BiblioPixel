@@ -118,9 +118,10 @@ class Animation(object):
 
     def generate_frames(self, clean_layout=True):
         with self._run_context(clean_layout):
-            while self.state == STATE.running:
-                self._run_one_frame()
-                yield
+            if self.runner.repeats != 0:
+                while self.state == STATE.running:
+                    self._run_one_frame()
+                    yield
 
     def run(self, **kwds):
         deprecated.deprecated('BaseAnimation.run')

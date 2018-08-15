@@ -19,7 +19,8 @@ class Runner(object):
 
     def __init__(self, *, amt=1, fps=0, sleep_time=0, max_steps=0,
                  until_complete=False, max_cycles=0, seconds=None,
-                 threaded=False, main=None, flat_out=False, **kwds):
+                 threaded=False, main=None, flat_out=False,
+                 repeats=None, **kwds):
         attributes.check(kwds, 'run')
 
         if max_steps < 0:
@@ -34,6 +35,9 @@ class Runner(object):
         if fps < 0:
             log.error('fps %s < 0', fps)
             fps = 0
+        if repeats and repeats < 0:
+            log.error('repeats %s < 0', repeats)
+            repeats = None
 
         if sleep_time and fps:
             log.error('sleep_time=%s and fps=%s cannot both be set',
@@ -62,6 +66,10 @@ class Runner(object):
         self.threaded = threaded
         self.flat_out = flat_out
         self.main = load.code(main)
+        if repeats is not None:
+            self.until_complete = True
+            self.max_cycles = repeats
+        self.repeats = repeats
 
     def set_project(self, project):
         self.project = project
