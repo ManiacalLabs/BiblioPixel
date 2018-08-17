@@ -4,24 +4,12 @@ from bibliopixel.util.image import extract_gif_lines
 
 
 class ExtractGifLinesTest(unittest.TestCase):
-    def test_doc_path(self):
-        path = 'bibliopixel/drivers/driver.py'
-        actual = extract_gif_lines.doc_path(path)
-        expected = 'doc/bibliopixel/drivers'
-        self.assertEqual(actual, expected)
-
-        path = 'doc/bibliopixel/drivers/driver.py'
-        actual = extract_gif_lines.doc_path(path)
-        expected = 'doc/bibliopixel/drivers'
-        self.assertEqual(actual, expected)
-
     def test_extract(self):
         actual = list(extract_gif_lines._extract(GIF_LINES))
         self.assertEqual(actual, EXPECTED1)
 
     def test_extract_gif_lines(self):
-        source = 'bibliopixel/animations/test.py'
-        actual = list(extract_gif_lines.extract_gif_lines(source, GIF_LINES))
+        actual = list(extract_gif_lines.extract_gif_lines(GIF_LINES))
         self.assertEqual(actual, EXPECTED2)
 
 
@@ -46,12 +34,16 @@ GIF_LINES = """
     animation: BiblioPixelAnimations.matrix.MatrixRain
     shape: [32, 32]
 ```
-![stuff foo/bar/something.gif]#$(
+
+![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
+BiblioPixel/doc/bibliopixel/animations/something.gif)
+
 ```
     animation: .split
     shape: 128
 ```
-minimal.gif
+![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
+BiblioPixel/doc/bibliopixel/animations/minimal.gif)
 """.splitlines()
 
 YAML_LINES_1 = """\
@@ -65,8 +57,8 @@ YAML_LINES_2 = """\
 """.splitlines()
 
 EXPECTED1 = [
-    ('something.gif', YAML_LINES_1),
-    ('minimal.gif', YAML_LINES_2)]
+    ('doc/bibliopixel/animations/something.gif', YAML_LINES_1),
+    ('doc/bibliopixel/animations/minimal.gif', YAML_LINES_2)]
 
 DATA1 = {
     'animation': 'BiblioPixelAnimations.matrix.MatrixRain',
