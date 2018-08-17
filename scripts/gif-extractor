@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 
-import argparse, copy, math, os, subprocess, sys, tempfile
+"""
+This script extracts GIFs from the various components that make up BLiPS
+and puts them into the DocsFiles repo.
+
+It relies on a directory structure like this:
+
+/<your-path>
+    /BiblioPixel   <-- current working directory
+    /BiblioPixelAnimations
+    /DocsFiles
+
+"""
+
+import argparse, copy, math, pathlib, os, subprocess, sys, tempfile
 from unittest import mock
 from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
@@ -10,14 +23,11 @@ SUFFIXES = '.md', '.py'
 RAISE = True
 IMAGE_WIDTH = 384
 PADDING_RATIO = 1 / 4
+ROOT = pathlib.Path(__file__).absolute().parents[2].joinpath(
+    'DocsFiles', 'BiblioPixel')
 
 
 def extract_one_gif(args, filename, desc):
-    dirname, fname = os.path.split(filename)
-    dirname = os.path.join(dirname, 'img')
-    filename = os.path.join(dirname, fname)
-
-    os.makedirs(dirname, exist_ok=True)
     shape = desc.get('shape')
     if shape is None:
         layout = desc.get('layout')
@@ -46,25 +56,30 @@ def extract_one_gif(args, filename, desc):
         'run': {
             'flat_out': True,
             'fps': args.fps,
-        }
+        },
+        'numbers': 'float',
     }
 
     merged = merge.merge(default, desc)
     saved_merged = copy.deepcopy(merged)
-    yml_name = filename + '.yml'
+
+    path = ROOT.joinpath(filename)
+    os.makedirs(str(path.parent), exist_ok=True)
+    yml_path = str(path) + '.yml'
     try:
-        df = data_file.load(yml_name)
+        df = data_file.load(yml_path)
         if df == merged:
             log.printer('Cached', filename)
             return
     except:
         pass
 
-    log.printer('--> Extracting', filename)
+    default['driver']['filename'] = str(path)
+    log.printer('--> Extracting to', path)
     try:
         pr = project.project(default, desc)
         pr.run()
-        data_file.dump(saved_merged, yml_name)
+        data_file.dump(saved_merged, yml_path)
     except KeyboardInterrupt:
         raise
     except:
@@ -75,8 +90,7 @@ def extract_one_gif(args, filename, desc):
 
 def extract(args):
     for root, input_file in walk.walk_suffix(args.roots, SUFFIXES):
-        relpath = os.path.relpath(input_file, root)
-        for filename, desc in extract_gif_lines(relpath, open(input_file)):
+        for filename, desc in extract_gif_lines(open(input_file)):
             extract_one_gif(args, filename, desc)
 
 

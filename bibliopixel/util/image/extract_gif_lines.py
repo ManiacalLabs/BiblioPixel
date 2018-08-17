@@ -1,19 +1,10 @@
-import os, re
+import re
 from .. import data_file, log
 
-GIF_RE = re.compile(r'\b[\w-]+\.gif\b')
-GIF_ROOT = 'doc/'
-PATTERNS = {GIF_ROOT: GIF_ROOT}
+PREFIX = """\
+https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/"""
 
-
-def doc_path(filename):
-    dirname = os.path.dirname(filename)
-
-    for prefix, replacement in PATTERNS.items():
-        if dirname.startswith(prefix):
-            return replacement + dirname[len(prefix):]
-
-    return GIF_ROOT + dirname
+GIF_RE = re.compile(r'! \[ .* \] \(' + PREFIX + r'(.* \.gif) \)', re.X)
 
 
 def _extract(lines):
@@ -36,22 +27,20 @@ def _extract(lines):
             code.append(line)
 
         elif state is AFTER_CODE:
-            m = GIF_RE.search(line)
+            m = GIF_RE.match(line.strip())
             if m:
-                yield m.group(), code
+                yield m.group(1), code
 
             if line.strip():
                 state = TEXT
 
 
-def extract_gif_lines(filename, lines):
-    path = doc_path(filename)
-    for base, code in _extract(lines):
-        full_path = os.path.join(path, base)
+def extract_gif_lines(lines):
+    for filename, code in _extract(lines):
         codelines = '\n'.join(code)
         try:
             project = data_file.loads(codelines)
         except:
             log.error('Unable to load code: $s\n%s', filename, codelines)
         else:
-            yield full_path, project
+            yield filename, project
