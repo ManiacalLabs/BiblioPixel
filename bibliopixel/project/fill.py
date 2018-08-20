@@ -98,31 +98,31 @@ def fill_shape(desc):
     if len(desc['drivers']) != 1:
         raise ValueError('Cannot use dimensions with more than one driver')
 
-    try:
-        d = [int(shape)]
-    except:
-        d = list(shape)
+    if isinstance(shape, int):
+        shape = [shape]
+    elif not isinstance(shape, list):
+        raise ValueError('`shape` must be a number or a list, was "%s"' % shape)
 
     ldesc = construct.to_type_constructor(desc.get('layout') or {},
                                           python_path='bibliopixel.layout')
     driver = desc['drivers'][0]
 
-    if len(d) == 1:
-        driver['num'] = d[0]
+    if len(shape) == 1:
+        driver['num'] = shape[0]
         ldesc.setdefault('datatype', layout.strip.Strip)
 
-    elif len(d) == 2:
-        driver['num'] = d[0] * d[1]
+    elif len(shape) == 2:
+        driver['num'] = shape[0] * shape[1]
         ldesc.setdefault('datatype', layout.matrix.Matrix)
-        ldesc.update(width=d[0], height=d[1])
+        ldesc.update(width=shape[0], height=shape[1])
 
-    elif len(d) == 3:
-        driver['num'] = d[0] * d[1] * d[2]
+    elif len(shape) == 3:
+        driver['num'] = shape[0] * shape[1] * shape[2]
         ldesc.setdefault('datatype', layout.cube.Cube)
-        ldesc.update(x=d[0], y=d[1], z=d[2])
+        ldesc.update(x=shape[0], y=shape[1], z=shape[2])
 
     else:
-        raise ValueError('Dimension %s > 3' % len(d))
+        raise ValueError('Dimension %s > 3' % len(shape))
 
     desc['layout'] = ldesc
     return desc
