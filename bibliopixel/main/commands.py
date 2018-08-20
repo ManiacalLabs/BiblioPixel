@@ -80,7 +80,7 @@ bp [<command>] [<argument> ...] [<flag> ...]
 bp info --help
 bp run -h
 bp info
-bp color "indian red 4"
+bp color "light sky blue 4"
 bp foo.json bar.json -v
 bp foo.json bar.json -v --numbers=float --dump --defaults=default.json
 ``````
