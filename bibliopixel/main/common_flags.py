@@ -85,6 +85,10 @@ def add_project_flags(parser):
         help='If true, continue running the next project if one project fails')
 
     parser.add_argument(
+        '-j', '--json', action='store_true',
+        help='Use Json when dumping description data')
+
+    parser.add_argument(
         '-l', '--layout', default=None,
         help='Default layout class if no layout is specified')
 
@@ -113,10 +117,6 @@ def add_project_flags(parser):
     parser.add_argument(
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
-
-    parser.add_argument(
-        '-y', '--yaml', action='store_true',
-        help='Use Yaml when dumping description data')
 
 
 def _make_project_flags(args):

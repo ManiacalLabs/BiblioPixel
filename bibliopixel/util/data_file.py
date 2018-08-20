@@ -20,7 +20,6 @@ def dumps(data, use_yaml=None, safe=True, **kwds):
 
     if use_yaml:
         dumps = yaml.safe_dump if safe else yaml.dump
-        kwds.update(canonical=True)
     else:
         dumps = json.dumps
         kwds.update(indent=4, sort_keys=True)
