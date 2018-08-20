@@ -81,9 +81,11 @@ def _get_projects(args):
         descs = []
         try:
             for filename in project_files.split('+'):
+                root_file = None
                 if filename.endswith('.py'):
                     desc = _load_py(filename)
-                    root_file = None
+                elif '{' in filename:
+                    desc = data_file.loads(filename)
                 else:
                     desc = load.data(filename, False)
                     desc = data_file.load(desc, filename)
