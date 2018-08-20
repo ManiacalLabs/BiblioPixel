@@ -10,6 +10,7 @@ from .. project import load
 from .. project.project import Project
 
 RUN_ERROR = """When reading file {filename}:
+
 {desc}
 {exception}
 """
@@ -45,7 +46,7 @@ def _load_py(filename):
 
 
 def _dump(args, desc):
-    return data_file.dumps(desc, args.yaml, safe=False)
+    return data_file.dumps(desc, use_yaml=not args.json, safe=False)
 
 
 def _get_projects(args):
@@ -214,10 +215,6 @@ def set_parser(parser):
     parser.add_argument(
         'name', nargs='*',
         help='Path project files - can be a URL or file system location')
-
-    parser.add_argument(
-        '-j', '--json', action='store_true',
-        help='Enter JSON directly as a command line argument.')
 
 
 _RUNNING = False
