@@ -10,8 +10,20 @@ from .. import layout, util
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 
+def fill(desc):
+    desc = _fill_aliases(desc)
+    desc = _fill_animation(desc)
+    desc = _fill_drivers(desc)
+    desc = _fill_shape(desc)  # Must come after fill_drivers
+    desc = _fill_numbers(desc)
+    desc = _fill_controls(desc)
+
+    return desc
+
+
 def fill_layout(animation):
     # Try to fill in the layout if it's missing.
+    # This is called from Project.__init__ - TODO: fix that.
     datatype = animation['datatype']
 
     try:
@@ -24,7 +36,7 @@ def fill_layout(animation):
     return dict(args, datatype=layout_cl)
 
 
-def fill_aliases(desc):
+def _fill_aliases(desc):
     def unalias(k):
         if any(k.startswith(m) for m in aliases.ALIAS_MARKERS):
             return k[1:]
@@ -35,15 +47,7 @@ def fill_aliases(desc):
     return desc
 
 
-def fill_numbers(desc):
-    numbers = desc.pop('numbers', 'python')
-    if numbers != 'python':
-        desc.setdefault('maker', {})['numpy_dtype'] = numbers
-
-    return desc
-
-
-def fill_animation(desc):
+def _fill_animation(desc):
     if not desc['animation']:
         raise ValueError('Missing "animation" section')
 
@@ -72,7 +76,7 @@ def fill_animation(desc):
     return desc
 
 
-def fill_drivers(desc):
+def _fill_drivers(desc):
     driver = construct.to_type(desc.pop('driver', {}))
     drivers = [construct.to_type(d) for d in desc['drivers']]
     if driver:
@@ -85,7 +89,7 @@ def fill_drivers(desc):
     return desc
 
 
-def fill_shape(desc):
+def _fill_shape(desc):
     desc = copy.deepcopy(desc)
     dimensions = desc.pop('dimensions', None)
     if dimensions:
@@ -128,19 +132,16 @@ def fill_shape(desc):
     return desc
 
 
-def fill_controls(desc):
-    controls = desc.get('controls', None)
-    if isinstance(controls, (str, dict)):
-        desc['controls'] = [controls]
+def _fill_numbers(desc):
+    numbers = desc.pop('numbers', 'python')
+    if numbers != 'python':
+        desc.setdefault('maker', {})['numpy_dtype'] = numbers
+
     return desc
 
 
-def fill(desc):
-    desc = fill_aliases(desc)
-    desc = fill_animation(desc)
-    desc = fill_drivers(desc)
-    desc = fill_shape(desc)  # Must come after fill_drivers
-    desc = fill_numbers(desc)
-    desc = fill_controls(desc)
-
+def _fill_controls(desc):
+    controls = desc.get('controls', None)
+    if isinstance(controls, (str, dict)):
+        desc['controls'] = [controls]
     return desc
