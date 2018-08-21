@@ -2,11 +2,12 @@
 Run specified project from file or URL
 """
 
-import os, sys, time, traceback
+import os, string, sys, time, traceback
 from . import common_flags, simpixel
 from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
 from .. project import load
+from .. project.aliases import ALIAS_MARKERS
 from .. project.project import Project
 
 RUN_ERROR = """When reading file {filename}:
@@ -87,9 +88,14 @@ def _get_projects(args):
                 elif '{' in filename:
                     desc = data_file.loads(filename)
                 else:
-                    desc = load.data(filename, False)
-                    desc = data_file.load(desc, filename)
-                    root_file = os.path.abspath(filename)
+                    try:
+                        desc = load.data(filename, False)
+                        desc = data_file.load(desc, filename)
+                        root_file = os.path.abspath(filename)
+                    except:
+                        if not _might_be_classname(filename):
+                            raise
+                        desc = {'animation': filename}
 
                 if gif:
                     if 'filename' in gif:
@@ -220,3 +226,13 @@ def set_parser(parser):
 
 
 _RUNNING = False
+_ALL_CHARS = set(string.ascii_letters + string.digits + '._' + ALIAS_MARKERS)
+_START_CHARS = set(string.ascii_letters + '.' + ALIAS_MARKERS)
+_END_CHARS = set(string.ascii_letters + string.digits)
+
+
+def _might_be_classname(s):
+    return (s and
+            set(s) <= _ALL_CHARS and
+            s[0] in _START_CHARS and
+            s[-1] in _END_CHARS)
