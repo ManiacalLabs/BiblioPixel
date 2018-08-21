@@ -14,8 +14,7 @@ def classname(c):
 class Project2Test(unittest.TestCase):
     def test_empty(self):
         with patch.patch(defaults, 'BYPASS_PROJECT_DEFAULTS', True):
-            with self.assertRaises(ValueError):
-                project.project()
+            project.project()
 
     def test_single(self):
         source = {

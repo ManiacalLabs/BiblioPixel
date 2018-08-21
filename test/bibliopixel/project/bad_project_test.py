@@ -168,15 +168,11 @@ class BadProjectTest(unittest.TestCase):
             ('Unknown attribute for run: "bad_attribute"',))
 
     def test_missing_layout(self):
-        with self.assertRaises(ValueError) as e:
-            make(MISSING_LAYOUT)
-        self.assertEquals(
-            e.exception.args,
-            ('Missing "layout" section',))
+        animation = make(MISSING_LAYOUT, run_start=False)
+        self.assertEquals(animation.__class__.__name__, 'Off')
+        self.assertEquals(animation.layout.__class__.__name__, 'Strip')
 
     def test_missing_everything(self):
-        with self.assertRaises(ValueError) as e:
-            make('{}')
-        self.assertEquals(
-            e.exception.args,
-            ('Missing "layout" section',))
+        animation = make('{}', run_start=False)
+        self.assertEquals(animation.__class__.__name__, 'Animation')
+        self.assertEquals(animation.layout.__class__.__name__, 'Strip')

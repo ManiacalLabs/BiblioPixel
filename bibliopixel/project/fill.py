@@ -6,6 +6,7 @@ so they have exactly the right constructor.
 import copy
 from . import aliases, alias_lists, construct, merge
 from .. import layout, util
+from .. animation.strip import BaseStripAnim
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
@@ -26,11 +27,8 @@ def fill_layout(animation):
     # This is called from Project.__init__ - TODO: fix that.
     datatype = animation['datatype']
 
-    try:
-        args = datatype.LAYOUT_ARGS
-        layout_cl = datatype.LAYOUT_CLASS
-    except:
-        raise ValueError('Missing "layout" section')
+    args = getattr(datatype, 'LAYOUT_ARGS', BaseStripAnim.LAYOUT_ARGS)
+    layout_cl = getattr(datatype, 'LAYOUT_CLASS', BaseStripAnim.LAYOUT_CLASS)
 
     args = {k: animation[k] for k in args if k in animation}
     return dict(args, datatype=layout_cl)
