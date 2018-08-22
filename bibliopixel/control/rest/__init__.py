@@ -1,1 +1,1 @@
-from . rest import Rest
+from . rest import OpenPage, Rest
