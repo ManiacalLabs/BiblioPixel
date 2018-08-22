@@ -64,8 +64,11 @@ def _multi(method):
 
 
 class Rest(control.ExtractedControl):
+    OPEN_PAGE = False
+
     def __init__(self, *args, port=PORT, external_access=False, verbose=True,
-                 root_folder=ROOT_FOLDER, index_file=INDEX_FILE, **kwds):
+                 root_folder=ROOT_FOLDER, index_file=INDEX_FILE,
+                 open_page=None, **kwds):
         super().__init__(*args, verbose=verbose, **kwds)
 
         root_folder = pathlib.Path(root_folder)
@@ -75,7 +78,12 @@ class Rest(control.ExtractedControl):
         self.index_file = str(index_file)
 
         static = str(root_folder / 'static')
-        self.server = server.Server(port, external_access, static_folder=static)
+
+        if open_page is None:
+            open_page = self.OPEN_PAGE
+
+        self.server = server.Server(
+            port, external_access, open_page, static_folder=static)
 
         app = self.server.app
         app.route('/')(self.index)
@@ -143,3 +151,7 @@ class Rest(control.ExtractedControl):
             if self.verbose:
                 traceback.print_exc()
             flask.abort(code)
+
+
+class OpenPage(Rest):
+    OPEN_PAGE = True

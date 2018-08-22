@@ -3,6 +3,7 @@ from werkzeug.datastructures import ImmutableOrderedMultiDict
 
 from ... util import log
 from ... util.threads import runnable
+from ... animation.remote import opener
 
 
 class OrderedFlask(flask.Flask):
@@ -13,13 +14,18 @@ class OrderedFlask(flask.Flask):
 
 
 class Server(runnable.LoopThread):
-    def __init__(self, port, external_access, **kwds):
+    OPEN_DELAY = 1
+
+    def __init__(self, port, external_access, open_page, **kwds):
         super().__init__()
         self.port = port
         self.hostname = '0.0.0.0' if external_access else 'localhost'
         self.app = OrderedFlask(__name__, **kwds)
+        self.open_page = open_page
 
     def run_once(self):
+        if self.open_page:
+            opener.raw_opener('localhost', self.port, self.OPEN_DELAY)
         werkzeug.serving.run_simple(self.hostname, self.port, self.app)
         super().stop()
 
