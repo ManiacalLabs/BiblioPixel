@@ -2,9 +2,9 @@ import contextlib, flask, fractions, functools, traceback
 import http.client, werkzeug.serving
 from werkzeug.datastructures import ImmutableOrderedMultiDict
 
-from . import control, editor
-from .. util import log
-from .. util.threads import runnable
+from .. import control, editor
+from ... util import log
+from ... util.threads import runnable
 
 PORT = 8787
 
