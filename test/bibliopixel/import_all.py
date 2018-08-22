@@ -1,4 +1,6 @@
-import importlib, os
+import importlib, os, traceback
+
+FAIL_ON_EXCEPTION = 'BLIPS_FAIL_ON_EXCEPTION' in os.environ
 
 
 def _split_all(path):
@@ -33,8 +35,8 @@ def import_all(root, project_name, blacklist):
         if name not in blacklist:
             try:
                 importlib.import_module(name)
-            except Exception as e:
-                failures.append((name, e))
+            except:
+                failures.append((name, traceback.format_exc()))
             else:
                 successes.append(name)
 
