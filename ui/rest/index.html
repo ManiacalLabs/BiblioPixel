@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>BLiPS REST Set/Get page</title>
+</head>
+
+<body>
+
+<script src="static/jquery.js"></script>
+<script src="static/index.js"></script>
+
+<div style="font-family:courier;">
+  <pre>
+  Enter an Address within your Project.
+  To GET the value at that Address, click Get.
+  To SET the value, fill in the Value field, and click Set.
+  </pre
+
+  <form method="get">
+    <label for="address">Address:</label>
+    <div>
+      <input type="text" id="address" size="48">
+    </div>
+
+    <label for="value">Value:</label>
+    <div>
+      <textarea id="value" rows="8" cols="48"></textarea>
+    </div>
+
+    <button type="submit" onClick="clickGet()">Get</button>
+    <button type="submit" onClick="clickSet()">Set</button>
+    <button type="submit" onClick="clickClear()">Clear</button>
+
+    <br>
+    <br>
+
+    <div id="error_div" style="color: red; visibility: hidden;">
+      <label for="error" id="error_label">Error:</label>
+      <div>
+        <textarea readonly id="error_text" rows="4" cols="48" style="color: red;"></textarea>
+      </div>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>
