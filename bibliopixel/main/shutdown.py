@@ -1,6 +1,11 @@
 """
 Send an interrupt signal to a BiblioPixel process running on this
 machine to kill it
+
+DEPRECATED: use
+
+    $ kill -int `bpa-pid`
+
 """
 
 DESCRIPTION = """

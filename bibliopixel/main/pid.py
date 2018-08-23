@@ -1,7 +1,10 @@
 """
 Print the process ID of the current bp instance that is running a project,
-if any
+if any.
 
+DEPRECATED: use
+
+    $ bpa-pid
 """
 
 DESCRIPTION = """

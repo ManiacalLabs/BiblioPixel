@@ -1,6 +1,6 @@
 import os, tempfile
 from .. project import data_maker, defaults, project
-from .. util import data_file, deprecated, log
+from .. util import data_file, deprecated, log, pid_context
 
 """Common command line arguments for run and demo."""
 
@@ -17,7 +17,6 @@ COMPONENTS = 'driver', 'layout', 'animation'
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 ENABLE_PRESETS = False
 NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
-DEFAULT_PID_FILENAME = os.path.join(tempfile.gettempdir(), 'bp_pid_file.txt')
 
 
 def add_common_flags(parser):
@@ -25,7 +24,7 @@ def add_common_flags(parser):
         '--loglevel', choices=log.SORTED_NAMES, default='info',
         help=LOGLEVEL_HELP)
     parser.add_argument(
-        '--pid_filename', default=DEFAULT_PID_FILENAME,
+        '--pid_filename', default=pid_context.DEFAULT_PID_FILENAME,
         help='Filename to store the `bp` process ID when running')
     parser.add_argument(
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)

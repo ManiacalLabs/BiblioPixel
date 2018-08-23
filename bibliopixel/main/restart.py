@@ -1,6 +1,11 @@
 """
 Send a restart signal to a BiblioPixel process running on this
 machine.
+
+DEPRECATED: use
+
+    $ kill -hup `bpa-pid`
+
 """
 
 DESCRIPTION = """
