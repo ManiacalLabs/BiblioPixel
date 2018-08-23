@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import sys
+from bibliopixel.util import log, pid_context
+
+HELPS = 'help', '-h', '--h', '--help', '--h'
+USAGE = """Usage:
+  bp-pid [pid_filename]
+
+Prints the PID for the running `bp` program if there if one, or returns
+an error.
+"""
+
+
+def main(pid_filename=pid_context.DEFAULT_PID_FILENAME):
+    if filename in HELPS:
+        log.printer(USAGE)
+        return
+
+    try:
+        log.printer(pid_context.get_pid(pid_filename))
+    except:
+        log.error('No bp process running. Could not find file ' + pid_filename)
+        return -1
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

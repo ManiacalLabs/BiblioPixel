@@ -1,5 +1,7 @@
-import contextlib, os
+import contextlib, os, tempfile
 from . import log
+
+DEFAULT_PID_FILENAME = os.path.join(tempfile.gettempdir(), 'bp_pid_file.txt')
 
 
 @contextlib.contextmanager

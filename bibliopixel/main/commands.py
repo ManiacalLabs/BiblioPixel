@@ -1,11 +1,14 @@
 import os
 from .. project.importer import import_module
-from .. util import log
+from .. util import deprecated, log
 
 COMMANDS = (
     'animations', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
-    'devices', 'info', 'kill', 'monitor', 'new', 'pid', 'restart', 'run',
-    'shutdown')
+    'devices', 'info', 'monitor', 'new', 'run')
+
+if deprecated.allowed():
+    SIGNAL_COMMANDS = 'kill', 'pid', 'restart', 'shutdown'
+    COMMANDS += SIGNAL_COMMANDS
 
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
