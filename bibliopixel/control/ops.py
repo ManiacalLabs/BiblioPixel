@@ -1,6 +1,3 @@
-import math, operator
-from . address import Address
-
 """
 Simple numerical operations put together in a list, useful for
 scaling or offsetting some incoming numerical value.
@@ -23,6 +20,8 @@ returns the square root of x
 returns sqrt(1 + 0.5 * x)
 
 """
+
+import math, operator
 
 
 class Op:
