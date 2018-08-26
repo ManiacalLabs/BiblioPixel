@@ -1,4 +1,5 @@
 import os, subprocess, sys
+import features
 
 ROOT = os.path.dirname(__file__)
 printer = print  # noqa: T001
@@ -9,7 +10,8 @@ def execute(*args, verbose=False):
         printer('$', *args)
     cwd = os.path.dirname(os.path.dirname(ROOT))
     po = subprocess.Popen(
-        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd,
+        shell=features.IS_WINDOWS)
     stdout, stderr = po.communicate()
     if po.returncode:
         printer()
