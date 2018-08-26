@@ -1,4 +1,4 @@
-import common
+import common, features
 import contextlib, requests, subprocess, threading, time
 
 FEATURES = 'browser',
@@ -21,7 +21,8 @@ def put(name, url, data):
 def bp(function):
     def wrapped():
         threading.Thread(
-            target=subprocess.check_call, args=(START_BP,)).start()
+            target=subprocess.check_call, args=(START_BP,),
+            shell=features.IS_WINDOWS).start()
         time.sleep(2 * PAUSE)
 
         function()
