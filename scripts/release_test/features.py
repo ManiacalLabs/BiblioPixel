@@ -5,7 +5,7 @@ import getpass, os, platform
 MIDI_PORTS_TO_REMOVE = {'IAC Driver Bus 1'}
 
 # https://raspberrypi.stackexchange.com/questions/5100
-IS_WINDOWS = getattr(os, 'uname', None)
+IS_WINDOWS = not getattr(os, 'uname', None)
 IS_RASPBERRY_PI = not IS_WINDOWS and os.uname()[4].startswith('arm')
 IS_MAC = platform.platform().startswith('Darwin')
 IS_ROOT = getpass.getuser() == 'root'
