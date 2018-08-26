@@ -8,6 +8,7 @@ from test.bibliopixel.util import udp_test
 
 class ArtNetControlTest(unittest.TestCase):
     @mark_tests.fails_in_travis
+    @mark_tests.fails_on_windows
     def test_artnet_control(self):
         project = make_project(ARTNET_CONTROL)
         q = queue.Queue()
@@ -22,6 +23,7 @@ class ArtNetControlTest(unittest.TestCase):
         self.assertEquals(results, TEST_DATA)
 
     @mark_tests.fails_in_travis
+    @mark_tests.fails_on_windows
     def test_artnet_integration(self):
         sender = udp.QueuedSender(SEND_ADDRESS)
         receiver = udp.QueuedReceiver(RECEIVE_ADDRESS)

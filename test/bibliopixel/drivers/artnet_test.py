@@ -24,6 +24,7 @@ PROJECT = {
 class DMXMessageTest(unittest.TestCase):
     @mark_tests.long_test
     @mark_tests.fails_in_travis
+    @mark_tests.fails_on_windows
     def test_blackout(self):
         results = []
         with udp_test.receive_udp(ADDRESS, results, MAX_STEPS + 1):
