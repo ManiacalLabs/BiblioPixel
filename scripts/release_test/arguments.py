@@ -1,16 +1,22 @@
 import argparse, common, sys, tests
-from features import check_features, get_features
+from features import check_features, get_features, FEATURES
 
 
 def arguments(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        'tests', nargs='*', help='The list of tests to run')
+    names = [t.__name__.split('.')[1] for t in tests.__all__]
+    names = ', '.join(names)
 
     parser.add_argument(
+        'tests', nargs='*',
+        help='The list of tests to run.  Tests are:' + names)
+
+    features = ', '.join(FEATURES)
+    parser.add_argument(
         '--features', '-f', default=[], action='append',
-        help='A list of features separated by colons')
+        help='A list of features separated by colons.  Features are: ' +
+        features)
 
     args = parser.parse_args(argv)
 
