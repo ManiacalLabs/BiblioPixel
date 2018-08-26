@@ -5,7 +5,8 @@ import getpass, os, platform
 MIDI_PORTS_TO_REMOVE = {'IAC Driver Bus 1'}
 
 # https://raspberrypi.stackexchange.com/questions/5100
-IS_RASPBERRY_PI = os.uname()[4].startswith('arm')
+IS_WINDOWS = getattr(os, 'uname', None)
+IS_RASPBERRY_PI = not IS_WINDOWS and os.uname()[4].startswith('arm')
 IS_MAC = platform.platform().startswith('Darwin')
 IS_ROOT = getpass.getuser() == 'root'
 
@@ -41,6 +42,10 @@ class Feature:
     def midi():
         import mido
         return set(mido.get_input_names()) - MIDI_PORTS_TO_REMOVE
+
+    @staticmethod
+    def windows():
+        return IS_WINDOWS
 
 
 FEATURES = set(k for k in dir(Feature) if not k.startswith('_'))
