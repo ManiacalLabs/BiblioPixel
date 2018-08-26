@@ -1,5 +1,6 @@
 import functools, time, unittest
 from bibliopixel.util.threads import sub
+from .. import mark_tests
 
 WAIT_FOR_SUB = 0.1
 
@@ -34,6 +35,7 @@ class SubTest(unittest.TestCase):
         pause(WAIT_FOR_SUB)
         self.assertFalse(s.is_alive())
 
+    @mark_tests.fails_on_windows
     def test_subprocess(self):
         self.do_test(True)
 
