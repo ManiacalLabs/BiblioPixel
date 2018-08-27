@@ -1,5 +1,6 @@
 import common, features
 import contextlib, requests, subprocess, threading, time
+from urllib.parse import quote_plus
 
 FEATURES = 'browser',
 START_BP = 'bp', '--loglevel=error', common.make_project('rest.yml')
@@ -22,7 +23,7 @@ def bp(function):
     def wrapped():
         threading.Thread(
             target=subprocess.check_call, args=(START_BP,),
-            shell=features.IS_WINDOWS).start()
+            kwargs={'shell': features.IS_WINDOWS}).start()
         time.sleep(2 * PAUSE)
 
         function()
@@ -45,7 +46,7 @@ def test_other():
 
 @bp
 def test_rest():
-    time.sleep(PAUSE * 10)
+    time.sleep(PAUSE * 5)
     get('basic', 'get/animation.levels')
     get('single', 'single/animation.levels')
     get('multi', 'multi?animation.levels=0')

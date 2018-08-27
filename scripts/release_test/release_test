@@ -4,7 +4,7 @@
 
 
 import arguments, common, features, tests
-import getpass, platform, sys, threading
+import getpass, platform, sys, threading, traceback
 
 SKIPPING_MESSAGE = '%-20s skipped due to missing feature%s: %s'
 RUNNING_MESSAGE = '%-20s running...'
@@ -29,11 +29,17 @@ def run_tests():
 
     common.printer('Running tests:', *[t.__name__ for t in good_tests])
 
+    failures = 0
     for test in good_tests:
         name = test.__name__
         common.printer(RUNNING_MESSAGE % name, end='', flush=True)
-        test.run()
+        try:
+            test.run()
+        except:
+            traceback.print_exc()
+            failures += 1
         common.printer('done', flush=True)
+    sys.exit(failures)
 
 
 if __name__ == '__main__':
