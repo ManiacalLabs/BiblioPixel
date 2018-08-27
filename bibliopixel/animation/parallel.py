@@ -14,13 +14,7 @@ class Parallel(collection.Collection):
         other than the first animation.
         """
         super().__init__(*args, **kwds)
-
-        # Give each animation a unique, mutable layout so they can
-        # run independently.
-        for i, a in enumerate(self.animations):
-            a.layout = a.layout.clone()
-            if overlay and i:
-                a.preclear = False
+        self.detach(overlay)
 
     def step(self, amt=1):
         for a in self.animations:
