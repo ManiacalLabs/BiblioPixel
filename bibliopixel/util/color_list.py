@@ -6,6 +6,12 @@ def is_numpy(x):
     return isinstance(x, numpy.ndarray)
 
 
+def check_numpy(item, name=None):
+    if not is_numpy(item.color_list):
+        name = name or item.__class__.__name__
+        raise ValueError(_NEEDS_NUMPY_ERROR % name)
+
+
 class ListMath:
     @staticmethod
     def clear(color_list):
@@ -103,3 +109,17 @@ def to_triplets(colors):
     if extra:
         colors = colors[:-extra]
     return list(zip(*[iter(colors)] * 3))
+
+
+_NEEDS_NUMPY_ERROR = """%s needs numpy to run.
+
+You can either:
+
+1. Edit your Project file to add a line
+
+    numbers: float
+
+2. Use the `--numbers` flag`:
+
+    $ bp --numbers=float <your-project-name>.yml
+"""
