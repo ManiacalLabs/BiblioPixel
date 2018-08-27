@@ -17,6 +17,7 @@ def _single(method):
     """Decorator for Rest methods that take a single address"""
     @functools.wraps(method)
     def single(self, address, value=None):
+        address = urllib.parse.unquote_plus(address)
         try:
             error = BAD_ADDRESS_ERROR
             ed = editor.Editor(address, self.root)
@@ -45,6 +46,7 @@ def _multi(method):
     @functools.wraps(method)
     def multi(self, address=''):
         values = flask.request.values
+        address = urllib.parse.unquote_plus(address)
         if address and values and not address.endswith('.'):
             address += '.'
 
@@ -91,7 +93,7 @@ class Rest(control.ExtractedControl):
         # Basic Endpoints
         app.route('/get/<address>')(self.get)
         app.route('/set/<address>/<value>')(self.put)
-        # <value> is URL quoted
+        # <address> and <value> are URL quoted
 
         # GET endpoints
         app.route('/single/<address>')(self.get)

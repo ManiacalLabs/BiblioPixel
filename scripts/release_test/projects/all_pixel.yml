@@ -5,4 +5,6 @@ run:
   fps: 40
   seconds: 9
 
-animation: tests.PixelTester
+animation:
+  typename: tests.PixelTester
+  brightness: 0.25

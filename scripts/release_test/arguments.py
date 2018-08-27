@@ -10,7 +10,7 @@ def arguments(argv=sys.argv[1:]):
 
     parser.add_argument(
         'tests', nargs='*',
-        help='The list of tests to run.  Tests are:' + names)
+        help='The list of tests to run.  Tests are: ' + names)
 
     features = ', '.join(FEATURES)
     parser.add_argument(
