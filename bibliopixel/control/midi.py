@@ -56,7 +56,7 @@ class Midi(control.ExtractedLoop):
             If True, map note_ons with velocity 0 to note_offs
             If None, do not change none_ons or note_offs
         """
-        control.ExtractedControl.__init__(self, **kwds)
+        super().__init__(**kwds)
         self.use_note_off = use_note_off
 
     def messages(self):

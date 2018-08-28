@@ -79,7 +79,7 @@ class Control(runnable.Runnable):
         """
         Returns a new thread to run the loop for this control source.
         """
-        raise NotImplementedError
+        pass
 
     def _msg_to_str(self, msg):
         if msg is None:
