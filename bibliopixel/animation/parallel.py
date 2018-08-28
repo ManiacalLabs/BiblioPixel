@@ -8,14 +8,23 @@ class Parallel(collection.Collection):
     at any time.
     """
 
-    def __init__(self, *args, overlay=False, **kwds):
+    def __init__(self, *args, overlay=False, detach=True, **kwds):
         """
         If overlay is True, then preclear is set to False for everything
         other than the first animation.
         """
         super().__init__(*args, **kwds)
-        self.detach(overlay)
+        if detach:
+            self.detach(overlay)
+
+    def generate_frames(self):
+        self._frames = [[a.generate_frames(), True] for a in self.animations]
+        return super().generate_frames()
 
     def step(self, amt=1):
-        for a in self.animations:
-            a.step(amt)
+        for i, (frames, enabled) in enumerate(self._frames):
+            if enabled:
+                try:
+                    next(frames)
+                except StopIteration:
+                    self._frames[i][1] = False

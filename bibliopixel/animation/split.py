@@ -5,11 +5,11 @@ segments within a larger diplay.
 """
 
 import copy
-from . collection import Collection
+from . parallel import Parallel
 from .. layout.strip import Strip
 
 
-class Split(Collection):
+class Split(Parallel):
 
     def __init__(self, *args, size=100, **kwds):
         """
@@ -18,7 +18,7 @@ class Split(Collection):
                 segment from the original layout.  If there aren't enough sizes
                 for each segment, the list of sizes is reused repeatedly.
         """
-        super().__init__(*args, **kwds)
+        super().__init__(*args, detach=False, **kwds)
         if not size:
             raise ValueError('Split must have at least one size')
 
@@ -29,8 +29,7 @@ class Split(Collection):
             animation.layout = Strip([], color_list=self.color_list[begin:end])
 
     def step(self, amt=1):
-        for a in self.animations:
-            a and a.step(amt)
+        super().step(amt)
 
         # If color_lists are numpy, then changing the sublists will
         # change the master list, so you don't have to do anything!
