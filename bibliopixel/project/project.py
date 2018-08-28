@@ -61,7 +61,7 @@ class Project:
 
         eq = edit_queue.EditQueue(maxsize=edit_queue_maxsize)
         self.layout.edit_queue = self.animation.edit_queue = eq
-        self.animation.preframe_callback = eq.get_and_run_edits
+        self.animation.add_preframe_callback(eq.get_and_run_edits)
 
         # Unfortunately, the whole animation cycle is controlled by methods on
         # the topmost animation - but we need to get called back at a certain
