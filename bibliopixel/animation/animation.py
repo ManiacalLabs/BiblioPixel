@@ -44,6 +44,7 @@ class Animation(object):
         self.project = None
         self.runner = None
         self.time = time.time
+        self.preframe_callbacks = []
 
     def set_project(self, project):
         self.project = project
@@ -95,16 +96,17 @@ class Animation(object):
         if clean_layout:
             self.layout.cleanup()
 
-    def preframe_callback(self):
+    def add_preframe_callback(self, callback):
         """
-        preframe_callback is called right before the start of a frame rendering
-        pass.
+        The preframe_callbacks are called right before the start of a
+        frame rendering pass.
 
-        The ``Project`` writes over this method, for the top-level animation
-        only, in order to drain its edit_queue at a moment where no rendering
-        is happening to avoid race conditions.
+        To avoid race conditions when editing values, the ``Project``
+        adds a callback here for the top-level animation, to drain the
+        edit_queue at a moment where no rendering is
+        happening.
         """
-        pass
+        self.preframe_callbacks.append(callback)
 
     def start(self):
         self.threading.start()
@@ -144,8 +146,8 @@ class Animation(object):
     def _run_one_frame(self):
         timestamps = [self.time()]
 
-        self.preframe_callback()
-        timestamps = [self.time()]
+        for cb in self.preframe_callbacks:
+            cb()
 
         self.step(self.runner.amt)
         timestamps.append(self.time())
