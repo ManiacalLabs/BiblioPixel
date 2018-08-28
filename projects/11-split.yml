@@ -1,0 +1,17 @@
+shape: 200
+
+aliases:
+  Fill: BiblioPixelAnimations.simple.Fill
+
+run:
+    seconds: 23
+    fps: 30
+
+animation:
+  typename: split
+  size: 50
+  animations:
+    - {typename: $Fill, color: blue}
+    - {typename: $bpa.strip.Wave}
+    - {typename: $Fill, color: yellow}
+    - {typename: $bpa.strip.PartyMode}
