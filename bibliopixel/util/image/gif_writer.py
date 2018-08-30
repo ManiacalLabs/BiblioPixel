@@ -1,4 +1,4 @@
-import os, shutil, tempfile, time, traceback
+import os, shutil, statistics, tempfile, time, traceback
 from . import gif, renderer
 from .. import colors, log
 
@@ -82,26 +82,19 @@ class GifWriter:
 
         if 'duration' in go:
             go.pop('fps', None)
-            try:
-                go['duration'] *= self.scale
-            except:
-                go['duration'] = [g * self.scale for g in go['duration']]
+            go['duration'] *= self.scale
+            assert isinstance(go['duration'], (int, float))
 
         elif 'fps' in go:
             go['fps'] /= self.scale
 
         else:
-            # Compute the list of durations from the list of times
-            duration = []
-            for i, time in enumerate(self.times):  # noqa: 402
-                if not i:
-                    previous_time = time
-                else:
-                    # GIFs only accept time in 0.01 second increments
-                    duration.append(round(time - previous_time, 2))
-                    previous_time += duration[-1]
+            # Compute the average duration
+            dt = [t1 - t0 for t0, t1 in zip(self.times, self.times[1:])]
+            duration = statistics.mean(dt)
 
-            duration.append(duration[-1])
+            # GIF durations are only expressed in hundredths of seconds.
+            duration = round(duration, 2)
             go = dict(go, duration=duration)
 
         gif.write_gif(self.filename, ff, **go)
