@@ -5,13 +5,10 @@ from .. layout import Strip
 class BaseStripAnim(Animation):
     LAYOUT_CLASS = Strip
     LAYOUT_ARGS = 'num',
+    FAIL_ON_WRONG_LAYOUT = False
 
     def __init__(self, layout, start=0, end=-1, **kwds):
         super().__init__(layout, **kwds)
-
-        if not isinstance(layout, Strip):
-            raise RuntimeError('Must use bibliopixel.layout.Strip with ' +
-                               'Strip Animations!')
 
         self._start = max(start, 0)
         self._end = end
