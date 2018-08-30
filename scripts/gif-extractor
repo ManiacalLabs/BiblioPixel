@@ -13,14 +13,14 @@ It relies on a directory structure like this:
 
 """
 
-import argparse, copy, math, pathlib, os, subprocess, sys, tempfile
+import argparse, copy, math, pathlib, os, subprocess, sys, tempfile, traceback
 from unittest import mock
 from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
 from bibliopixel.project import merge, project
 
 SUFFIXES = '.md', '.py'
-RAISE = True
+RAISE = False
 IMAGE_WIDTH = 384
 PADDING_RATIO = 1 / 4
 ROOT = pathlib.Path(__file__).absolute().parents[2].joinpath(
@@ -84,8 +84,15 @@ def extract_one_gif(args, filename, desc):
         raise
     except:
         log.error('Error in project %s', filename)
+        try:
+            os.remove(str(path))
+        except:
+            pass
+
         if RAISE:
             raise
+        else:
+            traceback.print_exc()
 
 
 def extract(args):
