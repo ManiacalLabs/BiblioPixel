@@ -89,7 +89,7 @@ def extract_one_gif(args, filename, desc):
         except:
             pass
 
-        if RAISE:
+        if args.fail:
             raise
         else:
             traceback.print_exc()
@@ -111,6 +111,9 @@ def args():
     parser.add_argument(
         'roots', nargs='*', default=('bibliopixel', 'doc'),
         help='Directory roots to search from')
+    parser.add_argument(
+        '--fail', action='store_true',
+        help='Continue going after one image fails')
     return parser.parse_args(sys.argv[1:])
 
 
