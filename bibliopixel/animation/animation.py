@@ -46,10 +46,13 @@ class Animation(object):
 
         lclass = getattr(self, 'LAYOUT_CLASS', None)
         if lclass and not isinstance(self.layout, lclass):
-            msg = LAYOUT_WARNING % (type(self), lclass, type(self.layout))
+            msg = LAYOUT_WARNING % (
+                type(self).__name__,
+                lclass.__name__,
+                type(self.layout).__name__)
             if getattr(self, 'FAIL_ON_WRONG_LAYOUT', True):
                 raise ValueError(msg)
-            log.warn(msg)
+            log.warning(msg)
 
     def set_project(self, project):
         self.project = project
