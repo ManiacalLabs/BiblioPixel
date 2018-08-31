@@ -12,7 +12,7 @@ bp demo list
 
 import random
 
-from . import common_flags, demo_table, simpixel
+from . import args, common_flags, demo_table
 from .. project import project
 from .. util import log, pid_context
 
@@ -56,6 +56,7 @@ def run(args):
         usage()
         return
 
+    args.simpixel = args.simpixel or True
     if not args.name:
         usage()
         args.name = random.choice(list(demo_table.DEMO_TABLE))
@@ -67,7 +68,6 @@ def run(args):
         raise KeyError('Unknown demo %s' % args.name)
 
     animation = make_runnable_animation(demo, args)
-    simpixel.open_simpixel(args.simpixel)
     animation.layout.start()
     animation.start()
 

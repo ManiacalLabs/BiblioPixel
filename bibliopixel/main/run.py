@@ -3,7 +3,7 @@ Run specified project from file or URL
 """
 
 import os, string, sys, time, traceback
-from . import common_flags, simpixel
+from . import common_flags
 from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
 from .. project import load
@@ -189,10 +189,6 @@ def run_once(args):
     if args.dry_run:
         log.printer('(dry run - nothing executed)')
         return
-    if args.simpixel:
-        simpixel.open_simpixel(args.simpixel)
-    elif args.s:
-        simpixel.open_simpixel()
 
     _run_projects(projects, args)
 

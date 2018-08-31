@@ -1,6 +1,19 @@
-import struct
+import struct, webbrowser
 from . import websocket
 from .. server_driver import ServerDriver
+from ... main import args
+
+DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
+
+
+class SimPixelOpenerServer(websocket.Server):
+    def __init__(self, port, selectInterval):
+        super().__init__(port, selectInterval)
+        url = args.ARGS.simpixel or (args.ARGS.s and DEFAULT_SIMPIXEL_URL)
+        if url is True:
+            url = DEFAULT_SIMPIXEL_URL
+        if not url.startswith('no'):
+            webbrowser.open(url, new=0, autoraise=True)
 
 
 class SimPixel(ServerDriver):
@@ -17,7 +30,7 @@ class SimPixel(ServerDriver):
         :py:mod:`bibliopixel.layout.geometry`
     """
 
-    SERVER_CLASS = websocket.Server
+    SERVER_CLASS = SimPixelOpenerServer
     SERVER_KWDS = {'selectInterval': 0.001}
 
     def __init__(self, num=1024, port=1337, **kwds):
