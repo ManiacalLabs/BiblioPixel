@@ -90,7 +90,11 @@ class GifWriter:
 
         else:
             # Compute the average duration
-            duration = round(statistics.mean(self.times), 2)
+            dt = [t1 - t0 for t0, t1 in zip(self.times, self.times[1:])]
+            duration = statistics.mean(dt)
+
+            # GIF durations are only expressed in hundredths of seconds.
+            duration = round(duration, 2)
             go = dict(go, duration=duration)
 
         gif.write_gif(self.filename, ff, **go)
