@@ -12,4 +12,5 @@ if platform.python_version() < MINIMUM_VERSION:
 from bibliopixel.main import main
 
 if __name__ == '__main__':
+    __spec__ = None
     main.main()
