@@ -12,7 +12,7 @@ class SimPixelOpenerServer(websocket.Server):
         url = args.ARGS.simpixel or (args.ARGS.s and DEFAULT_SIMPIXEL_URL)
         if url is True:
             url = DEFAULT_SIMPIXEL_URL
-        if not url.startswith('no'):
+        if url and not url.startswith('no'):
             webbrowser.open(url, new=0, autoraise=True)
 
 
