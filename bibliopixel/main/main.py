@@ -24,7 +24,7 @@ def main():
     try:
         result = run(args.ARGS) or 0
     except Exception as e:
-        if args.verbose:
+        if args.ARGS.verbose:
             raise
         log.printer('ERROR:', e.args and e.args[0], file=sys.stderr)
         log.printer(*e.args[1:], sep='\n', file=sys.stderr)
