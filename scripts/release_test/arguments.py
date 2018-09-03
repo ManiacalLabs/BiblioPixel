@@ -18,6 +18,10 @@ def arguments(argv=sys.argv[1:]):
         help='A list of features separated by colons.  Features are: ' +
         features)
 
+    parser.add_argument(
+        '--verbose', '-v', action='store_true',
+        help='More verbose output')
+
     args = parser.parse_args(argv)
 
     if args.tests:
@@ -36,7 +40,7 @@ def arguments(argv=sys.argv[1:]):
     else:
         features = get_features()
 
-    return all_tests, features
+    return all_tests, features, args.verbose
 
 
 if __name__ == '__main__':
