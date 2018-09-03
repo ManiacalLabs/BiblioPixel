@@ -5,6 +5,7 @@ from .. util import exception, log
 
 EDIT_QUEUE_MAXSIZE = 1000
 NO_DATATYPE_ERROR = 'No "datatype" field in section "%s"'
+MIN_TIME = 0.0001
 
 
 class Project:
@@ -181,5 +182,5 @@ class FlatOutClock:
         return self._time
 
     def sleep(self, delta_time):
-        assert delta_time >= 0
+        assert delta_time >= -MIN_TIME
         self._time += delta_time
