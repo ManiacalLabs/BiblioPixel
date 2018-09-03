@@ -1,0 +1,6 @@
+animation:
+  typename: .fill
+  color: red
+
+run:
+  seconds: 3
