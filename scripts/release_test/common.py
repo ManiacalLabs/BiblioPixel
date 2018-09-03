@@ -3,29 +3,40 @@ import features
 
 ROOT = os.path.dirname(__file__)
 printer = print  # noqa: T001
+VERBOSE = False
 
 
-def execute(*args, verbose=False):
-    if verbose:
+def execute(*args):
+    kwds = {
+        'cwd': os.path.dirname(os.path.dirname(ROOT)),
+        'stdout': subprocess.PIPE,
+        'shell': features.IS_WINDOWS}
+
+    if VERBOSE:
         printer('$', *args)
-    cwd = os.path.dirname(os.path.dirname(ROOT))
-    po = subprocess.Popen(
-        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd,
-        shell=features.IS_WINDOWS)
-    stdout, stderr = po.communicate()
-    if po.returncode:
         printer()
-        printer('*** ERROR ***')
-        printer(stderr.decode())
-        printer()
-        printer('--------------')
-        printer()
-        printer('stdout follows:')
-        printer()
-        printer('--------------')
-        printer(stdout.decode())
-        printer('--------------')
-        sys.exit(po.returncode)
+        po = subprocess.Popen(args, stderr=subprocess.STDOUT, **kwds)
+        for line in po.stdout:
+            printer(line.decode(), end='')
+        if po.returncode:
+            sys.exit(po.returncode)
+
+    else:
+        po = subprocess.Popen(args, stderr=subprocess.PIPE, **kwds)
+        stdout, stderr = po.communicate()
+        if po.returncode:
+            printer()
+            printer('*** ERROR ***')
+            printer(stderr.decode())
+            printer()
+            printer('--------------')
+            printer()
+            printer('stdout follows:')
+            printer()
+            printer('--------------')
+            printer(stdout.decode())
+            printer('--------------')
+            sys.exit(po.returncode)
 
 
 def run_project(*projects, flag=None):

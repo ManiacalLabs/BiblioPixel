@@ -11,7 +11,7 @@ RUNNING_MESSAGE = '%-20s running...'
 
 
 def run_tests():
-    all_tests, features = arguments.arguments()
+    all_tests, features, common.VERBOSE = arguments.arguments()
 
     common.printer('Features:', *sorted(features))
 
