@@ -99,6 +99,9 @@ And `bp kill` kills the `bp` process dead, like sending a Unix SIGKILL.
 _Previous:_  [2. How to write a Project](2-How-to-write-a-Project.md)
 . . . . . . . . . . . . . . . . . . . . . . . .  _Next:_  [4. Projects](4-Projects.md)
 
+---
+
+
 ```
 shape: [64, 13]
 animation: $bpa.strip.LarsonScanners.LarsonRainbow

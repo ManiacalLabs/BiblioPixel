@@ -96,6 +96,8 @@ _Previous:_ [9. The path and aliases Sections](9-the-path-and-aliases-Sections.m
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_  [11. The Serial Driver](11-The-serial-Driver.md)
 
+---
+
 
 ```
 shape: [64, 16]

@@ -50,6 +50,8 @@ _Previous:_ [0. Before you start](0-Before-you-start.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_ [2. How to write a Project](2-How-to-write-a-Project.md)
 
+---
+
 ```
 shape: [64, 16]
 animation: $bpa.matrix.MatrixRain

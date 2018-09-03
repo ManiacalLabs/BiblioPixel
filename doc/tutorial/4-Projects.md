@@ -170,6 +170,9 @@ _Previous:_ [3. The `bp` program](3-The-bp-program.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_  [5. The `animation` Section](5-The-animation-Section.md)
 
+---
+
+
 ```
 shape: [64, 4]
 animation: $bpa.strip.LarsonScanners.LarsonScanner

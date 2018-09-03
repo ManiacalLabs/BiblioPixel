@@ -43,11 +43,12 @@ _Previous:_ [5. The `animation` Section](5-The-animation-Section.md)
 _Next:_  [7. The `shape` and `layout` sections](7-The-shape-and-layout-Sections.md)
 
 
+---
+
+
 ```
 shape: [64, 17]
-animation: $bpa.strip.Pulse
-run:
-  seconds: 2
+animation: $bpa.matrix.circlepop
 ```
 
 ![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/6-footer.gif)

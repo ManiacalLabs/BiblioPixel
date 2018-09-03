@@ -90,10 +90,13 @@ _Previous:_  [4. Projects](4-Projects.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_ [6. The `run` Section](6-The-run-Section.md)
 
+---
+
+
 
 ```
 shape: [64, 17]
-animation: $bpa.strip.Pulse
+animation: $bpa.matrix.pinwheel
 ```
 
 ![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-footer.gif)

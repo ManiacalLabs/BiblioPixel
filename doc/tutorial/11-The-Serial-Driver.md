@@ -19,7 +19,9 @@ documentation for ledtype.py]
 
 _Previous:_ [10. The `driver` and `drivers` Sections](10-The-driver-and-drivers-Sections.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
-_Next:_ [12. The `controls` Sections](10-The-controls-Sections.md)
+_Next:_ [12. The `controls` Section](12-The-controls-Section.md)
+
+---
 
 
 ```

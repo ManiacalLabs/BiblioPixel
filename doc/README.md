@@ -14,6 +14,8 @@
 
 * For the truly devoted, the developer's mailing list is [here](https://groups.google.com/forum/#!forum/bibliopixel-dev).
 
+---
+
 ```
 shape: [96, 16]
 animation: $bpa.matrix.Twinkle

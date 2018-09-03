@@ -52,6 +52,9 @@ _Previous:_ [6. The `run` Section](6-The-run-Section.md)
 _Next:_[8. Typenames](8-Typenames.md)
 
 
+---
+
+
 ```
 shape: [32, 32]
 animation: $bpa.matrix.SpinningTriangle

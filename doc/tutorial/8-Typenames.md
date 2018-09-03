@@ -112,6 +112,11 @@ _Previous:_ [7. The `shape` and `layout` sections](7-The-shape-and-layout-Sectio
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_ [9. The path and aliases Sections](9-the-path-and-aliases-Sections.md)
 
+
+---
+
+
+
 ```
 shape: [96, 8]
 animation:

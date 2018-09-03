@@ -67,6 +67,8 @@ _Previous:_ [8. Typenames](8-Typenames.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_ [10. The `driver` and `drivers` Sections](10-The-driver-and-drivers-Sections.md)
 
+---
+
 ```
 shape: [96, 8]
 animation: $bpa.strip.Rainbows.Rainbow

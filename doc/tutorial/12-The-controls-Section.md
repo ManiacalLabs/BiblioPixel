@@ -150,6 +150,8 @@ _Previous:_ [11. The Serial Driver](11-The-serial-Driver.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_ ?
 
+---
+
 
 ```
 shape: [64, 24]

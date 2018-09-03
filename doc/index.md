@@ -39,10 +39,11 @@ _Previous:_ [Welcome to BLiPS](index.md)
 . . . . . . . . . . . . . . . . . . . . . . . .  _Next:_
 [0. Before you start](tutorial/0-Before-you-start.md)
 
+---
 
 ```
 shape: [64, 11]
-animation: $bpa.strip.PartyMode
+animation: $bpa.strip.HalvesRainbow
 ```
 
-![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/README-footer.gif)
+![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index-footer.gif)

@@ -44,6 +44,8 @@ BLiPS has some snappy features:
 
 [More](doc/README.md)...
 
+---
+
 ```
 animation: $bpa.strip.Wave
 shape: [64, 11]

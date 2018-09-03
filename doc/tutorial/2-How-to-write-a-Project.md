@@ -143,6 +143,9 @@ _Previous:_ [1.  Installing BLiPS](1-Installing-BLiPS.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_  [3. The `bp` program](3-The-bp-program.md)
 
+---
+
+
 ```
 shape: [64, 16]
 animation: $bpa.matrix.GameOfLife.GameOfLifeRGB

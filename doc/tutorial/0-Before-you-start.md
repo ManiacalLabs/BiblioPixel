@@ -111,6 +111,8 @@ _Previous:_ [Documentation roadmap](../roadmap.md)
 . . . . . . . . . . . . . . . . . . . . . . . .
 _Next:_ [1. How To Install BLiPS](1-Installing-BLiPS.md)
 
+---
+
 ```
 shape: [64, 16]
 animation: $bpa.matrix.Twinkle
