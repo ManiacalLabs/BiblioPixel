@@ -5,7 +5,6 @@ from .. layout import Strip
 class BaseStripAnim(Animation):
     LAYOUT_CLASS = Strip
     LAYOUT_ARGS = 'num',
-    FAIL_ON_WRONG_LAYOUT = False
 
     def __init__(self, layout, start=0, end=-1, **kwds):
         super().__init__(layout, **kwds)

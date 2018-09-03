@@ -1,4 +1,5 @@
 import contextlib, threading
+from . import adaptor
 from . runner import Runner, STATE
 from .. util import deprecated, log
 from .. util.threads.animation_threading import AnimationThreading
@@ -9,7 +10,6 @@ class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
     FAIL_ON_EXCEPTION = False
-    FAIL_ON_WRONG_LAYOUT = True
 
     @classmethod
     def construct(cls, project, *, run=None, name=None, data=None, **desc):
@@ -43,16 +43,6 @@ class Animation(object):
         self.preclear = preclear
         self.project = None
         self.runner = None
-
-        lclass = getattr(self, 'LAYOUT_CLASS', None)
-        if lclass and not isinstance(self.layout, lclass):
-            msg = LAYOUT_WARNING % (
-                type(self).__name__,
-                lclass.__name__,
-                type(self.layout).__name__)
-            if getattr(self, 'FAIL_ON_WRONG_LAYOUT', True):
-                raise ValueError(msg)
-            log.warning(msg)
 
     def set_project(self, project):
         self.project = project
@@ -185,6 +175,7 @@ class Animation(object):
         self.cycle_count = 0
 
         self._check_delay()
+        adaptor.adapt_animation_layout(self)
         self.preclear and self.layout.all_off()
 
         self.pre_run()
@@ -223,9 +214,3 @@ def _report_framerate(timestamps):
               fps,
               1000 * (timestamps[1] - timestamps[0]),
               1000 * (timestamps[2] - timestamps[1]))
-
-
-LAYOUT_WARNING = """\
-Animation %s expects a layout of type %s but layout is of type %s:
-you might get unpredictable results.
-"""
