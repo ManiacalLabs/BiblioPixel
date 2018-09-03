@@ -67,7 +67,7 @@ in a bit more information, here's
 }
 ```
 
-![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/doc/0-example-1.gif)
+![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif)
 
 
 **Example 2**:  The same data in YAML:
@@ -87,7 +87,7 @@ animation:
 shape: [32, 32]
 ```
 
-![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/doc/0-example-2.gif)
+![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif)
 
 YAML isn't just shorter and cleaner, it lets you write comments to yourself or
 anyone else reading - by starting a line with the `#` character.
