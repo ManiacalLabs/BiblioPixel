@@ -54,7 +54,7 @@ def add_project_flags(parser):
         '-d', '--defaults', default=None, nargs='*',
         action='append', help='Use this default setting')
 
-    if deprecated.allowed():
+    if deprecated.allowed():  # pragma: no cover
         parser.add_argument(
             '--dimensions', '--dim', default=None,
             help='DEPRECATED: x, (x, y) or (x, y, z) dimensions for project')

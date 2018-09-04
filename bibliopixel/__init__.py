@@ -10,7 +10,7 @@ from . drivers import return_codes
 from . project import data_maker
 
 from . util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     from . layout import LEDCircle, LEDMatrix, LEDPOV, LEDStrip, LEDCube
     from . layout import matrix_drawing as matrix
     from . layout.geometry.rotation import Rotation

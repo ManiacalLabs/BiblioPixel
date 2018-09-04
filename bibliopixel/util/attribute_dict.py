@@ -1,6 +1,6 @@
 from . import deprecated
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma nocover
     class AttributeDict(object):
         """
         A dict that exposes its values as attributes.

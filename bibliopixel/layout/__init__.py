@@ -8,7 +8,7 @@ from . geometry.circle import make_circle_coord_map
 from . geometry.cube import make_cube_coord_map
 
 from .. util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     from . circle import LEDCircle
     from . cube import LEDCube
     from . matrix import LEDMatrix

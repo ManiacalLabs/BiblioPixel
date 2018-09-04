@@ -11,10 +11,10 @@ class Circle(Animation):
         super().__init__(layout, **kwds)
         self.rings = layout.rings
         self.ringCount = layout.ringCount
-        if deprecated.allowed():
+        if deprecated.allowed():  # pragma: no cover
             self.lastRing = layout.lastRing
         self.ringSteps = layout.ringSteps
 
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     BaseCircleAnim = Circle

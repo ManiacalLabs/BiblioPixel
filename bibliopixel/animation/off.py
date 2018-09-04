@@ -13,5 +13,5 @@ class Off(Animation):
 
 
 from .. util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     OffAnim = Off

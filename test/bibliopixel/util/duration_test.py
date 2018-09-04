@@ -30,6 +30,12 @@ class DurationTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             duration.parse('1 killosecond')
 
+        with self.assertRaises(ValueError):
+            duration.parse('1 milliwombat')
+
+        with self.assertRaises(ValueError):
+            duration.parse('')
+
     def test_complex(self):
         self.assertEqual(duration.parse('2 hours, 3 minutes, 3.5 seconds'),
                          2 * 60 * 60 + 3 * 60 + 3.5)

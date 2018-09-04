@@ -13,7 +13,7 @@ def rotate_and_flip(coord_map, rotation, flip):
 
 
 from ... util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     class Rotation(IntEnum):
         ROTATE_0 = 0  # no rotation
         ROTATE_90 = 90  # rotate 90 degrees

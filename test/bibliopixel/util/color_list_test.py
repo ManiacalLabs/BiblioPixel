@@ -62,6 +62,10 @@ class ColorListTest(unittest.TestCase, TestBase):
         ListMath.clear(cl)
         self.assert_list_equal(cl, BLACKS)
 
+        cl = []
+        ListMath.clear(cl)
+        self.assert_list_equal(cl, [])
+
     def test_clear_numpy(self):
         cl = make_numpy(COLORS1)
         NumpyMath.clear(cl)

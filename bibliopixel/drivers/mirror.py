@@ -45,5 +45,5 @@ class Mirror(DriverBase):
 
 
 from .. util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     MirrorDriver = Mirror

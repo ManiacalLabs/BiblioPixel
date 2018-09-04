@@ -130,5 +130,5 @@ class Circle(Layout):
             self._set_base(i, color)
 
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     LEDCircle = Circle

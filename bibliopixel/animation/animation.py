@@ -202,7 +202,7 @@ class Animation(object):
         self.start()
 
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     BaseAnimation = Animation
 
 
