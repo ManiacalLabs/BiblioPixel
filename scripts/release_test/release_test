@@ -8,6 +8,7 @@ import getpass, platform, sys, threading, traceback
 
 SKIPPING_MESSAGE = '%-20s skipped due to missing feature%s: %s'
 RUNNING_MESSAGE = '%-20s running...'
+TEST_PREFIX = 'tests.'
 
 
 def run_tests():
@@ -23,16 +24,15 @@ def run_tests():
         if missing:
             plural = '' if len(missing) == 1 else 's'
             missing = ', '.join(missing)
-            common.printer(SKIPPING_MESSAGE % (test.__name__, plural, missing))
+            common.printer(SKIPPING_MESSAGE % (_name(test), plural, missing))
         else:
             good_tests.append(test)
 
-    common.printer('Running tests:', *[t.__name__ for t in good_tests])
+    common.printer('Running tests:', *[_name(t) for t in good_tests])
 
     failures = 0
     for test in good_tests:
-        name = test.__name__
-        common.printer(RUNNING_MESSAGE % name, end='', flush=True)
+        common.printer(RUNNING_MESSAGE % _name(test), end='', flush=True)
         try:
             test.run()
         except:
@@ -40,6 +40,11 @@ def run_tests():
             failures += 1
         common.printer('done', flush=True)
     sys.exit(failures)
+
+
+def _name(test):
+    n = test.__name__
+    return n[len(TEST_PREFIX):] if n.startswith(TEST_PREFIX) else n
 
 
 if __name__ == '__main__':
