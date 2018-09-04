@@ -6,8 +6,12 @@ from bibliopixel.util import log
 class TestAll(unittest.TestCase):
     def _test(self, root, name, blacklist):
         _, failures = import_all(root, name, blacklist)
+        log.printer('*** Failed to load modules:')
+        log.printer('  ', end='')
+        log.printer(*[name for name, tb in failures], sep='\n  ')
+
         for name, tb in failures:
-            log.printer('*** Failed to load', name)
+            log.printer('*** FAILED MODULE', name)
             log.printer()
             log.printer(tb)
             log.printer()
