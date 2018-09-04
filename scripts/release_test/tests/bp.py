@@ -27,7 +27,10 @@ def run():
         results.append(' '.join(args))
 
     with mock.patch('common.printer', side_effect=printer):
-        common.run_project('bp.yml+{animation: {color: wombat}}')
+        try:
+            common.run_project('bp.yml+{animation: {color: wombat}}')
+        except:
+            pass
 
     if ERROR not in ''.join(results):
         common.printer()
