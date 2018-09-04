@@ -323,7 +323,7 @@ class Matrix(MultiLayout):
         """
         md.fill_triangle(self.set, x0, y0, x1, y1, x2, y2, color, aa)
 
-    if deprecated.allowed():
+    if deprecated.allowed():  # pragma: no cover
         fillTrangle = fillTriangle
 
     def drawChar(self, x, y, c, color, bg,
@@ -348,5 +348,5 @@ class Matrix(MultiLayout):
                      x, y, color, bg, aa, font, font_scale)
 
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     LEDMatrix = Matrix

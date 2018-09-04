@@ -78,3 +78,11 @@ class LimitTest(unittest.TestCase):
                 asserts += 1
 
         self.assertEqual(asserts, 12)
+
+    def test_empty_colors(self):
+        limit = Limit()
+        self.assertFalse(limit)
+        colors = [(1, 1, 1), (2, 2, 2)]
+        limit.limit_colors(colors, ListMath)
+
+        self.assertEqual(colors, [(1, 1, 1), (2, 2, 2)])

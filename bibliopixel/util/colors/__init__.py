@@ -55,7 +55,7 @@ from . names import (
 
 from .. import deprecated
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     hex2rgb = COLORS.__getitem__
     from . import conversions as hue
 

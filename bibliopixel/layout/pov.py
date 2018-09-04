@@ -41,5 +41,5 @@ class POV(Matrix):
 
 
 from .. util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     LEDPOV = POV

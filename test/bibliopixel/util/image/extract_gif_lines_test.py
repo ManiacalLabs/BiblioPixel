@@ -12,6 +12,10 @@ class ExtractGifLinesTest(unittest.TestCase):
         actual = list(extract_gif_lines.extract_gif_lines(GIF_LINES))
         self.assertEqual(actual, EXPECTED2)
 
+    def test_errors(self):
+        actual = list(extract_gif_lines.extract_gif_lines(BAD_LINES))
+        self.assertEqual(actual, EXPECTED2)
+
 
 GIF_LINES = """
 
@@ -44,6 +48,15 @@ BiblioPixel/doc/bibliopixel/animations/something.gif)
 ```
 ![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
 BiblioPixel/doc/bibliopixel/animations/minimal.gif)
+""".splitlines()
+
+BAD_LINES = GIF_LINES + """
+
+```
+}}}
+```
+![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
+BiblioPixel/doc/bibliopixel/animations/bad-spelling.gif)
 """.splitlines()
 
 YAML_LINES_1 = """\

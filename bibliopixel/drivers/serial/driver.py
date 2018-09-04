@@ -212,6 +212,6 @@ REBOOT_MESSAGE = """Reconfigure and reboot needed!
 Waiting for controller to restart..."""
 
 from ... util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     DriverSerial = Serial
     DriverTeensySmartMatrix = TeensySmartMatrix

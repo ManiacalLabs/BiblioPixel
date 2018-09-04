@@ -6,7 +6,7 @@ COMMANDS = (
     'animations', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
     'devices', 'info', 'monitor', 'new', 'run')
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     SIGNAL_COMMANDS = 'kill', 'pid', 'restart', 'shutdown'
     COMMANDS += SIGNAL_COMMANDS
 

@@ -27,3 +27,6 @@ class ChannelOrderTypesTest(TypesBaseTest):
 
         with self.assertRaises(ValueError):
             self.make('c_order', None)
+
+        with self.assertRaises(ValueError):
+            self.make('c_order', [1, 2])

@@ -68,5 +68,5 @@ class Receiver(Animation):
 
 
 from .. util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     BaseReceiver = Receiver

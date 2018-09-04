@@ -21,6 +21,17 @@ class OffsetRangeTest(unittest.TestCase):
         dmx.copy_to(l256, target)
         self.assertEqual(target, list(range(128)))
 
+    def test_empty_copy(self):
+        dmx = offset_range.DMXChannel.make()
+
+        l256 = list(range(256))
+        r = list(dmx.read_from(l256))
+        self.assertEqual(r, l256 + ([0] * 256))
+
+        target = []
+        dmx.copy_to(l256, target)
+        self.assertEqual(target, [])
+
     def test_positive_offset(self):
         midi = offset_range.MidiChannel(offset=4)
         self.assertEqual(midi.index(0), None)

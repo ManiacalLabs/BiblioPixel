@@ -10,7 +10,7 @@ from . receiver import BaseReceiver
 from . tests import StripChannelTest, MatrixChannelTest, MatrixCalibrationTest
 
 from .. util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     strip_test = StripChannelTest
     matrix_calibration = MatrixCalibrationTest
     matrix_test = MatrixChannelTest

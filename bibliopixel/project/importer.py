@@ -20,12 +20,10 @@ def _validate_typename(typename):
 
     version = __import__(root_module).VERSION
 
-    if LooseVersion(version) >= LooseVersion(min_version):
-        return
-
-    install_name = INSTALL_NAMES.get(root_module, root_module)
-    raise ValueError(VERSION_MESSAGE % (
-        root_module, version, min_version, install_name))
+    if LooseVersion(version) < LooseVersion(min_version):  # pragma: no cover
+        install_name = INSTALL_NAMES.get(root_module, root_module)
+        raise ValueError(VERSION_MESSAGE % (
+            root_module, version, min_version, install_name))
 
 
 def _import(typename, python_path=None, loader=load.code):

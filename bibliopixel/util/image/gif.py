@@ -56,7 +56,7 @@ in BiblioPixelAnimations.matrix.ImageAnim
 
 
 from .. import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     def convert_mode(image, mode='RGB'):
         """Return an image in the given mode."""
         deprecated.deprecated('util.gif.convert_model')

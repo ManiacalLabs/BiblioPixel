@@ -58,5 +58,5 @@ class SimPixel(ServerDriver):
 
 
 from ... util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     DriverSimPixel = SimPixel

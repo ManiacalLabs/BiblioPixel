@@ -13,5 +13,5 @@ from . strip import (
     make_strip_coord_map_positions)
 
 from ... util import deprecated
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     from . rotation import Rotation, rotate_and_flip

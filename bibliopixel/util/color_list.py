@@ -72,8 +72,7 @@ class Mixer:
         self.sources = sources
         self.levels = list(levels or [])
         needed = len(self.sources) - len(self.levels)
-        if needed > 0:
-            self.levels.extend(0 for i in range(needed))
+        self.levels.extend(0 for i in range(needed))
         self.buffer = None
 
     def clear(self):

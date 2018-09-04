@@ -130,7 +130,7 @@ printer = print  # noqa: T001, T002
 
 from . import deprecated
 
-if deprecated.allowed():
+if deprecated.allowed():  # pragma: no cover
     def setLogLevel(level):
         deprecated.deprecated('util.setLogLevel')
         set_log_level(level)
