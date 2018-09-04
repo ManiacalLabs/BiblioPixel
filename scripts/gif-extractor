@@ -25,6 +25,7 @@ IMAGE_WIDTH = 384
 PADDING_RATIO = 1 / 4
 ROOT = pathlib.Path(__file__).absolute().parents[2].joinpath(
     'DocsFiles', 'BiblioPixel')
+ROOT_FILES = [('.', 'README.md')]
 
 
 def extract_one_gif(args, filename, desc):
@@ -96,7 +97,8 @@ def extract_one_gif(args, filename, desc):
 
 
 def extract(args):
-    for root, input_file in walk.walk_suffix(args.roots, SUFFIXES):
+    files = list(walk.walk_suffix(args.roots, SUFFIXES)) + ROOT_FILES
+    for root, input_file in files:
         for filename, desc in extract_gif_lines(open(input_file)):
             extract_one_gif(args, filename, desc)
 
