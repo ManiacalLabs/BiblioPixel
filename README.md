@@ -4,7 +4,7 @@ BLiPS is a free and open-source Python program for creating and sharing light se
 
 ## In one sentence:
 
-You write simple text files to create complex lighting animations.
+Animate complex lighting projects by writing simple text files.
 
 ```
     animation: $bpa.matrix.bloom
