@@ -9,6 +9,17 @@ repo_url: https://github.com/maniacallabs/bibliopixel
 copyright: Copyright &copy; 2018 Maniacal Labs
 
 docs_dir: doc
+gens_dir: build/pydocmd     # This will end up as the MkDocs 'docs_dir'
+site_dir: build/site
+
+loader:   pydocmd.loader.PythonLoader
+preprocessor: pydocmd.preprocessor.Preprocessor
+
+# Additional search path for your Python module. If you use Pydocmd from a
+# subdirectory of your project (eg. docs/), you may want to add the parent
+# directory here.
+additional_search_paths:
+- ./biblioipixel/
 
 # We're using the material theme for the master docs because it's beautiful
 # on ReadTheDocs, we'll default to the standard mkdocs theme.
@@ -53,22 +64,12 @@ markdown_extensions:
         custom_checkbox: true
     - pymdownx.tilde # strike-through/cross-out text
 
+generate:
+  - api/index.md:
+    - bibliopixel.layout:
+      - bibliopixel.layout.strip++
+      - bibliopixel.layout.matrix++
+      - bibliopixel.layout.circle++
+      - bibliopixel.layout.cube++
 # For now, auto detect docs. If we want a specific order, we'll need to hard code here later
-# pages:
-#     - Home: index.md
-#     # - Quick Start: quickstart.md
-#     - Overview:
-#         - Immediate Gratification: overview/Immediate-Gratification.md
-#         - BiblioPixel Basics: overview/BiblioPixel-Basics.md
-#         - How To Install BiblioPixel: overview/How-To-Install-BiblioPixel.md
-#         - How to make a Project: overview/How-to-write-a-Project.md
-#     - Reference:
-#       - Glossary: reference/Glossary.md
-#     - Topic Papers:
-#       - Troubleshooting: topic-papers/Troubleshooting-biblipixel.md
-#       - Usage: topic-papers/Using-bp.md
-#       - Using Controls: topic-papers/Using-controls.md
-#       - Using NumPy: topic-papers/Using-numpy.md
-#       - Writing an Animation: topic-papers/Writing-an-Animation-class.md
-#     - FAQ: faq.md
-#     - About: about.md
+pages: []

@@ -19,8 +19,8 @@ The **Tutorial** pages are general knowledge:
 * [8. Typenames.md](tutorial/8-Typenames.md)
 * [9. The path and aliases Sections.md](tutorial/9-The-path-and-aliases-Sections.md)
 * [10. The `driver` and `drivers` Sections.md](tutorial/10-The-driver-and-drivers-Sections.md)
-* [11. The Serial Driver](tutorial/11-The-serial-Driver.md)
-
+* [11. The Serial Driver](tutorial/11-The-Serial-Driver.md)
+* [12. API](api/index.md)
 
 **Topic Articles** are individual articles about specific topics:
 
