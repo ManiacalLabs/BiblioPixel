@@ -44,7 +44,7 @@ def run_tests():
 
 def _name(test):
     n = test.__name__
-    return n[len(PREFIX):] if n.startswith(PREFIX) else n
+    return n[len(TEST_PREFIX):] if n.startswith(TEST_PREFIX) else n
 
 
 if __name__ == '__main__':
