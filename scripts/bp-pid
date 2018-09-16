@@ -13,7 +13,7 @@ an error.
 
 
 def main(pid_filename=pid_context.DEFAULT_PID_FILENAME):
-    if filename in HELPS:
+    if pid_filename in HELPS:
         log.printer(USAGE)
         return
 
@@ -25,4 +25,4 @@ def main(pid_filename=pid_context.DEFAULT_PID_FILENAME):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main(*sys.argv[1:])
