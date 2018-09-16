@@ -10,4 +10,3 @@ Pillow>=2.4.0
 noise
 psutil
 websocket
-# opencv-python
