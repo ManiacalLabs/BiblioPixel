@@ -2,17 +2,16 @@
 Print the process ID of the current bp instance that is running a project,
 if any.
 
-DEPRECATED: use
-
-    $ bpa-pid
+DEPRECATED: use ``$ bpa-pid``
 """
 
 DESCRIPTION = """
 Example:
 
-``````
-$ bp pid
-``````
+.. code-block:: bash
+
+    $ bp pid
+
 """
 
 from .. util import log, pid_context

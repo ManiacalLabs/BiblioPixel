@@ -12,10 +12,11 @@ from bibliopixel.project.types import ledtype
 DESCRIPTION = """
 Equivalent to
 
-``````
-bp --num=10 --loglevel=debug --animation=strip_test --driver=serial \\
-   --fail_on_exception --layout=strip --ledtype=<argument>
-``````
+.. code-block:: bash
+
+    bp --num=10 --loglevel=debug --animation=strip_test --driver=serial \
+      --fail_on_exception --layout=strip --ledtype=<argument>
+
 """
 
 LEDTYPES = """

@@ -22,7 +22,6 @@ class Routing(Receiver):
              used to construct a class of that type.
            * otherwise, dictionaries are visited recursively
            * all other types are forbidden
-
         """
         def make(x):
             if isinstance(x, (list, str)):

@@ -1,0 +1,69 @@
+``bp`` - The BiblioPixel Project Runner
+--------------------------------------------
+
+``bp`` is a command-line script installed with BiblioPixel.  It can run
+projects and demos, configure hardware, save and load defaults, and more.
+
+``bp`` takes one of {command_count} *commands*:
+  {commands[0]}
+  {commands[1]}
+
+Some commands take *arguments* - often names of files.
+
+Examples of ``bp`` commands and arguments
+==============================================
+
+.. code-block:: bash
+
+    bp info
+    bp demo circle
+    bp run foo.json bar.json
+    bp foo.json bar.json      # run is the default command
+
+The commands are summarized below, and you can get more detailed help about
+each one by typing:
+
+.. code-block:: bash
+
+    bp <command> --help
+
+or
+
+.. code-block:: bash
+
+     bp <command> -h
+
+The ``bp`` command line
+=====================================
+
+``bp`` commands have *flags* that control how ``bp`` runs its commands.
+
+Examples of flags are ``-v``, ``--verbose``, ``--defaults``, ``-d``,
+``--simpixel``.  Flags either start with ``-``, for one letter flags, or ``--``
+for multi-letter flags.
+
+Sometimes two flags have the same meaning, like ``--simpixel`` and ``-s``
+or ``--verbose`` and ``-v``.
+
+Some flags take an argument, like ``--dim=160`` or ``--loglevel=frame``.
+Other flags do not, like ``--verbose`` or ``-v``.
+
+A ``bp`` command line can optionally include a command, a list of arguments,
+and a list of flags:
+
+.. code-block:: bash
+
+    bp [<command>] [<argument> ...] [<flag> ...]
+
+
+Examples of ``bp`` command lines
+==========================================
+
+.. code-block:: bash
+
+    bp info --help
+    bp run -h
+    bp info
+    bp color "light sky blue 4"
+    bp foo.json bar.json -v
+    bp foo.json bar.json -v --numbers=float --dump --defaults=default.json

@@ -4,16 +4,16 @@ machine.
 
 DEPRECATED: use
 
+.. code-block:: bash
+
     $ kill -hup `bpa-pid`
+
 
 """
 
 DESCRIPTION = """
-Example:
+Example: ``$ bp restart``
 
-``````
-$ bp restart
-``````
 """
 
 import os, signal

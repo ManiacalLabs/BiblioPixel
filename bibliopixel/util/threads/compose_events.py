@@ -2,7 +2,9 @@ import functools, threading
 
 
 def compose_events(events, condition=all):
-    """Compose a sequence of events into one event.
+    """
+    Compose a sequence of events into one event.
+
     Arguments:
         events:    a sequence of objects looking like threading.Event
         condition: a function taking a sequence of bools and returning a bool.

@@ -4,6 +4,7 @@ from . types import (
 
 FIELD_TYPES = {
     'c_order': channel_order,
+    'bgcolor': color,
     'color': color,
     'colors': colors,
     'duration': duration,

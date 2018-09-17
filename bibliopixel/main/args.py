@@ -50,7 +50,7 @@ def parse_args(commands, common_flags):
         common_flags.add_common_flags(subparser)
         module.set_parser(subparser)
         description = getattr(module, 'DESCRIPTION', '')
-        subparser.description = doc + commands.un_md(description)
+        subparser.description = doc + description
 
     if argv == ['-h']:
         log.printer(commands.HELP)

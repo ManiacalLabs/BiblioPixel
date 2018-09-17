@@ -8,13 +8,14 @@ from .. util import log
 DESCRIPTION = """
 Example:
 
-```
+.. code-block: bash
+
     # Create a new project directory named my-project/ in the current directory
     bp new my-project
 
     # Create a new project directory named my-project/ in ~/projects
     bp new my-project ~/projects
-```
+
 """
 
 PUNCTUATION = '.-_'
