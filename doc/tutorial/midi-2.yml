@@ -1,0 +1,22 @@
+shape: 50
+
+animation:
+  typename: mixer
+  levels: [1, 0, 0, 0]
+  animations:
+    - $bpa.strip.Rainbows.RainbowCycle
+    - $bpa.strip.Wave
+    - $bpa.strip.HalvesRainbow
+    - $bpa.strip.PartyMode
+
+controls:
+  typename: midi
+  extractor:
+    accept:
+      type: control_change
+
+  routing:
+    0: animation.levels[0]
+    1: animation.levels[1]
+    2: animation.levels[2]
+    3: animation.levels[3]

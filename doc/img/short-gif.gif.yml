@@ -1,8 +1,0 @@
-animation: {typename: BiblioPixelAnimations.matrix.bloom}
-driver:
-  filename: doc/img/short-gif.gif
-  render: {padding: 2, pixel_width: 8}
-  time: 5
-  typename: .gif_writer
-run: {flat_out: true, fps: 24}
-shape: [64, 64]

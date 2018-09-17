@@ -2,5 +2,4 @@ Sphinx
 sphinx-autobuild
 sphinxcontrib-fulltoc
 sphinxcontrib-websupport
-recommonmark
 sphinx-rtd-theme
