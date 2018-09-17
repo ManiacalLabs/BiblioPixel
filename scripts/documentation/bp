@@ -1,0 +1,7 @@
+#!/bin/bash
+source scripts/documentation/_common.sh
+
+mkdir -p $REFERENCE_DIR
+python -m bibliopixel.main.commands > $HELP_DOC
+
+echo "*** extracted command line documentation for $HELP_DOC"

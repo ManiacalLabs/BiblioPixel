@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source scripts/documentation/_common.sh
+MESSAGE="Deploy commit `date`"
+
+function deploy() {
+    DIR=$1
+    SUBDIR=$@
+
+    pushd ../$DIR
+    git add $SUBDIR
+
+    if git diff-index --quiet HEAD -- ; then
+        echo "No changes in $DIR"
+    else
+        git commit -m "$MESSAGE" && git push
+        echo "Committed $DIR with message: '$MESSAGE'"
+    fi
+
+    popd
+}
+
+deploy DocsFiles BiblioPixel
+deploy BiblioPixel.gh-pages html
+echo "*** finished deploy documentation"

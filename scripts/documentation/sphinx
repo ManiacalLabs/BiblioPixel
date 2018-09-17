@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source scripts/documentation/_common.sh
+
+pushd doc
+make html
+
+echo "*** finished sphinx documentation"
