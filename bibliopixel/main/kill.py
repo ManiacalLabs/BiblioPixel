@@ -4,6 +4,8 @@ machine to abruptly kill it
 
 DEPRECATED: use
 
+.. code-block:: bash
+
     $ kill -kill `bpa-pid`
 
 """
@@ -11,9 +13,10 @@ DEPRECATED: use
 DESCRIPTION = """
 Example:
 
-``````
-$ bp kill
-``````
+.. code-block:: bash
+
+    $ bp kill
+
 """
 
 from . restart import run, CHOICES

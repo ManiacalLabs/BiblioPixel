@@ -3,6 +3,7 @@ Send an interrupt signal to a BiblioPixel process running on this
 machine to kill it
 
 DEPRECATED: use
+.. code-block:: bash
 
     $ kill -int `bpa-pid`
 
@@ -10,10 +11,8 @@ DEPRECATED: use
 
 DESCRIPTION = """
 Example:
+`$ bp shutdown`
 
-``````
-$ bp shutdown
-``````
 """
 
 from . restart import run, CHOICES

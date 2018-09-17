@@ -3,7 +3,8 @@ A longer list of color names.
 
 These colors come from:
 https://github.com/timedata-org/timedata/blob
-    /master/src/cpp/timedata/color/names_table_inl.h
+/master/src/cpp/timedata/color/names_table_inl.h
+
 which came from Juce: http://juce.com.
 """
 

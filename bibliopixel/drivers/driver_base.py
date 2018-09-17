@@ -72,7 +72,7 @@ class DriverBase(object):
         Internal Use Only
 
         Placeholder callback for sending physical pixel layout data to the
-        :py:mod:`.SimPixel` driver.
+        ``SimPixel`` driver.
         """
         pass
 
