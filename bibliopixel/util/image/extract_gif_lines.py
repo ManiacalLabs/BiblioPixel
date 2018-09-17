@@ -1,38 +1,12 @@
-import re
+import os
 from .. import data_file, log
 
-PREFIX = """\
-https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/"""
+CODE_BLOCK = '.. code-block:: '
 
-GIF_RE = re.compile(r'! \[ .* \] \(' + PREFIX + r'(.* \.gif) \)', re.X)
+IMAGE = '.. image:: \
+https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/'
 
-
-def _extract(lines):
-    # State machine with three states
-    TEXT, CODE, AFTER_CODE = 'text', 'code', 'after-code'
-
-    state = TEXT
-    code = []
-
-    for line in lines:
-        if line.strip() == '```':
-            if state is CODE:
-                state = AFTER_CODE
-
-            else:
-                code = []
-                state = CODE
-
-        elif state is CODE:
-            code.append(line)
-
-        elif state is AFTER_CODE:
-            m = GIF_RE.match(line.strip())
-            if m:
-                yield m.group(1), code
-
-            if line.strip():
-                state = TEXT
+LANGS = 'json', 'yaml'
 
 
 def extract_gif_lines(lines):
@@ -44,3 +18,49 @@ def extract_gif_lines(lines):
             log.error('Unable to load code: $s\n%s', filename, codelines)
         else:
             yield filename, project
+
+
+def _extract(lines):
+    in_code = False
+
+    for line in lines:
+        if line.startswith('.. '):
+            if line.startswith(CODE_BLOCK):
+                code = []
+                in_code = True
+
+            elif line.startswith(IMAGE) and in_code:
+                filename = line[len(IMAGE):].strip()
+                code = _remove_common_prefix(code)
+                yield filename, code
+                in_code = False
+
+            elif line.startswith(IMAGE) and not in_code:
+                pass
+
+            elif line.startswith('.. image:'):
+                print('missing image')
+                print(line)
+                print(IMAGE)
+
+        elif in_code:
+            if not line or line[0].isspace():
+                code.append(line)
+            else:
+                in_code = False
+
+
+def _remove_common_prefix(lines):
+    lines = list(lines)
+    while lines and not lines[0].strip():
+        lines.pop(0)
+
+    while lines and not lines[-1].strip():
+        lines.pop()
+
+    fill = ' ' * max(len(i) for i in lines)
+    lines = [i or fill for i in lines]
+
+    prefix = os.path.commonprefix(lines)
+    spaces = len(prefix) - len(prefix.lstrip())
+    return [i[spaces:] for i in lines]

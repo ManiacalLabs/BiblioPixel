@@ -19,12 +19,13 @@ from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
 from bibliopixel.project import merge, project
 
-SUFFIXES = '.md', '.py'
+SUFFIXES = '.rst', '.py'
 RAISE = False
-IMAGE_WIDTH = 384
-PADDING_RATIO = 1 / 4
+IMAGE_WIDTH = 480
+PADDING_RATIO = 1 / 5
 ROOT = pathlib.Path(__file__).absolute().parents[2].joinpath(
     'DocsFiles', 'BiblioPixel')
+ROOT_FILES = [('.', 'README.rst')]
 
 
 def extract_one_gif(args, filename, desc):
@@ -89,14 +90,15 @@ def extract_one_gif(args, filename, desc):
         except:
             pass
 
-        if RAISE:
+        if args.fail:
             raise
         else:
             traceback.print_exc()
 
 
 def extract(args):
-    for root, input_file in walk.walk_suffix(args.roots, SUFFIXES):
+    files = list(walk.walk_suffix(args.roots, SUFFIXES)) + ROOT_FILES
+    for root, input_file in files:
         for filename, desc in extract_gif_lines(open(input_file)):
             extract_one_gif(args, filename, desc)
 
@@ -111,6 +113,9 @@ def args():
     parser.add_argument(
         'roots', nargs='*', default=('bibliopixel', 'doc'),
         help='Directory roots to search from')
+    parser.add_argument(
+        '--fail', action='store_true',
+        help='Continue going after one image fails')
     return parser.parse_args(sys.argv[1:])
 
 

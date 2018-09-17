@@ -22,51 +22,53 @@ GIF_LINES = """
 # Here's some stuff.
 # now code
 
-```
+.. code-block:: yaml
+
     math.frog(23)
     print('glog')
-```
 
 # But there's no GIF file.
 # More code:
 
-```
+.. code-block:: yaml
+
     animation: BiblioPixelAnimations.matrix.MatrixRain
     shape: [2, 2]
-```
-```
+
+.. code-block:: yaml
+
     animation: BiblioPixelAnimations.matrix.MatrixRain
     shape: [32, 32]
-```
 
-![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
-BiblioPixel/doc/bibliopixel/animations/something.gif)
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
+BiblioPixel/doc/bibliopixel/animations/something.gif
 
-```
+.. code-block:: yaml
+
     animation: .split
     shape: 128
-```
-![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
-BiblioPixel/doc/bibliopixel/animations/minimal.gif)
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
+BiblioPixel/doc/bibliopixel/animations/minimal.gif
 """.splitlines()
 
 BAD_LINES = GIF_LINES + """
 
-```
-}}}
-```
-![Result](https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/\
-BiblioPixel/doc/bibliopixel/animations/bad-spelling.gif)
+.. code-block:: json
+
+    }}}
+
+... image: blah.gif
 """.splitlines()
 
 YAML_LINES_1 = """\
-    animation: BiblioPixelAnimations.matrix.MatrixRain
-    shape: [32, 32]
+animation: BiblioPixelAnimations.matrix.MatrixRain
+shape: [32, 32]
 """.splitlines()
 
 YAML_LINES_2 = """\
-    animation: .split
-    shape: 128
+animation: .split
+shape: 128
 """.splitlines()
 
 EXPECTED1 = [
