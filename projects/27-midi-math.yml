@@ -1,0 +1,15 @@
+controls:
+  typename: midi
+  extractor:
+    accept:
+      type: control_change
+
+  routing:
+    0: animation.func
+
+shape: [64, 64]
+
+run:
+  fps: 30
+
+animation: $bpa.matrix.MathFunc
