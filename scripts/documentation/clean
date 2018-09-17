@@ -1,0 +1,5 @@
+#!/bin/bash
+source scripts/documentation/_common.sh
+
+rm -Rf $REFERENCE_DIR/ $BUILD_DIR/
+echo "*** finished clean documentation"

@@ -1,0 +1,19 @@
+#!/bin/bash
+source scripts/documentation/_common.sh
+
+APIDOC="sphinx-apidoc --force --separate -o $API_DIR"
+
+mkdir -p $REFERENCE_DIR
+$APIDOC bibliopixel
+echo
+
+mv $MODULES $TMP1
+$APIDOC ../BiblioPixelAnimations/BiblioPixelAnimations
+echo
+
+echo "" >> $TMP1
+cat $TMP1 $MODULES > $TMP2
+mv $TMP2 $MODULES
+rm -f $TMP1 $TMP2
+
+echo "*** finished API documentation"

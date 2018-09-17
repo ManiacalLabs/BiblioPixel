@@ -23,7 +23,7 @@ SUFFIXES = '.rst', '.py'
 RAISE = False
 IMAGE_WIDTH = 480
 PADDING_RATIO = 1 / 5
-ROOT = pathlib.Path(__file__).absolute().parents[2].joinpath(
+ROOT = pathlib.Path(__file__).absolute().parents[3].joinpath(
     'DocsFiles', 'BiblioPixel')
 ROOT_FILES = [('.', 'README.rst')]
 
@@ -121,3 +121,4 @@ def args():
 
 if __name__ == '__main__':
     extract(args())
+    print('*** finished extract-gifs')
