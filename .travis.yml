@@ -1,3 +1,4 @@
+
 language: python
 
 python:
@@ -10,21 +11,35 @@ python:
 install:
 - pip install -r test_requirements.txt
 - pip install -r ./doc/doc_requirements.txt
+- pip install -r requirements.txt
 
 script:
 - flake8
 - python setup.py coverage
+# this part should be made conditional
+- git clone https://github.com/ManiacalLabs/BiblioPixelAnimations.git
+- ./scripts/documentation/clean
+- ./scripts/documentation/api
+- ./scripts/documentation/bp
+- ./scripts/documentation/sphinx
 
 deploy:
-  provider: pypi
-  skip_cleanup: true
-  user: ManiacalLabs
-  password:
-    secure: "JnYRoQqID4nareQqAO2kOkq203FLjVLpN5ncWrsykuttOQK6KJXbuYJZTT65RJzO6iMfnz8YV/fzvL9c18po/pyxtEwTB2Ac9fdwjlHmOXthkt3uxAA7O89yr5kulwmMZ/sCb9QRI00kuA9dE8wEfmyLt5cF11Y5Qw1R8XGSzS+MKpO5nXA6jRg9VCXhkDKfZC3s+4Xm2K35xWwVit07DnAdhrqPW3hyDtSFFVd5cBPtHWzJbg6VNfPx7DRWe26wa/DExzPP9iz0Dv4DWew1rHKcFA5Y7PHxEKaL200lZig4W7Tg4ASpQwZP7fGO+NWPnfX9GZBMYN3z9FzziWzg+Q+DzUsbmobGuGQoIHbpEEYkHcIyb+KwN7J9GiUHqznjHu792aUsRfTasINNMzIXzf8ahfbIYiZfxyriF0elZDbWG9O4Avb15P6tBuOsDYdurEcN3BdLmnepTj2edotVK/7mSMhjVZEWBDhffMpStskt0CqFiUYb9MZgdLDr+cmLCYx9d36RE0Q8nv8oAd5naZ3ccwv+ZJiGBWv5YyhpkrIHQbH185DHV7bFBJkx87ck28t4cC8FKLi+Ry60MBJTD3DT93jdDVmysqV453ipaCX3akYOuLJINmBJHSxU+eRqAqnTY8ZMBjClZBwOxq0Xp7BZoWEGJhvjTvR1xd+RYys="
-  on:
-    repo: ManiacalLabs/BiblioPixel
-    python: 3.5
-    tags: true
+  - provider: pypi
+    skip_cleanup: true
+    user: ManiacalLabs
+    password:
+      secure: "JnYRoQqID4nareQqAO2kOkq203FLjVLpN5ncWrsykuttOQK6KJXbuYJZTT65RJzO6iMfnz8YV/fzvL9c18po/pyxtEwTB2Ac9fdwjlHmOXthkt3uxAA7O89yr5kulwmMZ/sCb9QRI00kuA9dE8wEfmyLt5cF11Y5Qw1R8XGSzS+MKpO5nXA6jRg9VCXhkDKfZC3s+4Xm2K35xWwVit07DnAdhrqPW3hyDtSFFVd5cBPtHWzJbg6VNfPx7DRWe26wa/DExzPP9iz0Dv4DWew1rHKcFA5Y7PHxEKaL200lZig4W7Tg4ASpQwZP7fGO+NWPnfX9GZBMYN3z9FzziWzg+Q+DzUsbmobGuGQoIHbpEEYkHcIyb+KwN7J9GiUHqznjHu792aUsRfTasINNMzIXzf8ahfbIYiZfxyriF0elZDbWG9O4Avb15P6tBuOsDYdurEcN3BdLmnepTj2edotVK/7mSMhjVZEWBDhffMpStskt0CqFiUYb9MZgdLDr+cmLCYx9d36RE0Q8nv8oAd5naZ3ccwv+ZJiGBWv5YyhpkrIHQbH185DHV7bFBJkx87ck28t4cC8FKLi+Ry60MBJTD3DT93jdDVmysqV453ipaCX3akYOuLJINmBJHSxU+eRqAqnTY8ZMBjClZBwOxq0Xp7BZoWEGJhvjTvR1xd+RYys="
+    on:
+      repo: ManiacalLabs/BiblioPixel
+      python: 3.5
+      tags: true
+  - provider: pages
+    skip_cleanup: true
+    local_dir: html
+    github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+    on:
+      python: 3.5
+      branch: docs # for now
 
 # Don't compile "experimental" branches starting with x-, y-, or z-.
 branches:
@@ -32,3 +47,4 @@ branches:
     - /^x-.*$/
     - /^y-.*$/
     - /^z-.*$/
+

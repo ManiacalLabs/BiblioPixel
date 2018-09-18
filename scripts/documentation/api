@@ -8,7 +8,7 @@ $APIDOC bibliopixel
 echo
 
 mv $MODULES $TMP1
-$APIDOC ../BiblioPixelAnimations/BiblioPixelAnimations
+$APIDOC ./BiblioPixelAnimations/BiblioPixelAnimations
 echo
 
 echo "" >> $TMP1

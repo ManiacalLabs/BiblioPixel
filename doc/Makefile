@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = BiblioPixel
 SOURCEDIR     = .
-BUILDDIR      = ../../BiblioPixel.gh-pages/
+BUILDDIR      = ../
 
 # Put it first so that "make" without argument is like "make help".
 help:

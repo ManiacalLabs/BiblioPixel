@@ -13,3 +13,7 @@ htmlcov
 .eggs
 .cache
 .pytest_cache
+BiblioPixelAnimations
+html
+doc/reference
+doctrees

@@ -1,6 +1,7 @@
 set -e
 
-BUILD_DIR=../BiblioPixel.gh-pages/html
+
+BUILD_DIR=html
 REFERENCE_DIR=doc/reference
 API_DIR=$REFERENCE_DIR/api
 
