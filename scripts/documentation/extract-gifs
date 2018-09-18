@@ -14,6 +14,9 @@ It relies on a directory structure like this:
 """
 
 import argparse, copy, math, pathlib, os, subprocess, sys, tempfile, traceback
+cdir = os.path.dirname(os.path.realpath(__file__))
+print(cdir)
+sys.path.append(cdir + '/../../')
 from unittest import mock
 from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
