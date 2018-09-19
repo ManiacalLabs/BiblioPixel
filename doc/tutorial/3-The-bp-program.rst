@@ -80,7 +80,7 @@ Some Commands take one optional argument:  ``bp demo`` or ``bp demo cube``
 Some Commands take one or more arguments: ``bp run one.yml two.yml``
 
 4. How to stop or restart ``bp``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 While some Animations can have a specific, fixed length like ten seconds, most
 of them go on indefinitely.  Sometimes you want to tell ``bp`` to stop running,

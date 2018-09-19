@@ -2,14 +2,14 @@
 ============================================================
 
 8.1. What is a Typename?
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 BiblioPixel lets you load projects, parts of projects, or even Python code from
 your local drive or from the Internet, and Typenames are BiblioPixel's way of
 identifying what code that is.
 
- A *Typename* names a Python class.  Typenames appear in Class Sections only -
- i.e. ``animation``\ , ``controls``\ , ``drivers``\
+A *Typename* names a Python class.  Typenames appear in Class Sections only -
+i.e. ``animation``\ , ``controls``\ , ``drivers``\
 , or ``layout``\.
 
 For easier reading and writing of Projects, if a Class Section is a string
@@ -30,7 +30,7 @@ projects mean the same:
 You can write Typenames in four formats.
 
 8.2. Absolute Typenames
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An Absolute Typename is a full Python pathname of a class or function like
 ``math.log`` or ``bibliopixel.animation.tests.PixelTester``.
@@ -43,7 +43,7 @@ So ``x23.he_is_13.yes`` is an Absolute Typename but neither ``23x.h`` nor
 Typenames.
 
 8.3. Relative Typenames
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To save typing, you can specify typenames relative to the base module for
 that Class Section.  For example, the Absolute Typename
@@ -54,7 +54,7 @@ Relative Typenames start with a ``.`` and then follow the same rules as Absolute
 Typenames.
 
 8.4. File Typenames
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can directly load Python code from a file on your drive this way:
 ``/home/pi/Documents/myAnimation.py``
@@ -62,7 +62,7 @@ You can directly load Python code from a file on your drive this way:
 File Typenames always start with ``/``.
 
 8.5. Git Repo Typenames
-^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can directly load code from a Github repo.
 
@@ -85,7 +85,7 @@ The first time that you use a new Git Repo, ``bp`` will prompt you from the
 command line to whitelist that site.  *Think long and hard* before you do this!
 
 8.7. Type guessing
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 BiblioPixel can often guess the name of the class you mean from the file or
 module that it's in.  This saves a lot of repetition.
@@ -103,7 +103,7 @@ and ``hello_world`` are canonically the same.
 
 
 EXAMPLES: How to use Typenames in a Project.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Example 1**\ :  Simple animation, Absolute Typename
 

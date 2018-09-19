@@ -1,7 +1,8 @@
 13. Routing, Addresses and Actions
+---------------------------------------------
 
 A routing example
-^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now you have Messages coming in, you need to tell the Control where to send
 them, by filling out a ``routing`` dictionary in the Project.

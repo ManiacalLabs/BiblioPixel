@@ -9,7 +9,7 @@ Projects have been designed to be as flexible and forgiving as possible.
 You can reuse bits of projects inside other projects, and you can combine
 partial projects from the command line, like this:
 
-.. code-block:: yaml
+.. code-block:: bash
 
     bp living-room.yml + smooth-fades.yml
 
@@ -205,7 +205,7 @@ Field ``length`` which sets the length of each subsequence.
 
 
 A quick description of each section
---------------------------
+----------------------------------------
 
 Class Sections
 ~~~~~~~~~~~~~~~
