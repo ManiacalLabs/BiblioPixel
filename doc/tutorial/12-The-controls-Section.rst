@@ -112,8 +112,9 @@ following optional fields:
     everything that happens to it in detail.
 
 
- Normalized numbers
+Normalized numbers
 ^^^^^^^^^^^^^^^^^^
+
 Controls have to handle many different sorts of numbers, and it's going to be
 hard for the user to write Projects that work well if the numbers are all over
 the place!

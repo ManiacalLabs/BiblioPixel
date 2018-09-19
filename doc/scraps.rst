@@ -8,6 +8,7 @@
    shape: [64, 11]
    animation: $bpa.strip.HalvesRainbow
 
+# comment here so the previous file isn't generated.
 
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index-footer.gif
