@@ -6,7 +6,7 @@ actually laid out in the real world.  The ``layout`` Class Section lets you
 represent more complicated setups.
 
 ``shape``
--------------
+==============
 
 ``shape`` specifies how many lights there are and how they are arranged.
 
@@ -37,7 +37,7 @@ pixels high:
 
 
 The ``layout`` section
---------------------------
+========================
 
 The ``shape`` section is good enough for a lot of simple layouts but
 more complex layouts to be specified will need the ``layout`` section.

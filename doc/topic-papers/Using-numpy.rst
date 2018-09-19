@@ -1,4 +1,4 @@
-Using `numpy` color lists
+Using ``numpy`` color lists
 -----------------------------------
 
 Introduction
@@ -29,7 +29,7 @@ Starting in BiblioPixel 4.0, ``numpy`` arrays will be the default, and fairly
 soon after that, we'll be phasing out classic lists.
 
 What's a ``numpy`` color list like?
----------------------------------------
+======================================
 
 Whether it's ``numpy`` or "classic", a color list is just a list of RGB colors.
 
@@ -74,7 +74,7 @@ It works even better if you have multiple lists - you can do slick things like:
 `numpy_list = (2 * list_1 + 3 * list_2) ** 2.5`
 
 Be careful:  references can be tricky
--------------------------------------
+==============================================
 
 Unlike classic lists, if you extract a color from a ``numpy`` color list and then
 modify it, the original list is also changed!
@@ -91,7 +91,7 @@ modify it, the original list is also changed!
        numpy_list[0]  # Now it's black!
 
 How to get your BiblioPixel Animation to use ``numpy`` lists.
------------------------------------------------------------------
+========================================================================
 
 You won't need to change anything in your Project at all, but if you have
 written a custom Animation, you might need to change your code.

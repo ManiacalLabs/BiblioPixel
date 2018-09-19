@@ -8,7 +8,8 @@ $APIDOC bibliopixel
 echo
 
 mv $MODULES $TMP1
-$APIDOC ./BiblioPixelAnimations/BiblioPixelAnimations
+BPA=`python -c 'import BiblioPixelAnimations, pathlib; print(pathlib.Path(BiblioPixelAnimations.__file__).parents[1])'`
+$APIDOC $BPA/BiblioPixelAnimations
 echo
 
 echo "" >> $TMP1

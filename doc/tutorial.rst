@@ -1,6 +1,9 @@
 The BiblioPixel Tutorial
 ------------------------------
 
+The tutorial steps you through all the features of BiblioPixel, starting with
+creating a project and going onto advanced topics like controls.
+
 .. toctree::
    :maxdepth: 1
 
@@ -17,3 +20,17 @@ The BiblioPixel Tutorial
    tutorial/10-The-driver-and-drivers-Sections
    tutorial/11-The-Serial-Driver
    tutorial/12-The-controls-Section
+   tutorial/13-Routing-Addresses-and-Actions
+
+-------
+
+.. code-block:: yaml
+
+   shape: [64, 7]
+   animation:
+     typename: $bpa.matrix.Text.ScrollText
+     text: 'BiblioPixel Tutorial'
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial.gif
+   :alt: Result

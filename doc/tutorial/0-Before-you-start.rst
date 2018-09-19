@@ -123,7 +123,6 @@ and we suggest you do too when writing your own lighting projects, unless your
 memory is better than ours.
 
 4. About the animated GIFs
-
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Those pretty pictures are automatically generated from the example BiblioPixel
