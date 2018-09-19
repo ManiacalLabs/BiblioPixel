@@ -40,13 +40,12 @@ Change directory to the project directory, and run the Project file, like this:
    cd my_lights
    bp -s my_lights.yml
 
+The ``-s`` flag to ``bp`` means "open a SimPixel window" and it will indeed open
+on your browser, showing a lighting pattern like this:
+
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-1.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-1.gif
    :alt: Result
-
-The ``-s`` flag to ``bp`` means "open a SimPixel window" and it will indeed open
-on your browser, showing a lighting pattern like the one above.
-
 
 5.  Stop the program.
 ^^^^^^^^^^^^^^^^^^^^^

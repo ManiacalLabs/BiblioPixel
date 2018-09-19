@@ -169,9 +169,9 @@ class] Most of the time, you'll only be wanting to change the ``accept``\ ,
 
 .. code-block:: yaml
 
-   shape: [64, 24]
-   animation:
-     typename: $bpa.matrix.Mainframe
+    shape: [64, 24]
+    animation:
+      typename: $bpa.matrix.Mainframe
 
 
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/12-footer.gif
