@@ -11,6 +11,7 @@ FIELD_TYPES = {
     'duration': duration,
     'gamma': gamma,
     'ledtype': ledtype,
+    'palette': colors,
     'time': duration,
     'spi_interface': spi_interface,
 }
