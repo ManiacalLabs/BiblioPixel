@@ -2,7 +2,7 @@ import copy, time
 from .. import util
 from .. project import attributes, data_maker, fields
 from .. util.threads.update_threading import UpdateThreading
-from .. util.color_list import to_triplets
+from .. util.colors import make, COLORS
 
 
 class Layout(object):
@@ -139,7 +139,7 @@ class Layout(object):
         """
         if not len(color_list):
             return
-        color_list = to_triplets(color_list)
+        color_list = make.colors(color_list)
 
         size = len(self._colors) - offset
         if len(color_list) > size:
@@ -149,7 +149,8 @@ class Layout(object):
     def _get_base(self, pixel):
         if pixel >= 0 and pixel < self.numLEDs:
             return self._colors[pixel]
-        return 0, 0, 0  # don't go out of bounds
+
+        return COLORS.Black  # don't go out of bounds
 
     def _set_base(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
