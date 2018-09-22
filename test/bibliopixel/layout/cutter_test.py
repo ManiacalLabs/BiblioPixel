@@ -29,8 +29,8 @@ class CutterTest(unittest.TestCase):
 
         cutter.apply(function)
         result = ''.join(layout.color_list)
-        self.assertEquals(expected_slices, slices)
-        self.assertEquals(expected_result, result)
+        self.assertEqual(expected_slices, slices)
+        self.assertEqual(expected_result, result)
 
     def test_get_row(self):
         self.assert_cut(['abc', 'def'], 'bcaefd')

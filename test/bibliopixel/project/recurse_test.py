@@ -15,10 +15,10 @@ class Tester:
 
 class RecurseTest(unittest.TestCase):
     def test_empty(self):
-        self.assertEquals(recurse.recurse({}), {})
+        self.assertEqual(recurse.recurse({}), {})
 
     def test_trivial(self):
-        self.assertEquals(recurse.recurse({'a': {}}), {'a': {}})
+        self.assertEqual(recurse.recurse({'a': {}}), {'a': {}})
 
     post_recursion = staticmethod(fields.default_converter)
 
@@ -26,7 +26,7 @@ class RecurseTest(unittest.TestCase):
         source = {'datatype': RecurseTest, 'foo': 'bar', 'color': 'red'}
         expected = {'datatype': RecurseTest, 'foo': 'bar', 'color': colors.Red}
         actual = recurse.recurse(source, post='post_recursion')
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)
 
     def test_complex(self):
         source = {
@@ -40,4 +40,4 @@ class RecurseTest(unittest.TestCase):
             'bing': 'post-bang',
         }
         actual = recurse.recurse(source, post='post_recursion')
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)

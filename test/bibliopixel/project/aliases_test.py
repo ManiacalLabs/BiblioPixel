@@ -15,16 +15,16 @@ class AliasTest(unittest.TestCase):
     def test_resolve(self):
         self.assertEqual(
             aliases.resolve('serial'), 'bibliopixel.drivers.serial.Serial')
-        self.assertEquals(aliases.resolve('foo'), 'foo')
+        self.assertEqual(aliases.resolve('foo'), 'foo')
 
         with patch(foo='bar'):
-            self.assertEquals(aliases.resolve('foo'), 'bar')
-            self.assertEquals(aliases.resolve('@foo.bing'), 'bar.bing')
-            self.assertEquals(aliases.resolve('$foo.bing'), 'bar.bing')
-            self.assertEquals(aliases.resolve('bar.bing.@foo'), 'bar.bing.bar')
-            self.assertEquals(aliases.resolve('bar.bing.$foo'), 'bar.bing.bar')
-            self.assertEquals(aliases.resolve('x@foo'), 'x@foo')
-            self.assertEquals(aliases.resolve('x$foo'), 'x$foo')
+            self.assertEqual(aliases.resolve('foo'), 'bar')
+            self.assertEqual(aliases.resolve('@foo.bing'), 'bar.bing')
+            self.assertEqual(aliases.resolve('$foo.bing'), 'bar.bing')
+            self.assertEqual(aliases.resolve('bar.bing.@foo'), 'bar.bing.bar')
+            self.assertEqual(aliases.resolve('bar.bing.$foo'), 'bar.bing.bar')
+            self.assertEqual(aliases.resolve('x@foo'), 'x@foo')
+            self.assertEqual(aliases.resolve('x$foo'), 'x$foo')
 
     def test_preserve_separators(self):
         s = '.asdfa./#fahdwrdr./#435'
@@ -78,8 +78,8 @@ class AliasTest(unittest.TestCase):
                 if actual is not expected:
                     not_equal.append(alias)
 
-        self.assertEquals([sorted(failed), sorted(not_equal)],
-                          [sorted(FAILED), sorted(NOT_EQUAL)])
+        self.assertEqual([sorted(failed), sorted(not_equal)],
+                         [sorted(FAILED), sorted(NOT_EQUAL)])
 
 
 # Aliases that would fail to load at all if they were removed

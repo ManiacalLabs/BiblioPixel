@@ -77,20 +77,20 @@ class ImportFailureTest(unittest.TestCase):
         with self.assertRaises(Exception) as e:
             make('{]')
 
-        self.assertEquals(str(e.exception).strip(), BAD_JSON_ERROR.strip())
+        self.assertEqual(str(e.exception).strip(), BAD_JSON_ERROR.strip())
 
     def test_failure1(self):
         with self.assertRaises(ImportError) as e:
             make(PROJECT_FAILURE1)
-        self.assertEquals(e.exception.name, 'test.bibliopixel.failure.Failure')
+        self.assertEqual(e.exception.name, 'test.bibliopixel.failure.Failure')
 
     def test_failure2(self):
         with self.assertRaises(ImportError) as e:
             make(PROJECT_FAILURE2)
-        self.assertEquals(e.exception.name,
-                          'test.bibliopixel.failure2.NON_EXISTENT')
+        self.assertEqual(e.exception.name,
+                         'test.bibliopixel.failure2.NON_EXISTENT')
 
     def test_failure3(self):
         with self.assertRaises(ImportError) as e:
             make(PROJECT_FAILURE3)
-        self.assertEquals(e.exception.name, 'test.NON_EXISTENT.Failure')
+        self.assertEqual(e.exception.name, 'test.NON_EXISTENT.Failure')

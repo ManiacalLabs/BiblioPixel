@@ -1,6 +1,7 @@
 import os, unittest, BiblioPixelAnimations
 from . import_all import import_all
 from bibliopixel.util import log
+import pytest
 
 
 class TestAll(unittest.TestCase):
@@ -18,9 +19,11 @@ class TestAll(unittest.TestCase):
 
         self.assertTrue(not failures)
 
+    @pytest.mark.filterwarnings('ignore:DeprecationWarning')
     def test_bp(self):
         self._test(BP_ROOT, BP_NAME, BP_BLACKLIST)
 
+    @pytest.mark.filterwarnings('ignore:DeprecationWarning')
     def test_bpa(self):
         self._test(BPA_ROOT, BPA_NAME, BPA_BLACKLIST)
 

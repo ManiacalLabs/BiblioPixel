@@ -24,41 +24,41 @@ class LayoutTest(unittest.TestCase):
         strip.set(1, GREEN)
         strip.set(2, 'hot pink')
         expected = [RED, GREEN, HOT_PINK, BLACK]
-        self.assertEquals(expected, strip.color_list)
+        self.assertEqual(expected, strip.color_list)
 
     def test_set_color(self):
         strip = Strip(MockDriver(4))
         strip.color_list = RED, GREEN, HOT_PINK
         expected = [RED, GREEN, HOT_PINK, BLACK]
-        self.assertEquals(expected, strip.color_list)
+        self.assertEqual(expected, strip.color_list)
 
     def test_set_linear_color(self):
         strip = Strip(MockDriver(4))
         strip.color_list = RED + GREEN + HOT_PINK
         expected = [RED, GREEN, HOT_PINK, BLACK]
-        self.assertEquals(expected, strip.color_list)
+        self.assertEqual(expected, strip.color_list)
 
     def test_set_too_much_color(self):
         strip = Strip(MockDriver(4))
         strip.color_list = RED + GREEN + HOT_PINK + GREEN + HOT_PINK
         expected = [RED, GREEN, HOT_PINK, GREEN]
-        self.assertEquals(expected, strip.color_list)
+        self.assertEqual(expected, strip.color_list)
 
     def test_set_partial_color(self):
         strip = Strip(MockDriver(4))
         strip.color_list = (RED + GREEN + HOT_PINK + GREEN)[:-1]
         expected = [RED, GREEN, HOT_PINK, BLACK]
-        self.assertEquals(expected, strip.color_list)
+        self.assertEqual(expected, strip.color_list)
 
     def test_set_offset(self):
         strip = Strip(MockDriver(4))
         strip.set_color_list(RED + GREEN, 2)
         expected = [BLACK, BLACK, RED, GREEN]
-        self.assertEquals(expected, strip.color_list)
+        self.assertEqual(expected, strip.color_list)
 
     def test_clone(self):
         strip = Strip(MockDriver(4))
         clone = strip.clone()
         clone.set(1, RED)
-        self.assertEquals(clone.get(1), RED)
-        self.assertEquals(strip.get(1), BLACK)
+        self.assertEqual(clone.get(1), RED)
+        self.assertEqual(strip.get(1), BLACK)

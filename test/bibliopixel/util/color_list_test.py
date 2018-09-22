@@ -83,10 +83,10 @@ class ColorListTest(unittest.TestCase, TestBase):
         self.assert_list_equal(cl, COLORS2)
 
     def test_sum_list(self):
-        self.assertEquals(ListMath.sum(COLORS1), 6 * 255)
+        self.assertEqual(ListMath.sum(COLORS1), 6 * 255)
 
     def test_sum_numpy(self):
-        self.assertEquals(NumpyMath.sum(make_numpy(COLORS1)), 6 * 255)
+        self.assertEqual(NumpyMath.sum(make_numpy(COLORS1)), 6 * 255)
 
     def test_scale_list(self):
         cl = COLORS1[:]
