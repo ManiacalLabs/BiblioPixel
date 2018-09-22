@@ -26,7 +26,7 @@ class ProjectTest(unittest.TestCase):
         with self.assertRaises(Exception) as e:
             make('{]')
 
-        self.assertEquals(str(e.exception).strip(), BAD_JSON_ERROR.strip())
+        self.assertEqual(str(e.exception).strip(), BAD_JSON_ERROR.strip())
 
     def test_simple(self):
         make(PROJECT)
@@ -34,12 +34,12 @@ class ProjectTest(unittest.TestCase):
     def test_types(self):
         animation = make(PROJECT_TYPES)
         kwds = animation.layout.drivers[0]._kwds
-        self.assertEquals(kwds['c_order'], (1, 2, 0))
-        self.assertEquals(kwds['color'], (0, 255, 0))
-        self.assertEquals(kwds['duration'], 3720)
-        self.assertEquals(kwds['gamma'].table, gamma.APA102.table)
-        self.assertEquals(kwds['time'], 35000)
-        self.assertEquals(kwds['ledtype'], LEDTYPE.GENERIC)
+        self.assertEqual(kwds['c_order'], (1, 2, 0))
+        self.assertEqual(kwds['color'], (0, 255, 0))
+        self.assertEqual(kwds['duration'], 3720)
+        self.assertEqual(kwds['gamma'].table, gamma.APA102.table)
+        self.assertEqual(kwds['time'], 35000)
+        self.assertEqual(kwds['ledtype'], LEDTYPE.GENERIC)
 
     def test_file(self):
         make('test/bibliopixel/project/project.json', False)
@@ -49,40 +49,40 @@ class ProjectTest(unittest.TestCase):
 
     def test_super(self):
         animation = make('test/bibliopixel/project/super_project.json', False)
-        self.assertEquals(animation.__class__.__name__, 'StripChannelTest')
-        self.assertEquals(animation.layout.pixelWidth, 2)
+        self.assertEqual(animation.__class__.__name__, 'StripChannelTest')
+        self.assertEqual(animation.layout.pixelWidth, 2)
 
     def test_multi(self):
         animation = make(PROJECT_MULTI)
         k = [d._kwds for d in animation.layout.drivers]
-        self.assertEquals(k[0]['width'], 128)
-        self.assertEquals(k[1]['width'], 128)
-        self.assertEquals(k[2]['width'], 128)
-        self.assertEquals(k[0]['device_id'], 10)
-        self.assertEquals(k[1]['device_id'], 11)
-        self.assertEquals(k[2]['device_id'], 12)
+        self.assertEqual(k[0]['width'], 128)
+        self.assertEqual(k[1]['width'], 128)
+        self.assertEqual(k[2]['width'], 128)
+        self.assertEqual(k[0]['device_id'], 10)
+        self.assertEqual(k[1]['device_id'], 11)
+        self.assertEqual(k[2]['device_id'], 12)
 
     def test_shared(self):
         make(PROJECT_SHARED)
 
     def test_sequence(self):
         animation = make(PROJECT_SEQUENCE, run_start=False)
-        self.assertEquals(len(animation.animations), 3)
+        self.assertEqual(len(animation.animations), 3)
         self.assertIsNotNone(animation.animations[0])
         animation = animation.animations[1]
-        self.assertEquals(animation.name, 'mt')
-        self.assertEquals(animation.layout.rotation, 90)
+        self.assertEqual(animation.name, 'mt')
+        self.assertEqual(animation.layout.rotation, 90)
 
     def test_sub_animation_names(self):
         animation = make(PROJECT_SUB_ANIMATIONS, run_start=False)
 
-        self.assertEquals(animation.name, 'Sequence')
+        self.assertEqual(animation.name, 'Sequence')
         a, b, c, d = animation.animations
-        self.assertEquals(a.name, 'StripChannelTest_0')
-        self.assertEquals(d.name, 'StripChannelTest_3')
+        self.assertEqual(a.name, 'StripChannelTest_0')
+        self.assertEqual(d.name, 'StripChannelTest_3')
         animation.pre_run()
-        self.assertEquals(animation.animations.StripChannelTest_2, c)
-        self.assertEquals(animation.animations['StripChannelTest_1'], b)
+        self.assertEqual(animation.animations.StripChannelTest_2, c)
+        self.assertEqual(animation.animations['StripChannelTest_1'], b)
 
     def test_numpy(self):
         make(PROJECT_NUMPY)
@@ -95,12 +95,12 @@ class ProjectTest(unittest.TestCase):
 
     def test_simpixel(self):
         animation = make(PROJECT_SIM, run_start=False)
-        self.assertEquals(animation.name, 'test name')
-        self.assertEquals(animation.data, {'title': 'test title'})
+        self.assertEqual(animation.name, 'test name')
+        self.assertEqual(animation.data, {'title': 'test title'})
 
     def test_project_from_animation_class(self):
         animation = make(PROJECT_ANIMATION)
-        self.assertEquals(animation.layout.rotation, 90)
+        self.assertEqual(animation.layout.rotation, 90)
 
 
 PROJECT = """

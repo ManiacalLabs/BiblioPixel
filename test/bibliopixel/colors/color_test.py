@@ -27,7 +27,7 @@ class ClassicTest(unittest.TestCase):
         cc = names._CLASSIC_COLORS
         jc = names._JUCE_COLORS
         for name, color in cc.items():
-            self.assertEquals(color, jc.get(name, color), name)
+            self.assertEqual(color, jc.get(name, color), name)
 
         # Find all the dupes in classic colors.
         dupes = {}
@@ -35,32 +35,32 @@ class ClassicTest(unittest.TestCase):
             dupes.setdefault(v, []).append(k)
 
         dupes2 = {k: v for k, v in dupes.items() if len(v) > 1}
-        self.assertEquals(set(dupes2), {
+        self.assertEqual(set(dupes2), {
             (0, 0, 0), (255, 255, 255), (0, 255, 0), (255, 0, 255),
             (0, 255, 255)})
 
         # Now find which colors appear in classic but not in Juce.
         classics_add = set(cc.values()) - set(jc.values())
-        self.assertEquals(classics_add,
-                          {(169, 169, 169), (0, 128, 0),
-                           (153, 102, 204), (204, 85, 51)})
+        self.assertEqual(classics_add,
+                         {(169, 169, 169), (0, 128, 0),
+                          (153, 102, 204), (204, 85, 51)})
 
 
 class NamesTest(unittest.TestCase):
     def test_colors(self):
-        self.assertEquals(names.COLORS.red, (255, 0, 0))
-        self.assertEquals(names.COLORS.OFF, (0, 0, 0))
-        self.assertEquals(names.COLORS['o n'], (255, 255, 255))
-        self.assertEquals(names.COLORS((0, 0, 0)), 'black')
-        self.assertEquals(names.COLORS((0x8a, 0x36, 0x0f)), 'burnt sienna')
+        self.assertEqual(names.COLORS.red, (255, 0, 0))
+        self.assertEqual(names.COLORS.OFF, (0, 0, 0))
+        self.assertEqual(names.COLORS['o n'], (255, 255, 255))
+        self.assertEqual(names.COLORS((0, 0, 0)), 'black')
+        self.assertEqual(names.COLORS((0x8a, 0x36, 0x0f)), 'burnt sienna')
 
     def test_toggle(self):
-        self.assertEquals(names.toggle('red'), '(255, 0, 0)')
-        self.assertEquals(names.toggle('(255, 0, 0)'), 'red')
-        self.assertEquals(names.toggle('OFF'), '(0, 0, 0)')
-        self.assertEquals(names.toggle('o n'), '(255, 255, 255)')
-        self.assertEquals(names.toggle('(0, 0, 0)'), 'black')
-        self.assertEquals(names.toggle('(0x8a, 0x36, 0x0f)'), 'burnt sienna')
+        self.assertEqual(names.toggle('red'), '(255, 0, 0)')
+        self.assertEqual(names.toggle('(255, 0, 0)'), 'red')
+        self.assertEqual(names.toggle('OFF'), '(0, 0, 0)')
+        self.assertEqual(names.toggle('o n'), '(255, 255, 255)')
+        self.assertEqual(names.toggle('(0, 0, 0)'), 'black')
+        self.assertEqual(names.toggle('(0x8a, 0x36, 0x0f)'), 'burnt sienna')
 
-        self.assertEquals(names.toggle('#8a360f'), 'burnt sienna')
-        self.assertEquals(names.toggle('0x8a360f'), 'burnt sienna')
+        self.assertEqual(names.toggle('#8a360f'), 'burnt sienna')
+        self.assertEqual(names.toggle('0x8a360f'), 'burnt sienna')

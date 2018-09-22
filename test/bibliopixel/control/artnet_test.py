@@ -20,7 +20,7 @@ class ArtNetControlTest(unittest.TestCase):
             sender.send(OUTGOING_MESSAGE)
             results = q.get(timeout=3)
 
-        self.assertEquals(results, TEST_DATA)
+        self.assertEqual(results, TEST_DATA)
 
     @mark_tests.fails_in_travis
     @mark_tests.fails_on_windows

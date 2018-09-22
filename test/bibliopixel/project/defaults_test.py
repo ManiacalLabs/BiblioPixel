@@ -6,7 +6,7 @@ from bibliopixel.project import defaults
 class DefaultsTest(unittest.TestCase):
     def run_test(self, expected, *sections):
         actual = defaults._sections_to_assignments(sections)
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)
 
     def run_failure(self, *sections, exception=ValueError):
         with self.assertRaises(exception):

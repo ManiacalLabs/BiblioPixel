@@ -35,6 +35,6 @@ class UDPTest(unittest.TestCase):
             sender.start()
             for m in messages:
                 sender.send(m)
-        self.assertEquals(actual, expected)
+        self.assertEqual(actual, expected)
         # TODO: if I don't have something here, this hangs!
         time.sleep(0.001)

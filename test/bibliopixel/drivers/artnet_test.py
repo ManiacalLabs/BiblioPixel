@@ -31,7 +31,7 @@ class DMXMessageTest(unittest.TestCase):
             project = make.make_project(PROJECT)
             project.start()
 
-        self.assertEquals(len(results), MAX_STEPS + 1)
+        self.assertEqual(len(results), MAX_STEPS + 1)
 
         make_msg = artnet_message.DMXMessage.from_buffer_copy
 
@@ -52,8 +52,8 @@ class DMXMessageTest(unittest.TestCase):
                 if e != a:
                     failures.append((i, j, e, a))
 
-        self.assertEquals(failures, [])
-        self.assertEquals(bytes(blackout), bytes(artnet_message.dmx_message()))
+        self.assertEqual(failures, [])
+        self.assertEqual(bytes(blackout), bytes(artnet_message.dmx_message()))
 
     def _make_driver_and_copy(self, numLEDs, offset=0):
         driver = artnet.ArtNet(numLEDs, offset=offset)
@@ -63,22 +63,22 @@ class DMXMessageTest(unittest.TestCase):
 
     def test_big(self):
         buffer, data = self._make_driver_and_copy(500)
-        self.assertEquals(buffer[:len(data)], data)
+        self.assertEqual(buffer[:len(data)], data)
 
     def test_little(self):
         buffer, data = self._make_driver_and_copy(8)
-        self.assertEquals(buffer, data[:len(buffer)])
+        self.assertEqual(buffer, data[:len(buffer)])
 
     def test_big_offset(self):
         buffer, data = self._make_driver_and_copy(500, 4)
-        self.assertEquals(buffer[4:4 + len(data)], data)
+        self.assertEqual(buffer[4:4 + len(data)], data)
 
     def test_little_offset(self):
         buffer, data = self._make_driver_and_copy(8, 4)
         split_point = len(buffer) - 4
-        self.assertEquals(buffer[4:], data[:split_point])
+        self.assertEqual(buffer[4:], data[:split_point])
         self.assertTrue(all(d == 0 for d in data[split_point:]))
 
     def test_big_offset_negative(self):
         buffer, data = self._make_driver_and_copy(500, -4)
-        self.assertEquals(buffer[4:4 + len(data)], data)
+        self.assertEqual(buffer[4:4 + len(data)], data)

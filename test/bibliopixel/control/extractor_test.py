@@ -31,7 +31,7 @@ class ExtractorTest(unittest.TestCase):
             normalizers=NORMALIZERS, **kwds)
 
         expected = expected and collections.OrderedDict(expected)
-        self.assertEquals(md.extract(msg), expected)
+        self.assertEqual(md.extract(msg), expected)
 
     def test_one(self):
         expected = [

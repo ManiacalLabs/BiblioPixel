@@ -15,20 +15,20 @@ def sorter(input):
 
 class SorterTest(unittest.TestCase):
     def test_empty(self):
-        self.assertEquals(sorter(''), '')
+        self.assertEqual(sorter(''), '')
 
     def test_one(self):
-        self.assertEquals(sorter('a'), 'a')
+        self.assertEqual(sorter('a'), 'a')
 
     def test_one(self):
-        self.assertEquals(sorter('ba'), 'ab')
+        self.assertEqual(sorter('ba'), 'ab')
 
     def test_sorted(self):
-        self.assertEquals(sorter('a'), 'a')
-        self.assertEquals(sorter('ab'), 'ab')
-        self.assertEquals(sorter('abc'), 'abc')
-        self.assertEquals(sorter('abcd'), 'abcd')
-        self.assertEquals(sorter('abcde'), 'abcde')
+        self.assertEqual(sorter('a'), 'a')
+        self.assertEqual(sorter('ab'), 'ab')
+        self.assertEqual(sorter('abc'), 'abc')
+        self.assertEqual(sorter('abcd'), 'abcd')
+        self.assertEqual(sorter('abcde'), 'abcde')
 
     def test_reverse(self):
         results = ['fedcba']
@@ -59,4 +59,4 @@ class SorterTest(unittest.TestCase):
             'abcdef',
         ]
 
-        self.assertEquals(results, expected)
+        self.assertEqual(results, expected)

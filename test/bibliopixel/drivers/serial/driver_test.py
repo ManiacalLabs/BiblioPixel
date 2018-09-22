@@ -36,7 +36,7 @@ class DriverTest(unittest.TestCase):
         expected = [
             mock.call().find_serial_devices(),
             mock.call().get_device(None)]
-        self.assertEquals(Devices.method_calls, expected)
+        self.assertEqual(Devices.method_calls, expected)
 
         expected = [
             call_write(1, 4, 0, 0, 9, 0, 1),
@@ -46,4 +46,4 @@ class DriverTest(unittest.TestCase):
             mock.call().flushInput(),
             mock.call().close()]
 
-        self.assertEquals(Serial.method_calls, expected)
+        self.assertEqual(Serial.method_calls, expected)
