@@ -70,8 +70,7 @@ class Project:
         #
         # So the monkey-patch above.  Ugly.  When we rewrite the
         # animation cycle, it will be freed from the topmost animation, and
-        # this problem will go away.  (Also, animations should have access to
-        # the Project, but that's a whole separate issue.)
+        # this problem will go away.
 
         self.controls = [create(c, 'control') for c in controls]
 
