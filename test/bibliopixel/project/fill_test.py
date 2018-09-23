@@ -67,6 +67,7 @@ class FillTest(unittest.TestCase):
                 'datatype': Matrix,
             },
             'numbers': 'python',
+            'palettes': {},
             'run': {},
         }
         expected = dict(source, **expected)

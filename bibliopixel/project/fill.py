@@ -6,6 +6,8 @@ so they have exactly the right constructor.
 import copy
 from . import aliases, alias_lists, construct, merge
 from .. import layout, util
+from .. util import exception
+from .. util.colors import make
 from .. animation.strip import BaseStripAnim
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
@@ -13,6 +15,7 @@ DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 def fill(desc):
     desc = _fill_aliases(desc)
+    desc = _fill_palettes(desc)
     desc = _fill_animation(desc)
     desc = _fill_drivers(desc)
     desc = _fill_shape(desc)  # Must come after fill_drivers
@@ -45,16 +48,25 @@ def _fill_aliases(desc):
     return desc
 
 
+def _fill_palettes(desc):
+    palettes = desc.pop('palettes', {})
+    with exception.add('Cannot read "palettes" Section'):
+        palettes = {k: make.colors(v) for k, v in palettes.items()}
+        make.PALETTES = palettes or make.PALETTES
+
+    return desc
+
+
 def _fill_animation(desc):
     if not desc['animation']:
-        raise ValueError('Missing "animation" section')
+        raise ValueError('Missing "animation" Section')
 
     desc['animation'] = construct.to_type_constructor(
         desc['animation'], 'bibliopixel.animation')
     datatype = desc['animation'].get('datatype')
     if not datatype:
         e = desc['animation'].get('_exception')
-        raise e or ValueError('Missing "datatype" in "animation" section')
+        raise e or ValueError('Missing "datatype" in "animation" Section')
 
     desc['animation'].setdefault('name', datatype.__name__)
 
@@ -91,7 +103,7 @@ def _fill_shape(desc):
     desc = copy.deepcopy(desc)
     dimensions = desc.pop('dimensions', None)
     if dimensions:
-        util.deprecated.deprecated('Project section "dimensions"')
+        util.deprecated.deprecated('Project Section "dimensions"')
 
     shape = desc.pop('shape', None) or dimensions
     if not shape:
