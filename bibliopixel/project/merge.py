@@ -7,6 +7,7 @@ from . import construct, load
 # layout, which depend on drivers, and everything depends on path and typename.
 DEFAULT_PROJECT = collections.OrderedDict((
     ('aliases', {'bpa': 'BiblioPixelAnimations'}),
+    ('palettes', {}),
     ('path', ''),
     ('typename', 'bibliopixel.project.project.Project'),
     ('numbers', 'python'),
