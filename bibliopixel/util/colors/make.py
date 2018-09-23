@@ -2,6 +2,11 @@ import functools, numbers
 from . names import COLORS
 from . import palette
 
+# This global variable is changed by the Project to allow color settings
+# in Animations and other classes to use palette names.  TODO: figure out
+# a way to avoid doing this.
+PALETTES = {}
+
 
 @functools.singledispatch
 def color(c):
@@ -52,7 +57,7 @@ def _(c):
 
 @colors.register(str)
 def _(s):
-    return _colors(s.split(','))
+    return PALETTES.get(s) or _colors(s.split(','))
 
 
 @colors.register(dict)
