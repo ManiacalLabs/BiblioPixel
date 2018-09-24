@@ -1,3 +1,7 @@
+## v3.4.20 - 2018-09-24
+- Fixes for classic "no project" BP
+- Get rid of deprecation warnings from new version of pytest
+
 ## v3.4.19 - 2018-07-23
 - Support Python 3.7
 - New `bp-pid` command
