@@ -1,4 +1,4 @@
-import contextlib, threading
+import contextlib, threading, time
 from . import adaptor
 from . runner import Runner, STATE
 from .. util import deprecated, log
@@ -43,9 +43,11 @@ class Animation(object):
         self.preclear = preclear
         self.project = None
         self.runner = None
+        self.time = time.time
 
     def set_project(self, project):
         self.project = project
+        self.time = project.time
         if self.runner:
             self.runner.set_project(project)
             self.threading.set_project(project)
@@ -140,18 +142,18 @@ class Animation(object):
         self.layout.animation_sleep_time = self.sleep_time or 0
 
     def _run_one_frame(self):
-        timestamps = [self.project.time()]
+        timestamps = [self.time()]
 
         self.preframe_callback()
-        timestamps = [self.project.time()]
+        timestamps = [self.time()]
 
         self.step(self.runner.amt)
-        timestamps.append(self.project.time())
+        timestamps.append(self.time())
 
         self.layout.frame_render_time = timestamps[1] - timestamps[0]
         self.layout.push_to_driver()
 
-        timestamps.append(self.project.time())
+        timestamps.append(self.time())
         _report_framerate(timestamps)
 
         self.cur_step += 1
@@ -168,7 +170,7 @@ class Animation(object):
 
     def _pre_run(self):
         self.state = STATE.running
-        self.runner.run_start_time = self.project.time()
+        self.runner.run_start_time = self.time()
         self.threading.stop_event.clear()
 
         self.cur_step = 0
@@ -199,6 +201,7 @@ class Animation(object):
     def run(self, **kwds):
         deprecated.deprecated('BaseAnimation.run')
         self._set_runner(kwds)
+        self.layout.start()
         self.start()
 
 

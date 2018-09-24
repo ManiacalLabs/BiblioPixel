@@ -9,7 +9,8 @@ DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
 class SimPixelOpenerServer(websocket.Server):
     def __init__(self, port, selectInterval):
         super().__init__(port, selectInterval)
-        url = args.ARGS.simpixel or (args.ARGS.s and DEFAULT_SIMPIXEL_URL)
+        url = args.ARGS and (
+            args.ARGS.simpixel or (args.ARGS.s and DEFAULT_SIMPIXEL_URL))
         if url is True:
             url = DEFAULT_SIMPIXEL_URL
         if url and not url.startswith('no'):
