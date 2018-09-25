@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+"""
+This minor utility is useful for understanding hex color patterns by
+printing the closest color name for any input hex color number.
+"""
+
+import sys
+from bibliopixel.util.colors import names
+from bibliopixel.util import log
+
+HELPS = {'help', '-h', '--h', '--help', '--h'}
+USAGE = """Usage:
+  nearest-color color [color color ...]
+
+Given a hex color, prints the nearest named color.
+"""
+
+def main(*colors):
+    if not colors:
+        log.printer(USAGE)
+
+    for color in colors:
+        if color in HELPS:
+            log.printer(USAGE)
+        else:
+            closest_color(color)
+
+
+def taxicab_metric(c1, c2):
+    return sum(abs(i - j) for i, j in zip(c1, c2))
+
+
+def closest_color(color_name, metric=taxicab_metric):
+    color = names.to_color(color_name)
+    m = min(metric(color, c) for c in names.COLOR_DICT.values())
+    closest = sorted(k for k, v in names.COLOR_DICT.items()
+                     if metric(color, v) == m)
+
+    print(color_name, ': "', '", "'.join(closest), '"', sep='')
+
+    s = sorted((metric(color, v), k) for k, v in names.COLOR_DICT.items())
+    # print(s, sep='\n')
+
+
+if __name__ == '__main__':
+    main(*sys.argv[1:])
