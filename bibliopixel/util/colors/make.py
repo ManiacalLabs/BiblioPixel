@@ -2,11 +2,6 @@ import functools, numbers
 from . names import COLORS
 from . import palette
 
-# This global variable is changed by the Project to allow color settings
-# in Animations and other classes to use palette names.  TODO: figure out
-# a way to avoid doing this.
-PALETTES = {}
-
 
 @functools.singledispatch
 def color(c):
@@ -19,7 +14,8 @@ def _(c):
         raise ValueError('Length %d is not 3' % len(c), _COLOR_USAGE)
 
     if not all(0 <= x <= 255 for x in c):
-        raise ValueError('All components must be between 0 and 255', _COLOR_USAGE)
+        raise ValueError(
+            'All components must be between 0 and 255', _COLOR_USAGE)
 
     return c
 
@@ -32,7 +28,8 @@ def _(c):
 @color.register(numbers.Number)
 def _(c):
     if not (0 <= c <= 255):
-        raise ValueError('All components must be between 0 and 255', _COLOR_USAGE)
+        raise ValueError(
+            'All components must be between 0 and 255', _COLOR_USAGE)
     return (c, c, c)
 
 
@@ -52,17 +49,17 @@ def colors(c):
 @colors.register(tuple)
 @colors.register(list)
 def _(c):
-    return _colors(c)
+    return _make(c)
 
 
 @colors.register(str)
 def _(s):
-    return PALETTES.get(s) or _colors(s.split(','))
+    return _make(s)
 
 
 @colors.register(dict)
 def _(d):
-    return _colors(**d)
+    return _make(**d)
 
 
 def to_triplets(colors):
@@ -86,7 +83,24 @@ def to_triplets(colors):
     return list(zip(*[iter(colors)] * 3))
 
 
-def _colors(colors=(), **kwds):
+def _make(colors=(), **kwds):
+    from . import palettes
+
+    p = palettes.get(colors)
+    if not p:
+        return make_colors(colors, **kwds)
+
+    if not kwds:
+        return p
+
+    kwds = dict(vars(p), **kwds)
+    return palette.Palette(p, **kwds)
+
+
+def make_colors(colors=(), **kwds):
+    if isinstance(colors, str):
+        colors = colors.split(',')
+
     colors = (color(c) for c in to_triplets(colors))
     return palette.Palette(colors, **kwds)
 
