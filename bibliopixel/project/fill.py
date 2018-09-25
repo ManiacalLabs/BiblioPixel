@@ -7,7 +7,7 @@ import copy
 from . import aliases, alias_lists, construct, merge
 from .. import layout, util
 from .. util import exception
-from .. util.colors import make
+from .. util.colors import make, palettes
 from .. animation.strip import BaseStripAnim
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
@@ -49,10 +49,9 @@ def _fill_aliases(desc):
 
 
 def _fill_palettes(desc):
-    palettes = desc.pop('palettes', {})
-    with exception.add('Cannot read "palettes" Section'):
-        palettes = {k: make.colors(v) for k, v in palettes.items()}
-        make.PALETTES = palettes or make.PALETTES
+    p = desc.pop('palettes', {})
+    with exception.add('Error in "palettes" Section'):
+        palettes.USER_PALETTES = {k: make.make_colors(v) for k, v in p.items()}
 
     return desc
 
