@@ -134,7 +134,8 @@ class Project:
         return self.clock.time()
 
     def sleep(self, delta_time):
-        return self.clock.sleep(delta_time)
+        # TODO: why is delta_time occasionally tiny and negative?
+        return self.clock.sleep(max(delta_time, 0))
 
     def flat_out(self, time=0):
         self.clock = FlatOutClock(time)
