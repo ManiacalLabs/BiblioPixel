@@ -1,3 +1,8 @@
+## v3.4.21 - 2018-09-30
+- New color palette class
+- Simplify entering channel order in Projects
+- Fix intermittent timer issue
+
 ## v3.4.20 - 2018-09-24
 - Fixes for classic "no project" BP
 - Get rid of deprecation warnings from new version of pytest
