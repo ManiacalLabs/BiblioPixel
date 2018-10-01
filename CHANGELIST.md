@@ -1,3 +1,6 @@
+## v3.4.21 - 2018-10-02
+- Include main/commands.rst.tmpl (fix #988)
+
 ## v3.4.20 - 2018-09-24
 - Fixes for classic "no project" BP
 - Get rid of deprecation warnings from new version of pytest
