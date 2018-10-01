@@ -1,4 +1,5 @@
 include bibliopixel/VERSION
+include bibliopixel/main/commands.rst.tmpl
 include scripts/*
 recursive-include ui *
 include requirements.txt
