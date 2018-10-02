@@ -1,3 +1,6 @@
+## v3.4.22 - 2018-10-02
+- Fix #991
+
 ## v3.4.21 - 2018-10-02
 - Include main/commands.rst.tmpl (fix #988)
 
