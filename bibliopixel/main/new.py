@@ -10,15 +10,15 @@ Example:
 
 .. code-block: bash
 
-    # Create a new project directory named my-project/ in the current directory
-    bp new my-project
+    # Create a new project directory named my_project/ in the current directory
+    bp new my_project
 
-    # Create a new project directory named my-project/ in ~/projects
-    bp new my-project ~/projects
+    # Create a new project directory named my_project/ in ~/projects
+    bp new my_project ~/projects
 
 """
 
-PUNCTUATION = '.-_'
+PUNCTUATION = '._'
 LEGAL_CHARS = set(string.ascii_letters + string.digits + PUNCTUATION)
 DIR_NAME = os.path.dirname(__file__)
 
@@ -73,7 +73,7 @@ TEMPLATES = {
 PROJECT_NAME_HELP = """
 The Name of the new BLiPS project you want to create.
 
-A Project Name can contain letters, numbers, `-` or `_`. Nothing else is
+A Project Name can contain letters, numbers, or `_`. Nothing else is
 allowed, which means no whitespace, "no `/`" and no `.`.
 
 A project name must start with a letter.
