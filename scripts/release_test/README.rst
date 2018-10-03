@@ -38,9 +38,24 @@ The features are
 * ``keyboard``\ : are we doing keyboard tests?
 * ``midi``\ : can we receive MIDI?
 
-How to run the program.
-=======================
 
+How to run the release tests in a clean environment
+===============================
+
+1. Create a new Python virtualenv
+
+2. ``cd`` to the BiblioPixel root directory
+
+3. ``source scripts/release_test/run.sh`` runs the release tests in ``/tmp`` -
+   or use ``source scripts/release_test/run.sh <your-directory>``.
+
+4. Delete the Python virtualenv so you don't accidentally use it again
+
+
+How to run the program.
+=========================
+
+This depends on what you want to run:
 
 #. Everything
 
@@ -72,3 +87,12 @@ How to run the program.
 
        # Set the features to be just `browser` and run only the `simpixel` test.
        release_test simpixel --features=browser
+
+
+ Note for MacOS users
+ ===========================
+
+ In order to test the keyboard control, you need to be running as root,
+ with either:
+
+     sudo
