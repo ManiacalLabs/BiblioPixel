@@ -19,6 +19,6 @@ FAILS_ON_WINDOWS = os.name == 'nt'
 
 long_test = skipIf(SKIP_LONG_TESTS, 'Long tests skipped.')
 allpixel_test = skipIf(not RUN_ALLPIXEL_TESTS, 'AllPixel tests skipped.')
-fails_in_travis = skipIf(FAILS_IN_TRAVIS, 'Travis-flakey tests skipped')
+fails_in_travis = skipIf(True or FAILS_IN_TRAVIS, 'Travis-flakey tests skipped')
 fails_on_windows = skipIf(FAILS_ON_WINDOWS, 'Windows-flakey tests skipped')
 deprecation_tests = skipIf(not DEPRECATION_TESTS, 'Tests of deprecation skipped')
