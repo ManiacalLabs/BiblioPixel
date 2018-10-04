@@ -1,3 +1,6 @@
+## v3.4.24 - 2018-10-04
+- Bump version number
+
 ## v3.4.23 - 2018-10-04
 - New color palette class
 - Simplify entering channel order in Projects
