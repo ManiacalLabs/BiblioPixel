@@ -1,3 +1,8 @@
+## v3.4.23 - 2018-10-04
+- New color palette class
+- Simplify entering channel order in Projects
+- Fix intermittent timer issue
+
 ## v3.4.22 - 2018-10-02
 - Fix #991
 
