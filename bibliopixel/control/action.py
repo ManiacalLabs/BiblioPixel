@@ -57,8 +57,8 @@ class ActionList(Receiver):
 
     def receive(self, msg):
         values = tuple(msg.values())
-        for a in self.actions:
-            a.receive(values)
+        for action in self.actions:
+            action.receive(values)
 
     def __bool__(self):
         return bool(self.actions)
