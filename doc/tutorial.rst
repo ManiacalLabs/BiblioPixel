@@ -16,6 +16,7 @@ creating a project and going onto advanced topics like controls.
    tutorial/The-run-Section
    tutorial/The-shape-and-layout-Sections
    tutorial/Typenames
+   tutorial/Palettes
    tutorial/The-path-and-aliases-Sections
    tutorial/The-driver-and-drivers-Sections
    tutorial/The-Serial-Driver

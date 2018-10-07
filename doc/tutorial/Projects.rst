@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Projects
+=======
+4. Projects
+>>>>>>> d39b9711... Document Palettes
 ==============
 
 A BiblioPixel Project is a text file describing a lighting project in either
@@ -123,8 +127,8 @@ Sections naturally fall into two categories.
 *Value Sections* are fairly simple things like strings, numbers, lists, or
 dictionaries.
 
-The five Value Sections are ``aliases``, ``numbers``, ``path``, ``run``, and
-``shape``.
+The Value Sections are ``aliases``, ``numbers``, ``palettes``, ``path``,
+``run``, and ``shape``.
 
 *Class Sections* represent Python objects - actual programs. Nearly all the
 excitement in BiblioPixel is in the Class Sections!
@@ -241,6 +245,10 @@ Value Sections
 ``path``
     ``path`` is added to the ``PYTHONPATH`` to allow loading of local Python
     libraries.
+
+``palettes``
+    A dictionary of named *Palettes*.  A Palette is a list of colors, together
+    with instructions on how to lay them out and interpolate between them.
 
 ``run``
     Controls how the topmost Animation is executed - how fast it runs, for how
