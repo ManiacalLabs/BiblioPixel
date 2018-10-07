@@ -19,7 +19,7 @@ class Palette(list):
             continuous: if True, interpolate linearly between colors; if False,
               use the nearest color from the original list
 
-            serpentine: if True, pallete colors are used in reverse order every
+            serpentine: if True, palette colors are used in reverse order every
               other iteration, giving a back-and-forth effect.  If False,
               palette colors always restart on each iteration
 
@@ -27,7 +27,7 @@ class Palette(list):
               to ``len(colors) - 1``, the whole palette repeats itself
               ``self.scale`` times
 
-            offset: offset to the incoming index  ``i``, applied after scaling
+            offset: offset to the incoming index ``i``, applied after scaling
         """
         super().__init__(colors)
         if not self:
