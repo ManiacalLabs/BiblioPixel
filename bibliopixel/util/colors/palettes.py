@@ -5,11 +5,11 @@ from bibliopixel.colors import conversions
 Map names to palettes
 ==========================
 
-First, the name is looked up in the mutable ``USER_PALETTES`` dictionary.
-The project set ``USER_PALETTES`` from its "palettes" Section.
+First, the name is looked up in the mutable ``PROJECT_PALETTES`` dictionary.
+The project set ``PROJECT_PALETTES`` from its "palettes" Section.
 
 If that fails, the name is looked up in a fixed, immutable dictionary
-``GLOBAL_PALETTES``.
+``BUILT_IN_PALETTES``.
 """
 
 DEFAULT_PALETTE = 'rainbow'
@@ -22,15 +22,15 @@ def get(name=DEFAULT_PALETTE):
     If ``name`` is omitted, the default value is used.
     """
     if isinstance(name, str):
-        return USER_PALETTES.get(name) or GLOBAL_PALETTES.get(name)
+        return PROJECT_PALETTES.get(name) or BUILT_IN_PALETTES.get(name)
 
 
 # This global variable is changed by the Project to allow color settings
 # in Animations and other classes to use palette names.  TODO: fix this.
 # types would somehow need to know about the current Project, non-trivial.
-USER_PALETTES = {}
+PROJECT_PALETTES = {}
 
-GLOBAL_PALETTES = {
+BUILT_IN_PALETTES = {
     # "Classic" palettes from old BP
     'rainbow': _colors(conversions.HUE_RAINBOW),
     'raw': _colors(conversions.HUE_RAW),

@@ -51,7 +51,7 @@ def _fill_aliases(desc):
 def _fill_palettes(desc):
     p = desc.pop('palettes', {})
     with exception.add('Error in "palettes" Section'):
-        palettes.USER_PALETTES = {k: make.make_colors(v) for k, v in p.items()}
+        palettes.PROJECT_PALETTES = {k: make.make_colors(v) for k, v in p.items()}
 
     return desc
 
