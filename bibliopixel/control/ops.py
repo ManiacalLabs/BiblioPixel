@@ -5,18 +5,23 @@ scaling or offsetting some incoming numerical value.
 Examples:
 
    Ops()(x)
+
 returns the number unchanged
 
    Ops('mul', 0.5)(x)
+
 multiples x by 0.5
 
    Ops('add', 0.1)(x)
+
 adds 1 to x
 
    Ops('sqrt')(x)
+
 returns the square root of x
 
    Ops('mul', 0.5, 'add', 1, 'sqrt')(x)
+
 returns sqrt(1 + 0.5 * x)
 
 """

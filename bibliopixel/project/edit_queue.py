@@ -6,9 +6,9 @@ class EditQueue(queue.Queue):
     """
     ``Edits``s are thread-unsafe operations to be executed later at a
     thread-safe time.  In the animation loop, this happens in
-    :py:method:`bibliopixel.animation.Animation.preframe_callback`.
+    ``bibliopixel.animation.Animation.preframe_callback``.
 
-    The typical `Edit` is a change to some parameter of an animation,
+    The typical ``Edit`` is a change to some parameter of an animation,
     but in general is represented by a call to a function with fixed parameters.
     """
 
@@ -37,7 +37,7 @@ class EditQueue(queue.Queue):
         can be processed, ``get_and_run_edits`` won't go into an infinite loop,
         but rather the queue will grow unboundedly, which that can be
         detected, and mitigated and reported on - or if Queue.maxsize is
-        set, `bp` will report a fairly clear error and just dump the edits
+        set, ``bp`` will report a fairly clear error and just dump the edits
         on the ground.
         """
         if self.empty():

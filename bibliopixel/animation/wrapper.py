@@ -2,6 +2,13 @@ from . indexed import Indexed
 
 
 class Wrapper(Indexed):
+    """
+    Wraps a single Animation.
+
+    ``Wrapper`` is used as a base class for Pytho Animation classes that control
+    or process other animations.
+    """
+
     # TODO: No unit tests cover any of this.
     @staticmethod
     def pre_recursion(desc):

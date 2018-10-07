@@ -121,7 +121,7 @@ class _AnimationList:
         # TODO: We should disallow APIs from doing surgery on
         # self.animations after construction.  Right now only
         # Remote does this, or legacy code that calls add_animation.
-        # That code should go on `cls.pre_recursion( )`.
+        # That code should go on ``cls.pre_recursion()``.
         self._animations.append(animation)
         try:
             base_name = animation.name
