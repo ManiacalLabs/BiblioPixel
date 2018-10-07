@@ -39,7 +39,7 @@ deploy:
     github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
     on:
       python: 3.5
-      branch: docs # for now
+      branch: dev # for now - eventually master
 
 # Don't compile "experimental" branches starting with x-, y-, or z-.
 branches:
@@ -47,4 +47,3 @@ branches:
     - /^x-.*$/
     - /^y-.*$/
     - /^z-.*$/
-
