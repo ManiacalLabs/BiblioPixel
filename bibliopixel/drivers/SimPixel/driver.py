@@ -18,15 +18,15 @@ class SimPixelOpenerServer(websocket.Server):
 
 
 class SimPixel(ServerDriver):
-    """Output a simulation of your displat to the web-based
-    simulator at http://simpixel.io
+    """
+    Output a simulation of your display to your browser at http://simpixel.io
 
     Provides the same parameters of
     :py:class:`bibliopixel.drivers.driver_base.DriverBase` as
     well as those below:
 
     :param int port: Port to serve websocket server on.
-    :param pixel_positions: Override the automatic generation of pyhsical
+    :param pixel_positions: Override the automatic generation of physical
         pixel layout. This value can be generated via the methods in
         :py:mod:`bibliopixel.layout.geometry`
     """
