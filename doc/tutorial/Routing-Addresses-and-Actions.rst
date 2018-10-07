@@ -1,4 +1,4 @@
-13. Routing, Addresses and Actions
+Routing, Addresses and Actions
 ---------------------------------------------
 
 A routing example

@@ -1,4 +1,4 @@
-8. Typenames, and the ``path`` and ``aliases`` Sections
+Typenames, and the ``path`` and ``aliases`` Sections
 ============================================================
 
 8.1. What is a Typename?

@@ -1,4 +1,4 @@
-10. The ``driver`` and ``drivers`` Sections
+The ``driver`` and ``drivers`` Sections
 ===================================================
 
 The ``driver`` and ``drivers`` section define the hardware or virtual outputs

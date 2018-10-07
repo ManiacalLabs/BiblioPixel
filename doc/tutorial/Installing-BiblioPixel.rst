@@ -1,4 +1,4 @@
-1. Installing BiblioPixel
+Installing BiblioPixel
 --------------------------------
 
 BiblioPixel is a combination of a Python 3 library named BiblioPixel and a

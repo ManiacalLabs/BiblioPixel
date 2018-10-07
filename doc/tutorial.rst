@@ -7,20 +7,20 @@ creating a project and going onto advanced topics like controls.
 .. toctree::
    :maxdepth: 1
 
-   tutorial/0-Before-you-start
-   tutorial/1-Installing-BiblioPixel
-   tutorial/2-How-to-write-a-Project
-   tutorial/3-The-bp-program
-   tutorial/4-Projects
-   tutorial/5-The-animation-Section
-   tutorial/6-The-run-Section
-   tutorial/7-The-shape-and-layout-Sections
-   tutorial/8-Typenames
-   tutorial/9-The-path-and-aliases-Sections
-   tutorial/10-The-driver-and-drivers-Sections
-   tutorial/11-The-Serial-Driver
-   tutorial/12-The-controls-Section
-   tutorial/13-Routing-Addresses-and-Actions
+   tutorial/Before-you-start
+   tutorial/Installing-BiblioPixel
+   tutorial/How-to-write-a-Project
+   tutorial/The-bp-program
+   tutorial/Projects
+   tutorial/The-animation-Section
+   tutorial/The-run-Section
+   tutorial/The-shape-and-layout-Sections
+   tutorial/Typenames
+   tutorial/The-path-and-aliases-Sections
+   tutorial/The-driver-and-drivers-Sections
+   tutorial/The-Serial-Driver
+   tutorial/The-controls-Section
+   tutorial/Routing-Addresses-and-Actions
 
 -------
 

@@ -1,5 +1,4 @@
-
-2. How to write a Project
+How to write a Project
 =========================
 
 This section will guide you throw creating a new project from scratch, and

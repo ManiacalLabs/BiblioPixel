@@ -1,4 +1,4 @@
-7. The ``shape`` and ``layout`` Sections.
+The ``shape`` and ``layout`` Sections.
 ----------------------------------------------
 
 The ``shape`` Value Section is a simple way of representing how your lights are

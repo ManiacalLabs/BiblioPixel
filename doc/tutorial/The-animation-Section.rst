@@ -1,4 +1,4 @@
-5. The ``animation`` Section
+The ``animation`` Section
 ================================
 
 BiblioPixel comes with a library of Animations called BiblioPixelAnimations

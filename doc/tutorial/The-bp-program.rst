@@ -1,4 +1,4 @@
-3. The ``bp`` program.
+The ``bp`` program.
 ==========================
 
 1. What is ``bp``\ ?
