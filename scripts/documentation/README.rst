@@ -41,8 +41,7 @@ from the BiblioPixel root directory.
   Run the Sphinx build into the directory ``BiblioPixel.gh-pages/html``
 
 ``deploy``
-  Commit and push any changes to ``DocsFiles/BiblioPixel`` and
-  ``BiblioPixel.gh-pages/html``
+  Commit and push any changes to ``DocsFiles/BiblioPixel``
 
 ``build``
   Equivalent to ``clean && api && bp && extract-gifs && sphinx``
