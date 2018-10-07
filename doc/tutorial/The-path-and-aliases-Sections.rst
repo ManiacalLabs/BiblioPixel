@@ -1,4 +1,4 @@
-9. The ``aliases`` and ``path`` Sections
+The ``aliases`` and ``path`` Sections
 =================================================
 
 The optional ``path`` and ``aliases`` Sections make it easier for you to find

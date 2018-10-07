@@ -1,4 +1,4 @@
-0. Before you start
+Before you start
 ------------------------------
 
 

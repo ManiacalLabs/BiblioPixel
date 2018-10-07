@@ -1,4 +1,4 @@
-11. The Serial Driver
+The Serial Driver
 =====================
 
 The Serial Driver handles LEDs that are attached to the computer with the USB

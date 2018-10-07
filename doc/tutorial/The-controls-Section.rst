@@ -1,4 +1,4 @@
-12. The ``controls`` Section
+The ``controls`` Section
 -------------------------------
 
 The optional ``controls`` Class Section is an advanced feature which allows you

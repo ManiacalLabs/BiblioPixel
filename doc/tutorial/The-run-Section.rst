@@ -1,4 +1,4 @@
-6. The ``run`` section
+The ``run`` section
 -----------------------------
 
 The Value Section ``run`` is a dictionary with the following Fields:

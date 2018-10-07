@@ -1,5 +1,5 @@
-4. Projects
-===========
+Projects
+==============
 
 A BiblioPixel Project is a text file describing a lighting project in either
 `YAML <https://yaml.org>`_ or `JSON <https://json.org>`_ format.
