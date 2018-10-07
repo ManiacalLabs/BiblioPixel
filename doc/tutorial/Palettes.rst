@@ -74,18 +74,20 @@ The list of Built-In Palettes is in the source code
 Fields in a Palette
 ====================================
 
-You can experiment with these Fields and not break anything.
+There are quite a few Fields below.  They're all optional but you can
+experiment with them and not break anything, and you can get interesting
+results that way.
 
-You can also attach them to a Control (described later in this Tutorial) and
-change them in real-time from an external source.
-
+You can also attach Palette Fields to a Control (described later in this
+Tutorial) and change the values in real-time from an external source for
+more excitement.
 
 ``colors`` (default ``[Black]``)
   A list of colors, or a string of color names separated with commas.
-  Colors can be string names, hex strings like #FFFFFF or 0xE8E0E8,
-  or triplets of integers like [255, 0, 255].  It can also be a name
-  of a Built-in or User Palette, in which case its Fields are copied
-  and then possibly overwritten by Fields in this Palette.
+  Each color can be a string name, a hex string like #FFFFFF or 0xE8E0E8,
+  or a triplet of integers like [255, 0, 255].  ``colors`` can also be the name
+  of a Built-in or User Palette, in which case its Fields are copied and then
+  possibly overwritten by Fields in this Palette.
 
 ``continuous`` (default ``False``)
   If ``True``, interpolate linearly between colors; otherwise
@@ -104,14 +106,10 @@ change them in real-time from an external source.
 ``offset``
   Offset added to the incoming index ``i``.  The offset is applied after scaling
 
-
-Reusing Palettes
-========================
-
-Named Palettes can be re-used a ``palette`` field of an Animation, or in the
-``palettes`` section of the Project.
-
-
+``autoscale``
+  If True, automatically rescale the Palette size to match the length of the
+  output length. ``autoscale`` happens before ``scale``, so the two work well
+  together to give banding or striping effects across your display
 
 ----
 

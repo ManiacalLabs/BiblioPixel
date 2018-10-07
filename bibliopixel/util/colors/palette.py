@@ -11,7 +11,7 @@ class Palette(list):
     """
 
     def __init__(self, colors=(), continuous=False, serpentine=False, scale=1,
-                 offset=0):
+                 offset=0, autoscale=False):
         """
         Arguments:
             colors: an iterable of colors
@@ -23,11 +23,16 @@ class Palette(list):
               other iteration, giving a back-and-forth effect.  If False,
               palette colors always restart on each iteration
 
-            scale: scales the incoming index ``i``.  As ``i`` moves from 0
+            scale: Scales the incoming index ``i``.  As ``i`` moves from 0
               to ``len(colors) - 1``, the whole palette repeats itself
               ``self.scale`` times
 
             offset: offset to the incoming index ``i``, applied after scaling
+
+            autoscale: If True, automatically rescale the Palette size to
+              match the length of the output.  ``autoscale`` happens before
+              ``scale``, so the two work well together to give banding or
+              striping effects across your display
         """
         super().__init__(colors)
         if not self:
@@ -37,50 +42,74 @@ class Palette(list):
         self.serpentine = serpentine
         self.scale = scale
         self.offset = offset
+        self.autoscale = autoscale
 
-    def get(self, position):
+    def get(self, position, length=None):
         """
-        Return a color interpolated from the Palette. ``i`` may be any integer
-        or floating point number.
+        Return a color interpolated from the Palette.
 
-        In the case where continuous=False, serpentine=False, scale=1 and
-        offset=0, this is exactly the same as plain old [] indexing, but with a
-        wrap-around.  The parameters affect this result as documented in the
+        In the case where continuous=False, serpentine=False, scale=1,
+        autoscale=False, and offset=0, this is exactly the same as plain old []
+        indexing, but with a wrap-around.
+
+        The constructor parameters affect this result as documented in the
         constructor.
+
+        Arguments:
+           ``position``:
+             May be any integer or floating point number
+
+           ``length``:
+             The length of the output color_list.  If None, use the length of
+             the palette itself.  If autoscale=True, ``length`` is used to scale
+             the palette to match the output.
         """
-        pos = self._position(position * self.scale + self.offset)
+        n = len(self)
+        if n == 1:
+            return self[0]
+
+        pos = position
+
+        if length and self.autoscale:
+            pos *= len(self)
+            pos /= length
+
+        pos *= self.scale
+        pos += self.offset
+
+        if not self.continuous:
+            if not self.serpentine:
+                return self[int(pos % n)]
+
+            # We want a color sequence of length 2n-2
+            # e.g. for n=5: a b c d | e d c b | a b c d ...
+            m = (2 * n) - 2
+            pos %= m
+            if pos < n:
+                return self[int(pos)]
+            else:
+                return self[int(m - pos)]
+
+        if self.serpentine:
+            pos %= (2 * n)
+            if pos > n:
+                pos = (2 * n) - pos
+        else:
+            pos %= n
+
+        # p is a number in [0, n): scale it to be in [0, n-1)
+        pos *= n - 1
+        pos /= n
+
         index = int(pos)
         fade = pos - index
         if not fade:
             return self[index]
+        else:
+            print(' -> fade', fade)
 
         r1, g1, b1 = self[index]
         r2, g2, b2 = self[(index + 1) % len(self)]
         dr, dg, db = r2 - r1, g2 - g1, b2 - b1
 
         return r1 + fade * dr, g1 + fade * dg, b1 + fade * db
-
-    def _position(self, i):
-        n = len(self)
-        if n == 1:
-            return 0
-
-        if not self.continuous:
-            if not self.serpentine:
-                return int(i % n)
-
-            # We want a color sequence of length 2n-2
-            # e.g. for n=5: a b c d | e d c b | a b c d ...
-            m = (2 * n) - 2
-            index = i % m
-            return int(index if index < n else m - index)
-
-        if not self.serpentine:
-            index = i % n
-        else:
-            index = i % (2 * n)
-            if index > n:
-                index = (2 * n) - index
-
-        # This is a number in [0, n): scale it to be in [0, n-1)
-        return index * (n - 1) / n
