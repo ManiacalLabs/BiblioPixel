@@ -188,3 +188,15 @@ class PaletteTest(unittest.TestCase):
         # result2 = [tuple(float(i) for i in c) for c in result]
         # print('', *result2, sep=',\n            ')
         self.assertEqual(expected, result)
+
+    def test_autoscale(self):
+        colors = [Red, Green, Blue, White]
+        p = Palette(colors, autoscale=True)
+
+        expected = [Red, Red, Green, Green, Blue, Blue, White, White, Red, Red]
+        result = [p.get(32 * i, 256) for i in range(10)]
+        print(*result, sep='\n')
+        self.assertEqual(expected, result)
+
+        result = [p.get(Fraction(i) / 2) for i in range(10)]
+        self.assertEqual(expected, result)
