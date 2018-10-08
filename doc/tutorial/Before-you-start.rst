@@ -3,7 +3,7 @@ Before you start
 
 
 You don't need to know how to program in order to use BiblioPixel but you do need to
-be familiar with a few things:
+be familiar with a couple of things:
 
 1. Using the command line
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -47,94 +47,6 @@ NOTE: Microsoft Word does not work for this task of text editing - it's a word
 processor, a different sort of program, and it embeds all sorts of other
 information in its documents which BiblioPixel cannot process.
 
-3. Either the YAML or JSON data file formats
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-BiblioPixel represents lighting Projects as text files in one of two formats -
-`YAML <https://github.com/darvid/trine/wiki/YAML-Primer>`_
-or `JSON <https://json.org>`_\ .
-
-Most of our examples are in YAML, because it's less typing - however, many
-people who write Javascript prefer JSON and that works perfectly well too.
-
-BiblioPixel doesn't care about which file names you use, but it's neater to put
-JSON data in files ending in .json and YAML data in files ending in .yml.
-
-You can learn YAML by example, from reading this document.  If you're interested
-in a bit more information, here's
-`a link <https://github.com/darvid/trine/wiki/YAML-Primer>`_\ .
-
-**Example 1**\ : Some data in JSON:
-
-.. code-block:: json
-
-    {
-        "animation": {
-            "typename": "sequence",
-            "length": 3,
-            "animations": [
-                ".tests.PixelTester",
-                {
-                    "typename": "fill",
-                    "color": "red"
-                },
-                "$bpa.matrix.MatrixRain"
-            ]
-        },
-        "shape": [32, 12]
-    }
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif
-   :alt: Result
-   :align: center
-
-
-**Example 2**\ :  The same data in YAML:
-
-.. code-block:: yaml
-
-   # This is a comment.
-
-   animation:
-     typename: sequence
-     length: 3
-
-     animations:
-       - .tests.PixelTester
-       - {typename: fill, color: red}
-       - $bpa.matrix.MatrixRain
-
-   shape: [32, 12]
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
-   :alt: Result
-   :align: center
-
-
-YAML isn't just shorter and cleaner: it lets you write comments to yourself or
-anyone else reading, by starting a line with the ``#`` character.
-
-We make heavy use of this "comment" feature in our own projects, and we suggest
-you do too when writing yours, unless your memory is better than ours.
-
-4. About the animated GIFs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Those pretty pictures are automatically generated from the example BiblioPixel
-projects embedded in the documentation, so they fairly faithfully represent the
-results you would get.
-
-The one big difference is that that the GIFs loop after ten seconds (to keep
-their size down), where the real animation will keep playing forever.
-
-They're embedded in the text as examples of how to make Projects, and there's
-also a unique one at the bottom of each page just for fun, as a sort of gallery
-of animations.
-
 ----
 
 .. code-block:: yaml
@@ -145,7 +57,7 @@ of animations.
      speed: 5
      density: 100
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-footer.gif
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/before-you-start-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/before-you-start-footer.gif
    :alt: Result
    :align: center

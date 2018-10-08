@@ -78,13 +78,13 @@ you do too when writing yours, unless your memory is better than ours.
    shape: [64, 16]
    animation:
      typename: $bpa.matrix.MathFunc
-     fun: 23
+     func: 23
      palette:
        colors: eight
        continuous: true
        scale: 0.01
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-footer.gif
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/yaml-and-json-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/yaml-and-json-footer.gif
    :alt: Result
    :align: center
