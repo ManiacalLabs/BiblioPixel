@@ -182,13 +182,7 @@ and run it again to get this:
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 16]
    animation: $bpa.matrix.GameOfLife.GameOfLifeRGB
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/how-to-write-a-project-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/how-to-write-a-project-footer.gif
-   :alt: Result
-   :align: center

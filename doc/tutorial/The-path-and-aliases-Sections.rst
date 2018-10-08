@@ -64,13 +64,7 @@ searched for code, in this order:
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [96, 8]
    animation: $bpa.strip.Rainbows.Rainbow
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-path-and-aliases-sections-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-path-and-aliases-sections-footer.gif
-   :alt: Result
-   :align: center

@@ -11,12 +11,7 @@ This section includes the full API references, and the reference for the
    reference/api/modules.rst
    reference/The-bp-command.rst
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    animation: $bpa.matrix.GameOfLife.GameOfLifeRGB
    shape: [64, 11]
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/reference-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/reference-footer.gif
-   :alt: Result
-   :align: center

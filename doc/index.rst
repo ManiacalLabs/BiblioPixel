@@ -9,7 +9,7 @@ In one sentence:
 
 Animate complex lighting projects by writing simple text files.
 
-.. code-block:: yaml
+.. bp-code-block:: example
 
     animation:
       typename: $bpa.matrix.MathFunc
@@ -17,13 +17,6 @@ Animate complex lighting projects by writing simple text files.
       rand: false
 
     shape: [64, 64]
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index.gif
-   :alt: Result
-   :align: center
-
 
 .. toctree::
    :maxdepth: 1

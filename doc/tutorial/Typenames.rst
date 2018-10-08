@@ -135,15 +135,9 @@ For convenience, if the whole class section is a string, it's the ``typename``\ 
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [96, 8]
    animation:
      typename: $bpa.strip.Wave
      color: coral
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/typenames-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/typenames-footer.gif
-   :alt: Result
-   :align: center

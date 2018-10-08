@@ -31,21 +31,16 @@ or ask a question on the
 
 **Example 1** : a simple Project file written in YAML
 
-.. code-block:: yaml
+.. bp-code-block:: example-1
 
    shape: 50
    animation: $bpa.strip.Wave
 
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-1.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-1.gif
-   :alt: Result
-   :align: center
-
 
 **Example 2** : a slightly larger Project file, written in JSON
 
-.. code-block:: json
+.. bp-code-block:: example-2
 
    {
        "shape": [32, 32],
@@ -61,15 +56,9 @@ or ask a question on the
    }
 
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-2.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-2.gif
-   :alt: Result
-   :align: center
-
-
 **Example 3** : the same Project file as in Example 2, but written in YAML
 
-.. code-block:: yaml
+.. bp-code-block:: example-3
 
    shape: [32, 32]
 
@@ -79,12 +68,6 @@ or ask a question on the
    animation:
      typename: $bpa.matrix.MatrixRain
      colors: [blue, yellow, coral]
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-3.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-3.gif
-   :alt: Result
-   :align: center
 
 
 A Project is made up of *Sections*, and Sections have *Fields*.
@@ -169,17 +152,11 @@ like the Animation ``.tests.PixelTester``:
 
 **Example 4**:  An Animation that runs a simple test on a strip of 32 pixels
 
-.. code-block:: yaml
+.. bp-code-block:: example-4
 
    shape: 32
    animation:
        typename: .tests.PixelTester
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-4.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-4.gif
-   :alt: Result
-   :align: center
 
 
 On the other hand, the ``.sequence`` Animation requires a Field ``animations``,
@@ -189,7 +166,7 @@ Field ``length`` which sets the length of each subsequence.
 **Example 5**:  This Animation runs four Animations, each for two seconds, in a
   loop, and displays the result on a 32x32 pixel display.
 
-.. code-block:: yaml
+.. bp-code-block:: example-5
 
    shape: [32, 32]
 
@@ -201,12 +178,6 @@ Field ``length`` which sets the length of each subsequence.
            - $bpa.matrix.ImageShow
            - $bpa.matrix.ImageDissolve
            - $bpa.matrix.ScreenGrab
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-5.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-5.gif
-   :alt: Result
-   :align: center
 
 
 A quick description of each section
@@ -262,13 +233,7 @@ Value Sections
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 4]
    animation: $bpa.strip.LarsonScanners.LarsonScanner
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/projects-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/projects-footer.gif
-   :alt: Result
-   :align: center

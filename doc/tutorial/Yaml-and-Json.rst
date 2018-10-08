@@ -18,7 +18,7 @@ in a bit more information, here's
 
 **Example 1**\ : Some data in JSON:
 
-.. code-block:: json
+.. bp-code-block:: example-1
 
     {
         "animation": {
@@ -37,15 +37,9 @@ in a bit more information, here's
     }
 
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif
-   :alt: Result
-   :align: center
-
-
 **Example 2**\ :  The same data in YAML:
 
-.. code-block:: yaml
+.. bp-code-block:: example-2
 
    animation:
      # Run three different animations, each for three seconds.
@@ -61,19 +55,13 @@ in a bit more information, here's
    shape: [32, 12]
 
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
-   :alt: Result
-   :align: center
-
-
 YAML isn't just shorter and cleaner: it lets you write comments to yourself or
 anyone else reading, by starting a line with the ``#`` character.
 
 We make heavy use of this "comment" feature in our own projects, and we suggest
 you do too when writing yours, unless your memory is better than ours.
 
-.. code-block:: yaml
+.. bp-code-block:: example-3
 
    shape: [64, 16]
    animation:
@@ -83,8 +71,3 @@ you do too when writing yours, unless your memory is better than ours.
        colors: eight
        continuous: true
        scale: 0.01
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/yaml-and-json-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/yaml-and-json-footer.gif
-   :alt: Result
-   :align: center

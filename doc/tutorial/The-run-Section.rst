@@ -47,13 +47,7 @@ Examples
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 17]
    animation: $bpa.matrix.circlepop
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-run-section-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-run-section-footer.gif
-   :alt: Result
-   :align: center
