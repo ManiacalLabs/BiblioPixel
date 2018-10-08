@@ -15,16 +15,17 @@ It relies on a directory structure like this:
 
 import argparse, copy, math, pathlib, os, subprocess, sys, tempfile, traceback
 cdir = os.path.dirname(os.path.realpath(__file__))
-print(cdir)
+
 sys.path.append(cdir + '/../../')
 from unittest import mock
 from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
+from bibliopixel.util.threads import worker
 from bibliopixel.project import merge, project
 
 SUFFIXES = '.rst', '.py'
 RAISE = False
-IMAGE_WIDTH = 480
+IMAGE_WIDTH = 320
 PADDING_RATIO = 1 / 5
 ROOT = pathlib.Path(__file__).absolute().parents[3].joinpath(
     'DocsFiles', 'BiblioPixel')
@@ -70,13 +71,14 @@ def extract_one_gif(args, filename, desc):
     path = ROOT.joinpath(filename)
     os.makedirs(str(path.parent), exist_ok=True)
     yml_path = str(path) + '.yml'
-    try:
-        df = data_file.load(yml_path)
-        if df == merged:
-            log.printer('Cached', filename)
-            return
-    except:
-        pass
+    if not args.ignore_cache:
+        try:
+            df = data_file.load(yml_path)
+            if df == merged:
+                log.printer('Cached', filename)
+                return
+        except:
+            pass
 
     default['driver']['filename'] = str(path)
     log.printer('--> Extracting to', path)
@@ -100,10 +102,29 @@ def extract_one_gif(args, filename, desc):
 
 
 def extract(args):
+    ex = extract_single if args.workers <= 1 else extract_parallel
+    return ex(args)
+
+
+def extract_single(args):
+    for filename, desc in all_gif_lines(args):
+        extract_one_gif(args, filename, desc)
+
+
+def extract_parallel(args):
+    log.printer('Running extract_gifs with', args.workers, 'workers')
+
+    def items():
+        for filename, desc in all_gif_lines(args):
+            yield args, filename, desc
+
+    worker.work_on(extract_one_gif, items(), args.workers)
+
+
+def all_gif_lines(args):
     files = list(walk.walk_suffix(args.roots, SUFFIXES)) + ROOT_FILES
     for root, input_file in files:
-        for filename, desc in extract_gif_lines(open(input_file)):
-            extract_one_gif(args, filename, desc)
+        yield from extract_gif_lines(open(input_file))
 
 
 def args():
@@ -119,6 +140,12 @@ def args():
     parser.add_argument(
         '--fail', action='store_true',
         help='Continue going after one image fails')
+    parser.add_argument(
+        '--workers', '-w', default=7, type=int,
+        help='Number of workers to use')
+    parser.add_argument(
+        '--ignore_cache', '-i', action='store_true',
+        help='If true, ignored the cached GIF files')
     return parser.parse_args(sys.argv[1:])
 
 
