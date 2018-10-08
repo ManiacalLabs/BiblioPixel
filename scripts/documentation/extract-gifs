@@ -114,11 +114,20 @@ def extract_single(args):
 def extract_parallel(args):
     log.printer('Running extract_gifs with', args.workers, 'workers')
 
-    def items():
-        for filename, desc in all_gif_lines(args):
-            yield args, filename, desc
+    items = []
+    files = set()
+    dupes = False
+    for filename, desc in all_gif_lines(args):
+        if filename in files:
+            log.error('Duplicate file %s', filename)
+            dupes = True
+        else:
+            items.append((args, filename, desc))
+            files.add(filename)
+    if dupes:
+        raise ValueError('Duplicate files!')
 
-    worker.work_on(extract_one_gif, items(), args.workers)
+    worker.work_on(extract_one_gif, items, args.workers)
 
 
 def all_gif_lines(args):
