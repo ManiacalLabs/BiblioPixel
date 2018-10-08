@@ -105,7 +105,7 @@ often removes a huge amount of duplicated typing:
    animation: $bpa.matrix.MathFunc
 
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/10-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/10-footer.gif
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-driver-and-drivers-sections-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-driver-and-drivers-sections-footer.gif
    :alt: Result
    :align: center

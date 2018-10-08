@@ -59,7 +59,7 @@ We have the following layout classes:
    animation: $bpa.matrix.SpinningTriangle
 
 
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/7-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/7-footer.gif
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-shape-and-layout-sections-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-shape-and-layout-sections-footer.gif
    :alt: Result
    :align: center
