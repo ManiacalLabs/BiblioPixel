@@ -53,13 +53,7 @@ We have the following layout classes:
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [32, 32]
    animation: $bpa.matrix.SpinningTriangle
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-shape-and-layout-sections-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-shape-and-layout-sections-footer.gif
-   :alt: Result
-   :align: center

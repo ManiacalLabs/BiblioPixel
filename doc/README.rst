@@ -28,16 +28,10 @@ Other documentation
 ----
 
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [96, 16]
    animation:
      typename: $bpa.matrix.Twinkle
      speed: 30
      density: 100
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/documentation.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/documentation.gif
-   :alt: Result
-   :align: center

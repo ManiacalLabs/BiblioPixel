@@ -137,13 +137,7 @@ This will restart ``bp`` if it is running, otherwise cause an error.
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 13]
    animation: $bpa.strip.LarsonScanners.LarsonRainbow
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-bp-program-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-bp-program-footer.gif
-   :alt: Result
-   :align: center

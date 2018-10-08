@@ -35,12 +35,7 @@ BiblioPixel has some snappy features:
 
 -------------------------------
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    animation: $bpa.strip.Wave
    shape: [64, 11]
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/features-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/features-footer.gif
-   :alt: Result
-   :align: center

@@ -41,16 +41,10 @@ fade in and out as you move the faders around.
 
  --------------------------
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 24]
    animation:
      typename: $bpa.matrix.MathFunc
      rand: False
      func: 12
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/routing-addresses-and-actions-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/routing-addresses-and-actions-footer.gif
-   :alt: Result
-   :align: center

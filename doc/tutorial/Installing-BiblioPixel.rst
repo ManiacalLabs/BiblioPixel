@@ -52,12 +52,7 @@ this.
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 16]
    animation: $bpa.matrix.MatrixRain
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/installing-bibliopixel-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/installing-bibliopixel-footer.gif
-   :alt: Result
-   :align: center

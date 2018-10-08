@@ -27,14 +27,9 @@ creating a project and going onto advanced topics like controls.
 
 -------
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 7]
    animation:
      typename: $bpa.matrix.Text.ScrollText
      text: 'BiblioPixel Tutorial'
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial.gif
-   :alt: Result
-   :align: center

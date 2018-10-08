@@ -14,7 +14,7 @@ Getting help
 
 ---
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    animation:
      typename: $bpa.matrix.MathFunc
@@ -24,9 +24,3 @@ Getting help
        autoscale: true
 
    shape: [64, 16]
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/getting-help-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/getting-help-footer.gif
-   :alt: Result
-   :align: center

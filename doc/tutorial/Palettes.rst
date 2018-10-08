@@ -113,15 +113,10 @@ more excitement.
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 48]
    animation:
      typename: $bpa.matrix.MathFunc
      func: 10
      palette: pastel
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/palettes-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/palettes-footer.gif
-   :alt: Result
-   :align: center

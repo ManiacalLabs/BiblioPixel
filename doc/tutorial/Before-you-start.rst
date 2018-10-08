@@ -49,15 +49,10 @@ information in its documents which BiblioPixel cannot process.
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: yaml
 
    shape: [64, 16]
    animation:
      typename: $bpa.matrix.Twinkle
      speed: 5
      density: 100
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/before-you-start-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/before-you-start-footer.gif
-   :alt: Result
-   :align: center

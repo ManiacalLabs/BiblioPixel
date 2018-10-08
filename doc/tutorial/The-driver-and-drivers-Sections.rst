@@ -99,13 +99,7 @@ often removes a huge amount of duplicated typing:
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 16]
    animation: $bpa.matrix.MathFunc
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-driver-and-drivers-sections-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-driver-and-drivers-sections-footer.gif
-   :alt: Result
-   :align: center

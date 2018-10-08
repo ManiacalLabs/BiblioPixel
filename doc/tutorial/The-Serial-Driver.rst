@@ -20,14 +20,8 @@ documentation for ledtype.py]
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 24]
    animation:
      typename: $bpa.matrix.MathFunc
-
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-serial-driver-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/the-serial-driver-footer.gif
-   :alt: Result
-   :align: center

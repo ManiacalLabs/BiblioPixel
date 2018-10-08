@@ -17,15 +17,10 @@ You can generate your own animated GIFs from your Projects - see
 
 ----
 
-.. code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 16]
    animation:
      typename: $bpa.matrix.Twinkle
      speed: 5
      density: 100
-
-.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/animated-gifs-footer.gif
-   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/animated-gifs-footer.gif
-   :alt: Result
-   :align: center
