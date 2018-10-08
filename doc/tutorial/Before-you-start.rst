@@ -28,8 +28,6 @@ Try it now - open a terminal window and type:
 This should print out the string ``hello-world`` on your terminal.
 
 
-
-
 2. Using a text editor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -83,7 +81,7 @@ in a bit more information, here's
                 "$bpa.matrix.MatrixRain"
             ]
         },
-        "shape": [32, 32]
+        "shape": [32, 12]
     }
 
 
@@ -108,7 +106,7 @@ in a bit more information, here's
        - {typename: fill, color: red}
        - $bpa.matrix.MatrixRain
 
-   shape: [32, 32]
+   shape: [32, 12]
 
 
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
@@ -117,12 +115,11 @@ in a bit more information, here's
    :align: center
 
 
-YAML isn't just shorter and cleaner, it lets you write comments to yourself or
-anyone else reading - by starting a line with the ``#`` character.
+YAML isn't just shorter and cleaner: it lets you write comments to yourself or
+anyone else reading, by starting a line with the ``#`` character.
 
-We're going to make heavy use of this "comment" feature in this documentation,
-and we suggest you do too when writing your own lighting projects, unless your
-memory is better than ours.
+We make heavy use of this "comment" feature in our own projects, and we suggest
+you do too when writing yours, unless your memory is better than ours.
 
 4. About the animated GIFs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

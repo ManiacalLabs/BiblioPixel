@@ -8,6 +8,8 @@ creating a project and going onto advanced topics like controls.
    :maxdepth: 1
 
    tutorial/Before-you-start
+   tutorial/Yaml-and-Json
+   tutorial/animated-gifs
    tutorial/Installing-BiblioPixel
    tutorial/How-to-write-a-Project
    tutorial/The-bp-program
