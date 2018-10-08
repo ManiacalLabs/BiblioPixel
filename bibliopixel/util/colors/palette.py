@@ -105,8 +105,6 @@ class Palette(list):
         fade = pos - index
         if not fade:
             return self[index]
-        else:
-            print(' -> fade', fade)
 
         r1, g1, b1 = self[index]
         r2, g2, b2 = self[(index + 1) % len(self)]
