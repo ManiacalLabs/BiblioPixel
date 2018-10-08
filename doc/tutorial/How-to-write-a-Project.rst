@@ -45,6 +45,7 @@ on your browser, showing a lighting pattern like this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-1.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-1.gif
    :alt: Result
+   :align: center
 
 5.  Stop the program.
 ^^^^^^^^^^^^^^^^^^^^^
@@ -64,6 +65,7 @@ Go to the line that says: ``shape: [32, 48]`` and change it to say
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-2.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-2.gif
    :alt: Result
+   :align: center
 
 
 Now change that line to say: ``shape: [48, 48]`` and run the Project again.  You
@@ -73,6 +75,7 @@ should see this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-3.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-3.gif
    :alt: Result
+   :align: center
 
 
 7. Change the Animation
@@ -85,6 +88,7 @@ Go to the line that says: ``animation: $bpa.matrix.bloom`` and change it to say
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-4.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-4.gif
    :alt: Result
+   :align: center
 
 
 Now, let's try a sequence.
@@ -112,6 +116,7 @@ seconds, like this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-5.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-5.gif
    :alt: Result
+   :align: center
 
 
 8.  Use a custom Python Animation
@@ -135,6 +140,7 @@ Resulting in this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-6.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-6.gif
    :alt: Result
+   :align: center
 
 
 Run the Project again.  Change the ``color:`` line to read ``color: goldenrod`` and
@@ -144,6 +150,7 @@ run it again to get this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-7.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-7.gif
    :alt: Result
+   :align: center
 
 
 Now let's change the Python code.
@@ -170,6 +177,7 @@ and run it again to get this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-8.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-8.gif
    :alt: Result
+   :align: center
 
 
 ----
@@ -183,3 +191,4 @@ and run it again to get this:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-footer.gif
    :alt: Result
+   :align: center

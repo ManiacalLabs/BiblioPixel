@@ -38,6 +38,7 @@ lists its Fields, and give examples of usage.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-example-1.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-example-1.gif
    :alt: Result
+   :align: center
 
 
 **Example 2**\ : an animation with fields ``scroll``\ , ``color`` and ``bgcolor``
@@ -56,6 +57,7 @@ lists its Fields, and give examples of usage.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-example-2.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-example-2.gif
    :alt: Result
+   :align: center
 
 
 **Example 3**\ : Mix four animations together
@@ -77,6 +79,7 @@ lists its Fields, and give examples of usage.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-example-3.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-example-3.gif
    :alt: Result
+   :align: center
 
 
 Listing the Animation Classes.
@@ -115,3 +118,4 @@ BiblioPixel, use the ``bp animations`` Command:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/5-footer.gif
    :alt: Result
+   :align: center

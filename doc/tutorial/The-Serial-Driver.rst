@@ -30,3 +30,4 @@ documentation for ledtype.py]
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/11-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/11-footer.gif
    :alt: Result
+   :align: center

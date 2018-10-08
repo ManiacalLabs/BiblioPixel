@@ -90,6 +90,7 @@ in a bit more information, here's
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-1.gif
    :alt: Result
+   :align: center
 
 
 **Example 2**\ :  The same data in YAML:
@@ -113,6 +114,7 @@ in a bit more information, here's
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-example-2.gif
    :alt: Result
+   :align: center
 
 
 YAML isn't just shorter and cleaner, it lets you write comments to yourself or
@@ -141,9 +143,12 @@ of animations.
 .. code-block:: yaml
 
    shape: [64, 16]
-   animation: $bpa.matrix.Twinkle
-
+   animation:
+     typename: $bpa.matrix.Twinkle
+     speed: 5
+     density: 100
 
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/0-footer.gif
    :alt: Result
+   :align: center

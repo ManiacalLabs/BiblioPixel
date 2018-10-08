@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 Projects
-=======
-4. Projects
->>>>>>> d39b9711... Document Palettes
 ==============
 
 A BiblioPixel Project is a text file describing a lighting project in either
@@ -44,6 +40,7 @@ or ask a question on the
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-1.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-1.gif
    :alt: Result
+   :align: center
 
 
 **Example 2** : a slightly larger Project file, written in JSON
@@ -67,6 +64,7 @@ or ask a question on the
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-2.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-2.gif
    :alt: Result
+   :align: center
 
 
 **Example 3** : the same Project file as in Example 2, but written in YAML
@@ -86,10 +84,11 @@ or ask a question on the
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-3.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-3.gif
    :alt: Result
+   :align: center
 
 
 A Project is made up of *Sections*, and Sections have *Fields*.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+================================================================
 
 Project files can have as many as ten Sections, but nearly all the Sections are
 optional.
@@ -180,6 +179,7 @@ like the Animation ``.tests.PixelTester``:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-4.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-4.gif
    :alt: Result
+   :align: center
 
 
 On the other hand, the ``.sequence`` Animation requires a Field ``animations``,
@@ -206,6 +206,7 @@ Field ``length`` which sets the length of each subsequence.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-5.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-example-5.gif
    :alt: Result
+   :align: center
 
 
 A quick description of each section
@@ -270,3 +271,4 @@ Value Sections
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/4-footer.gif
    :alt: Result
+   :align: center

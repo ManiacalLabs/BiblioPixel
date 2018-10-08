@@ -48,3 +48,4 @@ Getting help
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/documentation-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/documentation-footer.gif
    :alt: Result
+   :align: center

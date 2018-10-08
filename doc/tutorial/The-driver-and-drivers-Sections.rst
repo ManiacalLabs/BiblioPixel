@@ -108,3 +108,4 @@ often removes a huge amount of duplicated typing:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/10-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/10-footer.gif
    :alt: Result
+   :align: center
