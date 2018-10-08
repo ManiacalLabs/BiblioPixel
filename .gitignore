@@ -1,19 +1,23 @@
+# Python
 *.pyc
+__pycache__
+
+# For build
 build
 dist
 MANIFEST
 BiblioPixel.egg*
-*.so
+
+# Dotfiles
 .DS_STORE
-*.pyc
-__pycache__
 .cache
 .coverage
-htmlcov
 .eggs
-.cache
 .pytest_cache
-BiblioPixelAnimations
+
+# For documentation
 html
+htmlcov
 doc/reference
 doctrees
+_doc
