@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+
+import shutil
+from bibliopixel.util import walk
+
+
+# Duplicates _common.sh
+DOC_IN_DIR = 'doc'
+DOC_OUT_DIR = '_doc'
+BP_BLOCK = '.. bp-code-block::'
+SUFFIX = '.rst'
+URL_ROOT = """\
+https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel"""
+CODE_BLOCK = """.. code-block:: yaml
+"""
+
+IMAGE_BLOCK = """
+.. image:: {0}/{1}-{2}.gif
+   :target: {0}/{1}-{2}.gif
+   :alt: {1}-{2}
+   :align: center
+
+"""
+
+
+def _preprocess(file):
+    in_bp, gif_root = False, ''
+
+    def flush():
+        nonlocal in_bp
+        if in_bp:
+            in_bp = False
+            yield IMAGE_BLOCK.format(URL_ROOT, file[:-len(SUFFIX)], gif_root)
+
+    for line in open(file):
+        if line.startswith(BP_BLOCK):
+            yield from flush()
+            gif_root = line[len(BP_BLOCK):].strip()
+            yield CODE_BLOCK
+            in_bp = True
+
+        else:
+            if not line[0].isspace():
+                yield from flush()
+            yield line
+
+    yield from flush()
+
+def preprocess():
+    try:
+        shutil.rmtree(DOC_OUT_DIR)
+    except:
+        pass
+
+    shutil.copytree(DOC_IN_DIR, DOC_OUT_DIR)
+    for _, file in walk.walk_suffix('doc', SUFFIX):
+        with open('_' + file, 'w') as writer:
+            for line in _preprocess(file):
+                writer.write(line)
+
+
+if __name__ == '__main__':
+    preprocess()

@@ -144,7 +144,7 @@ def args():
         '--fps', '-f', default=24, type=float,
         help='frames per second for the animation')
     parser.add_argument(
-        'roots', nargs='*', default=('bibliopixel', 'doc'),
+        'roots', nargs='*', default=('bibliopixel', '_doc'),
         help='Directory roots to search from')
     parser.add_argument(
         '--fail', action='store_true',

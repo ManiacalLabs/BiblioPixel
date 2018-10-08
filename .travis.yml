@@ -18,7 +18,9 @@ script:
 - python setup.py coverage
 # this part should be made conditional
 - git clone https://github.com/ManiacalLabs/BiblioPixelAnimations.git
+- python setup.py install
 - ./scripts/documentation/clean
+- ./scripts/documentation/preprocess
 - ./scripts/documentation/api
 - ./scripts/documentation/bp
 - ./scripts/documentation/sphinx
