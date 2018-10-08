@@ -124,3 +124,4 @@ more excitement.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/palettes-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/palettes-footer.gif
    :alt: Result
+   :align: center

@@ -73,3 +73,4 @@ searched for code, in this order:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/9-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/9-footer.gif
    :alt: Result
+   :align: center

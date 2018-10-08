@@ -22,6 +22,7 @@ Animate complex lighting projects by writing simple text files.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index.gif
    :alt: Result
+   :align: center
 
 
 Features
@@ -76,3 +77,4 @@ BiblioPixel has some snappy features:
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/index-footer.gif
    :alt: Result
+   :align: center

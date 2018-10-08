@@ -146,3 +146,4 @@ This will restart ``bp`` if it is running, otherwise cause an error.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/3-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/3-footer.gif
    :alt: Result
+   :align: center

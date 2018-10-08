@@ -178,3 +178,4 @@ class] Most of the time, you'll only be wanting to change the ``accept``\ ,
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/12-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/12-footer.gif
    :alt: Result
+   :align: center

@@ -53,3 +53,4 @@ fade in and out as you move the faders around.
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/13-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/13-footer.gif
    :alt: Result
+   :align: center

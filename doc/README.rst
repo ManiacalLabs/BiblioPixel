@@ -40,3 +40,4 @@ Other documentation
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/documentation.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/documentation.gif
    :alt: Result
+   :align: center

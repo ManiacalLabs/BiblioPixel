@@ -146,3 +146,4 @@ For convenience, if the whole class section is a string, it's the ``typename``\ 
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/8-footer.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/8-footer.gif
    :alt: Result
+   :align: center
