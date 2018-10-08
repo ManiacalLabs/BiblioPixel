@@ -1,7 +1,7 @@
 #!/bin/bash
 source scripts/documentation/_common.sh
 
-rm -Rf $REFERENCE_DIR/ $BUILD_DIR/
-rm -Rf doctrees
+rm -Rf $DOC_OUT_DIR/ $BUILD_DIR/ doctress
 mkdir -p $BUILD_DIR
+mkdir -p $REFERENCE_DIR
 echo "*** finished clean documentation"

@@ -1,8 +1,9 @@
 set -e
 
-
 BUILD_DIR=html
-REFERENCE_DIR=doc/reference
+DOC_IN_DIR=doc
+DOC_OUT_DIR=_doc
+REFERENCE_DIR=_doc/reference
 API_DIR=$REFERENCE_DIR/api
 
 HELP_DOC=$REFERENCE_DIR/The-bp-command.rst

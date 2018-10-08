@@ -2,7 +2,7 @@
 
 source scripts/documentation/_common.sh
 
-pushd doc
+pushd _doc
 make html
 
 echo "*** finished sphinx documentation"
