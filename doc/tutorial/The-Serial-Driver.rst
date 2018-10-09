@@ -18,8 +18,6 @@ The Serial Driver needs to have an LEDTYPE set to identify the LED chipset and
 hardware.  This must be one of these values: [TODO-API: point to or embed generated
 documentation for ledtype.py]
 
-----
-
 .. bp-code-block:: footer
 
    shape: [64, 24]

@@ -62,8 +62,6 @@ searched for code, in this order:
        # path: "/home/pi/my-library:/var/stuff/some-library"
 
 
-----
-
 .. bp-code-block:: footer
 
    shape: [96, 8]

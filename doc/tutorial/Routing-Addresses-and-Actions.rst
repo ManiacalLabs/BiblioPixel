@@ -38,9 +38,6 @@ fade in and out as you move the faders around.
          2: animation.levels[2]
          3: animation.levels[3]
 
-
- --------------------------
-
 .. bp-code-block:: footer
 
    shape: [64, 24]

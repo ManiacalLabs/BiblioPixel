@@ -54,14 +54,13 @@ in a bit more information, here's
 
    shape: [32, 12]
 
-
 YAML isn't just shorter and cleaner: it lets you write comments to yourself or
 anyone else reading, by starting a line with the ``#`` character.
 
 We make heavy use of this "comment" feature in our own projects, and we suggest
 you do too when writing yours, unless your memory is better than ours.
 
-.. bp-code-block:: example-3
+.. bp-code-block:: footer
 
    shape: [64, 16]
    animation:

@@ -2,7 +2,8 @@ BiblioPixel - the light programming system
 ----------------------------------------------
 
 BiblioPixel is a free, open-source Python program for creating and sharing
-light sequences and animations, particularly for LED strips.
+light sequences and animations, particularly for LED strips, matrices and
+other shapes.
 
 In one sentence:
 =====================
@@ -23,7 +24,7 @@ Animate complex lighting projects by writing simple text files.
    :hidden:
 
    features
-   tutorial
+   tutorial/index
    Getting-Help
    topic-papers/index
    reference

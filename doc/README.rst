@@ -25,9 +25,6 @@ Other documentation
 * For the truly devoted, the developer's mailing list is `always there
   <https://groups.google.com/forum/#!forum/bibliopixel-dev>`_\ .
 
-----
-
-
 .. bp-code-block:: footer
 
    shape: [96, 16]

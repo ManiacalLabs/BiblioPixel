@@ -165,9 +165,6 @@ values in your Project.
 class] Most of the time, you'll only be wanting to change the ``accept``\ ,
 ``omit`` or ``reject`` Subfields in the ``extractor`` field of the Control.
 
-
-----
-
 .. bp-code-block:: footer
 
     shape: [64, 24]

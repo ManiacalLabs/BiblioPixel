@@ -89,8 +89,6 @@ BiblioPixel, use the ``bp animations`` Command:
 
    [... many more ...]
 
-----
-
 .. bp-code-block:: footer
 
    shape: [64, 17]
