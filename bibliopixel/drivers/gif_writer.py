@@ -24,8 +24,8 @@ class GifWriter(DriverBase):
         :param float time: Total time to write.  If non-zero, takes precedence
             over `frames`
 
-        :param float speed: the length of the GIF is speedd by this factor, so
-            if speed=2 then a 1 second animation will become a 2 second GIF.
+        :param float speed: the speed of the GIF is scaled up by this factor,
+            so if speed=2 then a 2 second animation will become a 1 second GIF.
 
         :param dict gif_options: Options to
             ``bibliopixel.util.image.gif.write_animation``
