@@ -30,7 +30,7 @@ Examples
    run:
      fps: 30
 
-**Example 2**\ :  Run for two seconds at 10 fps
+**Example 2**\ :  Run for two seconds at 10 fps, then stop
 
 .. code-block:: yaml
 
@@ -38,14 +38,12 @@ Examples
      seconds: 2
      fps: 10
 
-**Example 3**\ :  Run three times
+**Example 3**\ :  Run three times, then stop
 
 .. code-block:: yaml
 
    run:
      max_cycles: 3
-
-----
 
 .. bp-code-block:: footer
 

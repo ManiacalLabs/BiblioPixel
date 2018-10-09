@@ -30,10 +30,10 @@ BiblioPixel has some snappy features:
 * There are Controls like REST, MIDI and keyboard that can control any
   animation, layout, device or other control – also without programming.
 
+* There are color Palettes you can share between Animations and Projects, and
+  also modulate using Controls.
+
 * ...and much more.
-
-
--------------------------------
 
 .. bp-code-block:: footer
 

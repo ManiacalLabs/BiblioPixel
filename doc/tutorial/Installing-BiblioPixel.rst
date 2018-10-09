@@ -36,12 +36,12 @@ and it will open a browser session with an animation controlled by the command
 line.
 
 
-Stopping BiblioPixel.
+Stopping ``bpo``.
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Unless otherwise specified, animations go on forever.
 
-The easy way to interrupt ``bp``\ is typing "Control-C" in the terminal window
+The easy way to interrupt ``bp`` is by typing "Control-C" in the terminal window
 that's running the ``bp`` program - hold down the key named Control
 or CTR on your keyboard and press C a few times.
 
@@ -49,8 +49,6 @@ Try it now, to interrupt the ``bp demo`` command.
 
 In future, the documentation will just say "press Control-C" when you need to do
 this.
-
-----
 
 .. bp-code-block:: footer
 

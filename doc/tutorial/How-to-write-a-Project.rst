@@ -173,14 +173,10 @@ add these two lines:
 
 and run it again to get this:
 
-
 .. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-8.gif
    :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/2-example-8.gif
    :alt: Result
    :align: center
-
-
-----
 
 .. bp-code-block:: footer
 

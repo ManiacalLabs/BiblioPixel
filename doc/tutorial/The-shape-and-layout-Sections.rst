@@ -51,8 +51,6 @@ We have the following layout classes:
 * ``cube``
 * ``circle``
 
-----
-
 .. bp-code-block:: footer
 
    shape: [32, 32]

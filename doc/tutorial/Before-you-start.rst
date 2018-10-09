@@ -1,23 +1,19 @@
 Before you start
 ------------------------------
 
+You don't have to program to use BiblioPixel but you do need to be know a couple
+of things.
 
-You don't need to know how to program in order to use BiblioPixel but you do need to
-be familiar with a couple of things:
-
-1. Using the command line
+Using the command line
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-BiblioPixel is a command line program, run by typing commands into a terminal
-window and giving text responses.
+BiblioPixel is a command line program: you run it by typing commands into a
+terminal window and giving text responses. You don't have to be an
+expert on the command line to use it for BiblioPixel!  You just need to be
+comfortable with changing directories, entering commands and pressing return.
 
-You don't by any means have to be an expert on the command line to use it for
-BiblioPixel!  You just need to be comfortable with entering commands and
-pressing return, and with the idea of directories and the current directory.
-
-In this documentation, lines that you type into a command line will start
-with the dollar sign character ``$`` to distinguish them from the results -
-so don't type the ``$`` yourself when entering command lines.
+In this documentation, command lines are show starting with the dollar sign
+character ``$`` - don't type the ``$`` yourself when entering command lines!
 
 Try it now - open a terminal window and type:
 
@@ -28,28 +24,25 @@ Try it now - open a terminal window and type:
 This should print out the string ``hello-world`` on your terminal.
 
 
-2. Using a text editor
+Using a text editor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-BiblioPixel uses text files to represent lighting Projects, and so you will need
-some sort of text editor to prepare your Projects.
+BiblioPixel uses text files to represent lighting Projects, so you'll need
+a text editor to prepare your Projects.  (Microsoft Word won't work
+- Word is a word processor, a very different sort of program.)
 
-You don't need anything too sophisticated.  Every computer comes with some sort
+You don't need anything fancy.  Every computer comes with some sort
 of simple, free text editor:
 
 * ``Notepad`` on Windows
 * ``Text`` on the Macintosh
-* ``vi`` or ``emacs`` on Linux, Rasbperry Pi and almost all other platforms
+* ``vi`` or ``emacs`` on Linux, Rasbperry Pi, Mac, Windows and almost all other
+  platforms
 
-A popular text editor, SublimeText, works on all these platforms.
+There's also a popular commercial text editor named SublimeText, which also
+works on almost all platforms.
 
-NOTE: Microsoft Word does not work for this task of text editing - it's a word
-processor, a different sort of program, and it embeds all sorts of other
-information in its documents which BiblioPixel cannot process.
-
-----
-
-.. bp-code-block:: yaml
+.. bp-code-block:: footer
 
    shape: [64, 16]
    animation:
