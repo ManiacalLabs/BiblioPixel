@@ -82,11 +82,11 @@ class GifWriter:
 
         if 'duration' in go:
             go.pop('fps', None)
-            go['duration'] *= self.speed
+            go['duration'] /= self.speed
             assert isinstance(go['duration'], (int, float))
 
         elif 'fps' in go:
-            go['fps'] /= self.speed
+            go['fps'] *= self.speed
 
         else:
             # Compute the average duration
