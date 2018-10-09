@@ -18,14 +18,14 @@ class GifWriter:
     """Write an animated GIF given frames from an animation."""
 
     def __init__(self, filename='gif_writer', render=None,
-                 divide=1, frames=128, time=10, scale=1.0, gif_options=None,
+                 divide=1, frames=128, time=10, speed=1.0, gif_options=None,
                  tmp_dir=None):
         self.render = dict(DEFAULT_RENDER, **(render or {}))
         self.divide = divide
         self.frames = frames
         self.time = time
         self.frame_files = []
-        self.scale = scale
+        self.speed = speed
         self.gif_options = gif_options or {}
 
         filename = os.path.expanduser(os.path.abspath(filename))
@@ -82,11 +82,11 @@ class GifWriter:
 
         if 'duration' in go:
             go.pop('fps', None)
-            go['duration'] *= self.scale
+            go['duration'] *= self.speed
             assert isinstance(go['duration'], (int, float))
 
         elif 'fps' in go:
-            go['fps'] /= self.scale
+            go['fps'] /= self.speed
 
         else:
             # Compute the average duration

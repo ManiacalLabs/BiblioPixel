@@ -62,6 +62,9 @@ def _get_projects(args):
         if '{' in gif:
             gif = data_file.loads(gif, filename='--gif')
         if isinstance(gif, str):
+            if not gif.endswith('.gif'):
+                log.warning('--gif argument %s didn\'t end with .gif', gif)
+                gif += '.gif'
             gif = {'filename': gif}
         if 'filename' in gif and len(args.name) > 1:
             log.warning('Writing multiple documents to the same GIF file name')
