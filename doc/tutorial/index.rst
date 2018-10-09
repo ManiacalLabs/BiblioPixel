@@ -7,30 +7,30 @@ creating a project and going onto advanced topics like Controls.
 .. toctree::
    :maxdepth: 1
 
-   Before-you-start
-   Yaml-and-Json
+   before-you-start
+   yaml-and-json
    animated-gifs
-   Installing-BiblioPixel
-   How-to-write-a-Project
-   The-bp-program
+   installing-bibliopixel
+   how-to-write-a-project
+   the-bp-program
    stopping-and-restarting-bp
-   Projects
+   projects
    project-fields
    project-sections
-   The-animation-Section
-   The-run-Section
-   The-shape-and-layout-Sections
-   Typenames
+   the-animation-section
+   the-run-section
+   the-shape-and-layout-sections
+   typenames
    types-of-typenames
    type-guessing
-   Palettes
+   palettes
    fields-of-a-palette
    the-driver-section
    the-drivers-section
-   The-Serial-Driver
-   The-controls-Section
-   Routing-Addresses-and-Actions
-   The-path-and-aliases-Sections
+   the-serial-driver
+   the-controls-section
+   routing-addresses-and-actions
+   the-path-and-aliases-Sections
 
 .. bp-code-block:: footer
 

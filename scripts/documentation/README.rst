@@ -31,17 +31,17 @@ from the BiblioPixel root directory.
 
 ``bp``
   Automatically generate documentation for the `bp` command line
-  program to the file  ``BiblioPixel/doc/The-bp-command.rst``
+  program to the file  ``BiblioPixel/doc/the-bp-command.rst``
 
 ``extract-gifs``
   Extract GIFs whose projects are in documentation or code into the
   directory ``DocsFiles/BiblioPixel``
 
 ``sphinx``
-  Run the Sphinx build into the directory ``BiblioPixel.gh-pages/html``
+  Run the Sphinx build
 
 ``deploy``
   Commit and push any changes to ``DocsFiles/BiblioPixel``
 
 ``build``
-  Equivalent to ``clean && api && bp && extract-gifs && sphinx``
+  Equivalent to ``clean && preprocess && api && bp && extract-gifs && sphinx``
