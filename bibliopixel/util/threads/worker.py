@@ -23,7 +23,7 @@ class Worker(mp.Process):
                 command(*args)
             except Exception as e:
                 name = getattr(command, '__name__', str(command))
-                print('ERROR on command', name, args, e)
+                log.printer('ERROR on command', name, args, e)
                 traceback.print_exc()
             else:
                 counter = self._increment_counter()

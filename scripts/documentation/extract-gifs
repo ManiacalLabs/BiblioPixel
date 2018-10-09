@@ -75,13 +75,13 @@ def extract_one_gif(args, filename, desc):
         try:
             df = data_file.load(yml_path)
             if df == merged:
-                log.printer('Cached', filename)
+                log.debug('Cached', filename)
                 return
         except:
             pass
 
     default['driver']['filename'] = str(path)
-    log.printer('--> Extracting to', path)
+    log.info('Extracting ', path)
     try:
         pr = project.project(default, desc)
         pr.run()
@@ -160,4 +160,3 @@ def args():
 
 if __name__ == '__main__':
     extract(args())
-    print('*** finished extract-gifs')
