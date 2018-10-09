@@ -3,11 +3,15 @@
 import shutil
 from bibliopixel.util import walk
 
-
-# Duplicates _common.sh
 DOC_IN_DIR = 'doc'
 DOC_OUT_DIR = '_doc'
 BP_BLOCK = '.. bp-code-block::'
+PARAGRAPH_BREAK = """
+
+----------
+
+"""
+
 SUFFIX = '.rst'
 URL_ROOT = """\
 https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel"""
@@ -36,6 +40,8 @@ def _preprocess(file):
         if line.startswith(BP_BLOCK):
             yield from flush()
             gif_root = line[len(BP_BLOCK):].strip()
+            if gif_root == 'footer':
+                yield PARAGRAPH_BREAK
             yield CODE_BLOCK
             in_bp = True
 
