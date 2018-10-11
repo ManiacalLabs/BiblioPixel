@@ -83,6 +83,21 @@ def _get_version():
     return open(filename).read().strip()
 
 
+INSTALLATION_ERROR = """INSTALLATION ERROR!
+
+BiblioPixel v3 requires Python 3.4+ but
+you are using version {0.major}.{0.minor}.{0.micro}
+
+If you absolutely require using Python 2,
+please install BiblioPixel v2.x using:
+
+    > pip install "bibliopixel<3.0"
+
+However we highly recommend using the latest BiblioPixel
+(v3+) with Python 3.4+.
+"""
+
+
 if sys.version_info.major != 3:
     printer(INSTALLATION_ERROR.format(sys.version_info))
     sys.exit(1)
@@ -123,21 +138,6 @@ setup(
     scripts=['scripts/' + s for s in SCRIPTS_TO_INSTALL],
     install_requires=REQUIRED
 )
-
-
-INSTALLATION_ERROR = """INSTALLATION ERROR!
-
-BiblioPixel v3 requires Python 3.4+ but
-you are using version {0.major}.{0.minor}.{0.micro}
-
-If you absolutely require using Python 2,
-please install BiblioPixel v2.x using:
-
-    > pip install "bibliopixel<3.0"
-
-However we highly recommend using the latest BiblioPixel
-(v3+) with Python 3.4+.
-"""
 
 BAT_TEMPLATE = \
     r"""@echo off
