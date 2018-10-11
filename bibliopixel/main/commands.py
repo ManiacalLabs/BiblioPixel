@@ -3,7 +3,7 @@ from .. project.importer import import_module
 from .. util import deprecated, log
 
 COMMANDS = (
-    'animations', 'all_pixel', 'all_pixel_test', 'clear_cache', 'color', 'demo',
+    'animations', 'all_pixel', 'all_pixel_test', 'clear_cache', 'demo',
     'devices', 'info', 'monitor', 'new', 'run')
 
 if deprecated.allowed():  # pragma: no cover
