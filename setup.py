@@ -4,42 +4,9 @@ from setuptools.command.install_scripts import install_scripts
 from setuptools.command.install import install as _install
 import os, platform, sys
 
-
-INSTALLATION_ERROR = """INSTALLATION ERROR!
-
-BiblioPixel v3 requires Python 3.4+ but
-you are using version {0.major}.{0.minor}.{0.micro}
-
-If you absolutely require using Python 2,
-please install BiblioPixel v2.x using:
-
-    > pip install "bibliopixel<3.0"
-
-However we highly recommend using the latest BiblioPixel
-(v3+) with Python 3.4+.
-"""
-
-BAT_TEMPLATE = \
-    r"""@echo off
-REM wrapper to use shebang first line of {FNAME}
-
-set mypath=%~dp0
-set pyscript="%mypath%{FNAME}"
-set /p line1=<%pyscript%
-
-if "%line1:~0,2%" == "#!" (goto :goodstart)
-echo First line of %pyscript% does not start with "#!"
-exit /b 1
-
-:goodstart
-set py_exe=%line1:~2%
-call "%py_exe%" %pyscript% %*
-"""
-
-NO_PYTHON_ERROR = """
-WARNING: No #!python executable found in %s, skipping .bat wrapper'"""
-
 printer = print  # noqa: T001
+
+SCRIPTS_TO_INSTALL = 'bp', 'bibliopixel', 'bp-color', 'bp-pid'
 
 
 class InstallScripts(install_scripts):
@@ -153,6 +120,41 @@ setup(
         'install_scripts': InstallScripts
     },
     include_package_data=True,
-    scripts=['scripts/bp', 'scripts/bp-pid', 'scripts/bibliopixel'],
+    scripts=['scripts/' + s for s in SCRIPTS_TO_INSTALL],
     install_requires=REQUIRED
 )
+
+
+INSTALLATION_ERROR = """INSTALLATION ERROR!
+
+BiblioPixel v3 requires Python 3.4+ but
+you are using version {0.major}.{0.minor}.{0.micro}
+
+If you absolutely require using Python 2,
+please install BiblioPixel v2.x using:
+
+    > pip install "bibliopixel<3.0"
+
+However we highly recommend using the latest BiblioPixel
+(v3+) with Python 3.4+.
+"""
+
+BAT_TEMPLATE = \
+    r"""@echo off
+REM wrapper to use shebang first line of {FNAME}
+
+set mypath=%~dp0
+set pyscript="%mypath%{FNAME}"
+set /p line1=<%pyscript%
+
+if "%line1:~0,2%" == "#!" (goto :goodstart)
+echo First line of %pyscript% does not start with "#!"
+exit /b 1
+
+:goodstart
+set py_exe=%line1:~2%
+call "%py_exe%" %pyscript% %*
+"""
+
+NO_PYTHON_ERROR = """
+WARNING: No #!python executable found in %s, skipping .bat wrapper'"""
