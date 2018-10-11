@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+"""
+This minor utility is useful for understanding hex color patterns by
+printing the closest color name for any input hex color number.
+"""
+
+import sys
+from bibliopixel.util.colors.closest_colors import closest_colors
+from bibliopixel.util import log
+
+HELPS = {'help', '-h', '--h', '--help', '--h'}
+USAGE = """Usage:
+  bp-color color [color color ...]
+
+Given a hex color, prints the nearest named color.
+"""
+
+def main(*colors):
+    if not colors or any(c in HELPS for c in colors):
+        log.printer(USAGE)
+    else:
+        for color in colors:
+            log.printer(*('"%s"' % c for c in closest_colors(color)), sep=', ')
+
+
+if __name__ == '__main__':
+    main(*sys.argv[1:])
