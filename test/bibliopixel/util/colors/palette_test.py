@@ -3,19 +3,20 @@ from fractions import Fraction
 
 from bibliopixel.util.colors.palette import Palette
 from bibliopixel.util.colors.classic import Black, White, Red, Green, Blue
+from bibliopixel.util import log
 
 
 class PaletteTest(unittest.TestCase):
     def test_empty(self):
         p = Palette()
         self.assertEqual(p[0], Black)
-        self.assertEqual(p.get(0), Black)
+        self.assertEqual(p.get(), Black)
         self.assertEqual(p.get(1), Black)
 
     def test_single(self):
         p = Palette([Red])
         self.assertEqual(p[0], Red)
-        self.assertEqual(p.get(0), Red)
+        self.assertEqual(p.get(), Red)
         self.assertEqual(p.get(1), Red)
 
     def test_get(self):
@@ -185,9 +186,11 @@ class PaletteTest(unittest.TestCase):
             Green, Red, Red, Red, Green, Blue, Blue, White,
             Blue]
 
-        # result2 = [tuple(float(i) for i in c) for c in result]
-        # print('', *result2, sep=',\n            ')
         self.assertEqual(expected, result)
+
+    def _print_result(self, result):
+        result2 = [tuple(float(i) for i in c) for c in result]
+        log.printer('', *result2, sep=',\n            ')
 
     def test_autoscale(self):
         colors = [Red, Green, Blue, White]
@@ -195,7 +198,6 @@ class PaletteTest(unittest.TestCase):
 
         expected = [Red, Red, Green, Green, Blue, Blue, White, White, Red, Red]
         result = [p.get(32 * i, 256) for i in range(10)]
-        print(*result, sep='\n')
         self.assertEqual(expected, result)
 
         result = [p.get(Fraction(i) / 2) for i in range(10)]
