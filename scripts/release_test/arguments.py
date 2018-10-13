@@ -5,8 +5,7 @@ from features import check_features, get_features, FEATURES
 def arguments(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser()
 
-    names = [t.__name__.split('.')[1] for t in tests.__all__]
-    names = ', '.join(names)
+    names = ', '.join(tests.__all__)
 
     parser.add_argument(
         'tests', nargs='*',
@@ -24,14 +23,12 @@ def arguments(argv=sys.argv[1:]):
 
     args = parser.parse_args(argv)
 
-    if args.tests:
-        all_tests = [(t, getattr(tests, t, None)) for t in args.tests]
-        bad_tests = [t for (t, a) in all_tests if a is None]
-        if bad_tests:
-            raise ValueError('Bad test names: ' + ', '.join(bad_tests))
-        all_tests = tuple(a for (t, a) in all_tests)
-    else:
-        all_tests = tests.__all__
+    test_list = args.tests or tests.__all__
+    all_tests = [(t, getattr(tests, t, None)) for t in test_list]
+    bad_tests = [t for (t, a) in all_tests if a is None]
+    if bad_tests:
+        raise ValueError('Bad test names: ' + ', '.join(bad_tests))
+    all_tests = tuple(a for (t, a) in all_tests)
 
     if args.features:
         features = set(':'.join(args.features).split(':'))
