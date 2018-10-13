@@ -2,6 +2,7 @@ import contextlib, threading, time
 from . import adaptor
 from . runner import Runner, STATE
 from .. util import deprecated, log
+from .. util.colors import palettes
 from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
 
@@ -34,9 +35,10 @@ class Animation(object):
         a.data = data
         return a
 
-    def __init__(self, layout, *, preclear=True, **kwds):
+    def __init__(self, layout, *, preclear=True, palette=None, **kwds):
         attributes.set_reserved(self, 'animation', **kwds)
         self.layout = layout
+        assert layout
         self.internal_delay = None
         self.on_completion = None
         self.state = STATE.ready
@@ -45,6 +47,8 @@ class Animation(object):
         self.runner = None
         self.time = time.time
         self.preframe_callbacks = []
+        self.palette = palette or palettes.get()
+        self.palette.length = layout.numLEDs
 
     def set_project(self, project):
         self.project = project
