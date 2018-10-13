@@ -44,7 +44,7 @@ class Palette(list):
         self.offset = offset
         self.autoscale = autoscale
 
-    def get(self, position, length=None):
+    def get(self, position=0, length=None):
         """
         Return a color interpolated from the Palette.
 
