@@ -93,21 +93,21 @@ class EnvelopeTest(unittest.TestCase):
 
     def test_simple_segments(self):
         env = envelope.Segments([1, 2, 3, 4])
-        self.assertEquals(env.period, 1)
+        self.assertEqual(env.period, 1)
 
         expected = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 0]
         function_tester(env, self, expected)
 
     def test_simple_segments2(self):
         env = envelope.Segments([1, 1.5, 3, 7])
-        self.assertEquals(env.period, 1)
+        self.assertEqual(env.period, 1)
 
         expected = [0, 0.5, 1, 1.25, 1.5, 2.25, 3, 5, 0]
         function_tester(env, self, expected)
 
     def test_decreasing_segments(self):
         env = envelope.Segments([1, 3, 2, 4])
-        self.assertEquals(env.period, 1)
+        self.assertEqual(env.period, 1)
 
         expected = [0, 0.5, 1, 2, 3, 2.5, 2, 3, 0]
         function_tester(env, self, expected)
