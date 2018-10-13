@@ -1,3 +1,8 @@
+## v3.4.26 - 2018-10-13
+- Much more documentation
+- Better extracted GIFs
+- New Palette.autoscale feature
+
 ## v3.4.25 - 2018-10-04
 - Bump version number
 
