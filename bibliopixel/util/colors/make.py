@@ -43,23 +43,29 @@ def _(c):
 
 @functools.singledispatch
 def colors(c):
+    """Return a color Palette"""
     raise ValueError("Don't understand type %s" % type(c), _COLORS_USAGE)
 
 
 @colors.register(tuple)
 @colors.register(list)
 def _(c):
-    return _make(c)
+    return _colors(c)
 
 
 @colors.register(str)
 def _(s):
-    return _make(s)
+    return _colors(s)
 
 
 @colors.register(dict)
 def _(d):
-    return _make(**d)
+    return _colors(**d)
+
+
+@colors.register(type(None))
+def _(d):
+    return _colors()
 
 
 def to_triplets(colors):
@@ -83,12 +89,12 @@ def to_triplets(colors):
     return list(zip(*[iter(colors)] * 3))
 
 
-def _make(colors=(), **kwds):
+def _colors(colors=None, **kwds):
     from . import palettes
 
     p = palettes.get(colors)
     if not p:
-        return make_colors(colors, **kwds)
+        return colors_no_palette(colors, **kwds)
 
     if not kwds:
         return p
@@ -97,11 +103,12 @@ def _make(colors=(), **kwds):
     return palette.Palette(p, **kwds)
 
 
-def make_colors(colors=(), **kwds):
+def colors_no_palette(colors=None, **kwds):
+    """Return a Palette but don't take into account Pallet Names."""
     if isinstance(colors, str):
         colors = colors.split(',')
 
-    colors = (color(c) for c in to_triplets(colors))
+    colors = (color(c) for c in to_triplets(colors or ()))
     return palette.Palette(colors, **kwds)
 
 

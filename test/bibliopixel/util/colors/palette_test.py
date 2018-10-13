@@ -197,8 +197,9 @@ class PaletteTest(unittest.TestCase):
         p = Palette(colors, autoscale=True)
 
         expected = [Red, Red, Green, Green, Blue, Blue, White, White, Red, Red]
-        result = [p.get(32 * i, 256) for i in range(10)]
+        result = [p.get(Fraction(i) / 2) for i in range(10)]
         self.assertEqual(expected, result)
 
-        result = [p.get(Fraction(i) / 2) for i in range(10)]
+        p.length = 256
+        result = [p.get(32 * i) for i in range(10)]
         self.assertEqual(expected, result)

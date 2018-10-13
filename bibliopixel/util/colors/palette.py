@@ -11,7 +11,7 @@ class Palette(list):
     """
 
     def __init__(self, colors=(), continuous=False, serpentine=False, scale=1,
-                 offset=0, autoscale=False):
+                 offset=0, autoscale=False, length=None):
         """
         Arguments:
             colors: an iterable of colors
@@ -33,6 +33,11 @@ class Palette(list):
               match the length of the output.  ``autoscale`` happens before
               ``scale``, so the two work well together to give banding or
               striping effects across your display
+
+           ``length``:
+             The length of the output color_list.  If None, use the length of
+             the palette itself.  If autoscale=True, ``length`` is used to scale
+             the palette to match the output.
         """
         super().__init__(colors)
         if not self:
@@ -43,8 +48,9 @@ class Palette(list):
         self.scale = scale
         self.offset = offset
         self.autoscale = autoscale
+        self.length = length
 
-    def get(self, position=0, length=None):
+    def get(self, position=0):
         """
         Return a color interpolated from the Palette.
 
@@ -58,11 +64,6 @@ class Palette(list):
         Arguments:
            ``position``:
              May be any integer or floating point number
-
-           ``length``:
-             The length of the output color_list.  If None, use the length of
-             the palette itself.  If autoscale=True, ``length`` is used to scale
-             the palette to match the output.
         """
         n = len(self)
         if n == 1:
@@ -70,9 +71,9 @@ class Palette(list):
 
         pos = position
 
-        if length and self.autoscale:
+        if self.length and self.autoscale:
             pos *= len(self)
-            pos /= length
+            pos /= self.length
 
         pos *= self.scale
         pos += self.offset

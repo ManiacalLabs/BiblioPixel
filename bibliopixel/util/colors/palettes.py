@@ -1,4 +1,5 @@
-from . make import make_colors as _colors
+import copy
+from . make import colors_no_palette as _colors
 from bibliopixel.colors import conversions
 
 """
@@ -15,14 +16,17 @@ If that fails, the name is looked up in a fixed, immutable dictionary
 DEFAULT_PALETTE = 'rainbow'
 
 
-def get(name=DEFAULT_PALETTE):
+def get(name=None):
     """
     Return a named Palette, or None if no such name exists.
 
     If ``name`` is omitted, the default value is used.
     """
+    if name is None:
+        name = DEFAULT_PALETTE
     if isinstance(name, str):
-        return PROJECT_PALETTES.get(name) or BUILT_IN_PALETTES.get(name)
+        result = PROJECT_PALETTES.get(name) or BUILT_IN_PALETTES.get(name)
+        return copy.deepcopy(result)
 
 
 # This global variable is changed by the Project to allow color settings
