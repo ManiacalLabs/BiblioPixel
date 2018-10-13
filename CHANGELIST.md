@@ -1,3 +1,6 @@
+## v3.4.27 - 2018-10-13
+- Better palettes
+
 ## v3.4.26 - 2018-10-13
 - Much more documentation
 - Better extracted GIFs
