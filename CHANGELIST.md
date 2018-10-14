@@ -1,3 +1,6 @@
+## v3.4.28 - 2018-10-14
+- Legacy palettes allow BPA animations to easily use palettes
+
 ## v3.4.27 - 2018-10-13
 - Better palettes
 
