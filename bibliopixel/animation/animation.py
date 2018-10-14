@@ -3,6 +3,8 @@ from . import adaptor
 from . runner import Runner, STATE
 from .. util import deprecated, log
 from .. util.colors import palettes
+from .. util.colors.legacy_palette import pop_legacy_palette
+
 from .. util.threads.animation_threading import AnimationThreading
 from .. project import attributes, fields
 
@@ -35,7 +37,10 @@ class Animation(object):
         a.data = data
         return a
 
-    def __init__(self, layout, *, preclear=True, palette=None, **kwds):
+    def __init__(self, layout, *, preclear=True, **kwds):
+        self.palette = pop_legacy_palette(kwds)
+        self.palette.length = layout.numLEDs
+
         attributes.set_reserved(self, 'animation', **kwds)
         self.layout = layout
         assert layout
@@ -47,8 +52,6 @@ class Animation(object):
         self.runner = None
         self.time = time.time
         self.preframe_callbacks = []
-        self.palette = palette or palettes.get()
-        self.palette.length = layout.numLEDs
 
     def set_project(self, project):
         self.project = project

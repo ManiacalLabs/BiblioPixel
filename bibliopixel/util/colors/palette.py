@@ -112,3 +112,9 @@ class Palette(list):
         dr, dg, db = r2 - r1, g2 - g1, b2 - b1
 
         return r1 + fade * dr, g1 + fade * dg, b1 + fade * db
+
+    def __eq__(self, other):
+        return super().__eq__(other) and vars(self) == vars(other)
+
+    def __ne__(self, other):
+        return not (self == other)

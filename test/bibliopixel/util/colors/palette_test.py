@@ -203,3 +203,19 @@ class PaletteTest(unittest.TestCase):
         p.length = 256
         result = [p.get(32 * i) for i in range(10)]
         self.assertEqual(expected, result)
+
+    def test_equality(self):
+        colors = [Red, Green, Blue, White]
+        p = Palette(colors, autoscale=True)
+        q = Palette(colors, autoscale=True)
+
+        self.assertEqual(p, q)
+        self.assertFalse(p != q)
+
+        r = Palette(colors)
+        self.assertNotEqual(p, r)
+        self.assertFalse(p == r)
+
+        s = Palette(colors, serpentine=True)
+        t = Palette(colors[:3], serpentine=True)
+        self.assertNotEqual(s, t)
