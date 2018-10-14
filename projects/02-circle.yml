@@ -8,15 +8,17 @@ layout:
 
 run:
   fps: 30
-  seconds: 12
+  seconds: 26
 
 aliases:
   bpa: BiblioPixelAnimations.circle
 
-
 animation:
   typename: sequence
+  length: 2
   animations:
+    - $bpa.fill.CircleFill
+    - $bpa.fill.CircleFillRainbow
     - $bpa.arc_clock
     - $bpa.arc_rotate
     - $bpa.bloom.CircleBloom
