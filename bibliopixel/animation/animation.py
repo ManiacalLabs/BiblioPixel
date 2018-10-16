@@ -13,6 +13,7 @@ class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
     FAIL_ON_EXCEPTION = False
+    COLOR_DEFAULTS = ()
 
     @classmethod
     def construct(cls, project, *, run=None, name=None, data=None, **desc):
@@ -38,7 +39,7 @@ class Animation(object):
         return a
 
     def __init__(self, layout, *, preclear=True, **kwds):
-        self.palette = pop_legacy_palette(kwds)
+        self.palette = pop_legacy_palette(kwds, *self.COLOR_DEFAULTS)
         self.palette.length = layout.numLEDs
 
         attributes.set_reserved(self, 'animation', **kwds)

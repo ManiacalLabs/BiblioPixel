@@ -1,43 +1,23 @@
-from . import make, palettes
-from . names import COLORS
-
-LEGACY_FIELDS = (
-    ('color',),
-    ('color1', 'color2'),
-    ('onColor', 'offColor'),
-    ('colors',),
-    ('palette',),
-)
+from . import make
 
 
-def pop_legacy_palette(kwds):
+def pop_legacy_palette(kwds, *color_defaults):
     """
     Older animations in BPA and other areas use all sorts of different names for
     what we are now representing with palettes.
 
     This function mutates a kwds dictionary to remove these legacy fields and
     extract a palette from it, which it returns.
-    """
+ """
+    palette = kwds.pop('palette', None)
+    if palette:
+        legacy = [k for k, _ in color_defaults if k in kwds]
+        if legacy:
+            raise ValueError('Cannot set palette and ' + ', '.join(legacy))
+        return palette
 
-    cases = []
-    for fields in LEGACY_FIELDS:
-        if any(f in kwds for f in fields):
-            cases.append(fields)
+    values = [kwds.pop(k, v) for k, v in color_defaults]
+    if values and color_defaults[0][0] in ('colors', 'palette'):
+        values = values[0]
 
-    if not cases:
-        return palettes.get()
-
-    if len(cases) > 1:
-        raise ValueError('Cannot set all of ' + ', '.join(sum(cases, [])))
-
-    first, *rest = cases[0]
-
-    a = kwds.pop(first, COLORS.Red)
-    if first == 'color':
-        return make.colors((a,))
-
-    if not rest:
-        return a
-
-    b = kwds.pop(rest[0], COLORS.Black)
-    return make.colors((a, b))
+    return make.colors(values or None)

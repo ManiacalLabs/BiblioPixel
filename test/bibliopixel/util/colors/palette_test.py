@@ -10,18 +10,18 @@ class PaletteTest(unittest.TestCase):
     def test_empty(self):
         p = Palette()
         self.assertEqual(p[0], Black)
-        self.assertEqual(p.get(), Black)
-        self.assertEqual(p.get(1), Black)
+        self.assertEqual(p(), Black)
+        self.assertEqual(p(1), Black)
 
     def test_single(self):
         p = Palette([Red])
         self.assertEqual(p[0], Red)
-        self.assertEqual(p.get(), Red)
-        self.assertEqual(p.get(1), Red)
+        self.assertEqual(p(), Red)
+        self.assertEqual(p(1), Red)
 
     def test_get(self):
         p = Palette([Red, Green, Blue], continuous=True)
-        result = [p.get(-1 + Fraction(i) / 2) for i in range(12)]
+        result = [p(-1 + Fraction(i) / 2) for i in range(12)]
         expected = [
             (0, 170, 85),
             (0, 85, 170),
@@ -39,7 +39,7 @@ class PaletteTest(unittest.TestCase):
 
     def test_get_serpentine(self):
         p = Palette([Red, Green, Blue], serpentine=True, continuous=True)
-        result = [p.get(-1 + Fraction(i) / 2) for i in range(12)]
+        result = [p(-1 + Fraction(i) / 2) for i in range(12)]
         expected = [
             (85, 170, 0),
             (170, 85, 0),
@@ -62,7 +62,7 @@ class PaletteTest(unittest.TestCase):
         self.assertEqual(p[0], Red)
         self.assertEqual(p[1], Green)
 
-        result = [p.get(-1 + Fraction(i) / 3) for i in range(12)]
+        result = [p(-1 + Fraction(i) / 3) for i in range(12)]
         expected = [
             (127.5, 127.5, 0),
             (85, 170, 0),
@@ -82,7 +82,7 @@ class PaletteTest(unittest.TestCase):
     def test_double_serpentine(self):
         p = Palette([Red, Green], serpentine=True, continuous=True)
 
-        result = [p.get(-1 + Fraction(i) / 3) for i in range(12)]
+        result = [p(-1 + Fraction(i) / 3) for i in range(12)]
         expected = [
             (127.5, 127.5, 0.0),
             (170.0, 85.0, 0.0),
@@ -103,7 +103,7 @@ class PaletteTest(unittest.TestCase):
         colors = [Red, Green, Blue, White]
         p = Palette(colors)
 
-        result = [p.get(Fraction(i) / 2) for i in range(10)]
+        result = [p(Fraction(i) / 2) for i in range(10)]
         expected = [Red, Red, Green, Green, Blue, Blue, White, White, Red, Red]
 
         self.assertEqual(expected, result)
@@ -111,25 +111,25 @@ class PaletteTest(unittest.TestCase):
     def test_discontinuous_serpentine(self):
         colors = [Red, Green, Blue, White]
         p = Palette(colors, serpentine=True)
-        self.assertEqual(Green, p.get(7))
+        self.assertEqual(Green, p(7))
 
-        self.assertEqual(Red, p.get(0))
-        self.assertEqual(Green, p.get(1))
-        self.assertEqual(Blue, p.get(2))
-        self.assertEqual(White, p.get(3))
-        self.assertEqual(Blue, p.get(4))
-        self.assertEqual(Green, p.get(5))
-        self.assertEqual(Red, p.get(6))
-        self.assertEqual(Green, p.get(7))
-        self.assertEqual(Blue, p.get(8))
+        self.assertEqual(Red, p(0))
+        self.assertEqual(Green, p(1))
+        self.assertEqual(Blue, p(2))
+        self.assertEqual(White, p(3))
+        self.assertEqual(Blue, p(4))
+        self.assertEqual(Green, p(5))
+        self.assertEqual(Red, p(6))
+        self.assertEqual(Green, p(7))
+        self.assertEqual(Blue, p(8))
 
-        self.assertEqual(Red, p.get(0.1))
-        self.assertEqual(Green, p.get(1.9))
+        self.assertEqual(Red, p(0.1))
+        self.assertEqual(Green, p(1.9))
 
     def test_continuous(self):
         colors = [Red, Green, Blue, White]
         p = Palette(colors, continuous=True)
-        result = [p.get(-1 + Fraction(i) / 3) for i in range(16)]
+        result = [p(-1 + Fraction(i) / 3) for i in range(16)]
 
         expected = [
             (63.75, 63.75, 255.0),
@@ -154,7 +154,7 @@ class PaletteTest(unittest.TestCase):
     def test_continuous_serpentine(self):
         colors = [Red, Green, Blue, White]
         p = Palette(colors, serpentine=True, continuous=True)
-        result = [p.get(-1 + Fraction(i) / 3) for i in range(15)]
+        result = [p(-1 + Fraction(i) / 3) for i in range(15)]
 
         expected = [
             (63.75, 191.25, 0.0),
@@ -179,7 +179,7 @@ class PaletteTest(unittest.TestCase):
         colors = [Red, Green, Blue, White]
         p = Palette(colors, continuous=False, serpentine=True, scale=3)
 
-        result = [p.get(Fraction(2 * i) / 9) for i in range(25)]
+        result = [p(Fraction(2 * i) / 9) for i in range(25)]
         expected = [
             Red, Red, Green, Blue, Blue, White, Blue, Green,
             Red, Red, Red, Green, Blue, Blue, White, Blue,
@@ -197,11 +197,11 @@ class PaletteTest(unittest.TestCase):
         p = Palette(colors, autoscale=True)
 
         expected = [Red, Red, Green, Green, Blue, Blue, White, White, Red, Red]
-        result = [p.get(Fraction(i) / 2) for i in range(10)]
+        result = [p(Fraction(i) / 2) for i in range(10)]
         self.assertEqual(expected, result)
 
         p.length = 256
-        result = [p.get(32 * i) for i in range(10)]
+        result = [p(32 * i) for i in range(10)]
         self.assertEqual(expected, result)
 
     def test_equality(self):
