@@ -47,6 +47,11 @@ def colors(c):
     raise ValueError("Don't understand type %s" % type(c), _COLORS_USAGE)
 
 
+@colors.register(palette.Palette)
+def _(c):
+    return c
+
+
 @colors.register(tuple)
 @colors.register(list)
 def _(c):

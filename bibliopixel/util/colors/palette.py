@@ -50,6 +50,9 @@ class Palette(list):
         self.autoscale = autoscale
         self.length = length
 
+    def __call__(self, position=0):
+        return self.get(position)
+
     def get(self, position=0):
         """
         Return a color interpolated from the Palette.
@@ -114,7 +117,9 @@ class Palette(list):
         return r1 + fade * dr, g1 + fade * dg, b1 + fade * db
 
     def __eq__(self, other):
-        return super().__eq__(other) and vars(self) == vars(other)
+        return (isinstance(other, Palette) and
+                super().__eq__(other) and
+                vars(self) == vars(other))
 
     def __ne__(self, other):
         return not (self == other)
