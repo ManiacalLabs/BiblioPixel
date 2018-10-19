@@ -36,7 +36,6 @@ class GifWriter(wrapper.Wrapper):
         super().__init__(*args, **kwds)
         self._writer = _gif_writer.GifWriter(
             filename, render, divide, frames, time, scale, gif_options, tmp_dir)
-        self._writer.set_layout(self.layout)
 
     def step(self, amt=1):
         super().step(amt)
