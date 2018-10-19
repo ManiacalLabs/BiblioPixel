@@ -49,37 +49,6 @@ def write_gif(filename, frames, **gif_options):
     im.save(filename, save_all=True, append_images=images, **gif_options)
 
 
-"""
-This is probably not used and should likely be replaced by the code
-in BiblioPixelAnimations.matrix.ImageAnim
-"""
-
-
 from .. import deprecated
 if deprecated.allowed():  # pragma: no cover
-    def convert_mode(image, mode='RGB'):
-        """Return an image in the given mode."""
-        deprecated.deprecated('util.gif.convert_model')
-
-        return image if (image.mode == mode) else image.convert(mode=mode)
-
-    def image_to_colorlist(image, container=list):
-        """Given a PIL.Image, returns a ColorList of its pixels."""
-        deprecated.deprecated('util.gif.image_to_colorlist')
-
-        return container(convert_mode(image).getdata())
-
-    def animated_gif_to_colorlists(image, container=list):
-        """
-        Given an animated GIF, return a list with a colorlist for each frame.
-        """
-        deprecated.deprecated('util.gif.animated_gif_to_colorlists')
-
-        from PIL import ImageSequence
-
-        it = ImageSequence.Iterator(image)
-        return [image_to_colorlist(i, container) for i in it]
-
-
-if __name__ == '__main__':
-    pass
+    from . old_gif import *  # noqa: F403
