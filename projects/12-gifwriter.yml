@@ -10,7 +10,11 @@ animation:
   typename: .gif_writer.GifWriter
 
   run:
-    fps: 24
+    fps: 12
+    seconds: 2
+
+  filename: output.mp4
+  tmp_dir: /Users/tom/tmp
 
   render:
     pixel_width: 32
