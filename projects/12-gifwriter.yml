@@ -1,20 +1,16 @@
 shape: [16, 16]
 
-aliases:
-  bpa: BiblioPixelAnimations.matrix
-
 run:
   until_complete: true
 
 animation:
-  typename: .gif_writer.GifWriter
+  typename: .movie_writer
 
   run:
     fps: 12
     seconds: 2
 
-  filename: output.mp4
-  tmp_dir: /Users/tom/tmp
+  filename: output.yml
 
   render:
     pixel_width: 32
@@ -26,7 +22,7 @@ animation:
     typename: sequence
     length: 2
     animations:
-      - $bpa.bloom
-      - $bpa.circlepop
-      - $bpa.perlin_simplex
-      - $bpa.pinwheel
+      - $bpa.matrix.bloom
+      - $bpa.matrix.circlepop
+      - $bpa.matrix.perlin_simplex
+      - $bpa.matrix.pinwheel

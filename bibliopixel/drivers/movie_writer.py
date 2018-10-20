@@ -9,7 +9,7 @@ class MovieWriter(DriverBase):
 
     def __init__(self, *args, filename='output.gif', render=None,
                  divide=1, frames=0, time=10, speed=1.0, options=None,
-                 tmp_dir=None, **kwds):
+                 gif_dir=None, **kwds):
         """
         :param str filename: Base filename to write the animated GIF file
 
@@ -30,13 +30,13 @@ class MovieWriter(DriverBase):
         :param dict options: Options to
             ``bibliopixel.util.image.gif.write_animation``
 
-        :param str tmp_dir: If set, write individual GIF frame files to this
+        :param str gif_dir: If set, write individual GIF frame files to this
             directory, and do not delete them when done.  For testing purposes.
         """
         super().__init__(*args, **kwds)
         self.cur_step = 1
         self.movie_writer = _movie_writer.MovieWriter(
-            filename, render, divide, frames, time, speed, options, tmp_dir)
+            filename, render, divide, frames, time, speed, options, gif_dir)
 
     def set_project(self, project):
         super().set_project(project)
