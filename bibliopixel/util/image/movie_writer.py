@@ -2,7 +2,6 @@ import os, shutil, statistics, tempfile, time, traceback
 from . import gif, mp4, renderer
 from .. import colors, log
 
-
 DEFAULT_RENDER = {
     'color': colors.Black,
     'pixel_width': 2,
@@ -18,13 +17,15 @@ WRITERS = {
     '.mp4': mp4.write,
 }
 
+DEFAULT_SUFFIX = '.gif'
 
-class GifWriter:
+
+class MovieWriter:
     """Write an animated GIF given frames from an animation."""
 
-    def __init__(self, filename='gif_writer', render=None,
-                 divide=1, frames=128, time=10, speed=1.0, gif_options=None,
-                 tmp_dir=None, remove_tmp_dir=False, suffix='.gif',
+    def __init__(self, filename='gif_writer.gif', render=None,
+                 divide=1, frames=128, time=10, speed=1.0, options=None,
+                 tmp_dir=None, remove_tmp_dir=False,
                  duration=None, fps=None):
         self.render = dict(DEFAULT_RENDER, **(render or {}))
         self.divide = divide
@@ -34,14 +35,17 @@ class GifWriter:
         self.speed = speed
         self.duration = duration
         self.fps = fps
-        self.gif_options = gif_options or {}
+        self.options = options or {}
+
+        filename = os.path.expanduser(os.path.abspath(filename))
+        file_root, suffix = os.path.splitext(filename)
+        suffix = suffix or DEFAULT_SUFFIX
+
         try:
             self.writer = WRITERS[suffix]
         except:
             raise ValueError('Cannot write %s files' % suffix)
 
-        filename = os.path.expanduser(os.path.abspath(filename))
-        file_root = filename[:-4] if filename.endswith(suffix) else filename
         self.filename = file_root + suffix
         os.makedirs(os.path.dirname(self.filename), exist_ok=True)
 
@@ -89,20 +93,16 @@ class GifWriter:
     @property
     def fps(self):
         if self._fps:
-            print('1')
             return self._fps
 
         if self.duration:
-            print('2')
             return 1 / self.duration
 
         if len(self.frame_files) < 2:
-            print('3')
             return 1
 
         dt = self.times[-1] - self.times[0]
         slots = len(self.frame_files) - 1
-        print('4')
         return slots / dt
 
     @fps.setter
@@ -111,5 +111,4 @@ class GifWriter:
 
     def write(self):
         fps = self.fps * self.speed
-        print('fps', fps)
-        self.writer(self.filename, self.frame_files, fps, **self.gif_options)
+        self.writer(self.filename, self.frame_files, fps, **self.options)

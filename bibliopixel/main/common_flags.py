@@ -76,8 +76,9 @@ def add_project_flags(parser):
         '-f', '--fail_on_exception', action='store_true',
         help='If true, bp fail if any subanimation fails to construct')
 
-    parser.add_argument(
-        '-g', '--gif', default='', nargs='?', help=GIF_HELP)
+    if deprecated.allowed():
+        parser.add_argument(
+            '-g', '--gif', default='', nargs='?', help=GIF_HELP)
 
     parser.add_argument(
         '-i', '--ignore_exceptions', action='store_true',
@@ -90,6 +91,9 @@ def add_project_flags(parser):
     parser.add_argument(
         '-l', '--layout', default=None,
         help='Default layout class if no layout is specified')
+
+    parser.add_argument(
+        '-m', '--movie', default='', nargs='?', help=MOVIE_HELP)
 
     parser.add_argument(
         '--numbers', '-n', default='python', choices=NUMBER_TYPES,
@@ -224,11 +228,11 @@ Run BiblioPixel in v4 compatibility mode, to see if it will work with
 future releases v4.x
 """
 
-GIF_HELP = """
-Write an animated GIF file.
+MOVIE_HELP = """
+Write a movie file (animated GIF or mp4).
 
-If --gif has no argument, the name of the GIF file is the same as the name of
-the project.
+If --gif has no argument, the name of the movie file is the same as the name of
+the project, with a .gif added to the end.
 
 If it has a single string argument, then it's the name of the GIF file.
 
@@ -249,3 +253,7 @@ Often some sections of your project correspond to hardware and thus rarely
 change, so the `bp default` command allows you to set defaults so you
 don't have to mention these from your project at all.
 """
+
+GIF_HELP = """
+--gif/-g is a deprecated name for the --movie/-m flag."
+""" + MOVIE_HELP
