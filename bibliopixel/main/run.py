@@ -10,16 +10,7 @@ from .. project import load
 from .. project.aliases import ALIAS_MARKERS
 from .. project.project import Project
 
-RUN_ERROR = """When reading file {filename}:
-
-{desc}
-{exception}
-"""
-
-FAILURE_ERROR = """\
-{count} project{s} failed
-____________________
-"""
+MOVIE_SUFFIXES = '.gif', '.mp4'
 
 
 def _load_py(filename):
@@ -53,23 +44,27 @@ def _dump(args, desc):
 def _get_projects(args):
     projects, failed = [], []
 
-    gif = args.gif
-    if gif != '':
-        log.info('writing animated gifs')
-        if gif is None:
-            # --get appeared but without a value
-            gif = '{}'
-        if '{' in gif:
-            gif = data_file.loads(gif, filename='--gif')
-        if isinstance(gif, str):
-            if not gif.endswith('.gif'):
-                log.warning('--gif argument %s didn\'t end with .gif', gif)
-                gif += '.gif'
-            gif = {'filename': gif}
-        if 'filename' in gif and len(args.name) > 1:
-            log.warning('Writing multiple documents to the same GIF file name')
+    movie = args.gif if args.movie == '' else args.movie
+    if movie != '':
+        log.info('writing animated movies')
+        if movie is None:
+            # --movie appeared but without a value
+            movie = {}
+        elif '{' in movie:
+            movie = data_file.loads(movie, filename='--movie')
 
-        gif['typename'] = '.gif_writer'
+        if isinstance(movie, str):
+            movie = {'filename': movie}
+        filename = movie.get('filename', None)
+        if filename:
+            if not any(filename.endswith(s) for s in MOVIE_SUFFIXES):
+                log.warning('--movie argument %s didn\'t end with %s',
+                            movie, ' or '.join(MOVIE_SUFFIXES))
+                movie += '.gif'
+            if len(args.name) > 1:
+                log.warning('Writing multiple movies to the same file name')
+
+        movie['typename'] = '.movie_writer'
 
     # Handle spaces around + signs.
     names = []
@@ -100,12 +95,12 @@ def _get_projects(args):
                             raise
                         desc = {'animation': filename}
 
-                if gif:
-                    if 'filename' in gif:
-                        desc['driver'] = gif
+                if movie:
+                    if 'filename' in movie:
+                        desc['driver'] = movie
                     else:
                         f, suffix = os.path.splitext(filename)
-                        desc['driver'] = dict(gif, filename=f + '.gif')
+                        desc['driver'] = dict(movie, filename=f + '.gif')
                 descs.append(desc)
 
             project = common_flags.make_project(
@@ -149,7 +144,7 @@ def _run_projects(projects, args):
 
     needs_pause = False
     assert len(projects) == len(args.name)
-    is_gif = args.gif != ''
+    is_movie = (args.movie != '')
 
     for project, name in zip(projects, args.name):
         if not _RUNNING:
@@ -164,7 +159,7 @@ def _run_projects(projects, args):
             needs_pause = True
 
         log.debug('Running file %s', name)
-        if is_gif:
+        if is_movie:
             project.flat_out()
 
         try:
@@ -228,6 +223,18 @@ _RUNNING = False
 _ALL_CHARS = set(string.ascii_letters + string.digits + '._' + ALIAS_MARKERS)
 _START_CHARS = set(string.ascii_letters + '.' + ALIAS_MARKERS)
 _END_CHARS = set(string.ascii_letters + string.digits)
+
+
+RUN_ERROR = """When reading file {filename}:
+
+{desc}
+{exception}
+"""
+
+FAILURE_ERROR = """\
+{count} project{s} failed
+____________________
+"""
 
 
 def _might_be_classname(s):
