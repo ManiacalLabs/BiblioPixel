@@ -9,7 +9,7 @@ class MovieWriter(wrapper.Wrapper):
 
     def __init__(self, *args, filename='output.gif', render=None,
                  divide=1, frames=128, time=0, scale=1.0, options=None,
-                 tmp_dir=None, **kwds):
+                 gif_dir=None, **kwds):
         """
         :param str filename: Base filename to write the animated GIF file
 
@@ -30,12 +30,16 @@ class MovieWriter(wrapper.Wrapper):
         :param dict options: Options to
             ``bibliopixel.util.image.gif.write_animation``
 
-        :param str tmp_dir: If set, write individual GIF frame files to this
+        :param str gif_dir: If set, write individual GIF frame files to this
             directory, and do not delete them when done.  For testing purposes.
         """
         super().__init__(*args, **kwds)
         self.movie_writer = _movie_writer.MovieWriter(
-            filename, render, divide, frames, time, scale, options, tmp_dir)
+            filename, render, divide, frames, time, scale, options, gif_dir)
+
+    def set_project(self, project):
+        super().set_project(project)
+        self.movie_writer.set_project(project)
 
     def step(self, amt=1):
         super().step(amt)
