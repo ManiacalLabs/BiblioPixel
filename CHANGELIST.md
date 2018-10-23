@@ -1,3 +1,8 @@
+## v3.4.30 - 2018-10-23
+- Revert change that broken LarsonScanners, affected others
+- New mp4 extractor
+- Bigger default GIF sizes (fix #1019)
+
 ## v3.4.29 - 2018-10-16
 - Better legacy palettes
 
