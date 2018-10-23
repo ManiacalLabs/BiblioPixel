@@ -199,15 +199,6 @@ class Animation(object):
             self.runner.set_project(self.project)
             self.threading.set_project(self.project)
 
-    # DEPRECATED
-    @property
-    def _step(self):
-        return self.cur_step
-
-    @_step.setter
-    def _step(self, step):
-        self.cur_step = step
-
     def run(self, **kwds):
         deprecated.deprecated('BaseAnimation.run')
         self._set_runner(kwds)
