@@ -4,12 +4,12 @@ from .. import colors, log
 
 DEFAULT_RENDER = {
     'color': colors.Black,
-    'pixel_width': 2,
+    'pixel_width': 12,
     'pixel_height': None,
     'ellipse': True,
     'vertical': False,
-    'frame': 3,
-    'padding': 1,
+    'frame': 2,
+    'padding': 2,
 }
 
 WRITERS = {
