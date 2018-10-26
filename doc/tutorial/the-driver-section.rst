@@ -35,6 +35,18 @@ We have the following driver classes built into BiblioPixel:
 ``simpixel``
   Send layout and pixels to a OpenGL driver running in the browser
 
+``SPI```
+  Interfaces with the SPI ports on a raspberry pi or similar device
+
+**Example 1**\ : A ``driver`` Section for an SPI device
+
+.. code-block:: yaml
+
+  driver:
+    typename: SPI
+    ledtype: WS2801
+    interface: PERIPHERY
+
 ``text``
   Print out the r, g, b levels of each pixel on each frame.
   Spews out huge amounts of data - only good for debugging

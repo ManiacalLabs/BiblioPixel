@@ -8,5 +8,6 @@ Topic Papers
    troubleshooting
    using-controls.rst
    using-numpy.rst
+   using-rest-api.rst
    writing-an-animation-class.rst
    writing-animated-gifs
