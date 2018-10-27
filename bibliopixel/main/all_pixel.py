@@ -99,12 +99,13 @@ def run(args):
         try:
             Serial(t[0], num, dev=d, SPISpeed=spi, restart_timeout=6)
             log.printer('\nConfigure complete!')
-        except BiblioSerialError as e:
+        except BiblioSerialError:
             log.printer('\nError configuring device!')
 
     except KeyboardInterrupt:
         sys.exit(128 + signal.SIGINT)
-    except ValueError as e:
+
+    except ValueError:
         pass
 
 

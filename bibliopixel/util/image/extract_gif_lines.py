@@ -39,9 +39,9 @@ def _extract(lines):
                 pass
 
             elif line.startswith('.. image:'):
-                print('missing image')
-                print(line)
-                print(IMAGE)
+                log.printer('missing image')
+                log.printer(line)
+                log.printer(IMAGE)
 
         elif in_code:
             if not line or line[0].isspace():

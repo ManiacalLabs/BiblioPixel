@@ -92,7 +92,7 @@ class Serial(DriverBase):
             try:
                 self._com = serial.Serial(
                     self.dev, baudrate=self.devices.baudrate, timeout=5)
-            except serial.SerialException as e:
+            except serial.SerialException:
                 ports = self.devices.devices.values()
                 error = "Invalid port specified. No COM ports available."
                 if ports:
