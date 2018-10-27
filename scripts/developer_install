@@ -21,3 +21,6 @@ pip install -r requirements.txt && \
 # should fix that bug and then remove the last two lines
 
 popd
+
+git remote add rec git@github.com:rec/BiblioPixel.git
+git remote add upstream git@github.com:ManiacalLabs/BiblioPixel.git
