@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Run style and unit tests for BiblioPixel.
+#
+# This needs to be called from the BiblioPixel root directory, one level
+# above this.
+#
+# The script scripts/developer_install needs to have been run once to install
+# all the additional dependencies for building tests and documentation.
+
+flake8 && pytest test
