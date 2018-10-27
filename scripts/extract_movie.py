@@ -23,7 +23,6 @@ for f in os.listdir(dir_path):
 
 # Determine the width and height from the first image
 image_path = os.path.join(dir_path, images[0])
-print('!!!', image_path)
 frame = cv2.imread(image_path)
 
 cv2.imshow('video', frame)
@@ -48,4 +47,4 @@ for image in images:
 out.release()
 cv2.destroyAllWindows()
 
-print("The output video is {}".format(output))
+print("The output video is {}".format(output))  # noqa: T001, T002

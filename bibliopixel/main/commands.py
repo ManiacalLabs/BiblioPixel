@@ -62,9 +62,9 @@ BP_HELP = SEPARATOR.join(get_command_help(c) for c in COMMANDS)
 
 
 def print_help():
-    print(HELP)
-    print(BP_HEADER)
-    print(BP_HELP)
+    log.printer(HELP)
+    log.printer(BP_HEADER)
+    log.printer(BP_HELP)
 
 
 if __name__ == '__main__':

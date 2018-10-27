@@ -36,5 +36,5 @@ class Server(runnable.LoopThread):
         super().stop()
         try:
             flask.request.environ.get('werkzeug.server.shutdown', error)()
-        except Exception as e:
+        except Exception:
             log.debug('Exception shutting werkzeug down')

@@ -98,7 +98,7 @@ class SerialGamePad(BaseGamePad):
 
             try:
                 self._com = serial.Serial(self.dev, timeout=5)
-            except serial.SerialException as e:
+            except serial.SerialException:
                 ports = SerialGamePad.find_serial_devices(self._hardwareID)
                 error = "Invalid port specified. No COM ports available."
                 if len(ports) > 0:
