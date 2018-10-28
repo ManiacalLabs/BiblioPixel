@@ -1,5 +1,6 @@
 from . address import number, Address
 from . receiver import Receiver
+from .. util import deprecated
 
 
 class Editor(Receiver):
@@ -7,25 +8,25 @@ class Editor(Receiver):
     A `Editor` is a `Receiver` which gets and sets `Address`es, perhaps using an
     an optional `EditQueue` for the setting.
 
-    When the `set_root` method is called, `Editor` searches
+    When the `set_project` method is called, `Editor` searches
     down through the address and stores the most recent `edit_queue`
     method it finds.
     """
 
-    def __init__(self, address=None, root=None):
+    def __init__(self, address=None, project=None):
         self.address = Address(address)
-        if root is not None:
-            self.set_root(root)
+        if project is not None:
+            self.set_project(project)
 
-    def set_root(self, root):
-        self.root = root
+    def set_project(self, project):
+        self.project = project
         self.segments = self.address.segments[:]
         self.last_segment = self.address.segments.pop()
         edit_queue = None
 
         for segment in self.address.segments:
-            edit_queue = getattr(root, 'edit_queue', edit_queue)
-            root = segment.get(root)
+            edit_queue = getattr(project, 'edit_queue', edit_queue)
+            project = segment.get(project)
 
         self.edit_queue = edit_queue
 
@@ -53,11 +54,18 @@ class Editor(Receiver):
         return str(self.address)
 
     def _get(self):
-        root = self.root
+        project = self.project
         for segment in self.address.segments:
-            root = segment.get(root)
-        return root
+            project = segment.get(project)
+        return project
 
     def _set(self, values):
         args = self.address.assignment + values
         self.last_segment.set(self._get(), *args)
+
+    if deprecated.allowed():
+        set_root = set_project
+
+        @property
+        def root(self):
+            return self.project

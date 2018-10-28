@@ -89,7 +89,7 @@ class Project:
 
         self.layout.start()
         for c in self.controls:
-            c.set_root(self)
+            c.set_project(self)
             c.start()
         self.animation.start()
 

@@ -2,7 +2,7 @@ import collections, functools, sys, threading
 from . extractor import Extractor
 from .. project import construct, importer
 from .. util.log_errors import LogErrors
-from .. util import flatten, log
+from .. util import deprecated, flatten, log
 from .. util.threads import runnable
 from . routing import ActionList, Routing
 
@@ -30,10 +30,10 @@ class Control(runnable.Runnable):
         self.pre_routing = ActionList(pre_routing)
         self.routing = Routing(routing or {}, default or {}, python_path)
 
-    def set_root(self, root):
-        self.root = root
-        self.pre_routing.set_root(root)
-        self.routing.set_root(root)
+    def set_project(self, project):
+        self.project = project
+        self.pre_routing.set_project(project)
+        self.routing.set_project(project)
 
     def start(self):
         super().start()
@@ -88,6 +88,13 @@ class Control(runnable.Runnable):
 
     def __bool__(self):
         return bool(self.routing or self.pre_routing)
+
+    if deprecated.allowed():
+        set_root = set_project
+
+        @property
+        def root(self):
+            return self.project
 
 
 class ControlLoop:

@@ -20,7 +20,7 @@ def _single(method):
         address = urllib.parse.unquote_plus(address)
         try:
             error = BAD_ADDRESS_ERROR
-            ed = editor.Editor(address, self.root)
+            ed = editor.Editor(address, self.project)
 
             if value is None:
                 error = BAD_GETTER_ERROR
@@ -31,8 +31,7 @@ def _single(method):
             result = {'value': result}
 
         except Exception as e:
-            if self.verbose:
-                traceback.print_exc()
+            traceback.print_exc()
             msg = '%s\n%s' % (error.format(**locals()), e)
             result = {'error': msg}
 
@@ -53,11 +52,10 @@ def _multi(method):
         result = {}
         for a in values or '':
             try:
-                ed = editor.Editor(address + a, self.root)
+                ed = editor.Editor(address + a, self.project)
                 result[address + a] = {'value': method(self, ed, a)}
             except:
-                if self.verbose:
-                    traceback.print_exc()
+                traceback.print_exc()
                 result[address + a] = {'error': 'Could not multi addr %s' % a}
 
         return flask.jsonify(result)
