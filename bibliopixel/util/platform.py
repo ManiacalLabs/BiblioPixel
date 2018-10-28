@@ -1,4 +1,4 @@
-import platform
+import platform, subprocess
 
 MAC = 'Darwin'
 WINDOWS = 'Windows'
@@ -32,4 +32,9 @@ class Platform:
         elif self.platform == MAC:
             release, versioninfo, machine = platform.mac_ver()
             platform_version = release, machine
+            # https://boklee.blogspot.com/2012/05/how-to-retrieve-cpuinfo-on-os-x.html
+            for i in 'features', 'brand_string':
+                s = subprocess.check_output(('sysctl', 'machdep.cpu.' + i))
+                self.cpuinfo.append(s.decode().strip())
+
         self.platform_version = ':'.join(platform_version)
