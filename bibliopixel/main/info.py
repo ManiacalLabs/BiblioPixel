@@ -23,7 +23,10 @@ def run(args):
     bp_path = sys.argv[0]
     library_path = os.path.dirname(bibliopixel.__file__)
     dependencies = '\n'.join(_dependency(m) for m in MODULES)
-    cpuinfo = platform.cpuinfo or '' and CPUINFO % '\n'.join(platform.cpuinfo)
+    if platform.cpuinfo:
+        cpuinfo = CPUINFO % '\n'.join(platform.cpuinfo)
+    else:
+        cpuinfo = ''
 
     log.printer(MESSAGE.format(**locals()))
 
