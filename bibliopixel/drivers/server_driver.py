@@ -7,7 +7,7 @@ class ServerDriver(DriverBase, StaticCache):
     def __init__(self, *args, address, pixel_positions=None, **kwds):
         """
         Args:
-            port:  the port on which the SimPixel server is running.
+            port:  the port on which the server is running.
             pixel_positions:  the positions of the LEDs in 3-d space.
             **kwds:  keywords passed to DriverBase.
         """

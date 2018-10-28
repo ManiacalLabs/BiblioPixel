@@ -1,6 +1,7 @@
 from . ops import Ops
 from . editor import Editor
 from . receiver import Receiver
+from .. util import deprecated
 
 
 class Action(Receiver):
@@ -13,8 +14,8 @@ class Action(Receiver):
         self.address = Editor(address)
         self.ops = Ops(*ops)
 
-    def set_root(self, root):
-        self.address.set_root(root)
+    def set_project(self, project):
+        self.address.set_project(project)
 
     def receive(self, values):
         if self.ops:
@@ -42,6 +43,13 @@ class Action(Receiver):
             return cls(**action)
         return cls(*action)
 
+    if deprecated.allowed():
+        set_root = set_project
+
+        @property
+        def root(self):
+            return self.project
+
 
 class ActionList(Receiver):
     """A list of Actions."""
@@ -51,9 +59,9 @@ class ActionList(Receiver):
             actions = [actions]
         self.actions = tuple(Action.make(a) for a in actions or ())
 
-    def set_root(self, root):
+    def set_project(self, project):
         for a in self.actions:
-            a.set_root(root)
+            a.set_project(project)
 
     def receive(self, msg):
         values = tuple(msg.values())
