@@ -2,56 +2,16 @@ import errno
 from .. import log
 
 
-ADDRESS_IN_USE_ERROR = """
+class StaticCache:
+    SERVER_CLASS = None
+    SERVER_KWDS = {}
+    CACHE = None
 
-Cached server {0} on your machine is already in use.
-Perhaps BiblioPixel is already running on your machine?
-"""
-
-CACHED_SERVER_ERROR = """
-Tried to open server of type {new_type} on {port}, but there was already
-a server of type {old_type} running there.
-"""
-
-CACHED_KWDS_WARNING = """
-Cached server for {server.port} had keywords {server.kwds},
-but keywords {kwds} were requested.
-"""
-
-
-class _CachedServer:
-    def __init__(self, constructor, key, kwds):
-        self.server = self._make_server(constructor, key, kwds)
-        self.key = key
-        self.constructor = constructor
-        self.kwds = kwds
-
-    def check_keywords(self, constructor, kwds):
-        if self.constructor != constructor:
-            raise ValueError(CACHED_SERVER_ERROR.format(
-                key=self.key,
-                new_type=str(constructor),
-                old_type=str(self.constructor)))
-
-        if self.kwds != kwds:
-            log.warning(CACHED_KWDS_WARNING.format(server=self, kwds=kwds))
-
-    def close(self):
-        pass
-
-    def __getattr__(self, key):
-        # Pass through all other attributes to the server.
-        return getattr(self.server, key)
-
-    @staticmethod
-    def _make_server(constructor, key, kwds):
-        try:
-            return constructor(key, **kwds)
-        except OSError as e:
-            if e.errno == errno.EADDRINUSE:
-                e.strerror += ADDRESS_IN_USE_ERROR.format(key)
-                e.args = (e.errno, e.strerror)
-            raise
+    @classmethod
+    def cache(cls):
+        if not cls.CACHE:
+            cls.CACHE = ServerCache(cls.SERVER_CLASS, **cls.SERVER_KWDS)
+        return cls.CACHE
 
 
 class ServerCache:
@@ -99,13 +59,49 @@ class ServerCache:
             return True
 
 
-class StaticCache:
-    SERVER_CLASS = None
-    SERVER_KWDS = {}
-    CACHE = None
+class _CachedServer:
+    def __init__(self, constructor, key, kwds):
+        try:
+            self.server = constructor(key, **kwds)
+        except OSError as e:
+            if e.errno == errno.EADDRINUSE:
+                e.strerror += ADDRESS_IN_USE_ERROR.format(key)
+                e.args = (e.errno, e.strerror)
+            raise
+        self.key = key
+        self.constructor = constructor
+        self.kwds = kwds
 
-    @classmethod
-    def cache(cls):
-        if not cls.CACHE:
-            cls.CACHE = ServerCache(cls.SERVER_CLASS, **cls.SERVER_KWDS)
-        return cls.CACHE
+    def check_keywords(self, constructor, kwds):
+        if self.constructor != constructor:
+            raise ValueError(CACHED_SERVER_ERROR.format(
+                key=self.key,
+                new_type=str(constructor),
+                old_type=str(self.constructor)))
+
+        if self.kwds != kwds:
+            log.warning(CACHED_KWDS_WARNING.format(server=self, kwds=kwds))
+
+    def close(self):
+        pass
+
+    def __getattr__(self, key):
+        # Pass through all other attributes to the server.
+        return getattr(self.server, key)
+
+
+ADDRESS_IN_USE_ERROR = """
+
+Cached server {0} on your machine is already in use.
+Perhaps BiblioPixel is already running on your machine?
+"""
+
+CACHED_SERVER_ERROR = """
+Tried to open server of type {new_type} on {port}, but there was already
+a server of type {old_type} running there.
+"""
+
+CACHED_KWDS_WARNING = """
+Cached server for {server.port} had keywords {server.kwds},
+but keywords {kwds} were requested.
+"""
