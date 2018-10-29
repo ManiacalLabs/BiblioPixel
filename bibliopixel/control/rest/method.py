@@ -12,6 +12,8 @@ def single(method):
     def single(self, address, value=None):
         address = urllib.parse.unquote_plus(address)
         try:
+            if not self.project:
+                raise ValueError('No Project is currently loaded')
             error = BAD_ADDRESS_ERROR
             ed = editor.Editor(address, self.project)
 
@@ -45,10 +47,14 @@ def multi(method):
         result = {}
         for a in values or '':
             try:
+                if not self.project:
+                    raise ValueError('No Project is currently loaded')
+
                 ed = editor.Editor(address + a, self.project)
                 result[address + a] = {'value': method(self, ed, a)}
             except:
-                traceback.print_exc()
+                if self.project:
+                    traceback.print_exc()
                 result[address + a] = {'error': 'Could not multi addr %s' % a}
 
         return flask.jsonify(result)
