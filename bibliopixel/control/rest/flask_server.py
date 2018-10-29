@@ -13,7 +13,7 @@ class OrderedFlask(flask.Flask):
         parameter_storage_class = ImmutableOrderedMultiDict
 
 
-class Server(runnable.LoopThread):
+class FlaskServer(runnable.LoopThread):
     OPEN_DELAY = 1
 
     def __init__(self, port, external_access, open_page, **kwds):
