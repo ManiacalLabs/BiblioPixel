@@ -63,27 +63,20 @@ def _multi(method):
     return multi
 
 
-class Rest(control.ExtractedControl):
-    OPEN_PAGE = False
-
-    def __init__(self, *args, port=PORT, external_access=False, verbose=True,
-                 root_folder=ROOT_FOLDER, index_file=INDEX_FILE,
-                 open_page=None, **kwds):
-        super().__init__(*args, verbose=verbose, **kwds)
-
+class RestImpl:
+    def __init__(self, port, external_access, open_page,
+                 root_folder, index_file):
         root_folder = pathlib.Path(root_folder)
+        static_folder = str(root_folder / 'static')
+
         index_file = pathlib.Path(index_file)
         if not index_file.is_absolute():
             index_file = root_folder / index_file
         self.index_file = str(index_file)
 
-        static = str(root_folder / 'static')
-
-        if open_page is None:
-            open_page = self.OPEN_PAGE
-
+        self.project = None
         self.server = server.Server(
-            port, external_access, open_page, static_folder=static)
+            port, external_access, open_page, static_folder=static_folder)
 
         app = self.server.app
         app.route('/')(self.index)
@@ -105,11 +98,8 @@ class Rest(control.ExtractedControl):
         app.route('/multi', methods=['PUT'])(self.multi_put)
         app.route('/multi/<address>', methods=['PUT'])(self.multi_put)
 
-    def _make_thread(self):
-        return self.server
-
     def index(self):
-        with open(str(self.index_file)) as fp:
+        with open(self.index_file) as fp:
             return fp.read()
 
     @_single
@@ -151,6 +141,26 @@ class Rest(control.ExtractedControl):
             if self.verbose:
                 traceback.print_exc()
             flask.abort(code)
+
+
+class Rest(control.ExtractedControl):
+    OPEN_PAGE = False
+
+    def __init__(self, *args, port=PORT, external_access=False, open_page=None,
+                 root_folder=ROOT_FOLDER, index_file=INDEX_FILE, **kwds):
+        super().__init__(*args, **kwds)
+        if open_page is None:
+            open_page = self.OPEN_PAGE
+
+        self.rest = RestImpl(
+            port, external_access, open_page, root_folder, index_file)
+
+    def set_project(self, project):
+        super().set_project(project)
+        self.rest.project = project
+
+    def _make_thread(self):
+        return self.rest.server
 
 
 class OpenPage(Rest):
