@@ -4,7 +4,7 @@ from ...drivers.channel_order import ChannelOrder
 USAGE = """
 A ChannelOrder can be initialized with:
 
-* A list, tuple or string of lengths three: '012', 'bgr', (0, 2, 1)
+* A list, tuple or string of length three: '012', 'bgr', (0, 2, 1)
 * An integer from 0 to 5."""
 
 NAMES = {
