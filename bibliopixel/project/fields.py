@@ -1,5 +1,5 @@
 from . types import (
-    channel_order, color, colors, duration, gamma, int_name, ledtype,
+    channel_order, color, colors, direction, duration, gamma, int_name, ledtype,
     spi_interface)
 
 
@@ -12,6 +12,7 @@ FIELD_TYPES = {
     'color2': color,
     'colors': colors,
     'count': int_name,
+    'direction': direction,
     'duration': duration,
     'func': int_name,
     'gamma': gamma,
