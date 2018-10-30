@@ -8,6 +8,7 @@ from .. project import attributes, fields
 class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
+    subframes = 1
     top_level = False
 
     FAIL_ON_EXCEPTION = False
@@ -164,7 +165,7 @@ class Animation(object):
                 self.state = runner.STATE.running
 
         if self.top_level:
-            self.threading.wait(self.sleep_time, timestamps)
+            self.threading.wait(self.sleep_time / self.subframes, timestamps)
 
         if self.threading.stop_event.isSet():
             self.state = runner.STATE.canceled
