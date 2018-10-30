@@ -1,0 +1,11 @@
+shape: 12
+
+animation:
+  typename: .pov
+  animation:
+    typename: $bpa.matrix.bloom
+    width: 12
+    height: 8
+
+run:
+  fps: 10
