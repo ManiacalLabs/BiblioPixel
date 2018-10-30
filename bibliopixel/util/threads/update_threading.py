@@ -7,7 +7,6 @@ class UpdateDriverThread(runnable.LoopThread):
 
     def __init__(self, driver):
         super().__init__()
-        self.setDaemon(True)
         self._wait = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
@@ -39,7 +38,6 @@ class UpdateThread(runnable.LoopThread):
 
     def __init__(self, drivers):
         super().__init__()
-        self.setDaemon(True)
         self._wait = threading.Event()
         self._reading = threading.Event()
         self._reading.set()
