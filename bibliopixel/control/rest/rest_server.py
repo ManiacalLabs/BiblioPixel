@@ -1,5 +1,5 @@
 import contextlib, flask, pathlib, traceback, urllib
-from . import flask_server, method
+from . import flask_server, decorator
 from ... util import data_file
 
 
@@ -42,25 +42,25 @@ class RestServer:
         with open(self.index_file) as fp:
             return fp.read()
 
-    @method.single
+    @decorator.single
     def get(self, editor):
         return self._get(editor)
 
-    @method.single
+    @decorator.single
     def put(self, editor, value):
         unquoted = urllib.parse.unquote_plus(value)
         return self._set(editor, unquoted)
 
-    @method.single
+    @decorator.single
     def single_put(self, editor):
         value = flask.request.values['value']
         return self._set(editor, value)
 
-    @method.multi
+    @decorator.multi
     def multi_get(self, editor, address):
         return self._get(editor)
 
-    @method.multi
+    @decorator.multi
     def multi_put(self, editor, address):
         value = flask.request.values[address]
         return self._set(editor, value)
