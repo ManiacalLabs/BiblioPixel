@@ -1,6 +1,7 @@
 import flask, functools, traceback, urllib
 from .. import editor
 
+NO_PROJECT_ERROR = 'No Project is currently loaded'
 BAD_ADDRESS_ERROR = 'Bad address {address}'
 BAD_GETTER_ERROR = 'Couldn\'t get address {address}'
 BAD_SETTER_ERROR = 'Couldn\'t set value {value} at address {address}'
@@ -12,8 +13,9 @@ def single(method):
     def single(self, address, value=None):
         address = urllib.parse.unquote_plus(address)
         try:
+            error = NO_PROJECT_ERROR
             if not self.project:
-                raise ValueError('No Project is currently loaded')
+                raise ValueError
             error = BAD_ADDRESS_ERROR
             ed = editor.Editor(address, self.project)
 
