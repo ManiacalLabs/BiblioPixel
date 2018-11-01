@@ -1,6 +1,7 @@
 import common, features
 import contextlib, requests, subprocess, threading, time
 from urllib.parse import quote_plus
+from bibliopixel.util import pid_context
 
 FEATURES = 'browser',
 START_BP = 'bp', '--loglevel=error', common.make_project('rest.yml')
@@ -59,6 +60,8 @@ def test_rest():
     put('single', 'single/animation.levels[1]', {'value': 0})
     time.sleep(PAUSE)
 
+    common.execute('kill', '-hup', str(pid_context.get_pid()))
+    time.sleep(PAUSE)
     data = {'animation.levels[0]': 1, 'animation.levels[1]': 1,
             'animation.master': 0.5}
     put('multi', 'multi', data)
