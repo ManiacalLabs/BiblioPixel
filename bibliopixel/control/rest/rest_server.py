@@ -13,30 +13,29 @@ class RestServer:
         if not index_file.is_absolute():
             index_file = root_folder / index_file
         self.index_file = str(index_file)
-
         self.project = None
-        self.server = flask_server.FlaskServer(
+        self.port = port
+        self.flask_server = flask_server.FlaskServer(
             port, external_access, open_page, static_folder=static_folder)
 
-        app = self.server.app
-        app.route('/')(self.index)
+        route = self.flask_server.app.route
 
-        # Basic Endpoints
-        app.route('/get/<address>')(self.get)
-        app.route('/set/<address>/<value>')(self.put)
-        # <address> and <value> are URL quoted
+        route('/get/<address>', methods=['GET'])(self.get)
+        route('/set/<address>/<value>', methods=['GET'])(self.quoted_put)
 
-        # GET endpoints
-        app.route('/single/<address>')(self.get)
+        route('/single/<address>', methods=['GET'])(self.get)
+        route('/single/<address>', methods=['PUT'])(self.put)
 
-        app.route('/multi')(self.multi_get)
-        app.route('/multi/<address>')(self.multi_get)
+        route('/multi', methods=['GET'])(self.multi_get)
+        route('/multi/<address>', methods=['GET'])(self.multi_get)
 
-        # PUT endpoints
-        app.route('/single/<address>', methods=['PUT'])(self.single_put)
+        route('/multi', methods=['PUT'])(self.multi_put)
+        route('/multi/<address>', methods=['PUT'])(self.multi_put)
 
-        app.route('/multi', methods=['PUT'])(self.multi_put)
-        app.route('/multi/<address>', methods=['PUT'])(self.multi_put)
+        self.flask_server.start()
+
+    def set_project(self, project):
+        self.project = project
 
     def index(self):
         with open(self.index_file) as fp:
@@ -47,12 +46,12 @@ class RestServer:
         return self._get(editor)
 
     @decorator.single
-    def put(self, editor, value):
+    def quoted_put(self, editor, value):
         unquoted = urllib.parse.unquote_plus(value)
         return self._set(editor, unquoted)
 
     @decorator.single
-    def single_put(self, editor):
+    def put(self, editor):
         value = flask.request.values['value']
         return self._set(editor, value)
 
