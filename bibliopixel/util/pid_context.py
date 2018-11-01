@@ -5,7 +5,7 @@ DEFAULT_PID_FILENAME = os.path.join(tempfile.gettempdir(), 'bp_pid_file.txt')
 
 
 @contextlib.contextmanager
-def pid_context(pid_filename):
+def pid_context(pid_filename=DEFAULT_PID_FILENAME):
     """
     For the duration of this context manager, put the PID for this process into
     `pid_filename`, and then remove the file at the end.
@@ -29,7 +29,7 @@ def pid_context(pid_filename):
                       e, pid_filename)
 
 
-def get_pid(pid_filename):
+def get_pid(pid_filename=DEFAULT_PID_FILENAME):
     """
     Return the integer PID for the current bp process, or raise an exception if
     there is no such process or it hasn't registered a PID.
