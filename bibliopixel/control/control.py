@@ -41,7 +41,7 @@ class Control(runnable.Runnable):
             log.info('Starting %s', self)
 
         self.thread = self._make_thread()
-        self.thread.start()
+        getattr(self.thread, 'start', lambda: None)()
 
     def stop(self):
         super().stop()
