@@ -5,8 +5,8 @@ so they have exactly the right constructor.
 
 import copy
 from . import aliases, alias_lists, construct, merge
-from .. import layout, util
-from .. util import exception
+from .. import layout
+from .. util import deprecated, exception, log
 from .. util.colors import make, palettes
 from .. animation.strip import BaseStripAnim
 
@@ -49,10 +49,17 @@ def _fill_aliases(desc):
 
 
 def _fill_palettes(desc):
-    p = desc.pop('palettes', {})
-    with exception.add('Error in "palettes" Section'):
-        palettes.PROJECT_PALETTES = {k: make.colors(v) for k, v in p.items()}
-
+    p = desc.pop('palettes', None)
+    if p:
+        default = p.pop('default', None)
+        with exception.add('Error in "palettes" Section'):
+            pp = {k: make.colors(v) for k, v in p.items()}
+        palettes.PROJECT_PALETTES = pp
+        if default:
+            try:
+                palettes.set_default(default)
+            except:
+                log.error('Unable to set default palette to be %s', default)
     return desc
 
 
@@ -99,10 +106,12 @@ def _fill_drivers(desc):
 
 
 def _fill_shape(desc):
+    # TODO: this copy can't be deleted AND this can't be moved even one step
+    # earlier without causing a test failure!
     desc = copy.deepcopy(desc)
     dimensions = desc.pop('dimensions', None)
     if dimensions:
-        util.deprecated.deprecated('Project Section "dimensions"')
+        deprecated.deprecated('Project Section "dimensions"')
 
     shape = desc.pop('shape', None) or dimensions
     if not shape:

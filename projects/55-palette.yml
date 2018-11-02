@@ -1,0 +1,6 @@
+shape: [32, 32]
+palettes:
+  default: flag
+
+animation:
+    typename: $bpa.matrix.bloom

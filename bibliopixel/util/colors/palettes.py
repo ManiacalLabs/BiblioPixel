@@ -13,8 +13,6 @@ If that fails, the name is looked up in a fixed, immutable dictionary
 ``BUILT_IN_PALETTES``.
 """
 
-DEFAULT_PALETTE = 'rainbow'
-
 
 def get(name=None):
     """
@@ -22,11 +20,11 @@ def get(name=None):
 
     If ``name`` is omitted, the default value is used.
     """
-    if name is None:
-        name = DEFAULT_PALETTE
+    if name is None or name == 'default':
+        return _DEFAULT_PALETTE
+
     if isinstance(name, str):
-        result = PROJECT_PALETTES.get(name) or BUILT_IN_PALETTES.get(name)
-        return copy.deepcopy(result)
+        return PROJECT_PALETTES.get(name) or BUILT_IN_PALETTES.get(name)
 
 
 # This global variable is changed by the Project to allow color settings
@@ -59,3 +57,14 @@ BUILT_IN_PALETTES = {
     'splash': _colors('steel blue 3, gainsboro, gold, tan 2'),
     'energy': _colors('magenta, yellow, cyan, beige'),
 }
+
+
+def set_default(palette):
+    p = get(palette)
+    if not p:
+        raise ValueError('Don\'t understand default %s' % palette)
+    global _DEFAULT_PALETTE
+    _DEFAULT_PALETTE = p
+
+
+set_default('rainbow')
