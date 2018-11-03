@@ -1,12 +1,12 @@
 Types of Typenames
 -----------------------------
 
-This Section is fairly advanced and can be omitted on first reading.
+This Section is fairly advanced and can be skipped on first reading.
 
 You can write Typenames in four formats:
 
 1. Absolute Typenames
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+================================
 
 An Absolute Typename is a full Python pathname of a class or function like
 ``math.log`` or ``bibliopixel.animation.tests.PixelTester``.
@@ -19,7 +19,7 @@ So ``x23.he_is_13.yes`` is an Absolute Typename but neither ``23x.h`` nor
 Typenames.
 
 2. Relative Typenames
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+================================
 
 To save typing, you can specify typenames relative to the base module for
 that Class Section.  For example, the Absolute Typename
@@ -30,7 +30,7 @@ Relative Typenames start with a ``.`` and then follow the same rules as Absolute
 Typenames.
 
 3. File Typenames
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+================================
 
 You can directly load Python code from a file on your drive this way:
 ``/home/pi/Documents/myAnimation.py``
@@ -38,7 +38,7 @@ You can directly load Python code from a file on your drive this way:
 File Typenames always start with ``/``.
 
 4. Git Repo Typenames
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==============================================
 
 You can directly load code from a Github repo.
 

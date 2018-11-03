@@ -25,7 +25,7 @@
 
 .. code-block:: yaml
 
-   shape: [48, 48]
+   shape: [48, 24]
    animation: $bpa.matrix.bloom
 
 
@@ -37,7 +37,7 @@
 
 .. code-block:: yaml
 
-   shape: [48, 48]
+   shape: [48, 24]
    animation: $bpa.matrix.SpinningTriangle
 
 
@@ -49,7 +49,7 @@
 
 .. code-block:: yaml
 
-   shape: [48, 48]
+   shape: [48, 24]
 
    animation:
      typename: sequence
@@ -69,7 +69,7 @@
 
 .. code-block:: yaml
 
-   shape: [48, 48]
+   shape: [48, 24]
 
    animation:
      typename: test.bibliopixel.animation.documentation_class.Example26
@@ -84,7 +84,7 @@
 
 .. code-block:: yaml
 
-   shape: [48, 48]
+   shape: [48, 24]
 
    animation:
      typename: test.bibliopixel.animation.documentation_class.Example26
@@ -99,7 +99,7 @@
 
 .. code-block:: yaml
 
-   shape: [48, 48]
+   shape: [48, 24]
 
    animation:
      typename: test.bibliopixel.animation.documentation_class.Example28

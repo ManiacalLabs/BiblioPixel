@@ -1,12 +1,10 @@
 The ``bp`` program.
 ==========================
 
-1. What is ``bp``\ ?
-^^^^^^^^^^^^^^^^^^^^^^
+``bp`` is the BiblioPixel project runner, a command line application installed
+as part of BiblioPixel.
 
-``bp`` is short for the BiblioPixel project runner.  It's a command line
-application that's installed as part of BiblioPixel, along with the
-``bibliopixel`` Python library.
+``bp``
 
 You've already used ``bp`` to run your BiblioPixel projects and ``bp new`` to
 create a new BiblioPixel project, but ``bp`` has all sorts of other Commands,

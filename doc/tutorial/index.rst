@@ -2,35 +2,24 @@ The BiblioPixel Tutorial
 ------------------------------
 
 The tutorial steps you through all the features of BiblioPixel, starting with
-creating a project and going onto advanced topics like Controls.
+creating a simple project and going onto advanced topics like Controls.
+
+Creating BiblioPixel projects is quite easy, and we have tried hard to give you
+clear error messages when you do make a mistake - and the `mailing list
+<https://groups.google.com/d/forum/maniacal-labs-users>`_ is always a click
+away.
+
 
 .. toctree::
    :maxdepth: 1
 
-   before-you-start
-   yaml-and-json
-   animated-gifs
-   installing-bibliopixel
-   how-to-write-a-project
-   the-bp-program
-   stopping-and-restarting-bp
-   projects
-   project-fields
-   project-sections
-   the-animation-section
-   the-run-section
-   the-shape-and-layout-sections
-   typenames
-   types-of-typenames
-   type-guessing
-   palettes
-   fields-of-a-palette
-   the-driver-section
-   the-drivers-section
-   the-serial-driver
-   the-controls-section
-   routing-addresses-and-actions
-   the-path-and-aliases-Sections
+   getting-started/index
+   projects/index
+   sections/index
+   fields/index
+   animations/index
+   drivers/index
+   controls/index
 
 .. bp-code-block:: footer
 

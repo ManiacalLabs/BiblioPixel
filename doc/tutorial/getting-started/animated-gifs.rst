@@ -13,7 +13,7 @@ also a unique one at the bottom of each page just for fun, as a sort of gallery
 of animations.
 
 You can generate your own animated GIFs from your Projects - see
-`here <topic-papers/writing-animated-gifs>`_.
+`here <topic-papers/writing-animated-gifs>`_ for more details.
 
 .. bp-code-block:: footer
 
