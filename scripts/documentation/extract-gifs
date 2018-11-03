@@ -81,7 +81,7 @@ def extract_one_gif(args, filename, desc):
             pass
 
     default['driver']['filename'] = str(path)
-    log.info('Extracting ', path)
+    log.info('Extracting %s', path)
     try:
         pr = project.project(default, desc)
         pr.run()
@@ -150,7 +150,7 @@ def args():
         '--fail', action='store_true',
         help='Continue going after one image fails')
     parser.add_argument(
-        '--workers', '-w', default=7, type=int,
+        '--workers', '-w', default=6, type=int,
         help='Number of workers to use')
     parser.add_argument(
         '--ignore_cache', '-i', action='store_true',
