@@ -29,7 +29,7 @@ class Serial(DriverBase):
     :param int baudrate: Baud rate to connect to serial device
     """
 
-    def __init__(self, ledtype=None, num=0, dev="",
+    def __init__(self, ledtype=None, num=0, dev='',
                  c_order='RGB', spi_speed=2,
                  gamma=None, restart_timeout=3,
                  device_id=None, hardwareID="1D50:60AB",
