@@ -55,7 +55,14 @@ We have the following driver classes built into BiblioPixel:
   Drives the WS281X strips on the Raspberry Pi
 
 ``Serial``
-  All other serial drivers and strips, including the AllPixel
+  All strips run by a serial (USB) device, particularly the AllPixel and
+  PiPixel.  This driver is important enough to have its own page later.
+
+``SPI``
+  This is the base class for all types of strips connected to an SPI bus
+  as found on the Raspberry Pi and other small machines.  This driver also has
+  its own page.
+
 
 **Example 1**\ : A ``driver`` Section for a serial device
 

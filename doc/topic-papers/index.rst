@@ -6,8 +6,9 @@ Topic Papers
    :caption: BiblioPixel topic papers:
 
    troubleshooting
-   using-controls.rst
-   using-numpy.rst
-   using-rest-api.rst
-   writing-an-animation-class.rst
+   using-controls
+   using-numpy
+   using-rest-api
+   writing-an-animation-class
+   stopping-and-restarting-bp
    writing-animated-gifs

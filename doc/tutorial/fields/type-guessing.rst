@@ -2,7 +2,7 @@ Type guessing
 --------------------
 
 BiblioPixel can often guess the name of the class you mean from the file or
-module that it's in.  This saves a lot of repetitive typing
+module that it's in.  This saves a lot of repetitive typing.
 
 This happens in two cases:
 

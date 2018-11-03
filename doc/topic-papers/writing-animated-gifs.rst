@@ -40,4 +40,4 @@ This would render the project to a file called lovely-gif.gif, twice real-time
 speed, square pixels of width 5, padded with 2 pixels of dark grey background.
 
 You can see all the ``GifWriter`` options `here <https://github.com/ManiacalLabs/BiblioPixel/blob/master/bibliopixel/util/image/gif_writer. py#L4-L16>`_
-and `here <https://github.com/ManiacalLabs/BiblioPixel/blob/master/bibliopixel/drivers/gif_writer. py#L10-L36>`_\ .
+and `also here <https://github.com/ManiacalLabs/BiblioPixel/blob/master/bibliopixel/drivers/gif_writer. py#L10-L36>`_\ .
