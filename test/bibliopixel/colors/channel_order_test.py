@@ -19,13 +19,10 @@ class ChannelOrderTest(unittest.TestCase):
         self.assertIs(make((2, 1, 0)), ChannelOrder.BGR)
 
     def test_index(self):
-        with self.assertRaisesRegex(ValueError, 'index .+ is not between'):
-            make(-1)
-        map(make, range(6))
-        with self.assertRaisesRegex(ValueError, 'index .+ is not between'):
-            make(6)
+        self.assertIs(make(-1), ChannelOrder.BGR)
+        self.assertIs(make(6), ChannelOrder.RGB)
 
-        with self.assertRaisesRegex(ValueError, 'index .+ is not an integer'):
+        with self.assertRaises(TypeError):
             make(2.3)
 
     def test_fail(self):

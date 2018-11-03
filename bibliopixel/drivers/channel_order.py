@@ -19,18 +19,7 @@ class ChannelOrder(object):
         try:
             length = len(x)
         except:
-            # Must be an integer index.
-            if x < 0:
-                raise ValueError(
-                    'ChannelOrder index %s is not between 0 and 5' % x)
-            try:
-                return orders[x]
-            except IndexError:
-                raise ValueError(
-                    'ChannelOrder index %s is not between 0 and 5' % x)
-            except:
-                raise ValueError(
-                    'ChannelOrder index "%s" is not an integer' % x)
+            return orders[x % len(orders)]
 
         if length != 3:
             raise ValueError('ChannelOrder "%s" does not have length 3' % x)
