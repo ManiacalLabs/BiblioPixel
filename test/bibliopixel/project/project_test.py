@@ -102,6 +102,12 @@ class ProjectTest(unittest.TestCase):
         animation = make(PROJECT_ANIMATION)
         self.assertEqual(animation.layout.rotation, 90)
 
+    def test_nested_animation(self):
+        make(PROJECT_NESTED_ANIMATION, run_start=False)
+
+    def test_nested_sequence(self):
+        make(PROJECT_NESTED_SEQUENCE, run_start=False)
+
 
 PROJECT = """
 {
@@ -338,6 +344,25 @@ PROJECT_SUB_ANIMATIONS = """
 
 PROJECT_ANIMATION = """
 {"animation": "test.bibliopixel.project.project_test.AnimationTest"}
+"""
+
+PROJECT_NESTED_ANIMATION = """
+shape: [32, 32]
+animation:
+  typename: .wrapper
+  animation:
+      typename: .wrapper
+      animation: $bpa.matrix.bloom
+"""
+
+PROJECT_NESTED_SEQUENCE = """
+shape: [32, 32]
+animation:
+  typename: .sequence
+  animations:
+      - typename: .sequence
+        animations:
+        - $bpa.matrix.bloom
 """
 
 
