@@ -5,7 +5,7 @@ from .. util import deprecated, log
 from .. util.colors import palettes
 from .. util.colors.legacy_palette import pop_legacy_palette
 
-from .. util.threads.animation_threading import AnimationThreading
+from . animation_threading import AnimationThreading
 from .. project import attributes, fields
 
 

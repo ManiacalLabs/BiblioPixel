@@ -1,6 +1,6 @@
 import threading, time
-from .. import log
-from . import compose_events, runnable
+from .. util import log
+from .. util.threads import compose_events, runnable
 
 
 class UpdateDriverThread(runnable.LoopThread):
