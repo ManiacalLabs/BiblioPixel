@@ -25,11 +25,8 @@ class Collection(animation.Animation):
                 run = {}
 
             else:
-                animation = a.pop('animation', {})
                 run = a.pop('run', {})
-                if a:
-                    raise ValueError(
-                        'Extra fields in animation: ' + ', '.join(a))
+                animation = a
 
             animation = construct.to_type_constructor(
                 animation, 'bibliopixel.animation')

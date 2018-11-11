@@ -14,7 +14,7 @@ def make_project(data):
         raise ValueError('Cannot understand data %s' % data)
 
     else:
-        if '{' in data:
+        if '{' in data or ':' in data:
             fp = tempfile.NamedTemporaryFile(mode='w')
             fp.write(data)
             fp.seek(0)
