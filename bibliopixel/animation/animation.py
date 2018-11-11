@@ -1,11 +1,7 @@
 import contextlib, threading, time
-from . import adaptor
-from . runner import Runner, STATE
+from . import adaptor, animation_threading, runner
 from .. util import deprecated, log
-from .. util.colors import palettes
-from .. util.colors.legacy_palette import pop_legacy_palette
-
-from . animation_threading import AnimationThreading
+from .. util.colors import palettes, legacy_palette
 from .. project import attributes, fields
 
 
@@ -39,7 +35,8 @@ class Animation(object):
         return a
 
     def __init__(self, layout, *, preclear=True, **kwds):
-        self.palette = pop_legacy_palette(kwds, *self.COLOR_DEFAULTS)
+        self.palette = legacy_palette.pop_legacy_palette(
+            kwds, *self.COLOR_DEFAULTS)
         self.palette.length = layout.numLEDs
 
         attributes.set_reserved(self, 'animation', **kwds)
@@ -47,7 +44,7 @@ class Animation(object):
         assert layout
         self.internal_delay = None
         self.on_completion = None
-        self.state = STATE.ready
+        self.state = runner.STATE.ready
         self.preclear = preclear
         self.project = None
         self.runner = None
@@ -57,9 +54,8 @@ class Animation(object):
     def set_project(self, project):
         self.project = project
         self.time = project.time
-        if self.runner:
-            self.runner.set_project(project)
-            self.threading.set_project(project)
+        self.runner.set_project(project)
+        self.threading.set_project(project)
 
     @property
     def _led(self):
@@ -81,11 +77,11 @@ class Animation(object):
     @property
     def completed(self):
         """Many BiblioPixelAnimations use the old `completed` variable."""
-        return self.state == STATE.complete
+        return self.state == runner.STATE.complete
 
     @completed.setter
     def completed(self, state):
-        self.state = STATE.complete if state else STATE.running
+        self.state = runner.STATE.complete if state else runner.STATE.running
 
     def pre_run(self):
         pass
@@ -133,22 +129,14 @@ class Animation(object):
         self._pre_run()
         try:
             if self.runner.repeats != 0:
-                while self.state == STATE.running:
+                while self.state == runner.STATE.running:
                     self._run_one_frame()
                     yield
         finally:
             self.cleanup(clean_layout)
 
         self.on_completion and self.on_completion(self.state)
-        self.state = STATE.ready
-
-    def _check_delay(self):
-        if self.free_run:
-            self.sleep_time = None
-        elif self.internal_delay:
-            self.sleep_time = self.internal_delay
-        else:
-            self.sleep_time = self.runner.sleep_time
+        self.state = runner.STATE.ready
 
     def _run_one_frame(self):
         timestamps = [self.time()]
@@ -166,37 +154,42 @@ class Animation(object):
         _report_framerate(timestamps)
 
         self.cur_step += 1
-        if self.state == STATE.complete and self.runner.max_cycles > 0:
+        if self.state == runner.STATE.complete and self.runner.max_cycles > 0:
             if self.cycle_count < self.runner.max_cycles - 1:
                 self.cycle_count += 1
-                self.state = STATE.running
+                self.state = runner.STATE.running
 
         self.threading.wait(self.sleep_time, timestamps)
+
         if self.threading.stop_event.isSet():
-            self.state = STATE.canceled
+            self.state = runner.STATE.canceled
         else:
             self.state = self.runner.compute_state(self.cur_step, self.state)
 
     def _pre_run(self):
-        self.state = STATE.running
+        self.state = runner.STATE.running
         self.runner.run_start_time = self.time()
         self.threading.stop_event.clear()
 
         self.cur_step = 0
         self.cycle_count = 0
 
-        self._check_delay()
+        if self.free_run:
+            self.sleep_time = None
+        elif self.internal_delay:
+            self.sleep_time = self.internal_delay
+        else:
+            self.sleep_time = self.runner.sleep_time
+
         adaptor.adapt_animation_layout(self)
         self.preclear and self.layout.all_off()
 
         self.pre_run()
 
-    def _set_runner(self, runner):
-        self.runner = Runner(**(runner or {}))
-        self.threading = AnimationThreading(self.runner, self.run_all_frames)
-        if self.project:
-            self.runner.set_project(self.project)
-            self.threading.set_project(self.project)
+    def _set_runner(self, run):
+        self.runner = runner.Runner(**(run or {}))
+        self.threading = animation_threading.AnimationThreading(
+            self.runner, self.run_all_frames)
 
     def run(self, **kwds):
         deprecated.deprecated('BaseAnimation.run')

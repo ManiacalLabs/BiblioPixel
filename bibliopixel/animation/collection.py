@@ -1,6 +1,6 @@
 import os
 from .. project import aliases, construct, load, project
-from . import animation, failed
+from . import animation, failed, runner
 from .. util import log
 
 
@@ -70,7 +70,7 @@ class Collection(animation.Animation):
 
     # Override to handle all the animations
     def cleanup(self, clean_layout=True):
-        self.state = animation.STATE.canceled
+        self.state = runner.STATE.canceled
         for a in self.animations:
             a.cleanup()
         super().cleanup(clean_layout)
