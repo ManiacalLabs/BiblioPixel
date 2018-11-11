@@ -54,7 +54,6 @@ class Layout(object):
             pos += d.numLEDs
 
         self.frame_render_time = 0
-        self.animation_sleep_time = None
 
         self.threading = UpdateThreading(threadedUpdate, self)
         self.brightness = brightness

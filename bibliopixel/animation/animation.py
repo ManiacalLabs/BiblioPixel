@@ -149,7 +149,6 @@ class Animation(object):
             self.sleep_time = self.internal_delay
         else:
             self.sleep_time = self.runner.sleep_time
-        self.layout.animation_sleep_time = self.sleep_time or 0
 
     def _run_one_frame(self):
         timestamps = [self.time()]
