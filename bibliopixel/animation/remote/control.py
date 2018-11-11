@@ -1,6 +1,6 @@
 import copy, multiprocessing
 from . import opener, server, trigger_process
-from .. animation import STATE
+from .. runner import STATE
 from .. import wrapper
 from ... project import load
 from ... util import log
