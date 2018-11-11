@@ -1,8 +1,7 @@
-import copy, time
-from .. import util
+import copy
+from . update_threading import UpdateThreading
 from .. project import attributes, data_maker, fields
-from .. util.threads.update_threading import UpdateThreading
-from .. util.colors import make, COLORS
+from .. util import colors, deprecated, log
 
 
 class Layout(object):
@@ -66,7 +65,7 @@ class Layout(object):
 
     def update(self):
         """DEPRECATED: Use :py:func:`push_to_driver` instead"""
-        util.deprecated.deprecated('Layout.update')
+        deprecated.deprecated('Layout.update')
         return self.push_to_driver()
 
     def start(self):
@@ -115,7 +114,7 @@ class Layout(object):
 
     @property
     def dimensions(self):
-        util.deprecated.deprecated('Layout.dimensions')
+        deprecated.deprecated('Layout.dimensions')
         return self.shape
 
     @property
@@ -138,7 +137,7 @@ class Layout(object):
         """
         if not len(color_list):
             return
-        color_list = make.colors(color_list)
+        color_list = colors.make.colors(color_list)
 
         size = len(self._colors) - offset
         if len(color_list) > size:
@@ -149,12 +148,12 @@ class Layout(object):
         if pixel >= 0 and pixel < self.numLEDs:
             return self._colors[pixel]
 
-        return COLORS.Black  # don't go out of bounds
+        return colors.COLORS.Black  # don't go out of bounds
 
     def _set_base(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
             if isinstance(color, str):
-                color = util.colors.COLORS[color]
+                color = colors.COLORS[color]
             else:
                 color = tuple(color)
             self.color_list[pixel] = color
@@ -182,7 +181,7 @@ class Layout(object):
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
-        color = util.colors.hsv2rgb(hsv)
+        color = colors.hsv2rgb(hsv)
         self._set_base(pixel, color)
 
     # turns off the desired pixel
@@ -211,7 +210,7 @@ class Layout(object):
     # Fill the strand (or a subset) with a single color using HSV values
     def fillHSV(self, hsv, start=0, end=-1):
         """Fill the entire strip with HSV color tuple"""
-        self.fill(util.colors.hsv2rgb(hsv), start, end)
+        self.fill(colors.hsv2rgb(hsv), start, end)
 
 
 class MultiLayout(Layout):
@@ -222,7 +221,7 @@ class MultiLayout(Layout):
         self.gen_coord_map = gen_coord_map
         if gen_coord_map:
             if coord_map:
-                util.log.warning('Cannot set both coord_map and gen_coord_map')
+                log.warning('Cannot set both coord_map and gen_coord_map')
             elif isinstance(gen_coord_map, dict):
                 coord_map = self.gen_multi(**gen_coord_map)
             else:
@@ -241,7 +240,7 @@ class MultiLayout(Layout):
         rotation control buf must also be in the exact format required by the
         display type.
         """
-        util.deprecated.deprecated('layout.set_colors')
+        deprecated.deprecated('layout.set_colors')
         if len(self._colors) != len(buf):
             raise IOError("Data buffer size incorrect! "
                           "Expected: {} bytes / Received: {} bytes"
@@ -249,5 +248,5 @@ class MultiLayout(Layout):
         self._colors[:] = buf
 
     def setBuffer(self, buf):
-        util.deprecated.deprecated('layout.setBuffer')
+        deprecated.deprecated('layout.setBuffer')
         self.color_list = buf
