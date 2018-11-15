@@ -8,6 +8,8 @@ from .. project import attributes, fields
 class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
+    top_level = False
+
     FAIL_ON_EXCEPTION = False
     COLOR_DEFAULTS = ()
 
@@ -139,19 +141,21 @@ class Animation(object):
         self.state = runner.STATE.ready
 
     def _run_one_frame(self):
-        timestamps = [self.time()]
-
-        for cb in self.preframe_callbacks:
-            cb()
+        if self.top_level:
+            timestamps = [self.time()]
+            for cb in self.preframe_callbacks:
+                cb()
 
         self.step(self.runner.amt)
-        timestamps.append(self.time())
 
-        self.layout.frame_render_time = timestamps[1] - timestamps[0]
-        self.layout.push_to_driver()
+        if self.top_level:
+            timestamps.append(self.time())
 
-        timestamps.append(self.time())
-        _report_framerate(timestamps)
+            self.layout.frame_render_time = timestamps[1] - timestamps[0]
+            self.layout.push_to_driver()
+
+            timestamps.append(self.time())
+            _report_framerate(timestamps)
 
         self.cur_step += 1
         if self.state == runner.STATE.complete and self.runner.max_cycles > 0:
@@ -159,7 +163,8 @@ class Animation(object):
                 self.cycle_count += 1
                 self.state = runner.STATE.running
 
-        self.threading.wait(self.sleep_time, timestamps)
+        if self.top_level:
+            self.threading.wait(self.sleep_time, timestamps)
 
         if self.threading.stop_event.isSet():
             self.state = runner.STATE.canceled
