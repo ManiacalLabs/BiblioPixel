@@ -175,7 +175,7 @@ class Animation(object):
         self.cycle_count = 0
 
         if self.free_run:
-            self.sleep_time = None
+            self.sleep_time = 0
         elif self.internal_delay:
             self.sleep_time = self.internal_delay
         else:
