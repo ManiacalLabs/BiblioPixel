@@ -1,0 +1,36 @@
+shape: [32, 32]
+run: {fps: 60}
+
+animation:
+  typename: .wrapper
+  animation:
+      typename: .wrapper
+      animation:
+        typename: .wrapper
+        animation:
+            typename: .wrapper
+            animation:
+              typename: .wrapper
+              animation:
+                  typename: .wrapper
+                  animation:
+                    typename: .wrapper
+                    animation:
+                        typename: .wrapper
+                        animation:
+                          typename: .wrapper
+                          animation:
+                              typename: .wrapper
+                              animation:
+                                typename: .wrapper
+                                animation:
+                                    typename: .wrapper
+                                    animation:
+                                      typename: .wrapper
+                                      animation:
+                                          typename: .wrapper
+                                          animation:
+                                            typename: .wrapper
+                                            animation:
+                                                typename: .wrapper
+                                                animation: $bpa.matrix.bloom

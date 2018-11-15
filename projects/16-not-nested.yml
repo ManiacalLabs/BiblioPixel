@@ -1,0 +1,4 @@
+shape: [32, 32]
+run: {fps: 60}
+
+animation: $bpa.matrix.bloom
