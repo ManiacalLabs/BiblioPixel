@@ -1,3 +1,10 @@
+## v3.4.31 - 2018-11-15
+- Fix issues #978, #984, #988, #991, #1023, #1025, #1040, #1042, #1043
+- New default palettes
+- Much smoother animations in many cases
+- More documentation
+- Improvements to `bp info`
+
 ## v3.4.30 - 2018-10-23
 - Revert change that broken LarsonScanners, affected others
 - New mp4 extractor
