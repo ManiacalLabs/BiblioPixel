@@ -5,14 +5,6 @@ from .. util import data_file, deprecated, log, pid_context
 """Common command line arguments for run and demo."""
 
 
-def _get_version():
-    from os.path import abspath, dirname, join
-    filename = join(dirname(dirname(dirname(abspath(
-        __file__)))), 'bibliopixel', 'VERSION')
-    return open(filename).read().strip()
-
-
-VERSION = _get_version()
 COMPONENTS = 'driver', 'layout', 'animation'
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 ENABLE_PRESETS = False
@@ -28,8 +20,6 @@ def add_common_flags(parser):
         help='Filename to store the `bp` process ID when running')
     parser.add_argument(
         '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
-    parser.add_argument(
-        '--version', action='store_true', help=VERSION_HELP)
     parser.add_argument(
         deprecated.V4_FLAG, action='store_true', help=V4_HELP)
 
@@ -218,10 +208,6 @@ VERBOSE_HELP = """\
 If this is set, then errors are reported with a full stack trace, and
 loglevel is by default set to debug
 """
-
-VERSION_HELP = """\
-Print the current version number of BiblioPixel (%s)
-""" % VERSION
 
 V4_HELP = """\
 Run BiblioPixel in v4 compatibility mode, to see if it will work with
