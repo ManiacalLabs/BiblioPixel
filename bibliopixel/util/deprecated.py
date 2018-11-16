@@ -18,6 +18,15 @@ FLAG = '--deprecated'
 V4_FLAG = '--v4'
 ENVIRONMENT_VARIABLE = 'BP_DEPRECATED'
 
+V4_HELP = """\
+Run BiblioPixel in v4 compatibility mode, to see if it will work with
+future releases v4.x
+"""
+
+
+def add_arguments(parser):
+    parser.add_argument(V4_FLAG, action='store_true', help=V4_HELP)
+
 
 def allowed():
     _compute_action()

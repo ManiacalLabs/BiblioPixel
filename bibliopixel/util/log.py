@@ -8,6 +8,21 @@ LOG_NAMES = {'frame': FRAME, 'debug': DEBUG, 'info': INFO, 'warning': WARNING,
 SORTED_NAMES = tuple(k for k, v in sorted(LOG_NAMES.items()))
 
 
+def add_arguments(parser):
+    parser.add_argument(
+        '--loglevel', choices=SORTED_NAMES, default='info',
+        help=LOGLEVEL_HELP)
+    parser.add_argument(
+        '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
+
+
+def apply_args(args):
+    if args.verbose and args.loglevel != 'frame':
+        set_log_level('debug')
+    else:
+        set_log_level(args.loglevel)
+
+
 # From https://stackoverflow.com/a/35804945/43839
 def _addLoggingLevel(levelName, levelNum, methodName=None):
     """
@@ -126,6 +141,14 @@ frame, debug, info, warning, error = (
 # introducers like "INFO".  By default this is the same as the global `print` -
 # re-assign this variable if you need to redirect your printing.
 printer = print  # noqa: T001, T002
+
+LOGLEVEL_HELP = """\
+Set what level of events to log. Higher log levels print less."""
+
+VERBOSE_HELP = """\
+If this is set, then errors are reported with a full stack trace, and
+loglevel is by default set to debug
+"""
 
 
 from . import deprecated
