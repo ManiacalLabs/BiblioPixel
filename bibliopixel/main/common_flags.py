@@ -1,4 +1,3 @@
-import os, tempfile
 from .. project import data_maker, defaults, project
 from .. util import data_file, deprecated, log, pid_context
 
@@ -12,23 +11,9 @@ NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 
 def add_common_flags(parser):
-    parser.add_argument(
-        '--loglevel', choices=log.SORTED_NAMES, default='info',
-        help=LOGLEVEL_HELP)
-    parser.add_argument(
-        '--pid_filename', default=pid_context.DEFAULT_PID_FILENAME,
-        help='Filename to store the `bp` process ID when running')
-    parser.add_argument(
-        '--verbose', '-v', action='store_true', help=VERBOSE_HELP)
-    parser.add_argument(
-        deprecated.V4_FLAG, action='store_true', help=V4_HELP)
-
-
-def execute_args(args):
-    if args.verbose and args.loglevel != 'frame':
-        log.set_log_level('debug')
-    else:
-        log.set_log_level(args.loglevel)
+    log.add_arguments(parser)
+    deprecated.add_arguments(parser)
+    pid_context.add_arguments(parser)
 
 
 def add_project_flags(parser):
@@ -185,9 +170,6 @@ See https://github.com/ManiacalLabs/BiblioPixel/wiki/BiblioPixel-Paths
 for more information.
 """
 
-LOGLEVEL_HELP = """\
-Set what level of events to log. Higher log levels print less."""
-
 NUMBERS_HELP = """
 The type of numbers that are used in color list calculations.
 
@@ -203,16 +185,6 @@ PRESET_HELP = """Filenames for preset library"""
 
 PROJECT_LENGTHS_HELP = """\
 How long to run the animation (overrides runner.seconds)"""
-
-VERBOSE_HELP = """\
-If this is set, then errors are reported with a full stack trace, and
-loglevel is by default set to debug
-"""
-
-V4_HELP = """\
-Run BiblioPixel in v4 compatibility mode, to see if it will work with
-future releases v4.x
-"""
 
 MOVIE_HELP = """
 Write a movie file (animated GIF or mp4).
