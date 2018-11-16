@@ -13,7 +13,7 @@ For the list of possible demos, type
 
 import random
 
-from . import args, common_flags, demo_table
+from .. main import args, common_flags, demo_table
 from .. project import project
 from .. util import log, pid_context
 

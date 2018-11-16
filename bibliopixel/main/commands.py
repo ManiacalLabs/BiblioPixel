@@ -10,7 +10,7 @@ if deprecated.allowed():  # pragma: no cover
     SIGNAL_COMMANDS = 'kill', 'pid', 'restart', 'shutdown'
     COMMANDS += SIGNAL_COMMANDS
 
-MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
+MODULES = {c: import_module('bibliopixel.commands.' + c) for c in COMMANDS}
 
 FILE = pathlib.Path(__file__).parent / 'commands.rst.tmpl'
 

@@ -3,7 +3,7 @@ Run specified project from file or URL
 """
 
 import os, string, sys, time, traceback
-from . import common_flags
+from .. main import common_flags
 from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
 from .. project import load
