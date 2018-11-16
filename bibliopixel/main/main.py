@@ -1,7 +1,6 @@
 import sys
 from . import args, commands, common_flags
 from .. util import log
-from .. project import aliases, project
 
 __all__ = ['main']
 
