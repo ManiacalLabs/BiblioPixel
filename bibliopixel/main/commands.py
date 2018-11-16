@@ -12,15 +12,6 @@ if deprecated.allowed():  # pragma: no cover
 
 MODULES = {c: import_module('bibliopixel.main.' + c) for c in COMMANDS}
 
-
-BP_DELETED_COMMANDS = False
-
-if os.environ.get('BP_DELETED_COMMANDS', BP_DELETED_COMMANDS):
-    DELETED = (
-        'list', 'load', 'remove', 'reset', 'save', 'set', 'show', 'update')
-    MODULES.update({
-        c: import_module('bibliopixel.main.deleted.' + c) for c in DELETED})
-
 FILE = pathlib.Path(__file__).parent / 'commands.rst.tmpl'
 
 HELP = FILE.open().read().format(
