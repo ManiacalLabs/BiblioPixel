@@ -36,7 +36,7 @@ def get_int(msg, invalid=-1):
         return invalid
 
 
-def showSelectList(msg, values):
+def _show_select_list(msg, values):
     log.printer('\n' + msg)
     shift = len(str(len(values)))
     count = 0
@@ -65,13 +65,13 @@ def run(args):
         if len(devs) == 1:
             d = devs[0][1]
         else:
-            d = showSelectList('Select device:', devs)
+            d = _show_select_list('Select device:', devs)
             if d < 0 or d >= len(devs):
                 log.printer('\nInvalid choice!')
                 raise ValueError()
             d = devs[d][1]
 
-        t = showSelectList('Choose LED Type', [v[1] for v in types])
+        t = _show_select_list('Choose LED Type', [v[1] for v in types])
         if t < 0 or t >= len(types):
             log.printer('\nInvalid choice!')
             raise ValueError()

@@ -1,12 +1,12 @@
 import sys
-from . import args, commands, common_flags
+from . import args, commands, project_flags
 from .. util import log
 
 __all__ = ['main']
 
 
 def main():
-    args.parse_args(commands, common_flags)
+    args.parse_args(commands, project_flags)
     run = getattr(args.ARGS, 'run', None)
     if not run:
         log.printer('ERROR: No command entered')
