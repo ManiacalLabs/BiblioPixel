@@ -15,12 +15,8 @@ Example:
 
 """
 
-from . restart import run, CHOICES
+from . import restart
 
 
 def set_parser(parser):
-    parser.add_argument(
-        'signal', nargs='?', default='SIGINT', choices=CHOICES,
-        help='Signal to send.')
-
-    parser.set_defaults(run=run)
+    restart.add_arguments(parser, 'SIGKINT')

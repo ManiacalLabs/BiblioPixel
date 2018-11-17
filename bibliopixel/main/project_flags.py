@@ -1,4 +1,5 @@
 from .. project import data_maker, defaults, project
+from . import common_flags
 from .. util import data_file, deprecated, log, pid_context
 
 """Common command line arguments for run and demo."""
@@ -10,13 +11,10 @@ ENABLE_PRESETS = False
 NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 
-def add_common_flags(parser):
-    log.add_arguments(parser)
-    deprecated.add_arguments(parser)
+def add_project_flags(parser):
+    # common_flags.add_arguments(parser)
     pid_context.add_arguments(parser)
 
-
-def add_project_flags(parser):
     parser.add_argument(
         '-a', '--animation', default=None,
         help='Default animation type if no animation is specified')

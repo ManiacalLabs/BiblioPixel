@@ -27,4 +27,5 @@ def run(args):
 
 
 def set_parser(parser):
+    pid_context.add_arguments(parser)
     parser.set_defaults(run=run)

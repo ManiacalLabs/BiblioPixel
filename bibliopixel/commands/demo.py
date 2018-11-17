@@ -15,7 +15,7 @@ import random
 
 from .. main import args, project_flags, demo_table
 from .. project import project
-from .. util import log, pid_context
+from .. util import log
 
 DEMO_OPTS = ', '.join(sorted(demo_table.DEMO_TABLE.keys()))
 

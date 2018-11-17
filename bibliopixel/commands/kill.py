@@ -19,12 +19,8 @@ Example:
 
 """
 
-from . restart import run, CHOICES
+from . import restart
 
 
 def set_parser(parser):
-    parser.add_argument(
-        'signal', nargs='?', default='SIGKILL', choices=CHOICES,
-        help='Signal to send.')
-
-    parser.set_defaults(run=run)
+    restart.add_arguments(parser, 'SIGKILL')
