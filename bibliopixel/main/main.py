@@ -1,32 +1,43 @@
-import sys
-from . import args, commands
-from .. util import log
+import importlib, sys
+from .. import commands
 
-__all__ = ['main']
+DEFAULT_COMMAND = 'run'
+ERROR = 'No command entered!'
+USAGE = """\
+No command entered!
+Valid commands are:
+
+    %s
+
+For help on each command, type
+    bp <command> -h
+""" % ', '.join(commands.COMMANDS)
 
 
-def main():
-    args.parse_args(commands)
-    run = getattr(args.ARGS, 'run', None)
-    if not run:
-        log.printer('ERROR: No command entered')
-        log.printer('Valid commands are:')
-        log.printer('    ', ', '.join(commands.COMMANDS))
-        log.printer()
-        log.printer('For more help, type')
-        log.printer()
-        log.printer('    bp --help')
-        sys.exit(-1)
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else list(argv)
 
-    log.apply_args(args.ARGS)
+    for i, arg in enumerate(argv):
+        if arg in commands.COMMANDS:
+            command = argv.pop(i)
+            break
+    else:
+        command = DEFAULT_COMMAND
+        if all(a.startswith('-') for a in argv):
+            from .. util import log
+            log.error(ERROR + USAGE)
+            return -1
 
-    try:
-        result = run(args.ARGS) or 0
-    except Exception as e:
-        if args.ARGS.verbose:
-            raise
-        log.printer('ERROR:', e.args and e.args[0], file=sys.stderr)
-        log.printer(*e.args[1:], sep='\n', file=sys.stderr)
-        result = getattr(e, 'errorcode', -1)
+    module = importlib.import_module('bibliopixel.commands.' + command)
+    if hasattr(module, 'main'):
+        return module.main(argv)
 
-    sys.exit(result)
+    description = module.__doc__ + getattr(module, 'DESCRIPTION', '')
+
+    from . args import set_args
+    args = set_args(description, argv, module)
+    args.run(args)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
