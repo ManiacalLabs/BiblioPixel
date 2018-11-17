@@ -1,10 +1,11 @@
 import argparse, sys
 from .. util import log
+from .. main import common_flags
 
 ARGS = None
 
 
-def parse_args(commands, project_flags):
+def parse_args(commands):
     helps = '--help', 'help'
     argv = ['-h' if a in helps else a for a in sys.argv[1:]]
 
@@ -15,15 +16,6 @@ def parse_args(commands, project_flags):
     # so we use `bp <command> --help` (#429)
     if len(argv) == 2 and argv[0] == '-h':
         argv.reverse()
-
-    try:
-        argv.remove('--version')
-    except:
-        pass
-    else:
-        log.printer('BiblioPixel version %s' % project_flags.VERSION)
-        if not argv:
-            return
 
     # Move all the flags to the end.
     args = [], []
@@ -47,7 +39,7 @@ def parse_args(commands, project_flags):
     for name, module in sorted(commands.MODULES.items()):
         doc = module.__doc__
         subparser = subparsers.add_parser(name, help=doc)
-        project_flags.add_common_flags(subparser)
+        common_flags.add_arguments(subparser)
         module.set_parser(subparser)
         description = getattr(module, 'DESCRIPTION', '')
         subparser.description = doc + description
