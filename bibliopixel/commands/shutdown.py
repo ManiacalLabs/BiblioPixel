@@ -18,5 +18,5 @@ Example:
 from . import restart
 
 
-def set_parser(parser):
-    restart.add_arguments(parser, 'SIGKINT')
+def add_arguments(parser):
+    restart.add_signal_arguments(parser, 'SIGKINT')

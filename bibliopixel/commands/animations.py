@@ -30,7 +30,7 @@ def run(args):
     log.printer('Total animation classes', count)
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)
 
 

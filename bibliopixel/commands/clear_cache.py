@@ -9,5 +9,5 @@ def run(args):
     loady.library.clear()
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)

@@ -40,7 +40,7 @@ def parse_args(commands):
         doc = module.__doc__
         subparser = subparsers.add_parser(name, help=doc)
         common_flags.add_arguments(subparser)
-        module.set_parser(subparser)
+        module.add_arguments(subparser)
         description = getattr(module, 'DESCRIPTION', '')
         subparser.description = doc + description
 

@@ -40,7 +40,7 @@ def run(args):
     log.info('%s sent to bp process %s', args.signal, pid)
 
 
-def add_arguments(parser, default, help=''):
+def add_signal_arguments(parser, default, help=''):
     parser.add_argument(
         'signal', nargs='?', default=default, choices=CHOICES,
         help='Signal to send.' + help)
@@ -48,5 +48,5 @@ def add_arguments(parser, default, help=''):
     parser.set_defaults(run=run)
 
 
-def set_parser(parser):
-    add_arguments(parser, 'SIGHUP', ' Default SIGHUP restarts bp.')
+def add_arguments(parser):
+    add_signal_arguments(parser, 'SIGHUP', ' Default SIGHUP restarts bp.')

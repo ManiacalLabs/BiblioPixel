@@ -73,7 +73,7 @@ def run(args):
     animation.start()
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)
     project_flags.add_project_flags(parser)
     parser.add_argument(

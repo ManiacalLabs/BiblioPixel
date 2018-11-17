@@ -46,6 +46,6 @@ def run(args):
     animation.start()
 
 
-def set_parser(args):
+def add_arguments(args):
     args.set_defaults(run=run)
     args.add_argument('ledtype', help=LEDTYPE_HELP, nargs='?')
