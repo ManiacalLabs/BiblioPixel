@@ -4,7 +4,7 @@ from .. util import log
 ARGS = None
 
 
-def parse_args(commands, common_flags):
+def parse_args(commands, project_flags):
     helps = '--help', 'help'
     argv = ['-h' if a in helps else a for a in sys.argv[1:]]
 
@@ -21,7 +21,7 @@ def parse_args(commands, common_flags):
     except:
         pass
     else:
-        log.printer('BiblioPixel version %s' % common_flags.VERSION)
+        log.printer('BiblioPixel version %s' % project_flags.VERSION)
         if not argv:
             return
 
@@ -47,7 +47,7 @@ def parse_args(commands, common_flags):
     for name, module in sorted(commands.MODULES.items()):
         doc = module.__doc__
         subparser = subparsers.add_parser(name, help=doc)
-        common_flags.add_common_flags(subparser)
+        project_flags.add_common_flags(subparser)
         module.set_parser(subparser)
         description = getattr(module, 'DESCRIPTION', '')
         subparser.description = doc + description

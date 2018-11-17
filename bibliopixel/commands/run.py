@@ -3,7 +3,7 @@ Run specified project from file or URL
 """
 
 import os, string, sys, time, traceback
-from .. main import common_flags
+from .. main import project_flags
 from .. util import data_file, log, pid_context, signal_handler
 from .. animation import Animation
 from .. project import load
@@ -103,7 +103,7 @@ def _get_projects(args):
                         desc['driver'] = dict(movie, filename=f + '.gif')
                 descs.append(desc)
 
-            project = common_flags.make_project(
+            project = project_flags.make_project(
                 args, *descs, root_file=root_file)
             projects.append(project)
             if args.dump:
@@ -212,7 +212,7 @@ def run(args):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    common_flags.add_project_flags(parser)
+    project_flags.add_project_flags(parser)
 
     parser.add_argument(
         'name', nargs='*',

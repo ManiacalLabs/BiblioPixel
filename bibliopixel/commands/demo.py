@@ -13,7 +13,7 @@ For the list of possible demos, type
 
 import random
 
-from .. main import args, common_flags, demo_table
+from .. main import args, project_flags, demo_table
 from .. project import project
 from .. util import log, pid_context
 
@@ -44,7 +44,7 @@ def make_runnable_animation(demo, args):
         if 'z' in layout:
             layout['z'] = layout['z'] or args.depth
 
-    project = common_flags.make_project(args, demo)
+    project = project_flags.make_project(args, demo)
     return project.animation
 
 
@@ -75,7 +75,7 @@ def run(args):
 
 def set_parser(parser):
     parser.set_defaults(run=run)
-    common_flags.add_project_flags(parser)
+    project_flags.add_project_flags(parser)
     parser.add_argument(
         'name', nargs='?', default='',
         help='Name of demo to run. Options are: {}'.format(DEMO_OPTS))
