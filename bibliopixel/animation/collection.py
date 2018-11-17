@@ -24,14 +24,22 @@ class Collection(animation.Animation):
                 animation = a
                 run = {}
 
-            else:
+            elif not isinstance(a, dict):
+                raise TypeError('Unexpected type %s in collection' % type(a))
+
+            elif 'typename' in a:
                 run = a.pop('run', {})
                 animation = a
+
+            else:
+                animation = a.pop('animation', {})
+                run = a.pop('run', {})
+                if a:
+                    raise ValueError('Extra animation fields: ' + ', '.join(a))
 
             animation = construct.to_type_constructor(
                 animation, 'bibliopixel.animation')
 
-            run.update(animation.get('run', {}))
             animation['run'] = run
 
             datatype = animation.setdefault('datatype', failed.Failed)
