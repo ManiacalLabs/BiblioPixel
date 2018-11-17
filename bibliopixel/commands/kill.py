@@ -22,5 +22,5 @@ Example:
 from . import restart
 
 
-def set_parser(parser):
-    restart.add_arguments(parser, 'SIGKILL')
+def add_arguments(parser):
+    restart.add_signal_arguments(parser, 'SIGKILL')

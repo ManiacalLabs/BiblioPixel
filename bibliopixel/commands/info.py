@@ -31,7 +31,7 @@ def run(args):
     log.printer(MESSAGE.format(**locals()))
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)
 
 

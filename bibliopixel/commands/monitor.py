@@ -22,7 +22,7 @@ def run(args):
     control_object.wait()
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.add_argument(
         'control', nargs=1,
         help='Name of a control to monitor')

@@ -109,7 +109,7 @@ def run(args):
         pass
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)
     parser.add_argument('--hardware-id', default='1D50:60AB',
                         help='USB Vendor ID : Product ID of device. '

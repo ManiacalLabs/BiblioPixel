@@ -59,7 +59,7 @@ def run(args):
     log.printer('Created new project in', directory)
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)
     parser.add_argument('project_name', help=PROJECT_NAME_HELP)
     parser.add_argument('directory', default='', nargs='?', help=DIRECTORY_HELP)

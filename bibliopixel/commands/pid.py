@@ -26,6 +26,6 @@ def run(args):
         return -1
 
 
-def set_parser(parser):
+def add_arguments(parser):
     pid_context.add_arguments(parser)
     parser.set_defaults(run=run)

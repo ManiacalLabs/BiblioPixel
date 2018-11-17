@@ -210,7 +210,7 @@ def run(args):
                     break
 
 
-def set_parser(parser):
+def add_arguments(parser):
     parser.set_defaults(run=run)
     project_flags.add_project_flags(parser)
 
