@@ -11,8 +11,7 @@ ENABLE_PRESETS = False
 NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
 
 
-def add_project_flags(parser):
-    # common_flags.add_arguments(parser)
+def add_arguments(parser):
     pid_context.add_arguments(parser)
 
     parser.add_argument(

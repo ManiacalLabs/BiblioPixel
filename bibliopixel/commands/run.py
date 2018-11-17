@@ -212,7 +212,7 @@ def run(args):
 
 def add_arguments(parser):
     parser.set_defaults(run=run)
-    project_flags.add_project_flags(parser)
+    project_flags.add_arguments(parser)
 
     parser.add_argument(
         'name', nargs='*',

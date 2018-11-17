@@ -13,7 +13,7 @@ For the list of possible demos, type
 
 import random
 
-from .. main import args, project_flags, demo_table
+from .. main import project_flags, demo_table
 from .. project import project
 from .. util import log
 
@@ -75,7 +75,7 @@ def run(args):
 
 def add_arguments(parser):
     parser.set_defaults(run=run)
-    project_flags.add_project_flags(parser)
+    project_flags.add_arguments(parser)
     parser.add_argument(
         'name', nargs='?', default='',
         help='Name of demo to run. Options are: {}'.format(DEMO_OPTS))
