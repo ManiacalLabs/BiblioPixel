@@ -1,3 +1,6 @@
+## v3.4.33 - 2018-11-18
+- Better GIF file generation
+
 ## v3.4.32 - 2018-11-18
 - Fix demos (#1048, #1049)
 - Load commands individually for faster startup (#10433)
