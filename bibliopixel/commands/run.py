@@ -156,30 +156,38 @@ def _get_projects(args):
     for project_files in args.name:
         saved_path = sys.path[:]
         descs = []
+        root_file = None
         try:
             for filename in project_files.split('+'):
-                root_file = None
                 if filename.endswith('.py'):
                     desc = _load_py(filename)
+                    root_file = filename
                 elif '{' in filename:
                     desc = data_file.loads(filename)
                 else:
                     try:
                         desc = load.data(filename, False)
                         desc = data_file.load(desc, filename)
-                        root_file = os.path.abspath(filename)
+                        root_file = filename
                     except:
                         if not _might_be_classname(filename):
                             raise
                         desc = {'animation': filename}
 
-                if movie:
-                    if 'filename' in movie:
-                        desc['driver'] = movie
-                    else:
-                        f, suffix = os.path.splitext(filename)
-                        desc['driver'] = dict(movie, filename=f + '.gif')
                 descs.append(desc)
+
+            if movie:
+                for d in descs:
+                    d.pop('driver', None)
+                if 'filename' in movie:
+                    driver = movie
+                else:
+                    f = project_files.replace('+', '-')
+                    f = f.replace('/', '-')
+                    f = ''.join(i for i in f if i in _FILE_CHARS)
+                    f, ext = os.path.splitext(f)
+                    driver = dict(movie, filename=f + '.gif')
+                descs.append({'driver': driver})
 
             project = project_flags.make_project(
                 args, *descs, root_file=root_file)
@@ -219,6 +227,7 @@ def _get_projects(args):
 _ALL_CHARS = set(string.ascii_letters + string.digits + '._' + ALIAS_MARKERS)
 _START_CHARS = set(string.ascii_letters + '.' + ALIAS_MARKERS)
 _END_CHARS = set(string.ascii_letters + string.digits)
+_FILE_CHARS = set(string.ascii_letters + string.digits + '._-')
 
 
 RUN_ERROR = """When reading file {filename}:
