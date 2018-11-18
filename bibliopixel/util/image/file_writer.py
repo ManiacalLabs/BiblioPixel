@@ -34,7 +34,7 @@ class FileWriter:
         self.frame_files.append(filename)
 
     def write(self):
-        fps = self.writer.scaled_fps()
+        fps = self.writer.scaled_fps
         ff, self.frame_files = self.frame_files, []
         if ff:
             self._write(self.writer.filename, ff, fps, **self.writer.options)
