@@ -1,3 +1,7 @@
+## v3.4.32 - 2018-11-18
+- Fix demos (#1048, #1049)
+- Load commands individually for faster startup (#10433)
+
 ## v3.4.31 - 2018-11-15
 - Fix issues #978, #984, #988, #991, #1023, #1025, #1040, #1042, #1043
 - New default palettes
