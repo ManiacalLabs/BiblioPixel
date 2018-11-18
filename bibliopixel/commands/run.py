@@ -10,7 +10,85 @@ from .. project import load
 from .. project.aliases import ALIAS_MARKERS
 from .. project.project import Project
 
-MOVIE_SUFFIXES = '.gif', '.mp4'
+MOVIE_SUFFIXES = '.gif', '.mp4', '.yml'
+_RUNNING = False
+
+
+def run(args):
+    with pid_context.pid_context(args.pid_filename):
+        with signal_handler.context(
+                SIGHUP=stop, SIGINT=stop, SIGTERM=stop) as signals:
+            while True:
+                _run_once(args)
+                if signals:
+                    log.info('Received signal %s', ' '.join(signals))
+
+                if not signals.pop('SIGHUP', False):
+                    break
+
+
+def add_arguments(parser):
+    parser.set_defaults(run=run)
+    project_flags.add_arguments(parser)
+
+    parser.add_argument(
+        'name', nargs='*',
+        help='Path project files - can be a URL or file system location')
+
+
+def stop():
+    global _RUNNING
+    _RUNNING = False
+    Project.stop_all()
+
+
+def _run_once(args):
+    Animation.FAIL_ON_EXCEPTION = args.fail_on_exception
+
+    args.name = args.name or ['']
+    projects = _get_projects(args)
+
+    if args.dry_run:
+        log.printer('(dry run - nothing executed)')
+        return
+
+    global _RUNNING
+    _RUNNING = True
+
+    needs_pause = False
+    assert len(projects) == len(args.name)
+    is_movie = (args.movie != '')
+
+    for project, name in zip(projects, args.name):
+        if not _RUNNING:
+            break
+
+        if needs_pause:
+            if args.pause:
+                time.sleep(float(args.pause))
+                if not _RUNNING:
+                    break
+        else:
+            needs_pause = True
+
+        log.debug('Running file %s', name)
+        if is_movie:
+            project.flat_out()
+
+        try:
+            project.run()
+
+        except KeyboardInterrupt:
+            if not args.ignore_exceptions:
+                raise
+            log.warning('\nKeyboardInterrupt terminated project.')
+            needs_pause = False
+
+        except Exception as e:
+            if not args.ignore_exceptions:
+                raise
+            log.error('Exception %s', e)
+            traceback.print_exc()
 
 
 def _load_py(filename):
@@ -138,88 +216,6 @@ def _get_projects(args):
     raise ValueError('Run aborted')
 
 
-def _run_projects(projects, args):
-    global _RUNNING
-    _RUNNING = True
-
-    needs_pause = False
-    assert len(projects) == len(args.name)
-    is_movie = (args.movie != '')
-
-    for project, name in zip(projects, args.name):
-        if not _RUNNING:
-            break
-
-        if needs_pause:
-            if args.pause:
-                time.sleep(float(args.pause))
-                if not _RUNNING:
-                    break
-        else:
-            needs_pause = True
-
-        log.debug('Running file %s', name)
-        if is_movie:
-            project.flat_out()
-
-        try:
-            project.run()
-
-        except KeyboardInterrupt:
-            if not args.ignore_exceptions:
-                raise
-            log.warning('\nKeyboardInterrupt terminated project.')
-            needs_pause = False
-
-        except Exception as e:
-            if not args.ignore_exceptions:
-                raise
-            log.error('Exception %s', e)
-            traceback.print_exc()
-
-
-def run_once(args):
-    Animation.FAIL_ON_EXCEPTION = args.fail_on_exception
-
-    args.name = args.name or ['']
-    projects = _get_projects(args)
-
-    if args.dry_run:
-        log.printer('(dry run - nothing executed)')
-        return
-
-    _run_projects(projects, args)
-
-
-def stop():
-    global _RUNNING
-    _RUNNING = False
-    Project.stop_all()
-
-
-def run(args):
-    with pid_context.pid_context(args.pid_filename):
-        with signal_handler.context(
-                SIGHUP=stop, SIGINT=stop, SIGTERM=stop) as signals:
-            while True:
-                run_once(args)
-                if signals:
-                    log.info('Received signal %s', ' '.join(signals))
-
-                if not signals.pop('SIGHUP', False):
-                    break
-
-
-def add_arguments(parser):
-    parser.set_defaults(run=run)
-    project_flags.add_arguments(parser)
-
-    parser.add_argument(
-        'name', nargs='*',
-        help='Path project files - can be a URL or file system location')
-
-
-_RUNNING = False
 _ALL_CHARS = set(string.ascii_letters + string.digits + '._' + ALIAS_MARKERS)
 _START_CHARS = set(string.ascii_letters + '.' + ALIAS_MARKERS)
 _END_CHARS = set(string.ascii_letters + string.digits)
