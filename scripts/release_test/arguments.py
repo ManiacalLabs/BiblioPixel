@@ -27,6 +27,7 @@ def arguments(argv=sys.argv[1:]):
     all_tests = [(t, getattr(tests, t, None)) for t in test_list]
     bad_tests = [t for (t, a) in all_tests if a is None]
     if bad_tests:
+        print(test_list, all_tests, bad_tests)
         raise ValueError('Bad test names: ' + ', '.join(bad_tests))
     all_tests = tuple(a for (t, a) in all_tests)
 
