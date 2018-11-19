@@ -1,3 +1,6 @@
+## v3.4.35 - 2018-11-19
+- Make scripts/new_version more Windows-compatible
+
 ## v3.4.34 - 2018-11-19
 - Fix setup.py for Windows
 
