@@ -5,7 +5,7 @@ Make a new release version of BiblioPixel by editing CHANGELIST.md
 
 """
 
-import datetime, os, subprocess, sys
+import datetime, io, os, subprocess, sys
 
 DRY_RUN = False
 ROOT = os.path.dirname(os.path.dirname(__file__))
@@ -19,6 +19,10 @@ def new_version(new_version_string=''):
 
     def split_version(s):
         return tuple(int(i) for i in s.split('.'))
+
+    def open_write(f):
+        # https://stackoverflow.com/questions/2536545/
+        return io.open(f, 'w', newline='\n')
 
     old_version = split_version(open(VERSION_FILE).read())
 
@@ -44,12 +48,12 @@ def new_version(new_version_string=''):
         raise ValueError(
             'There must be at least one new change in CHANGELIST.md')
 
-    with open(VERSION_FILE, 'w') as fp:
+    with open_write(VERSION_FILE) as fp:
         fp.write(new_version_string)
         fp.write('\n')
 
     changelist = open(CHANGELIST_FILE).read()
-    with open(CHANGELIST_FILE, 'w') as fp:
+    with open_write(CHANGELIST_FILE) as fp:
         date = datetime.datetime.now().strftime('%Y-%m-%d')
         fp.write('## v%s - %s\n' % (new_version_string, date))
         for c in comments:
