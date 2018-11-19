@@ -1,6 +1,6 @@
 import os, queue, threading, time, weakref
 from . import (
-    attributes, construct, fill, defaults, edit_queue, load, recurse)
+    attributes, construct, edit_queue, fill, load, merge, recurse)
 from .. util import exception, log
 
 EDIT_QUEUE_MAXSIZE = 1000
@@ -157,7 +157,7 @@ def project(*descs, root_file=None):
     """
     load.ROOT_FILE = root_file
 
-    desc = defaults.merge(*descs)
+    desc = merge.merge(merge.DEFAULT_PROJECT, *descs)
     path = desc.get('path', '')
 
     if root_file:

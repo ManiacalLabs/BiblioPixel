@@ -1,4 +1,4 @@
-from .. project import data_maker, defaults, project
+from .. project import data_maker, project
 from . import common_flags
 from .. util import data_file, deprecated, log, pid_context
 
@@ -21,10 +21,6 @@ def add_arguments(parser):
     parser.add_argument(
         '-b', '--brightness', default=None,
         help='Override project brightness value')
-
-    parser.add_argument(
-        '-d', '--defaults', default=None, nargs='*',
-        action='append', help='Use this default setting')
 
     if deprecated.allowed():  # pragma: no cover
         parser.add_argument(
@@ -111,12 +107,6 @@ def _make_project_flags(args):
 
     if args.brightness:
         project_flags['layout']['brightness'] = int(args.brightness)
-
-    if args.defaults:
-        # Arguments come in like: [['foo'], ['bar'], ['baz'], ...]
-        # I have no idea why.
-        defs = [(a[0] if isinstance(a, list) else a) for a in args.defaults]
-        defaults.set_project_defaults(defs)
 
     if args.v4:
         log.printer('*** Using v4 forward compatibility mode.')
