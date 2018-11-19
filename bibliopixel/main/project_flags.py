@@ -1,5 +1,4 @@
 from .. project import data_maker, project
-from . import common_flags
 from .. util import data_file, deprecated, log, pid_context
 
 """Common command line arguments for run and demo."""
