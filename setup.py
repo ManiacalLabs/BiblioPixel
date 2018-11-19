@@ -4,6 +4,28 @@ from setuptools.command.install_scripts import install_scripts
 from setuptools.command.install import install as _install
 import os, platform, sys
 
+
+BAT_TEMPLATE = \
+    r"""@echo off
+REM wrapper to use shebang first line of {FNAME}
+
+set mypath=%~dp0
+set pyscript="%mypath%{FNAME}"
+set /p line1=<%pyscript%
+
+if "%line1:~0,2%" == "#!" (goto :goodstart)
+echo First line of %pyscript% does not start with "#!"
+exit /b 1
+
+:goodstart
+set py_exe=%line1:~2%
+call "%py_exe%" %pyscript% %*
+"""
+
+NO_PYTHON_ERROR = """
+WARNING: No #!python executable found in %s, skipping .bat wrapper'"""
+
+
 printer = print  # noqa: T001
 
 SCRIPTS_TO_INSTALL = 'bp', 'bibliopixel', 'bp-color', 'bp-pid'
@@ -138,23 +160,3 @@ setup(
     scripts=['scripts/' + s for s in SCRIPTS_TO_INSTALL],
     install_requires=REQUIRED
 )
-
-BAT_TEMPLATE = \
-    r"""@echo off
-REM wrapper to use shebang first line of {FNAME}
-
-set mypath=%~dp0
-set pyscript="%mypath%{FNAME}"
-set /p line1=<%pyscript%
-
-if "%line1:~0,2%" == "#!" (goto :goodstart)
-echo First line of %pyscript% does not start with "#!"
-exit /b 1
-
-:goodstart
-set py_exe=%line1:~2%
-call "%py_exe%" %pyscript% %*
-"""
-
-NO_PYTHON_ERROR = """
-WARNING: No #!python executable found in %s, skipping .bat wrapper'"""

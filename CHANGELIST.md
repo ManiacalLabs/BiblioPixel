@@ -1,3 +1,6 @@
+## v3.4.34 - 2018-11-18
+- Fixing setup.py for Windows
+
 ## v3.4.33 - 2018-11-18
 - Better GIF file generation
 
