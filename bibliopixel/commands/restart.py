@@ -17,7 +17,6 @@ Example: ``$ bp restart``
 """
 
 import os, signal
-from .. project import defaults
 from .. util import log, pid_context
 
 CHOICES = sorted(d for d in dir(signal) if d.startswith('SIG') and '_' not in d)
