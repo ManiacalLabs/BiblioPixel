@@ -1,24 +1,23 @@
 import unittest
 
-from bibliopixel.util import colors
-from bibliopixel.colors import classic, names
+from bibliopixel.colors import COLORS, arithmetic, classic, names
 
 
 class ArithmeticTest(unittest.TestCase):
     def test_color_blend(self):
-        self.assertEqual(colors.color_blend(colors.Red, colors.Green),
+        self.assertEqual(arithmetic.color_blend(COLORS.Red, COLORS.Green),
                          (255, 255, 1))
-        self.assertEqual(colors.color_blend(colors.Red, colors.White),
+        self.assertEqual(arithmetic.color_blend(COLORS.Red, COLORS.White),
                          (255, 255, 255))
-        self.assertEqual(colors.color_blend(colors.Red, colors.Black),
+        self.assertEqual(arithmetic.color_blend(COLORS.Red, COLORS.Black),
                          (255, 1, 1))
 
     def test_color_scale(self):
-        self.assertEqual(colors.Green, (0, 255, 0))
-        self.assertEqual(colors.color_scale(colors.Green, 256), (0, 255, 0))
-        self.assertEqual(colors.color_scale(colors.Green, 255), (0, 254, 0))
-        self.assertEqual(colors.color_scale(colors.Green, 128), (0, 127, 0))
-        self.assertEqual(colors.color_scale(colors.Green, 0), (0, 0, 0))
+        self.assertEqual(COLORS.Green, (0, 255, 0))
+        self.assertEqual(arithmetic.color_scale(COLORS.Green, 256), (0, 255, 0))
+        self.assertEqual(arithmetic.color_scale(COLORS.Green, 255), (0, 254, 0))
+        self.assertEqual(arithmetic.color_scale(COLORS.Green, 128), (0, 127, 0))
+        self.assertEqual(arithmetic.color_scale(COLORS.Green, 0), (0, 0, 0))
 
 
 class ClassicTest(unittest.TestCase):
@@ -48,11 +47,11 @@ class ClassicTest(unittest.TestCase):
 
 class NamesTest(unittest.TestCase):
     def test_colors(self):
-        self.assertEqual(names.COLORS.red, (255, 0, 0))
-        self.assertEqual(names.COLORS.OFF, (0, 0, 0))
-        self.assertEqual(names.COLORS['o n'], (255, 255, 255))
-        self.assertEqual(names.COLORS((0, 0, 0)), 'black')
-        self.assertEqual(names.COLORS((0x8a, 0x36, 0x0f)), 'burnt sienna')
+        self.assertEqual(COLORS.red, (255, 0, 0))
+        self.assertEqual(COLORS.OFF, (0, 0, 0))
+        self.assertEqual(COLORS['o n'], (255, 255, 255))
+        self.assertEqual(COLORS((0, 0, 0)), 'black')
+        self.assertEqual(COLORS((0x8a, 0x36, 0x0f)), 'burnt sienna')
 
     def test_toggle(self):
         self.assertEqual(names.toggle('red'), '(255, 0, 0)')

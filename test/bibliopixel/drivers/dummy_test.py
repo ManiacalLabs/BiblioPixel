@@ -1,7 +1,7 @@
 import argparse, time, unittest
 
 from bibliopixel.layout.strip import Strip
-from bibliopixel.drivers.dummy_driver import Dummy
+from bibliopixel.drivers.dummy import Dummy
 
 
 def clock_only_project():

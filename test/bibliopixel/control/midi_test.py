@@ -53,7 +53,7 @@ class MidiTest(unittest.TestCase):
 
             root = Root()
             m = midi.Midi(routing=routing or self.routing, **kwds)
-            m.set_root(root)
+            m.set_project(root)
             with m.run_until_stop():
                 time.sleep(0.1)
 

@@ -1,5 +1,6 @@
 import math
-from .. util import colors, log
+from .. colors import COLORS, arithmetic
+from .. util import log
 from . import font
 
 ##########################################################################
@@ -163,7 +164,7 @@ def wu_line(setter, x0, y0, x1, y1, color=None, colorFunc=None):
             c = colorFunc(funcCount[0])
             funcCount[0] += 1
 
-        c = colors.color_scale(color, int(255 * level))
+        c = arithmetic.color_scale(color, int(255 * level))
         setter(int(x), int(y), c)
 
     def ipart(x):
@@ -402,7 +403,7 @@ def draw_char(fonts, setter, width, height, x, y, c, color, bg,
 
 
 def draw_text(fonts, setter, text, width, height, x=0, y=0,
-              color=None, bg=colors.Off, aa=False,
+              color=None, bg=COLORS.Off, aa=False,
               font=font.default_font, font_scale=1):
     fh = fonts[font]['height']
     for c in text:

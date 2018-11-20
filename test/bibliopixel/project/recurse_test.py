@@ -1,6 +1,6 @@
 import unittest
 from bibliopixel.project import fields, recurse
-from bibliopixel.util import colors
+from bibliopixel.colors import COLORS
 
 
 class Tester:
@@ -24,7 +24,7 @@ class RecurseTest(unittest.TestCase):
 
     def test_simple(self):
         source = {'datatype': RecurseTest, 'foo': 'bar', 'color': 'red'}
-        expected = {'datatype': RecurseTest, 'foo': 'bar', 'color': colors.Red}
+        expected = {'datatype': RecurseTest, 'foo': 'bar', 'color': COLORS.Red}
         actual = recurse.recurse(source, post='post_recursion')
         self.assertEqual(expected, actual)
 
@@ -36,7 +36,7 @@ class RecurseTest(unittest.TestCase):
         }
         expected = {
             'datatype': Tester,
-            'foo': {'datatype': RecurseTest, 'foo': 'bar', 'color': colors.Red},
+            'foo': {'datatype': RecurseTest, 'foo': 'bar', 'color': COLORS.Red},
             'bing': 'post-bang',
         }
         actual = recurse.recurse(source, post='post_recursion')

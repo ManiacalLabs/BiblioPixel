@@ -1,5 +1,6 @@
-from .. layout import Circle, Cube, Matrix, Strip
-from .. util import colors, log
+from .. layout import circle, cube, matrix, strip
+from .. import colors
+from .. util import log
 
 BLACK = colors.COLORS.Black
 
@@ -27,15 +28,15 @@ def adapt_animation_layout(animation):
     setter = layout.set
     adaptor = None
 
-    if required is Strip:
-        if isinstance(layout, Matrix):
+    if required is strip.Strip:
+        if isinstance(layout, matrix.Matrix):
             width = layout.width
 
             def adaptor(pixel, color=None):
                 y, x = divmod(pixel, width)
                 setter(x, y, color or BLACK)
 
-        elif isinstance(layout, Cube):
+        elif isinstance(layout, cube.Cube):
             lx, ly = layout.x, layout.y
 
             def adaptor(pixel, color=None):
@@ -43,13 +44,13 @@ def adapt_animation_layout(animation):
                 z, y = divmod(yz, ly)
                 setter(x, y, z, color or BLACK)
 
-        elif isinstance(layout, Circle):
+        elif isinstance(layout, circle.Circle):
 
             def adaptor(pixel, color=None):
                 layout._set_base(pixel, color or BLACK)
 
-    elif required is Matrix:
-        if isinstance(layout, Strip):
+    elif required is matrix.Matrix:
+        if isinstance(layout, strip.Strip):
             width = animation.width
 
             def adaptor(x, y, color=None):

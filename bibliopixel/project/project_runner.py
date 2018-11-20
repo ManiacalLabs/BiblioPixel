@@ -5,7 +5,7 @@ Run specified project from file or URL
 import os, string, sys, time, traceback
 from .. main import project_flags
 from .. util import data_file, log
-from .. animation import Animation
+from .. animation.animation import Animation
 from .. project import load
 from .. project.aliases import ALIAS_MARKERS
 from .. project.project import Project

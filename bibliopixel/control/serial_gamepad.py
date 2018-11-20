@@ -1,8 +1,9 @@
+import argparse, serial, serial.tools.list_ports
 from distutils.version import LooseVersion
-from .. util import AttributeDict, generate_header, log
-import serial, serial.tools.list_ports
-from .. drivers.return_codes import RETURN_CODES, print_error
 from . gamepad import BaseGamePad
+from .. drivers.return_codes import RETURN_CODES, print_error
+from .. util import log
+from .. util.util import generate_header
 
 VERSION_ERROR = """
 pyserial v{} found, please upgrade to v2.7+!
@@ -144,7 +145,7 @@ class SerialGamePad(BaseGamePad):
         for m in self._map:
             result[m] = (bits & (1 << index) > 0)
             index += 1
-        return AttributeDict(result)
+        return argparse.Namespace(**result)
 
     def setLights(self, data):
         temp = [(0, 0, 0)] * len(data.keys())

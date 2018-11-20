@@ -114,7 +114,7 @@ PROJECT = """
     "driver": "dummy",
     "shape": 12,
     "layout": "strip",
-    "animation": "strip_test",
+    "animation": ".tests.StripChannelTest",
     "run": {
         "max_steps": 2
     }
@@ -135,7 +135,7 @@ PROJECT_TYPES = """
 
     "shape": 12,
     "layout": "strip",
-    "animation": "strip_test",
+    "animation": ".tests.StripChannelTest",
     "run": {
         "max_steps": 2
     }
@@ -176,7 +176,7 @@ PROJECT_MULTI = """
         ]
     },
 
-    "animation": "matrix_test",
+    "animation": ".tests.MatrixChannelTest",
 
     "run": {
         "max_steps": 2
@@ -193,7 +193,7 @@ PROJECT_SHARED = """
     },
 
     "layout": "strip",
-    "animation": "strip_test",
+    "animation": ".tests.StripChannelTest",
     "run": {
         "max_steps": 2
     },
@@ -213,7 +213,7 @@ PROJECT_NUMPY = """
     },
 
     "layout": "bibliopixel.layout.strip.Strip",
-    "animation": "strip_test",
+    "animation": ".tests.StripChannelTest",
     "run": {
         "max_steps": 2
     },
@@ -262,15 +262,15 @@ PROJECT_SEQUENCE = """
         "typename": "sequence",
 
         "animations": [
-            "matrix_test",
+            ".tests.MatrixChannelTest",
             {
-                "typename": "matrix_test",
+                "typename": ".tests.MatrixChannelTest",
                 "name": "mt",
                 "data": {"title": "test title"}
             },
             {
                 "animation": {
-                    "typename": "matrix_test",
+                    "typename": ".tests.MatrixChannelTest",
                     "name": "mt2",
                     "data": {"title": "test title"}
                 }
@@ -312,7 +312,7 @@ PROJECT_PIXELWIDTH = """
         "pixelWidth": 3
     },
 
-    "animation": "strip_test",
+    "animation": ".tests.StripChannelTest",
     "run": {
         "max_steps": 2
     }
@@ -333,7 +333,10 @@ PROJECT_SUB_ANIMATIONS = """
 
     "animation": {
         "typename": "sequence",
-        "animations": ["strip_test", "strip_test", "strip_test", "strip_test"]
+        "animations": [".tests.StripChannelTest",
+                       ".tests.StripChannelTest",
+                       ".tests.StripChannelTest",
+                       ".tests.StripChannelTest"]
     },
 
     "run": {

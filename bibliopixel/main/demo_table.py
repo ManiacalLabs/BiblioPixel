@@ -1,7 +1,7 @@
 from bibliopixel.drivers.SimPixel import SimPixel
-from bibliopixel import Circle, Matrix
+from bibliopixel.layout.circle import Circle
 from bibliopixel.layout import geometry
-from bibliopixel.animation import Sequence
+from bibliopixel.animation.sequence import Sequence
 from BiblioPixelAnimations.circle.bloom import CircleBloom
 from BiblioPixelAnimations.circle.swirl import Swirl
 from BiblioPixelAnimations.circle.hyperspace import HyperspaceRainbow

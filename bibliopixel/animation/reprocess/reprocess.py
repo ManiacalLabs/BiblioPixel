@@ -1,7 +1,7 @@
-from .. import wrapper
-from ... project import importer
-from ... layout import cutter
 from . import functions
+from .. import wrapper
+from ... layout import cutter
+from ... project import importer
 from ... util import class_name
 
 

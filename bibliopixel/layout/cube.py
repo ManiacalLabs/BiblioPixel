@@ -1,6 +1,7 @@
 import math, threading, time
 
-from .. util import colors, log
+from .. util import log
+from .. colors import conversions
 from . import font
 from . layout import Layout
 from . geometry.cube import make_cube_coord_map, make_cube_coord_map_positions
@@ -53,7 +54,7 @@ class Cube(Layout):
             return 0, 0, 0
 
     def setHSV(self, x, y, z, hsv):
-        color = colors.hsv2rgb(hsv)
+        color = conversions.hsv2rgb(hsv)
         self._set(x, y, z, color)
 
     def setRGB(self, x, y, z, r, g, b):

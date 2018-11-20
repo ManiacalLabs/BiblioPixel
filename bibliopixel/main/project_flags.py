@@ -139,10 +139,13 @@ def _make_project_flags(args):
         length = [float(i) for i in args.animation_lengths.split(',')]
         animation['length'] = length
 
-    if args.dimensions is not None:
-        deprecated.deprecated('Use --shape: --dimensions')
+    if deprecated.allowed():
+        if args.dimensions is not None:
+            deprecated.deprecated('Use --shape instead of --dimensions')
+        shape = args.shape or args.dimensions
+    else:
+        shape = args.shape
 
-    shape = args.shape or args.dimensions
     if shape is not None:
         shape = shape.split(',')
         try:

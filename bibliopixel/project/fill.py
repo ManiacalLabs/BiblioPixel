@@ -8,7 +8,7 @@ from . import aliases, alias_lists, construct, merge
 from .. import layout
 from .. util import deprecated, exception, log
 from .. colors import make, palettes
-from .. animation.strip import BaseStripAnim
+from .. animation.strip import Strip
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
@@ -30,8 +30,8 @@ def fill_layout(animation):
     # This is called from Project.__init__ - TODO: fix that.
     datatype = animation['datatype']
 
-    args = getattr(datatype, 'LAYOUT_ARGS', BaseStripAnim.LAYOUT_ARGS)
-    layout_cl = getattr(datatype, 'LAYOUT_CLASS', BaseStripAnim.LAYOUT_CLASS)
+    args = getattr(datatype, 'LAYOUT_ARGS', Strip.LAYOUT_ARGS)
+    layout_cl = getattr(datatype, 'LAYOUT_CLASS', Strip.LAYOUT_CLASS)
 
     args = {k: animation[k] for k in args if k in animation}
     return dict(args, datatype=layout_cl)

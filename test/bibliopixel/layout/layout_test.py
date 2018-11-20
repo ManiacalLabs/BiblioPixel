@@ -1,5 +1,5 @@
 import unittest
-from bibliopixel.layout import Strip
+from bibliopixel.layout.strip import Strip
 from bibliopixel.colors import COLORS
 
 RED = COLORS.Red

@@ -1,7 +1,8 @@
 import copy
 from . update_threading import UpdateThreading
 from .. project import attributes, data_maker, fields
-from .. util import colors, deprecated, log
+from .. util import deprecated, log
+from .. colors import COLORS, conversions, make
 
 
 class Layout(object):
@@ -137,7 +138,7 @@ class Layout(object):
         """
         if not len(color_list):
             return
-        color_list = colors.make.colors(color_list)
+        color_list = make.colors(color_list)
 
         size = len(self._colors) - offset
         if len(color_list) > size:
@@ -148,12 +149,12 @@ class Layout(object):
         if pixel >= 0 and pixel < self.numLEDs:
             return self._colors[pixel]
 
-        return colors.COLORS.Black  # don't go out of bounds
+        return COLORS.Black  # don't go out of bounds
 
     def _set_base(self, pixel, color):
         if pixel >= 0 and pixel < self.numLEDs:
             if isinstance(color, str):
-                color = colors.COLORS[color]
+                color = COLORS[color]
             else:
                 color = tuple(color)
             self.color_list[pixel] = color
@@ -181,7 +182,7 @@ class Layout(object):
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
-        color = colors.hsv2rgb(hsv)
+        color = conversions.hsv2rgb(hsv)
         self._set_base(pixel, color)
 
     # turns off the desired pixel
@@ -210,7 +211,7 @@ class Layout(object):
     # Fill the strand (or a subset) with a single color using HSV values
     def fillHSV(self, hsv, start=0, end=-1):
         """Fill the entire strip with HSV color tuple"""
-        self.fill(colors.hsv2rgb(hsv), start, end)
+        self.fill(conversions.hsv2rgb(hsv), start, end)
 
 
 class MultiLayout(Layout):

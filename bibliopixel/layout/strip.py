@@ -1,4 +1,4 @@
-from .. util import colors
+from .. colors import conversions
 from . layout import MultiLayout
 from . geometry import make_strip_coord_map_multi
 from . geometry.strip import make_strip_coord_map_positions
@@ -76,7 +76,7 @@ class Strip(MultiLayout):
 
     def setHSV(self, pixel, hsv):
         """Set single pixel to HSV tuple"""
-        color = colors.hsv2rgb(hsv)
+        color = conversions.hsv2rgb(hsv)
         self.set(pixel, color)
 
     # turns off the desired pixel

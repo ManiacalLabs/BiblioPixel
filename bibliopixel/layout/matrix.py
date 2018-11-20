@@ -1,6 +1,7 @@
 import math, threading, time
 
-from .. util import colors, deprecated, log
+from .. import colors
+from .. util import deprecated, log
 from . import matrix_drawing as md
 from . import font
 from . layout import MultiLayout
@@ -133,7 +134,7 @@ class Matrix(MultiLayout):
             pixel = self.coord_map[y][x]
             return self._get_base(pixel)
         except IndexError:
-            return colors.Black
+            return colors.COLORS.Black
 
     def set(self, x, y, color):
         """Set the pixel color at position x, y."""
@@ -335,7 +336,8 @@ class Matrix(MultiLayout):
                      x, y, c, color, bg, aa, font, font_scale)
 
     def drawText(self, text, x=0, y=0, color=None,
-                 bg=colors.Off, aa=False, font=font.default_font, font_scale=1):
+                 bg=colors.COLORS.Off, aa=False, font=font.default_font,
+                 font_scale=1):
         """
         Draw a line of text starting at (x, y) in an RGB color.
 

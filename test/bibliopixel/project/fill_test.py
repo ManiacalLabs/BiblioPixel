@@ -1,14 +1,14 @@
 import copy, unittest
 from bibliopixel.project import fill, merge, project
 from bibliopixel.animation.sequence import Sequence
-from bibliopixel.animation.matrix import BaseMatrixAnim
-from bibliopixel.animation.off import OffAnim
-from bibliopixel.layout import Cube, Matrix, Strip
+from bibliopixel.animation.matrix import Matrix
+from bibliopixel.animation.off import Off
+from bibliopixel.layout import cube, matrix, strip
 
 BASE = {
     'animation': {
         'run': {},
-        'datatype': OffAnim,
+        'datatype': Off,
         'name': 'Off',
     },
     'controls': [],
@@ -49,7 +49,7 @@ class FillTest(unittest.TestCase):
     def test_layout(self):
         source = {
             'animation': {
-                'datatype': BaseMatrixAnim,
+                'datatype': Matrix,
                 'width': 23,
                 'height': 32,
                 'wombat': 7,
@@ -64,7 +64,7 @@ class FillTest(unittest.TestCase):
             'layout': {
                 'width': 23,
                 'height': 32,
-                'datatype': Matrix,
+                'datatype': matrix.Matrix,
             },
             'numbers': 'python',
             'palettes': {},
@@ -78,7 +78,7 @@ class FillTest(unittest.TestCase):
         actual = fill_before(source)
         expected = {
             'drivers': [{'num': 3, 'typename': 'simpixel'}],
-            'layout': {'datatype': Strip},
+            'layout': {'datatype': strip.Strip},
         }
         self.assertEqual(actual, dict(BASE, **expected))
 
@@ -91,7 +91,7 @@ class FillTest(unittest.TestCase):
         actual = fill_before(source)
         expected = {
             'drivers': [{'num': 10, 'typename': 'simpixel'}],
-            'layout': {'datatype': Matrix, 'width': 2, 'height': 5},
+            'layout': {'datatype': matrix.Matrix, 'width': 2, 'height': 5},
         }
         self.assertEqual(actual, dict(BASE, **expected))
 
@@ -100,6 +100,6 @@ class FillTest(unittest.TestCase):
         actual = fill_before(source)
         expected = {
             'drivers': [{'num': 42, 'typename': 'simpixel'}],
-            'layout': {'datatype': Cube, 'x': 2, 'y': 3, 'z': 7},
+            'layout': {'datatype': cube.Cube, 'x': 2, 'y': 3, 'z': 7},
         }
         self.assertEqual(actual, dict(BASE, **expected))

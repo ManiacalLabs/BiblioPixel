@@ -1,12 +1,13 @@
-from ... util import colors
-from ... layout import Matrix
+from ... colors import COLORS
+from ... colors.arithmetic import color_scale
+from ... layout.matrix import Matrix
 
 
 def show_image(setter, width, height,
-               image_path='', image_obj=None, offset=(0, 0), bgcolor=colors.Off,
-               brightness=255):
+               image_path='', image_obj=None, offset=(0, 0),
+               bgcolor=COLORS.Off, brightness=255):
     """Display an image on a matrix."""
-    bgcolor = colors.color_scale(bgcolor, brightness)
+    bgcolor = color_scale(bgcolor, brightness)
 
     img = image_obj
     if image_path and not img:
@@ -38,16 +39,16 @@ def show_image(setter, width, height,
             if a == 0:
                 r, g, b = bgcolor
             else:
-                r, g, b = colors.color_scale((r, g, b), a)
+                r, g, b = color_scale((r, g, b), a)
 
             if brightness != 255:
-                r, g, b = colors.color_scale((r, g, b), brightness)
+                r, g, b = color_scale((r, g, b), brightness)
 
             setter(x, y, (r, g, b))
 
 
 def showImage(layout, imagePath="", imageObj=None, offset=(0, 0),
-              bgcolor=colors.Off, brightness=255):
+              bgcolor=COLORS.Off, brightness=255):
     """Display an image on the matrix"""
     if not isinstance(layout, Matrix):
         raise RuntimeError("Must use Matrix with showImage!")
@@ -59,13 +60,13 @@ def showImage(layout, imagePath="", imageObj=None, offset=(0, 0),
 
 
 def loadImage(layout, imagePath="", imageObj=None, offset=(0, 0),
-              bgcolor=colors.Off, brightness=255):
+              bgcolor=COLORS.Off, brightness=255):
     """Display an image on the matrix"""
 
     if not isinstance(layout, Matrix):
         raise RuntimeError("Must use Matrix with loadImage!")
 
-    texture = [[colors.Off for x in range(layout.width)]
+    texture = [[COLORS.Off for x in range(layout.width)]
                for y in range(layout.height)]
 
     def setter(x, y, pixel):

@@ -1,14 +1,14 @@
-from . strip import BaseStripAnim
-from . matrix import BaseMatrixAnim
+from . strip import Strip
+from . matrix import Matrix
 from . animation import Animation
-from .. util import colors
+from .. colors import COLORS
 
-BASE_COLORS = [colors.Red, colors.Green, colors.Green,
-               colors.Blue, colors.Blue, colors.Blue]
-CYCLE_COLORS = [colors.Red, colors.Green, colors.Blue, colors.White]
+BASE_COLORS = [COLORS.Red, COLORS.Green, COLORS.Green,
+               COLORS.Blue, COLORS.Blue, COLORS.Blue]
+CYCLE_COLORS = [COLORS.Red, COLORS.Green, COLORS.Blue, COLORS.White]
 
 
-class StripChannelTest(BaseStripAnim):
+class StripChannelTest(Strip):
 
     def __init__(self, layout):
         super().__init__(layout)
@@ -23,32 +23,32 @@ class StripChannelTest(BaseStripAnim):
         self.layout.fill(self.colors[color], 7, 9)
 
 
-class MatrixChannelTest(BaseMatrixAnim):
+class MatrixChannelTest(Matrix):
 
     def __init__(self, layout):
         super().__init__(layout, 0, 0)
         self.internal_delay = 0.500
-        self.colors = [colors.Red, colors.Green, colors.Blue, colors.White]
+        self.colors = [COLORS.Red, COLORS.Green, COLORS.Blue, COLORS.White]
 
     def step(self, amt=1):
-        self.layout.drawLine(0, 0, 0, self.height - 1, colors.Red)
-        self.layout.drawLine(1, 0, 1, self.height - 1, colors.Green)
-        self.layout.drawLine(2, 0, 2, self.height - 1, colors.Green)
-        self.layout.drawLine(3, 0, 3, self.height - 1, colors.Blue)
-        self.layout.drawLine(4, 0, 4, self.height - 1, colors.Blue)
-        self.layout.drawLine(5, 0, 5, self.height - 1, colors.Blue)
+        self.layout.drawLine(0, 0, 0, self.height - 1, COLORS.Red)
+        self.layout.drawLine(1, 0, 1, self.height - 1, COLORS.Green)
+        self.layout.drawLine(2, 0, 2, self.height - 1, COLORS.Green)
+        self.layout.drawLine(3, 0, 3, self.height - 1, COLORS.Blue)
+        self.layout.drawLine(4, 0, 4, self.height - 1, COLORS.Blue)
+        self.layout.drawLine(5, 0, 5, self.height - 1, COLORS.Blue)
 
         color = self.cur_step % 4
         self.layout.fillRect(7, 0, 3, self.height, self.colors[color])
 
 
-class MatrixCalibrationTest(BaseMatrixAnim):
+class MatrixCalibrationTest(Matrix):
 
     def __init__(self, layout):
         super().__init__(layout, 0, 0)
         self.internal_delay = 0.500
-        self.colors = [colors.Red, colors.Green, colors.Green,
-                       colors.Blue, colors.Blue, colors.Blue]
+        self.colors = [COLORS.Red, COLORS.Green, COLORS.Green,
+                       COLORS.Blue, COLORS.Blue, COLORS.Blue]
 
     def step(self, amt=1):
         self.layout.all_off()
@@ -78,8 +78,8 @@ class PixelTester(Animation):
             self.completed = True
 
     def steps(self):
-        for color in (colors.Red, colors.Green, colors.Blue, colors.Yellow,
-                      colors.Fuchsia, colors.Aqua, colors.White):
+        for color in (COLORS.Red, COLORS.Green, COLORS.Blue, COLORS.Yellow,
+                      COLORS.Fuchsia, COLORS.Aqua, COLORS.White):
             color = tuple(c * self.brightness for c in color)
             for i in range(len(self.color_list)):
                 self.color_list[i] = color
@@ -88,5 +88,5 @@ class PixelTester(Animation):
             for i in range(self.PAUSE):
                 yield
 
-            self.color_list = [colors.Black] * len(self.color_list)
+            self.color_list = [COLORS.Black] * len(self.color_list)
             yield
