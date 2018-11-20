@@ -1,6 +1,6 @@
 import importlib, os, pathlib
 from .. project.importer import import_module
-from .. commands import COMMANDS
+from .. import commands
 from .. util import log
 
 
@@ -28,12 +28,12 @@ def print_help():
     template_file = pathlib.Path(__file__).parent / 'commands.rst.tmpl'
 
     help_text = template_file.open().read().format(
-        command_count=len(COMMANDS),
-        commands=[', '.join(COMMANDS[0:8]), ', '.join(COMMANDS[8:])])
+        command_count=len(commands.COMMANDS),
+        commands=commands.COMMANDS_PRINTABLE)
 
     log.printer(help_text)
     log.printer(BP_HEADER)
-    for command in COMMANDS:
+    for command in commands.COMMANDS:
         module = importlib.import_module('bibliopixel.commands.' + command)
         log.printer(BP_TEMPLATE.format(
             command=command,
