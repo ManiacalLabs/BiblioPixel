@@ -1,5 +1,5 @@
 from . base import TypesBaseTest
-from bibliopixel import gamma
+from bibliopixel.colors import gamma
 
 
 class GammaTypesTest(TypesBaseTest):

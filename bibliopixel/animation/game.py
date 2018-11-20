@@ -1,8 +1,7 @@
-from . matrix import BaseMatrixAnim
-from .. util import AttributeDict
+from . matrix import Matrix
 
 
-class BaseGameAnim(BaseMatrixAnim):
+class Game(Matrix):
 
     def __init__(self, layout, inputDev):
         super().__init__(layout)
@@ -34,20 +33,19 @@ class BaseGameAnim(BaseMatrixAnim):
         if not isinstance(key, list):
             key = [key]
         for k in key:
-            self._keyfuncs[k] = AttributeDict({
+            self._keyfuncs[k] = {
                 "func": func,
                 "speed": speed,
                 "hold": hold,
                 "last": False,
                 "inter": False
-            })
+            }
 
     def handleKeys(self):
-        kf = self._keyfuncs
         for key in self._keys:
             val = self._keys[key]
-            if key in kf:
-                cfg = kf[key]
+            if key in self._keyfuncs:
+                cfg = self._keyfuncs[key]
                 speed_pass = self._checkSpeed(cfg.speed)
 
                 if cfg.hold:
@@ -67,3 +65,8 @@ class BaseGameAnim(BaseMatrixAnim):
     def step(self, amt):
         self._keys = self._input_dev.getKeys()
         self._speedStep += 1
+
+
+from .. util import deprecated
+if deprecated.allowed():
+    BaseGameAnim = Game

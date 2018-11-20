@@ -2,11 +2,11 @@ import time, unittest
 
 from ... mark_tests import allpixel_test
 
-from bibliopixel import Strip
-from bibliopixel.animation import StripChannelTest
+from bibliopixel.animation.tests import StripChannelTest
 from bibliopixel.drivers.channel_order import ChannelOrder
 from bibliopixel.drivers.serial import Serial, LEDTYPE
 from bibliopixel.drivers.serial.devices import Devices
+from bibliopixel.layout.strip import Strip
 from bibliopixel.util import log
 
 

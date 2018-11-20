@@ -25,10 +25,11 @@ class SPIBase(DriverBase):
                  interface=None, **kwargs):
         super().__init__(num, **kwargs)
         from ...project.types.spi_interface import make
-        # See https://github.com/ManiacalLabs/BiblioPixel/issues/419
         if interface:
-            from ... util import deprecated
-            deprecated.deprecated('SPIBase.interface')
+            if False:
+                # TODO: why is this deprecated?
+                from ... util import deprecated
+                deprecated.deprecated('SPIBase.interface')
         else:
             interface = 'FILE'
 

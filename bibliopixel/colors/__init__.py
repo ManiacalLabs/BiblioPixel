@@ -45,19 +45,19 @@ is also of the "constant apparent brightness" variety.
 More details here: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors
 """
 
-from . arithmetic import color_blend, color_scale
-from . conversions import hsv2rgb_spectrum, hsv2rgb_rainbow, hsv2rgb_360
-from . conversions import hsv2rgb, hue2rgb, hue_gradient, hue2rgb_360
-from . conversions import hue_helper, hue_helper360
-from . wheel import wheel_color, wheel_helper
-from . names import (
-    COLORS, COLOR_DICT, color_to_name, name_to_color, to_color, toggle)
+from . names import COLORS
 
 from .. util import deprecated
-
 if deprecated.allowed():  # pragma: no cover
-    hex2rgb = COLORS.__getitem__
+    from . arithmetic import color_blend, color_scale
     from . import conversions as hue
+    from . conversions import hsv2rgb_spectrum, hsv2rgb_rainbow, hsv2rgb_360
+    from . conversions import hsv2rgb, hue2rgb, hue_gradient, hue2rgb_360
+    from . conversions import hue_helper, hue_helper360
+    from . wheel import wheel_color, wheel_helper
+    from . names import (
+        COLOR_DICT, color_to_name, name_to_color, to_color, toggle)
+    hex2rgb = COLORS.__getitem__
 
     # Legacy color names
     from . classic import *  # noqa: F403

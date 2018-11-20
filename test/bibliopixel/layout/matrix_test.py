@@ -1,7 +1,7 @@
 import contextlib, itertools, os, time, unittest
 from . import matrix_results
 from bibliopixel.drivers.driver_base import DriverBase
-from bibliopixel.layout import Matrix
+from bibliopixel.layout.matrix import Matrix
 from bibliopixel.project import data_maker
 from bibliopixel.util import log
 

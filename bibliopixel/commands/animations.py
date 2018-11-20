@@ -3,9 +3,9 @@ List all BiblioPixel Animations
 """
 
 import os, bibliopixel, inspect, BiblioPixelAnimations
-from bibliopixel import animation
 from bibliopixel.animation import (
-    collection, indexed, parallel, receiver, wrapper)
+    animation, circle, collection, cube, game, indexed, indexed, matrix,
+    parallel, receiver, strip, wrapper)
 from bibliopixel.util import log, walk
 from bibliopixel.project import importer
 
@@ -93,16 +93,16 @@ BP_ROOT = os.path.dirname(bibliopixel.__file__)
 BPA_ROOT = os.path.dirname(BiblioPixelAnimations.__file__)
 ROOTS = BP_ROOT, BPA_ROOT
 BASE_CLASSES = (
-    ('circle', animation.Circle),
-    ('cube', animation.BaseCubeAnim),
-    ('game', animation.BaseGameAnim),
-    ('matrix', animation.BaseMatrixAnim),
-    ('strip', animation.BaseStripAnim),
+    ('circle', circle.Circle),
+    ('cube', cube.Cube),
+    ('game', game.Game),
+    ('matrix', matrix.Matrix),
+    ('strip', strip.Strip),
     ('parallel', parallel.Parallel),
     ('wrapper', wrapper.Wrapper),
     ('indexed', indexed.Indexed),
     ('collection', collection.Collection),
-    ('receiver', receiver.BaseReceiver),
+    ('receiver', receiver.Receiver),
     ('simple', animation.Animation),
 )
 

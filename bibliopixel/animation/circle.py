@@ -1,10 +1,10 @@
 from . animation import Animation
-from .. layout import Circle as CircleLayout
+from .. layout import circle
 from .. util import deprecated
 
 
 class Circle(Animation):
-    LAYOUT_CLASS = CircleLayout
+    LAYOUT_CLASS = circle.Circle
     LAYOUT_ARGS = 'rings',
 
     def __init__(self, layout, **kwds):

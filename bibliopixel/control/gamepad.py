@@ -1,6 +1,3 @@
-from .. util import AttributeDict
-
-
 class BaseGamePad(object):
     def __init__(self):
         pass

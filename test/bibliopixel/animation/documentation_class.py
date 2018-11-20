@@ -10,7 +10,7 @@ write Python code in general.
 """
 
 
-class Example26(animation.BaseAnimation):
+class Example26(animation.Animation):
     def __init__(
             self, *args,
             # The fields for your class go here!

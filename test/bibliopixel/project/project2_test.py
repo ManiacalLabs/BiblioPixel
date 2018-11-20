@@ -1,8 +1,8 @@
 import copy, unittest
 from bibliopixel.project import project
 from bibliopixel.animation.sequence import Sequence
-from bibliopixel.animation.matrix import BaseMatrixAnim
-from bibliopixel.layout import Matrix
+from bibliopixel.animation import matrix
+from bibliopixel.layout.matrix import Matrix
 from bibliopixel.project.data_maker import Maker
 
 
@@ -17,7 +17,7 @@ class Project2Test(unittest.TestCase):
     def test_single(self):
         source = {
             'animation': {
-                'typename': 'bibliopixel.animation.matrix.BaseMatrixAnim',
+                'typename': 'bibliopixel.animation.matrix.Matrix',
                 'width': 23,
                 'height': 32,
             }
@@ -25,7 +25,7 @@ class Project2Test(unittest.TestCase):
         pr = project.project(source)
 
         self.assertEqual(
-            [BaseMatrixAnim, 1, Matrix, Maker, 23, 32],
+            [matrix.Matrix, 1, Matrix, Maker, 23, 32],
             [
                 type(pr.animation),
                 len(pr.drivers),

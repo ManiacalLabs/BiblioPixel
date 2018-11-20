@@ -13,7 +13,7 @@ class ArtNetControlTest(unittest.TestCase):
         project = make_project(ARTNET_CONTROL)
         q = queue.Queue()
         project.test_callback = q.put
-        project.controls[0].set_root(project)
+        project.controls[0].set_project(project)
         sender = udp.QueuedSender(SEND_ADDRESS)
 
         with project.controls[0].run_until_stop(), sender.run_until_stop():

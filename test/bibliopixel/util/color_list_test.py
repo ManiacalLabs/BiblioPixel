@@ -1,14 +1,15 @@
 import numpy, numpy.testing, unittest
 
-from bibliopixel.util import colors, color_list, log
+from bibliopixel.util import color_list, log
 from bibliopixel.util.color_list import check_numpy, ListMath, NumpyMath
 from bibliopixel.colors.make import to_triplets
+from bibliopixel.colors import COLORS
 
-COLORS1 = [colors.Red, colors.Green, colors.Blue, colors.White]
-COLORS2 = [colors.Black, colors.Blue, colors.Red, colors.Black]
-SUM12 = [colors.Red, colors.Cyan, colors.Magenta, colors.White]
-WHITES = [colors.White, colors.White, colors.White, colors.White]
-BLACKS = [colors.Black, colors.Black, colors.Black, colors.Black]
+COLORS1 = [COLORS.Red, COLORS.Green, COLORS.Blue, COLORS.White]
+COLORS2 = [COLORS.Black, COLORS.Blue, COLORS.Red, COLORS.Black]
+SUM12 = [COLORS.Red, COLORS.Cyan, COLORS.Magenta, COLORS.White]
+WHITES = [COLORS.White, COLORS.White, COLORS.White, COLORS.White]
+BLACKS = [COLORS.Black, COLORS.Black, COLORS.Black, COLORS.Black]
 
 
 def make_numpy(cl):
@@ -184,7 +185,7 @@ class ToTripletsTest(unittest.TestCase):
         self.assertEqual(to_triplets(cl), COLORS1)
 
         cl.append(0)
-        self.assertEqual(to_triplets(cl), COLORS1 + [colors.Red])
+        self.assertEqual(to_triplets(cl), COLORS1 + [COLORS.Red])
 
 
 class CheckTest(unittest.TestCase):

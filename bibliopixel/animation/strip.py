@@ -1,9 +1,9 @@
 from . animation import Animation
-from .. layout import Strip
+from .. layout import strip
 
 
-class BaseStripAnim(Animation):
-    LAYOUT_CLASS = Strip
+class Strip(Animation):
+    LAYOUT_CLASS = strip.Strip
     LAYOUT_ARGS = 'num',
 
     def __init__(self, layout, start=0, end=-1, **kwds):
@@ -15,3 +15,8 @@ class BaseStripAnim(Animation):
             self._end = self.layout.numLEDs - 1
 
         self._size = self._end - self._start + 1
+
+
+from .. import deprecated
+if deprecated.allowed():
+    BaseStripAnim = Strip

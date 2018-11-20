@@ -1,9 +1,10 @@
 import os, time
 from . import file_writer, renderer
-from .. import colors, log
+from ... colors import COLORS
+from .. import log
 
 DEFAULT_RENDER = {
-    'color': colors.Black,
+    'color': COLORS.Black,
     'pixel_width': 12,
     'pixel_height': None,
     'ellipse': True,

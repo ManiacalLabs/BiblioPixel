@@ -1,5 +1,5 @@
 import errno
-from .. import log
+from . import log
 
 
 class StaticCache:
