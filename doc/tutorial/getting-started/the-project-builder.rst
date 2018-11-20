@@ -61,11 +61,8 @@ walkthrough below will probably be more entertaining.
 
     dr.start()
 
-    dr.running_builder.stop()  #
-
-    dr.save('driver.yml')  # I'm going to merge it into
+    dr.save('driver.yml')
 
     print(pb)
-    driver: {c_order: RGB, device_id: 10, typename: .serial.driver.Serial}
 
     (pb + dr).start()  # Restarts the Project with a new driver

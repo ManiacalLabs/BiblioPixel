@@ -29,13 +29,13 @@ Serial Driver Fields
 
 ``dev``
   Serial device address/path. If not set, the first serial device
-  found will be used.
+  found will be used
 
 ``c_order``
   RGB color order
 
 ``gamma``
-
+  the gamma correction for the driver
 
 ``spi_speed`` (default ``2``)
   SPI datarate for applicable LED types, in MHz
