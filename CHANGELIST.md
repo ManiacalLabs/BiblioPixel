@@ -1,3 +1,8 @@
+## v3.4.36 - 2018-11-20
+- Stop using deprecated features
+- Better help
+- Clean up directory structure
+
 ## v3.4.35 - 2018-11-19
 - Make scripts/new_version more Windows-compatible
 
