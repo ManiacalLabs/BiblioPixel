@@ -3,32 +3,21 @@ from .. util import data_file, deprecated, log, pid_context
 
 """Common command line arguments for run and demo."""
 
-
 COMPONENTS = 'driver', 'layout', 'animation'
 PRESET_LIBRARY_DEFAULT = '~/.bibliopixel'
 ENABLE_PRESETS = False
 NUMBER_TYPES = ('python',) + data_maker.NUMPY_TYPES
+ADD_REDUNDANT_ARGUMENTS = True
 
 
 def add_arguments(parser):
     pid_context.add_arguments(parser)
-
-    parser.add_argument(
-        '-a', '--animation', default=None,
-        help='Default animation type if no animation is specified')
+    if ADD_REDUNDANT_ARGUMENTS:
+        _add_redundant_arguments(parser)
 
     parser.add_argument(
         '-b', '--brightness', default=None,
         help='Override project brightness value')
-
-    if deprecated.allowed():  # pragma: no cover
-        parser.add_argument(
-            '--dimensions', '--dim', default=None,
-            help='DEPRECATED: x, (x, y) or (x, y, z) dimensions for project')
-
-    parser.add_argument(
-        '--shape', default=None,
-        help='x, (x, y) or (x, y, z) dimensions for project')
 
     parser.add_argument(
         '--dump', action='store_true',
@@ -56,17 +45,7 @@ def add_arguments(parser):
         help='Use Json when dumping description data')
 
     parser.add_argument(
-        '-l', '--layout', default=None,
-        help='Default layout class if no layout is specified')
-
-    parser.add_argument(
         '-m', '--movie', default='', nargs='?', help=MOVIE_HELP)
-
-    parser.add_argument(
-        '--numbers', '-n', default='python', choices=NUMBER_TYPES,
-        help=NUMBERS_HELP)
-
-    parser.add_argument('-p', '--path', default=None, help=PATH_HELP)
 
     parser.add_argument(
         '--pause', default=0, help='Time to pause between running animations')
@@ -87,6 +66,44 @@ def add_arguments(parser):
     parser.add_argument(
         '-t', '--ledtype', default=None,
         help='Default LED type if no LED type is specified')
+
+
+def _add_redundant_arguments(parser):
+    """
+    These arguments are redundant with just using a project, and we should
+    encouraging that as you don't have to learn any dumb flags!
+
+    For example, instead of
+
+       bp foo.yml --animation=wombat --numbers=float
+
+    use
+
+       bp foo.yml + '{animation: wombat, numbers: float}'
+
+    """
+    parser.add_argument(
+        '-a', '--animation', default=None,
+        help='Default animation type if no animation is specified')
+
+    if deprecated.allowed():  # pragma: no cover
+        parser.add_argument(
+            '--dimensions', '--dim', default=None,
+            help='DEPRECATED: x, (x, y) or (x, y, z) dimensions for project')
+
+    parser.add_argument(
+        '--shape', default=None,
+        help='x, (x, y) or (x, y, z) dimensions for project')
+
+    parser.add_argument(
+        '-l', '--layout', default=None,
+        help='Default layout class if no layout is specified')
+
+    parser.add_argument(
+        '--numbers', '-n', default='python', choices=NUMBER_TYPES,
+        help=NUMBERS_HELP)
+
+    parser.add_argument('-p', '--path', default=None, help=PATH_HELP)
 
 
 def _make_project_flags(args):
