@@ -1,4 +1,4 @@
-from bibliopixel import animation
+from bibliopixel.animation import animation
 from bibliopixel.colors import COLORS
 
 """
