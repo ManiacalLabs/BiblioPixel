@@ -1,8 +1,8 @@
 import unittest
 from fractions import Fraction
 
-from bibliopixel.util.colors.palette import Palette
-from bibliopixel.util.colors.classic import Black, White, Red, Green, Blue
+from bibliopixel.colors.palette import Palette
+from bibliopixel.colors.classic import Black, White, Red, Green, Blue
 from bibliopixel.util import log
 
 

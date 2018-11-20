@@ -1,6 +1,6 @@
 import unittest
 from bibliopixel.layout import Strip
-from bibliopixel.util.colors import COLORS
+from bibliopixel.colors import COLORS
 
 RED = COLORS.Red
 GREEN = COLORS.Green

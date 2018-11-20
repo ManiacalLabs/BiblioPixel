@@ -1,5 +1,5 @@
 from . animation import Animation
-from .. util.colors import make
+from .. colors import make
 
 
 class Fill(Animation):

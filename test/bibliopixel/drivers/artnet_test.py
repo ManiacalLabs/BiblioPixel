@@ -1,6 +1,6 @@
 import struct, unittest
 from bibliopixel.util import artnet_message, udp
-from bibliopixel.util.colors import printer
+from bibliopixel.colors import printer
 from bibliopixel.animation import tests as animation_tests
 from test.bibliopixel import mark_tests
 from test.bibliopixel.project import make

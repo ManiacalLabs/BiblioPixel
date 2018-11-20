@@ -1,8 +1,8 @@
 import unittest
 from fractions import Fraction
 
-from bibliopixel.util.colors import palettes
-from bibliopixel.util.colors.classic import Black, White, Red, Green, Blue
+from bibliopixel.colors import palettes
+from bibliopixel.colors.classic import Black, White, Red, Green, Blue
 
 
 class PalettesTest(unittest.TestCase):

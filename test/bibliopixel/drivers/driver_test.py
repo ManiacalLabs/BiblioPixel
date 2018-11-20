@@ -1,6 +1,6 @@
 import unittest
 
-from bibliopixel.util.colors import gamma
+from bibliopixel.colors import gamma
 from bibliopixel.drivers.driver_base import DriverBase, ChannelOrder
 from bibliopixel.drivers.SPI import SPI, SPI_INTERFACES
 from bibliopixel.drivers.ledtype import LEDTYPE

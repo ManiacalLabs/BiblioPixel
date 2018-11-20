@@ -1,5 +1,5 @@
 from . channel_order import ChannelOrder
-from .. util.colors import gamma as _gamma
+from .. colors import gamma as _gamma
 from .. project import attributes, data_maker, fields
 import threading, time
 
@@ -19,7 +19,7 @@ class DriverBase(object):
     :param str c_order: Color channel order
 
     :param gamma: Gamma correction table. Preset tables available
-        in :py:mod:`bibliopixel.util.colors.gamma`
+        in :py:mod:`bibliopixel.colors.gamma`
     """
 
     # If set_device_brightness is not empty, it's a method that allows you

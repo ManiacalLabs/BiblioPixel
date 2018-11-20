@@ -1,7 +1,7 @@
 import contextlib, threading, time
 from . import adaptor, animation_threading, runner
 from .. util import deprecated, log
-from .. util.colors import palettes, legacy_palette
+from .. colors import palettes, legacy_palette
 from .. project import attributes, fields
 
 

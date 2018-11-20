@@ -1,6 +1,6 @@
 import copy
 from . make import colors_no_palette as _colors
-from bibliopixel.colors import conversions
+from . import conversions
 
 """
 Map names to palettes

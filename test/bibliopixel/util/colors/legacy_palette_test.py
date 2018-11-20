@@ -1,7 +1,7 @@
 import collections, unittest
-from bibliopixel.util.colors import palette, palettes
+from bibliopixel.colors import palette, palettes
 from bibliopixel.colors import COLORS
-from bibliopixel.util.colors.legacy_palette import pop_legacy_palette
+from bibliopixel.colors.legacy_palette import pop_legacy_palette
 
 
 class LegacyPaletteTest(unittest.TestCase):

@@ -1,6 +1,6 @@
 from .. channel_order import ChannelOrder
 from . base import SPIBase
-from ... util.colors import gamma
+from ... colors import gamma
 
 SPI_SPEED_ERROR = 'WS2801 requires an SPI speed of 1MHz but was set to {}MHz'
 

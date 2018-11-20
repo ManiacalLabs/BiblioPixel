@@ -2,7 +2,7 @@ import numpy, numpy.testing, unittest
 
 from bibliopixel.util import colors, color_list, log
 from bibliopixel.util.color_list import check_numpy, ListMath, NumpyMath
-from bibliopixel.util.colors.make import to_triplets
+from bibliopixel.colors.make import to_triplets
 
 COLORS1 = [colors.Red, colors.Green, colors.Blue, colors.White]
 COLORS2 = [colors.Black, colors.Blue, colors.Red, colors.Black]
