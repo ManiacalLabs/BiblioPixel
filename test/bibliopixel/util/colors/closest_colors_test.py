@@ -1,6 +1,6 @@
 import collections, unittest
 
-from bibliopixel.util.colors import closest_colors
+from bibliopixel.colors import closest_colors
 
 closest = closest_colors.closest_colors
 

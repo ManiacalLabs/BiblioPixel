@@ -1,4 +1,4 @@
-from ... util.colors import gamma
+from ... colors import gamma
 from .. channel_order import ChannelOrder
 from . base import SPIBase
 

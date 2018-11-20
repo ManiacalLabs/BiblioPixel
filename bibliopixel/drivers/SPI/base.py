@@ -1,6 +1,6 @@
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
-from ... util.colors import gamma as _gamma
+from ... colors import gamma as _gamma
 from . import interfaces
 
 

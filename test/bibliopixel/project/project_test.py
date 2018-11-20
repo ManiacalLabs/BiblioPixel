@@ -3,7 +3,7 @@ from unittest import mock
 
 from . make import make
 from bibliopixel.animation import animation
-from bibliopixel.util.colors import gamma
+from bibliopixel.colors import gamma
 from bibliopixel.drivers.ledtype import LEDTYPE
 
 BAD_JSON_ERROR = """

@@ -5,7 +5,7 @@ from . layout.geometry.cube import make_cube_coord_map
 from . import animation, layout, util
 from . util import colors, image, log
 
-from . util.colors import gamma
+from . colors import gamma
 from . drivers import return_codes
 from . project import data_maker
 

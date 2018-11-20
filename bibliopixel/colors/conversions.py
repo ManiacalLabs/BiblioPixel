@@ -1,4 +1,4 @@
-from .. import log, util
+from .. import util
 import colorsys
 
 
@@ -207,7 +207,7 @@ hue2rgb = hue2rgb_rainbow
 
 def hue_gradient(start, stop, steps):
     if not (0 <= start <= 255 and 0 <= stop <= 255):
-        log.error(
+        util.log.error(
             'hue must be between 0 and 255; start=%s, stop=%s', start, stop)
         start = min(255, max(0, start))
         stop = min(255, max(0, stop))

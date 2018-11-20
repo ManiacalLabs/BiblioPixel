@@ -7,7 +7,7 @@ import copy
 from . import aliases, alias_lists, construct, merge
 from .. import layout
 from .. util import deprecated, exception, log
-from .. util.colors import make, palettes
+from .. colors import make, palettes
 from .. animation.strip import BaseStripAnim
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]

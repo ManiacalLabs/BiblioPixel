@@ -1,5 +1,5 @@
 from . base import TypesBaseTest
-from bibliopixel.util.colors.palette import Palette
+from bibliopixel.colors.palette import Palette
 
 
 class ColorTypesTest(TypesBaseTest):
