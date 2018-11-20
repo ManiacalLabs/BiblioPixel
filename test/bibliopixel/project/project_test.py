@@ -118,6 +118,9 @@ class ProjectTest(unittest.TestCase):
             tables.set_user_colors({})
         self.assertEqual(tables.get_color('bland'), None)
 
+    def test_test_example(self):
+        make(PROJECT_TEST_EXAMPLE)
+
 
 PROJECT = """
 {
@@ -384,6 +387,14 @@ animation: .tests.StripChannelTest
 colors:
   bland: [1, 2, 3]
   'exciting!!': [3, 2, 1]
+"""
+
+PROJECT_TEST_EXAMPLE = """
+driver: dummy
+shape: [48, 24]
+animation: test.bibliopixel.animation.documentation_class.Example26
+run:
+  max_steps: 4
 """
 
 
