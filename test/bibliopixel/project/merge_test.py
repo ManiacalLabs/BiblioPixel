@@ -41,6 +41,7 @@ class MergeTest(unittest.TestCase):
                 'numpy_dtype': 'float',
                 'typename': 'bibliopixel.project.data_maker.Maker'
             },
+            'colors': {},
             'palettes': {},
             'path': 'path/to/dir',
             'run': {},

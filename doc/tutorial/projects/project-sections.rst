@@ -31,6 +31,10 @@ Value Sections
     A dictionary of aliases that are expanded in ``typename`` fields
     to save repetition in Project files.
 
+``colors``
+    A dictionary of named Colors.  Colors can be named in many ways - see the
+    section on Color Fields later.
+
 ``numbers``
     Selects between plain old Python lists and faster, more powerful ``numpy``
     lists.
