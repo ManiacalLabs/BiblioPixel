@@ -11,6 +11,9 @@ class Animation(object):
     subframes = 1
     top_level = False
 
+    if deprecated.allowed():
+        _step = 0
+
     FAIL_ON_EXCEPTION = False
     COLOR_DEFAULTS = ()
 
