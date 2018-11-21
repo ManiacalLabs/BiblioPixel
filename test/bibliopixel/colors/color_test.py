@@ -1,6 +1,6 @@
 import unittest
 
-from bibliopixel.colors import COLORS, arithmetic, classic, names
+from bibliopixel.colors import COLORS, arithmetic, classic, names, tables
 
 
 class ArithmeticTest(unittest.TestCase):
@@ -23,8 +23,8 @@ class ArithmeticTest(unittest.TestCase):
 class ClassicTest(unittest.TestCase):
     def test_classic(self):
         # Make sure that the classic and new color names are the same.
-        cc = names._CLASSIC_COLORS
-        jc = names._JUCE_COLORS
+        cc = tables._CLASSIC_COLORS
+        jc = tables._JUCE_COLORS
         for name, color in cc.items():
             self.assertEqual(color, jc.get(name, color), name)
 

@@ -2,8 +2,9 @@
 Convert back and forth between colors and string names.
 """
 
-import numbers, re
-from . import juce, classic
+import numbers
+from . import tables
+from . tables import COLOR_DICT
 
 
 def name_to_color(name):
@@ -26,9 +27,9 @@ def name_to_color(name):
         try:
             n = _from_number(name)
         except:
-            return TO_COLOR[name.replace(' ', '').lower()]
+            return tables.TO_COLOR[name.replace(' ', '').lower()]
 
-        return _to_triplet(n)
+        return tables.to_triplet(n)
 
     try:
         color = to_color(name)
@@ -58,7 +59,7 @@ def color_to_name(color, use_hex=False):
         return '#%02x%02x%02x' % color
 
     try:
-        return TO_NAME[color]
+        return tables.TO_NAME[color]
     except:
         return str(color)
 
@@ -94,24 +95,6 @@ class _Colors(object):
 
     def __call__(self, color):
         return color_to_name(color)
-
-
-def _to_triplet(color):
-    rg, b = color // 256, color % 256
-    r, g = rg // 256, rg % 256
-    return r, g, b
-
-
-def _classic_pairs():
-    find = re.compile(r'[A-Z][a-z0-9]+').finditer
-
-    for name in dir(classic):
-        if name == 'Green_HTML':
-            yield 'green html', classic.Green_HTML
-
-        elif len(name) > 1 and name[0].isupper() and name[1].islower():
-            key = ' '.join(i.group(0).lower() for i in find(name))
-            yield key, getattr(classic, name)
 
 
 def _from_number(s):
@@ -170,18 +153,3 @@ To get a name from a color, use
     COLOR((0, 255, 255))
 """
 COLORS = _Colors()
-
-
-_JUCE_COLORS = {k: _to_triplet(v) for k, v in juce.COLORS.items()}
-_CLASSIC_COLORS = dict(_classic_pairs())
-
-"""
-A dictionary of every color by name.
-"""
-
-COLOR_DICT = dict(_CLASSIC_COLORS, **_JUCE_COLORS)
-
-# TODO: integrate this better with COLOR
-_SECONDARY_NAMES = juce.SECONDARY_NAMES.union({'off', 'on'})
-TO_NAME = {v: k for k, v in COLOR_DICT.items() if k not in _SECONDARY_NAMES}
-TO_COLOR = {k.replace(' ', ''): v for k, v in COLOR_DICT.items()}
