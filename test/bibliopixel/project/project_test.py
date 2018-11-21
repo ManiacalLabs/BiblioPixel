@@ -3,7 +3,7 @@ from unittest import mock
 
 from . make import make
 from bibliopixel.animation import animation
-from bibliopixel.colors import gamma
+from bibliopixel.colors import gamma, tables
 from bibliopixel.drivers.ledtype import LEDTYPE
 
 BAD_JSON_ERROR = """
@@ -107,6 +107,16 @@ class ProjectTest(unittest.TestCase):
 
     def test_nested_sequence(self):
         make(PROJECT_NESTED_SEQUENCE, run_start=False)
+
+    def test_project_colors(self):
+        try:
+            make(PROJECT_COLORS, run_start=False)
+            self.assertEqual(tables.get_color('bland'), (1, 2, 3))
+            self.assertEqual(tables.get_name((3, 2, 1)), 'exciting!!')
+            self.assertIs(tables.get_color('exciting'), None)
+        finally:
+            tables.set_user_colors({})
+        self.assertEqual(tables.get_color('bland'), None)
 
 
 PROJECT = """
@@ -366,6 +376,14 @@ animation:
       - typename: .sequence
         animations:
         - $bpa.matrix.bloom
+"""
+
+PROJECT_COLORS = """
+shape: 32
+animation: .tests.StripChannelTest
+colors:
+  bland: [1, 2, 3]
+  'exciting!!': [3, 2, 1]
 """
 
 

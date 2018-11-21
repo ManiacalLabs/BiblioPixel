@@ -7,7 +7,7 @@ import copy
 from . import aliases, alias_lists, construct, merge
 from .. import layout
 from .. util import deprecated, exception, log
-from .. colors import make, palettes
+from .. colors import make, palettes, tables
 from .. animation.strip import Strip
 
 DEFAULT_DRIVERS = [construct.to_type('simpixel')]
@@ -15,6 +15,7 @@ DEFAULT_DRIVERS = [construct.to_type('simpixel')]
 
 def fill(desc):
     desc = _fill_aliases(desc)
+    desc = _fill_colors(desc)
     desc = _fill_palettes(desc)
     desc = _fill_animation(desc)
     desc = _fill_drivers(desc)
@@ -45,6 +46,11 @@ def _fill_aliases(desc):
 
     al = desc.pop('aliases', {})
     alias_lists.PROJECT_ALIASES = {unalias(k): v for k, v in al.items()}
+    return desc
+
+
+def _fill_colors(desc):
+    tables.set_user_colors(desc.pop('colors', {}))
     return desc
 
 

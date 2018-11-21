@@ -67,6 +67,7 @@ class FillTest(unittest.TestCase):
                 'datatype': matrix.Matrix,
             },
             'numbers': 'python',
+            'colors': {},
             'palettes': {},
             'run': {},
         }

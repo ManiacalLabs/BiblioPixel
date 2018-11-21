@@ -12,9 +12,9 @@ The Project files above contain three Sections: ``shape``, ``run``, and
 ``animation``, and the ``animation`` Section contains two Fields, ``typename``
 and ``colors``.
 
-The Project Sections are ``aliases``, ``animation``, ``controls``, ``driver``,
-``drivers``, ``layout``, ``numbers``, ``path``, ``run``, and ``shape``... but
-you will probably never use many of these.
+The Project Sections are ``aliases``, ``animation``, ``colors``, ``controls``,
+``driver``, ``drivers``, ``layout``, ``numbers``, ``palettes``, ``path``,
+``run``, and ``shape``... but you might never use many of these.
 
 Sections can have Fields - for example, the ``run`` Section above has the Field
 ``fps: 60``.
@@ -41,8 +41,8 @@ Sections naturally fall into two categories.
 *Value Sections* are fairly simple things like strings, numbers, lists, or
 dictionaries.
 
-The Value Sections are ``aliases``, ``numbers``, ``palettes``, ``path``,
-``run``, and ``shape``.
+The Value Sections are ``aliases``, ``colors``, ``numbers``, ``palettes``,
+``path``, ``run``, and ``shape``.
 
 *Class Sections* represent Python objects - actual programs. Nearly all the
 excitement in BiblioPixel is in the Class Sections!
