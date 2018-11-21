@@ -1,3 +1,7 @@
+## v3.4.38 - 2018-11-21
+- Fix MANIFEST for templates used by `bp new`
+- New user colors
+
 ## v3.4.37 - 2018-11-21
 - Initialize self._step in animation.Animation
 
