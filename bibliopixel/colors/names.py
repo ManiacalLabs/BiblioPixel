@@ -27,7 +27,10 @@ def name_to_color(name):
         try:
             n = _from_number(name)
         except:
-            return tables.TO_COLOR[name.replace(' ', '').lower()]
+            color = tables.get_color(name)
+            if color:
+                return color
+            raise ValueError
 
         return tables.to_triplet(n)
 
@@ -58,10 +61,7 @@ def color_to_name(color, use_hex=False):
     if use_hex:
         return '#%02x%02x%02x' % color
 
-    try:
-        return tables.TO_NAME[color]
-    except:
-        return str(color)
+    return tables.get_name(color) or str(color)
 
 
 def toggle(s):
