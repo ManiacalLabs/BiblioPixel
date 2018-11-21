@@ -1,3 +1,6 @@
+## v3.4.37 - 2018-11-21
+- Initialize self._step in animation.Animation
+
 ## v3.4.36 - 2018-11-20
 - Stop using deprecated features
 - Better help
