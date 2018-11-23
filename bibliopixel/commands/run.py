@@ -4,22 +4,12 @@ Run specified project from file or URL
 
 from .. main import project_flags
 from .. project import project_runner
-from .. util import log, pid_context, signal_handler
-
-SIGNALS = 'SIGHUP', 'SIGINT', 'SIGTERM'
-SIGNAL_DICT = {s: project_runner.stop for s in SIGNALS}
+from .. util import signal_handler
 
 
 def run(args):
-    with pid_context.pid_context(args.pid_filename):
-        with signal_handler.context(**SIGNAL_DICT) as signals:
-            while True:
-                project_runner.run(args)
-                if signals:
-                    log.info('Received signal %s', ' '.join(signals))
-
-                if not signals.pop('SIGHUP', False):
-                    break
+    for i in signal_handler.run(args.pid_filename, project_runner.stop):
+        project_runner.run(args)
 
 
 def add_arguments(parser):
