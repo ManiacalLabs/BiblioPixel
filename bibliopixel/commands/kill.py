@@ -19,8 +19,5 @@ Example:
 
 """
 
-from . import restart
-
-
-def add_arguments(parser):
-    restart.add_signal_arguments(parser, 'SIGKILL')
+from .. util.signal_handler import make_command
+add_arguments, run = make_command('SIGKILL')

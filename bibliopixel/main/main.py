@@ -28,7 +28,7 @@ def main(argv=None):
 
     from . args import set_args
     args = set_args(description, argv, module)
-    args.run(args)
+    module.run(args)
 
 
 DEFAULT_COMMAND = 'run'
