@@ -6,9 +6,9 @@ from ... main import args
 DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
 
 
-def open_browser(url=DEFAULT_SIMPIXEL_URL):
+def open_browser(url=DEFAULT_SIMPIXEL_URL, new=0, autoraise=True):
     if url and not url.startswith('no'):
-        webbrowser.open(url, new=0, autoraise=True)
+        webbrowser.open(url, new=new, autoraise=autoraise)
 
 
 class SimPixelOpenerServer(websocket.Server):
@@ -38,7 +38,7 @@ class SimPixel(ServerDriver):
     SERVER_CLASS = SimPixelOpenerServer
     SERVER_KWDS = {'selectInterval': 0.001}
 
-    def __init__(self, num=1024, port=1337, **kwds):
+    def __init__(self, num=32, port=1337, **kwds):
         """
         Args:
             num:  number of LEDs being visualizer.
