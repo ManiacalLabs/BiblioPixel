@@ -1,20 +1,23 @@
 #!/bin/bash
+set -Eeuxo pipefail
 
 pushd .
 
 # rtmidi is the wrong package
 pip uninstall -q rtmidi
 
-pip install -r requirements.txt && \
-    pip install -r test_requirements.txt && \
-    pip install -r doc/doc_requirements.txt && \
-    pip install python-rtmidi && \
-    pip install mido && \
-    pip install pynput && \
-    pip install opencv-python && \
-    python setup.py develop && \
-    cd ../BiblioPixelAnimations && \
-    python setup.py develop
+pip install -r requirements.txt
+pip install -r test_requirements.txt
+pip install -r doc/doc_requirements.txt
+pip install python-rtmidi
+pip install mido
+pip install pynput
+pip install opencv-python
+
+python setup.py develop
+
+cd ../BiblioPixelAnimations
+python setup.py develop
 
 # TODO: the last two lines are janky - they are required because of a bug in
 # BiblioPixelAnimations's setup.py, but they won't work on every system.  We

@@ -1,4 +1,4 @@
-set -e
+set -Eeuxo pipefail
 
 BUILD_DIR=html
 DOC_IN_DIR=doc
