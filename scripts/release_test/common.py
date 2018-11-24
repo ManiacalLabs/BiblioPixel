@@ -4,6 +4,12 @@ import features
 ROOT = os.path.dirname(__file__)
 printer = print  # noqa: T001
 VERBOSE = False
+USE_PROMPT = True
+
+
+def prompt(prompt):
+    if USE_PROMPT:
+        input(prompt + ': ')
 
 
 def execute(*args):

@@ -13,9 +13,13 @@ def arguments(argv=sys.argv[1:]):
 
     features = ', '.join(FEATURES)
     parser.add_argument(
-        '--features', '-f', default=[], action='append',
+        '--features', default=[], action='append',
         help='A list of features separated by colons.  Features are: ' +
         features)
+
+    parser.add_argument(
+        '--force', '-f', action='store_true',
+        help='Do not wait for a prompt')
 
     parser.add_argument(
         '--verbose', '-v', action='store_true',
@@ -38,7 +42,7 @@ def arguments(argv=sys.argv[1:]):
     else:
         features = get_features()
 
-    return all_tests, features, args.verbose
+    return all_tests, features, args.verbose, args.force
 
 
 if __name__ == '__main__':
