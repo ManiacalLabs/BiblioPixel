@@ -29,14 +29,14 @@ class MergeTest(unittest.TestCase):
                 'path': 'path/to/dir'
             })
         expected = {
-            'aliases': {'bpa': 'BiblioPixelAnimations'},
+            'aliases': {},
             'animation': {'typename': 'bfoo'},
             'controls': [],
             'shape': (),
             'driver': {'typename': 'bar'},
             'drivers': ['bang', 'bop'],
             'layout': {},
-            'numbers': 'python',
+            'numbers': '',
             'maker': {
                 'numpy_dtype': 'float',
                 'typename': 'bibliopixel.project.data_maker.Maker'

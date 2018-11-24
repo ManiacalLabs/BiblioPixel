@@ -16,11 +16,8 @@ class Project2Test(unittest.TestCase):
 
     def test_single(self):
         source = {
-            'animation': {
-                'typename': 'bibliopixel.animation.matrix.Matrix',
-                'width': 23,
-                'height': 32,
-            }
+            'animation': 'bibliopixel.animation.matrix.Matrix',
+            'shape': [23, 32],
         }
         pr = project.project(source)
 

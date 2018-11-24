@@ -4,7 +4,7 @@ so they have exactly the right constructor.
 """
 
 import copy
-from . import aliases, alias_lists, construct, merge
+from . import aliases, construct, merge
 from .. import layout
 from .. util import deprecated, exception, log
 from .. colors import make, palettes, tables
@@ -45,7 +45,7 @@ def _fill_aliases(desc):
         return k
 
     al = desc.pop('aliases', {})
-    alias_lists.PROJECT_ALIASES = {unalias(k): v for k, v in al.items()}
+    aliases.PROJECT_ALIASES = {unalias(k): v for k, v in al.items()}
     return desc
 
 
@@ -157,7 +157,7 @@ def _fill_shape(desc):
 
 
 def _fill_numbers(desc):
-    numbers = desc.pop('numbers', 'python')
+    numbers = desc.pop('numbers', None) or 'python'
     if numbers != 'python':
         desc.setdefault('maker', {})['numpy_dtype'] = numbers
 
