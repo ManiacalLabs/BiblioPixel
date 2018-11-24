@@ -2,7 +2,7 @@ import common
 
 
 def run():
-    input('Press return to start demo tests')
+    common.prompt('Press return to start demo tests')
     for i, demo in enumerate(('bloom', 'circle', 'cube', 'matrix')):
         if i:
             common.execute('bp', 'demo', demo, '--pl=3', '--simpixel=no')

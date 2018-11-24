@@ -12,7 +12,8 @@ TEST_PREFIX = 'tests.'
 
 
 def run_tests():
-    all_tests, features, common.VERBOSE = arguments.arguments()
+    all_tests, features, common.VERBOSE, force = arguments.arguments()
+    common.USE_PROMPT = not force
 
     common.printer('Features:', *sorted(features))
 
