@@ -57,7 +57,7 @@ class FillTest(unittest.TestCase):
         }
         actual = fill_after(copy.deepcopy(source))
         expected = {
-            'aliases': {'bpa': 'BiblioPixelAnimations'},
+            'aliases': {},
             'shape': (),
             'driver': {},
             'drivers': [],
@@ -66,7 +66,7 @@ class FillTest(unittest.TestCase):
                 'height': 32,
                 'datatype': matrix.Matrix,
             },
-            'numbers': 'python',
+            'numbers': '',
             'colors': {},
             'palettes': {},
             'run': {},

@@ -1,11 +1,13 @@
 import unittest
 import test.bibliopixel.patch
-from bibliopixel.project import aliases, alias_lists, importer
+from bibliopixel.project import aliases, importer
 from bibliopixel.util import log
+
+NOT_ANIMATIONS = ['bpa']
 
 
 def patch(**kwds):
-    return test.bibliopixel.patch.patch(alias_lists, 'PROJECT_ALIASES', kwds)
+    return test.bibliopixel.patch.patch(aliases, 'PROJECT_ALIASES', kwds)
 
 
 class AliasTest(unittest.TestCase):
@@ -44,15 +46,15 @@ class AliasTest(unittest.TestCase):
 
     def test_existence(self):
         failed = []
-        for cl in alias_lists.BUILTIN_ALIASES.values():
+        for name, cl in aliases.BUILTIN_ALIASES.items():
             try:
                 importer.import_symbol(cl)
             except:
-                failed.append(cl)
+                failed.append(name)
 
-        if failed:
+        if failed != NOT_ANIMATIONS:
             log.printer('Failed', *failed, sep='\n')
-        self.assertFalse(failed)
+            self.assertTrue(False)
 
     def test_additional_aliases(self):
         additional = {'foo': 'bar', 'remote': 'distance'}
@@ -63,8 +65,8 @@ class AliasTest(unittest.TestCase):
         just_one = ''
         failed, not_equal = [], []
 
-        for alias, path in alias_lists.BUILTIN_ALIASES.items():
-            if just_one and alias != just_one:
+        for alias, path in aliases.BUILTIN_ALIASES.items():
+            if alias in NOT_ANIMATIONS or (just_one and alias != just_one):
                 continue
             python_path = '.'.join(path.split('.', 2)[:2])
             expected = importer.import_symbol(path)

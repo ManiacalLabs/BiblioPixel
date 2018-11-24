@@ -6,12 +6,12 @@ from . import construct, load
 # For example, animation is at the bottom which are  dependent on run and
 # layout, which depend on drivers, and everything depends on path and typename.
 DEFAULT_PROJECT = collections.OrderedDict((
-    ('aliases', {'bpa': 'BiblioPixelAnimations'}),
+    ('aliases', {}),
     ('colors', {}),
     ('palettes', {}),
     ('path', ''),
     ('typename', 'bibliopixel.project.project.Project'),
-    ('numbers', 'python'),
+    ('numbers', ''),
     ('maker', 'bibliopixel.project.data_maker.Maker'),
     ('driver', {}),
     ('drivers', []),
