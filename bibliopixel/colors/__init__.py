@@ -45,7 +45,7 @@ is also of the "constant apparent brightness" variety.
 More details here: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors
 """
 
-from . names import COLORS
+from . colors import COLORS
 
 from .. util import deprecated
 if deprecated.allowed():  # pragma: no cover

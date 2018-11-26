@@ -38,10 +38,21 @@ def get_name(color):
 
 
 def all_named_colors():
+    """Return an iteration over all name, color pairs in tables"""
     yield from _TO_COLOR_USER.items()
     for name, color in _TO_COLOR.items():
         if name not in _TO_COLOR_USER:
             yield name, color
+
+
+def contains(x):
+    """Return true if this string or integer tuple appears in tables"""
+    if isinstance(x, str):
+        x = canonical_name(x)
+        return x in _TO_COLOR_USER or x in _TO_COLOR
+    else:
+        x = tuple(x)
+        return x in _TO_NAME_USER or x in _TO_NAME
 
 
 def _classic_pairs():
@@ -64,9 +75,10 @@ A dictionary of every color by name.
 """
 
 COLOR_DICT = dict(_CLASSIC_COLORS, **_JUCE_COLORS)
+CANONICAL_DICT = {canonical_name(k): v for k, v in COLOR_DICT.items()}
 
 _SECONDARY_NAMES = juce.SECONDARY_NAMES.union({'off', 'on'})
 _TO_NAME = {v: k for k, v in COLOR_DICT.items() if k not in _SECONDARY_NAMES}
-_TO_COLOR = {k.replace(' ', ''): v for k, v in COLOR_DICT.items()}
+_TO_COLOR = {canonical_name(k): v for k, v in COLOR_DICT.items()}
 _TO_NAME_USER = {}
 _TO_COLOR_USER = {}
