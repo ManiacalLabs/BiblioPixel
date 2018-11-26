@@ -96,6 +96,9 @@ class _Colors(object):
     def __call__(self, color):
         return color_to_name(color)
 
+    def __iter__(self):
+        return tables.all_named_colors()
+
 
 def _from_number(s):
     s = s.strip()
