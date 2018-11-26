@@ -37,6 +37,15 @@ class PaletteTest(unittest.TestCase):
             (0, 255, 0)]
         self.assertEqual(result, expected)
 
+    def test_palette_setitem(self):
+        p = Palette([Red, Green, Blue])
+        p[0] = Green
+        p[1] = 'blue'
+        p[2] = '0xFF0000'
+        with self.assertRaises(IndexError):
+            p[3] = Red
+        self.assertEqual(p, Palette([Green, Blue, Red]))
+
     def test_get_serpentine(self):
         p = Palette([Red, Green, Blue], serpentine=True, continuous=True)
         result = [p(-1 + Fraction(i) / 2) for i in range(12)]
