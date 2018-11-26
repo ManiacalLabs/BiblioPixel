@@ -2,7 +2,7 @@
 Tables of named colors
 """
 
-import re
+import itertools, re
 from . import juce, classic
 
 
@@ -35,6 +35,13 @@ def get_color(name):
 
 def get_name(color):
     return _TO_NAME_USER.get(color) or _TO_NAME.get(color)
+
+
+def all_named_colors():
+    yield from _TO_COLOR_USER.items()
+    for name, color in _TO_COLOR.items():
+        if name not in _TO_COLOR_USER:
+            yield name, color
 
 
 def _classic_pairs():
