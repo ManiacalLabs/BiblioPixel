@@ -50,8 +50,9 @@ class NamesTest(unittest.TestCase):
         self.assertEqual(COLORS.red, (255, 0, 0))
         self.assertEqual(COLORS.OFF, (0, 0, 0))
         self.assertEqual(COLORS['o n'], (255, 255, 255))
-        self.assertEqual(COLORS((0, 0, 0)), 'black')
-        self.assertEqual(COLORS((0x8a, 0x36, 0x0f)), 'burnt sienna')
+        self.assertEqual(names.color_to_name((0, 0, 0)), 'black')
+        self.assertEqual(
+            names.color_to_name((0x8a, 0x36, 0x0f)), 'burnt sienna')
 
     def test_toggle(self):
         self.assertEqual(names.toggle('red'), '(255, 0, 0)')

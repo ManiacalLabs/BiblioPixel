@@ -80,26 +80,6 @@ def toggle(s):
     return color_to_name(c) if is_numeric else str(c)
 
 
-class _Colors(object):
-    def __getitem__(self, name):
-        try:
-            return name_to_color(name)
-        except:
-            raise KeyError(name)
-
-    def __getattr__(self, name):
-        try:
-            return name_to_color(name)
-        except:
-            raise AttributeError("COLORS has no attribute' %s'" % name)
-
-    def __call__(self, color):
-        return color_to_name(color)
-
-    def __iter__(self):
-        return tables.all_named_colors()
-
-
 def _from_number(s):
     s = s.strip()
     for prefix in '0x', '#':
@@ -133,26 +113,6 @@ def to_color(c):
     raise ValueError('Cannot create color from "%s"' % c)
 
 
-"""
-COLOR is a "magic" color name variable.
-
- To get a color from a name, use ``COLORS.<colorname>`` - for example
-
-::
-
-    COLORS.red
-    COLORS.ochre
-
-or if the name is a variable or has a space in it,
-
-::
-
-    COLORS['violet red 4']
-
-To get a name from a color, use
-
-::
-
-    COLOR((0, 255, 255))
-"""
-COLORS = _Colors()
+from .. util import deprecated
+if deprecated.allowed():
+    from . colors import COLORS
