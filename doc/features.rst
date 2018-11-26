@@ -8,12 +8,14 @@ BiblioPixel has some snappy features:
 
 * It has drivers for almost every popular LED strip, and many other lights.
 
-* Lighting projects can be put together without any programming...
+* Lighting Projects can be put together without any programming...
 
 * ...and it's easy to reuse projects...
 
 * ...but if you program, it's also easy to write your own Animations, Controls,
-  Drivers and Layouts in Python.
+  Drivers and Layouts in Python,
+
+* ...or there's a Project Builder to let you experiment from the command line.
 
 * There's a fast and free `WebGL visualizer <http://simpixel.io>`_ driver,
 
