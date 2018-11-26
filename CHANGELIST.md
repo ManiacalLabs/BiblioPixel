@@ -1,3 +1,8 @@
+## v3.4.39 - 2018-11-26
+- New Project Builder class
+- Make Color class more user-friendly
+- Improvements to error reporting in scripts
+
 ## v3.4.38 - 2018-11-21
 - Fix MANIFEST for templates used by `bp new`
 - New user colors
