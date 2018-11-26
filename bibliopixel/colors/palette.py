@@ -116,6 +116,10 @@ class Palette(list):
 
         return r1 + fade * dr, g1 + fade * dg, b1 + fade * db
 
+    def __setitem__(self, i, color):
+        from . import make
+        super().__setitem__(i, make.color(color))
+
     def __eq__(self, other):
         return (isinstance(other, Palette) and
                 super().__eq__(other) and
