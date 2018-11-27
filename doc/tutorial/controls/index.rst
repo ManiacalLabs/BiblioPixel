@@ -1,4 +1,4 @@
-The BiblioPixel Tutorial
+Controls
 ------------------------------
 
 This chapter describes Controls, a way of controlling all parts of a Project in

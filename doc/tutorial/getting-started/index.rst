@@ -13,6 +13,7 @@ How to get started with BiblioPixel
    how-to-write-a-project
    editing-a-project
    editing-an-animation
+   the-project-builder
    the-bp-program
    animated-gifs
 

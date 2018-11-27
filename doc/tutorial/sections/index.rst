@@ -1,4 +1,4 @@
-The BiblioPixel Tutorial
+The Sections in a Project
 ------------------------------
 
 This chapter describes the most common Sections in a Project.
