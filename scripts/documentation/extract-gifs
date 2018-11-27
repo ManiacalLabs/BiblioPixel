@@ -14,14 +14,16 @@ It relies on a directory structure like this:
 """
 
 import argparse, copy, math, pathlib, os, subprocess, sys, tempfile, traceback
-cdir = os.path.dirname(os.path.realpath(__file__))
+cdir = pathlib.Path(__file__).parents[2].absolute()
+sys.path.insert(0, str(cdir))
+print(sys.path)
 
-sys.path.append(cdir + '/../../')
 from unittest import mock
 from bibliopixel.util import data_file, log, walk
 from bibliopixel.util.image.extract_gif_lines import extract_gif_lines
 from bibliopixel.util.threads import worker
 from bibliopixel.project import merge, project
+
 
 SUFFIXES = '.rst', '.py'
 RAISE = False
