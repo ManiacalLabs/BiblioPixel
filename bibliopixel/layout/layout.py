@@ -64,11 +64,6 @@ class Layout(object):
         for d in self.drivers:
             d.set_pixel_positions(pixel_positions)
 
-    def update(self):
-        """DEPRECATED: Use :py:func:`push_to_driver` instead"""
-        deprecated.deprecated('Layout.update')
-        return self.push_to_driver()
-
     def start(self):
         for d in self.drivers:
             d.start()
@@ -166,9 +161,21 @@ class Layout(object):
         return result
 
     def push_to_driver(self):
-        """Push the current pixel state to the driver"""
+        """
+        Push the current pixel state to the driver
+        Do not call this method from user code!
+        """
         # This is overridden elsewhere.
         self.threading.push_to_driver()
+
+    if deprecated.allowed():
+        def update(self):
+            """
+            DEPRECATED: Use :py:func:`push_to_driver` instead
+            Do not call this method from user code!
+            """
+            deprecated.deprecated('Layout.update')
+            return self.push_to_driver()
 
     def set_brightness(self, brightness):
         self.brightness = brightness
