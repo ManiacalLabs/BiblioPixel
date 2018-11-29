@@ -55,9 +55,6 @@ class ProjectTest(unittest.TestCase):
     def test_multi(self):
         animation = make(PROJECT_MULTI)
         k = [d._kwds for d in animation.layout.drivers]
-        self.assertEqual(k[0]['width'], 128)
-        self.assertEqual(k[1]['width'], 128)
-        self.assertEqual(k[2]['width'], 128)
         self.assertEqual(k[0]['device_id'], 10)
         self.assertEqual(k[1]['device_id'], 11)
         self.assertEqual(k[2]['device_id'], 12)
@@ -159,8 +156,6 @@ PROJECT_MULTI = """
 {
     "driver": {
         "typename": "dummy",
-        "width": 128,
-        "height": 32,
         "num": 4096
     },
 
@@ -173,6 +168,7 @@ PROJECT_MULTI = """
     "layout": {
         "typename": "matrix",
         "width": 128,
+        "height": 32,
         "gen_coord_map": [
             {
               "dx": 32,
