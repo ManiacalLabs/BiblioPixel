@@ -45,8 +45,8 @@ class Matrix(MultiLayout):
         if self.rotation != rot_mod:
             log.warning(ROTATION_WARNING, rotation, self.rotation)
 
-        self.width = width or getattr(self.drivers[0], 'width') or 32
-        self.height = height or getattr(self.drivers[0], 'height') or 32
+        self.width = width or getattr(self.drivers[0], 'width') or 0
+        self.height = height or getattr(self.drivers[0], 'height') or 0
         self.vert_flip = vert_flip
         self.y_flip = y_flip
         self.serpentine = serpentine
@@ -54,7 +54,7 @@ class Matrix(MultiLayout):
         pw, ph = self.pixelSize
 
         # If both are 0, try to assume it's a square display.
-        if self.width == 0 and self.height == 0:
+        if not (self.width or self.height):
             square = int(math.sqrt(self.numLEDs))
             if (square * square) == self.numLEDs:
                 self.width = self.height = square
