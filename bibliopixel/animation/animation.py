@@ -9,7 +9,7 @@ class Animation(object):
     free_run = False
     pre_recursion = fields.default_converter
     subframes = 1
-    top_level = False
+    top_level = True
 
     if deprecated.allowed():
         _step = 0

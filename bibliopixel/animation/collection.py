@@ -72,6 +72,8 @@ class Collection(animation.Animation):
         super().__init__(layout, **kwds)
         self.animations = _AnimationList(animations or [])
         self.internal_delay = 0  # never wait
+        for a in self.animations:
+            a.top_level = False
 
     # Override to handle all the animations
     def cleanup(self, clean_layout=True):
