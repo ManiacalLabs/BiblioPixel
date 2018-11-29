@@ -56,7 +56,6 @@ class Project:
             self.layout = self.construct_child('layout', **layout)
 
         self.animation = create(animation, 'animation')
-        self.animation.top_level = True
         self.running = False
         self.clock = time
 
