@@ -1,5 +1,5 @@
 from . import aliases
-import loady, os
+import loady, os, platform
 from .. util import data_file, log
 
 guess_name = loady.importer.guess_name
@@ -26,10 +26,7 @@ def module(name, python_path=None):
 
 
 def extender(path):
-    parts = [os.getcwd()]
-    if path:
-        parts.extend(path.split(':'))
-
+    parts = [os.getcwd()] + _split_path(path)
     missing = [p for p in parts if not os.path.exists(p)]
     if missing:
         msg = ('This "path" entry does not exist' if len(missing) == 1
@@ -47,3 +44,15 @@ def load_if_filename(s):
             s = os.path.join(os.path.dirname(ROOT_FILE), s)
 
         return data_file.load(s)
+
+
+def _split_path(path):
+    if not path:
+        return []
+
+    p = path.split(';')
+    if platform.system() == 'Windows':
+        return p
+
+    # Also split on : for backwards compatibility
+    return [j for i in p for j in i.split(':')]
