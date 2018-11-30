@@ -1,3 +1,7 @@
+## v3.4.40 - 2018-11-30
+- Fix #1094, #1088, #1084, #1076 and probably #1085
+- Make all Yaml dumping safe
+
 ## v3.4.39 - 2018-11-26
 - New Project Builder class
 - Make Color class more user-friendly
