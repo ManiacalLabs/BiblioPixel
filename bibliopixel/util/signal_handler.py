@@ -67,8 +67,9 @@ def run(filename, stopper,
             running = True
             while running:
                 yield
-                if signals:
-                    log.info('Received signal %s', ' '.join(signals))
+                if not signals:
+                    return
+                log.info('Received signal %s', ' '.join(signals))
                 running = all(s in restart_signals for s in signals)
                 signals.clear()
 
