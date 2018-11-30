@@ -6,7 +6,7 @@ open = __builtins__['open']
 ALWAYS_LOAD_YAML, ALWAYS_DUMP_YAML = True, True
 
 
-def dumps(data, use_yaml=None, safe=True, **kwds):
+def dumps(data, use_yaml=None, **kwds):
     """
     Dumps data into a nicely formatted JSON string.
 
@@ -19,12 +19,10 @@ def dumps(data, use_yaml=None, safe=True, **kwds):
         use_yaml = ALWAYS_DUMP_YAML
 
     if use_yaml:
-        dumps = yaml.safe_dump if safe else yaml.dump
+        dumps = yaml.safe_dump
     else:
         dumps = json.dumps
         kwds.update(indent=4, sort_keys=True)
-        if not safe:
-            kwds.update(default=repr)
     return dumps(data, **kwds)
 
 
