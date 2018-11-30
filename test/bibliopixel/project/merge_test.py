@@ -27,14 +27,22 @@ class MergeTest(unittest.TestCase):
                 'animation': 'bfoo',
                 'maker': {'numpy_dtype': 'float'},
                 'path': 'path/to/dir'
-            })
+            },
+            {
+                'drivers': None,
+                'animation': {'bar': 'baz', 'bing': 'bop'},
+            },
+            {
+                'animation': {'bing': None},
+            },
+        )
         expected = {
             'aliases': {},
-            'animation': {'typename': 'bfoo'},
+            'animation': {'typename': 'bfoo', 'bar': 'baz'},
             'controls': [],
             'shape': (),
             'driver': {'typename': 'bar'},
-            'drivers': ['bang', 'bop'],
+            'drivers': [],
             'layout': {},
             'numbers': '',
             'maker': {

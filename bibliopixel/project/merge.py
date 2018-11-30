@@ -18,14 +18,16 @@ DEFAULT_PROJECT = collections.OrderedDict((
     ('shape', ()),
     ('layout', {}),
     ('run', {}),
-    ('animation', {'typename': 'animation'}),
+    ('animation', {}),
     ('controls', []),
 ))
-PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys())
 
-NOT_MERGEABLE = (
-    'controls', 'datatype', 'dimensions', 'shape', 'drivers', 'numbers', 'path',
-    'typename')
+NOT_MERGEABLE = 'controls', 'shape', 'drivers', 'numbers', 'path', 'typename'
+
+# datatype is added when we resolve the typename
+# dimensions is a legacy section
+SPECIAL_CASE = 'datatype', 'dimensions',
+PROJECT_SECTIONS = tuple(DEFAULT_PROJECT.keys()) + SPECIAL_CASE
 
 SECTION_ISNT_DICT_ERROR = 'Project section "%s" is %s, should be dictionary'
 UNKNOWN_SECTION_ERROR = 'There is no Project section named "%s"'
@@ -39,12 +41,16 @@ def merge(*projects):
     result = {}
     for project in projects:
         for name, section in (project or {}).items():
-            if name in NOT_MERGEABLE:
-                result[name] = section
+            if name not in PROJECT_SECTIONS:
+                raise ValueError(UNKNOWN_SECTION_ERROR % name)
+
+            if section is None:
+                result[name] = type(result[name])()
                 continue
 
-            if name not in DEFAULT_PROJECT:
-                raise ValueError(UNKNOWN_SECTION_ERROR % name)
+            if name in NOT_MERGEABLE + SPECIAL_CASE:
+                result[name] = section
+                continue
 
             if section and not isinstance(section, (dict, str)):
                 cname = section.__class__.__name__
@@ -57,8 +63,11 @@ def merge(*projects):
                     section = adesc.get('animation', {})
                     section['run'] = adesc.get('run', {})
 
-            result.setdefault(name, {}).update(construct.to_type(section))
-            if 'datatype' in result[name]:
-                result[name].pop('typename', None)
-
+            result_section = result.setdefault(name, {})
+            section = construct.to_type(section)
+            for k, v in section.items():
+                if v is None:
+                    result_section.pop(k, None)
+                else:
+                    result_section[k] = v
     return result

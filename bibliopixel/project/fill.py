@@ -70,31 +70,26 @@ def _fill_palettes(desc):
 
 
 def _fill_animation(desc):
-    if not desc['animation']:
-        raise ValueError('Missing "animation" Section')
-
-    desc['animation'] = construct.to_type_constructor(
-        desc['animation'], 'bibliopixel.animation')
-    datatype = desc['animation'].get('datatype')
+    da = desc['animation'] or {'typename': 'animation'}
+    da = construct.to_type_constructor(da, 'bibliopixel.animation')
+    datatype = da.get('datatype')
     if not datatype:
-        e = desc['animation'].get('_exception')
+        e = da.get('_exception')
         raise e or ValueError('Missing "datatype" in "animation" Section')
 
-    desc['animation'].setdefault('name', datatype.__name__)
+    da.setdefault('name', datatype.__name__)
 
     from .. animation import sequence
     if not issubclass(datatype, sequence.Sequence):
         # Magic here to allow this to work for non-sequences.
-        length = desc['animation'].pop('length', [])
+        length = da.pop('length', [])
         if length:
-            desc['run']['seconds'] = length[0]
+            desc.setdefault('run', {})['seconds'] = length[0]
 
     desc = merge.merge(getattr(datatype, 'PROJECT', {}), desc)
 
-    run = desc.pop('run')
-    anim_run = desc['animation'].setdefault('run', {})
-    if run:
-        desc['animation']['run'] = dict(run, **anim_run)
+    da['run'] = dict(desc.pop('run', {}), **da.get('run', {}))
+    desc['animation'] = da
     return desc
 
 
@@ -102,10 +97,7 @@ def _fill_drivers(desc):
     driver = construct.to_type(desc.pop('driver', {}))
     drivers = [construct.to_type(d) for d in desc['drivers']]
     if driver:
-        if drivers:
-            drivers = [dict(driver, **d) for d in drivers]
-        else:
-            drivers = [driver]
+        drivers = [dict(driver, **d) for d in drivers or [{}]]
 
     desc['drivers'] = drivers or DEFAULT_DRIVERS
     return desc
