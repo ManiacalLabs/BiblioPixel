@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+#
+# Run a complete battery of tests
+
+
+import arguments, common, features, tests
+import getpass, platform, sys, threading, traceback
+
+SKIPPING_MESSAGE = '%-20s skipped due to missing feature%s: %s'
+RUNNING_MESSAGE = '%-20s running...'
+TEST_PREFIX = 'tests.'
+
+
+def run_tests():
+    all_tests, features, common.VERBOSE, force = arguments.arguments()
+    common.USE_PROMPT = not force
+
+    common.printer('Features:', *sorted(features))
+
+    good_tests = []
+    for test in all_tests:
+        required_features = set(getattr(test, 'FEATURES', []))
+        missing = required_features - features
+
+        if missing:
+            plural = '' if len(missing) == 1 else 's'
+            missing = ', '.join(missing)
+            common.printer(SKIPPING_MESSAGE % (_name(test), plural, missing))
+        else:
+            good_tests.append(test)
+
+    'list' in good_tests and good_tests.remove('list')
+    if not good_tests:
+        return
+    common.printer('Running tests:', *[_name(t) for t in good_tests])
+
+    failures = 0
+    for test in good_tests:
+        common.printer(RUNNING_MESSAGE % _name(test), end='', flush=True)
+        try:
+            test.run()
+        except:
+            traceback.print_exc()
+            failures += 1
+        common.printer('done', flush=True)
+    sys.exit(failures)
+
+
+def _name(test):
+    n = test.__name__
+    return n[len(TEST_PREFIX):] if n.startswith(TEST_PREFIX) else n
+
+
+if __name__ == '__main__':
+    run_tests()

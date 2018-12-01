@@ -16,14 +16,15 @@ pip install opencv-python
 
 python setup.py develop
 
-cd ../BiblioPixelAnimations
-python setup.py develop
-
-# TODO: the last two lines are janky - they are required because of a bug in
+# TODO: these next two lines are janky - they are required because of a bug in
 # BiblioPixelAnimations's setup.py, but they won't work on every system.  We
 # should fix that bug and then remove the last two lines
 
+cd ../BiblioPixelAnimations
+python setup.py develop
+
+
 popd
 
-git remote add rec git@github.com:rec/BiblioPixel.git
-git remote add upstream git@github.com:ManiacalLabs/BiblioPixel.git
+git remote add rec git@github.com:rec/BiblioPixel.git || :
+git remote add upstream git@github.com:ManiacalLabs/BiblioPixel.git || :
