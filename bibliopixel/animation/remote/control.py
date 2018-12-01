@@ -169,6 +169,9 @@ class RemoteControl(wrapper.Indexed):
                 target=trigger_process.run_trigger,
                 args=(typename, self.q_recv, events, kwargs))
 
+        for a in self.animations:
+            a.top_level = True
+
     def cleanup(self, clean_layout=True):
         self.q_recv.close()
         for q in self.send_queues.values():
@@ -222,6 +225,7 @@ class RemoteControl(wrapper.Indexed):
         return True, resp
 
     def pre_run(self):
+        super().pre_run()
         self.server.start()
         for proc in self.trigger_procs.values():
             proc.start()
