@@ -60,7 +60,7 @@ class Server:
         self.ws_server.close()
 
     def close(self):
-        self.server.close()
+        self.ws_server.close()
 
     def is_alive(self):
         return self.thread.is_alive()
