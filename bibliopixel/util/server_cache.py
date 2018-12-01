@@ -13,6 +13,12 @@ class StaticCache:
             cls.CACHE = ServerCache(cls.SERVER_CLASS, **cls.SERVER_KWDS)
         return cls.CACHE
 
+    @classmethod
+    def close_all(cls):
+        if cls.CACHE:
+            cls.CACHE.close_all()
+            cls.CACHE = None
+
 
 class ServerCache:
     """
@@ -58,6 +64,10 @@ class ServerCache:
         if server:
             server.server.close()
             return True
+
+    def close_all(self):
+        for key in list(self.servers.keys()):
+            self.close(key)
 
 
 class _CachedServer:

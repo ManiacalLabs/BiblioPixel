@@ -22,6 +22,10 @@ class ServerDriver(DriverBase, StaticCache):
         self.server = self.cache().get_server(self.address)
         self._on_positions()
 
+    @classmethod
+    def stop_all(cls):
+        cls.CACHE and cls.CACHE.close_all()
+
     def set_pixel_positions(self, pixel_positions):
         # This is the "automatic" update from the layout - don't overwrite
         # any pixel_position set in the constructor.
