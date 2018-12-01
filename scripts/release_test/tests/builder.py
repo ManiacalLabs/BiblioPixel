@@ -2,6 +2,7 @@ import os, tempfile, threading, time
 import common
 from bibliopixel.project.builder import Builder
 from bibliopixel.animation.tests import StripChannelTest
+from bibliopixel.drivers.simpixel import SimPixel
 
 SAVE_FILE = 'save.yml'
 
@@ -40,4 +41,8 @@ def run():
         pb.start()
         time.sleep(2)
         pb.project.animation.palette[0] = 'green'
-        stop()
+        pb.stop()
+        pb = None
+
+        # TODO: why do we only have to do this for this one test?
+        SimPixel.close_all()
