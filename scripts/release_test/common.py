@@ -14,7 +14,6 @@ def prompt(prompt):
 
 def execute(*args):
     kwds = {
-        'cwd': os.path.dirname(os.path.dirname(ROOT)),
         'stdout': subprocess.PIPE,
         'shell': features.IS_WINDOWS}
 
