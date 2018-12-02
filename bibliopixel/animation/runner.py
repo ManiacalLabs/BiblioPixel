@@ -70,9 +70,10 @@ class Runner(object):
             self.until_complete = True
             self.max_cycles = repeats
         self.repeats = repeats
+        self.time = time.time
 
     def set_project(self, project):
-        self.project = project
+        self.time = project.time
         if self.flat_out:
             project.flat_out()
 
@@ -86,7 +87,7 @@ class Runner(object):
 
     def compute_state(self, cur_step, state):
         if self.seconds:
-            elapsed = self.project.time() - self.run_start_time
+            elapsed = self.time() - self.run_start_time
             if elapsed >= self.seconds:
                 return STATE.timeout
 
