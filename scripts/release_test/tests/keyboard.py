@@ -4,5 +4,5 @@ FEATURES = 'keyboard',
 
 
 def run():
-    common.prompt('Press return to start keyboard test')
+    common.test_prompt('keyboard')
     common.run_project('keyboard.yml')

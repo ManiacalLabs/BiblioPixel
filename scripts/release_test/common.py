@@ -9,7 +9,11 @@ USE_PROMPT = True
 
 def prompt(prompt):
     if USE_PROMPT:
-        input(prompt + ': ')
+        input('\n' + prompt + ': ')
+
+
+def test_prompt(name):
+    prompt('--> Press return to start %s test' % name)
 
 
 def execute(*args):
