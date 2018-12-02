@@ -6,11 +6,6 @@ from ... main import args
 DEFAULT_SIMPIXEL_URL = 'http://simpixel.io'
 
 
-def open_browser(url=DEFAULT_SIMPIXEL_URL, new=0, autoraise=True):
-    if url and not url.startswith('no'):
-        webbrowser.open(url, new=new, autoraise=autoraise)
-
-
 class SimPixelOpenerServer(websocket.Server):
     def __init__(self, port, selectInterval):
         super().__init__(port, selectInterval)
@@ -18,7 +13,7 @@ class SimPixelOpenerServer(websocket.Server):
             args.ARGS.simpixel or (args.ARGS.s and DEFAULT_SIMPIXEL_URL))
         if url is True:
             url = DEFAULT_SIMPIXEL_URL
-        open_browser(url)
+        SimPixel.open_browser(url)
 
 
 class SimPixel(ServerDriver):
@@ -37,6 +32,11 @@ class SimPixel(ServerDriver):
 
     SERVER_CLASS = SimPixelOpenerServer
     SERVER_KWDS = {'selectInterval': 0.001}
+
+    @staticmethod
+    def open_browser(url=DEFAULT_SIMPIXEL_URL, new=0, autoraise=True):
+        if url and not url.startswith('no'):
+            webbrowser.open(url, new=new, autoraise=autoraise)
 
     def __init__(self, num=32, port=1337, **kwds):
         """
@@ -64,4 +64,5 @@ class SimPixel(ServerDriver):
 
 from ... util import deprecated
 if deprecated.allowed():  # pragma: no cover
+    open_browser = SimPixel.open_browser
     DriverSimPixel = SimPixel
