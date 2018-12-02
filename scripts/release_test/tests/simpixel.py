@@ -5,5 +5,5 @@ PROJECTS = 'sim-strip.yml', 'sim-matrix.yml', 'sim-cube.yml', 'sim-circle.yml',
 
 
 def run():
-    common.prompt('Open a simpixel browser window and press return')
-    common.run_project(*PROJECTS)
+    common.test_prompt('simpixel')
+    common.run_project(*PROJECTS, flag='-s')

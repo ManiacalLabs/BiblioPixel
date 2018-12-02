@@ -8,7 +8,7 @@ SAVE_FILE = 'save.yml'
 
 
 def run():
-    common.prompt('Press return to start builder test')
+    common.test_prompt('builder')
 
     with tempfile.TemporaryDirectory() as td:
         save_file = os.path.join(td, SAVE_FILE)

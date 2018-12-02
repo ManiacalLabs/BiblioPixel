@@ -5,5 +5,5 @@ PROJECT = 'remote.yml'
 
 
 def run():
-    common.prompt('Open a simpixel browser window and press return')
-    common.run_project(PROJECT)
+    common.test_prompt('remote')
+    common.run_project(PROJECT, flag='-s')
