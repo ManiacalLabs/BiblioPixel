@@ -9,13 +9,9 @@ function is_callable() {
 }
 
 if is_callable new-env ; then
-    echo "ONE"
     delete-env bp-release-test
-    echo "TWO"
     new-env bp-release-test
 fi
 
-echo "THREE"
 python setup.py install
-echo "FOUR"
 source scripts/developer_install
