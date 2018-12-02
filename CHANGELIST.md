@@ -1,3 +1,7 @@
+## v3.4.41 - 2018-12-02
+- Fix issue with classic projects where run.seconds != 0
+- Better release tests
+
 ## v3.4.40 - 2018-11-30
 - Fix #1094, #1088, #1084, #1076 and probably #1085
 - Make all Yaml dumping safe
