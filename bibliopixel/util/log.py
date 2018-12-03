@@ -6,6 +6,9 @@ LOG_NAMES = {'frame': FRAME, 'debug': DEBUG, 'info': INFO, 'warning': WARNING,
              'error': ERROR}
 
 SORTED_NAMES = tuple(k for k, v in sorted(LOG_NAMES.items()))
+VERBOSE_FMT = '\
+%(asctime)s,%(msecs)d %(levelname)-7s [%(filename)s:%(lineno)d] %(message)s'
+DATE_FMT = '%d-%m-%Y:%H:%M:%S'
 
 
 def add_arguments(parser):
@@ -18,7 +21,8 @@ def add_arguments(parser):
 
 def apply_args(args):
     if args.verbose and args.loglevel != 'frame':
-        set_log_level('debug')
+        logging.basicConfig(
+            format=VERBOSE_FMT, datefmt=DATE_FMT, level=logging.DEBUG)
     else:
         set_log_level(args.loglevel)
 
