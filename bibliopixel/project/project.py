@@ -106,6 +106,7 @@ class Project:
         for c in self.controls:
             c.stop()
         self.layout.stop()
+        return True
 
     def cleanup(self):
         self.animation.cleanup()

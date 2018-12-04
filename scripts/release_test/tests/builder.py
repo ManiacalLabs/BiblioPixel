@@ -1,6 +1,6 @@
 import os, tempfile, threading, time
 import common
-from bibliopixel.project.builder import Builder
+from bibliopixel.builder import Builder
 from bibliopixel.animation.tests import StripChannelTest
 from bibliopixel.drivers.simpixel import SimPixel
 
@@ -13,8 +13,9 @@ def run():
     with tempfile.TemporaryDirectory() as td:
         save_file = os.path.join(td, SAVE_FILE)
         pb = Builder()
-        pb.shape = 32
-        pb.animation = '.tests.PixelTester'
+        desc = pb.desc
+        desc.shape = 32
+        desc.animation = '.tests.PixelTester'
         pb.simpixel()
 
         def stop():
@@ -33,7 +34,7 @@ def run():
         pb = Builder(save_file)
         start_and_stop()
 
-        pb.animation = StripChannelTest
+        pb.danimation = StripChannelTest
         start_and_stop()
 
         pb.animation = '$bpa.strip.Wave'

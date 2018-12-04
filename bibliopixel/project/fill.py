@@ -129,7 +129,8 @@ def _fill_shape(desc):
         except:
             raise ValueError('Cannot parse shape %s' % shape)
     elif not isinstance(shape, (list, tuple)):
-        raise ValueError('`shape` must be a number or a list, was "%s"' % shape)
+        raise ValueError('`shape` must be a number or a list, was "%s" (%s)' %
+                         (shape, type(shape)))
 
     ldesc = construct.to_type_constructor(desc.get('layout') or {},
                                           python_path='bibliopixel.layout')
