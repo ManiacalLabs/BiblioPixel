@@ -1,4 +1,4 @@
-import functools, numbers
+import functools, numbers, re
 from . import names
 from . import palette
 
@@ -109,13 +109,29 @@ def _colors(colors=None, **kwds):
 
 
 def colors_no_palette(colors=None, **kwds):
-    """Return a Palette but don't take into account Pallet Names."""
+    """Return a Palette but don't take into account Pallete Names."""
     if isinstance(colors, str):
-        colors = colors.split(',')
+        colors = _split_colors(colors)
+    else:
+        colors = to_triplets(colors or ())
 
-    colors = (color(c) for c in to_triplets(colors or ()))
+    colors = (color(c) for c in colors or ())
     return palette.Palette(colors, **kwds)
 
+
+def _split_colors(colors):
+    brackets = False
+    for part in _COLOR_SPLIT_RE.split(colors):
+        if brackets:
+            yield part
+        else:
+            part = [p.strip() for p in part.split(',')]
+            part = [p for p in part if p]
+            yield from part
+        brackets = not brackets
+
+
+_COLOR_SPLIT_RE = re.compile(r'( [([] .*? [])] )', re.X)
 
 _COLOR_USAGE = """
 A Color can be initialized with:
@@ -124,7 +140,7 @@ A Color can be initialized with:
 * A single number which represents a brightness/gray level: 0, 255, 127
 * A string:  "red", "yellow", "gold" naming a color from ...colors.COLORS.
 
-All numbers must be in the range [0, 256) - 0 <= x < 256"""
+All numbers should be in the range [0, 256) - 0 <= x <= 255"""
 
 _COLORS_USAGE = """
 Colors is a list of colors.  Each color can be:
@@ -133,4 +149,4 @@ Colors is a list of colors.  Each color can be:
 * A single number which represents a brightness/gray level: 0, 255, 127
 * A string:  "red", "yellow", "gold" naming a color from ...colors.COLORS.
 
-All numbers must be in the range [0, 256) - 0 <= x < 256"""
+All numbers must be in the range [0, 256) - 0 <= x <= 255"""

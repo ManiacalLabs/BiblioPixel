@@ -20,6 +20,8 @@ def name_to_color(name):
         if ',' in name:
             if name.startswith('(') and name.endswith(')'):
                 name = name[1:-1]
+            if name.startswith('[') and name.endswith(']'):
+                name = name[1:-1]
 
             r, g, b = name.split(',')
             return _from_number(r), _from_number(g), _from_number(b)
