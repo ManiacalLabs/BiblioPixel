@@ -120,7 +120,15 @@ def _fill_shape(desc):
 
     if isinstance(shape, int):
         shape = [shape]
-    elif not isinstance(shape, list):
+    elif isinstance(shape, str):
+        shape = shape.strip()
+        if shape.startswith('(') and shape.endswith(')'):
+            shape = shape[1:-1]
+        try:
+            shape = [int(s) for s in shape.split(',')]
+        except:
+            raise ValueError('Cannot parse shape %s' % shape)
+    elif not isinstance(shape, (list, tuple)):
         raise ValueError('`shape` must be a number or a list, was "%s"' % shape)
 
     ldesc = construct.to_type_constructor(desc.get('layout') or {},

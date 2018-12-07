@@ -4,6 +4,7 @@ from bibliopixel.animation.sequence import Sequence
 from bibliopixel.animation.matrix import Matrix
 from bibliopixel.animation.off import Off
 from bibliopixel.layout import cube, matrix, strip
+from bibliopixel.util import data_file
 
 BASE = {
     'animation': {
@@ -104,3 +105,13 @@ class FillTest(unittest.TestCase):
             'layout': {'datatype': cube.Cube, 'x': 2, 'y': 3, 'z': 7},
         }
         self.assertEqual(actual, dict(BASE, **expected))
+
+    def test_wrong_shape(self):
+        for shape in '(2, 3, 7)', '2, 3, 7':
+            source = {'shape': shape}
+            actual = fill_before(source)
+            expected = {
+                'drivers': [{'num': 42, 'typename': 'simpixel'}],
+                'layout': {'datatype': cube.Cube, 'x': 2, 'y': 3, 'z': 7},
+            }
+            self.assertEqual(actual, dict(BASE, **expected))
