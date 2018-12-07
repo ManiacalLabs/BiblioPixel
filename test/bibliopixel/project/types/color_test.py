@@ -23,6 +23,13 @@ class ColorTypesTest(TypesBaseTest):
             self.make('color', c, c)
             self.make('color', str(c), c)
 
+    def test_edge_cases(self):
+        a = self.make('color', '[0, 0, 0]')
+        b = self.make('color', '(0, 0, 0)')
+        expected = {'color': (0, 0, 0)}
+        self.assertEqual(a, expected)
+        self.assertEqual(b, expected)
+
     def test_errors(self):
         with self.assertRaises(ValueError):
             self.make('color', -1)
@@ -32,9 +39,6 @@ class ColorTypesTest(TypesBaseTest):
 
         with self.assertRaises(ValueError):
             self.make('color', '')
-
-        with self.assertRaises(ValueError):
-            self.make('color', '[0, 0, 0]')
 
         with self.assertRaises(ValueError):
             self.make('color', 'dog')
