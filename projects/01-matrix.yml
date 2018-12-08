@@ -1,38 +1,35 @@
 shape: [32, 32]
 
 run:
-    fps: 30
-    seconds: 14
-    threaded: true  # This is the only place we test threaded animations.
-
-aliases:
-    bpa: BiblioPixelAnimations.matrix
+  fps: 30
+  seconds: 14
+  threaded: true  # This is the only place we test threaded animations.
 
 animation:
-    typename: sequence
-    length: 2
-    animations:
-        - $bpa.ImageAnim
-        - $bpa.ImageShow
-        - $bpa.ImageDissolve
-        - $bpa.ScreenGrab
-        - $bpa.AnalogClock
-        - $bpa.BinaryClock.MatrixBinaryClock
-        - $bpa.CPUUsage
-        - $bpa.GameOfLife
-        - $bpa.GameOfLife.GameOfLifeRGB
-        - $bpa.GradientClock
-        - $bpa.LangtonsAnt
-        - $bpa.LangtonsAnt.LangtonsAntRainbow
-        - $bpa.Mainframe
-        - $bpa.MatrixRain
-        - $bpa.MatrixRain.MatrixRainBow
-        - $bpa.SpinningTriangle
-        - $bpa.TallClock
-        - $bpa.Text.BounceText
-        - $bpa.Text.ScrollText
-        - $bpa.TicTacToe
-        - $bpa.bloom
-        - $bpa.circlepop
-        - $bpa.perlin_simplex
-        - $bpa.pinwheel
+  typename: sequence
+  length: 2
+  animations:
+    - $bpa.matrix.ImageAnim
+    - $bpa.matrix.ImageShow
+    - $bpa.matrix.ImageDissolve
+    - $bpa.matrix.ScreenGrab
+    - $bpa.matrix.AnalogClock
+    - $bpa.matrix.BinaryClock.MatrixBinaryClock
+    - $bpa.matrix.CPUUsage
+    - $bpa.matrix.GameOfLife
+    - $bpa.matrix.GameOfLife.GameOfLifeRGB
+    - $bpa.matrix.GradientClock
+    - $bpa.matrix.LangtonsAnt
+    - $bpa.matrix.LangtonsAnt.LangtonsAntRainbow
+    - $bpa.matrix.Mainframe
+    - $bpa.matrix.MatrixRain
+    - $bpa.matrix.MatrixRain.MatrixRainBow
+    - $bpa.matrix.SpinningTriangle
+    - $bpa.matrix.TallClock
+    - $bpa.matrix.Text.BounceText
+    - $bpa.matrix.Text.ScrollText
+    - $bpa.matrix.TicTacToe
+    - $bpa.matrix.bloom
+    - $bpa.matrix.circlepop
+    - $bpa.matrix.perlin_simplex
+    - $bpa.matrix.pinwheel
