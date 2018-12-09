@@ -3,6 +3,9 @@ from .. project import aliases, construct, load, project
 from . import animation, failed, runner
 from .. util import log
 
+DEFAULT_ANIMATION = '.animation'
+ANIMATION_PATH = 'bibliopixel.animation'
+
 
 class Collection(animation.Animation):
     """
@@ -11,58 +14,9 @@ class Collection(animation.Animation):
 
     @staticmethod
     def pre_recursion(desc):
-        animations = []
-        name_count = {}
-
-        for a in desc['animations']:
-            loaded = load.load_if_filename(a)
-            if loaded:
-                animation = loaded.get('animation', {})
-                run = loaded.get('run', {})
-
-            elif callable(a) or isinstance(a, str) or 'animation' not in a:
-                animation = a
-                run = {}
-
-            elif not isinstance(a, dict):
-                raise TypeError('Unexpected type %s in collection' % type(a))
-
-            elif 'typename' in a:
-                run = a.pop('run', {})
-                animation = a
-
-            else:
-                animation = a.pop('animation', {})
-                run = a.pop('run', {})
-                if a:
-                    raise ValueError('Extra animation fields: ' + ', '.join(a))
-
-            animation = construct.to_type_constructor(
-                animation, 'bibliopixel.animation')
-
-            animation['run'] = run
-
-            datatype = animation.setdefault('datatype', failed.Failed)
-            name = animation.setdefault('name', datatype.__name__)
-            name_count[name] = 1 + name_count.get(name, 0)
-
-            # Children without fps or sleep_time get it from their parents.
-            if not ('fps' in run or 'sleep_time' in run):
-                if 'fps' in desc['run']:
-                    run.update(fps=desc['run']['fps'])
-                elif 'sleep_time' in desc['run']:
-                    run.update(sleep_time=desc['run']['sleep_time'])
-
-            animations.append(animation)
-
-        dupes = {k: 1 for k, v in name_count.items() if v > 1}
-        for a in animations:
-            name = a['name']
-            count = dupes.get(name)
-            if count:
-                dupes[name] += 1
-                a['name'] += '_' + str(count - 1)
-
+        animations = desc['animations']
+        animations = [_clean_animation(a, desc) for a in animations]
+        _make_names_unique(animations)
         desc['animations'] = animations
         return desc
 
@@ -75,7 +29,6 @@ class Collection(animation.Animation):
         for a in self.animations:
             a.top_level = False
 
-    # Override to handle all the animations
     def cleanup(self, clean_layout=True):
         self.state = runner.STATE.canceled
         for a in self.animations:
@@ -104,7 +57,6 @@ class Collection(animation.Animation):
         independently.
         """
         # See #868
-        #
         for i, a in enumerate(self.animations):
             a.layout = a.layout.clone()
             if overlay and i:
@@ -155,3 +107,73 @@ class _AnimationList:
 
     def __len__(self):
         return len(self._animations)
+
+
+def _clean_animation(desc, parent):
+    """
+    Cleans up all sorts of special cases that humans want when entering
+    an animation from a yaml file.
+
+    1. Loading it from a file
+    2. Using just a typename instead of a dict
+    3. A single dict representing an animation, with a run: section.
+    4. (Legacy) Having a dict with parallel elements run: and animation:
+    5. (Legacy) A tuple or list: (animation, run )
+
+    """
+    desc = load.load_if_filename(desc) or desc
+
+    if isinstance(desc, str):
+        animation = {'typename': desc}
+
+    elif not isinstance(desc, dict):
+        raise TypeError('Unexpected type %s in collection' % type(desc))
+
+    elif 'typename' in desc or 'animation' not in desc:
+        animation = desc
+
+    else:
+        animation = desc.pop('animation', {})
+        if isinstance(animation, str):
+            animation = {'typename': animation}
+
+        animation['run'] = desc.pop('run', {})
+        if desc:
+            raise ValueError('Extra animation fields: ' + ', '.join(desc))
+
+    animation.setdefault('typename', DEFAULT_ANIMATION)
+    animation = construct.to_type_constructor(animation, ANIMATION_PATH)
+    datatype = animation.setdefault('datatype', failed.Failed)
+    animation.setdefault('name', datatype.__name__)
+
+    # Children without fps or sleep_time get it from their parents.
+    # TODO: We shouldn't have to rewrite our descriptions here!  The
+    # animation engine should be smart enough to figure out the right
+    # speed to run a subanimation without a run: section.
+    run = animation.setdefault('run', {})
+    run_parent = parent.setdefault('run', {})
+    if not ('fps' in run or 'sleep_time' in run):
+        if 'fps' in run_parent:
+            run.update(fps=run_parent['fps'])
+        elif 'sleep_time' in run_parent:
+            run.update(sleep_time=run_parent['sleep_time'])
+
+    return animation
+
+
+def _make_names_unique(animations):
+    """
+    Given a list of animations, some of which might have duplicate names, rename
+    the first one to be <duplicate>_0, the second <duplicate>_1,
+    <duplicate>_2, etc."""
+    counts = {}
+    for a in animations:
+        c = counts.get(a['name'], 0) + 1
+        counts[a['name']] = c
+        if c > 1:
+            a['name'] += '_' + str(c - 1)
+
+    dupes = set(k for k, v in counts.items() if v > 1)
+    for a in animations:
+        if a['name'] in dupes:
+            a['name'] += '_0'

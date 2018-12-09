@@ -2,6 +2,7 @@ from bibliopixel.drivers.SimPixel import SimPixel
 from bibliopixel.layout.circle import Circle
 from bibliopixel.layout import geometry
 from bibliopixel.animation.sequence import Sequence
+from bibliopixel.util import class_name
 from BiblioPixelAnimations.circle.bloom import CircleBloom
 from BiblioPixelAnimations.circle.swirl import Swirl
 from BiblioPixelAnimations.circle.hyperspace import HyperspaceRainbow
@@ -158,7 +159,10 @@ CIRCLE_PROJECT = {
     'animation': {
         'typename': 'sequence',
         'length': 8,
-        'animations': [CircleBloom, Swirl, HyperspaceRainbow]
+        'animations': [
+            class_name.class_name(CircleBloom),
+            class_name.class_name(Swirl),
+            class_name.class_name(HyperspaceRainbow)]
     }
 }
 
