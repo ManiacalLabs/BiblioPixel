@@ -1,0 +1,14 @@
+shape: [32, 32]
+
+run:
+  fps: 30
+  seconds: 10
+
+animation:
+  typename: sequence
+  length: [1, 2, 3, 4]
+  animations:
+    - $bpa.matrix.Mainframe
+    - $bpa.matrix.MatrixRain
+    - $bpa.matrix.MatrixRain.MatrixRainBow
+    - $bpa.matrix.SpinningTriangle
