@@ -74,10 +74,3 @@ class Routing(Receiver):
 
     def __str__(self):
         return str(self.routing)
-
-    if deprecated.allowed():
-        set_root = set_project
-
-        @property
-        def root(self):
-            return self.project

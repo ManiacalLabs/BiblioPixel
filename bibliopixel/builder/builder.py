@@ -5,6 +5,7 @@ from .. import colors
 from .. commands import animations
 from .. drivers.SimPixel import driver as simpixel_driver
 from .. project import project
+from .. util import log
 
 
 class Builder(SavedDescription):
@@ -15,7 +16,6 @@ class Builder(SavedDescription):
     COLORS = colors.COLORS
 
     def __init__(self, project_file='', desc=None, threaded=None, **kwds):
-
         self.project = None
         self.pixel = Pixels(self)
         self._runner = Runner(self)
@@ -29,18 +29,24 @@ class Builder(SavedDescription):
         """Creates and starts the project."""
         if threaded is not None:
             self.threaded = threaded
+        run = {'run': {'threaded': False}}
+        self.project = project.project(
+            self.desc, run, root_file=self.project_file)
+        self._run = self.project.run
         self._runner.start(self.threaded)
 
     def stop(self=None):
         """Stop the builder if it's running."""
         if not self:
-            self = getattr(Runner.instance(), 'builder', None)
+            instance = getattr(Runner.instance(), 'builder', None)
+            self = instance and instance()
             if not self:
                 return
 
         self._runner.stop()
         if self.project:
             self.project.stop()
+            self.project = None
 
     def clear(self):
         """Stop the project if it's running and clear the project description"""
@@ -94,10 +100,3 @@ class Builder(SavedDescription):
 
     def __deepcopy__(self, _):
         return self.__copy__()
-
-    def _run(self):
-        """Called from the Runner class"""
-        run = {'run': {'threaded': False}}
-        self.project = project.project(
-            self.desc, run, root_file=self.project_file)
-        self.project.run()

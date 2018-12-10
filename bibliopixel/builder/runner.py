@@ -10,7 +10,7 @@ class Runner:
     def __init__(self, builder):
         self.thread = None
         self.is_running = False
-        self.builder = builder
+        self.builder = weakref.ref(builder)
 
     def start(self, threaded):
         """Creates and starts the project."""
@@ -52,11 +52,11 @@ class Runner:
 
     def _target(self):
         try:
-            log.info('Running Builder')
-            self.builder._run()
+            self.builder()._run()
         except:
             if self.thread:
                 log.error(traceback.format_exc())
             raise
         finally:
-            self.builder.stop()
+            b = self.builder()
+            b and b.stop()

@@ -43,13 +43,6 @@ class Action(Receiver):
             return cls(**action)
         return cls(*action)
 
-    if deprecated.allowed():
-        set_root = set_project
-
-        @property
-        def root(self):
-            return self.project
-
 
 class ActionList(Receiver):
     """A list of Actions."""

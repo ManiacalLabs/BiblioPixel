@@ -46,10 +46,6 @@ class MovieWriter(wrapper.Wrapper):
         if self.movie_writer.step(self.cur_step):
             self.completed = True
 
-    def set_project(self, project):
-        super().set_project(project)
-        self.movie_writer.set_project(project)
-
     def cleanup(self, clean_layout=True):
         super().cleanup(clean_layout)
         self.movie_writer.write()

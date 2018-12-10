@@ -43,7 +43,7 @@ class MovieWriter:
         self.times = []
 
     def set_project(self, project):
-        self.project = project
+        self.time = project.clock.time
         self.render = renderer.renderer(project.layout, **self.render)
         assert self.render
         self.file_writer = file_writer.file_writer(self)
@@ -54,7 +54,7 @@ class MovieWriter:
             return True
 
         self.frame = cur_step / max(self.divide, 1)
-        self.times.append(self.project.time())
+        self.times.append(self.time())
 
         if self.time:
             elapsed = self.times[-1] - self.times[0]
