@@ -1,6 +1,6 @@
-import weakref
+import itertools, weakref
 from .. colors import make
-from .. util import log
+from .. util import color_list, log
 
 
 class Pixels:
@@ -32,6 +32,10 @@ class Pixels:
             raise
         index.append(color)
         return self.layout.set(*index)
+
+    def clear(self):
+        cl = self.layout.color_list
+        color_list.Math(cl).clear(cl)
 
     @property
     def layout(self):
