@@ -31,7 +31,6 @@ class Control(runnable.Runnable):
         self.routing = Routing(routing or {}, default or {}, python_path)
 
     def set_project(self, project):
-        self.project = project
         self.pre_routing.set_project(project)
         self.routing.set_project(project)
 
@@ -88,13 +87,6 @@ class Control(runnable.Runnable):
 
     def __bool__(self):
         return bool(self.routing or self.pre_routing)
-
-    if deprecated.allowed():
-        set_root = set_project
-
-        @property
-        def root(self):
-            return self.project
 
 
 class ControlLoop:

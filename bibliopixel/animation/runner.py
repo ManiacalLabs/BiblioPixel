@@ -73,9 +73,9 @@ class Runner(object):
         self.time = time.time
 
     def set_project(self, project):
-        self.time = project.time
         if self.flat_out:
             project.flat_out()
+        self.time = project.clock.time
 
     @property
     def fps(self):

@@ -1,3 +1,4 @@
+import weakref
 from . address import number, Address
 from . receiver import Receiver
 from .. util import deprecated
@@ -19,16 +20,14 @@ class Editor(Receiver):
             self.set_project(project)
 
     def set_project(self, project):
-        self.project = project
+        self.project = weakref.ref(project)
         self.segments = self.address.segments[:]
         self.last_segment = self.address.segments.pop()
-        edit_queue = None
+        self.edit_queue = None
 
         for segment in self.address.segments:
-            edit_queue = getattr(project, 'edit_queue', edit_queue)
+            self.edit_queue = getattr(project, 'edit_queue', self.edit_queue)
             project = segment.get(project)
-
-        self.edit_queue = edit_queue
 
     def receive(self, msg):
         """
@@ -54,18 +53,12 @@ class Editor(Receiver):
         return str(self.address)
 
     def _get(self):
-        project = self.project
-        for segment in self.address.segments:
-            project = segment.get(project)
-        return project
+        project = self.project and self.project()
+        if project:
+            for segment in self.address.segments:
+                project = segment.get(project)
+            return project
 
     def _set(self, values):
         args = self.address.assignment + values
         self.last_segment.set(self._get(), *args)
-
-    if deprecated.allowed():
-        set_root = set_project
-
-        @property
-        def root(self):
-            return self.project

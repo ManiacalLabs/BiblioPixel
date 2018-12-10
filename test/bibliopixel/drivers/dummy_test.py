@@ -2,10 +2,11 @@ import argparse, time, unittest
 
 from bibliopixel.layout.strip import Strip
 from bibliopixel.drivers.dummy import Dummy
+from bibliopixel.project import clock
 
 
 def clock_only_project():
-    return argparse.Namespace(time=time.time, sleep=time.sleep)
+    return argparse.Namespace(clock=clock.Clock())
 
 
 class DummyTest(unittest.TestCase):

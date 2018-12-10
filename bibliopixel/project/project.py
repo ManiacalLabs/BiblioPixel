@@ -1,6 +1,6 @@
 import os, queue, threading, time, weakref
 from . import (
-    attributes, construct, edit_queue, fill, load, merge, recurse)
+    attributes, clock, construct, edit_queue, fill, load, merge, recurse)
 from .. util import exception, log
 
 EDIT_QUEUE_MAXSIZE = 1000
@@ -57,11 +57,12 @@ class Project:
 
         self.animation = create(animation, 'animation')
         self.running = False
-        self.clock = time
+        self.clock = clock.Clock()
 
         eq = edit_queue.EditQueue(maxsize=edit_queue_maxsize)
         self.layout.edit_queue = self.animation.edit_queue = eq
         self.animation.add_preframe_callback(eq.get_and_run_edits)
+        self.cleaned_up = False
 
         # Unfortunately, the whole animation cycle is controlled by methods on
         # the topmost animation - but we need to get called back at a certain
@@ -78,6 +79,12 @@ class Project:
             d.set_project(self)
 
         self.animation.set_project(self)
+
+    def __del__(self):
+        try:
+            self.cleanup()
+        except:
+            pass
 
     def start(self):
         with self.LOCK:
@@ -109,10 +116,12 @@ class Project:
         return True
 
     def cleanup(self):
-        self.animation.cleanup()
-        for c in self.controls:
-            c.cleanup()
-        self.layout.cleanup_drivers()
+        if not self.cleaned_up:
+            self.cleaned_up = True
+            self.animation.cleanup()
+            for c in self.controls:
+                c.cleanup()
+            self.layout.cleanup_drivers()
 
     def join(self, timeout=None):
         self.animation.join(timeout)
@@ -130,15 +139,8 @@ class Project:
             self.cleanup()
         log.debug('Project %s finishes run()', self)
 
-    def time(self):
-        return self.clock.time()
-
-    def sleep(self, delta_time):
-        # TODO: why is delta_time occasionally tiny and negative?
-        return self.clock.sleep(max(delta_time, 0))
-
-    def flat_out(self, time=0):
-        self.clock = FlatOutClock(time)
+    def flat_out(self=0):
+        self.clock.flat_out = True
 
     @staticmethod
     def stop_all():
@@ -173,15 +175,3 @@ def project(*descs, root_file=None):
     project = construct.construct(**desc)
     project.desc = desc
     return project
-
-
-class FlatOutClock:
-    def __init__(self, _time=0):
-        self._time = _time or time.time()
-
-    def time(self):
-        return self._time
-
-    def sleep(self, delta_time):
-        assert delta_time >= -MIN_TIME
-        self._time += delta_time

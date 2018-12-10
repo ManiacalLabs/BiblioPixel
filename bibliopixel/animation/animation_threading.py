@@ -17,8 +17,7 @@ class AnimationThreading:
         self.sleep = time.sleep
 
     def set_project(self, project):
-        self.project = project
-        self.sleep = project.sleep
+        self.sleep = project.clock.sleep
 
     def join(self, timeout=None):
         self.thread and self.thread.join(timeout)

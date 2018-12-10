@@ -45,7 +45,9 @@ class MovieWriter(DriverBase):
     def update_colors(self):
         super().update_colors()
         if self.movie_writer.step(self.cur_step):
-            self.project.stop()
+            project = self.movie_writer.project()
+            if project:
+                project.stop()
         else:
             self.cur_step += 1
 

@@ -52,14 +52,12 @@ class Animation(object):
         self.on_completion = None
         self.state = runner.STATE.ready
         self.preclear = preclear
-        self.project = None
         self.runner = None
         self.time = time.time
         self.preframe_callbacks = []
 
     def set_project(self, project):
-        self.project = project
-        self.time = project.time
+        self.time = project.clock.time
         self.runner.set_project(project)
         self.threading.set_project(project)
 

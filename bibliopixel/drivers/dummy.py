@@ -18,7 +18,7 @@ class Dummy(DriverBase):
     # Push new data to strand
     def _compute_packet(self):
         if self._delay > 0:
-            self.project.sleep(self._delay)
+            self.clock.sleep(self._delay)
         else:
             pass
 

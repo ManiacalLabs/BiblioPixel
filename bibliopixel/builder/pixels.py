@@ -1,3 +1,4 @@
+import weakref
 from .. colors import make
 from .. util import log
 
@@ -8,7 +9,7 @@ class Pixels:
     better error reporting.
     """
     def __init__(self, builder):
-        self.builder = builder
+        self.builder = weakref.ref(builder)
 
     def __getitem__(self, index):
         """
@@ -34,9 +35,11 @@ class Pixels:
 
     @property
     def layout(self):
-        if not self.builder.project:
+        b = self.builder()
+
+        if not (b and b.project):
             raise ValueError('Cannot get layout before Builder has started')
-        return self.builder.project.layout
+        return b.project.layout
 
     @property
     def shape(self):

@@ -66,7 +66,6 @@ class DriverBase(object):
         self.brightness_lock = threading.Lock()
         self._brightness = 255
         self._waiting_brightness = None
-        self.time = time.time
 
     def set_pixel_positions(self, pixel_positions):
         """
@@ -95,8 +94,7 @@ class DriverBase(object):
                 end, len(self._colors)))
 
     def set_project(self, project):
-        self.project = project
-        self.time = project.time
+        self.clock = project.clock
 
     def start(self):
         """
@@ -156,7 +154,7 @@ class DriverBase(object):
         provided as a wrapper for each driver's implementation of
         :py:func:`_compute_packet` and :py:func:`_send_packet`.
         """
-        start = self.time()
+        start = self.clock.time()
 
         with self.brightness_lock:
             # Swap in a new brightness.
@@ -171,7 +169,7 @@ class DriverBase(object):
         self._compute_packet()
         self._send_packet()
 
-        self.lastUpdate = self.time() - start
+        self.lastUpdate = self.clock.time() - start
 
     def set_brightness(self, brightness):
         """Set the global brightness for this driver's output.
