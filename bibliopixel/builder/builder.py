@@ -100,4 +100,4 @@ class Builder(SavedDescription):
         run = {'run': {'threaded': False}}
         self.project = project.project(
             self.desc, run, root_file=self.project_file)
-        self.project.start()
+        self.project.run()
