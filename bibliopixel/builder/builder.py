@@ -12,6 +12,7 @@ class Builder(SavedDescription):
     """
     A Project Builder to allow people to experiment with projects
     from the command line or in their own main program.
+
     """
     COLORS = colors.COLORS
 
@@ -55,10 +56,15 @@ class Builder(SavedDescription):
 
     @property
     def is_running(self):
+        """True if the Builder is currently running"""
         return self._runner.is_running
 
     @property
     def threaded(self):
+        """
+        True if the Builder is runs in a separate thread, false if the
+        Builder blocks, waiting for the animation to end.
+        """
         return self.desc.run.get('threaded', False)
 
     @threaded.setter
