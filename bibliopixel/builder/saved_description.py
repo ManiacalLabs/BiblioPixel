@@ -4,7 +4,7 @@ from .. util import data_file
 
 class SavedDescription:
     """
-    Project descriptions that are saved in a file.
+    Hold a Description and save and load it from a data_file.
     """
     def __init__(self, project_file='', desc=None, **kwds):
         self.desc = Description()
@@ -35,7 +35,11 @@ class SavedDescription:
         return str(self.desc)
 
     def __repr__(self):
-        return super().__repr__() + ' from file ' + self.project_file
+        rep = super().__repr__()
+        if self.project_file:
+            return rep + ' loaded from file ' + self.project_file
+        else:
+            return rep
 
     @property
     def project_file(self):
