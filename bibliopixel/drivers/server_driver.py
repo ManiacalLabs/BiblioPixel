@@ -1,4 +1,5 @@
 from . driver_base import DriverBase
+from .. util import exception
 from .. util.server_cache import StaticCache
 from .. project import construct
 
@@ -40,7 +41,9 @@ class ServerDriver(DriverBase, StaticCache):
         pass
 
     def cleanup(self):
-        self.server and self.server.close()
+        if self.server:
+            exception.report(self.server.close)
+            self.server = None
 
     def _compute_packet(self):
         self._render()

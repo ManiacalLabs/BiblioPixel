@@ -1,4 +1,4 @@
-import os, queue, threading, time, weakref
+import atexit, os, queue, threading, time, traceback, weakref
 from . import (
     attributes, clock, construct, edit_queue, fill, load, merge, recurse)
 from .. util import exception, log
@@ -59,10 +59,19 @@ class Project:
         self.running = False
         self.clock = clock.Clock()
 
+        self.cleaned_up = False
+        weak = weakref.ref(self)
+
+        def cleanup_fn():
+            w = weak()
+            w and w.cleanup()
+
+        atexit.register(cleanup_fn)
+        self._cleanup_fn = cleanup_fn
+
         eq = edit_queue.EditQueue(maxsize=edit_queue_maxsize)
         self.layout.edit_queue = self.animation.edit_queue = eq
         self.animation.add_preframe_callback(eq.get_and_run_edits)
-        self.cleaned_up = False
 
         # Unfortunately, the whole animation cycle is controlled by methods on
         # the topmost animation - but we need to get called back at a certain
@@ -81,10 +90,7 @@ class Project:
         self.animation.set_project(self)
 
     def __del__(self):
-        try:
-            self.cleanup()
-        except:
-            pass
+        self.cleanup()
 
     def start(self):
         with self.LOCK:
@@ -116,12 +122,15 @@ class Project:
         return True
 
     def cleanup(self):
-        if not self.cleaned_up:
-            self.cleaned_up = True
-            self.animation.cleanup()
-            for c in self.controls:
-                c.cleanup()
-            self.layout.cleanup_drivers()
+        if self.cleaned_up:
+            return
+
+        self.cleaned_up = True
+        atexit.unregister(self._cleanup_fn)
+        self.animation.cleanup()
+        for c in self.controls:
+            c.cleanup()
+        self.layout.cleanup_drivers()
 
     def join(self, timeout=None):
         self.animation.join(timeout)

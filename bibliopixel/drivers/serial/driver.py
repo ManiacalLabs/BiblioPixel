@@ -5,7 +5,7 @@ from . devices import Devices
 from . import io
 from .. channel_order import ChannelOrder
 from .. driver_base import DriverBase
-from ... util import log, util
+from ... util import exception, log, util
 from ... drivers.return_codes import (
     RETURN_CODES, print_error, raise_error, BiblioSerialError)
 
@@ -76,12 +76,10 @@ class Serial(DriverBase):
             log.info("Using SPI Speed: %sMHz", self._spi_speed)
 
     def cleanup(self):
-        """
-        SHOULD BE PRIVATE
-        """
         if self._com:
             log.info("Closing connection to: %s", self.dev)
-            self._close()
+            exception.report(self._close)
+            self._com = None
 
     def _connect(self):
         try:

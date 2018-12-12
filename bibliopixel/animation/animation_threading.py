@@ -25,13 +25,10 @@ class AnimationThreading:
     def is_alive(self):
         return self.thread and self.thread.is_alive()
 
-    def cleanup(self, wait=False):
+    def cleanup(self):
         # if current thread is animation thread this was called
         # by the context manager and thread is therefore already stopped
-        if self.thread != threading.current_thread():
-            self.stop_event.set()
-            if self.thread and wait:
-                self.thread.join()
+        self.stop_event.set()
 
     def target(self):
         is_main = threading.current_thread() is threading.main_thread()

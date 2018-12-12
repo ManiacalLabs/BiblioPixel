@@ -48,4 +48,4 @@ class MovieWriter(wrapper.Wrapper):
 
     def cleanup(self, clean_layout=True):
         super().cleanup(clean_layout)
-        self.movie_writer.write()
+        self.movie_writer.cleanup()

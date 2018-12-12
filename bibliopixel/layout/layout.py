@@ -1,7 +1,7 @@
 import copy
 from . update_threading import UpdateThreading
 from .. project import attributes, data_maker, fields
-from .. util import deprecated, log
+from .. util import deprecated, exception, log
 from .. colors import COLORS, conversions, make
 
 
@@ -58,6 +58,7 @@ class Layout(object):
         self.threading = UpdateThreading(threadedUpdate, self)
         self.brightness = brightness
         self.set_brightness(brightness)
+        self.cleaned_up = False
 
     def set_pixel_positions(self, pixel_positions):
         """SHOULD BE PRIVATE"""
@@ -83,12 +84,11 @@ class Layout(object):
             d.cleanup()
 
     def cleanup(self):
-        self.all_off()
-        try:
-            self.push_to_driver()
-        except:
-            pass
-        self.threading.wait_for_update()
+        if not self.cleaned_up:
+            self.cleaned_up = True
+            self.all_off()
+            exception.report(self.push_to_driver)
+            self.threading.wait_for_update()
 
     def clone(self):
         """
