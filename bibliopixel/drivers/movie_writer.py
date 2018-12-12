@@ -52,4 +52,5 @@ class MovieWriter(DriverBase):
             self.cur_step += 1
 
     def cleanup(self):
-        self.movie_writer.write()
+        super().cleanup()
+        self.movie_writer.cleanup()

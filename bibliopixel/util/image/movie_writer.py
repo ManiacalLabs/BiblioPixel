@@ -1,7 +1,7 @@
 import os, time
 from . import file_writer, renderer
 from ... colors import COLORS
-from .. import log
+from .. import exception, log
 
 DEFAULT_RENDER = {
     'color': COLORS.Black,
@@ -38,8 +38,7 @@ class MovieWriter:
         self.basename = os.path.basename(file_root)
         os.makedirs(os.path.dirname(self.filename), exist_ok=True)
 
-        self.finished = False
-        self.stop_after_write = True
+        self.finished = self.written = False
         self.times = []
 
     def set_project(self, project):
@@ -69,8 +68,13 @@ class MovieWriter:
 
         return self.finished
 
+    def cleanup(self):
+        exception.report(self.write)
+
     def write(self):
-        self.file_writer.write()
+        if not self.written:
+            self.file_writer.write()
+            self.written = True
 
     @property
     def length(self):

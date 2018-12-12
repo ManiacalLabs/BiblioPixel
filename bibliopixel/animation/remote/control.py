@@ -3,7 +3,7 @@ from . import opener, server, trigger_process
 from .. runner import STATE
 from .. import wrapper
 from ... project import load
-from ... util import log
+from ... util import exception, log
 from bibliopixel.animation.off import Off
 
 DEFAULT_OFF = 'OFF_ANIM'
@@ -171,14 +171,20 @@ class RemoteControl(wrapper.Indexed):
 
         for a in self.animations:
             a.top_level = True
+        self.cleaned_up = False
 
     def cleanup(self, clean_layout=True):
-        self.q_recv.close()
+        if self.cleaned_up:
+            return
+        self.cleaned_up = True
+
+        exception.report(self.q_recv.close)
         for q in self.send_queues.values():
-            q.close()
-        self.server.terminate()
+            exception.report(q.close)
+
+        exception.report(self.server.terminate)
         for _, t in self.trigger_procs.items():
-            t.terminate()
+            exception.report(t.terminate)
         super().cleanup(clean_layout)
 
     def on_completion(self, reason):

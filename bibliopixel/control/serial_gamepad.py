@@ -2,7 +2,7 @@ import argparse, serial, serial.tools.list_ports
 from distutils.version import LooseVersion
 from . gamepad import BaseGamePad
 from .. drivers.return_codes import RETURN_CODES, print_error
-from .. util import log
+from .. util import exception, log
 from .. util.util import generate_header
 
 VERSION_ERROR = """
@@ -51,7 +51,8 @@ class SerialGamePad(BaseGamePad):
     def cleanup(self):
         if self._com is not None:
             log.info("Closing connection to: %s", self.dev)
-            self._com.close()
+            exception.report(self._com.close)
+            self._com = None
 
     def close(self):
         from .. util import deprecated
