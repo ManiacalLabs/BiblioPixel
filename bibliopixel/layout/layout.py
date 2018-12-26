@@ -58,7 +58,7 @@ class Layout(object):
         self.threading = UpdateThreading(threadedUpdate, self)
         self.brightness = brightness
         self.set_brightness(brightness)
-        self.cleaned_up = False
+        self.needs_cleanup = True
 
     def set_pixel_positions(self, pixel_positions):
         """SHOULD BE PRIVATE"""
@@ -84,8 +84,8 @@ class Layout(object):
             d.cleanup()
 
     def cleanup(self):
-        if not self.cleaned_up:
-            self.cleaned_up = True
+        if self.needs_cleanup:
+            self.needs_cleanup = False
             self.all_off()
             exception.report(self.push_to_driver)
             self.threading.wait_for_update()
