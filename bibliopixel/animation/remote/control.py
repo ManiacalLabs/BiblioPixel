@@ -171,12 +171,12 @@ class RemoteControl(wrapper.Indexed):
 
         for a in self.animations:
             a.top_level = True
-        self.cleaned_up = False
+        self.needs_cleanup = True
 
     def cleanup(self, clean_layout=True):
-        if self.cleaned_up:
+        if not self.needs_cleanup:
             return
-        self.cleaned_up = True
+        self.needs_cleanup = False
 
         exception.report(self.q_recv.close)
         for q in self.send_queues.values():

@@ -59,7 +59,7 @@ class Project:
         self.running = False
         self.clock = clock.Clock()
 
-        self.cleaned_up = False
+        self.needs_cleanup = True
         weak = weakref.ref(self)
 
         def cleanup_fn():
@@ -122,10 +122,10 @@ class Project:
         return True
 
     def cleanup(self):
-        if self.cleaned_up:
+        if not self.needs_cleanup:
             return
 
-        self.cleaned_up = True
+        self.needs_cleanup = False
         atexit.unregister(self._cleanup_fn)
         self.animation.cleanup()
         for c in self.controls:
