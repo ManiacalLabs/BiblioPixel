@@ -40,7 +40,18 @@ class Animation(object):
         a.data = data
         return a
 
-    def __init__(self, layout, *, preclear=True, **kwds):
+    def __init__(self, layout, *, preclear=True, fail_on_exception=None, **kwds):
+        """
+        Arguments:
+          preclear: If True, clear the layout before rendering the frame;
+              otherwise, the results of the previous frame are preserved
+
+          fail_on_exception: If False, exceptions thrown in the animation frame are
+              caught and reported;
+              if True, exceptions are are raised, potentially ending the
+              animation cycle and the program;
+              if None or not set, the value of Animation.FAIL_ON_EXCEPTION is used
+        """
         self.palette = legacy_palette.pop_legacy_palette(
             kwds, *self.COLOR_DEFAULTS)
         self.palette.length = layout.numLEDs
@@ -55,6 +66,7 @@ class Animation(object):
         self.runner = None
         self.time = time.time
         self.preframe_callbacks = []
+        self.fail_on_exception = self.FAIL_ON_EXCEPTION if fail_on_exception is None else fail_on_exception
 
     def set_project(self, project):
         self.time = project.clock.time
