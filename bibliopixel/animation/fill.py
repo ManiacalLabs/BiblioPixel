@@ -17,4 +17,4 @@ class Fill(Animation):
 
     def step(self, amt=1):
         n = len(self.color_list)
-        self.color_list[:] = (self.palette.get(i) for i in range(n))
+        self.color_list[:] = [self.palette.get(i) for i in range(n)]
