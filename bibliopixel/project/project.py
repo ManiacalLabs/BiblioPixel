@@ -33,6 +33,8 @@ class Project:
         :param int edit_queue_maxsize: maxsize parameter to queue.Queue.
             0 means an unbounded queue.
         """
+        self.needs_cleanup = False
+
         def create(root, name):
             def post(desc):
                 exception = desc.get('_exception')
@@ -59,16 +61,6 @@ class Project:
         self.running = False
         self.clock = clock.Clock()
 
-        self.needs_cleanup = True
-        weak = weakref.ref(self)
-
-        def cleanup_fn():
-            w = weak()
-            w and w.cleanup()
-
-        atexit.register(cleanup_fn)
-        self._cleanup_fn = cleanup_fn
-
         eq = edit_queue.EditQueue(maxsize=edit_queue_maxsize)
         self.layout.edit_queue = self.animation.edit_queue = eq
         self.animation.add_preframe_callback(eq.get_and_run_edits)
@@ -90,7 +82,10 @@ class Project:
         self.animation.set_project(self)
 
     def __del__(self):
-        self.cleanup()
+        try:
+            self.cleanup()
+        except:
+            traceback.print_exc()
 
     def start(self):
         with self.LOCK:
@@ -99,6 +94,16 @@ class Project:
 
             self.running = True
             self.PROJECTS_RUNNING.add(self)
+
+        self.needs_cleanup = True
+        weak = weakref.ref(self)
+
+        def cleanup_fn():
+            w = weak()
+            w and w.cleanup()
+
+        atexit.register(cleanup_fn)
+        self._cleanup_fn = cleanup_fn
 
         self.layout.start()
         for c in self.controls:
