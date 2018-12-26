@@ -22,7 +22,8 @@ class Collection(animation.Animation):
 
     CHILDREN = 'animations',
 
-    def __init__(self, layout, animations=None, **kwds):
+    def __init__(
+            self, layout, animations=None, **kwds):
         super().__init__(layout, **kwds)
         self.animations = _AnimationList(animations or [])
         self.internal_delay = 0  # never wait

@@ -53,6 +53,8 @@ class Indexed(Collection):
         except StopIteration:
             pass
         except Exception as e:
+            if self.fail_on_exception:
+                raise
             log.error('Exception %s in wrapper.step()', e)
 
     def forward(self, *unused):
