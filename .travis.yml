@@ -10,7 +10,7 @@ python:
 
 install:
 - pip install -r test_requirements.txt
-- pip install -r ./doc/doc_requirements.txt
+- pip install -r ./doc/requirements.txt
 - pip install -r requirements.txt
 
 script:
