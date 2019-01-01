@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
 """
-Make a new release version of BiblioPixel by editing CHANGELIST.md
-
+Automatically make a new release version of BiblioPixel by editing CHANGELIST.md
+and bibliopixel/VERSION
 """
 
-import datetime, io, os, subprocess, sys
+import datetime, io, os, pathlib, subprocess, sys
 
 DRY_RUN = False
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-CHANGELIST_FILE = os.path.join(ROOT, 'CHANGELIST.md')
-VERSION_FILE = os.path.join(ROOT, 'bibliopixel', 'VERSION')
+ROOT = pathlib.Path(__file__).parents[2]
+CHANGELIST_FILE = str(ROOT / 'CHANGELIST.md')
+VERSION_FILE = str(ROOT / 'bibliopixel' / 'VERSION')
 
 
 def new_version(new_version_string=''):
@@ -37,7 +37,7 @@ def new_version(new_version_string=''):
     assert new_version > old_version
 
     comments = []
-    print('Changes for CHANGELIST:')
+
     while True:
         comment = input('- ')
         if not comment:
