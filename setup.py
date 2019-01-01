@@ -157,6 +157,6 @@ setup(
         'install_scripts': InstallScripts
     },
     include_package_data=True,
-    scripts=['scripts/' + s for s in SCRIPTS_TO_INSTALL],
+    scripts=['scripts/to_install/' + s for s in SCRIPTS_TO_INSTALL],
     install_requires=REQUIRED
 )

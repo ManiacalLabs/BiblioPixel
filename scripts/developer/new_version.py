@@ -8,7 +8,7 @@ Make a new release version of BiblioPixel by editing CHANGELIST.md
 import datetime, io, os, subprocess, sys
 
 DRY_RUN = False
-ROOT = os.path.dirname(os.path.dirname(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 CHANGELIST_FILE = os.path.join(ROOT, 'CHANGELIST.md')
 VERSION_FILE = os.path.join(ROOT, 'bibliopixel', 'VERSION')
 

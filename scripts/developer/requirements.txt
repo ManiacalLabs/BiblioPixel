@@ -1,0 +1,4 @@
+python-rtmidi  # Must be installed first
+mido
+pynput
+opencv-python
