@@ -5,6 +5,7 @@ Topic Papers
    :maxdepth: 1
    :caption: BiblioPixel topic papers:
 
+   using-virtualenv
    troubleshooting
    using-controls
    using-numpy
