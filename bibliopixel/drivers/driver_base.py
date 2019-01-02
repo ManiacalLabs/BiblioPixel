@@ -1,6 +1,6 @@
 from . channel_order import ChannelOrder
 from .. colors import gamma as _gamma
-from .. project import attributes, data_maker, fields
+from .. project import attributes, clock, data_maker, fields
 import threading, time
 
 
@@ -66,6 +66,7 @@ class DriverBase(object):
         self.brightness_lock = threading.Lock()
         self._brightness = 255
         self._waiting_brightness = None
+        self.clock = clock.Clock()
 
     def set_pixel_positions(self, pixel_positions):
         """
