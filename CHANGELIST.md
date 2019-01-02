@@ -1,3 +1,8 @@
+## v3.4.42 - 2019-01-03
+- Fix `bp devices`
+- Better shutdown for Builder
+- Fix animation.fill.Fill
+
 ## v3.4.41 - 2018-12-02
 - Fix issue with classic projects where run.seconds != 0
 - Better release tests
