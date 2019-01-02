@@ -6,7 +6,7 @@ from ... util import log, util
 def send_packet(cmd, size, dev, baudrate, timeout, more_data=None):
     packet = util.generate_header(cmd, size)
     if more_data:
-        packet += more_data
+        packet.append(more_data)
 
     com = serial.Serial(dev, baudrate=baudrate, timeout=timeout)
     com.write(packet)
