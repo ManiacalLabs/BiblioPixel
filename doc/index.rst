@@ -27,4 +27,5 @@ Animate complex lighting projects by writing simple text files.
    tutorial/index
    getting-help
    topic-papers/index
+   developer/index
    reference
