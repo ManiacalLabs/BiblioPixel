@@ -1,0 +1,10 @@
+shape: [48, 96]
+
+run:
+  fps: 30
+  seconds: 14
+
+animation:
+  typename: $bpa.matrix.ImageAnim
+  use_gamma: false
+  scale_to: xy
