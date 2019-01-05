@@ -47,9 +47,10 @@ itself.
 Using `virtualenv` in practice.
 ================================
 
-The general picture of how you use virtualenvs in practice is like this.
+You use virtualenv something like this.
 
-0. Create a directory for all your virtualenvs.  Let's suppose it's `~/Envs`
+0. First time only - create a directory for all your virtualenvs.
+   Let's suppose it's `~/Envs`
 
 1. When you start a new project, experiment or sketch, you create a new
    clean virtualenv (usually with the same name):
@@ -93,7 +94,7 @@ The general picture of how you use virtualenvs in practice is like this.
     $ rm -R ~/Envs/my-project
 
 
-Installation depends on your operating system
-====================================
+NOTE: virtualenv Installation depends on your operating system
+================================================================
 
 Search for "install virtualenv <your-system-here>`.
