@@ -1,18 +1,20 @@
 #!/bin/bash
-set -Eeuxo pipefail
 
-pushd .
+#
+# Install all the packages necessary for BiblioPixel development into
+# the current virtualenv, and then install BiblioPixel and BiblioPixelAnimations
+# into the current virtualenv as "develop" so that changes to the code will be
+# immediately reflected when you run `bp`.
+#
 
-# rtmidi is the wrong package
+# The right package is's python-rtmidi, not rtmidi, so uninstall that
+# if it was accidentally installed - the two packages conflict
 pip uninstall -q rtmidi
 
 pip install -r requirements.txt
 pip install -r test_requirements.txt
-pip install -r doc/doc_requirements.txt
-pip install python-rtmidi
-pip install mido
-pip install pynput
-pip install opencv-python
+pip install -r doc/requirements.txt
+pip install -r scripts/developer/requirements.txt
 
 python setup.py develop
 
@@ -22,9 +24,4 @@ python setup.py develop
 
 cd ../BiblioPixelAnimations
 python setup.py develop
-
-
-popd
-
-git remote add rec git@github.com:rec/BiblioPixel.git || :
-git remote add upstream git@github.com:ManiacalLabs/BiblioPixel.git || :
+cd ../BiblioPixel
