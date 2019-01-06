@@ -4,14 +4,13 @@ How to run the documentation build
 1. Initial setup.
 ===============================
 
-There are four different git branches needed for building BiblioPixel
+There are three different git branches needed for building BiblioPixel
 documentation, and all they need to be checked out in the same directory:
 
 .. code-block:: bash
 
    <root directory>
        BiblioPixel            # master, dev or docs branch
-       BiblioPixel.gh-pages   # gh-pages branch
        DocsFiles              # master branch
        BiblioPixelAnimations  # master branch
 
@@ -44,4 +43,4 @@ from the BiblioPixel root directory.
   Commit and push any changes to ``DocsFiles/BiblioPixel``
 
 ``build``
-  Equivalent to ``clean && preprocess && api && bp && extract-gifs && sphinx``
+  Equivalent to ``preprocess && api && bp && sphinx``
