@@ -109,3 +109,17 @@ Here's how to make a new branch called ``new-branch``:
 This is beyond the scope of this document.  There are resources at e.g.
 https://www.google.com/search?q=git+primer but none of them are great.  Please
 report back if you find something really clear or useful.
+
+5. Making pull requests
+============================
+
+The final stage in this process is to make a pull request - in other words,
+ask the maintainers of BiblioPixel to review your code so that it can be
+committed into the main program.
+
+You do this from the github site.  You need to open the page for your new
+branch, which will be a URL like
+``https://github.com/<your-git-user>/BiblioPixel/tree/<your-branch-name>``
+
+There will be a button near the right middle marked "Pull request".  Click on
+that and go through the instructions.

@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+scripts/documentation/preprocess
+scripts/documentation/bp
+scripts/documentation/sphinx
+
+echo "*** finished build documentation"
