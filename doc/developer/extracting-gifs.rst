@@ -1,5 +1,5 @@
-Extracting GIFS
-----------------------
+Automatically extracting GIFs from the documentation
+----------------------------------------------------------
 
 GIF extraction; and, why the preprocessing phase?
 ===================================================
