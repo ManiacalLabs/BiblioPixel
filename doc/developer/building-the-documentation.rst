@@ -1,5 +1,5 @@
 Building the documentation
-===============================
+------------------------------------
 
 The Python documentation world is a little janky and so there is also a
 separate build for the documentation part!
