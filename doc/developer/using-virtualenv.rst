@@ -33,9 +33,10 @@ In the virtualenv world, you no longer pollute your system Python.  Instead,
 you install specific "clean" development versions of Python using the basic
 Python installer from https://python.org
 
-If you are developing for `BiblioPixel`, we suggest installing at least
-Python 3.4 (the oldest version that `BiblioPixel` supports) and Python 3.7
-(the newest production version of Python).
+If you are developing for ``BiblioPixel``, we suggest installing at least
+Python 3.4 (the oldest version that ``BiblioPixel`` supports) and Python 3.7
+(the newest production version of Python).  ``BiblioPixel`` does not support
+Python 2 at allo.
 
 Each new virtualenv is based off one of these "clean" installations, but
 installs new packages into its own directory.  This allows you to install large
