@@ -1,0 +1,244 @@
+``bp`` - The BiblioPixel Project Runner
+--------------------------------------------
+
+``bp`` is a command-line script installed with BiblioPixel.  It can run
+projects and demos, configure hardware, save and load defaults, and more.
+
+``bp`` takes one of 14 *commands*:
+  i
+  n
+
+Some commands take *arguments* - often names of files.
+
+Examples of ``bp`` commands and arguments
+==============================================
+
+.. code-block:: bash
+
+    bp info
+    bp demo circle
+    bp run foo.json bar.json
+    bp foo.json bar.json      # run is the default command
+
+The commands are summarized below, and you can get more detailed help about
+each one by typing:
+
+.. code-block:: bash
+
+    bp <command> --help
+
+or
+
+.. code-block:: bash
+
+     bp <command> -h
+
+The ``bp`` command line
+=====================================
+
+``bp`` commands have *flags* that control how ``bp`` runs its commands.
+
+Examples of flags are ``-v``, ``--verbose``, ``--defaults``, ``-d``,
+``--simpixel``.  Flags either start with ``-``, for one letter flags, or ``--``
+for multi-letter flags.
+
+Sometimes two flags have the same meaning, like ``--simpixel`` and ``-s``
+or ``--verbose`` and ``-v``.
+
+Some flags take an argument, like ``--dim=160`` or ``--loglevel=frame``.
+Other flags do not, like ``--verbose`` or ``-v``.
+
+A ``bp`` command line can optionally include a command, a list of arguments,
+and a list of flags:
+
+.. code-block:: bash
+
+    bp [<command>] [<argument> ...] [<flag> ...]
+
+
+Examples of ``bp`` command lines
+==========================================
+
+.. code-block:: bash
+
+    bp info --help
+    bp run -h
+    bp info
+    bp color "light sky blue 4"
+    bp foo.json bar.json -v
+    bp foo.json bar.json -v --numbers=float --dump --defaults=default.json
+
+
+APPENDIX: ``bp <command> --help`` for each command
+==================================================
+
+``bp info``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Print information about BiblioPixel
+
+
+Prints the versions of BiblioPixel's dependencies, and the platform
+that the program is running on.
+
+
+``bp run``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run specified project from file or URL
+
+
+
+``bp pid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Print the process ID of the current bp instance that is running a project,
+if any.
+
+DEPRECATED: use ``$ bpa-pid``
+
+
+Example:
+
+.. code-block:: bash
+
+    $ bp pid
+
+
+
+``bp kill``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Send a kill signal to a BiblioPixel process running on this
+machine to abruptly kill it
+
+DEPRECATED: use
+
+.. code-block:: bash
+
+    $ kill -kill `bpa-pid`
+
+
+Example:
+
+.. code-block:: bash
+
+    $ bp kill
+
+
+
+``bp clear_cache``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Clear the loady git repository library cache
+
+
+
+``bp all_pixel_test``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test the all_pixel
+
+
+Equivalent to
+
+.. code-block:: bash
+
+    bp --num=10 --loglevel=debug --animation=strip_test --driver=serial       --fail_on_exception --layout=strip --ledtype=<argument>
+
+
+
+``bp demo``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Run a bibliopixel demo
+
+
+For the list of possible demos, type
+
+.. code-block:: bash
+
+    bp demo list
+
+
+
+``bp new``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new BLiPS project
+
+
+Example:
+
+.. code-block: bash
+
+    # Create a new project directory named my_project/ in the current directory
+    bp new my_project
+
+    # Create a new project directory named my_project/ in ~/projects
+    bp new my_project ~/projects
+
+
+
+``bp all_pixel``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Configure the AllPixel or similar module
+
+
+
+``bp restart``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Send a restart signal to a BiblioPixel process running on this
+machine.
+
+DEPRECATED: use
+
+.. code-block:: bash
+
+    $ kill -hup `bpa-pid`
+
+
+Example: ``$ bp restart``
+
+
+
+``bp animations``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all BiblioPixel Animations
+
+
+
+``bp devices``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Find serial devices and update serial device IDs
+
+
+
+``bp shutdown``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Send an interrupt signal to a BiblioPixel process running on this
+machine to kill it
+
+DEPRECATED: use
+.. code-block:: bash
+
+    $ kill -int `bpa-pid`
+
+
+Example:
+`$ bp shutdown`
+
+
+
+``bp monitor``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Monitor a control source
+
+
+

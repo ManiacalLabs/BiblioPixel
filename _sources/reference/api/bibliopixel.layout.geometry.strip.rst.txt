@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.strip module
+========================================
+
+.. automodule:: bibliopixel.layout.geometry.strip
+    :members:
+    :undoc-members:
+    :show-inheritance:

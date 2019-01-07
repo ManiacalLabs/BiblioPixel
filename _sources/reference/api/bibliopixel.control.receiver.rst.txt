@@ -1,0 +1,7 @@
+bibliopixel.control.receiver module
+===================================
+
+.. automodule:: bibliopixel.control.receiver
+    :members:
+    :undoc-members:
+    :show-inheritance:

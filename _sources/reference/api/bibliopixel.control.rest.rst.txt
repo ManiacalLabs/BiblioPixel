@@ -1,0 +1,20 @@
+bibliopixel.control.rest package
+================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.control.rest.decorator
+   bibliopixel.control.rest.flask_server
+   bibliopixel.control.rest.rest
+   bibliopixel.control.rest.rest_server
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.control.rest
+    :members:
+    :undoc-members:
+    :show-inheritance:

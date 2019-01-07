@@ -1,0 +1,7 @@
+bibliopixel.project.construct module
+====================================
+
+.. automodule:: bibliopixel.project.construct
+    :members:
+    :undoc-members:
+    :show-inheritance:

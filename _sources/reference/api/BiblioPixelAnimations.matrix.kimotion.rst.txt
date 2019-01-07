@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.kimotion module
+============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.kimotion
+    :members:
+    :undoc-members:
+    :show-inheritance:

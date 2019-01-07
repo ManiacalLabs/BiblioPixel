@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.animation.animation &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.animation.animation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.animation.animation</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">contextlib</span><span class="o">,</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">adaptor</span><span class="p">,</span> <span class="n">animation_threading</span><span class="p">,</span> <span class="n">runner</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">deprecated</span><span class="o">,</span> <span class="nn">log</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">colors</span> <span class="kn">import</span> <span class="nn">palettes</span><span class="o">,</span> <span class="nn">legacy_palette</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">project</span> <span class="kn">import</span> <span class="nn">attributes</span><span class="o">,</span> <span class="nn">fields</span>
+
+
+<div class="viewcode-block" id="Animation"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation">[docs]</a><span class="k">class</span> <span class="nc">Animation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">free_run</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">pre_recursion</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">default_converter</span>
+    <span class="n">subframes</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">top_level</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>
+        <span class="n">_step</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">FAIL_ON_EXCEPTION</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">COLOR_DEFAULTS</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="Animation.construct"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.construct">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">construct</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct an animation, set the runner, and add in the two</span>
+<span class="sd">        &quot;reserved fields&quot; `name` and `data`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.</span> <span class="n">failed</span> <span class="kn">import</span> <span class="nn">Failed</span>
+        <span class="n">exception</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_exception&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">Failed</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">layout</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">exception</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">layout</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">)</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">_set_runner</span><span class="p">(</span><span class="n">run</span> <span class="ow">or</span> <span class="p">{})</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">FAIL_ON_EXCEPTION</span><span class="p">:</span>
+                    <span class="k">raise</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">Failed</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">layout</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">a</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">preclear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fail_on_exception</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">          preclear: If True, clear the layout before rendering the frame;</span>
+<span class="sd">              otherwise, the results of the previous frame are preserved</span>
+
+<span class="sd">          fail_on_exception: If False, exceptions thrown in the animation frame are</span>
+<span class="sd">              caught and reported;</span>
+<span class="sd">              if True, exceptions are are raised, potentially ending the</span>
+<span class="sd">              animation cycle and the program;</span>
+<span class="sd">              if None or not set, the value of Animation.FAIL_ON_EXCEPTION is used</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">legacy_palette</span><span class="o">.</span><span class="n">pop_legacy_palette</span><span class="p">(</span>
+            <span class="n">kwds</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">COLOR_DEFAULTS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">numLEDs</span>
+
+        <span class="n">attributes</span><span class="o">.</span><span class="n">set_reserved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;animation&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">layout</span>
+        <span class="k">assert</span> <span class="n">layout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal_delay</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_completion</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">ready</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preclear</span> <span class="o">=</span> <span class="n">preclear</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preframe_callbacks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fail_on_exception</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FAIL_ON_EXCEPTION</span> <span class="k">if</span> <span class="n">fail_on_exception</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">fail_on_exception</span>
+
+<div class="viewcode-block" id="Animation.set_project"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.set_project">[docs]</a>    <span class="k">def</span> <span class="nf">set_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">set_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">set_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_led</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Many BiblioPixelAnimations use the &quot;protected&quot; variable _led.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>
+
+    <span class="nd">@_led</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">_led</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">layout</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">color_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">color_list</span>
+
+    <span class="nd">@color_list</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">color_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cl</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">color_list</span> <span class="o">=</span> <span class="n">cl</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">completed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Many BiblioPixelAnimations use the old `completed` variable.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">complete</span>
+
+    <span class="nd">@completed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">completed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">complete</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">running</span>
+
+<div class="viewcode-block" id="Animation.pre_run"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.pre_run">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+<div class="viewcode-block" id="Animation.step"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Animation.cleanup"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clean_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+        <span class="c1"># Some cases we may not want to clear the screen</span>
+        <span class="c1"># Like with the remote, it would flash between anims</span>
+        <span class="k">if</span> <span class="n">clean_layout</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Animation.add_preframe_callback"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.add_preframe_callback">[docs]</a>    <span class="k">def</span> <span class="nf">add_preframe_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The preframe_callbacks are called right before the start of a</span>
+<span class="sd">        frame rendering pass.</span>
+
+<span class="sd">        To avoid race conditions when editing values, the ``Project``</span>
+<span class="sd">        adds a callback here for the top-level animation, to drain the</span>
+<span class="sd">        edit_queue at a moment where no rendering is</span>
+<span class="sd">        happening.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preframe_callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Animation.start"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Animation.stop"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">stop_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Animation.join"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Animation.run_all_frames"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.run_all_frames">[docs]</a>    <span class="k">def</span> <span class="nf">run_all_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_frames</span><span class="p">():</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Animation.generate_frames"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.generate_frames">[docs]</a>    <span class="k">def</span> <span class="nf">generate_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clean_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pre_run</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">repeats</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_run_one_frame</span><span class="p">()</span>
+                    <span class="k">yield</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">clean_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_completion</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_completion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">ready</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_one_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_level</span><span class="p">:</span>
+            <span class="n">timestamps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">()]</span>
+            <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">preframe_callbacks</span><span class="p">:</span>
+                <span class="n">cb</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">amt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_level</span><span class="p">:</span>
+            <span class="n">timestamps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">frame_render_time</span> <span class="o">=</span> <span class="n">timestamps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">timestamps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">push_to_driver</span><span class="p">()</span>
+
+            <span class="n">timestamps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+            <span class="n">_report_framerate</span><span class="p">(</span><span class="n">timestamps</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur_step</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">complete</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">max_cycles</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">max_cycles</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">running</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_level</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">subframes</span><span class="p">,</span> <span class="n">timestamps</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">stop_event</span><span class="o">.</span><span class="n">isSet</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">canceled</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">compute_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cur_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_pre_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">running</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run_start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span><span class="o">.</span><span class="n">stop_event</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur_step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_run</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_delay</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_delay</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sleep_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">sleep_time</span>
+
+        <span class="n">adaptor</span><span class="o">.</span><span class="n">adapt_animation_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preclear</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">all_off</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pre_run</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_set_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="p">(</span><span class="o">**</span><span class="p">(</span><span class="n">run</span> <span class="ow">or</span> <span class="p">{}))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threading</span> <span class="o">=</span> <span class="n">animation_threading</span><span class="o">.</span><span class="n">AnimationThreading</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_all_frames</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Animation.run"><a class="viewcode-back" href="../../../reference/api/bibliopixel.animation.animation.html#bibliopixel.animation.animation.Animation.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="n">deprecated</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span><span class="s1">&#39;BaseAnimation.run&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_runner</span><span class="p">(</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">BaseAnimation</span> <span class="o">=</span> <span class="n">Animation</span>
+
+
+<span class="k">def</span> <span class="nf">_report_framerate</span><span class="p">(</span><span class="n">timestamps</span><span class="p">):</span>
+    <span class="n">total_time</span> <span class="o">=</span> <span class="n">timestamps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">timestamps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">fps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">total_time</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">))</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">ms/</span><span class="si">%d</span><span class="s2">fps / Frame: </span><span class="si">%d</span><span class="s2">ms / Update: </span><span class="si">%d</span><span class="s2">ms&quot;</span><span class="p">,</span>
+              <span class="mi">1000</span> <span class="o">*</span> <span class="n">total_time</span><span class="p">,</span>
+              <span class="n">fps</span><span class="p">,</span>
+              <span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">timestamps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">timestamps</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+              <span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">timestamps</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">timestamps</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+bibliopixel.drivers.ledtype module
+==================================
+
+.. automodule:: bibliopixel.drivers.ledtype
+    :members:
+    :undoc-members:
+    :show-inheritance:

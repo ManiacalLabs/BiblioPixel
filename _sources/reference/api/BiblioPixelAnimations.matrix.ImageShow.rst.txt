@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.ImageShow module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.ImageShow
+    :members:
+    :undoc-members:
+    :show-inheritance:

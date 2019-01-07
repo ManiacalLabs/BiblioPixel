@@ -1,0 +1,7 @@
+BiblioPixelAnimations.game.flappy module
+========================================
+
+.. automodule:: BiblioPixelAnimations.game.flappy
+    :members:
+    :undoc-members:
+    :show-inheritance:

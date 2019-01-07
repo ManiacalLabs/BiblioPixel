@@ -1,0 +1,15 @@
+bibliopixel
+===========
+
+.. toctree::
+   :maxdepth: 4
+
+   bibliopixel
+
+BiblioPixelAnimations
+=====================
+
+.. toctree::
+   :maxdepth: 4
+
+   BiblioPixelAnimations

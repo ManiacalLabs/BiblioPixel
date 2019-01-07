@@ -1,0 +1,33 @@
+bibliopixel.layout package
+==========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    bibliopixel.layout.geometry
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.layout.circle
+   bibliopixel.layout.cube
+   bibliopixel.layout.cutter
+   bibliopixel.layout.font
+   bibliopixel.layout.layout
+   bibliopixel.layout.matrix
+   bibliopixel.layout.matrix_drawing
+   bibliopixel.layout.pov
+   bibliopixel.layout.strip
+   bibliopixel.layout.update_threading
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.layout
+    :members:
+    :undoc-members:
+    :show-inheritance:

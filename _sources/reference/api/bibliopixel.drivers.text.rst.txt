@@ -1,0 +1,7 @@
+bibliopixel.drivers.text module
+===============================
+
+.. automodule:: bibliopixel.drivers.text
+    :members:
+    :undoc-members:
+    :show-inheritance:

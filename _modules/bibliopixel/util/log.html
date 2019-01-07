@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.log &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.util.log</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.util.log</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">DEBUG</span><span class="p">,</span> <span class="n">INFO</span><span class="p">,</span> <span class="n">WARNING</span><span class="p">,</span> <span class="n">ERROR</span>
+
+<span class="n">FRAME</span> <span class="o">=</span> <span class="n">DEBUG</span> <span class="o">-</span> <span class="mi">5</span>
+<span class="n">LOG_NAMES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="n">FRAME</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="n">DEBUG</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="n">INFO</span><span class="p">,</span> <span class="s1">&#39;warning&#39;</span><span class="p">:</span> <span class="n">WARNING</span><span class="p">,</span>
+             <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">ERROR</span><span class="p">}</span>
+
+<span class="n">SORTED_NAMES</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">LOG_NAMES</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+<span class="n">VERBOSE_FMT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\</span>
+<span class="si">%(asctime)s</span><span class="s1">,</span><span class="si">%(msecs)d</span><span class="s1"> </span><span class="si">%(levelname)-7s</span><span class="s1"> [</span><span class="si">%(filename)s</span><span class="s1">:</span><span class="si">%(lineno)d</span><span class="s1">] </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="n">DATE_FMT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%m-%Y:%H:%M:%S&#39;</span>
+
+
+<div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.log.html#bibliopixel.util.log.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--loglevel&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">SORTED_NAMES</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">LOGLEVEL_HELP</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">VERBOSE_HELP</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="apply_args"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.log.html#bibliopixel.util.log.apply_args">[docs]</a><span class="k">def</span> <span class="nf">apply_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">loglevel</span> <span class="o">!=</span> <span class="s1">&#39;frame&#39;</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">VERBOSE_FMT</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="n">DATE_FMT</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">set_log_level</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">loglevel</span><span class="p">)</span></div>
+
+
+<span class="c1"># From https://stackoverflow.com/a/35804945/43839</span>
+<span class="k">def</span> <span class="nf">_addLoggingLevel</span><span class="p">(</span><span class="n">levelName</span><span class="p">,</span> <span class="n">levelNum</span><span class="p">,</span> <span class="n">methodName</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Comprehensively adds a new logging level to the `logging` module and the</span>
+<span class="sd">    currently configured logging class.</span>
+
+<span class="sd">    `levelName` becomes an attribute of the `logging` module with the value</span>
+<span class="sd">    `levelNum`. `methodName` becomes a convenience method for both `logging`</span>
+<span class="sd">    itself and the class returned by `logging.getLoggerClass()` (usually just</span>
+<span class="sd">    `logging.Logger`). If `methodName` is not specified, `levelName.lower()` is</span>
+<span class="sd">    used.</span>
+
+<span class="sd">    To avoid accidental clobberings of existing attributes, this method will</span>
+<span class="sd">    raise an `AttributeError` if the level name is already an attribute of the</span>
+<span class="sd">    `logging` module or if the method name is already present</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; addLoggingLevel(&#39;TRACE&#39;, logging.DEBUG - 5)</span>
+<span class="sd">    &gt;&gt;&gt; logging.getLogger(__name__).setLevel(&quot;TRACE&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; logging.getLogger(__name__).trace(&#39;that worked&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; logging.trace(&#39;so did this&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; logging.TRACE</span>
+<span class="sd">    5</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">methodName</span><span class="p">:</span>
+        <span class="n">methodName</span> <span class="o">=</span> <span class="n">levelName</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">levelName</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> already defined in logging module&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">levelName</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">methodName</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> already defined in logging module&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">methodName</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLoggerClass</span><span class="p">(),</span> <span class="n">methodName</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> already defined in logger class&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">methodName</span><span class="p">))</span>
+
+    <span class="c1"># This method was inspired by the answers to Stack Overflow post</span>
+    <span class="c1"># http://stackoverflow.com/q/2183233/2988730, especially</span>
+    <span class="c1"># http://stackoverflow.com/a/13638084/2988730</span>
+    <span class="k">def</span> <span class="nf">logForLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">levelNum</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">levelNum</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">logToRoot</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">levelNum</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">addLevelName</span><span class="p">(</span><span class="n">levelNum</span><span class="p">,</span> <span class="n">levelName</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">levelName</span><span class="p">,</span> <span class="n">levelNum</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLoggerClass</span><span class="p">(),</span> <span class="n">methodName</span><span class="p">,</span> <span class="n">logForLevel</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">methodName</span><span class="p">,</span> <span class="n">logToRoot</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_new_custom_logger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;BiblioPixel&#39;</span><span class="p">,</span>
+                       <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(module)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">):</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_handler</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">Filter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">rec</span><span class="o">.</span><span class="n">levelno</span> <span class="o">==</span> <span class="n">level</span>
+
+        <span class="n">h</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">())</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="n">add_handler</span><span class="p">(</span><span class="n">FRAME</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">add_handler</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">add_handler</span><span class="p">(</span><span class="n">INFO</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">add_handler</span><span class="p">(</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">add_handler</span><span class="p">(</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">logger</span>
+
+
+<div class="viewcode-block" id="set_log_level"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.log.html#bibliopixel.util.log.set_log_level">[docs]</a><span class="k">def</span> <span class="nf">set_log_level</span><span class="p">(</span><span class="n">level</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param level: the level to set - either a string level name from</span>
+<span class="sd">                  &#39;frame&#39;, &#39;debug&#39;, &#39;info&#39;, &#39;warning&#39;, &#39;error&#39;</span>
+<span class="sd">                  or an integer log level from:</span>
+<span class="sd">                  log.FRAME, log.DEBUG, log.INFO, log.WARNING, log.ERROR</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">LOG_NAMES</span><span class="p">[</span><span class="n">level</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_log_level"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.log.html#bibliopixel.util.log.get_log_level">[docs]</a><span class="k">def</span> <span class="nf">get_log_level</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="is_debug"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.log.html#bibliopixel.util.log.is_debug">[docs]</a><span class="k">def</span> <span class="nf">is_debug</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">get_log_level</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">DEBUG</span></div>
+
+
+<span class="c1"># Add a new logging level FRAME for messages which appear on every frame.</span>
+<span class="n">_addLoggingLevel</span><span class="p">(</span><span class="s1">&#39;FRAME&#39;</span><span class="p">,</span> <span class="n">FRAME</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">_new_custom_logger</span><span class="p">()</span>
+
+<span class="n">frame</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">,</span> <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
+
+
+<span class="c1"># The function `printer` emits text no matter what the loglevel, and without any</span>
+<span class="c1"># introducers like &quot;INFO&quot;.  By default this is the same as the global `print` -</span>
+<span class="c1"># re-assign this variable if you need to redirect your printing.</span>
+<span class="n">printer</span> <span class="o">=</span> <span class="nb">print</span>  <span class="c1"># noqa: T001, T002</span>
+
+<span class="n">LOGLEVEL_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">Set what level of events to log. Higher log levels print less.&quot;&quot;&quot;</span>
+
+<span class="n">VERBOSE_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">If this is set, then errors are reported with a full stack trace, and</span>
+<span class="s2">loglevel is by default set to debug</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">deprecated</span>
+
+<span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>  <span class="c1"># pragma: no cover</span>
+<div class="viewcode-block" id="setLogLevel"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.log.html#bibliopixel.util.log.setLogLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setLogLevel</span><span class="p">(</span><span class="n">level</span><span class="p">):</span>
+        <span class="n">deprecated</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span><span class="s1">&#39;util.setLogLevel&#39;</span><span class="p">)</span>
+        <span class="n">set_log_level</span><span class="p">(</span><span class="n">level</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

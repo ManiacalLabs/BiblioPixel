@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.circlepop module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.circlepop
+    :members:
+    :undoc-members:
+    :show-inheritance:

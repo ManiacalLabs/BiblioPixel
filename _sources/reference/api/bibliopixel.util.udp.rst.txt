@@ -1,0 +1,7 @@
+bibliopixel.util.udp module
+===========================
+
+.. automodule:: bibliopixel.util.udp
+    :members:
+    :undoc-members:
+    :show-inheritance:

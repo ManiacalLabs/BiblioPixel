@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Types of Typenames &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Type guessing" href="type-guessing.html" />
+    <link rel="prev" title="The typename Field identifies a Python class." href="typenames.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">The BiblioPixel Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/index.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/index.html">Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sections/index.html">The Sections in a Project</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Field Types</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="typenames.html">The <code class="docutils literal notranslate"><span class="pre">typename</span></code> Field identifies a Python class.</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Types of Typenames</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#absolute-typenames">1. Absolute Typenames</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#relative-typenames">2. Relative Typenames</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#file-typenames">3. File Typenames</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#git-repo-typenames">4. Git Repo Typenames</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#warning-warning-warning">WARNING WARNING WARNING!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="type-guessing.html">Type guessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="palettes.html">Palettes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="named-palettes.html">Named Palettes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fields-of-a-palette.html">Fields of a Palette</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ledtype.html">The <code class="docutils literal notranslate"><span class="pre">ledtype</span></code> Field identifies the type of LED strip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="c_order.html">The <code class="docutils literal notranslate"><span class="pre">c_order</span></code> Field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gamma.html"><code class="docutils literal notranslate"><span class="pre">gamma</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../animations/index.html">Animations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/index.html">Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../controls/index.html">Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">The BiblioPixel Tutorial</a> &raquo;</li>
+        
+          <li><a href="index.html">Field Types</a> &raquo;</li>
+        
+      <li>Types of Typenames</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tutorial/fields/types-of-typenames.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="types-of-typenames">
+<h1>Types of Typenames<a class="headerlink" href="#types-of-typenames" title="Permalink to this headline">¶</a></h1>
+<p>This Section is fairly advanced and can be skipped on first reading.</p>
+<p>You can write Typenames in four formats:</p>
+<div class="section" id="absolute-typenames">
+<h2>1. Absolute Typenames<a class="headerlink" href="#absolute-typenames" title="Permalink to this headline">¶</a></h2>
+<p>An Absolute Typename is a full Python pathname of a class or function like
+<code class="docutils literal notranslate"><span class="pre">math.log</span></code> or <code class="docutils literal notranslate"><span class="pre">bibliopixel.animation.tests.PixelTester</span></code>.</p>
+<p>Absolute Typenames start with a letter and can contain only letters, numbers,
+the period <code class="docutils literal notranslate"><span class="pre">.</span></code>, and the underscore <code class="docutils literal notranslate"><span class="pre">_</span></code>.</p>
+<p>So <code class="docutils literal notranslate"><span class="pre">x23.he_is_13.yes</span></code> is an Absolute Typename but neither <code class="docutils literal notranslate"><span class="pre">23x.h</span></code> nor
+<code class="docutils literal notranslate"><span class="pre">this-has-dashes</span></code> nor <code class="docutils literal notranslate"><span class="pre">this</span> <span class="pre">has</span> <span class="pre">spaces.no</span></code> nor <code class="docutils literal notranslate"><span class="pre">oops!</span></code> are Absolute
+Typenames.</p>
+</div>
+<div class="section" id="relative-typenames">
+<h2>2. Relative Typenames<a class="headerlink" href="#relative-typenames" title="Permalink to this headline">¶</a></h2>
+<p>To save typing, you can specify typenames relative to the base module for
+that Class Section.  For example, the Absolute Typename
+<code class="docutils literal notranslate"><span class="pre">bibliopixel.animation.tests.PixelTester</span></code> can be shortened to
+the Relative Typename <code class="docutils literal notranslate"><span class="pre">.tests.PixelTester</span></code></p>
+<p>Relative Typenames start with a <code class="docutils literal notranslate"><span class="pre">.</span></code> and then follow the same rules as Absolute
+Typenames.</p>
+</div>
+<div class="section" id="file-typenames">
+<h2>3. File Typenames<a class="headerlink" href="#file-typenames" title="Permalink to this headline">¶</a></h2>
+<p>You can directly load Python code from a file on your drive this way:
+<code class="docutils literal notranslate"><span class="pre">/home/pi/Documents/myAnimation.py</span></code></p>
+<p>File Typenames always start with <code class="docutils literal notranslate"><span class="pre">/</span></code>.</p>
+</div>
+<div class="section" id="git-repo-typenames">
+<h2>4. Git Repo Typenames<a class="headerlink" href="#git-repo-typenames" title="Permalink to this headline">¶</a></h2>
+<p>You can directly load code from a Github repo.</p>
+<p><code class="docutils literal notranslate"><span class="pre">https://github.com/ManiacalLabs/BiblioPixelAnimations/blob/master/BiblioPixelAnimations/matrix/MatrixRain.py</span></code></p>
+</div>
+</div>
+<div class="section" id="warning-warning-warning">
+<h1>WARNING WARNING WARNING!<a class="headerlink" href="#warning-warning-warning" title="Permalink to this headline">¶</a></h1>
+<p>Git Repo Typenames allow you to load arbitrary code from the internet and
+execute it.</p>
+<p>Malicious code that you downloaded this way could do anything, including erasing
+all your data or stealing money from your accounts.  ONLY use Git Repo Typenames
+if you <em>completely and 100%</em> trust the repo that you are loading from.
+Remember, there’s nothing preventing people from changing code that’s perfectly
+safe today to be malicious tomorrow.</p>
+<p>The first time that you use a new Git Repo, <code class="docutils literal notranslate"><span class="pre">bp</span></code> will prompt you from the
+command line to whitelist that site.  <em>Think long and hard</em> before you do this!
+Or simply choose not to use this feature, and download the code yourself as you
+need it.</p>
+<hr class="docutils" />
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">shape</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">96</span><span class="p p-Indicator">,</span> <span class="nv">16</span><span class="p p-Indicator">]</span>
+<span class="nt">animation</span><span class="p">:</span>
+  <span class="nt">typename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$bpa.strip.Wave.WaveMove</span>
+  <span class="nt">color</span><span class="p">:</span> <span class="s">&#39;royal</span><span class="nv"> </span><span class="s">blue&#39;</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/fields/types-of-typenames-footer.gif"><img alt="doc/tutorial/fields/types-of-typenames-footer" class="align-center" src="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/fields/types-of-typenames-footer.gif" /></a>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="type-guessing.html" class="btn btn-neutral float-right" title="Type guessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="typenames.html" class="btn btn-neutral" title="The typename Field identifies a Python class." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

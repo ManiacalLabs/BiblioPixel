@@ -1,0 +1,7 @@
+bibliopixel.control.extractor module
+====================================
+
+.. automodule:: bibliopixel.control.extractor
+    :members:
+    :undoc-members:
+    :show-inheritance:

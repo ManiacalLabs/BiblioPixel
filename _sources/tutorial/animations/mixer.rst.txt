@@ -1,0 +1,21 @@
+The ``mixer`` animation
+------------------------------
+
+``mixer``
+
+
+
+----------
+
+.. code-block:: yaml
+
+   shape: [64, 7]
+   animation:
+     typename: $bpa.matrix.Text.ScrollText
+     text: 'Animations'
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/animations/mixer-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/animations/mixer-footer.gif
+   :alt: doc/tutorial/animations/mixer-footer
+   :align: center
+

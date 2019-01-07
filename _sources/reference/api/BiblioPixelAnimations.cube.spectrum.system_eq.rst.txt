@@ -1,0 +1,7 @@
+BiblioPixelAnimations.cube.spectrum.system\_eq module
+=====================================================
+
+.. automodule:: BiblioPixelAnimations.cube.spectrum.system_eq
+    :members:
+    :undoc-members:
+    :show-inheritance:

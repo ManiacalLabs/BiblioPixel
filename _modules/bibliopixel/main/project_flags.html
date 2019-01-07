@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.main.project_flags &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.main.project_flags</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.main.project_flags</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..</span> <span class="n">project</span> <span class="kn">import</span> <span class="nn">data_maker</span><span class="o">,</span> <span class="nn">project</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">data_file</span><span class="o">,</span> <span class="nn">deprecated</span><span class="o">,</span> <span class="nn">log</span><span class="o">,</span> <span class="nn">pid_context</span>
+
+<span class="sd">&quot;&quot;&quot;Common command line arguments for run and demo.&quot;&quot;&quot;</span>
+
+<span class="n">COMPONENTS</span> <span class="o">=</span> <span class="s1">&#39;driver&#39;</span><span class="p">,</span> <span class="s1">&#39;layout&#39;</span><span class="p">,</span> <span class="s1">&#39;animation&#39;</span>
+<span class="n">PRESET_LIBRARY_DEFAULT</span> <span class="o">=</span> <span class="s1">&#39;~/.bibliopixel&#39;</span>
+<span class="n">ENABLE_PRESETS</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">NUMBER_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;python&#39;</span><span class="p">,)</span> <span class="o">+</span> <span class="n">data_maker</span><span class="o">.</span><span class="n">NUMPY_TYPES</span>
+<span class="n">ADD_REDUNDANT_ARGUMENTS</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../reference/api/bibliopixel.main.project_flags.html#bibliopixel.main.project_flags.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="n">pid_context</span><span class="o">.</span><span class="n">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ADD_REDUNDANT_ARGUMENTS</span><span class="p">:</span>
+        <span class="n">_add_redundant_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="s1">&#39;--brightness&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Override project brightness value&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--dump&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Dump the full project as DATA_FILE after loading but &#39;</span> <span class="o">+</span>
+             <span class="s1">&#39;before running&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--dry_run&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Load projects but do not run them&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="s1">&#39;--fail_on_exception&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;If true, bp fail if any subanimation fails to construct&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="s1">&#39;--gif&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">GIF_HELP</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--ignore_exceptions&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;If true, continue running the next project if one project fails&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-j&#39;</span><span class="p">,</span> <span class="s1">&#39;--json&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Use Json when dumping description data&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;--movie&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">MOVIE_HELP</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--pause&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Time to pause between running animations&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--project_lengths&#39;</span><span class="p">,</span> <span class="s1">&#39;--pl&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">PROJECT_LENGTHS_HELP</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Run SimPixel at the default URL&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--simpixel&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Run SimPixel at a specific URL&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--animation_lengths&#39;</span><span class="p">,</span> <span class="s1">&#39;--at&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Set run length for each animation&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--ledtype&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Default LED type if no LED type is specified&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_add_redundant_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    These arguments are redundant with just using a project, and we should</span>
+<span class="sd">    encouraging that as you don&#39;t have to learn any dumb flags!</span>
+
+<span class="sd">    For example, instead of</span>
+
+<span class="sd">       bp foo.yml --animation=wombat --numbers=float</span>
+
+<span class="sd">    use</span>
+
+<span class="sd">       bp foo.yml + &#39;{animation: wombat, numbers: float}&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-a&#39;</span><span class="p">,</span> <span class="s1">&#39;--animation&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Default animation type if no animation is specified&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s1">&#39;--dimensions&#39;</span><span class="p">,</span> <span class="s1">&#39;--dim&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;DEPRECATED: x, (x, y) or (x, y, z) dimensions for project&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--shape&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;x, (x, y) or (x, y, z) dimensions for project&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--layout&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Default layout class if no layout is specified&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--numbers&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">NUMBER_TYPES</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">NUMBERS_HELP</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--path&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">PATH_HELP</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_make_project_flags</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="s1">&#39;{&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data_file</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+
+    <span class="n">project_flags</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">get_value</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">COMPONENTS</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">ledtype</span><span class="p">:</span>
+        <span class="n">project_flags</span><span class="p">[</span><span class="s1">&#39;driver&#39;</span><span class="p">][</span><span class="s1">&#39;ledtype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ledtype</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">brightness</span><span class="p">:</span>
+        <span class="n">project_flags</span><span class="p">[</span><span class="s1">&#39;layout&#39;</span><span class="p">][</span><span class="s1">&#39;brightness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">brightness</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">v4</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;*** Using v4 forward compatibility mode.&#39;</span><span class="p">)</span>
+        <span class="n">project_flags</span><span class="p">[</span><span class="s1">&#39;numbers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">numbers</span> <span class="o">!=</span> <span class="s1">&#39;python&#39;</span><span class="p">:</span>
+        <span class="n">project_flags</span><span class="p">[</span><span class="s1">&#39;numbers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">numbers</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">project_lengths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">project_flags</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">run</span><span class="p">[</span><span class="s1">&#39;seconds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_lengths</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">animation_lengths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">animation</span> <span class="o">=</span> <span class="n">project_flags</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;animation&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">animation_lengths</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="n">animation</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">length</span>
+
+    <span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dimensions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">deprecated</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span><span class="s1">&#39;Use --shape instead of --dimensions&#39;</span><span class="p">)</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">dimensions</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">project_flags</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--shape must be one to three numbers &#39;</span>
+                             <span class="s1">&#39;separated by commas.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">project_flags</span>
+
+
+<div class="viewcode-block" id="make_project"><a class="viewcode-back" href="../../../reference/api/bibliopixel.main.project_flags.html#bibliopixel.main.project_flags.make_project">[docs]</a><span class="k">def</span> <span class="nf">make_project</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">descs</span><span class="p">,</span> <span class="n">root_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">project_flags</span> <span class="o">=</span> <span class="n">_make_project_flags</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">descs</span> <span class="o">+=</span> <span class="p">(</span><span class="n">project_flags</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">project</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="o">*</span><span class="n">descs</span><span class="p">,</span> <span class="n">root_file</span><span class="o">=</span><span class="n">root_file</span><span class="p">)</span></div>
+
+
+<span class="c1"># Help messages.</span>
+
+<span class="n">PATH_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">A list of directories, separated by colons, &#39;which are added to the end of</span>
+<span class="s2">`sys.path`.</span>
+
+<span class="s2">You can also use loady-style paths which start with `//git/` to</span>
+<span class="s2">dynamically load a library from a public git repository.</span>
+
+<span class="s2">See https://github.com/ManiacalLabs/BiblioPixel/wiki/BiblioPixel-Paths</span>
+<span class="s2">for more information.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">NUMBERS_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">The type of numbers that are used in color list calculations.</span>
+
+<span class="s2">  `python` means to use the classic Python lists of (r, g, b) tuples.</span>
+
+<span class="s2">  Anything else is a numpy type, which means that bp uses numpy arrays, which</span>
+<span class="s2">  use much faster arithmetic.</span>
+
+<span class="s2">  numpy types include:</span>
+<span class="s2">    &quot;&quot;&quot;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_maker</span><span class="o">.</span><span class="n">NUMPY_TYPES</span><span class="p">)</span>
+
+<span class="n">PRESET_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Filenames for preset library&quot;&quot;&quot;</span>
+
+<span class="n">PROJECT_LENGTHS_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">How long to run the animation (overrides runner.seconds)&quot;&quot;&quot;</span>
+
+<span class="n">MOVIE_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Write a movie file (animated GIF or mp4).</span>
+
+<span class="s2">If --gif has no argument, the name of the movie file is the same as the name of</span>
+<span class="s2">the project, with a .gif added to the end.</span>
+
+<span class="s2">If it has a single string argument, then it&#39;s the name of the GIF file.</span>
+
+<span class="s2">Otherwise, the argument is read as JSON and used to construct a GifWriter class.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># TODO: this should go somewhere else</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Set defaults for projects using YAML or JSON data files.</span>
+
+<span class="sd">A Project is a data file or equivalently a Python dictionary that describes</span>
+<span class="sd">a BibliopPixel installation.  The top-level keys in a Project are called the</span>
+<span class="sd">sections and a Project might have the following sections:</span>
+
+<span class="sd">    {sections}</span>
+
+<span class="sd">Often some sections of your project correspond to hardware and thus rarely</span>
+<span class="sd">change, so the `bp default` command allows you to set defaults so you</span>
+<span class="sd">don&#39;t have to mention these from your project at all.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">GIF_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">--gif/-g is a deprecated name for the --movie/-m flag.&quot;</span>
+<span class="s2">&quot;&quot;&quot;</span> <span class="o">+</span> <span class="n">MOVIE_HELP</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+bibliopixel.drivers.channel\_order module
+=========================================
+
+.. automodule:: bibliopixel.drivers.channel_order
+    :members:
+    :undoc-members:
+    :show-inheritance:

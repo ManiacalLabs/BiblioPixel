@@ -1,0 +1,7 @@
+bibliopixel.main.demo\_table module
+===================================
+
+.. automodule:: bibliopixel.main.demo_table
+    :members:
+    :undoc-members:
+    :show-inheritance:

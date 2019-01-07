@@ -1,0 +1,37 @@
+Getting Started
+------------------------------
+
+How to get started with BiblioPixel
+=====================================
+
+.. toctree::
+   :maxdepth: 1
+
+   before-you-start
+   yaml-and-json
+   installing-bibliopixel
+   how-to-write-a-project
+   editing-a-project
+   editing-an-animation
+   the-project-builder
+   the-bp-program
+   animated-gifs
+
+
+
+
+----------
+
+.. code-block:: yaml
+
+   shape: [64, 7]
+   animation:
+     typename: $bpa.matrix.Text.ScrollText
+     color: orange
+     text: 'Getting Started'
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/index-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/index-footer.gif
+   :alt: doc/tutorial/getting-started/index-footer
+   :align: center
+

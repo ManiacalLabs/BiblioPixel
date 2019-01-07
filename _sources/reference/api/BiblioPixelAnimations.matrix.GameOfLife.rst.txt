@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.GameOfLife module
+==============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.GameOfLife
+    :members:
+    :undoc-members:
+    :show-inheritance:

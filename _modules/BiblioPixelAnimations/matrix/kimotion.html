@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BiblioPixelAnimations.matrix.kimotion &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BiblioPixelAnimations.matrix.kimotion</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BiblioPixelAnimations.matrix.kimotion</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">bibliopixel.animation.matrix</span> <span class="k">import</span> <span class="n">Matrix</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">websocket</span> <span class="k">import</span> <span class="n">create_connection</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">create_connection</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">WS_FRAME_WIDTH</span> <span class="o">=</span> <span class="mi">640</span>
+<span class="n">WS_FRAME_HEIGHT</span> <span class="o">=</span> <span class="mi">480</span>
+<span class="n">WS_FRAME_SIZE</span> <span class="o">=</span> <span class="n">WS_FRAME_WIDTH</span> <span class="o">*</span> <span class="n">WS_FRAME_HEIGHT</span>
+
+
+<div class="viewcode-block" id="clamp"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.clamp">[docs]</a><span class="k">def</span> <span class="nf">clamp</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_min</span><span class="p">,</span> <span class="n">_max</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_max</span><span class="p">),</span> <span class="n">_min</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="lerp"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.lerp">[docs]</a><span class="k">def</span> <span class="nf">lerp</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">clamp</span><span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rebin"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.rebin">[docs]</a><span class="k">def</span> <span class="nf">rebin</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="n">sh</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="thread_lock"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.thread_lock">[docs]</a><span class="k">def</span> <span class="nf">thread_lock</span><span class="p">():</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">clear</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">release</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">set</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">is_released</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">is_set</span>
+
+    <span class="n">e</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">e</span></div>
+
+
+<div class="viewcode-block" id="ws_thread"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.ws_thread">[docs]</a><span class="k">class</span> <span class="nc">ws_thread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reading</span> <span class="o">=</span> <span class="n">thread_lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">newbyteorder</span><span class="p">(</span><span class="s1">&#39;&lt;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">WS_FRAME_SIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">),</span>
+                      <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">WS_FRAME_SIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ws</span> <span class="o">=</span> <span class="n">create_connection</span><span class="p">(</span><span class="s2">&quot;ws://</span><span class="si">{}</span><span class="s2">/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ws_thread.stop"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.ws_thread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ws_thread.stopped"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.ws_thread.stopped">[docs]</a>    <span class="k">def</span> <span class="nf">stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="o">.</span><span class="n">isSet</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ws_thread.get_frame"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.ws_thread.get_frame">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reading</span><span class="o">.</span><span class="n">lock</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="k">else</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reading</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+<div class="viewcode-block" id="ws_thread.run"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.ws_thread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopped</span><span class="p">():</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ws</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reading</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="k">else</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ws</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="KimotionShader"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.KimotionShader">[docs]</a><span class="k">class</span> <span class="nc">KimotionShader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anim</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">anim</span> <span class="o">=</span> <span class="n">anim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anim</span><span class="o">.</span><span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anim</span><span class="o">.</span><span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anim</span><span class="o">.</span><span class="n">_led</span></div>
+
+
+<div class="viewcode-block" id="SandStorm"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.SandStorm">[docs]</a><span class="k">class</span> <span class="nc">SandStorm</span><span class="p">(</span><span class="n">KimotionShader</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anim</span><span class="p">,</span> <span class="n">min_z</span><span class="o">=</span><span class="mi">440</span><span class="p">,</span> <span class="n">max_z</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+                 <span class="n">near_color</span><span class="o">=</span><span class="p">[</span><span class="mi">229</span><span class="p">,</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">near_z</span><span class="o">=</span><span class="mi">760</span><span class="p">,</span>
+                 <span class="n">mid_color</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">114</span><span class="p">],</span>
+                 <span class="n">far_color</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="n">far_z</span><span class="o">=</span><span class="mi">1100</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">anim</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">min_z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">near_color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">near_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">near_z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">near_z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mid_color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mid_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mid_z</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_z</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">near_z</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">far_color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">far_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">far_z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">far_z</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">z_color</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">Kimotion</span><span class="o">.</span><span class="n">max_depth</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SandStorm.z_color"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.SandStorm.z_color">[docs]</a>    <span class="k">def</span> <span class="nf">z_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="k">if</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid_z</span><span class="p">:</span>
+            <span class="n">ns</span> <span class="o">=</span> <span class="n">lerp</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">near_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid_z</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">ns</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">near_color</span> <span class="o">+</span> <span class="n">ns</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid_color</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># z must be between self.mid_z and FAR_Z</span>
+            <span class="n">fs</span> <span class="o">=</span> <span class="n">lerp</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">far_z</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">fs</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mid_color</span> <span class="o">+</span> <span class="n">fs</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">far_color</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">lerp</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_z</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">min_z</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># gl_FragColor = vec4(color, alpha) * texture2D( texture, gl_PointCoord )</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">color</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SandStorm.render"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.SandStorm.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_colors</span><span class="p">[</span><span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">led</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Kimotion"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.Kimotion">[docs]</a><span class="k">class</span> <span class="nc">Kimotion</span><span class="p">(</span><span class="n">Matrix</span><span class="p">):</span>
+    <span class="n">max_depth</span> <span class="o">=</span> <span class="mf">1200.0</span>
+    <span class="n">shaders</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Sandstorm&quot;</span><span class="p">:</span> <span class="n">SandStorm</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s2">&quot;localhost:1337&quot;</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shader</span><span class="o">=</span><span class="s2">&quot;Sandstorm&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span> <span class="o">=</span> <span class="n">mirror</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop</span> <span class="o">=</span> <span class="n">crop</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fw</span> <span class="o">=</span> <span class="n">WS_FRAME_WIDTH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fh</span> <span class="o">=</span> <span class="n">WS_FRAME_HEIGHT</span>
+
+        <span class="c1"># TODO: Implement something to actually use this</span>
+        <span class="c1"># Right now needs 4:3 aspect display</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame_aspect</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">WS_FRAME_WIDTH</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">WS_FRAME_HEIGHT</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop_box</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_aspect</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_aspect</span><span class="p">)</span>
+            <span class="n">half</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">crop_box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">half</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">crop_box</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">half</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_aspect</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">)</span>
+            <span class="n">half</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">crop_box</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">half</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">crop_box</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resize_box</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">half</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">shader</span> <span class="o">=</span> <span class="n">Kimotion</span><span class="o">.</span><span class="n">shaders</span><span class="p">[</span><span class="n">shader</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ws_thread</span> <span class="o">=</span> <span class="n">ws_thread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ws_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ws_thread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Kimotion.step"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.kimotion.html#BiblioPixelAnimations.matrix.kimotion.Kimotion.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ws_thread</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">WS_FRAME_HEIGHT</span><span class="p">,</span> <span class="n">WS_FRAME_WIDTH</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">rebin</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">shader</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

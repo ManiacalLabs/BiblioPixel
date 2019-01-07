@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.colors.conversions &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.colors.conversions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.colors.conversions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">util</span>
+<span class="kn">import</span> <span class="nn">colorsys</span>
+
+
+<div class="viewcode-block" id="hsv2rgb_raw"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hsv2rgb_raw">[docs]</a><span class="k">def</span> <span class="nf">hsv2rgb_raw</span><span class="p">(</span><span class="n">hsv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts an HSV tuple to RGB. Intended for internal use.</span>
+<span class="sd">    You should use hsv2rgb_spectrum or hsv2rgb_rainbow instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">HSV_SECTION_3</span> <span class="o">=</span> <span class="mh">0x40</span>
+
+    <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">hsv</span>
+
+    <span class="c1"># The brightness floor is minimum number that all of</span>
+    <span class="c1"># R, G, and B will be set to.</span>
+    <span class="n">invsat</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">s</span>
+    <span class="n">brightness_floor</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">invsat</span><span class="p">)</span> <span class="o">//</span> <span class="mi">256</span>
+
+    <span class="c1"># The color amplitude is the maximum amount of R, G, and B</span>
+    <span class="c1"># that will be added on top of the brightness_floor to</span>
+    <span class="c1"># create the specific hue desired.</span>
+    <span class="n">color_amplitude</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">brightness_floor</span>
+
+    <span class="c1"># figure out which section of the hue wheel we&#39;re in,</span>
+    <span class="c1"># and how far offset we are within that section</span>
+    <span class="n">section</span> <span class="o">=</span> <span class="n">h</span> <span class="o">//</span> <span class="n">HSV_SECTION_3</span>  <span class="c1"># 0..2</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">h</span> <span class="o">%</span> <span class="n">HSV_SECTION_3</span>  <span class="c1"># 0..63</span>
+
+    <span class="n">rampup</span> <span class="o">=</span> <span class="n">offset</span>
+    <span class="n">rampdown</span> <span class="o">=</span> <span class="p">(</span><span class="n">HSV_SECTION_3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">offset</span>
+
+    <span class="c1"># compute color-amplitude-scaled-down versions of rampup and rampdown</span>
+    <span class="n">rampup_amp_adj</span> <span class="o">=</span> <span class="p">(</span><span class="n">rampup</span> <span class="o">*</span> <span class="n">color_amplitude</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="mi">256</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">rampdown_amp_adj</span> <span class="o">=</span> <span class="p">(</span><span class="n">rampdown</span> <span class="o">*</span> <span class="n">color_amplitude</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="mi">256</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="c1"># add brightness_floor offset to everything</span>
+    <span class="n">rampup_adj_with_floor</span> <span class="o">=</span> <span class="n">rampup_amp_adj</span> <span class="o">+</span> <span class="n">brightness_floor</span>
+    <span class="n">rampdown_adj_with_floor</span> <span class="o">=</span> <span class="n">rampdown_amp_adj</span> <span class="o">+</span> <span class="n">brightness_floor</span>
+
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">section</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">section</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># section 1: 0x40..0x7F</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">brightness_floor</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">rampdown_adj_with_floor</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">rampup_adj_with_floor</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># section 2; 0x80..0xBF</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">rampup_adj_with_floor</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">brightness_floor</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">rampdown_adj_with_floor</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># section 0: 0x00..0x3F</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">rampdown_adj_with_floor</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">rampup_adj_with_floor</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">brightness_floor</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hsv2rgb_spectrum"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hsv2rgb_spectrum">[docs]</a><span class="k">def</span> <span class="nf">hsv2rgb_spectrum</span><span class="p">(</span><span class="n">hsv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generates RGB values from HSV values in line with a typical light</span>
+<span class="sd">    spectrum.&quot;&quot;&quot;</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">hsv</span>
+    <span class="k">return</span> <span class="n">hsv2rgb_raw</span><span class="p">(((</span><span class="n">h</span> <span class="o">*</span> <span class="mi">192</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="hsv2rgb_rainbow"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hsv2rgb_rainbow">[docs]</a><span class="k">def</span> <span class="nf">hsv2rgb_rainbow</span><span class="p">(</span><span class="n">hsv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generates RGB values from HSV that have an even visual</span>
+<span class="sd">    distribution.  Be careful as this method is only have as fast as</span>
+<span class="sd">    hsv2rgb_spectrum.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">nscale8x3_video</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">nonzeroscale</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nonzeroscale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="p">((</span><span class="n">r</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">nonzeroscale</span>
+        <span class="k">if</span> <span class="n">g</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="p">((</span><span class="n">g</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">nonzeroscale</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="p">((</span><span class="n">b</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">nonzeroscale</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scale8_video_LEAVING_R1_DIRTY</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">nonzeroscale</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nonzeroscale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">nonzeroscale</span>
+        <span class="k">return</span> <span class="n">i</span>
+
+    <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">hsv</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x1F</span>  <span class="c1"># 0..31</span>
+    <span class="n">offset8</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">*</span> <span class="mi">8</span>
+    <span class="n">third</span> <span class="o">=</span> <span class="p">(</span><span class="n">offset8</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">//</span> <span class="mi">3</span><span class="p">))</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x80</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x40</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x20</span><span class="p">):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">third</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="n">third</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">171</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mi">85</span> <span class="o">+</span> <span class="n">third</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mh">0x00</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x20</span><span class="p">):</span>
+                <span class="n">twothirds</span> <span class="o">=</span> <span class="p">(</span><span class="n">third</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">171</span> <span class="o">-</span> <span class="n">twothirds</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mi">171</span> <span class="o">+</span> <span class="n">third</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">third</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">third</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x40</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x20</span><span class="p">):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mh">0x00</span>
+                <span class="n">twothirds</span> <span class="o">=</span> <span class="p">(</span><span class="n">third</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mi">171</span> <span class="o">-</span> <span class="n">twothirds</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mi">85</span> <span class="o">+</span> <span class="n">twothirds</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">third</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">third</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">h</span> <span class="o">&amp;</span> <span class="mh">0x20</span><span class="p">):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">85</span> <span class="o">+</span> <span class="n">third</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mi">171</span> <span class="o">-</span> <span class="n">third</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">171</span> <span class="o">+</span> <span class="n">third</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="mh">0x00</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="mi">85</span> <span class="o">-</span> <span class="n">third</span>
+
+    <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="mi">255</span><span class="p">:</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">nscale8x3_video</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">desat</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">s</span>
+        <span class="n">desat</span> <span class="o">=</span> <span class="p">(</span><span class="n">desat</span> <span class="o">*</span> <span class="n">desat</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span>
+        <span class="n">brightness_floor</span> <span class="o">=</span> <span class="n">desat</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">brightness_floor</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">+</span> <span class="n">brightness_floor</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">brightness_floor</span>
+
+    <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="mi">255</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">scale8_video_LEAVING_R1_DIRTY</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">nscale8x3_video</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hsv2rgb_360"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hsv2rgb_360">[docs]</a><span class="k">def</span> <span class="nf">hsv2rgb_360</span><span class="p">(</span><span class="n">hsv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Python default hsv to rgb conversion for when hue values in the</span>
+<span class="sd">    range 0-359 are preferred.  Due to requiring float math, this method</span>
+<span class="sd">    is slower than hsv2rgb_rainbow and hsv2rgb_spectrum.&quot;&quot;&quot;</span>
+
+    <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">hsv</span>
+
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">colorsys</span><span class="o">.</span><span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="mf">360.0</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">))</span></div>
+
+
+<span class="c1"># pre-generated spectra for the sake of speed</span>
+<span class="n">HUE_RAW</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsv2rgb_raw</span><span class="p">((</span><span class="n">hue</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span> <span class="k">for</span> <span class="n">hue</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">)]</span>
+<span class="n">HUE_RAINBOW</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsv2rgb_rainbow</span><span class="p">((</span><span class="n">hue</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span> <span class="k">for</span> <span class="n">hue</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">)]</span>
+<span class="n">HUE_SPECTRUM</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsv2rgb_spectrum</span><span class="p">((</span><span class="n">hue</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span> <span class="k">for</span> <span class="n">hue</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">)]</span>
+<span class="n">HUE_360</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsv2rgb_360</span><span class="p">((</span><span class="n">hue</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span> <span class="k">for</span> <span class="n">hue</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">360</span><span class="p">)]</span>
+
+
+<div class="viewcode-block" id="hue2rgb_raw"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue2rgb_raw">[docs]</a><span class="k">def</span> <span class="nf">hue2rgb_raw</span><span class="p">(</span><span class="n">hue</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">hue</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">hue</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HUE_RAW</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hue</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;hue must be between 0 and 255&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hue2rgb_rainbow"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue2rgb_rainbow">[docs]</a><span class="k">def</span> <span class="nf">hue2rgb_rainbow</span><span class="p">(</span><span class="n">hue</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">hue</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">hue</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HUE_RAINBOW</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hue</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;hue must be between 0 and 255&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hue2rgb_spectrum"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue2rgb_spectrum">[docs]</a><span class="k">def</span> <span class="nf">hue2rgb_spectrum</span><span class="p">(</span><span class="n">hue</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">hue</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">hue</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HUE_SPECTRUM</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hue</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;hue must be between 0 and 255&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hue2rgb_360"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue2rgb_360">[docs]</a><span class="k">def</span> <span class="nf">hue2rgb_360</span><span class="p">(</span><span class="n">hue</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">hue</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">hue</span> <span class="o">&lt;</span> <span class="mi">360</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HUE_360</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hue</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;hue must be between 0 and 359&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">hsv2rgb</span> <span class="o">=</span> <span class="n">hsv2rgb_rainbow</span>
+<span class="n">hue2rgb</span> <span class="o">=</span> <span class="n">hue2rgb_rainbow</span>
+
+
+<div class="viewcode-block" id="hue_gradient"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue_gradient">[docs]</a><span class="k">def</span> <span class="nf">hue_gradient</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="mi">255</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">stop</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">):</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+            <span class="s1">&#39;hue must be between 0 and 255; start=</span><span class="si">%s</span><span class="s1">, stop=</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">))</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">))</span>
+    <span class="n">flip</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">:</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="n">stop</span><span class="p">,</span> <span class="n">start</span>
+        <span class="n">flip</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">stops</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">even_dist</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">flip</span><span class="p">:</span>
+        <span class="n">stops</span> <span class="o">=</span> <span class="n">stops</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">stops</span></div>
+
+
+<div class="viewcode-block" id="hue_helper"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue_helper">[docs]</a><span class="k">def</span> <span class="nf">hue_helper</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">cycle_step</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hue2rgb</span><span class="p">(((</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">255</span> <span class="o">//</span> <span class="n">length</span><span class="p">)</span> <span class="o">+</span> <span class="n">cycle_step</span><span class="p">)</span> <span class="o">%</span> <span class="mi">255</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hue_helper360"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.hue_helper360">[docs]</a><span class="k">def</span> <span class="nf">hue_helper360</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">cycle_step</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hue2rgb_360</span><span class="p">(((</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">360</span> <span class="o">//</span> <span class="n">length</span><span class="p">)</span> <span class="o">+</span> <span class="n">cycle_step</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rgb_to_hsv"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.rgb_to_hsv">[docs]</a><span class="k">def</span> <span class="nf">rgb_to_hsv</span><span class="p">(</span><span class="n">pixel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">colorsys</span><span class="o">.</span><span class="n">rgb_to_hsv</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="mi">255</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pixel</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="color_cmp"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.conversions.html#bibliopixel.colors.conversions.color_cmp">[docs]</a><span class="k">def</span> <span class="nf">color_cmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Order colors by hue, saturation and value, in that order.</span>
+
+<span class="sd">    Returns -1 if a &lt; b, 0 if a == b and 1 if a &lt; b.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">rgb_to_hsv</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">rgb_to_hsv</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="k">else</span> <span class="mi">1</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

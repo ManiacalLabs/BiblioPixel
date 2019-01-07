@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.swirl module
+=========================================
+
+.. automodule:: BiblioPixelAnimations.circle.swirl
+    :members:
+    :undoc-members:
+    :show-inheritance:

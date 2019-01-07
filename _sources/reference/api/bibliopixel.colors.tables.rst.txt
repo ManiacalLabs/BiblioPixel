@@ -1,0 +1,7 @@
+bibliopixel.colors.tables module
+================================
+
+.. automodule:: bibliopixel.colors.tables
+    :members:
+    :undoc-members:
+    :show-inheritance:

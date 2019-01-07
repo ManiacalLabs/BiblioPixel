@@ -1,0 +1,7 @@
+bibliopixel.drivers.curses module
+=================================
+
+.. automodule:: bibliopixel.drivers.curses
+    :members:
+    :undoc-members:
+    :show-inheritance:

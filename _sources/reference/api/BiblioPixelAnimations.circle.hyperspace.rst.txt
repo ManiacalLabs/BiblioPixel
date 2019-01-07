@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.hyperspace module
+==============================================
+
+.. automodule:: BiblioPixelAnimations.circle.hyperspace
+    :members:
+    :undoc-members:
+    :show-inheritance:

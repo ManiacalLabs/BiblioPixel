@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.layout.matrix_drawing &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.layout.matrix_drawing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.layout.matrix_drawing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">colors</span> <span class="kn">import</span> <span class="nn">COLORS</span><span class="o">,</span> <span class="nn">arithmetic</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">font</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># Drawing Functions</span>
+<span class="c1"># Lovingly borrowed from Adafruit</span>
+<span class="c1"># https://github.com/adafruit/Adafruit-GFX-Library/blob/master/Adafruit_GFX.cpp</span>
+<span class="c1">##########################################################################</span>
+
+
+<div class="viewcode-block" id="draw_circle"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_circle">[docs]</a><span class="k">def</span> <span class="nf">draw_circle</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws a circle at point x0, y0 with radius r of the specified RGB color</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">r</span>
+    <span class="n">ddF_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ddF_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span>
+
+    <span class="n">setter</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="n">setter</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">r</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">ddF_y</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="n">f</span> <span class="o">+=</span> <span class="n">ddF_y</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ddF_x</span> <span class="o">+=</span> <span class="mi">2</span>
+        <span class="n">f</span> <span class="o">+=</span> <span class="n">ddF_x</span>
+
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_draw_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">cornername</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">r</span>
+    <span class="n">ddF_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ddF_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span>
+
+    <span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">ddF_y</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="n">f</span> <span class="o">+=</span> <span class="n">ddF_y</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ddF_x</span> <span class="o">+=</span> <span class="mi">2</span>
+        <span class="n">f</span> <span class="o">+=</span> <span class="n">ddF_x</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cornername</span> <span class="o">&amp;</span> <span class="mh">0x4</span><span class="p">):</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cornername</span> <span class="o">&amp;</span> <span class="mh">0x2</span><span class="p">):</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cornername</span> <span class="o">&amp;</span> <span class="mh">0x8</span><span class="p">):</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cornername</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">):</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">cornername</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">r</span>
+    <span class="n">ddF_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ddF_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">ddF_y</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="n">f</span> <span class="o">+=</span> <span class="n">ddF_y</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ddF_x</span> <span class="o">+=</span> <span class="mi">2</span>
+        <span class="n">f</span> <span class="o">+=</span> <span class="n">ddF_x</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cornername</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">):</span>
+            <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cornername</span> <span class="o">&amp;</span> <span class="mh">0x2</span><span class="p">):</span>
+            <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fill_circle"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.fill_circle">[docs]</a><span class="k">def</span> <span class="nf">fill_circle</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draws a filled circle at point x0,y0 with radius r and specified color&quot;&quot;&quot;</span>
+    <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">r</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="n">_fill_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="draw_line"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_line">[docs]</a><span class="k">def</span> <span class="nf">draw_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">aa</span><span class="p">:</span>
+        <span class="n">wu_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">colorFunc</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bresenham_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">colorFunc</span><span class="p">)</span></div>
+
+
+<span class="c1"># Bresenham&#39;s algorithm</span>
+<div class="viewcode-block" id="bresenham_line"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.bresenham_line">[docs]</a><span class="k">def</span> <span class="nf">bresenham_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw line from point x0,y0 to x,1,y1. Will draw beyond matrix bounds.&quot;&quot;&quot;</span>
+    <span class="n">steep</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">steep</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x0</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span>
+
+    <span class="k">if</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="n">x1</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+        <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
+
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)</span>
+
+    <span class="n">err</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="k">if</span> <span class="n">y0</span> <span class="o">&lt;</span> <span class="n">y1</span><span class="p">:</span>
+        <span class="n">ystep</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ystep</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">colorFunc</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">colorFunc</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">steep</span><span class="p">:</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">setter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+        <span class="n">err</span> <span class="o">-=</span> <span class="n">dy</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">y0</span> <span class="o">+=</span> <span class="n">ystep</span>
+            <span class="n">err</span> <span class="o">+=</span> <span class="n">dx</span></div>
+<span class="c1"># END Bresenham&#39;s algorithm</span>
+
+
+<span class="c1"># Xiaolin Wu&#39;s _line Algorithm</span>
+<div class="viewcode-block" id="wu_line"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.wu_line">[docs]</a><span class="k">def</span> <span class="nf">wu_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">funcCount</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># python2 hack since nonlocal not available</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="k">if</span> <span class="n">colorFunc</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">colorFunc</span><span class="p">(</span><span class="n">funcCount</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">funcCount</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="n">arithmetic</span><span class="o">.</span><span class="n">color_scale</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">level</span><span class="p">))</span>
+        <span class="n">setter</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">c</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ipart</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fpart</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rfpart</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">fpart</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">steep</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">steep</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x0</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span>
+
+    <span class="k">if</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="n">x1</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+        <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
+
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span>
+    <span class="n">gradient</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">/</span> <span class="n">dx</span>
+
+    <span class="c1"># handle first endpoint</span>
+    <span class="n">xend</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+    <span class="n">yend</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">gradient</span> <span class="o">*</span> <span class="p">(</span><span class="n">xend</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span>
+    <span class="n">xgap</span> <span class="o">=</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">xpxl1</span> <span class="o">=</span> <span class="n">xend</span>  <span class="c1"># this will be used in the main loop</span>
+    <span class="n">ypxl1</span> <span class="o">=</span> <span class="n">ipart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">steep</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">ypxl1</span><span class="p">,</span> <span class="n">xpxl1</span><span class="p">,</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">ypxl1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">xpxl1</span><span class="p">,</span> <span class="n">fpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">xpxl1</span><span class="p">,</span> <span class="n">ypxl1</span><span class="p">,</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">xpxl1</span><span class="p">,</span> <span class="n">ypxl1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+
+    <span class="c1"># first y-intersection for the main loop</span>
+    <span class="n">intery</span> <span class="o">=</span> <span class="n">yend</span> <span class="o">+</span> <span class="n">gradient</span>
+
+    <span class="c1"># handle second endpoint</span>
+    <span class="n">xend</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+    <span class="n">yend</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">gradient</span> <span class="o">*</span> <span class="p">(</span><span class="n">xend</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
+    <span class="n">xgap</span> <span class="o">=</span> <span class="n">fpart</span><span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">xpxl2</span> <span class="o">=</span> <span class="n">xend</span>  <span class="c1"># this will be used in the main loop</span>
+    <span class="n">ypxl2</span> <span class="o">=</span> <span class="n">ipart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">steep</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">ypxl2</span><span class="p">,</span> <span class="n">xpxl2</span><span class="p">,</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">ypxl2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">xpxl2</span><span class="p">,</span> <span class="n">fpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">xpxl2</span><span class="p">,</span> <span class="n">ypxl2</span><span class="p">,</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">xpxl2</span><span class="p">,</span> <span class="n">ypxl2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fpart</span><span class="p">(</span><span class="n">yend</span><span class="p">)</span> <span class="o">*</span> <span class="n">xgap</span><span class="p">)</span>
+
+    <span class="c1"># main loop</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">xpxl1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">xpxl2</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">steep</span><span class="p">:</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">ipart</span><span class="p">(</span><span class="n">intery</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">intery</span><span class="p">))</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">ipart</span><span class="p">(</span><span class="n">intery</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">fpart</span><span class="p">(</span><span class="n">intery</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ipart</span><span class="p">(</span><span class="n">intery</span><span class="p">),</span> <span class="n">rfpart</span><span class="p">(</span><span class="n">intery</span><span class="p">))</span>
+            <span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ipart</span><span class="p">(</span><span class="n">intery</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fpart</span><span class="p">(</span><span class="n">intery</span><span class="p">))</span>
+        <span class="n">intery</span> <span class="o">=</span> <span class="n">intery</span> <span class="o">+</span> <span class="n">gradient</span></div>
+
+<span class="c1"># END Xiaolin Wu&#39;s _line Algorithm</span>
+
+
+<span class="k">def</span> <span class="nf">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">draw_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">draw_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="draw_rect"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_rect">[docs]</a><span class="k">def</span> <span class="nf">draw_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw rectangle with top-left corner at x,y, width w and height h&quot;&quot;&quot;</span>
+    <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fill_rect"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.fill_rect">[docs]</a><span class="k">def</span> <span class="nf">fill_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw solid rectangle with top-left corner at x,y, width w and height h&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span><span class="p">):</span>
+        <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="draw_round_rect"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_round_rect">[docs]</a><span class="k">def</span> <span class="nf">draw_round_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw rectangle with top-left corner at x,y, width w, height h,</span>
+<span class="sd">    and corner radius r.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>  <span class="c1"># Top</span>
+    <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>  <span class="c1"># Bottom</span>
+    <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>  <span class="c1"># Left</span>
+    <span class="n">_draw_fast_vline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>  <span class="c1"># Right</span>
+    <span class="c1"># draw four corners</span>
+    <span class="n">_draw_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_draw_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">-</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_draw_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">-</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span> <span class="o">-</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_draw_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span> <span class="o">-</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fill_round_rect"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.fill_round_rect">[docs]</a><span class="k">def</span> <span class="nf">fill_round_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw solid rectangle with top-left corner at x,y, width w, height h,</span>
+<span class="sd">    and corner radius r&quot;&quot;&quot;</span>
+    <span class="n">fill_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_fill_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">-</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span>
+                        <span class="mi">1</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">_fill_circle_helper</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="draw_triangle"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_triangle">[docs]</a><span class="k">def</span> <span class="nf">draw_triangle</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw triangle with points x0,y0 - x1,y1 - x2,y2&quot;&quot;&quot;</span>
+    <span class="n">draw_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">draw_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+    <span class="n">draw_line</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fill_triangle"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.fill_triangle">[docs]</a><span class="k">def</span> <span class="nf">fill_triangle</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw solid triangle with points x0,y0 - x1,y1 - x2,y2&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">y0</span> <span class="o">&gt;</span> <span class="n">y1</span><span class="p">:</span>
+        <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+    <span class="k">if</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y2</span><span class="p">:</span>
+        <span class="n">y2</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>
+    <span class="k">if</span> <span class="n">y0</span> <span class="o">&gt;</span> <span class="n">y1</span><span class="p">:</span>
+        <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+
+    <span class="k">if</span> <span class="n">y0</span> <span class="o">==</span> <span class="n">y2</span><span class="p">:</span>  <span class="c1"># Handle awkward all-on-same-line case as its own thing</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="n">x0</span>
+        <span class="k">if</span> <span class="n">x1</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">x1</span>
+        <span class="k">elif</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">x1</span>
+        <span class="k">if</span> <span class="n">x2</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">x2</span>
+        <span class="k">elif</span> <span class="n">x2</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">x2</span>
+            <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+
+    <span class="n">dx01</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">dy01</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span>
+    <span class="n">dx02</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">dy02</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y0</span>
+    <span class="n">dx12</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span>
+    <span class="n">dy12</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span>
+    <span class="n">sa</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">sb</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># For upper part of triangle, find scanline crossings for segments</span>
+    <span class="c1"># 0-1 and 0-2.  If y1=y2 (flat-bottomed triangle), the scanline y1</span>
+    <span class="c1"># is included here (and second loop will be skipped, avoiding a /0</span>
+    <span class="c1"># error there), otherwise scanline y1 is skipped here and handled</span>
+    <span class="c1"># in the second loop...which also avoids a /0 error here if y0=y1</span>
+    <span class="c1"># (flat-topped triangle).</span>
+
+    <span class="k">if</span> <span class="n">y1</span> <span class="o">==</span> <span class="n">y2</span><span class="p">:</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">y1</span>  <span class="c1"># include y1 scanline</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># skip it</span>
+
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">last</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">sa</span> <span class="o">/</span> <span class="n">dy01</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">/</span> <span class="n">dy02</span>
+        <span class="n">sa</span> <span class="o">+=</span> <span class="n">dx01</span>
+        <span class="n">sb</span> <span class="o">+=</span> <span class="n">dx02</span>
+
+        <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">:</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+            <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+
+    <span class="c1"># For lower part of triangle, find scanline crossings for segments</span>
+    <span class="c1"># 0-2 and 1-2.  This loop is skipped if y1=y2.</span>
+    <span class="n">sa</span> <span class="o">=</span> <span class="n">dx12</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span>
+    <span class="n">sb</span> <span class="o">=</span> <span class="n">dx02</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">sa</span> <span class="o">/</span> <span class="n">dy12</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">/</span> <span class="n">dy02</span>
+        <span class="n">sa</span> <span class="o">+=</span> <span class="n">dx12</span>
+        <span class="n">sb</span> <span class="o">+=</span> <span class="n">dx02</span>
+
+        <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">:</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+            <span class="n">_draw_fast_hline</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="draw_char"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_char">[docs]</a><span class="k">def</span> <span class="nf">draw_char</span><span class="p">(</span><span class="n">fonts</span><span class="p">,</span> <span class="n">setter</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">bg</span><span class="p">,</span>
+              <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="o">.</span><span class="n">default_font</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">font_scale</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;font_scale </span><span class="si">%s</span><span class="s1"> must be &gt;= 1&#39;</span><span class="p">,</span> <span class="n">font_scale</span><span class="p">)</span>
+        <span class="n">font_scale</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">fonts</span><span class="p">[</span><span class="n">font</span><span class="p">]</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+    <span class="n">FONT</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>  <span class="c1"># make it the int value</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">c_data</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;undef&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">c_data</span> <span class="o">=</span> <span class="n">FONT</span><span class="p">[</span><span class="n">c</span> <span class="o">-</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="n">fw</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_data</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fw</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;sep&#39;</span><span class="p">]):</span>
+        <span class="n">x_pos</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">font_scale</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">font_scale</span> <span class="o">*</span> <span class="n">fw</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">x_pos</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">fw</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">FONT</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+                <span class="n">y_pos</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="n">font_scale</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">y_pos</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">)</span> <span class="ow">and</span>
+                        <span class="p">(</span><span class="n">y_pos</span> <span class="o">+</span> <span class="n">fh</span> <span class="o">*</span> <span class="n">font_scale</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">line</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">font_scale</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">setter</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">fill_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">font_scale</span><span class="p">,</span>
+                                      <span class="n">font_scale</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">bg</span> <span class="o">!=</span> <span class="n">color</span> <span class="ow">and</span> <span class="n">bg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">font_scale</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">setter</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">bg</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">fill_rect</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">font_scale</span><span class="p">,</span>
+                                      <span class="n">font_scale</span><span class="p">,</span> <span class="n">bg</span><span class="p">,</span> <span class="n">aa</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">fw</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;sep&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="draw_text"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.matrix_drawing.html#bibliopixel.layout.matrix_drawing.draw_text">[docs]</a><span class="k">def</span> <span class="nf">draw_text</span><span class="p">(</span><span class="n">fonts</span><span class="p">,</span> <span class="n">setter</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+              <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Off</span><span class="p">,</span> <span class="n">aa</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="o">.</span><span class="n">default_font</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">fonts</span><span class="p">[</span><span class="n">font</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">font_scale</span> <span class="o">*</span> <span class="n">fh</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># skip it</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fw</span> <span class="o">=</span> <span class="n">draw_char</span><span class="p">(</span><span class="n">fonts</span><span class="p">,</span> <span class="n">setter</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                           <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">bg</span><span class="p">,</span> <span class="n">aa</span><span class="p">,</span> <span class="n">font</span><span class="p">,</span> <span class="n">font_scale</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">font_scale</span> <span class="o">*</span> <span class="n">fw</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">width</span><span class="p">:</span>
+                <span class="k">break</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

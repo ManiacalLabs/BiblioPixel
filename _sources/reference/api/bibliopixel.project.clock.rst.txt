@@ -1,0 +1,7 @@
+bibliopixel.project.clock module
+================================
+
+.. automodule:: bibliopixel.project.clock
+    :members:
+    :undoc-members:
+    :show-inheritance:

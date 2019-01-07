@@ -1,0 +1,87 @@
+Yaml and JSON
+--------------------------------------------------
+
+A Lighting Project is a JSON or Yaml file.
+
+* `JSON <https://json.org>`_ files end in .json
+* `Yaml <https://github.com/darvid/trine/wiki/YAML-Primer>`_ files end in .yml
+
+Examples are mostly in Yaml, a minimal format that's backward-compatible with
+JSON.
+
+**Example 1**: Some data in JSON:
+
+.. code-block:: yaml
+
+    {
+        "animation": {
+            "typename": "sequence",
+            "length": 3,
+            "animations": [
+                ".tests.PixelTester",
+                {
+                    "typename": "fill",
+                    "color": "red"
+                },
+                "$bpa.matrix.MatrixRain"
+            ]
+        },
+        "shape": [32, 12]
+    }
+
+
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/yaml-and-json-example-1.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/yaml-and-json-example-1.gif
+   :alt: doc/tutorial/getting-started/yaml-and-json-example-1
+   :align: center
+
+**Example 2**:  The same data in YAML:
+
+.. code-block:: yaml
+
+   animation:
+     # Run three different animations, each for three seconds.
+     typename: sequence
+     length: 3
+
+     animations:
+       - .tests.PixelTester
+       - typename: fill
+         color: red
+       - $bpa.matrix.MatrixRain
+
+   shape: [32, 12]
+
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/yaml-and-json-example-2.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/yaml-and-json-example-2.gif
+   :alt: doc/tutorial/getting-started/yaml-and-json-example-2
+   :align: center
+
+----
+
+YAML lets you write helpful comments for yourself or anyone else reading, by
+starting a line with the ``#`` character:
+
+
+
+----------
+
+.. code-block:: yaml
+
+   shape: [64, 16]
+   animation:
+     typename: $bpa.matrix.MathFunc
+     func: 23
+     palette:
+       colors: eight
+       continuous: true
+       scale: 0.01  # Gentle soft ripppling colors
+       # scale: 100   # Psycho strobe colors
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/yaml-and-json-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/getting-started/yaml-and-json-footer.gif
+   :alt: doc/tutorial/getting-started/yaml-and-json-footer
+   :align: center
+

@@ -1,0 +1,7 @@
+bibliopixel.animation.adaptor module
+====================================
+
+.. automodule:: bibliopixel.animation.adaptor
+    :members:
+    :undoc-members:
+    :show-inheritance:

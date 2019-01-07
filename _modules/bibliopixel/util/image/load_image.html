@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.image.load_image &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.util.image.load_image</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.util.image.load_image</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">...</span> <span class="n">colors</span> <span class="kn">import</span> <span class="nn">COLORS</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="n">colors</span><span class="o">.</span><span class="n">arithmetic</span> <span class="kn">import</span> <span class="nn">color_scale</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="n">layout</span><span class="o">.</span><span class="n">matrix</span> <span class="kn">import</span> <span class="nn">Matrix</span>
+
+
+<div class="viewcode-block" id="show_image"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.util.image.load_image.html#bibliopixel.util.image.load_image.show_image">[docs]</a><span class="k">def</span> <span class="nf">show_image</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+               <span class="n">image_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">image_obj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+               <span class="n">bgcolor</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Off</span><span class="p">,</span> <span class="n">brightness</span><span class="o">=</span><span class="mi">255</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display an image on a matrix.&quot;&quot;&quot;</span>
+    <span class="n">bgcolor</span> <span class="o">=</span> <span class="n">color_scale</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">image_obj</span>
+    <span class="k">if</span> <span class="n">image_path</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">img</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">img</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Must provide either image_path or image_obj&#39;</span><span class="p">)</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ox</span> <span class="o">=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">oy</span> <span class="o">=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ox</span><span class="p">,</span> <span class="n">w</span> <span class="o">+</span> <span class="n">ox</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">oy</span><span class="p">,</span> <span class="n">h</span> <span class="o">+</span> <span class="n">oy</span><span class="p">):</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+            <span class="n">rgba</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">getpixel</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">ox</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">oy</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rgba</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Image must be in RGB or RGBA format!&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgba</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">rgba</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgba</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">rgba</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Image must be in RGB or RGBA format!&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">bgcolor</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">color_scale</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">a</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">brightness</span> <span class="o">!=</span> <span class="mi">255</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">color_scale</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">brightness</span><span class="p">)</span>
+
+            <span class="n">setter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="showImage"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.util.image.load_image.html#bibliopixel.util.image.load_image.showImage">[docs]</a><span class="k">def</span> <span class="nf">showImage</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">imagePath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">imageObj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+              <span class="n">bgcolor</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Off</span><span class="p">,</span> <span class="n">brightness</span><span class="o">=</span><span class="mi">255</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display an image on the matrix&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Must use Matrix with showImage!&quot;</span><span class="p">)</span>
+
+    <span class="n">layout</span><span class="o">.</span><span class="n">all_off</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">show_image</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">imagePath</span><span class="p">,</span>
+                      <span class="n">imageObj</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="loadImage"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.util.image.load_image.html#bibliopixel.util.image.load_image.loadImage">[docs]</a><span class="k">def</span> <span class="nf">loadImage</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">imagePath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">imageObj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+              <span class="n">bgcolor</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Off</span><span class="p">,</span> <span class="n">brightness</span><span class="o">=</span><span class="mi">255</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display an image on the matrix&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Must use Matrix with loadImage!&quot;</span><span class="p">)</span>
+
+    <span class="n">texture</span> <span class="o">=</span> <span class="p">[[</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Off</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span>
+               <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">setter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pixel</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">texture</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">pixel</span>
+
+    <span class="n">show_image</span><span class="p">(</span><span class="n">setter</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">imagePath</span><span class="p">,</span> <span class="n">imageObj</span><span class="p">,</span>
+               <span class="n">offset</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">texture</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

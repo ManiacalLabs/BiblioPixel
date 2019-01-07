@@ -1,0 +1,7 @@
+bibliopixel.animation.strip module
+==================================
+
+.. automodule:: bibliopixel.animation.strip
+    :members:
+    :undoc-members:
+    :show-inheritance:

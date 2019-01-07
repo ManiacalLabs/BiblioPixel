@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.MathFunc module
+============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.MathFunc
+    :members:
+    :undoc-members:
+    :show-inheritance:

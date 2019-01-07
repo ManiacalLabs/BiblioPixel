@@ -1,0 +1,7 @@
+bibliopixel.animation.remote.opener module
+==========================================
+
+.. automodule:: bibliopixel.animation.remote.opener
+    :members:
+    :undoc-members:
+    :show-inheritance:

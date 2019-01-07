@@ -1,0 +1,38 @@
+BiblioPixelAnimations.strip package
+===================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.strip.Alternates
+   BiblioPixelAnimations.strip.BinaryEpochClock
+   BiblioPixelAnimations.strip.ColorChase
+   BiblioPixelAnimations.strip.ColorFade
+   BiblioPixelAnimations.strip.ColorFill
+   BiblioPixelAnimations.strip.ColorPattern
+   BiblioPixelAnimations.strip.ColorWipe
+   BiblioPixelAnimations.strip.FireFlies
+   BiblioPixelAnimations.strip.HalvesRainbow
+   BiblioPixelAnimations.strip.LarsonScanners
+   BiblioPixelAnimations.strip.LinearRainbow
+   BiblioPixelAnimations.strip.PartyMode
+   BiblioPixelAnimations.strip.PixelPingPong
+   BiblioPixelAnimations.strip.Pulse
+   BiblioPixelAnimations.strip.RGBClock
+   BiblioPixelAnimations.strip.Rainbows
+   BiblioPixelAnimations.strip.SaberBlade
+   BiblioPixelAnimations.strip.Searchlights
+   BiblioPixelAnimations.strip.Twinkle
+   BiblioPixelAnimations.strip.Wave
+   BiblioPixelAnimations.strip.WhiteTwinkle
+   BiblioPixelAnimations.strip.hexclock
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.strip
+    :members:
+    :undoc-members:
+    :show-inheritance:

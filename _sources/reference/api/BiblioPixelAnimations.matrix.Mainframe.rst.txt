@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.Mainframe module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.Mainframe
+    :members:
+    :undoc-members:
+    :show-inheritance:

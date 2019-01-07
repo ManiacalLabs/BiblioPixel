@@ -1,0 +1,7 @@
+bibliopixel.project.project\_runner module
+==========================================
+
+.. automodule:: bibliopixel.project.project_runner
+    :members:
+    :undoc-members:
+    :show-inheritance:

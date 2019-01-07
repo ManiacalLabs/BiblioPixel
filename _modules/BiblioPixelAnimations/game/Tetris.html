@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BiblioPixelAnimations.game.Tetris &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BiblioPixelAnimations.game.Tetris</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BiblioPixelAnimations.game.Tetris</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Based on: https://gist.github.com/kch42/565419</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randrange</span> <span class="k">as</span> <span class="n">rand</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.colors</span> <span class="k">import</span> <span class="n">COLORS</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.colors.conversions</span> <span class="k">import</span> <span class="n">hue_helper</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.animation.game</span> <span class="k">import</span> <span class="n">Game</span>
+
+
+<span class="c1"># The configuration</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="mi">19</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">maxfps</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">color_map</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Black</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Red</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Orange</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Yellow</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Green</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Blue</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Purple</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Violet</span><span class="p">,</span>
+
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Cyan</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">SeaGreen</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Navy</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">YellowGreen</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">DarkRed</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">Teal</span><span class="p">,</span>
+    <span class="n">COLORS</span><span class="o">.</span><span class="n">MediumVioletRed</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># Define the shapes of the single parts</span>
+<span class="n">tetris_shapes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">8</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">]],</span>
+
+    <span class="p">[[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+     <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">]],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="rotate_clockwise"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.rotate_clockwise">[docs]</a><span class="k">def</span> <span class="nf">rotate_clockwise</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">shape</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>
+             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))]</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="check_collision"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.check_collision">[docs]</a><span class="k">def</span> <span class="nf">check_collision</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+    <span class="n">off_x</span><span class="p">,</span> <span class="n">off_y</span> <span class="o">=</span> <span class="n">offset</span>
+    <span class="k">for</span> <span class="n">cy</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cell</span> <span class="ow">and</span> <span class="n">board</span><span class="p">[</span><span class="n">cy</span> <span class="o">+</span> <span class="n">off_y</span><span class="p">][</span><span class="n">cx</span> <span class="o">+</span> <span class="n">off_x</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="remove_row"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.remove_row">[docs]</a><span class="k">def</span> <span class="nf">remove_row</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+    <span class="k">del</span> <span class="n">board</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">)]]</span> <span class="o">+</span> <span class="n">board</span></div>
+
+
+<div class="viewcode-block" id="join_matrixes"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.join_matrixes">[docs]</a><span class="k">def</span> <span class="nf">join_matrixes</span><span class="p">(</span><span class="n">mat1</span><span class="p">,</span> <span class="n">mat2</span><span class="p">,</span> <span class="n">mat2_off</span><span class="p">):</span>
+    <span class="n">off_x</span><span class="p">,</span> <span class="n">off_y</span> <span class="o">=</span> <span class="n">mat2_off</span>
+    <span class="k">for</span> <span class="n">cy</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mat2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+            <span class="n">mat1</span><span class="p">[</span><span class="n">cy</span> <span class="o">+</span> <span class="n">off_y</span> <span class="o">-</span> <span class="mi">1</span>	<span class="p">][</span><span class="n">cx</span> <span class="o">+</span> <span class="n">off_x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">val</span>
+    <span class="k">return</span> <span class="n">mat1</span></div>
+
+
+<div class="viewcode-block" id="new_board"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.new_board">[docs]</a><span class="k">def</span> <span class="nf">new_board</span><span class="p">():</span>
+    <span class="n">board</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">)]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">board</span></div>
+
+
+<div class="viewcode-block" id="Tetris"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris">[docs]</a><span class="k">class</span> <span class="nc">Tetris</span><span class="p">(</span><span class="n">Game</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">inputDev</span><span class="p">,</span> <span class="n">evil</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">inputDev</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;Sorry, this was lazily written to only work on a 25x50 display :(&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_dev</span><span class="p">,</span> <span class="s2">&quot;setLights&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_dev</span><span class="p">,</span> <span class="s2">&quot;setLightsOff&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_dev</span><span class="o">.</span><span class="n">setLightsOff</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">lights</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="s2">&quot;SELECT&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_dev</span><span class="o">.</span><span class="n">setLights</span><span class="p">(</span><span class="n">lights</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSpeed</span><span class="p">(</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rlim</span> <span class="o">=</span> <span class="n">cols</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_evilMode</span> <span class="o">=</span> <span class="n">evil</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_doEvil</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_stone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getNextPiece</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKeyFunc</span><span class="p">(</span><span class="s2">&quot;LEFT&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">speed</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKeyFunc</span><span class="p">(</span><span class="s2">&quot;RIGHT&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">speed</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKeyFunc</span><span class="p">(</span><span class="s2">&quot;DOWN&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="kc">True</span><span class="p">),</span> <span class="n">speed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKeyFunc</span><span class="p">([</span><span class="s2">&quot;A&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotate_stone</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKeyFunc</span><span class="p">([</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;SELECT&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">insta_drop</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKeyFunc</span><span class="p">(</span><span class="s2">&quot;START&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">togglePause</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_game</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Tetris.pre_run"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.pre_run">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="nf">_getNextPiece</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tetris_shapes</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_doEvil</span> <span class="k">else</span> <span class="mi">7</span>
+        <span class="k">return</span> <span class="n">tetris_shapes</span><span class="p">[</span><span class="n">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="Tetris.togglePause"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.togglePause">[docs]</a>    <span class="k">def</span> <span class="nf">togglePause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span></div>
+
+<div class="viewcode-block" id="Tetris.clearLevelUp"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.clearLevelUp">[docs]</a>    <span class="k">def</span> <span class="nf">clearLevelUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doStart</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Tetris.new_stone"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.new_stone">[docs]</a>    <span class="k">def</span> <span class="nf">new_stone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_stone</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_stone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getNextPiece</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cols</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">check_collision</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">,</span>
+                           <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Tetris.init_game"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.init_game">[docs]</a>    <span class="k">def</span> <span class="nf">init_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines_per_level</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doStart</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">new_board</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_stone</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Tetris.disp_msg"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.disp_msg">[docs]</a>    <span class="k">def</span> <span class="nf">disp_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">font</span><span class="o">=</span><span class="s1">&#39;6x4&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tetris.draw_matrix"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.draw_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">draw_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="n">off_x</span><span class="p">,</span> <span class="n">off_y</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">val</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">off_x</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">off_y</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">color_map</span><span class="p">[</span><span class="n">val</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Tetris.add_cl_lines"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.add_cl_lines">[docs]</a>    <span class="k">def</span> <span class="nf">add_cl_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">linescores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1200</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evilMode</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_doEvil</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_doEvil</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">+=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="n">linescores</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines_per_level</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getSpeed</span><span class="p">(</span><span class="s2">&quot;drop&quot;</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">win</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setSpeed</span><span class="p">(</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Tetris.move"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span><span class="p">:</span>
+            <span class="n">new_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span> <span class="o">+</span> <span class="n">delta_x</span>
+            <span class="k">if</span> <span class="n">new_x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">new_x</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">new_x</span> <span class="o">&gt;</span> <span class="n">cols</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">new_x</span> <span class="o">=</span> <span class="n">cols</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">check_collision</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">,</span>
+                                   <span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span> <span class="o">=</span> <span class="n">new_x</span></div>
+
+<div class="viewcode-block" id="Tetris.drop"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.drop">[docs]</a>    <span class="k">def</span> <span class="nf">drop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manual</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">manual</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">check_collision</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">,</span>
+                               <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">join_matrixes</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">,</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">new_stone</span><span class="p">()</span>
+                <span class="n">cleared_rows</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">remove_row</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                            <span class="n">cleared_rows</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">break</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_cl_lines</span><span class="p">(</span><span class="n">cleared_rows</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Tetris.insta_drop"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.insta_drop">[docs]</a>    <span class="k">def</span> <span class="nf">insta_drop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span><span class="p">:</span>
+            <span class="k">while</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="kc">True</span><span class="p">)):</span>
+                <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Tetris.rotate_stone"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.rotate_stone">[docs]</a>    <span class="k">def</span> <span class="nf">rotate_stone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span><span class="p">:</span>
+            <span class="n">new_stone</span> <span class="o">=</span> <span class="n">rotate_clockwise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">check_collision</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span>
+                                   <span class="n">new_stone</span><span class="p">,</span>
+                                   <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stone</span> <span class="o">=</span> <span class="n">new_stone</span></div>
+
+<div class="viewcode-block" id="Tetris.toggle_pause"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.toggle_pause">[docs]</a>    <span class="k">def</span> <span class="nf">toggle_pause</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span></div>
+
+<div class="viewcode-block" id="Tetris.start_game"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.start_game">[docs]</a>    <span class="k">def</span> <span class="nf">start_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doStart</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_game</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Tetris.step"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.game.Tetris.html#BiblioPixelAnimations.game.Tetris.Tetris.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lastKeys</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doStart</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doStart</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">clearLevelUp</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">start_game</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">doStart</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handleKeys</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">all_off</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gameover</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">all_off</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;GAME&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">11</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Green</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;OVER&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">11</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Green</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">//</span>
+                                 <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">9</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s1">&#39;6x4&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Green</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">win</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">hue_helper</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speedStep</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">hue_helper</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speedStep</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;YOU&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">9</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Black</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;WIN!&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">10</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Black</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">all_off</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levelUp</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span>
+                        <span class="s2">&quot;LVL&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Green</span><span class="p">)</span>
+                    <span class="n">str_level</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span>
+                        <span class="n">str_level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">str_level</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Green</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">16</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">24</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">32</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">40</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">White</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">disp_msg</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">lines_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines_per_level</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lines_left</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">Red</span><span class="p">)</span>
+
+                <span class="c1"># draw rainbow border</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">cols</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span>
+                                     <span class="n">colorFunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pos</span><span class="p">:</span> <span class="n">hue_helper</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">cols</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speedStep</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cols</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">colorFunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pos</span><span class="p">:</span> <span class="n">hue_helper</span><span class="p">(</span><span class="n">cols</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">pos</span><span class="p">,</span> <span class="n">cols</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speedStep</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span>
+                                     <span class="n">colorFunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pos</span><span class="p">:</span> <span class="n">hue_helper</span><span class="p">(</span><span class="n">rows</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">pos</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speedStep</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawLine</span><span class="p">(</span><span class="n">cols</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">cols</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span>
+                                     <span class="n">colorFunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pos</span><span class="p">:</span> <span class="n">hue_helper</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speedStep</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+
+                <span class="c1"># draw current board state</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">draw_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+                <span class="c1"># draw current block</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">draw_matrix</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stone</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stone_x</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stone_y</span> <span class="o">+</span> <span class="mi">9</span><span class="p">))</span>
+                <span class="c1"># draw next block</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">draw_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_stone</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="c1"># drop block</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkSpeed</span><span class="p">(</span><span class="s2">&quot;drop&quot;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_step</span> <span class="o">+=</span> <span class="n">amt</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

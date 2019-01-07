@@ -1,0 +1,7 @@
+bibliopixel.project.load module
+===============================
+
+.. automodule:: bibliopixel.project.load
+    :members:
+    :undoc-members:
+    :show-inheritance:

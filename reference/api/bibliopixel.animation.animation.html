@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.animation.animation module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.animation.animation_threading module" href="bibliopixel.animation.animation_threading.html" />
+    <link rel="prev" title="bibliopixel.animation.adaptor module" href="bibliopixel.animation.adaptor.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.animation.html">bibliopixel.animation package</a> &raquo;</li>
+        
+      <li>bibliopixel.animation.animation module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.animation.animation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.animation.animation">
+<span id="bibliopixel-animation-animation-module"></span><h1>bibliopixel.animation.animation module<a class="headerlink" href="#module-bibliopixel.animation.animation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bibliopixel.animation.animation.Animation">
+<em class="property">class </em><code class="descclassname">bibliopixel.animation.animation.</code><code class="descname">Animation</code><span class="sig-paren">(</span><em>layout</em>, <em>*</em>, <em>preclear=True</em>, <em>fail_on_exception=None</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.COLOR_DEFAULTS">
+<code class="descname">COLOR_DEFAULTS</code><em class="property"> = ()</em><a class="headerlink" href="#bibliopixel.animation.animation.Animation.COLOR_DEFAULTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.FAIL_ON_EXCEPTION">
+<code class="descname">FAIL_ON_EXCEPTION</code><em class="property"> = False</em><a class="headerlink" href="#bibliopixel.animation.animation.Animation.FAIL_ON_EXCEPTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.add_preframe_callback">
+<code class="descname">add_preframe_callback</code><span class="sig-paren">(</span><em>callback</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.add_preframe_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.add_preframe_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>The preframe_callbacks are called right before the start of a
+frame rendering pass.</p>
+<p>To avoid race conditions when editing values, the <code class="docutils literal notranslate"><span class="pre">Project</span></code>
+adds a callback here for the top-level animation, to drain the
+edit_queue at a moment where no rendering is
+happening.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.cleanup">
+<code class="descname">cleanup</code><span class="sig-paren">(</span><em>clean_layout=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.color_list">
+<code class="descname">color_list</code><a class="headerlink" href="#bibliopixel.animation.animation.Animation.color_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.completed">
+<code class="descname">completed</code><a class="headerlink" href="#bibliopixel.animation.animation.Animation.completed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Many BiblioPixelAnimations use the old <cite>completed</cite> variable.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bibliopixel.animation.animation.Animation.construct">
+<em class="property">classmethod </em><code class="descname">construct</code><span class="sig-paren">(</span><em>project</em>, <em>*</em>, <em>run=None</em>, <em>name=None</em>, <em>data=None</em>, <em>**desc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.construct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.construct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an animation, set the runner, and add in the two
+“reserved fields” <cite>name</cite> and <cite>data</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.free_run">
+<code class="descname">free_run</code><em class="property"> = False</em><a class="headerlink" href="#bibliopixel.animation.animation.Animation.free_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.generate_frames">
+<code class="descname">generate_frames</code><span class="sig-paren">(</span><em>clean_layout=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.generate_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.generate_frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.pre_recursion">
+<code class="descname">pre_recursion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bibliopixel.animation.animation.Animation.pre_recursion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.pre_run">
+<code class="descname">pre_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.pre_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.run_all_frames">
+<code class="descname">run_all_frames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.run_all_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.run_all_frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.set_project">
+<code class="descname">set_project</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.set_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.set_project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>amt=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.animation.animation.Animation.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/animation/animation.html#Animation.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.animation.animation.Animation.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.subframes">
+<code class="descname">subframes</code><em class="property"> = 1</em><a class="headerlink" href="#bibliopixel.animation.animation.Animation.subframes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.title">
+<code class="descname">title</code><a class="headerlink" href="#bibliopixel.animation.animation.Animation.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.Animation.top_level">
+<code class="descname">top_level</code><em class="property"> = True</em><a class="headerlink" href="#bibliopixel.animation.animation.Animation.top_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.animation.animation.BaseAnimation">
+<code class="descclassname">bibliopixel.animation.animation.</code><code class="descname">BaseAnimation</code><a class="headerlink" href="#bibliopixel.animation.animation.BaseAnimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#bibliopixel.animation.animation.Animation" title="bibliopixel.animation.animation.Animation"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.animation.animation.Animation</span></code></a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.animation.animation_threading.html" class="btn btn-neutral float-right" title="bibliopixel.animation.animation_threading module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.animation.adaptor.html" class="btn btn-neutral" title="bibliopixel.animation.adaptor module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

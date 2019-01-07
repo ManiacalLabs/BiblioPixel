@@ -1,0 +1,7 @@
+bibliopixel.util.class\_name module
+===================================
+
+.. automodule:: bibliopixel.util.class_name
+    :members:
+    :undoc-members:
+    :show-inheritance:

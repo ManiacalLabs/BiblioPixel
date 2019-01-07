@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.PixelPingPong module
+================================================
+
+.. automodule:: BiblioPixelAnimations.strip.PixelPingPong
+    :members:
+    :undoc-members:
+    :show-inheritance:

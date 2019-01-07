@@ -1,0 +1,7 @@
+bibliopixel.drivers.return\_codes module
+========================================
+
+.. automodule:: bibliopixel.drivers.return_codes
+    :members:
+    :undoc-members:
+    :show-inheritance:

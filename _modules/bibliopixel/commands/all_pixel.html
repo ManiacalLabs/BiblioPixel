@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.commands.all_pixel &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.commands.all_pixel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.commands.all_pixel</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Configure the AllPixel or similar module</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">signal</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">drivers</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">codes</span> <span class="kn">import</span> <span class="nn">LEDTYPE</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">drivers</span><span class="o">.</span><span class="n">return_codes</span> <span class="kn">import</span> <span class="nn">BiblioSerialError</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+
+<span class="n">types</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">GENERIC</span><span class="p">,</span> <span class="s1">&#39;GENERIC&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">LPD8806</span><span class="p">,</span> <span class="s1">&#39;LPD8806&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">WS2801</span><span class="p">,</span> <span class="s1">&#39;WS2801 &#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">NEOPIXEL</span><span class="p">,</span> <span class="s1">&#39;WS2812/NEOPIXEL&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">APA104</span><span class="p">,</span> <span class="s1">&#39;APA104&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">WS2811_400</span><span class="p">,</span> <span class="s1">&#39;WS2811_400&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">TM1809</span><span class="p">,</span> <span class="s1">&#39;TM1809/TM1804&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">TM1803</span><span class="p">,</span> <span class="s1">&#39;TM1803 &#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">UCS1903</span><span class="p">,</span> <span class="s1">&#39;UCS1903&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">SM16716</span><span class="p">,</span> <span class="s1">&#39;SM16716&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">APA102</span><span class="p">,</span> <span class="s1">&#39;APA102/DOTSTAR&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">LPD1886</span><span class="p">,</span> <span class="s1">&#39;LPD1886&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">LEDTYPE</span><span class="o">.</span><span class="n">P9813</span><span class="p">,</span> <span class="s1">&#39;P9813&#39;</span><span class="p">]</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="get_input"><a class="viewcode-back" href="../../../reference/api/bibliopixel.commands.all_pixel.html#bibliopixel.commands.all_pixel.get_input">[docs]</a><span class="k">def</span> <span class="nf">get_input</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_int"><a class="viewcode-back" href="../../../reference/api/bibliopixel.commands.all_pixel.html#bibliopixel.commands.all_pixel.get_int">[docs]</a><span class="k">def</span> <span class="nf">get_int</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">get_input</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">invalid</span></div>
+
+
+<span class="k">def</span> <span class="nf">_show_select_list</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)))</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">shift</span><span class="p">),</span> <span class="n">v</span><span class="p">))</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">get_int</span><span class="p">(</span><span class="s1">&#39;Choice: &#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../../reference/api/bibliopixel.commands.all_pixel.html#bibliopixel.commands.all_pixel.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">..drivers.serial.driver</span> <span class="k">import</span> <span class="n">Serial</span>
+    <span class="kn">from</span> <span class="nn">..drivers.serial.devices</span> <span class="k">import</span> <span class="n">Devices</span>
+    <span class="kn">from</span> <span class="nn">..drivers.serial.codes</span> <span class="k">import</span> <span class="n">SPIChipsets</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;Press Ctrl+C anytime to quit.&#39;</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Scanning for devices...&#39;</span><span class="p">)</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">Devices</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">hardware_id</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">baud</span><span class="p">)</span>
+        <span class="n">devs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">devices</span><span class="o">.</span><span class="n">find_serial_devices</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">devs</span><span class="p">:</span>
+            <span class="n">get_input</span><span class="p">(</span>
+                <span class="s1">&#39;No devices found! Please connect one and press any key...&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">devs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">devs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">_show_select_list</span><span class="p">(</span><span class="s1">&#39;Select device:&#39;</span><span class="p">,</span> <span class="n">devs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">devs</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Invalid choice!&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">devs</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">_show_select_list</span><span class="p">(</span><span class="s1">&#39;Choose LED Type&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">types</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Invalid choice!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">types</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
+        <span class="n">num</span> <span class="o">=</span> <span class="n">get_int</span><span class="p">(</span><span class="s1">&#39;Number of LEDs: &#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Invalid choice!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+        <span class="n">spi</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">use_spi</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">SPIChipsets</span>
+        <span class="k">if</span> <span class="n">use_spi</span><span class="p">:</span>
+            <span class="n">spi</span> <span class="o">=</span> <span class="n">get_int</span><span class="p">(</span><span class="s1">&#39;SPI Speed (1-24): &#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">spi</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Invalid choice!&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+        <span class="n">details</span> <span class="o">=</span> <span class="s1">&#39;Device: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">LED Type: </span><span class="si">{}</span><span class="se">\n</span><span class="s1">Num LEDs: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_spi</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">SPI Speed: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spi</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">details</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Serial</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num</span><span class="p">,</span> <span class="n">dev</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">SPISpeed</span><span class="o">=</span><span class="n">spi</span><span class="p">,</span> <span class="n">restart_timeout</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Configure complete!&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">BiblioSerialError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Error configuring device!&#39;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">128</span> <span class="o">+</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../reference/api/bibliopixel.commands.all_pixel.html#bibliopixel.commands.all_pixel.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="n">run</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--hardware-id&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;1D50:60AB&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;USB Vendor ID : Product ID of device. &#39;</span>
+                             <span class="s1">&#39;Defaults to VID:PID for AllPixel&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--baud&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">921600</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Serial baud rate.&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

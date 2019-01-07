@@ -1,0 +1,7 @@
+BiblioPixelAnimations.cube.simplex module
+=========================================
+
+.. automodule:: BiblioPixelAnimations.cube.simplex
+    :members:
+    :undoc-members:
+    :show-inheritance:

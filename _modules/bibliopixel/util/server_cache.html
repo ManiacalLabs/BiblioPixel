@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.server_cache &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.util.server_cache</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.util.server_cache</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">log</span>
+
+
+<div class="viewcode-block" id="StaticCache"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.StaticCache">[docs]</a><span class="k">class</span> <span class="nc">StaticCache</span><span class="p">:</span>
+    <span class="n">SERVER_CLASS</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">SERVER_KWDS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">CACHE</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="StaticCache.cache"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.StaticCache.cache">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CACHE</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">CACHE</span> <span class="o">=</span> <span class="n">ServerCache</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">SERVER_CLASS</span><span class="p">,</span> <span class="o">**</span><span class="bp">cls</span><span class="o">.</span><span class="n">SERVER_KWDS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CACHE</span></div>
+
+<div class="viewcode-block" id="StaticCache.close_all"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.StaticCache.close_all">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">close_all</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CACHE</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">CACHE</span><span class="o">.</span><span class="n">close_all</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">CACHE</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="ServerCache"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.ServerCache">[docs]</a><span class="k">class</span> <span class="nc">ServerCache</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class that caches servers by key so you don&#39;t keep closing and re-opening</span>
+<span class="sd">    the same server and interrupting your connection.</span>
+
+<span class="sd">    The exact nature of the key depends on the sort of server.</span>
+<span class="sd">    For example, for a server socket like SimPixel, it would be just a port</span>
+<span class="sd">    number, whereas for a UDP connection like Art-Net, it would be a</span>
+<span class="sd">    port, ip_address pair.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constructor</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param constructor: a function which takes a key and some keywords,</span>
+<span class="sd">            and returns a new server</span>
+<span class="sd">        :param kwds: keywords to the ``constructor`` function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constructor</span> <span class="o">=</span> <span class="n">constructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwds</span> <span class="o">=</span> <span class="n">kwds</span>
+
+<div class="viewcode-block" id="ServerCache.get_server"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.ServerCache.get_server">[docs]</a>    <span class="k">def</span> <span class="nf">get_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a new or existing server for this key.</span>
+
+<span class="sd">        :param int key: key for the server to use</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwds</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kwds</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">server</span><span class="p">:</span>
+            <span class="c1"># Make sure it&#39;s the right server.</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">check_keywords</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constructor</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Make a new server</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">_CachedServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constructor</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">server</span>
+
+        <span class="k">return</span> <span class="n">server</span></div>
+
+<div class="viewcode-block" id="ServerCache.close"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.ServerCache.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">server</span><span class="p">:</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ServerCache.close_all"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.server_cache.html#bibliopixel.util.server_cache.ServerCache.close_all">[docs]</a>    <span class="k">def</span> <span class="nf">close_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">_CachedServer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constructor</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">kwds</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">constructor</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EADDRINUSE</span><span class="p">:</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">strerror</span> <span class="o">+=</span> <span class="n">ADDRESS_IN_USE_ERROR</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">errno</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constructor</span> <span class="o">=</span> <span class="n">constructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwds</span> <span class="o">=</span> <span class="n">kwds</span>
+
+    <span class="k">def</span> <span class="nf">check_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constructor</span><span class="p">,</span> <span class="n">kwds</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constructor</span> <span class="o">!=</span> <span class="n">constructor</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">CACHED_SERVER_ERROR</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                <span class="n">new_type</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">constructor</span><span class="p">),</span>
+                <span class="n">old_type</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constructor</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwds</span> <span class="o">!=</span> <span class="n">kwds</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">CACHED_KWDS_WARNING</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwds</span><span class="o">=</span><span class="n">kwds</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="c1"># Pass through all other attributes to the server.</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+
+<span class="n">ADDRESS_IN_USE_ERROR</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">Cached server </span><span class="si">{0}</span><span class="s2"> on your machine is already in use.</span>
+<span class="s2">Perhaps BiblioPixel is already running on your machine?</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">CACHED_SERVER_ERROR</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Tried to open server of type </span><span class="si">{new_type}</span><span class="s2"> on </span><span class="si">{port}</span><span class="s2">, but there was already</span>
+<span class="s2">a server of type </span><span class="si">{old_type}</span><span class="s2"> running there.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">CACHED_KWDS_WARNING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Cached server for </span><span class="si">{server.port}</span><span class="s2"> had keywords </span><span class="si">{server.kwds}</span><span class="s2">,</span>
+<span class="s2">but keywords </span><span class="si">{kwds}</span><span class="s2"> were requested.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+bibliopixel.layout.layout module
+================================
+
+.. automodule:: bibliopixel.layout.layout
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.animation.mixer module
+==================================
+
+.. automodule:: bibliopixel.animation.mixer
+    :members:
+    :undoc-members:
+    :show-inheritance:

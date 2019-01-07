@@ -1,0 +1,7 @@
+bibliopixel.layout.cube module
+==============================
+
+.. automodule:: bibliopixel.layout.cube
+    :members:
+    :undoc-members:
+    :show-inheritance:

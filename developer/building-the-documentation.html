@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building the documentation &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Automatically extracting GIFs from the documentation" href="extracting-gifs.html" />
+    <link rel="prev" title="Unit tests and flake8" href="unit-tests-and-flake8.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">For BiblioPixel developers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="using-virtualenv.html">Using <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-git.html">Using <code class="docutils literal notranslate"><span class="pre">git</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit-tests-and-flake8.html">Unit tests and flake8</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building the documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-basic-build">The basic Build</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="extracting-gifs.html">Automatically extracting GIFs from the documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing-an-animation-class.html">How to write an <code class="docutils literal notranslate"><span class="pre">Animation</span></code> class for BiblioPixel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">For BiblioPixel developers</a> &raquo;</li>
+        
+      <li>Building the documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/developer/building-the-documentation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-the-documentation">
+<h1>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The Python documentation world is a little janky and so there is also a
+separate build for the documentation part!</p>
+<p>If you make significant changes to the documentation, you’ll need to learn how
+to run this documentation build so you can see your results.</p>
+<p>We use the powerful but gnarly <a class="reference external" href="http://www.sphinx-doc.org/en/master/">Sphinx</a>
+documentation system for Python.  You won’t have to read that previous link, we
+hope, because that has mostly been automated away.</p>
+<p>Documentation files are in the doc/ subdirectory and are in the poorly-specified
+but fairly easy to understand <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText format.</a></p>
+<p>There are multiple parts to building the documentation, though they are all
+automated:</p>
+<ol class="arabic simple">
+<li>The preprocessing phase</li>
+<li>Extracting the API documentation</li>
+<li>Extracting the documentation on the <code class="docutils literal notranslate"><span class="pre">bp</span></code> command</li>
+</ol>
+<p>4. Running Sphinx to convert the documentation into HTML files
+6. GIF extraction and deployment (see next page)</p>
+<div class="section" id="the-basic-build">
+<h2>The basic Build<a class="headerlink" href="#the-basic-build" title="Permalink to this headline">¶</a></h2>
+<p>To build the documentation, go to the BiblioPixel directory and run one of the
+build scripts:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/documentation/build
+</pre></div>
+</div>
+<p>This runs preprocessing + api + bp + sphinx.  Use this if you have changed both
+the Python code and the documentation, or the very first time you want to build
+documentation.</p>
+<p>To actually look at the documentation, go the <code class="docutils literal notranslate"><span class="pre">html</span></code> directory in the base
+<code class="docutils literal notranslate"><span class="pre">BiblioPixel</span></code> directory and open the file <code class="docutils literal notranslate"><span class="pre">index.html</span></code> in your browser
+(which you can probably do just by double-clicking on it).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/documentation/quick_build
+</pre></div>
+</div>
+<p>This runs preprocessing + bp + sphinx.</p>
+<p>Running the api task is quite slow, and if you haven’t made changes to the
+Python source code, since the last time you did a full build, it’s unnecessary.</p>
+<p><code class="docutils literal notranslate"><span class="pre">quick_build</span></code> is what you will use most of the time.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ scripts/documentation/clean
+</pre></div>
+</div>
+<p>This cleans out all the existing documentation build.  You should do this if you
+have made major changes to the structure and want to get rid of old files;  but
+it won’t cause issues for anyone else if you don’t run this, as it’s purely
+local.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="extracting-gifs.html" class="btn btn-neutral float-right" title="Automatically extracting GIFs from the documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="unit-tests-and-flake8.html" class="btn btn-neutral" title="Unit tests and flake8" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.HalvesRainbow module
+================================================
+
+.. automodule:: BiblioPixelAnimations.strip.HalvesRainbow
+    :members:
+    :undoc-members:
+    :show-inheritance:

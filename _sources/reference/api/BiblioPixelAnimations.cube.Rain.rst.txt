@@ -1,0 +1,7 @@
+BiblioPixelAnimations.cube.Rain module
+======================================
+
+.. automodule:: BiblioPixelAnimations.cube.Rain
+    :members:
+    :undoc-members:
+    :show-inheritance:

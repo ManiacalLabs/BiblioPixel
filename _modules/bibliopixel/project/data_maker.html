@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.project.data_maker &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.project.data_maker</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.project.data_maker</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_float</span><span class="p">,</span> <span class="n">c_uint8</span>
+<span class="kn">from</span> <span class="nn">multiprocessing.sharedctypes</span> <span class="k">import</span> <span class="n">RawArray</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">importer</span>
+
+
+<span class="c1"># These are just the ones we are sure to work with.  numpy defines a</span>
+<span class="c1"># lot more, and we pass the names right through, if you want to experiment</span>
+<span class="c1"># with &#39;float128&#39; or whatever.</span>
+<span class="n">NUMPY_TYPES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="s1">&#39;int8&#39;</span><span class="p">,</span> <span class="s1">&#39;int16&#39;</span><span class="p">,</span> <span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="s1">&#39;int64&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;uint&#39;</span><span class="p">,</span> <span class="s1">&#39;uint8&#39;</span><span class="p">,</span> <span class="s1">&#39;uint16&#39;</span><span class="p">,</span> <span class="s1">&#39;uint32&#39;</span><span class="p">,</span> <span class="s1">&#39;uint64&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;float32&#39;</span><span class="p">,</span> <span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+
+<span class="n">NUMPY_DEFAULTS</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="s1">&#39;float&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Maker"><a class="viewcode-back" href="../../../reference/api/bibliopixel.project.data_maker.html#bibliopixel.project.data_maker.Maker">[docs]</a><span class="k">class</span> <span class="nc">Maker</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">floating</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shared_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpy_dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">numpy_dtype</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Using numpy&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">numpy_dtype</span> <span class="ow">in</span> <span class="n">NUMPY_DEFAULTS</span><span class="p">:</span>
+                <span class="n">numpy_dtype</span> <span class="o">=</span> <span class="s1">&#39;float32&#39;</span>
+            <span class="k">if</span> <span class="n">numpy_dtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sctypeDict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">BAD_NUMPY_TYPE_ERROR</span> <span class="o">%</span> <span class="n">numpy_dtype</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">shared_memory</span> <span class="ow">and</span> <span class="n">numpy_dtype</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Shared memory for numpy arrays is not yet supported.&#39;</span><span class="p">)</span>
+            <span class="n">numpy_dtype</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">floating</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">floating</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">shared_memory</span>
+
+        <span class="n">c_type</span> <span class="o">=</span> <span class="n">c_float</span> <span class="k">if</span> <span class="n">floating</span> <span class="k">else</span> <span class="n">c_uint8</span>
+
+        <span class="k">if</span> <span class="n">shared_memory</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">size</span><span class="p">:</span> <span class="n">RawArray</span><span class="p">(</span><span class="n">c_uint8</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color_list</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">size</span><span class="p">:</span> <span class="n">RawArray</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">c_type</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="c1"># Note https://stackoverflow.com/questions/37705974/</span>
+
+        <span class="k">elif</span> <span class="n">numpy_dtype</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="nb">bytearray</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color_list</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">size</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">numpy_dtype</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="nb">bytearray</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">color_list</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">size</span><span class="p">:</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">*</span> <span class="n">size</span></div>
+
+
+<span class="n">MAKER</span> <span class="o">=</span> <span class="n">Maker</span><span class="p">()</span>
+<span class="n">NUMPY_MAKER</span> <span class="o">=</span> <span class="n">Maker</span><span class="p">(</span><span class="n">numpy_dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+
+<span class="n">ColorList</span> <span class="o">=</span> <span class="n">MAKER</span><span class="o">.</span><span class="n">color_list</span>
+<span class="n">NumpyColorList</span> <span class="o">=</span> <span class="n">NUMPY_MAKER</span><span class="o">.</span><span class="n">color_list</span>
+
+<span class="n">BAD_NUMPY_TYPE_ERROR</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Bad numpy_type &quot;</span><span class="si">%s</span><span class="s2">&quot;</span>
+
+<span class="s2">Possible numpy_type values include:</span>
+<span class="s2">    &quot;&quot;&quot;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">NUMPY_TYPES</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

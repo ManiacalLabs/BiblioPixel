@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.ColorChase module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.strip.ColorChase
+    :members:
+    :undoc-members:
+    :show-inheritance:

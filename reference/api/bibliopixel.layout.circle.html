@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.layout.circle module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.layout.cube module" href="bibliopixel.layout.cube.html" />
+    <link rel="prev" title="bibliopixel.layout.geometry.strip module" href="bibliopixel.layout.geometry.strip.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.layout.html">bibliopixel.layout package</a> &raquo;</li>
+        
+      <li>bibliopixel.layout.circle module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.layout.circle.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.layout.circle">
+<span id="bibliopixel-layout-circle-module"></span><h1>bibliopixel.layout.circle module<a class="headerlink" href="#module-bibliopixel.layout.circle" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bibliopixel.layout.circle.Circle">
+<em class="property">class </em><code class="descclassname">bibliopixel.layout.circle.</code><code class="descname">Circle</code><span class="sig-paren">(</span><em>drivers</em>, <em>rings=[]</em>, <em>pixels_per=None</em>, <em>maxAngleDiff=0</em>, <em>rotation=0</em>, <em>reverse_angle=False</em>, <em>threadedUpdate=False</em>, <em>brightness=255</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/circle.html#Circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.circle.Circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bibliopixel.layout.layout.html#bibliopixel.layout.layout.Layout" title="bibliopixel.layout.layout.Layout"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.layout.layout.Layout</span></code></a></p>
+<dl class="attribute">
+<dt id="bibliopixel.layout.circle.Circle.CLONE_ATTRS">
+<code class="descname">CLONE_ATTRS</code><em class="property"> = ('maker', 'brightness', 'rings', 'pixels_per', 'maxAngleDiff', 'rotation', 'reverse_angle')</em><a class="headerlink" href="#bibliopixel.layout.circle.Circle.CLONE_ATTRS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.circle.Circle.angleToPixel">
+<code class="descname">angleToPixel</code><span class="sig-paren">(</span><em>angle</em>, <em>ring</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/circle.html#Circle.angleToPixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.circle.Circle.angleToPixel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.circle.Circle.drawRadius">
+<code class="descname">drawRadius</code><span class="sig-paren">(</span><em>angle</em>, <em>color</em>, <em>startRing=0</em>, <em>endRing=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/circle.html#Circle.drawRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.circle.Circle.drawRadius" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.circle.Circle.fillRing">
+<code class="descname">fillRing</code><span class="sig-paren">(</span><em>ring</em>, <em>color</em>, <em>startAngle=0</em>, <em>endAngle=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/circle.html#Circle.fillRing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.circle.Circle.fillRing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.circle.Circle.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>ring</em>, <em>angle</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/circle.html#Circle.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.circle.Circle.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get RGB color tuple of color at index pixel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.layout.circle.Circle.lastRing">
+<code class="descname">lastRing</code><a class="headerlink" href="#bibliopixel.layout.circle.Circle.lastRing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.circle.Circle.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>ring</em>, <em>angle</em>, <em>color</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/circle.html#Circle.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.circle.Circle.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set pixel to RGB color tuple</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.layout.circle.Circle.shape">
+<code class="descname">shape</code><a class="headerlink" href="#bibliopixel.layout.circle.Circle.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">ringCount,</span> <span class="pre">ringSteps</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.layout.circle.LEDCircle">
+<code class="descclassname">bibliopixel.layout.circle.</code><code class="descname">LEDCircle</code><a class="headerlink" href="#bibliopixel.layout.circle.LEDCircle" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#bibliopixel.layout.circle.Circle" title="bibliopixel.layout.circle.Circle"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.layout.circle.Circle</span></code></a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.layout.cube.html" class="btn btn-neutral float-right" title="bibliopixel.layout.cube module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.layout.geometry.strip.html" class="btn btn-neutral" title="bibliopixel.layout.geometry.strip module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

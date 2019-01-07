@@ -1,0 +1,50 @@
+bibliopixel.animation package
+=============================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    bibliopixel.animation.remote
+    bibliopixel.animation.reprocess
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.animation.adaptor
+   bibliopixel.animation.animation
+   bibliopixel.animation.animation_threading
+   bibliopixel.animation.circle
+   bibliopixel.animation.collection
+   bibliopixel.animation.cube
+   bibliopixel.animation.failed
+   bibliopixel.animation.feedback
+   bibliopixel.animation.fill
+   bibliopixel.animation.game
+   bibliopixel.animation.gif_writer
+   bibliopixel.animation.indexed
+   bibliopixel.animation.limiter
+   bibliopixel.animation.matrix
+   bibliopixel.animation.mixer
+   bibliopixel.animation.movie_writer
+   bibliopixel.animation.off
+   bibliopixel.animation.parallel
+   bibliopixel.animation.pov
+   bibliopixel.animation.receiver
+   bibliopixel.animation.runner
+   bibliopixel.animation.sequence
+   bibliopixel.animation.split
+   bibliopixel.animation.strip
+   bibliopixel.animation.tests
+   bibliopixel.animation.wrapper
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.animation
+    :members:
+    :undoc-members:
+    :show-inheritance:

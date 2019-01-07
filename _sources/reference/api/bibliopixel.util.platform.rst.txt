@@ -1,0 +1,7 @@
+bibliopixel.util.platform module
+================================
+
+.. automodule:: bibliopixel.util.platform
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.drivers.SPI.APA102 module
+=====================================
+
+.. automodule:: bibliopixel.drivers.SPI.APA102
+    :members:
+    :undoc-members:
+    :show-inheritance:

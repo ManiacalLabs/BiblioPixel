@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.hexclock module
+===========================================
+
+.. automodule:: BiblioPixelAnimations.strip.hexclock
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.receivers.GenericNetworkReceiver module
+=============================================================
+
+.. automodule:: BiblioPixelAnimations.receivers.GenericNetworkReceiver
+    :members:
+    :undoc-members:
+    :show-inheritance:

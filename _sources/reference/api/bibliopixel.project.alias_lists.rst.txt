@@ -1,0 +1,7 @@
+bibliopixel.project.alias\_lists module
+=======================================
+
+.. automodule:: bibliopixel.project.alias_lists
+    :members:
+    :undoc-members:
+    :show-inheritance:

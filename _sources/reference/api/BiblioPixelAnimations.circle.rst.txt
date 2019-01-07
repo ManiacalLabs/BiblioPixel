@@ -1,0 +1,28 @@
+BiblioPixelAnimations.circle package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.circle.Twinkle
+   BiblioPixelAnimations.circle.arc_clock
+   BiblioPixelAnimations.circle.arc_rotate
+   BiblioPixelAnimations.circle.bloom
+   BiblioPixelAnimations.circle.circle_clock
+   BiblioPixelAnimations.circle.diag
+   BiblioPixelAnimations.circle.fill
+   BiblioPixelAnimations.circle.fireflies
+   BiblioPixelAnimations.circle.hyperspace
+   BiblioPixelAnimations.circle.pinwheel
+   BiblioPixelAnimations.circle.ring_clock
+   BiblioPixelAnimations.circle.swirl
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.circle
+    :members:
+    :undoc-members:
+    :show-inheritance:

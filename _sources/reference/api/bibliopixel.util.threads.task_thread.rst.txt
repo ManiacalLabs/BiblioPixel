@@ -1,0 +1,7 @@
+bibliopixel.util.threads.task\_thread module
+============================================
+
+.. automodule:: bibliopixel.util.threads.task_thread
+    :members:
+    :undoc-members:
+    :show-inheritance:

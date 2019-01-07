@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How to stop or restart bp &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Writing Animated GIFs from Projects" href="writing-animated-gifs.html" />
+    <link rel="prev" title="Using the REST api" href="using-rest-api.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-help.html">Getting help</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Topic Papers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting BiblioPixel, <code class="docutils literal notranslate"><span class="pre">bp</span></code> and the AllPixel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-controls.html">Using controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-numpy.html">Using <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-rest-api.html">Using the REST api</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">How to stop or restart <code class="docutils literal notranslate"><span class="pre">bp</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#control-c">1. Control-C</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unix-signals">2. Unix signals</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="writing-animated-gifs.html">Writing Animated GIFs from Projects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Topic Papers</a> &raquo;</li>
+        
+      <li>How to stop or restart <code class="docutils literal notranslate"><span class="pre">bp</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/topic-papers/stopping-and-restarting-bp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="how-to-stop-or-restart-bp">
+<h1>How to stop or restart <code class="docutils literal notranslate"><span class="pre">bp</span></code><a class="headerlink" href="#how-to-stop-or-restart-bp" title="Permalink to this headline">¶</a></h1>
+<p>While some Animations can have a specific, fixed length like ten seconds, most
+of them go on indefinitely.  Sometimes you want to tell <code class="docutils literal notranslate"><span class="pre">bp</span></code> to stop running,
+or you want to tell it to restart from the beginning again.</p>
+<div class="section" id="control-c">
+<h2>1. Control-C<a class="headerlink" href="#control-c" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to stop <code class="docutils literal notranslate"><span class="pre">bp</span></code> is using Control-C - hold down the Control or
+CTR key and press C.</p>
+<p>Control-C interrupts almost any command line program, not just <code class="docutils literal notranslate"><span class="pre">BiblioPixel</span></code>.
+It must be done in the command line or terminal which is running <code class="docutils literal notranslate"><span class="pre">bp</span></code>.</p>
+</div>
+<div class="section" id="unix-signals">
+<h2>2. Unix signals<a class="headerlink" href="#unix-signals" title="Permalink to this headline">¶</a></h2>
+<p>This is an advanced section which can safely be skipped on first reading!</p>
+<p>A more versatile way (which unfortunately does not work on Windows) is to send a
+<a class="reference external" href="https://www.tutorialspoint.com/unix/unix-signals-traps.htm">Unix signal</a>
+to the <code class="docutils literal notranslate"><span class="pre">bp</span></code> process.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bp</span></code> understands three Unix signals:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">SIGINT</span></code></dt>
+<dd>Shut <code class="docutils literal notranslate"><span class="pre">bp</span></code> down in a controlled fashion, turning off all lights:
+equivalent to typing Control-C.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SIGTERM</span></code></dt>
+<dd>Shut <code class="docutils literal notranslate"><span class="pre">bp</span></code> down immediately.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SIGHUP</span></code></dt>
+<dd>Stop the running <code class="docutils literal notranslate"><span class="pre">bp</span></code> Project in a controlled fashion, create a new
+Project by re-reading the originalo Project file, then run it.</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">SIGHUP</span></code> is particularly useful for developers who want to restart their
+application with a new Animation without taking the several seconds it would
+take to bring <code class="docutils literal notranslate"><span class="pre">bp</span></code> down and back up again.</p>
+<p>A tiny bash utility <code class="docutils literal notranslate"><span class="pre">bp-pid</span></code> is installed with BiblioPixel to report on the
+process ID that’s running <code class="docutils literal notranslate"><span class="pre">bp</span></code>.</p>
+<p>For example, to send a <code class="docutils literal notranslate"><span class="pre">SIGHUP</span></code> to the running <code class="docutils literal notranslate"><span class="pre">bp</span></code> process, if any, use
+this command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">kill</span> -hup <span class="sb">`</span>bp-pid<span class="sb">`</span>
+</pre></div>
+</div>
+<p>This will restart <code class="docutils literal notranslate"><span class="pre">bp</span></code> if it is running, otherwise cause an error.</p>
+<hr class="docutils" />
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">shape</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">13</span><span class="p p-Indicator">]</span>
+<span class="nt">animation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$bpa.strip.LarsonScanners.LarsonRainbow</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/topic-papers/stopping-and-restarting-bp-footer.gif"><img alt="doc/topic-papers/stopping-and-restarting-bp-footer" class="align-center" src="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/topic-papers/stopping-and-restarting-bp-footer.gif" /></a>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="writing-animated-gifs.html" class="btn btn-neutral float-right" title="Writing Animated GIFs from Projects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="using-rest-api.html" class="btn btn-neutral" title="Using the REST api" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.TicTacToe module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.TicTacToe
+    :members:
+    :undoc-members:
+    :show-inheritance:

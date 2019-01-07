@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.layout.strip &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.layout.strip</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.layout.strip</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..</span> <span class="n">colors</span> <span class="kn">import</span> <span class="nn">conversions</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">layout</span> <span class="kn">import</span> <span class="nn">MultiLayout</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">geometry</span> <span class="kn">import</span> <span class="nn">make_strip_coord_map_multi</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">geometry</span><span class="o">.</span><span class="n">strip</span> <span class="kn">import</span> <span class="nn">make_strip_coord_map_positions</span>
+
+
+<div class="viewcode-block" id="Strip"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.strip.html#bibliopixel.animation.strip.Strip">[docs]</a><span class="k">class</span> <span class="nc">Strip</span><span class="p">(</span><span class="n">MultiLayout</span><span class="p">):</span>
+    <span class="n">CLONE_ATTRS</span> <span class="o">=</span> <span class="n">MultiLayout</span><span class="o">.</span><span class="n">CLONE_ATTRS</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;brightness&#39;</span><span class="p">,</span> <span class="s1">&#39;pixelWidth&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drivers</span><span class="p">,</span> <span class="n">threadedUpdate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">brightness</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">pixelWidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_multi</span> <span class="o">=</span> <span class="n">make_strip_coord_map_multi</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">drivers</span><span class="p">,</span> <span class="n">threadedUpdate</span><span class="p">,</span> <span class="n">brightness</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">=</span> <span class="n">pixelWidth</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;pixelWidth must be greater than 0 and less than or equal to &quot;</span>
+                <span class="s2">&quot;the total LED count!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Total LED count must be evenly divisible by pixelWidth!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setScaled</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord_map</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coord_map</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;coord_map length must equal total number of pixels!&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_strip_mapped</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_base</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pixel_positions</span><span class="p">(</span><span class="n">make_strip_coord_map_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a 1-tuple with the length of the strip&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Strip.get"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.strip.html#bibliopixel.animation.strip.Strip.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get RGB color tuple of color at index pixel&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_base</span><span class="p">(</span><span class="n">pixel</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Strip.set"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.strip.html#bibliopixel.animation.strip.Strip.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the pixel color at position x in the strip.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The actual implementation of this method is computed at construction</span>
+        <span class="c1"># time and monkey-patched in from one of self._setTexture,</span>
+        <span class="c1"># self.__setNormal or self.__setScaled</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_strip_mapped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pixel</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">pixel</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span><span class="p">:</span>
+            <span class="n">pixel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord_map</span><span class="p">[</span><span class="n">pixel</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_base</span><span class="p">(</span><span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="c1"># Set single pixel to Color value</span>
+    <span class="k">def</span> <span class="nf">_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set pixel to RGB color tuple&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_base</span><span class="p">(</span><span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_setScaled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">pixel</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_base</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+    <span class="c1"># Set single pixel to RGB value</span>
+<div class="viewcode-block" id="Strip.setRGB"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.strip.html#bibliopixel.animation.strip.Strip.setRGB">[docs]</a>    <span class="k">def</span> <span class="nf">setRGB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set single pixel using individual RGB values instead of tuple&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pixel</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Strip.setHSV"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.strip.html#bibliopixel.animation.strip.Strip.setHSV">[docs]</a>    <span class="k">def</span> <span class="nf">setHSV</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">hsv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set single pixel to HSV tuple&quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">conversions</span><span class="o">.</span><span class="n">hsv2rgb</span><span class="p">(</span><span class="n">hsv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pixel</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span></div>
+
+    <span class="c1"># turns off the desired pixel</span>
+<div class="viewcode-block" id="Strip.setOff"><a class="viewcode-back" href="../../../reference/api/bibliopixel.layout.strip.html#bibliopixel.animation.strip.Strip.setOff">[docs]</a>    <span class="k">def</span> <span class="nf">setOff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set single pixel off&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pixel</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div></div>
+
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">deprecated</span>
+<span class="k">if</span> <span class="n">deprecated</span><span class="o">.</span><span class="n">allowed</span><span class="p">():</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">LEDStrip</span> <span class="o">=</span> <span class="n">Strip</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

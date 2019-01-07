@@ -1,0 +1,7 @@
+bibliopixel.drivers.hue module
+==============================
+
+.. automodule:: bibliopixel.drivers.hue
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.animation.runner module
+===================================
+
+.. automodule:: bibliopixel.animation.runner
+    :members:
+    :undoc-members:
+    :show-inheritance:

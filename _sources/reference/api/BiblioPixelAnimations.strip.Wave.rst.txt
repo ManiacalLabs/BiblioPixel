@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.Wave module
+=======================================
+
+.. automodule:: BiblioPixelAnimations.strip.Wave
+    :members:
+    :undoc-members:
+    :show-inheritance:

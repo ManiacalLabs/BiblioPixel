@@ -1,0 +1,7 @@
+bibliopixel.util.signal\_handler module
+=======================================
+
+.. automodule:: bibliopixel.util.signal_handler
+    :members:
+    :undoc-members:
+    :show-inheritance:

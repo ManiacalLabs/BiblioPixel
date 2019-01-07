@@ -1,0 +1,18 @@
+bibliopixel.animation.reprocess package
+=======================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.animation.reprocess.functions
+   bibliopixel.animation.reprocess.reprocess
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.animation.reprocess
+    :members:
+    :undoc-members:
+    :show-inheritance:

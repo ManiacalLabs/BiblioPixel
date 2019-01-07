@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.SpinningTriangle module
+====================================================
+
+.. automodule:: BiblioPixelAnimations.matrix.SpinningTriangle
+    :members:
+    :undoc-members:
+    :show-inheritance:

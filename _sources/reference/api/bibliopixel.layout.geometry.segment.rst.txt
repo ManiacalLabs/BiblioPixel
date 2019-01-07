@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.segment module
+==========================================
+
+.. automodule:: bibliopixel.layout.geometry.segment
+    :members:
+    :undoc-members:
+    :show-inheritance:

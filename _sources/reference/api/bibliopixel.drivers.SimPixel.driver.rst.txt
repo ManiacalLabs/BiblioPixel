@@ -1,0 +1,7 @@
+bibliopixel.drivers.SimPixel.driver module
+==========================================
+
+.. automodule:: bibliopixel.drivers.SimPixel.driver
+    :members:
+    :undoc-members:
+    :show-inheritance:

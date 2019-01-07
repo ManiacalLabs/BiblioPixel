@@ -1,0 +1,7 @@
+bibliopixel.commands.clear\_cache module
+========================================
+
+.. automodule:: bibliopixel.commands.clear_cache
+    :members:
+    :undoc-members:
+    :show-inheritance:

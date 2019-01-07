@@ -1,0 +1,7 @@
+bibliopixel.project.data\_maker module
+======================================
+
+.. automodule:: bibliopixel.project.data_maker
+    :members:
+    :undoc-members:
+    :show-inheritance:

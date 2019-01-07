@@ -1,0 +1,7 @@
+bibliopixel.util.threads.worker module
+======================================
+
+.. automodule:: bibliopixel.util.threads.worker
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.util.deprecated module
+==================================
+
+.. automodule:: bibliopixel.util.deprecated
+    :members:
+    :undoc-members:
+    :show-inheritance:

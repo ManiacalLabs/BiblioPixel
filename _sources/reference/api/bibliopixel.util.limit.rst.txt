@@ -1,0 +1,7 @@
+bibliopixel.util.limit module
+=============================
+
+.. automodule:: bibliopixel.util.limit
+    :members:
+    :undoc-members:
+    :show-inheritance:

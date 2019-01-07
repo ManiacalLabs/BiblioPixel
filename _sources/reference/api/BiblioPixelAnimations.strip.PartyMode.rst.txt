@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.PartyMode module
+============================================
+
+.. automodule:: BiblioPixelAnimations.strip.PartyMode
+    :members:
+    :undoc-members:
+    :show-inheritance:

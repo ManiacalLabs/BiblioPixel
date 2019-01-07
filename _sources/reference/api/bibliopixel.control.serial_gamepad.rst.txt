@@ -1,0 +1,7 @@
+bibliopixel.control.serial\_gamepad module
+==========================================
+
+.. automodule:: bibliopixel.control.serial_gamepad
+    :members:
+    :undoc-members:
+    :show-inheritance:

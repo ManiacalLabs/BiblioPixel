@@ -1,0 +1,7 @@
+BiblioPixelAnimations.simple.Fill module
+========================================
+
+.. automodule:: BiblioPixelAnimations.simple.Fill
+    :members:
+    :undoc-members:
+    :show-inheritance:

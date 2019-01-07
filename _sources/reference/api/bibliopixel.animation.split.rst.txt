@@ -1,0 +1,7 @@
+bibliopixel.animation.split module
+==================================
+
+.. automodule:: bibliopixel.animation.split
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.project.types.color module
+======================================
+
+.. automodule:: bibliopixel.project.types.color
+    :members:
+    :undoc-members:
+    :show-inheritance:

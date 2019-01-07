@@ -1,0 +1,7 @@
+bibliopixel.util.offset\_range module
+=====================================
+
+.. automodule:: bibliopixel.util.offset_range
+    :members:
+    :undoc-members:
+    :show-inheritance:

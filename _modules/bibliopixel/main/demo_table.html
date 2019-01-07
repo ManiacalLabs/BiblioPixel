@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.main.demo_table &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.main.demo_table</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.main.demo_table</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">bibliopixel.drivers.SimPixel</span> <span class="k">import</span> <span class="n">SimPixel</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.layout.circle</span> <span class="k">import</span> <span class="n">Circle</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.layout</span> <span class="k">import</span> <span class="n">geometry</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.animation.sequence</span> <span class="k">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.util</span> <span class="k">import</span> <span class="n">class_name</span>
+<span class="kn">from</span> <span class="nn">BiblioPixelAnimations.circle.bloom</span> <span class="k">import</span> <span class="n">CircleBloom</span>
+<span class="kn">from</span> <span class="nn">BiblioPixelAnimations.circle.swirl</span> <span class="k">import</span> <span class="n">Swirl</span>
+<span class="kn">from</span> <span class="nn">BiblioPixelAnimations.circle.hyperspace</span> <span class="k">import</span> <span class="n">HyperspaceRainbow</span>
+
+
+<span class="n">BLOOM</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;simpixel&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;matrix&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixelAnimations.matrix.bloom.Bloom&#39;</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">30</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="n">MATRIX_PROJECT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;simpixel&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;matrix&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;sequence&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;animations&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span>
+                <span class="s1">&#39;BiblioPixelAnimations.matrix.MatrixRain.MatrixRainBow&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixelAnimations.matrix.Text.ScrollText&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;xPos&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+                    <span class="s1">&#39;font_scale&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixel Demo&#39;</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s1">&#39;until_complete&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixelAnimations.matrix.bloom.Bloom&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixelAnimations.matrix.circlepop.CirclePop&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">CUBE_PROJECT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;simpixel&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;cube&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;sequence&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;animations&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;typename&#39;</span><span class="p">:</span>
+                        <span class="s1">&#39;BiblioPixelAnimations.cube.wave_spiral.WaveSpiral&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">6</span>
+                <span class="p">},</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixelAnimations.cube.Rain.RainBow&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="s1">&#39;BiblioPixelAnimations.cube.bloom.CubeBloom&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;amt&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s1">&#39;fps&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                    <span class="s1">&#39;seconds&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">_PIXELS_PER</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+<span class="n">_RINGS</span><span class="p">,</span> <span class="n">_STEPS</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">make_circle_coord_map</span><span class="p">(</span><span class="n">pixels_per</span><span class="o">=</span><span class="n">_PIXELS_PER</span><span class="p">)</span>
+<span class="n">_POINTS</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">make_circle_coord_map_positions</span><span class="p">(</span>
+    <span class="n">_RINGS</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">z_diff</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">CIRCLE_PROJECT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;simpixel&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">_PIXELS_PER</span><span class="p">),</span>
+        <span class="s1">&#39;pixel_positions&#39;</span><span class="p">:</span> <span class="n">_POINTS</span><span class="p">,</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;circle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rings&#39;</span><span class="p">:</span> <span class="n">_RINGS</span><span class="p">,</span>
+        <span class="s1">&#39;maxAngleDiff&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">},</span>
+
+    <span class="s1">&#39;animation&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;sequence&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="s1">&#39;animations&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">class_name</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">CircleBloom</span><span class="p">),</span>
+            <span class="n">class_name</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">Swirl</span><span class="p">),</span>
+            <span class="n">class_name</span><span class="o">.</span><span class="n">class_name</span><span class="p">(</span><span class="n">HyperspaceRainbow</span><span class="p">)]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="circle"><a class="viewcode-back" href="../../../reference/api/bibliopixel.main.demo_table.html#bibliopixel.main.demo_table.circle">[docs]</a><span class="k">def</span> <span class="nf">circle</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">pixels_per</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+    <span class="n">rings</span><span class="p">,</span> <span class="n">steps</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">make_circle_coord_map</span><span class="p">(</span><span class="n">pixels_per</span><span class="o">=</span><span class="n">pixels_per</span><span class="p">)</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">make_circle_coord_map_positions</span><span class="p">(</span>
+        <span class="n">rings</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">z_diff</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">SimPixel</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">pixels_per</span><span class="p">),</span> <span class="n">pixel_positions</span><span class="o">=</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">rings</span><span class="o">=</span><span class="n">rings</span><span class="p">,</span> <span class="n">maxAngleDiff</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">anim</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="n">anim</span><span class="o">.</span><span class="n">add_animation</span><span class="p">(</span><span class="n">CircleBloom</span><span class="p">(</span><span class="n">layout</span><span class="p">),</span> <span class="n">amt</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">anim</span><span class="o">.</span><span class="n">add_animation</span><span class="p">(</span><span class="n">Swirl</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">amt</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">anim</span><span class="o">.</span><span class="n">add_animation</span><span class="p">(</span><span class="n">HyperspaceRainbow</span><span class="p">(</span><span class="n">layout</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">anim</span></div>
+
+
+<span class="n">DEMO_TABLE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;bloom&#39;</span><span class="p">:</span> <span class="n">BLOOM</span><span class="p">,</span>
+    <span class="s1">&#39;circle&#39;</span><span class="p">:</span> <span class="n">CIRCLE_PROJECT</span><span class="p">,</span>
+    <span class="s1">&#39;cube&#39;</span><span class="p">:</span> <span class="n">CUBE_PROJECT</span><span class="p">,</span>
+    <span class="s1">&#39;matrix&#39;</span><span class="p">:</span> <span class="n">MATRIX_PROJECT</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

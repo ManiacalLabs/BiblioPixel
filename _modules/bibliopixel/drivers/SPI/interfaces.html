@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.drivers.SPI.interfaces &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.drivers.SPI.interfaces</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.drivers.SPI.interfaces</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">errors</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">spi_interfaces</span> <span class="kn">import</span> <span class="nn">SPI_INTERFACES</span>
+
+
+<div class="viewcode-block" id="SpiBaseInterface"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiBaseInterface">[docs]</a><span class="k">class</span> <span class="nc">SpiBaseInterface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; abstract class for different spi backends&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev</span><span class="p">,</span> <span class="n">spi_speed</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dev</span> <span class="o">=</span> <span class="n">dev</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spi_speed</span> <span class="o">=</span> <span class="n">spi_speed</span>
+
+<div class="viewcode-block" id="SpiBaseInterface.send_packet"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiBaseInterface.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;SHOULD BE PRIVATE&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SpiBaseInterface.compute_packet"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiBaseInterface.compute_packet">[docs]</a>    <span class="k">def</span> <span class="nf">compute_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;SHOULD BE PRIVATE&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="SpiBaseInterface.error"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiBaseInterface.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;SHOULD BE PRIVATE&quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error with dev: </span><span class="si">{}</span><span class="s1">, spi_speed: </span><span class="si">{}</span><span class="s1"> - </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spi_speed</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SpiFileInterface"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiFileInterface">[docs]</a><span class="k">class</span> <span class="nc">SpiFileInterface</span><span class="p">(</span><span class="n">SpiBaseInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; using os open/write to send data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">CANT_FIND_ERROR</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;file io spi dev </span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">))</span>
+
+<div class="viewcode-block" id="SpiFileInterface.send_packet"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiFileInterface.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;SHOULD BE PRIVATE&quot;&quot;&quot;</span>
+        <span class="n">package_size</span> <span class="o">=</span> <span class="mi">4032</span>  <span class="c1"># bit smaller than 4096 because of headers</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="n">package_size</span><span class="p">))):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">package_size</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">package_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="SpiPeripheryInterface"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiPeripheryInterface">[docs]</a><span class="k">class</span> <span class="nc">SpiPeripheryInterface</span><span class="p">(</span><span class="n">SpiBaseInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; using `python-periphery` to send data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">CANT_FIND_ERROR</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">periphery</span> <span class="k">import</span> <span class="n">SPI</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span> <span class="o">=</span> <span class="n">SPI</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spi_speed</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">CANT_IMPORT_PERIPHERY_ERROR</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;periphery spi dev </span><span class="si">{:s}</span><span class="s1"> speed @ </span><span class="si">{:.2f}</span><span class="s1"> MHz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">max_speed</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">))</span>
+
+<div class="viewcode-block" id="SpiPeripheryInterface.send_packet"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiPeripheryInterface.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;SHOULD BE PRIVATE&quot;&quot;&quot;</span>
+        <span class="n">package_size</span> <span class="o">=</span> <span class="mi">4032</span>  <span class="c1"># bit smaller than 4096 because of headers</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="n">package_size</span><span class="p">))):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">package_size</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">package_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">transfer</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="SpiPyDevInterface"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiPyDevInterface">[docs]</a><span class="k">class</span> <span class="nc">SpiPyDevInterface</span><span class="p">(</span><span class="n">SpiBaseInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; using py-spidev to send data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/dev/spidev&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_device_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device_cs</span> <span class="o">=</span> <span class="n">ids</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">BAD_FORMAT_ERROR</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">CANT_FIND_ERROR</span><span class="p">)</span>
+        <span class="c1"># permissions check</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">PERMISSION_ERROR</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+        <span class="c1"># import spidev and cache error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">spidev</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span> <span class="o">=</span> <span class="n">spidev</span><span class="o">.</span><span class="n">SpiDev</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">CANT_IMPORT_SPIDEV_ERROR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device_cs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">max_speed_hz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spi_speed</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s1">&#39;py-spidev dev </span><span class="si">{:s}</span><span class="s1"> speed @ </span><span class="si">{:.2f}</span><span class="s1"> MHz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">max_speed_hz</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">))</span>
+
+<div class="viewcode-block" id="SpiPyDevInterface.send_packet"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiPyDevInterface.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;SHOULD BE PRIVATE&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spi</span><span class="o">.</span><span class="n">xfer2</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="SpiDummyInterface"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiDummyInterface">[docs]</a><span class="k">class</span> <span class="nc">SpiDummyInterface</span><span class="p">(</span><span class="n">SpiBaseInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; interface for testing proposal&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SpiDummyInterface.send_packet"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SPI.interfaces.html#bibliopixel.drivers.SPI.interfaces.SpiDummyInterface.send_packet">[docs]</a>    <span class="k">def</span> <span class="nf">send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; do nothing &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="n">_SPI_INTERFACES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">SpiFileInterface</span><span class="p">,</span>
+    <span class="n">SpiPyDevInterface</span><span class="p">,</span>
+    <span class="n">SpiPeripheryInterface</span><span class="p">,</span>
+    <span class="n">SpiDummyInterface</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

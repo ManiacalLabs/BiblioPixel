@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.OneKClock module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.OneKClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.Alternates module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.strip.Alternates
+    :members:
+    :undoc-members:
+    :show-inheritance:

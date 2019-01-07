@@ -1,0 +1,7 @@
+bibliopixel.drivers.SPI.interfaces module
+=========================================
+
+.. automodule:: bibliopixel.drivers.SPI.interfaces
+    :members:
+    :undoc-members:
+    :show-inheritance:

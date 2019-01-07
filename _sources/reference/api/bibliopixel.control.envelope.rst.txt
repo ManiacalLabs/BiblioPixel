@@ -1,0 +1,18 @@
+bibliopixel.control.envelope package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.control.envelope.envelope
+   bibliopixel.control.envelope.segments
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.control.envelope
+    :members:
+    :undoc-members:
+    :show-inheritance:

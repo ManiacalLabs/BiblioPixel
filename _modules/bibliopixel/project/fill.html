@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.project.fill &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.project.fill</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.project.fill</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Fill in missing parts of a project and cleans up its sections</span>
+<span class="sd">so they have exactly the right constructor.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">aliases</span><span class="p">,</span> <span class="n">construct</span><span class="p">,</span> <span class="n">merge</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">layout</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">deprecated</span><span class="o">,</span> <span class="nn">exception</span><span class="o">,</span> <span class="nn">log</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">colors</span> <span class="kn">import</span> <span class="nn">make</span><span class="o">,</span> <span class="nn">palettes</span><span class="o">,</span> <span class="nn">tables</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">animation</span><span class="o">.</span><span class="n">strip</span> <span class="kn">import</span> <span class="nn">Strip</span>
+
+<span class="n">DEFAULT_DRIVERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">construct</span><span class="o">.</span><span class="n">to_type</span><span class="p">(</span><span class="s1">&#39;simpixel&#39;</span><span class="p">)]</span>
+
+
+<div class="viewcode-block" id="fill"><a class="viewcode-back" href="../../../reference/api/bibliopixel.project.fill.html#bibliopixel.project.fill.fill">[docs]</a><span class="k">def</span> <span class="nf">fill</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_aliases</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_colors</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_palettes</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_animation</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_drivers</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_shape</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>  <span class="c1"># Must come after fill_drivers</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_numbers</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">_fill_controls</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">desc</span></div>
+
+
+<div class="viewcode-block" id="fill_layout"><a class="viewcode-back" href="../../../reference/api/bibliopixel.project.fill.html#bibliopixel.project.fill.fill_layout">[docs]</a><span class="k">def</span> <span class="nf">fill_layout</span><span class="p">(</span><span class="n">animation</span><span class="p">):</span>
+    <span class="c1"># Try to fill in the layout if it&#39;s missing.</span>
+    <span class="c1"># This is called from Project.__init__ - TODO: fix that.</span>
+    <span class="n">datatype</span> <span class="o">=</span> <span class="n">animation</span><span class="p">[</span><span class="s1">&#39;datatype&#39;</span><span class="p">]</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="s1">&#39;LAYOUT_ARGS&#39;</span><span class="p">,</span> <span class="n">Strip</span><span class="o">.</span><span class="n">LAYOUT_ARGS</span><span class="p">)</span>
+    <span class="n">layout_cl</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="s1">&#39;LAYOUT_CLASS&#39;</span><span class="p">,</span> <span class="n">Strip</span><span class="o">.</span><span class="n">LAYOUT_CLASS</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">animation</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">animation</span><span class="p">}</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">layout_cl</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_fill_aliases</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">unalias</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">aliases</span><span class="o">.</span><span class="n">ALIAS_MARKERS</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">k</span>
+
+    <span class="n">al</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;aliases&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">aliases</span><span class="o">.</span><span class="n">PROJECT_ALIASES</span> <span class="o">=</span> <span class="p">{</span><span class="n">unalias</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">al</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_colors</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">tables</span><span class="o">.</span><span class="n">set_user_colors</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;colors&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_palettes</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;palettes&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">exception</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;Error in &quot;palettes&quot; Section&#39;</span><span class="p">):</span>
+            <span class="n">pp</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">make</span><span class="o">.</span><span class="n">colors</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">palettes</span><span class="o">.</span><span class="n">PROJECT_PALETTES</span> <span class="o">=</span> <span class="n">pp</span>
+        <span class="k">if</span> <span class="n">default</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">palettes</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unable to set default palette to be </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_animation</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;animation&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{</span><span class="s1">&#39;typename&#39;</span><span class="p">:</span> <span class="s1">&#39;animation&#39;</span><span class="p">}</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="n">construct</span><span class="o">.</span><span class="n">to_type_constructor</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="s1">&#39;bibliopixel.animation&#39;</span><span class="p">)</span>
+    <span class="n">datatype</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datatype&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">datatype</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_exception&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span> <span class="ow">or</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Missing &quot;datatype&quot; in &quot;animation&quot; Section&#39;</span><span class="p">)</span>
+
+    <span class="n">da</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">..</span> <span class="n">animation</span> <span class="kn">import</span> <span class="nn">sequence</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="n">sequence</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="c1"># Magic here to allow this to work for non-sequences.</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="n">length</span><span class="p">:</span>
+            <span class="n">desc</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="s1">&#39;seconds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">length</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">merge</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="s1">&#39;PROJECT&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">desc</span><span class="p">)</span>
+
+    <span class="n">da</span><span class="p">[</span><span class="s1">&#39;run&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="o">**</span><span class="n">da</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;animation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">da</span>
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_drivers</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">construct</span><span class="o">.</span><span class="n">to_type</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;driver&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="n">drivers</span> <span class="o">=</span> <span class="p">[</span><span class="n">construct</span><span class="o">.</span><span class="n">to_type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;drivers&#39;</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">driver</span><span class="p">:</span>
+        <span class="n">drivers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="o">**</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">drivers</span> <span class="ow">or</span> <span class="p">[{}]]</span>
+
+    <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;drivers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">drivers</span> <span class="ow">or</span> <span class="n">DEFAULT_DRIVERS</span>
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_shape</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="c1"># TODO: this copy can&#39;t be deleted AND this can&#39;t be moved even one step</span>
+    <span class="c1"># earlier without causing a test failure!</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">dimensions</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;dimensions&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dimensions</span><span class="p">:</span>
+        <span class="n">deprecated</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span><span class="s1">&#39;Project Section &quot;dimensions&quot;&#39;</span><span class="p">)</span>
+
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">dimensions</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">shape</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">desc</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="s1">&#39;drivers&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot use dimensions with more than one driver&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">shape</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shape</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">):</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shape</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot parse shape </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`shape` must be a number or a list, was &quot;</span><span class="si">%s</span><span class="s1">&quot; (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span>
+                         <span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span>
+
+    <span class="n">ldesc</span> <span class="o">=</span> <span class="n">construct</span><span class="o">.</span><span class="n">to_type_constructor</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{},</span>
+                                          <span class="n">python_path</span><span class="o">=</span><span class="s1">&#39;bibliopixel.layout&#39;</span><span class="p">)</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;drivers&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">driver</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ldesc</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;datatype&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">strip</span><span class="o">.</span><span class="n">Strip</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">driver</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ldesc</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;datatype&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span>
+        <span class="n">ldesc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">height</span><span class="o">=</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">driver</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">ldesc</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;datatype&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">.</span><span class="n">cube</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span>
+        <span class="n">ldesc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Dimension </span><span class="si">%s</span><span class="s1"> &gt; 3&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+
+    <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ldesc</span>
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_numbers</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;python&#39;</span>
+    <span class="k">if</span> <span class="n">numbers</span> <span class="o">!=</span> <span class="s1">&#39;python&#39;</span><span class="p">:</span>
+        <span class="n">desc</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;maker&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="s1">&#39;numpy_dtype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">numbers</span>
+
+    <span class="k">return</span> <span class="n">desc</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_controls</span><span class="p">(</span><span class="n">desc</span><span class="p">):</span>
+    <span class="n">controls</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;controls&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+        <span class="n">desc</span><span class="p">[</span><span class="s1">&#39;controls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">controls</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">desc</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

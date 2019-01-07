@@ -1,0 +1,7 @@
+bibliopixel.util.threads.compose\_events module
+===============================================
+
+.. automodule:: bibliopixel.util.threads.compose_events
+    :members:
+    :undoc-members:
+    :show-inheritance:

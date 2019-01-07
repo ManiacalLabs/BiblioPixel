@@ -1,0 +1,7 @@
+bibliopixel.util.duration module
+================================
+
+.. automodule:: bibliopixel.util.duration
+    :members:
+    :undoc-members:
+    :show-inheritance:

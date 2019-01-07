@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.opencv\_video module
+=================================================
+
+.. automodule:: BiblioPixelAnimations.matrix.opencv_video
+    :members:
+    :undoc-members:
+    :show-inheritance:

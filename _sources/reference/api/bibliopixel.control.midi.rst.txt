@@ -1,0 +1,7 @@
+bibliopixel.control.midi module
+===============================
+
+.. automodule:: bibliopixel.control.midi
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.RGBClock module
+===========================================
+
+.. automodule:: BiblioPixelAnimations.strip.RGBClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

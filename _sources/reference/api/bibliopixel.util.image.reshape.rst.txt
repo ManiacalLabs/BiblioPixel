@@ -1,0 +1,7 @@
+bibliopixel.util.image.reshape module
+=====================================
+
+.. automodule:: bibliopixel.util.image.reshape
+    :members:
+    :undoc-members:
+    :show-inheritance:

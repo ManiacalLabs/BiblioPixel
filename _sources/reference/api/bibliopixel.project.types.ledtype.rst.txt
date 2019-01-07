@@ -1,0 +1,7 @@
+bibliopixel.project.types.ledtype module
+========================================
+
+.. automodule:: bibliopixel.project.types.ledtype
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.LarsonScanners module
+=================================================
+
+.. automodule:: BiblioPixelAnimations.strip.LarsonScanners
+    :members:
+    :undoc-members:
+    :show-inheritance:

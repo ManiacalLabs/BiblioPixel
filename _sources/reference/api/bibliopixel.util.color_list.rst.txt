@@ -1,0 +1,7 @@
+bibliopixel.util.color\_list module
+===================================
+
+.. automodule:: bibliopixel.util.color_list
+    :members:
+    :undoc-members:
+    :show-inheritance:

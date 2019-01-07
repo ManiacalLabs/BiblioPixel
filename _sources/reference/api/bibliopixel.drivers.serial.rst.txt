@@ -1,0 +1,20 @@
+bibliopixel.drivers.serial package
+==================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.drivers.serial.codes
+   bibliopixel.drivers.serial.devices
+   bibliopixel.drivers.serial.driver
+   bibliopixel.drivers.serial.io
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.drivers.serial
+    :members:
+    :undoc-members:
+    :show-inheritance:

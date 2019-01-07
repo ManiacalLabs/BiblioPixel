@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The SPI Driver &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="The simpixel Driver" href="the-simpixel-driver.html" />
+    <link rel="prev" title="The Serial Driver" href="the-serial-driver.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">The BiblioPixel Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/index.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/index.html">Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sections/index.html">The Sections in a Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fields/index.html">Field Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../animations/index.html">Animations</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Drivers</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="the-driver-section.html">The <code class="docutils literal notranslate"><span class="pre">driver</span></code> Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="the-drivers-section.html">The <code class="docutils literal notranslate"><span class="pre">drivers</span></code> Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="the-serial-driver.html">The Serial Driver</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">The SPI Driver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#serial-driver-fields">Serial Driver Fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ledtype"><code class="docutils literal notranslate"><span class="pre">ledtype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#color-order">Color Order</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="the-simpixel-driver.html">The <code class="docutils literal notranslate"><span class="pre">simpixel</span></code> Driver</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../controls/index.html">Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">The BiblioPixel Tutorial</a> &raquo;</li>
+        
+          <li><a href="index.html">Drivers</a> &raquo;</li>
+        
+      <li>The SPI Driver</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tutorial/drivers/the-spi-driver.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-spi-driver">
+<h1>The SPI Driver<a class="headerlink" href="#the-spi-driver" title="Permalink to this headline">¶</a></h1>
+<p>Many small computers like the Raspberry Pi have an Serial Peripheral Interface
+or SPI bus, which allows the machine to directly control LEDs.</p>
+<p>This driver controls this</p>
+<p><strong>Example</strong>: The <code class="docutils literal notranslate"><span class="pre">driver</span></code> section of a project using Serial communication</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">driver</span><span class="p">:</span>
+  <span class="nt">typename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.serial</span>
+  <span class="nt">ledtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LPD8806</span>
+  <span class="nt">c_order</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GRB</span>
+  <span class="nt">gamma</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2.5</span>
+  <span class="nt">device_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+<div class="section" id="serial-driver-fields">
+<h2>Serial Driver Fields<a class="headerlink" href="#serial-driver-fields" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">ledtype</span></code></dt>
+<dd>LED protocol type - see below for details</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dev</span></code></dt>
+<dd>Serial device address/path. If not set, the first serial device
+found will be used.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">c_order</span></code></dt>
+<dd>RGB color order - see below for details</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">gamma</span></code></p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">spi_speed</span></code> (default <code class="docutils literal notranslate"><span class="pre">2</span></code>)</dt>
+<dd>SPI datarate for applicable LED types, in MHz</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">restart_timeout</span></code> (default <code class="docutils literal notranslate"><span class="pre">3</span></code>)</dt>
+<dd>Seconds to wait between reconfigure reboot and reconnection attempt</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">device_id</span></code></dt>
+<dd>Device ID to connect to.  If not set, connect to the first device ID
+found on the device</dd>
+<dt>hardwareID (default <code class="docutils literal notranslate"><span class="pre">'1D50:60AB'</span></code>)</dt>
+<dd>A valid USB VID:PID (vendor id : product id) pair.  The default is the
+VID:PID pair for the AllPixel</dd>
+<dt>baudrate (default <code class="docutils literal notranslate"><span class="pre">921600</span></code>)</dt>
+<dd>Baud rate to connect to serial device</dd>
+</dl>
+</div>
+<div class="section" id="ledtype">
+<h2><code class="docutils literal notranslate"><span class="pre">ledtype</span></code><a class="headerlink" href="#ledtype" title="Permalink to this headline">¶</a></h2>
+<p>The Serial Driver already understands many brands and varieties of RGB LED
+strips out of the box.  They are identified by a string called the <code class="docutils literal notranslate"><span class="pre">LEDTYPE</span></code>.</p>
+<ul class="simple">
+<li>APA102</li>
+<li>APA104</li>
+<li>LPD1886</li>
+<li>LPD8806</li>
+<li>NEOPIXEL</li>
+<li>P9813</li>
+<li>SK9822</li>
+<li>SM16716</li>
+<li>TM1803</li>
+<li>TM1804</li>
+<li>TM1809</li>
+<li>UCS1903</li>
+<li>WS2801</li>
+<li>WS2811</li>
+<li>WS2811_400</li>
+<li>WS2812</li>
+<li>WS2812B</li>
+<li>GENERIC  # No processing</li>
+</ul>
+<p>If you don’t see your brand of LED strip, just ask the <a class="reference external" href="https://groups.google.com/d/forum/maniacal-labs-users">mailing list</a>. It’s very likely
+that it’s either a variant of one of the above, or we can figure out how to
+handle it.</p>
+</div>
+<div class="section" id="color-order">
+<h2>Color Order<a class="headerlink" href="#color-order" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">c_order</span></code> field sets the order of the color RGB components in the  LED
+strips - which are unfortunately different between different brands.</p>
+</div>
+<div class="section" id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>[TODO-API: embed or point to generated documentation for serial/driver.py]</p>
+<div class="section" id="id1">
+<h3>LEDTYPE<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The Serial Driver needs to have an LEDTYPE set to identify the LED chipset and
+hardware.  This must be one of these values: [TODO-API: point to or embed generated
+documentation for ledtype.py]</p>
+<hr class="docutils" />
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">shape</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">61</span><span class="p p-Indicator">,</span> <span class="nv">13</span><span class="p p-Indicator">]</span>
+<span class="nt">animation</span><span class="p">:</span>
+  <span class="nt">typename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$bpa.matrix.MathFunc</span>
+  <span class="nt">palette</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bold</span>
+  <span class="nt">func</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/drivers/the-spi-driver-footer.gif"><img alt="doc/tutorial/drivers/the-spi-driver-footer" class="align-center" src="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/drivers/the-spi-driver-footer.gif" /></a>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="the-simpixel-driver.html" class="btn btn-neutral float-right" title="The simpixel Driver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="the-serial-driver.html" class="btn btn-neutral" title="The Serial Driver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

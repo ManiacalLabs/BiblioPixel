@@ -1,0 +1,7 @@
+bibliopixel.project.recurse module
+==================================
+
+.. automodule:: bibliopixel.project.recurse
+    :members:
+    :undoc-members:
+    :show-inheritance:

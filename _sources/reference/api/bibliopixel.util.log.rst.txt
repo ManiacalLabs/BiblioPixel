@@ -1,0 +1,7 @@
+bibliopixel.util.log module
+===========================
+
+.. automodule:: bibliopixel.util.log
+    :members:
+    :undoc-members:
+    :show-inheritance:

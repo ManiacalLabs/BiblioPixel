@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fields of a Palette &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="The ledtype Field identifies the type of LED strip" href="ledtype.html" />
+    <link rel="prev" title="Named Palettes" href="named-palettes.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">The BiblioPixel Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/index.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/index.html">Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sections/index.html">The Sections in a Project</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Field Types</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="typenames.html">The <code class="docutils literal notranslate"><span class="pre">typename</span></code> Field identifies a Python class.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="types-of-typenames.html">Types of Typenames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="types-of-typenames.html#warning-warning-warning">WARNING WARNING WARNING!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="type-guessing.html">Type guessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="palettes.html">Palettes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="named-palettes.html">Named Palettes</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Fields of a Palette</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ledtype.html">The <code class="docutils literal notranslate"><span class="pre">ledtype</span></code> Field identifies the type of LED strip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="c_order.html">The <code class="docutils literal notranslate"><span class="pre">c_order</span></code> Field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gamma.html"><code class="docutils literal notranslate"><span class="pre">gamma</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../animations/index.html">Animations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/index.html">Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../controls/index.html">Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">The BiblioPixel Tutorial</a> &raquo;</li>
+        
+          <li><a href="index.html">Field Types</a> &raquo;</li>
+        
+      <li>Fields of a Palette</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tutorial/fields/fields-of-a-palette.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fields-of-a-palette">
+<h1>Fields of a Palette<a class="headerlink" href="#fields-of-a-palette" title="Permalink to this headline">¶</a></h1>
+<p>Palettes have several extra fields for special effects.  They’re all optional
+but you can experiment with them and not break anything, and you can get
+interesting results that way.</p>
+<p>You can also attach Palette Fields to a Control (described later in this
+Tutorial) and change the values in real-time from an external source for
+more excitement.</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">colors</span></code> (default <code class="docutils literal notranslate"><span class="pre">[Black]</span></code>)</dt>
+<dd>A list of colors, or a string of color names separated with commas.
+Each color can be a string name, a hex string like #FFFFFF or 0xE8E0E8,
+or a triplet of integers like [255, 0, 255].  <code class="docutils literal notranslate"><span class="pre">colors</span></code> can also be the name
+of a Built-in or User Palette, in which case its Fields are copied and then
+possibly overwritten by Fields in this Palette.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">continuous</span></code> (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)</dt>
+<dd>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, interpolate linearly between colors; otherwise
+use the nearest color from the original list.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">serpentine</span></code></dt>
+<dd>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, palette colors are used in reverse order every
+other iteration, giving a back-and-forth effect.  Otherwise,
+palette colors always restart on each iteration</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scale</span></code></dt>
+<dd>Scales the incoming index <code class="docutils literal notranslate"><span class="pre">i</span></code>.  As <code class="docutils literal notranslate"><span class="pre">i</span></code> moves from 0
+to <code class="docutils literal notranslate"><span class="pre">len(colors)</span> <span class="pre">-</span> <span class="pre">1</span></code>, the whole palette repeats itself
+<code class="docutils literal notranslate"><span class="pre">self.scale</span></code> times</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">offset</span></code></dt>
+<dd>Offset added to the incoming index <code class="docutils literal notranslate"><span class="pre">i</span></code>.  The offset is applied after scaling</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">autoscale</span></code></dt>
+<dd>If True, automatically rescale the Palette size to match the length of the
+output length. <code class="docutils literal notranslate"><span class="pre">autoscale</span></code> happens before <code class="docutils literal notranslate"><span class="pre">scale</span></code>, so the two work well
+together to give banding or striping effects across your display</dd>
+</dl>
+<hr class="docutils" />
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">shape</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">48</span><span class="p p-Indicator">]</span>
+<span class="nt">animation</span><span class="p">:</span>
+  <span class="nt">typename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$bpa.strip.Pulse</span>
+  <span class="nt">colors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;lime&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;dark</span><span class="nv"> </span><span class="s">olive</span><span class="nv"> </span><span class="s">green&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;emerald</span><span class="nv"> </span><span class="s">green&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/fields/fields-of-a-palette-footer.gif"><img alt="doc/tutorial/fields/fields-of-a-palette-footer" class="align-center" src="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/fields/fields-of-a-palette-footer.gif" /></a>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ledtype.html" class="btn btn-neutral float-right" title="The ledtype Field identifies the type of LED strip" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="named-palettes.html" class="btn btn-neutral" title="Named Palettes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

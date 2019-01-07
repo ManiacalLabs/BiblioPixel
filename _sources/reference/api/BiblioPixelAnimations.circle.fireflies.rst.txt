@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.fireflies module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.circle.fireflies
+    :members:
+    :undoc-members:
+    :show-inheritance:

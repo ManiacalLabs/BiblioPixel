@@ -1,0 +1,7 @@
+bibliopixel.project.types.channel\_order module
+===============================================
+
+.. automodule:: bibliopixel.project.types.channel_order
+    :members:
+    :undoc-members:
+    :show-inheritance:

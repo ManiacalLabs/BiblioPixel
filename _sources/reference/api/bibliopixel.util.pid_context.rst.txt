@@ -1,0 +1,7 @@
+bibliopixel.util.pid\_context module
+====================================
+
+.. automodule:: bibliopixel.util.pid_context
+    :members:
+    :undoc-members:
+    :show-inheritance:

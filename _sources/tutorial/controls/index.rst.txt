@@ -1,0 +1,29 @@
+Controls
+------------------------------
+
+This chapter describes Controls, a way of controlling all parts of a Project in
+real-time from any external source.
+
+.. toctree::
+   :maxdepth: 1
+
+   the-controls-section
+   routing-addresses-and-actions
+
+
+
+----------
+
+.. code-block:: yaml
+
+   shape: [64, 7]
+   animation:
+     typename: $bpa.matrix.Text.ScrollText
+     color: Red
+     text: Controls
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/controls/index-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/controls/index-footer.gif
+   :alt: doc/tutorial/controls/index-footer
+   :align: center
+

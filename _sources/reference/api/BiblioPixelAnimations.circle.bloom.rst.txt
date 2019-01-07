@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.bloom module
+=========================================
+
+.. automodule:: BiblioPixelAnimations.circle.bloom
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.drivers.server\_driver module
+=========================================
+
+.. automodule:: bibliopixel.drivers.server_driver
+    :members:
+    :undoc-members:
+    :show-inheritance:

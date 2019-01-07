@@ -1,0 +1,7 @@
+bibliopixel.project.importer module
+===================================
+
+.. automodule:: bibliopixel.project.importer
+    :members:
+    :undoc-members:
+    :show-inheritance:

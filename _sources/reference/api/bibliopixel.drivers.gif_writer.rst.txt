@@ -1,0 +1,7 @@
+bibliopixel.drivers.gif\_writer module
+======================================
+
+.. automodule:: bibliopixel.drivers.gif_writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

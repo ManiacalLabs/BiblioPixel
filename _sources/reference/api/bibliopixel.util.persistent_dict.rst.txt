@@ -1,0 +1,7 @@
+bibliopixel.util.persistent\_dict module
+========================================
+
+.. automodule:: bibliopixel.util.persistent_dict
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,23 @@
+bibliopixel.layout.geometry package
+===================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.layout.geometry.circle
+   bibliopixel.layout.geometry.cube
+   bibliopixel.layout.geometry.index_ops
+   bibliopixel.layout.geometry.matrix
+   bibliopixel.layout.geometry.rotation
+   bibliopixel.layout.geometry.segment
+   bibliopixel.layout.geometry.strip
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.layout.geometry
+    :members:
+    :undoc-members:
+    :show-inheritance:

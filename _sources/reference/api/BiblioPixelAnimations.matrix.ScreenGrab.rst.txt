@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.ScreenGrab module
+==============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.ScreenGrab
+    :members:
+    :undoc-members:
+    :show-inheritance:

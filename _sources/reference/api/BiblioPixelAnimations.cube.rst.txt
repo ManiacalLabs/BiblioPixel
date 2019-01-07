@@ -1,0 +1,28 @@
+BiblioPixelAnimations.cube package
+==================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    BiblioPixelAnimations.cube.spectrum
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.cube.GameOfLife
+   BiblioPixelAnimations.cube.Rain
+   BiblioPixelAnimations.cube.bloom
+   BiblioPixelAnimations.cube.simplex
+   BiblioPixelAnimations.cube.wave_spiral
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.cube
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.control.address module
+==================================
+
+.. automodule:: bibliopixel.control.address
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.WhiteTwinkle module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.strip.WhiteTwinkle
+    :members:
+    :undoc-members:
+    :show-inheritance:

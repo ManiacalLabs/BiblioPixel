@@ -1,0 +1,7 @@
+bibliopixel.drivers.mirror module
+=================================
+
+.. automodule:: bibliopixel.drivers.mirror
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.ColorPattern module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.strip.ColorPattern
+    :members:
+    :undoc-members:
+    :show-inheritance:

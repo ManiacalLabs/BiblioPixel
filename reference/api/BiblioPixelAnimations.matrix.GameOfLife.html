@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BiblioPixelAnimations.matrix.GameOfLife module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="BiblioPixelAnimations.matrix.GradientClock module" href="BiblioPixelAnimations.matrix.GradientClock.html" />
+    <link rel="prev" title="BiblioPixelAnimations.matrix.CPUUsage module" href="BiblioPixelAnimations.matrix.CPUUsage.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="modules.html">bibliopixel</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="BiblioPixelAnimations.html">BiblioPixelAnimations package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="BiblioPixelAnimations.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BiblioPixelAnimations.html#module-BiblioPixelAnimations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="BiblioPixelAnimations.html">BiblioPixelAnimations package</a> &raquo;</li>
+        
+          <li><a href="BiblioPixelAnimations.matrix.html">BiblioPixelAnimations.matrix package</a> &raquo;</li>
+        
+      <li>BiblioPixelAnimations.matrix.GameOfLife module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/BiblioPixelAnimations.matrix.GameOfLife.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-BiblioPixelAnimations.matrix.GameOfLife">
+<span id="bibliopixelanimations-matrix-gameoflife-module"></span><h1>BiblioPixelAnimations.matrix.GameOfLife module<a class="headerlink" href="#module-BiblioPixelAnimations.matrix.GameOfLife" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLife">
+<em class="property">class </em><code class="descclassname">BiblioPixelAnimations.matrix.GameOfLife.</code><code class="descname">GameOfLife</code><span class="sig-paren">(</span><em>layout</em>, <em>toroidal=False</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLife"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bibliopixel.animation.matrix.html#bibliopixel.animation.matrix.Matrix" title="bibliopixel.animation.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.animation.matrix.Matrix</span></code></a></p>
+<dl class="attribute">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.COLOR_DEFAULTS">
+<code class="descname">COLOR_DEFAULTS</code><em class="property"> = (('bg', (0, 0, 0)), ('color', (255, 0, 0)))</em><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.COLOR_DEFAULTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.pre_run">
+<code class="descname">pre_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLife.pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.pre_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>amt=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLife.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.stepTable">
+<code class="descname">stepTable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLife.stepTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.stepTable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock">
+<em class="property">class </em><code class="descclassname">BiblioPixelAnimations.matrix.GameOfLife.</code><code class="descname">GameOfLifeClock</code><span class="sig-paren">(</span><em>layout</em>, <em>font_name='16x8'</em>, <em>mil_time=False</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bibliopixel.animation.matrix.html#bibliopixel.animation.matrix.Matrix" title="bibliopixel.animation.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.animation.matrix.Matrix</span></code></a></p>
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.create_time_table">
+<code class="descname">create_time_table</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.create_time_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.create_time_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.display_frame">
+<code class="descname">display_frame</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.display_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.display_frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.do_gen_next">
+<code class="descname">do_gen_next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.do_gen_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.do_gen_next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.gen_next">
+<code class="descname">gen_next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.gen_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.gen_next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.generate_history">
+<code class="descname">generate_history</code><span class="sig-paren">(</span><em>t</em>, <em>steps</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.generate_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.generate_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>amt=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.swap_history">
+<code class="descname">swap_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeClock.swap_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.swap_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB">
+<em class="property">class </em><code class="descclassname">BiblioPixelAnimations.matrix.GameOfLife.</code><code class="descname">GameOfLifeRGB</code><span class="sig-paren">(</span><em>layout</em>, <em>toroidal=True</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeRGB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bibliopixel.animation.matrix.html#bibliopixel.animation.matrix.Matrix" title="bibliopixel.animation.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.animation.matrix.Matrix</span></code></a></p>
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.doStableCheck">
+<code class="descname">doStableCheck</code><span class="sig-paren">(</span><em>table</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeRGB.doStableCheck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.doStableCheck" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.pre_run">
+<code class="descname">pre_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeRGB.pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.pre_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>amt=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeRGB.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.stepTables">
+<code class="descname">stepTables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#GameOfLifeRGB.stepTables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.stepTables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.Table">
+<em class="property">class </em><code class="descclassname">BiblioPixelAnimations.matrix.GameOfLife.</code><code class="descname">Table</code><span class="sig-paren">(</span><em>height</em>, <em>width</em>, <em>rand_max</em>, <em>table=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#Table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.Table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.Table.checkStable">
+<code class="descname">checkStable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#Table.checkStable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.Table.checkStable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.Table.genNewTable">
+<code class="descname">genNewTable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#Table.genNewTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.Table.genNewTable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.Table.liveNeighbours">
+<code class="descname">liveNeighbours</code><span class="sig-paren">(</span><em>y</em>, <em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#Table.liveNeighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.Table.liveNeighbours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of live neighbours.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BiblioPixelAnimations.matrix.GameOfLife.Table.turn">
+<code class="descname">turn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/BiblioPixelAnimations/matrix/GameOfLife.html#Table.turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BiblioPixelAnimations.matrix.GameOfLife.Table.turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="BiblioPixelAnimations.matrix.GradientClock.html" class="btn btn-neutral float-right" title="BiblioPixelAnimations.matrix.GradientClock module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="BiblioPixelAnimations.matrix.CPUUsage.html" class="btn btn-neutral" title="BiblioPixelAnimations.matrix.CPUUsage module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

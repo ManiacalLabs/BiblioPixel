@@ -1,0 +1,7 @@
+bibliopixel.main.commands module
+================================
+
+.. automodule:: bibliopixel.main.commands
+    :members:
+    :undoc-members:
+    :show-inheritance:

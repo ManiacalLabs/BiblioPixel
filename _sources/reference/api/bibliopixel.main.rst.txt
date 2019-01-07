@@ -1,0 +1,21 @@
+bibliopixel.main package
+========================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.main.args
+   bibliopixel.main.commands
+   bibliopixel.main.demo_table
+   bibliopixel.main.main
+   bibliopixel.main.project_flags
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.main
+    :members:
+    :undoc-members:
+    :show-inheritance:

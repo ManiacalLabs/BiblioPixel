@@ -1,0 +1,7 @@
+BiblioPixelAnimations.simple.LogFade module
+===========================================
+
+.. automodule:: BiblioPixelAnimations.simple.LogFade
+    :members:
+    :undoc-members:
+    :show-inheritance:

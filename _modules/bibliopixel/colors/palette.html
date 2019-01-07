@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.colors.palette &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.colors.palette</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.colors.palette</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">classic</span> <span class="kn">import</span> <span class="nn">Black</span>
+
+
+<div class="viewcode-block" id="Palette"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.palette.html#bibliopixel.colors.palette.Palette">[docs]</a><span class="k">class</span> <span class="nc">Palette</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Palette is a list of one or more colors used to render Animations.</span>
+
+<span class="sd">    The method ``Palette.get()`` takes a position in the pallete and returns</span>
+<span class="sd">    a color.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">(),</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">serpentine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            colors: an iterable of colors</span>
+
+<span class="sd">            continuous: if True, interpolate linearly between colors; if False,</span>
+<span class="sd">              use the nearest color from the original list</span>
+
+<span class="sd">            serpentine: if True, palette colors are used in reverse order every</span>
+<span class="sd">              other iteration, giving a back-and-forth effect.  If False,</span>
+<span class="sd">              palette colors always restart on each iteration</span>
+
+<span class="sd">            scale: Scales the incoming index ``i``.  As ``i`` moves from 0</span>
+<span class="sd">              to ``len(colors) - 1``, the whole palette repeats itself</span>
+<span class="sd">              ``self.scale`` times</span>
+
+<span class="sd">            offset: offset to the incoming index ``i``, applied after scaling</span>
+
+<span class="sd">            autoscale: If True, automatically rescale the Palette size to</span>
+<span class="sd">              match the length of the output.  ``autoscale`` happens before</span>
+<span class="sd">              ``scale``, so the two work well together to give banding or</span>
+<span class="sd">              striping effects across your display</span>
+
+<span class="sd">           ``length``:</span>
+<span class="sd">             The length of the output color_list.  If None, use the length of</span>
+<span class="sd">             the palette itself.  If autoscale=True, ``length`` is used to scale</span>
+<span class="sd">             the palette to match the output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Black</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">continuous</span> <span class="o">=</span> <span class="n">continuous</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serpentine</span> <span class="o">=</span> <span class="n">serpentine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span> <span class="o">=</span> <span class="n">autoscale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Palette.get"><a class="viewcode-back" href="../../../reference/api/bibliopixel.colors.palette.html#bibliopixel.colors.palette.Palette.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a color interpolated from the Palette.</span>
+
+<span class="sd">        In the case where continuous=False, serpentine=False, scale=1,</span>
+<span class="sd">        autoscale=False, and offset=0, this is exactly the same as plain old []</span>
+<span class="sd">        indexing, but with a wrap-around.</span>
+
+<span class="sd">        The constructor parameters affect this result as documented in the</span>
+<span class="sd">        constructor.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">           ``position``:</span>
+<span class="sd">             May be any integer or floating point number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">position</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoscale</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">*=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">pos</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+
+        <span class="n">pos</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">continuous</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">serpentine</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">pos</span> <span class="o">%</span> <span class="n">n</span><span class="p">)]</span>
+
+            <span class="c1"># We want a color sequence of length 2n-2</span>
+            <span class="c1"># e.g. for n=5: a b c d | e d c b | a b c d ...</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
+            <span class="n">pos</span> <span class="o">%=</span> <span class="n">m</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">pos</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">serpentine</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">%=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">%=</span> <span class="n">n</span>
+
+        <span class="c1"># p is a number in [0, n): scale it to be in [0, n-1)</span>
+        <span class="n">pos</span> <span class="o">*=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">pos</span> <span class="o">/=</span> <span class="n">n</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">fade</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">index</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fade</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="n">r1</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">b1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">r2</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)]</span>
+        <span class="n">dr</span><span class="p">,</span> <span class="n">dg</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">r2</span> <span class="o">-</span> <span class="n">r1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">-</span> <span class="n">g1</span><span class="p">,</span> <span class="n">b2</span> <span class="o">-</span> <span class="n">b1</span>
+
+        <span class="k">return</span> <span class="n">r1</span> <span class="o">+</span> <span class="n">fade</span> <span class="o">*</span> <span class="n">dr</span><span class="p">,</span> <span class="n">g1</span> <span class="o">+</span> <span class="n">fade</span> <span class="o">*</span> <span class="n">dg</span><span class="p">,</span> <span class="n">b1</span> <span class="o">+</span> <span class="n">fade</span> <span class="o">*</span> <span class="n">db</span></div>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">make</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">make</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Palette</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">vars</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">other</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

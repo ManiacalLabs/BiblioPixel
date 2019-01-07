@@ -1,0 +1,17 @@
+BiblioPixelAnimations.cube.spectrum package
+===========================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.cube.spectrum.system_eq
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.cube.spectrum
+    :members:
+    :undoc-members:
+    :show-inheritance:

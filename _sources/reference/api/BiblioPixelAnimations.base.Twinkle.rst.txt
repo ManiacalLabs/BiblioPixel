@@ -1,0 +1,7 @@
+BiblioPixelAnimations.base.Twinkle module
+=========================================
+
+.. automodule:: BiblioPixelAnimations.base.Twinkle
+    :members:
+    :undoc-members:
+    :show-inheritance:

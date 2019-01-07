@@ -1,0 +1,7 @@
+bibliopixel.util.image.yml module
+=================================
+
+.. automodule:: bibliopixel.util.image.yml
+    :members:
+    :undoc-members:
+    :show-inheritance:

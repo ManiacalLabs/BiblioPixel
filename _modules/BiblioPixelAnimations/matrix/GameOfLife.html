@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BiblioPixelAnimations.matrix.GameOfLife &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BiblioPixelAnimations.matrix.GameOfLife</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BiblioPixelAnimations.matrix.GameOfLife</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.animation.matrix</span> <span class="k">import</span> <span class="n">Matrix</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.colors</span> <span class="k">import</span> <span class="n">COLORS</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.util</span> <span class="k">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.layout</span> <span class="k">import</span> <span class="n">font</span>
+
+
+<div class="viewcode-block" id="Table"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.Table">[docs]</a><span class="k">class</span> <span class="nc">Table</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">rand_max</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rand_max</span> <span class="o">=</span> <span class="n">rand_max</span>
+        <span class="k">if</span> <span class="n">table</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">genNewTable</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_oldStates</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_oldStates</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+
+<div class="viewcode-block" id="Table.genNewTable"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.Table.genNewTable">[docs]</a>    <span class="k">def</span> <span class="nf">genNewTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rand_max</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">rand</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Table.liveNeighbours"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.Table.liveNeighbours">[docs]</a>    <span class="k">def</span> <span class="nf">liveNeighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of live neighbours.&quot;&quot;&quot;</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">]:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">]:</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">x</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">count</span></div>
+
+<div class="viewcode-block" id="Table.turn"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.Table.turn">[docs]</a>    <span class="k">def</span> <span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn&quot;&quot;&quot;</span>
+        <span class="n">nt</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">neighbours</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">liveNeighbours</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">neighbours</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">nt</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">neighbours</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">neighbours</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">):</span>
+                        <span class="n">nt</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_oldStates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_oldStates</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_oldStates</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">nt</span></div>
+
+<div class="viewcode-block" id="Table.checkStable"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.Table.checkStable">[docs]</a>    <span class="k">def</span> <span class="nf">checkStable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oldStates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="GameOfLife"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife">[docs]</a><span class="k">class</span> <span class="nc">GameOfLife</span><span class="p">(</span><span class="n">Matrix</span><span class="p">):</span>
+    <span class="n">COLOR_DEFAULTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bg&#39;</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">Off</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">Red</span><span class="p">),</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">toroidal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="n">toroidal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_finishCount</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="GameOfLife.pre_run"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.pre_run">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span></div>
+
+<div class="viewcode-block" id="GameOfLife.stepTable"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.stepTable">[docs]</a>    <span class="k">def</span> <span class="nf">stepTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">col</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">turn</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GameOfLife.step"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLife.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepTable</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">checkStable</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_finishCount</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finishCount</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">genNewTable</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_finishCount</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">animComplete</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="GameOfLifeRGB"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB">[docs]</a><span class="k">class</span> <span class="nc">GameOfLifeRGB</span><span class="p">(</span><span class="n">Matrix</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">toroidal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="n">toroidal</span>
+
+<div class="viewcode-block" id="GameOfLifeRGB.pre_run"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.pre_run">[docs]</a>    <span class="k">def</span> <span class="nf">pre_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableG</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableG</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableB</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableB</span><span class="o">.</span><span class="n">toroidal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toroidal</span></div>
+
+<div class="viewcode-block" id="GameOfLifeRGB.stepTables"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.stepTables">[docs]</a>    <span class="k">def</span> <span class="nf">stepTables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span> <span class="o">*</span> <span class="mi">255</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableG</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span> <span class="o">*</span> <span class="mi">255</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableB</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span> <span class="o">*</span> <span class="mi">255</span>
+
+                <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span><span class="o">.</span><span class="n">turn</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableG</span><span class="o">.</span><span class="n">turn</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tableB</span><span class="o">.</span><span class="n">turn</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GameOfLifeRGB.doStableCheck"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.doStableCheck">[docs]</a>    <span class="k">def</span> <span class="nf">doStableCheck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">table</span><span class="o">.</span><span class="n">checkStable</span><span class="p">():</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">genNewTable</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GameOfLifeRGB.step"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeRGB.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepTables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doStableCheck</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doStableCheck</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableG</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doStableCheck</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tableB</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="GameOfLifeClock"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock">[docs]</a><span class="k">class</span> <span class="nc">GameOfLifeClock</span><span class="p">(</span><span class="n">Matrix</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">font_name</span><span class="o">=</span><span class="s1">&#39;16x8&#39;</span><span class="p">,</span> <span class="n">mil_time</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font_name</span> <span class="o">=</span> <span class="n">font_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mil_time</span> <span class="o">=</span> <span class="n">mil_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">steady_time</span> <span class="o">=</span> <span class="mi">2000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_history</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_ready</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Find the text size</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">str_dim</span><span class="p">(</span><span class="s1">&#39;00:00&#39;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">font_name</span><span class="p">,</span>
+                                <span class="n">font_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">final_sep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># create a time frame while we wait</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_time_table</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+
+<div class="viewcode-block" id="GameOfLifeClock.create_time_table"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.create_time_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_time_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">hr</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">tm_hour</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">mil_time</span><span class="p">:</span>
+            <span class="n">hr</span> <span class="o">=</span> <span class="n">hr</span> <span class="o">%</span> <span class="mi">12</span>
+        <span class="n">hrs</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">mins</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">tm_min</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">hrs</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">mins</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">str_dim</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">font_name</span><span class="p">,</span>
+                            <span class="n">font_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">final_sep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">h</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">old_buf</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">all_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="o">.</span><span class="n">Red</span><span class="p">,</span>
+                             <span class="n">font</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">font_name</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">table</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">old_buf</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">table</span></div>
+
+<div class="viewcode-block" id="GameOfLifeClock.generate_history"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.generate_history">[docs]</a>    <span class="k">def</span> <span class="nf">generate_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_time_table</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">steady_frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steady_time</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span><span class="p">)</span>
+        <span class="n">steady</span> <span class="o">=</span> <span class="n">steps</span> <span class="k">if</span> <span class="n">steps</span> <span class="o">&lt;=</span> <span class="n">steady_frames</span> <span class="k">else</span> <span class="n">steady_frames</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steady</span><span class="p">):</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+        <span class="n">gol</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span> <span class="o">-</span> <span class="n">steady</span><span class="p">):</span>
+            <span class="n">gol</span><span class="o">.</span><span class="n">turn</span><span class="p">()</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">gol</span><span class="o">.</span><span class="n">table</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">history</span></div>
+
+<div class="viewcode-block" id="GameOfLifeClock.gen_next"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.gen_next">[docs]</a>    <span class="k">def</span> <span class="nf">gen_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_msTime</span><span class="p">()</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span><span class="p">,</span> <span class="s2">&quot;GameOfLifeClock requires a set FPS!&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_history</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60000</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;History Generate Time: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_msTime</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="GameOfLifeClock.do_gen_next"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.do_gen_next">[docs]</a>    <span class="k">def</span> <span class="nf">do_gen_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_thread</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_thread</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_next</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GameOfLifeClock.swap_history"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.swap_history">[docs]</a>    <span class="k">def</span> <span class="nf">swap_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_ready</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_gen_next</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GameOfLifeClock.display_frame"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.display_frame">[docs]</a>    <span class="k">def</span> <span class="nf">display_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">Red</span> <span class="k">if</span> <span class="n">frame</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="k">else</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">Black</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GameOfLifeClock.step"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.GameOfLife.html#BiblioPixelAnimations.matrix.GameOfLife.GameOfLifeClock.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_ready</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">display_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_frame</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_gen_next</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">swap_history</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">display_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">display_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_ready</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">swap_history</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

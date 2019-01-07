@@ -1,0 +1,22 @@
+bibliopixel.util.threads package
+================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.util.threads.compose_events
+   bibliopixel.util.threads.producer_consumer
+   bibliopixel.util.threads.runnable
+   bibliopixel.util.threads.sub
+   bibliopixel.util.threads.task_thread
+   bibliopixel.util.threads.worker
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.util.threads
+    :members:
+    :undoc-members:
+    :show-inheritance:

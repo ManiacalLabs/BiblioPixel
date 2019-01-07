@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.diag module
+========================================
+
+.. automodule:: BiblioPixelAnimations.circle.diag
+    :members:
+    :undoc-members:
+    :show-inheritance:

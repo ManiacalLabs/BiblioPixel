@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.rotation module
+===========================================
+
+.. automodule:: bibliopixel.layout.geometry.rotation
+    :members:
+    :undoc-members:
+    :show-inheritance:

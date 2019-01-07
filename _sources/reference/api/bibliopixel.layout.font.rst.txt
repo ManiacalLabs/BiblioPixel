@@ -1,0 +1,7 @@
+bibliopixel.layout.font module
+==============================
+
+.. automodule:: bibliopixel.layout.font
+    :members:
+    :undoc-members:
+    :show-inheritance:

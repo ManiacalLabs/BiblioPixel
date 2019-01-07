@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.bloom module
+=========================================
+
+.. automodule:: BiblioPixelAnimations.matrix.bloom
+    :members:
+    :undoc-members:
+    :show-inheritance:

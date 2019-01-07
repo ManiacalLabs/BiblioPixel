@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.circle module
+=========================================
+
+.. automodule:: bibliopixel.layout.geometry.circle
+    :members:
+    :undoc-members:
+    :show-inheritance:

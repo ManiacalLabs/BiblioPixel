@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.ColorFade module
+============================================
+
+.. automodule:: BiblioPixelAnimations.strip.ColorFade
+    :members:
+    :undoc-members:
+    :show-inheritance:

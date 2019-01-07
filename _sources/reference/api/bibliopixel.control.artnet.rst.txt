@@ -1,0 +1,7 @@
+bibliopixel.control.artnet module
+=================================
+
+.. automodule:: bibliopixel.control.artnet
+    :members:
+    :undoc-members:
+    :show-inheritance:

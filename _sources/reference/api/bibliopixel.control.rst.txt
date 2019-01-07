@@ -1,0 +1,37 @@
+bibliopixel.control package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    bibliopixel.control.envelope
+    bibliopixel.control.rest
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.control.action
+   bibliopixel.control.address
+   bibliopixel.control.artnet
+   bibliopixel.control.control
+   bibliopixel.control.editor
+   bibliopixel.control.extractor
+   bibliopixel.control.gamepad
+   bibliopixel.control.keyboard
+   bibliopixel.control.midi
+   bibliopixel.control.ops
+   bibliopixel.control.receiver
+   bibliopixel.control.routing
+   bibliopixel.control.serial_gamepad
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.control
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.game.Tetris module
+========================================
+
+.. automodule:: BiblioPixelAnimations.game.Tetris
+    :members:
+    :undoc-members:
+    :show-inheritance:

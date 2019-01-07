@@ -1,0 +1,7 @@
+bibliopixel.project.merge module
+================================
+
+.. automodule:: bibliopixel.project.merge
+    :members:
+    :undoc-members:
+    :show-inheritance:

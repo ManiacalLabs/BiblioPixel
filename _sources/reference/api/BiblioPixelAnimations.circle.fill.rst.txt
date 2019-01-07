@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.fill module
+========================================
+
+.. automodule:: BiblioPixelAnimations.circle.fill
+    :members:
+    :undoc-members:
+    :show-inheritance:

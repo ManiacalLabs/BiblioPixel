@@ -1,0 +1,31 @@
+bibliopixel.colors package
+==========================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.colors.arithmetic
+   bibliopixel.colors.classic
+   bibliopixel.colors.closest_colors
+   bibliopixel.colors.colors
+   bibliopixel.colors.conversions
+   bibliopixel.colors.gamma
+   bibliopixel.colors.juce
+   bibliopixel.colors.legacy_palette
+   bibliopixel.colors.make
+   bibliopixel.colors.names
+   bibliopixel.colors.palette
+   bibliopixel.colors.palettes
+   bibliopixel.colors.printer
+   bibliopixel.colors.tables
+   bibliopixel.colors.wheel
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.colors
+    :members:
+    :undoc-members:
+    :show-inheritance:

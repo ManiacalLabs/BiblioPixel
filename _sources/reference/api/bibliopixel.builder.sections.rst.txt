@@ -1,0 +1,7 @@
+bibliopixel.builder.sections module
+===================================
+
+.. automodule:: bibliopixel.builder.sections
+    :members:
+    :undoc-members:
+    :show-inheritance:

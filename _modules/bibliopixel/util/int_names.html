@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.int_names &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.util.int_names</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.util.int_names</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Fanciful names for integer indexes into lists - either a day of week,</span>
+<span class="sd">a month, a planet, or a chemical element.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">calendar</span>
+
+
+<div class="viewcode-block" id="to_index"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.int_names.html#bibliopixel.util.int_names.to_index">[docs]</a><span class="k">def</span> <span class="nf">to_index</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Indexes cannot be floating point&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">NAME_TO_INDEX</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Can</span><span class="se">\&#39;</span><span class="s1">t understand index &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="to_names"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.int_names.html#bibliopixel.util.int_names.to_names">[docs]</a><span class="k">def</span> <span class="nf">to_names</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">INDEX_TO_NAME</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_combine</span><span class="p">(</span><span class="o">*</span><span class="n">name_lists</span><span class="p">):</span>
+    <span class="n">name_to_index</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">index_to_name</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">nl</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name_to_index</span><span class="p">:</span>
+            <span class="n">name_to_index</span><span class="p">[</span><span class="n">nl</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">index_to_name</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">nl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">DUPES</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; duplicated&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">ZEROES</span><span class="p">:</span>
+        <span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">name_list</span> <span class="ow">in</span> <span class="n">name_lists</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">,</span>
+
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">add</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">name_to_index</span><span class="p">,</span> <span class="n">index_to_name</span>
+
+
+<span class="n">DUPES</span> <span class="o">=</span> <span class="s1">&#39;may&#39;</span><span class="p">,</span> <span class="s1">&#39;mercury&#39;</span>
+<span class="n">ZEROES</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;nothing&#39;</span><span class="p">,</span> <span class="s1">&#39;zero&#39;</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span>
+
+<span class="n">DAYS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">calendar</span><span class="o">.</span><span class="n">day_abbr</span><span class="p">,</span> <span class="n">calendar</span><span class="o">.</span><span class="n">day_name</span><span class="p">))</span>
+<span class="n">MONTHS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">calendar</span><span class="o">.</span><span class="n">month_abbr</span><span class="p">,</span> <span class="n">calendar</span><span class="o">.</span><span class="n">month_name</span><span class="p">))[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">COLORS</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;indigo&#39;</span><span class="p">,</span> <span class="s1">&#39;violet&#39;</span>
+<span class="n">PLANETS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Mercury&#39;</span><span class="p">,</span> <span class="s1">&#39;Venus&#39;</span><span class="p">,</span> <span class="s1">&#39;Earth&#39;</span><span class="p">,</span> <span class="s1">&#39;Mars&#39;</span><span class="p">,</span> <span class="s1">&#39;Jupiter&#39;</span><span class="p">,</span> <span class="s1">&#39;Saturn&#39;</span><span class="p">,</span> <span class="s1">&#39;Uranus&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;Neptune&#39;</span><span class="p">,</span> <span class="s1">&#39;Pluto&#39;</span><span class="p">)</span>
+
+<span class="n">ELEMENTS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;hydrogen&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;He&#39;</span><span class="p">,</span> <span class="s1">&#39;helium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Li&#39;</span><span class="p">,</span> <span class="s1">&#39;lithium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Be&#39;</span><span class="p">,</span> <span class="s1">&#39;beryllium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;boron&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;carbon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;nitrogen&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;oxygen&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;fluorine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ne&#39;</span><span class="p">,</span> <span class="s1">&#39;neon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Na&#39;</span><span class="p">,</span> <span class="s1">&#39;sodium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Mg&#39;</span><span class="p">,</span> <span class="s1">&#39;magnesium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="s1">&#39;aluminum&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="s1">&#39;silicon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;phosphorus&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;sulfur&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cl&#39;</span><span class="p">,</span> <span class="s1">&#39;chlorine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ar&#39;</span><span class="p">,</span> <span class="s1">&#39;argon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;potassium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ca&#39;</span><span class="p">,</span> <span class="s1">&#39;calcium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Sc&#39;</span><span class="p">,</span> <span class="s1">&#39;scandium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ti&#39;</span><span class="p">,</span> <span class="s1">&#39;titanium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="s1">&#39;vanadium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cr&#39;</span><span class="p">,</span> <span class="s1">&#39;chromium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Mn&#39;</span><span class="p">,</span> <span class="s1">&#39;manganese&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Fe&#39;</span><span class="p">,</span> <span class="s1">&#39;iron&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Co&#39;</span><span class="p">,</span> <span class="s1">&#39;cobalt&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ni&#39;</span><span class="p">,</span> <span class="s1">&#39;nickel&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cu&#39;</span><span class="p">,</span> <span class="s1">&#39;copper&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Zn&#39;</span><span class="p">,</span> <span class="s1">&#39;zinc&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ga&#39;</span><span class="p">,</span> <span class="s1">&#39;gallium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ge&#39;</span><span class="p">,</span> <span class="s1">&#39;germanium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;As&#39;</span><span class="p">,</span> <span class="s1">&#39;arsenic&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Se&#39;</span><span class="p">,</span> <span class="s1">&#39;selenium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Br&#39;</span><span class="p">,</span> <span class="s1">&#39;bromine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Kr&#39;</span><span class="p">,</span> <span class="s1">&#39;krypton&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Rb&#39;</span><span class="p">,</span> <span class="s1">&#39;rubidium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Sr&#39;</span><span class="p">,</span> <span class="s1">&#39;strontium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;yttrium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Zr&#39;</span><span class="p">,</span> <span class="s1">&#39;zirconium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Nb&#39;</span><span class="p">,</span> <span class="s1">&#39;niobium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Mo&#39;</span><span class="p">,</span> <span class="s1">&#39;molybdenum&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Tc&#39;</span><span class="p">,</span> <span class="s1">&#39;technetium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ru&#39;</span><span class="p">,</span> <span class="s1">&#39;ruthenium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Rh&#39;</span><span class="p">,</span> <span class="s1">&#39;rhodium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pd&#39;</span><span class="p">,</span> <span class="s1">&#39;palladium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ag&#39;</span><span class="p">,</span> <span class="s1">&#39;silver&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cd&#39;</span><span class="p">,</span> <span class="s1">&#39;cadmium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;In&#39;</span><span class="p">,</span> <span class="s1">&#39;indium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Sn&#39;</span><span class="p">,</span> <span class="s1">&#39;tin&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Sb&#39;</span><span class="p">,</span> <span class="s1">&#39;antimony&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Te&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;iodine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Xe&#39;</span><span class="p">,</span> <span class="s1">&#39;xenon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;cesium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ba&#39;</span><span class="p">,</span> <span class="s1">&#39;barium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;La&#39;</span><span class="p">,</span> <span class="s1">&#39;lanthanum&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ce&#39;</span><span class="p">,</span> <span class="s1">&#39;cerium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pr&#39;</span><span class="p">,</span> <span class="s1">&#39;praseodymium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Nd&#39;</span><span class="p">,</span> <span class="s1">&#39;neodymium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pm&#39;</span><span class="p">,</span> <span class="s1">&#39;promethium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Sm&#39;</span><span class="p">,</span> <span class="s1">&#39;samarium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Eu&#39;</span><span class="p">,</span> <span class="s1">&#39;europium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Gd&#39;</span><span class="p">,</span> <span class="s1">&#39;gadolinium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Tb&#39;</span><span class="p">,</span> <span class="s1">&#39;terbium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Dy&#39;</span><span class="p">,</span> <span class="s1">&#39;dysprosium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ho&#39;</span><span class="p">,</span> <span class="s1">&#39;holmium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Er&#39;</span><span class="p">,</span> <span class="s1">&#39;erbium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Tm&#39;</span><span class="p">,</span> <span class="s1">&#39;thulium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Yb&#39;</span><span class="p">,</span> <span class="s1">&#39;ytterbium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Lu&#39;</span><span class="p">,</span> <span class="s1">&#39;lutetium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Hf&#39;</span><span class="p">,</span> <span class="s1">&#39;hafnium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ta&#39;</span><span class="p">,</span> <span class="s1">&#39;tantalum&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;tungsten&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Re&#39;</span><span class="p">,</span> <span class="s1">&#39;rhenium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Os&#39;</span><span class="p">,</span> <span class="s1">&#39;osmium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ir&#39;</span><span class="p">,</span> <span class="s1">&#39;iridium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="s1">&#39;platinum&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Au&#39;</span><span class="p">,</span> <span class="s1">&#39;gold&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Hg&#39;</span><span class="p">,</span> <span class="s1">&#39;mercury&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Tl&#39;</span><span class="p">,</span> <span class="s1">&#39;thallium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pb&#39;</span><span class="p">,</span> <span class="s1">&#39;lead&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Bi&#39;</span><span class="p">,</span> <span class="s1">&#39;bismuth&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Po&#39;</span><span class="p">,</span> <span class="s1">&#39;polonium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;At&#39;</span><span class="p">,</span> <span class="s1">&#39;astatine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Rn&#39;</span><span class="p">,</span> <span class="s1">&#39;radon&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Fr&#39;</span><span class="p">,</span> <span class="s1">&#39;francium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ra&#39;</span><span class="p">,</span> <span class="s1">&#39;radium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ac&#39;</span><span class="p">,</span> <span class="s1">&#39;actinium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Th&#39;</span><span class="p">,</span> <span class="s1">&#39;thorium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pa&#39;</span><span class="p">,</span> <span class="s1">&#39;protactinium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="s1">&#39;uranium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Np&#39;</span><span class="p">,</span> <span class="s1">&#39;neptunium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Pu&#39;</span><span class="p">,</span> <span class="s1">&#39;plutonium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Am&#39;</span><span class="p">,</span> <span class="s1">&#39;americium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cm&#39;</span><span class="p">,</span> <span class="s1">&#39;curium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Bk&#39;</span><span class="p">,</span> <span class="s1">&#39;berkelium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cf&#39;</span><span class="p">,</span> <span class="s1">&#39;californium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Es&#39;</span><span class="p">,</span> <span class="s1">&#39;einsteinium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Fm&#39;</span><span class="p">,</span> <span class="s1">&#39;fermium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Md&#39;</span><span class="p">,</span> <span class="s1">&#39;mendelevium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;No&#39;</span><span class="p">,</span> <span class="s1">&#39;nobelium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Lr&#39;</span><span class="p">,</span> <span class="s1">&#39;lawrencium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Rf&#39;</span><span class="p">,</span> <span class="s1">&#39;rutherfordium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Db&#39;</span><span class="p">,</span> <span class="s1">&#39;dubnium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Sg&#39;</span><span class="p">,</span> <span class="s1">&#39;seaborgium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Bh&#39;</span><span class="p">,</span> <span class="s1">&#39;bohrium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Hs&#39;</span><span class="p">,</span> <span class="s1">&#39;hassium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Mt&#39;</span><span class="p">,</span> <span class="s1">&#39;meitnerium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ds&#39;</span><span class="p">,</span> <span class="s1">&#39;darmstadtium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Rg&#39;</span><span class="p">,</span> <span class="s1">&#39;roentgenium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Cn&#39;</span><span class="p">,</span> <span class="s1">&#39;copernicium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Nh&#39;</span><span class="p">,</span> <span class="s1">&#39;nihonium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Fl&#39;</span><span class="p">,</span> <span class="s1">&#39;flerovium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Mc&#39;</span><span class="p">,</span> <span class="s1">&#39;moscovium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Lv&#39;</span><span class="p">,</span> <span class="s1">&#39;livermorium&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Ts&#39;</span><span class="p">,</span> <span class="s1">&#39;tennessine&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Og&#39;</span><span class="p">,</span> <span class="s1">&#39;oganesson&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+
+
+<span class="n">NAME_TO_INDEX</span><span class="p">,</span> <span class="n">INDEX_TO_NAME</span> <span class="o">=</span> <span class="n">_combine</span><span class="p">(</span><span class="n">DAYS</span><span class="p">,</span> <span class="n">MONTHS</span><span class="p">,</span> <span class="n">COLORS</span><span class="p">,</span> <span class="n">PLANETS</span><span class="p">,</span> <span class="n">ELEMENTS</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

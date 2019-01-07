@@ -1,0 +1,7 @@
+bibliopixel.colors.wheel module
+===============================
+
+.. automodule:: bibliopixel.colors.wheel
+    :members:
+    :undoc-members:
+    :show-inheritance:

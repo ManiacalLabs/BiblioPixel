@@ -1,0 +1,7 @@
+bibliopixel.control.routing module
+==================================
+
+.. automodule:: bibliopixel.control.routing
+    :members:
+    :undoc-members:
+    :show-inheritance:

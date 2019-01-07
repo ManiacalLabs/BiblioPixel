@@ -1,0 +1,7 @@
+bibliopixel.project.aliases module
+==================================
+
+.. automodule:: bibliopixel.project.aliases
+    :members:
+    :undoc-members:
+    :show-inheritance:

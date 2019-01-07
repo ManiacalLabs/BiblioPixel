@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.Searchlights module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.strip.Searchlights
+    :members:
+    :undoc-members:
+    :show-inheritance:

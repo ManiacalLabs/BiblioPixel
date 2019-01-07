@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.layout.layout module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.layout.matrix module" href="bibliopixel.layout.matrix.html" />
+    <link rel="prev" title="bibliopixel.layout.font module" href="bibliopixel.layout.font.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.layout.html">bibliopixel.layout package</a> &raquo;</li>
+        
+      <li>bibliopixel.layout.layout module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.layout.layout.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.layout.layout">
+<span id="bibliopixel-layout-layout-module"></span><h1>bibliopixel.layout.layout module<a class="headerlink" href="#module-bibliopixel.layout.layout" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bibliopixel.layout.layout.Layout">
+<em class="property">class </em><code class="descclassname">bibliopixel.layout.layout.</code><code class="descname">Layout</code><span class="sig-paren">(</span><em>drivers</em>, <em>threadedUpdate=False</em>, <em>brightness=255</em>, <em>maker=&lt;bibliopixel.project.data_maker.Maker object&gt;</em>, <em>color_list=None</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base Layer class. Use Strip, Matrix, Cube, or Circle instead!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>drivers</strong> – A list of drivers</li>
+<li><strong>threadedUpdate</strong> – If True, updates to this layout are done in a
+separate thread</li>
+<li><strong>brightness</strong> – An initial brightness value from 0 to 255</li>
+<li><strong>maker</strong> – A data maker to make color_lists. TODO: Link to what a maker
+is.</li>
+<li><strong>color_list</strong> – If non-Null, the layout uses this color_list instead
+of creating its own</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><p class="first last"><strong>numLEDs</strong> (<em>int</em>) – Total number of pixels held by this layout instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="bibliopixel.layout.layout.Layout.CLONE_ATTRS">
+<code class="descname">CLONE_ATTRS</code><em class="property"> = ('maker', 'brightness')</em><a class="headerlink" href="#bibliopixel.layout.layout.Layout.CLONE_ATTRS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.all_off">
+<code class="descname">all_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.all_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.all_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set all pixels off</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.cleanup">
+<code class="descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.cleanup_drivers">
+<code class="descname">cleanup_drivers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.cleanup_drivers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.cleanup_drivers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an independent copy of this layout with a completely separate
+color_list and no drivers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.layout.layout.Layout.color_list">
+<code class="descname">color_list</code><a class="headerlink" href="#bibliopixel.layout.layout.Layout.color_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="bibliopixel.layout.layout.Layout.construct">
+<em class="property">classmethod </em><code class="descname">construct</code><span class="sig-paren">(</span><em>project</em>, <em>**desc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.construct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.construct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a layout.
+SHOULD BE PRIVATE</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.layout.layout.Layout.dimensions">
+<code class="descname">dimensions</code><a class="headerlink" href="#bibliopixel.layout.layout.Layout.dimensions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.fill">
+<code class="descname">fill</code><span class="sig-paren">(</span><em>color</em>, <em>start=0</em>, <em>end=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.fill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the entire strip with RGB color tuple</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.fillHSV">
+<code class="descname">fillHSV</code><span class="sig-paren">(</span><em>hsv</em>, <em>start=0</em>, <em>end=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.fillHSV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.fillHSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the entire strip with HSV color tuple</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.fillRGB">
+<code class="descname">fillRGB</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em>, <em>start=0</em>, <em>end=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.fillRGB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.fillRGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill entire strip by giving individual RGB values instead of tuple</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.get_pixel_positions">
+<code class="descname">get_pixel_positions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.get_pixel_positions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.get_pixel_positions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.pre_recursion">
+<code class="descname">pre_recursion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bibliopixel.layout.layout.Layout.pre_recursion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.push_to_driver">
+<code class="descname">push_to_driver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.push_to_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.push_to_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push the current pixel state to the driver
+Do not call this method from user code!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.setHSV">
+<code class="descname">setHSV</code><span class="sig-paren">(</span><em>pixel</em>, <em>hsv</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.setHSV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.setHSV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set single pixel to HSV tuple</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.setOff">
+<code class="descname">setOff</code><span class="sig-paren">(</span><em>pixel</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.setOff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.setOff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set single pixel off</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.setRGB">
+<code class="descname">setRGB</code><span class="sig-paren">(</span><em>pixel</em>, <em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.setRGB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.setRGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set single pixel using individual RGB values instead of tuple</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.set_brightness">
+<code class="descname">set_brightness</code><span class="sig-paren">(</span><em>brightness</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.set_brightness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.set_brightness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.set_color_list">
+<code class="descname">set_color_list</code><span class="sig-paren">(</span><em>color_list</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.set_color_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.set_color_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the internal colors starting at an optional offset.</p>
+<p>If <cite>color_list</cite> is a list or other 1-dimensional array, it is reshaped
+into an N x 3 list.</p>
+<p>If <cite>color_list</cite> too long it is truncated; if it is too short then only
+the initial colors are set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.set_pixel_positions">
+<code class="descname">set_pixel_positions</code><span class="sig-paren">(</span><em>pixel_positions</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.set_pixel_positions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.set_pixel_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>SHOULD BE PRIVATE</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.layout.layout.Layout.shape">
+<code class="descname">shape</code><a class="headerlink" href="#bibliopixel.layout.layout.Layout.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple indicating the dimensions of the layout - (x,) for a
+strip, (x, y) for an array, (x, y, z) for a cube, and
+(ring_count, ring_steps) for a circle.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.Layout.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#Layout.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.Layout.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED: Use <a class="reference internal" href="#bibliopixel.layout.layout.Layout.push_to_driver" title="bibliopixel.layout.layout.Layout.push_to_driver"><code class="xref py py-func docutils literal notranslate"><span class="pre">push_to_driver()</span></code></a> instead
+Do not call this method from user code!</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bibliopixel.layout.layout.MultiLayout">
+<em class="property">class </em><code class="descclassname">bibliopixel.layout.layout.</code><code class="descname">MultiLayout</code><span class="sig-paren">(</span><em>*args</em>, <em>gen_coord_map=None</em>, <em>coord_map=None</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#MultiLayout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.MultiLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bibliopixel.layout.layout.Layout" title="bibliopixel.layout.layout.Layout"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.layout.layout.Layout</span></code></a></p>
+<dl class="attribute">
+<dt id="bibliopixel.layout.layout.MultiLayout.CLONE_ATTRS">
+<code class="descname">CLONE_ATTRS</code><em class="property"> = ('maker', 'brightness', 'gen_coord_map', 'coord_map')</em><a class="headerlink" href="#bibliopixel.layout.layout.MultiLayout.CLONE_ATTRS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.MultiLayout.gen_multi">
+<code class="descname">gen_multi</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#MultiLayout.gen_multi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.MultiLayout.gen_multi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.MultiLayout.setBuffer">
+<code class="descname">setBuffer</code><span class="sig-paren">(</span><em>buf</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#MultiLayout.setBuffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.MultiLayout.setBuffer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.layout.MultiLayout.set_colors">
+<code class="descname">set_colors</code><span class="sig-paren">(</span><em>buf</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/layout.html#MultiLayout.set_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.layout.MultiLayout.set_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED: use self.color_list</p>
+<p>Use with extreme caution!
+Directly sets the internal buffer and bypasses all brightness and
+rotation control buf must also be in the exact format required by the
+display type.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.layout.matrix.html" class="btn btn-neutral float-right" title="bibliopixel.layout.matrix module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.layout.font.html" class="btn btn-neutral" title="bibliopixel.layout.font module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

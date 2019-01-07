@@ -1,0 +1,7 @@
+bibliopixel.animation.reprocess.functions module
+================================================
+
+.. automodule:: bibliopixel.animation.reprocess.functions
+    :members:
+    :undoc-members:
+    :show-inheritance:

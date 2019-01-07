@@ -1,0 +1,7 @@
+bibliopixel.colors.conversions module
+=====================================
+
+.. automodule:: bibliopixel.colors.conversions
+    :members:
+    :undoc-members:
+    :show-inheritance:

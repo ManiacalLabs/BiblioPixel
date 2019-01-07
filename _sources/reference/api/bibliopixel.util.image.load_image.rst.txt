@@ -1,0 +1,7 @@
+bibliopixel.util.image.load\_image module
+=========================================
+
+.. automodule:: bibliopixel.util.image.load_image
+    :members:
+    :undoc-members:
+    :show-inheritance:

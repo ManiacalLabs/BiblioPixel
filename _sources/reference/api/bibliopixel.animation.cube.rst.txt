@@ -1,0 +1,7 @@
+bibliopixel.animation.cube module
+=================================
+
+.. automodule:: bibliopixel.animation.cube
+    :members:
+    :undoc-members:
+    :show-inheritance:

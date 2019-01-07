@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.GradientClock module
+=================================================
+
+.. automodule:: BiblioPixelAnimations.matrix.GradientClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

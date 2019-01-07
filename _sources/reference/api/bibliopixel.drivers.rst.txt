@@ -1,0 +1,45 @@
+bibliopixel.drivers package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    bibliopixel.drivers.SPI
+    bibliopixel.drivers.SimPixel
+    bibliopixel.drivers.serial
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.drivers.PiWS281X
+   bibliopixel.drivers.artnet
+   bibliopixel.drivers.channel_order
+   bibliopixel.drivers.curses
+   bibliopixel.drivers.driver_base
+   bibliopixel.drivers.dummy
+   bibliopixel.drivers.dummy_driver
+   bibliopixel.drivers.gif_writer
+   bibliopixel.drivers.hue
+   bibliopixel.drivers.ledtype
+   bibliopixel.drivers.mirror
+   bibliopixel.drivers.movie_writer
+   bibliopixel.drivers.network
+   bibliopixel.drivers.network_receiver
+   bibliopixel.drivers.network_udp
+   bibliopixel.drivers.return_codes
+   bibliopixel.drivers.server_driver
+   bibliopixel.drivers.simpixel
+   bibliopixel.drivers.spi_interfaces
+   bibliopixel.drivers.text
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.drivers
+    :members:
+    :undoc-members:
+    :show-inheritance:

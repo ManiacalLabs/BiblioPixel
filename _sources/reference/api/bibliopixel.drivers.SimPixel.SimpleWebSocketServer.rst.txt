@@ -1,0 +1,7 @@
+bibliopixel.drivers.SimPixel.SimpleWebSocketServer module
+=========================================================
+
+.. automodule:: bibliopixel.drivers.SimPixel.SimpleWebSocketServer
+    :members:
+    :undoc-members:
+    :show-inheritance:

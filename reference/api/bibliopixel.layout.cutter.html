@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.layout.cutter module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.layout.font module" href="bibliopixel.layout.font.html" />
+    <link rel="prev" title="bibliopixel.layout.cube module" href="bibliopixel.layout.cube.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.layout.html">bibliopixel.layout package</a> &raquo;</li>
+        
+      <li>bibliopixel.layout.cutter module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.layout.cutter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.layout.cutter">
+<span id="bibliopixel-layout-cutter-module"></span><h1>bibliopixel.layout.cutter module<a class="headerlink" href="#module-bibliopixel.layout.cutter" title="Permalink to this headline">¶</a></h1>
+<p>Cut matrices by row or column and apply operations to them.</p>
+<dl class="class">
+<dt id="bibliopixel.layout.cutter.Cutter">
+<em class="property">class </em><code class="descclassname">bibliopixel.layout.cutter.</code><code class="descname">Cutter</code><span class="sig-paren">(</span><em>layout</em>, <em>by_row=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Cutter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Cutter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class that pre-calculates cuts and can use them to
+apply a function to the layout.</p>
+<p>Each “cut” is a row or column, depending on the value of by_row.</p>
+<p>The entries are iterated forward or backwards, depending on the
+value of forward.</p>
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Cutter.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Cutter.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Cutter.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each row or column in cuts, read a list of its colors,
+apply the function to that list of colors, then write it back
+to the layout.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bibliopixel.layout.cutter.Indexer">
+<em class="property">class </em><code class="descclassname">bibliopixel.layout.cutter.</code><code class="descname">Indexer</code><span class="sig-paren">(</span><em>layout</em>, <em>by_row=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Indexer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Indexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bibliopixel.layout.cutter.Cutter" title="bibliopixel.layout.cutter.Cutter"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.layout.cutter.Cutter</span></code></a></p>
+<p>Slower implementation of Cutter that uses lists of indices and the
+Matrix interface.</p>
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Indexer.cut_column">
+<code class="descname">cut_column</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Indexer.cut_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Indexer.cut_column" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Indexer.cut_row">
+<code class="descname">cut_row</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Indexer.cut_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Indexer.cut_row" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Indexer.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>cut</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Indexer.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Indexer.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Indexer.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>cut</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Indexer.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Indexer.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bibliopixel.layout.cutter.Slicer">
+<em class="property">class </em><code class="descclassname">bibliopixel.layout.cutter.</code><code class="descname">Slicer</code><span class="sig-paren">(</span><em>layout</em>, <em>by_row=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Slicer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bibliopixel.layout.cutter.Cutter" title="bibliopixel.layout.cutter.Cutter"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.layout.cutter.Cutter</span></code></a></p>
+<p>Implementation of Cutter that uses slices of the underlying colorlist.
+Does not work if the Matrix layout is serpentine or has any reflections
+or rotations.</p>
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Slicer.cut_column">
+<code class="descname">cut_column</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Slicer.cut_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Slicer.cut_column" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Slicer.cut_row">
+<code class="descname">cut_row</code><span class="sig-paren">(</span><em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Slicer.cut_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Slicer.cut_row" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Slicer.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>cut</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Slicer.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Slicer.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.layout.cutter.Slicer.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>cut</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/cutter.html#Slicer.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.cutter.Slicer.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.layout.font.html" class="btn btn-neutral float-right" title="bibliopixel.layout.font module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.layout.cube.html" class="btn btn-neutral" title="bibliopixel.layout.cube module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

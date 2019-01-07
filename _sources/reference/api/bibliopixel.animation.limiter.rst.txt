@@ -1,0 +1,7 @@
+bibliopixel.animation.limiter module
+====================================
+
+.. automodule:: bibliopixel.animation.limiter
+    :members:
+    :undoc-members:
+    :show-inheritance:

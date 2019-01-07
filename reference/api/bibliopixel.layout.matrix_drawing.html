@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.layout.matrix_drawing module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.layout.pov module" href="bibliopixel.layout.pov.html" />
+    <link rel="prev" title="bibliopixel.layout.matrix module" href="bibliopixel.layout.matrix.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.layout.html">bibliopixel.layout package</a> &raquo;</li>
+        
+      <li>bibliopixel.layout.matrix_drawing module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.layout.matrix_drawing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.layout.matrix_drawing">
+<span id="bibliopixel-layout-matrix-drawing-module"></span><h1>bibliopixel.layout.matrix_drawing module<a class="headerlink" href="#module-bibliopixel.layout.matrix_drawing" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.bresenham_line">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">bresenham_line</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>x1</em>, <em>y1</em>, <em>color=None</em>, <em>colorFunc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#bresenham_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.bresenham_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw line from point x0,y0 to x,1,y1. Will draw beyond matrix bounds.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_char">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_char</code><span class="sig-paren">(</span><em>fonts</em>, <em>setter</em>, <em>width</em>, <em>height</em>, <em>x</em>, <em>y</em>, <em>c</em>, <em>color</em>, <em>bg</em>, <em>aa=False</em>, <em>font='8x6'</em>, <em>font_scale=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_char"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_char" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_circle">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_circle</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>r</em>, <em>color=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a circle at point x0, y0 with radius r of the specified RGB color</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_line">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_line</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>x1</em>, <em>y1</em>, <em>color=None</em>, <em>colorFunc=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_rect">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_rect</code><span class="sig-paren">(</span><em>setter</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>color=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw rectangle with top-left corner at x,y, width w and height h</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_round_rect">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_round_rect</code><span class="sig-paren">(</span><em>setter</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>r</em>, <em>color=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_round_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_round_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw rectangle with top-left corner at x,y, width w, height h,
+and corner radius r.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_text">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_text</code><span class="sig-paren">(</span><em>fonts</em>, <em>setter</em>, <em>text</em>, <em>width</em>, <em>height</em>, <em>x=0</em>, <em>y=0</em>, <em>color=None</em>, <em>bg=(0</em>, <em>0</em>, <em>0)</em>, <em>aa=False</em>, <em>font='8x6'</em>, <em>font_scale=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.draw_triangle">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">draw_triangle</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>color=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#draw_triangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.draw_triangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw triangle with points x0,y0 - x1,y1 - x2,y2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.fill_circle">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">fill_circle</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>r</em>, <em>color=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#fill_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.fill_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a filled circle at point x0,y0 with radius r and specified color</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.fill_rect">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">fill_rect</code><span class="sig-paren">(</span><em>setter</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>color=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#fill_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.fill_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw solid rectangle with top-left corner at x,y, width w and height h</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.fill_round_rect">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">fill_round_rect</code><span class="sig-paren">(</span><em>setter</em>, <em>x</em>, <em>y</em>, <em>w</em>, <em>h</em>, <em>r</em>, <em>color=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#fill_round_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.fill_round_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw solid rectangle with top-left corner at x,y, width w, height h,
+and corner radius r</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.fill_triangle">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">fill_triangle</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>color=None</em>, <em>aa=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#fill_triangle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.fill_triangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw solid triangle with points x0,y0 - x1,y1 - x2,y2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bibliopixel.layout.matrix_drawing.wu_line">
+<code class="descclassname">bibliopixel.layout.matrix_drawing.</code><code class="descname">wu_line</code><span class="sig-paren">(</span><em>setter</em>, <em>x0</em>, <em>y0</em>, <em>x1</em>, <em>y1</em>, <em>color=None</em>, <em>colorFunc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/layout/matrix_drawing.html#wu_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.layout.matrix_drawing.wu_line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.layout.pov.html" class="btn btn-neutral float-right" title="bibliopixel.layout.pov module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.layout.matrix.html" class="btn btn-neutral" title="bibliopixel.layout.matrix module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

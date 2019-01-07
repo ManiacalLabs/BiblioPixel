@@ -1,0 +1,7 @@
+bibliopixel.util.image.directory module
+=======================================
+
+.. automodule:: bibliopixel.util.image.directory
+    :members:
+    :undoc-members:
+    :show-inheritance:

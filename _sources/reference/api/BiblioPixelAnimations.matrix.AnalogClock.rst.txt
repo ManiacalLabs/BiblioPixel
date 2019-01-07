@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.AnalogClock module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.AnalogClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.control.action module
+=================================
+
+.. automodule:: bibliopixel.control.action
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.builder.description module
+======================================
+
+.. automodule:: bibliopixel.builder.description
+    :members:
+    :undoc-members:
+    :show-inheritance:

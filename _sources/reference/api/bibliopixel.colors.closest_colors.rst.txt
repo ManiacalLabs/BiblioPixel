@@ -1,0 +1,7 @@
+bibliopixel.colors.closest\_colors module
+=========================================
+
+.. automodule:: bibliopixel.colors.closest_colors
+    :members:
+    :undoc-members:
+    :show-inheritance:

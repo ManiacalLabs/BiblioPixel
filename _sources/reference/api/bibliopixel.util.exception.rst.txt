@@ -1,0 +1,7 @@
+bibliopixel.util.exception module
+=================================
+
+.. automodule:: bibliopixel.util.exception
+    :members:
+    :undoc-members:
+    :show-inheritance:

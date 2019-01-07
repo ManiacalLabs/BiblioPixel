@@ -1,0 +1,7 @@
+bibliopixel.animation.remote.trigger module
+===========================================
+
+.. automodule:: bibliopixel.animation.remote.trigger
+    :members:
+    :undoc-members:
+    :show-inheritance:

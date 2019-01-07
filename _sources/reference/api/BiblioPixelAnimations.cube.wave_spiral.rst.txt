@@ -1,0 +1,7 @@
+BiblioPixelAnimations.cube.wave\_spiral module
+==============================================
+
+.. automodule:: BiblioPixelAnimations.cube.wave_spiral
+    :members:
+    :undoc-members:
+    :show-inheritance:

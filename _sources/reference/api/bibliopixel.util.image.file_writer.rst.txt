@@ -1,0 +1,7 @@
+bibliopixel.util.image.file\_writer module
+==========================================
+
+.. automodule:: bibliopixel.util.image.file_writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

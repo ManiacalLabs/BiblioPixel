@@ -1,0 +1,7 @@
+bibliopixel.util.threads.producer\_consumer module
+==================================================
+
+.. automodule:: bibliopixel.util.threads.producer_consumer
+    :members:
+    :undoc-members:
+    :show-inheritance:

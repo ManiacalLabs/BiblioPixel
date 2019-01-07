@@ -1,0 +1,7 @@
+bibliopixel.util.data\_file module
+==================================
+
+.. automodule:: bibliopixel.util.data_file
+    :members:
+    :undoc-members:
+    :show-inheritance:

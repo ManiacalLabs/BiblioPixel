@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using numpy color lists &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using the REST api" href="using-rest-api.html" />
+    <link rel="prev" title="Using controls" href="using-controls.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-help.html">Getting help</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Topic Papers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting BiblioPixel, <code class="docutils literal notranslate"><span class="pre">bp</span></code> and the AllPixel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-controls.html">Using controls</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color lists</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-a-numpy-color-list-like">What’s a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color list like?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#be-careful-references-can-be-tricky">Be careful:  references can be tricky</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-get-your-bibliopixel-animation-to-use-numpy-lists">How to get your BiblioPixel Animation to use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> lists.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="using-rest-api.html">Using the REST api</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stopping-and-restarting-bp.html">How to stop or restart <code class="docutils literal notranslate"><span class="pre">bp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing-animated-gifs.html">Writing Animated GIFs from Projects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Topic Papers</a> &raquo;</li>
+        
+      <li>Using <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color lists</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/topic-papers/using-numpy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="using-numpy-color-lists">
+<h1>Using <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color lists<a class="headerlink" href="#using-numpy-color-lists" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>All BiblioPixel animation is accomplished by changing a <em>color list</em> - a list of RGB
+colors.</p>
+<p>In all BiblioPixel versions up until and including v3, a color list was a Python list
+of Python tuples.</p>
+<p>We call this “classic Python lists”. This was very convenient and easy to
+understand - but classic lists are slow and uses a lot of memory if there are a
+lot of colors, and even quite simple operations on classic lists require
+many lines of code.</p>
+<p>Enter <code class="docutils literal notranslate"><span class="pre">numpy</span></code>!</p>
+<p><code class="docutils literal notranslate"><span class="pre">numpy</span></code> &lt;<a class="reference external" href="http://www.numpy.org/">http://www.numpy.org/</a>&gt;`_ is a Python package that has purely numeric
+arrays (lists and matrices) that use less memory and are a lot faster - but even
+better, <code class="docutils literal notranslate"><span class="pre">numpy</span></code> also lets you express even quite complex numeric operations with
+a smaller amount of clearer code than using classic lists.</p>
+<p>Since BiblioPixel version 3.4.0, animations can use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays by setting the
+Project section <cite>“numbers”</cite> to be <cite>“float32”</cite>.</p>
+<p>Starting in BiblioPixel 4.0, <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays will be the default, and fairly
+soon after that, we’ll be phasing out classic lists.</p>
+</div>
+<div class="section" id="what-s-a-numpy-color-list-like">
+<h2>What’s a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color list like?<a class="headerlink" href="#what-s-a-numpy-color-list-like" title="Permalink to this headline">¶</a></h2>
+<p>Whether it’s <code class="docutils literal notranslate"><span class="pre">numpy</span></code> or “classic”, a color list is just a list of RGB colors.</p>
+<p>Almost all operations that work on a classic list work the same way on a <code class="docutils literal notranslate"><span class="pre">numpy</span></code>
+list: for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bibliopixel.project.data_maker</span> <span class="kn">import</span> <span class="n">ColorList</span><span class="p">,</span> <span class="n">NumpyColorList</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.util.colors</span> <span class="kn">import</span> <span class="n">COLORS</span>
+
+<span class="n">classic_list</span> <span class="o">=</span> <span class="n">ColorList</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">numpy_list</span> <span class="o">=</span> <span class="n">NumpyColorList</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">classic</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">yellow</span>
+<span class="n">classic</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">blue</span>
+
+<span class="n">numpy_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">yellow</span>
+<span class="n">numpy_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">blue</span>
+</pre></div>
+</div>
+<p>sets the first four colors of a color list to yellow, red, green and blue.</p>
+<p>Unlike classic lists, you can write over components in a color_list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">numpy_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># classic_list[0][0] = 0    # Can&#39;t modify a tuple!  throws a TypeError.</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">numpy</span></code> disinguishes itself is operations that apply to all the colors at
+once.  To reduce the intensity of each color just created by 50%:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">classic</span><span class="p">):</span>
+    <span class="n">classic</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">g</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+ <span class="c1"># Much easier:</span>
+ <span class="n">numpy_list</span> <span class="o">/=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>It works even better if you have multiple lists - you can do slick things like:
+<cite>numpy_list = (2 * list_1 + 3 * list_2) ** 2.5</cite></p>
+</div>
+<div class="section" id="be-careful-references-can-be-tricky">
+<h2>Be careful:  references can be tricky<a class="headerlink" href="#be-careful-references-can-be-tricky" title="Permalink to this headline">¶</a></h2>
+<p>Unlike classic lists, if you extract a color from a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> color list and then
+modify it, the original list is also changed!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">numpy_list</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="n">COLORS</span><span class="o">.</span><span class="n">blue</span>
+
+<span class="n">color</span> <span class="o">=</span> <span class="n">numpy_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># later</span>
+<span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">numpy_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Now it&#39;s black!</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-get-your-bibliopixel-animation-to-use-numpy-lists">
+<h2>How to get your BiblioPixel Animation to use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> lists.<a class="headerlink" href="#how-to-get-your-bibliopixel-animation-to-use-numpy-lists" title="Permalink to this headline">¶</a></h2>
+<p>You won’t need to change anything in your Project at all, but if you have
+written a custom Animation, you might need to change your code.</p>
+<p>In our experience so far, 95% of existing Animations worked immediately with
+<code class="docutils literal notranslate"><span class="pre">numpy</span></code> and all the rest required only tiny changes.</p>
+<p>You can easily find out - just run your project with the command line float
+<cite>–numbers=float</cite> like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bp</span> <span class="o">--</span><span class="n">numbers</span><span class="o">=</span><span class="nb">float</span> <span class="n">your</span><span class="o">-</span><span class="n">project</span><span class="o">-</span><span class="n">name</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>If there’s an error, contact us at
+<a class="reference external" href="mailto:maniacal-labs-users&#37;&#52;&#48;googlegroups&#46;com">Maniacal Labs Users</a>
+and send us the code for your Animation and the error!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="using-rest-api.html" class="btn btn-neutral float-right" title="Using the REST api" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="using-controls.html" class="btn btn-neutral" title="Using controls" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

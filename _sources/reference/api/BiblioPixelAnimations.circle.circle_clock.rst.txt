@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.circle\_clock module
+=================================================
+
+.. automodule:: BiblioPixelAnimations.circle.circle_clock
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.Rainbows module
+===========================================
+
+.. automodule:: BiblioPixelAnimations.strip.Rainbows
+    :members:
+    :undoc-members:
+    :show-inheritance:

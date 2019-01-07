@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.LangtonsAnt module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.LangtonsAnt
+    :members:
+    :undoc-members:
+    :show-inheritance:

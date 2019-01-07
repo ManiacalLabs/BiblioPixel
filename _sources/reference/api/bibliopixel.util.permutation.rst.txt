@@ -1,0 +1,7 @@
+bibliopixel.util.permutation module
+===================================
+
+.. automodule:: bibliopixel.util.permutation
+    :members:
+    :undoc-members:
+    :show-inheritance:

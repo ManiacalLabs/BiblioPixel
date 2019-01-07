@@ -1,0 +1,7 @@
+bibliopixel.project.edit\_queue module
+======================================
+
+.. automodule:: bibliopixel.project.edit_queue
+    :members:
+    :undoc-members:
+    :show-inheritance:

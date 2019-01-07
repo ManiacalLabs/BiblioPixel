@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.ImageAnim module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.ImageAnim
+    :members:
+    :undoc-members:
+    :show-inheritance:

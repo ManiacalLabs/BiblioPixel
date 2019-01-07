@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.drivers.driver_base &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.drivers.driver_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.drivers.driver_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="n">channel_order</span> <span class="kn">import</span> <span class="nn">ChannelOrder</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">colors</span> <span class="kn">import</span> <span class="nn">gamma</span> <span class="k">as</span> <span class="nn">_gamma</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">project</span> <span class="kn">import</span> <span class="nn">attributes</span><span class="o">,</span> <span class="nn">clock</span><span class="o">,</span> <span class="nn">data_maker</span><span class="o">,</span> <span class="nn">fields</span>
+<span class="kn">import</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="DriverBase"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase">[docs]</a><span class="k">class</span> <span class="nc">DriverBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base driver class to build other drivers from.</span>
+
+<span class="sd">    :param int num: Number of total pixels held by this driver</span>
+
+<span class="sd">    :param int width: Width of matrix, for use</span>
+<span class="sd">        with :py:class:`bibliopixel.layout.matrix.Matrix`</span>
+
+<span class="sd">    :param int height: Height of matrix, for use</span>
+<span class="sd">        with :py:class:`bibliopixel.layout.matrix.Matrix`</span>
+
+<span class="sd">    :param str c_order: Color channel order</span>
+
+<span class="sd">    :param gamma: Gamma correction table. Preset tables available</span>
+<span class="sd">        in :py:mod:`bibliopixel.colors.gamma`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># If set_device_brightness is not empty, it&#39;s a method that allows you</span>
+    <span class="c1"># to directly set the brightness for the device.</span>
+    <span class="c1">#</span>
+    <span class="c1"># If it is empty, then the brightness is used as a scale factor in rendering</span>
+    <span class="c1"># the pixels.</span>
+    <span class="n">set_device_brightness</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">pre_recursion</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">default_converter</span>
+
+<div class="viewcode-block" id="DriverBase.construct"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.construct">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">construct</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct a driver from a project and a description.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">maker</span><span class="o">=</span><span class="n">project</span><span class="o">.</span><span class="n">maker</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c_order</span><span class="o">=</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span>
+                 <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maker</span><span class="o">=</span><span class="n">data_maker</span><span class="o">.</span><span class="n">MAKER</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="n">attributes</span><span class="o">.</span><span class="n">set_reserved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;driver&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span>
+            <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either num, or width and height are needed!&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span> <span class="o">=</span> <span class="n">num</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span> <span class="ow">or</span> <span class="n">_gamma</span><span class="o">.</span><span class="n">DEFAULT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_order</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">c_order</span> <span class="o">=</span> <span class="n">ChannelOrder</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="n">c_order</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">c_order</span> <span class="o">=</span> <span class="n">c_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perm</span> <span class="o">=</span> <span class="n">ChannelOrder</span><span class="o">.</span><span class="n">ORDERS</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c_order</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixel_positions</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maker</span> <span class="o">=</span> <span class="n">maker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_buffer</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastUpdate</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">brightness_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_brightness</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waiting_brightness</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">clock</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DriverBase.set_pixel_positions"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.set_pixel_positions">[docs]</a>    <span class="k">def</span> <span class="nf">set_pixel_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixel_positions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal Use Only</span>
+
+<span class="sd">        Placeholder callback for sending physical pixel layout data to the</span>
+<span class="sd">        ``SimPixel`` driver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DriverBase.set_colors"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.set_colors">[docs]</a>    <span class="k">def</span> <span class="nf">set_colors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use with caution!</span>
+
+<span class="sd">        Directly set the pixel buffers.</span>
+
+<span class="sd">        :param colors: A list of color tuples</span>
+<span class="sd">        :param int pos: Position in color list to begin set operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colors</span> <span class="o">=</span> <span class="n">colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="n">pos</span>
+
+        <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_colors</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Needed </span><span class="si">%d</span><span class="s1"> colors but found </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">end</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_colors</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="DriverBase.set_project"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.set_project">[docs]</a>    <span class="k">def</span> <span class="nf">set_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">clock</span></div>
+
+<div class="viewcode-block" id="DriverBase.start"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called right before this driver will run.  This is the place</span>
+<span class="sd">        to do things like start threads, not in the constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="DriverBase.stop"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called to request any threads or resources to shut down.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="DriverBase.cleanup"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called to shut this driver down, and stop all threads and processes.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="DriverBase.join"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called to join threads.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="DriverBase.bufByteCount"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.bufByteCount">[docs]</a>    <span class="k">def</span> <span class="nf">bufByteCount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Total number of bytes that the pixel buffer represents.</span>
+<span class="sd">        Mainly used for drivers such as :py:mod:`bibliopixel.drivers.serial`</span>
+<span class="sd">        and :py:mod:`.network`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span></div>
+
+<div class="viewcode-block" id="DriverBase.sync"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.sync">[docs]</a>    <span class="k">def</span> <span class="nf">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The sync() method is called after the entire frame has been</span>
+<span class="sd">        sent to the device to indicate that it may now be displayed.</span>
+
+<span class="sd">        This is particularly useful when there are multiple drivers comprising</span>
+<span class="sd">        one display which all need to display the next frame at exactly the same</span>
+<span class="sd">        time.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="k">def</span> <span class="nf">_compute_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the packet from the colors and position.</span>
+
+<span class="sd">        Eventually, this will run on the compute thread.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_send_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send the packet to the driver.</span>
+
+<span class="sd">        Eventually, this will run on an I/O thread.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DriverBase.update_colors"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.update_colors">[docs]</a>    <span class="k">def</span> <span class="nf">update_colors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply any corrections to the current color list</span>
+<span class="sd">        and send the results to the driver output. This function primarily</span>
+<span class="sd">        provided as a wrapper for each driver&#39;s implementation of</span>
+<span class="sd">        :py:func:`_compute_packet` and :py:func:`_send_packet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">brightness_lock</span><span class="p">:</span>
+            <span class="c1"># Swap in a new brightness.</span>
+            <span class="n">brightness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_waiting_brightness</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_waiting_brightness</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">brightness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_brightness</span> <span class="o">=</span> <span class="n">brightness</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_device_brightness</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_device_brightness</span><span class="p">(</span><span class="n">brightness</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_packet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_packet</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastUpdate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span></div>
+
+<div class="viewcode-block" id="DriverBase.set_brightness"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.driver_base.html#bibliopixel.drivers.driver_base.DriverBase.set_brightness">[docs]</a>    <span class="k">def</span> <span class="nf">set_brightness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brightness</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the global brightness for this driver&#39;s output.</span>
+
+<span class="sd">        :param int brightness: 0-255 value representing the desired</span>
+<span class="sd">            brightness level</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">brightness_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_waiting_brightness</span> <span class="o">=</span> <span class="n">brightness</span></div>
+
+    <span class="k">def</span> <span class="nf">_render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Typically called from :py:func:`_compute_packet` this applies</span>
+<span class="sd">        brightness and gamma correction to the pixels controlled by this</span>
+<span class="sd">        driver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_device_brightness</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_brightness</span> <span class="o">/</span> <span class="mf">255.0</span>
+        <span class="n">gam</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_order</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numLEDs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">level</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colors</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">gam</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">r</span><span class="p">]),</span> <span class="n">gam</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">g</span><span class="p">]),</span> <span class="n">gam</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">b</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_make_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">maker</span><span class="o">.</span><span class="n">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bufByteCount</span><span class="p">())</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

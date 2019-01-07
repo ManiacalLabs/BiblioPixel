@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.cube module
+=======================================
+
+.. automodule:: bibliopixel.layout.geometry.cube
+    :members:
+    :undoc-members:
+    :show-inheritance:

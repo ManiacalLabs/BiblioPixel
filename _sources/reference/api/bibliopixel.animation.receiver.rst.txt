@@ -1,0 +1,7 @@
+bibliopixel.animation.receiver module
+=====================================
+
+.. automodule:: bibliopixel.animation.receiver
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.util.image.extract\_gif\_lines module
+=================================================
+
+.. automodule:: bibliopixel.util.image.extract_gif_lines
+    :members:
+    :undoc-members:
+    :show-inheritance:

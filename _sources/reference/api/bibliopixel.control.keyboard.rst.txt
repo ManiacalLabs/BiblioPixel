@@ -1,0 +1,7 @@
+bibliopixel.control.keyboard module
+===================================
+
+.. automodule:: bibliopixel.control.keyboard
+    :members:
+    :undoc-members:
+    :show-inheritance:

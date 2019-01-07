@@ -1,0 +1,7 @@
+bibliopixel.project.types.spi\_interface module
+===============================================
+
+.. automodule:: bibliopixel.project.types.spi_interface
+    :members:
+    :undoc-members:
+    :show-inheritance:

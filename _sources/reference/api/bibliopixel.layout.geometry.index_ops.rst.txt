@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.index\_ops module
+=============================================
+
+.. automodule:: bibliopixel.layout.geometry.index_ops
+    :members:
+    :undoc-members:
+    :show-inheritance:

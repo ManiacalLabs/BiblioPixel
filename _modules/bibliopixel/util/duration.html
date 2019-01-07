@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.duration &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.util.duration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.util.duration</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Convert a string duration to a number of seconds.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">SI_PREFIXES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;yotta&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">21</span><span class="p">,</span> <span class="s1">&#39;zetta&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;exa&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;peta&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;tera&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;giga&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;mega&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;kilo&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;hecto&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;deka&#39;</span><span class="p">,</span> <span class="s1">&#39;da&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;deci&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;centi&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;milli&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;micro&#39;</span><span class="p">,</span> <span class="s1">&#39;µ&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="s1">&#39;nano&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;pico&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;femto&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">18</span><span class="p">,</span> <span class="s1">&#39;atto&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">21</span><span class="p">,</span> <span class="s1">&#39;zepto&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;yocto&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">SI_SCALES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="p">[(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">SI_PREFIXES</span><span class="p">]</span> <span class="o">+</span>
+    <span class="p">[(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">SI_PREFIXES</span><span class="p">]</span> <span class="o">+</span>
+    <span class="p">[[</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">9</span><span class="p">]])</span>  <span class="c1"># Cheat to allow usec</span>
+
+<span class="n">UNITS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;week&#39;</span><span class="p">:</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="s1">&#39;day&#39;</span><span class="p">:</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+
+    <span class="s1">&#39;hour&#39;</span><span class="p">:</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="s1">&#39;hr&#39;</span><span class="p">:</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+
+    <span class="s1">&#39;minute&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+
+    <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">PART_MATCH</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([0-9.]+)([a-zA-Z]+)&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fullmatch</span>
+
+
+<span class="k">def</span> <span class="nf">_get_units</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="c1"># Some subtleties to handle the possibility of plural units.</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;ss&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown unit&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">split_unit</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">UNITS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)],</span> <span class="n">u</span>
+
+    <span class="n">prefix</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">split_unit</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="ow">or</span>
+        <span class="n">split_unit</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">or</span>
+        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">unit</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown unit &#39;</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">UNITS</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">scale</span>
+
+    <span class="k">if</span> <span class="n">prefix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SI_SCALES</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown metric prefix &#39;</span> <span class="o">+</span> <span class="n">prefix</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SI_SCALES</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.duration.html#bibliopixel.util.duration.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a string representing a time interval or duration into seconds,</span>
+<span class="sd">    or raise an exception</span>
+
+<span class="sd">    :param str s: a string representation of a time interval</span>
+<span class="sd">    :raises ValueError: if ``s`` can&#39;t be interpreted as a duration</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parts</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot parse empty string&#39;</span><span class="p">)</span>
+
+    <span class="n">pieces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">PART_MATCH</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+        <span class="n">pieces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="p">[</span><span class="n">part</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">pieces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Malformed duration </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">parts</span><span class="p">,</span> <span class="n">pieces</span><span class="p">))</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">units</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">pieces</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Durations cannot have negative components&#39;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">number</span> <span class="o">*</span> <span class="n">_get_units</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.commands.new &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.commands.new</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.commands.new</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Create a new BLiPS project</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+
+<span class="n">DESCRIPTION</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Example:</span>
+
+<span class="s2">.. code-block: bash</span>
+
+<span class="s2">    # Create a new project directory named my_project/ in the current directory</span>
+<span class="s2">    bp new my_project</span>
+
+<span class="s2">    # Create a new project directory named my_project/ in ~/projects</span>
+<span class="s2">    bp new my_project ~/projects</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">PUNCTUATION</span> <span class="o">=</span> <span class="s1">&#39;._&#39;</span>
+<span class="n">LEGAL_CHARS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="o">+</span> <span class="n">PUNCTUATION</span><span class="p">)</span>
+<span class="n">DIR_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../../reference/api/bibliopixel.commands.new.html#bibliopixel.commands.new.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">project_name</span>
+    <span class="n">bad</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">-</span> <span class="n">LEGAL_CHARS</span>
+    <span class="k">if</span> <span class="n">bad</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Bad characters in project: &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bad</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Project names must start with a character&#39;</span><span class="p">)</span>
+
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">directory</span> <span class="ow">or</span> <span class="n">name</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Directory &quot;</span><span class="si">%s</span><span class="s1">&quot; already exists&#39;</span> <span class="o">%</span> <span class="n">directory</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">_split_words</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+    <span class="n">py_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;class_name&#39;</span><span class="p">:</span> <span class="n">class_name</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s1">&#39;py_name&#39;</span><span class="p">:</span> <span class="n">py_name</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">template</span><span class="p">,</span> <span class="n">out_file</span> <span class="ow">in</span> <span class="n">TEMPLATES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">out_file</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+        <span class="n">tmpl_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DIR_NAME</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+        <span class="n">tmpl_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmpl_file</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmpl_data</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;Written&#39;</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">printer</span><span class="p">(</span><span class="s1">&#39;Created new project in&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../reference/api/bibliopixel.commands.new.html#bibliopixel.commands.new.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="n">run</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;project_name&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">PROJECT_NAME_HELP</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;directory&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">DIRECTORY_HELP</span><span class="p">)</span></div>
+
+
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;template/project.yml.tmpl&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">.yml&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;template/animation.py.tmpl&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{py_name}</span><span class="s1">.py&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">PROJECT_NAME_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">The Name of the new BLiPS project you want to create.</span>
+
+<span class="s2">A Project Name can contain letters, numbers, or `_`. Nothing else is</span>
+<span class="s2">allowed, which means no whitespace, &quot;no `/`&quot; and no `.`.</span>
+
+<span class="s2">A project name must start with a letter.</span>
+
+<span class="s2">Valid project names are:</span>
+
+<span class="s2">* P</span>
+<span class="s2">* project_name</span>
+<span class="s2">* IHeartArea51</span>
+
+<span class="s2">Invalid project names are:</span>
+
+<span class="s2">* 23skidoo</span>
+<span class="s2">* project.name</span>
+<span class="s2">* _23skidoo</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">DIRECTORY_HELP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Optional directory where you want to create the project.</span>
+<span class="s2">If absent, use the name of the project as the directory name.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">_split_words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    # Find words in a string. Order matters!</span>
+<span class="s1">    [A-Z]+(?=[A-Z][a-z]) |  # All upper case before a capitalized word</span>
+<span class="s1">    [A-Z]?[a-z]+ |  # Capitalized words / all lower case</span>
+<span class="s1">    [A-Z]+ |  # All upper case</span>
+<span class="s1">    \d+  # Numbers</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span><span class="o">.</span><span class="n">findall</span>
+<span class="c1"># https://stackoverflow.com/a/41510011/43839</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

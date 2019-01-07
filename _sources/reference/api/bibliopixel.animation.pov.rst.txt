@@ -1,0 +1,7 @@
+bibliopixel.animation.pov module
+================================
+
+.. automodule:: bibliopixel.animation.pov
+    :members:
+    :undoc-members:
+    :show-inheritance:

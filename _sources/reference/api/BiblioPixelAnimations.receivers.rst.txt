@@ -1,0 +1,17 @@
+BiblioPixelAnimations.receivers package
+=======================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.receivers.GenericNetworkReceiver
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.receivers
+    :members:
+    :undoc-members:
+    :show-inheritance:

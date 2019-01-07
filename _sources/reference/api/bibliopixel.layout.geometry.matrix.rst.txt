@@ -1,0 +1,7 @@
+bibliopixel.layout.geometry.matrix module
+=========================================
+
+.. automodule:: bibliopixel.layout.geometry.matrix
+    :members:
+    :undoc-members:
+    :show-inheritance:

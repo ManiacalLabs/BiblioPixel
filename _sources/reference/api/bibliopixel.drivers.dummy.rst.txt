@@ -1,0 +1,7 @@
+bibliopixel.drivers.dummy module
+================================
+
+.. automodule:: bibliopixel.drivers.dummy
+    :members:
+    :undoc-members:
+    :show-inheritance:

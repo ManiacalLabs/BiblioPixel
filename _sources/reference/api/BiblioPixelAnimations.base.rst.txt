@@ -1,0 +1,17 @@
+BiblioPixelAnimations.base package
+==================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.base.Twinkle
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.base
+    :members:
+    :undoc-members:
+    :show-inheritance:

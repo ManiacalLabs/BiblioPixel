@@ -1,0 +1,19 @@
+BiblioPixelAnimations.game package
+==================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.game.Snake
+   BiblioPixelAnimations.game.Tetris
+   BiblioPixelAnimations.game.flappy
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.game
+    :members:
+    :undoc-members:
+    :show-inheritance:

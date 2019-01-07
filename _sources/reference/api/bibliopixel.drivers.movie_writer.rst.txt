@@ -1,0 +1,7 @@
+bibliopixel.drivers.movie\_writer module
+========================================
+
+.. automodule:: bibliopixel.drivers.movie_writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

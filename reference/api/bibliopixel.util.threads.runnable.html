@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.threads.runnable module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.util.threads.sub module" href="bibliopixel.util.threads.sub.html" />
+    <link rel="prev" title="bibliopixel.util.threads.producer_consumer module" href="bibliopixel.util.threads.producer_consumer.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.util.html">bibliopixel.util package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.util.threads.html">bibliopixel.util.threads package</a> &raquo;</li>
+        
+      <li>bibliopixel.util.threads.runnable module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.util.threads.runnable.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.util.threads.runnable">
+<span id="bibliopixel-util-threads-runnable-module"></span><h1>bibliopixel.util.threads.runnable module<a class="headerlink" href="#module-bibliopixel.util.threads.runnable" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bibliopixel.util.threads.runnable.LoopThread">
+<em class="property">class </em><code class="descclassname">bibliopixel.util.threads.runnable.</code><code class="descname">LoopThread</code><span class="sig-paren">(</span><em>daemon=True</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#LoopThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.LoopThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bibliopixel.util.threads.runnable.Runnable" title="bibliopixel.util.threads.runnable.Runnable"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.util.threads.runnable.Runnable</span></code></a></p>
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.LoopThread.is_alive">
+<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#LoopThread.is_alive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.LoopThread.is_alive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this Runnable still executing code?</p>
+<p>In some cases, such as threads, self.is_alive() might be true for some
+time after self.running has turned False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.LoopThread.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#LoopThread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.LoopThread.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.LoopThread.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#LoopThread.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.LoopThread.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bibliopixel.util.threads.runnable.QueueHandler">
+<em class="property">class </em><code class="descclassname">bibliopixel.util.threads.runnable.</code><code class="descname">QueueHandler</code><span class="sig-paren">(</span><em>timeout=0.1</em>, <em>send=None</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#QueueHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.QueueHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bibliopixel.util.threads.runnable.LoopThread" title="bibliopixel.util.threads.runnable.LoopThread"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.util.threads.runnable.LoopThread</span></code></a></p>
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.QueueHandler.run_once">
+<code class="descname">run_once</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#QueueHandler.run_once"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.QueueHandler.run_once" title="Permalink to this definition">¶</a></dt>
+<dd><p>The target code that is repeatedly executed in the run method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.QueueHandler.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#QueueHandler.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.QueueHandler.send" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bibliopixel.util.threads.runnable.Runnable">
+<em class="property">class </em><code class="descclassname">bibliopixel.util.threads.runnable.</code><code class="descname">Runnable</code><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for all objects that contain threads - including threads
+created and started by bp code, and threads started by external libraries.</p>
+<p>There are three possible thread categories for a Runnable:</p>
+<ol class="arabic simple">
+<li>Runs on the master thread - M</li>
+<li>A new thread created by us - N</li>
+<li>A new external thread created by some third-party code - X</li>
+</ol>
+<p>Case X is tricky because we would like our code to be called at the start of
+the new thread, and again at the end of that thread, but we can’t.</p>
+<p>Lifecycle - what a Runnable does, and what threads it could be called on</p>
+<ul class="simple">
+<li>construction: M</li>
+<li>start: M</li>
+<li>on_start: M
+* called on the master thread after any new thread has started up</li>
+<li>run: MN</li>
+<li>callbacks: MNX</li>
+<li>join: M</li>
+<li>cleanup: M(N?)</li>
+</ul>
+<p>TODO: right now we run all our cleanups on the new thread, if there is a new
+thread, otherwise on the master thread.  Should we move to doing all the
+cleanups on the master thread?</p>
+<p>The way to use a Runnable is like a context manager:</p>
+<dl class="docutils">
+<dt>with some_runnable() as runnable:</dt>
+<dd><p class="first">add_some_callbacks(runnable)
+more_stuff_that_runs_on_start()</p>
+<p class="last"># Depending on the thread category, the <cite>Runnable</cite> isn’t guaranteed to
+# actually “go off” until the end of this block.</p>
+</dd>
+</dl>
+<p>We’re going to call the code inside the context manager <cite>on_start</cite></p>
+<dl class="attribute">
+<dt id="bibliopixel.util.threads.runnable.Runnable.EXTERNAL">
+<code class="descname">EXTERNAL</code><em class="property"> = 'X'</em><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.EXTERNAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.util.threads.runnable.Runnable.MASTER">
+<code class="descname">MASTER</code><em class="property"> = 'M'</em><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.MASTER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.util.threads.runnable.Runnable.NEW">
+<code class="descname">NEW</code><em class="property"> = 'N'</em><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.NEW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.util.threads.runnable.Runnable.category">
+<code class="descname">category</code><em class="property"> = 'N'</em><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.category" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.cleanup">
+<code class="descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans up resources after the Runnable.</p>
+<p>self.cleanup() may not throw an exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.is_alive">
+<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.is_alive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.is_alive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this Runnable still executing code?</p>
+<p>In some cases, such as threads, self.is_alive() might be true for some
+time after self.running has turned False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.run_once">
+<code class="descname">run_once</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.run_once"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.run_once" title="Permalink to this definition">¶</a></dt>
+<dd><p>The target code that is repeatedly executed in the run method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.run_until_stop">
+<code class="descname">run_until_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.run_until_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.run_until_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager that starts this Runnable, yields,
+and then waits for it to finish.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.util.threads.runnable.Runnable.running">
+<code class="descname">running</code><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this Runnable expected to make any progress from here?</p>
+<p>The Runnable might still execute a little code after it has stopped
+running.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.util.threads.runnable.Runnable.timeout">
+<code class="descname">timeout</code><em class="property"> = 0.1</em><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.util.threads.runnable.Runnable.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/util/threads/runnable.html#Runnable.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.util.threads.runnable.Runnable.wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.util.threads.sub.html" class="btn btn-neutral float-right" title="bibliopixel.util.threads.sub module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.util.threads.producer_consumer.html" class="btn btn-neutral" title="bibliopixel.util.threads.producer_consumer module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

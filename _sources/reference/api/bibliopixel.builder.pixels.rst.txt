@@ -1,0 +1,7 @@
+bibliopixel.builder.pixels module
+=================================
+
+.. automodule:: bibliopixel.builder.pixels
+    :members:
+    :undoc-members:
+    :show-inheritance:

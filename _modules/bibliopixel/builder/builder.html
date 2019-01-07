@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.builder.builder &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.builder.builder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.builder.builder</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="n">pixels</span> <span class="kn">import</span> <span class="nn">Pixels</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">runner</span> <span class="kn">import</span> <span class="nn">Runner</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">saved_description</span> <span class="kn">import</span> <span class="nn">SavedDescription</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">colors</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">commands</span> <span class="kn">import</span> <span class="nn">animations</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">drivers</span><span class="o">.</span><span class="n">SimPixel</span> <span class="kn">import</span> <span class="nn">driver</span> <span class="k">as</span> <span class="nn">simpixel_driver</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">project</span> <span class="kn">import</span> <span class="nn">project</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+
+
+<div class="viewcode-block" id="Builder"><a class="viewcode-back" href="../../../reference/api/bibliopixel.builder.builder.html#bibliopixel.builder.builder.Builder">[docs]</a><span class="k">class</span> <span class="nc">Builder</span><span class="p">(</span><span class="n">SavedDescription</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Project Builder to allow people to experiment with projects</span>
+<span class="sd">    from the command line or in their own main program.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">COLORS</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">COLORS</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_file</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threaded</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixel</span> <span class="o">=</span> <span class="n">Pixels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">project_file</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">threaded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threaded</span> <span class="o">=</span> <span class="n">threaded</span>
+
+<div class="viewcode-block" id="Builder.start"><a class="viewcode-back" href="../../../reference/api/bibliopixel.builder.builder.html#bibliopixel.builder.builder.Builder.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threaded</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates and starts the project.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">threaded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threaded</span> <span class="o">=</span> <span class="n">threaded</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;threaded&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">project</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">root_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">run</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threaded</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Builder.stop"><a class="viewcode-back" href="../../../reference/api/bibliopixel.builder.builder.html#bibliopixel.builder.builder.Builder.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the builder if it&#39;s running.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Runner</span><span class="o">.</span><span class="n">instance</span><span class="p">(),</span> <span class="s1">&#39;builder&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="n">instance</span> <span class="ow">and</span> <span class="n">instance</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Builder.clear"><a class="viewcode-back" href="../../../reference/api/bibliopixel.builder.builder.html#bibliopixel.builder.builder.Builder.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the project if it&#39;s running and clear the project description&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;True if the Builder is currently running&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">is_running</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">threaded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        True if the Builder is runs in a separate thread, false if the</span>
+<span class="sd">        Builder blocks, waiting for the animation to end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;threaded&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@threaded</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">threaded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">.</span><span class="n">run</span><span class="p">[</span><span class="s1">&#39;threaded&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Builder.simpixel"><a class="viewcode-back" href="../../../reference/api/bibliopixel.builder.builder.html#bibliopixel.builder.builder.Builder.simpixel">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">simpixel</span><span class="p">(</span><span class="n">new</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">autoraise</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open an instance of simpixel in the browser&quot;&quot;&quot;</span>
+        <span class="n">simpixel_driver</span><span class="o">.</span><span class="n">open_browser</span><span class="p">(</span><span class="n">new</span><span class="o">=</span><span class="n">new</span><span class="p">,</span> <span class="n">autoraise</span><span class="o">=</span><span class="n">autoraise</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Builder.animations"><a class="viewcode-back" href="../../../reference/api/bibliopixel.builder.builder.html#bibliopixel.builder.builder.Builder.animations">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">animations</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;List all the existing animations&quot;&quot;&quot;</span>
+        <span class="n">animations</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;Running &#39;</span> <span class="o">+</span> <span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_running</span> <span class="k">else</span> <span class="n">r</span>
+
+    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">Builder</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="bp">self</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="n">other</span>
+        <span class="k">return</span> <span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">Builder</span><span class="p">()</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="n">other</span>
+        <span class="n">b</span> <span class="o">+=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">__copy__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__copy__</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

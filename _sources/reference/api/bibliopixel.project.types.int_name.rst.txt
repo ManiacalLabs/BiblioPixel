@@ -1,0 +1,7 @@
+bibliopixel.project.types.int\_name module
+==========================================
+
+.. automodule:: bibliopixel.project.types.int_name
+    :members:
+    :undoc-members:
+    :show-inheritance:

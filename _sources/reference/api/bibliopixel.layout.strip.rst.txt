@@ -1,0 +1,7 @@
+bibliopixel.layout.strip module
+===============================
+
+.. automodule:: bibliopixel.layout.strip
+    :members:
+    :undoc-members:
+    :show-inheritance:

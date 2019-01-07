@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.arc\_rotate module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.circle.arc_rotate
+    :members:
+    :undoc-members:
+    :show-inheritance:

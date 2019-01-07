@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.project.recurse &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.project.recurse</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.project.recurse</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">construct</span><span class="p">,</span> <span class="n">load</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">In order to validate project descriptions, we need to recurse through project</span>
+<span class="sd">dictionaries before we actually construct the objects in them.</span>
+
+<span class="sd">Some fields of project dictionaries are designated to be &quot;type constructors&quot; -</span>
+<span class="sd">i.e. they describe how to create an object.  We need to recurse down through</span>
+<span class="sd">those - and how we do so depends on the type of the object.</span>
+
+<span class="sd">For example, at the top level, the &quot;layout&quot; and &quot;animation&quot; fields are</span>
+<span class="sd">type constructors while the &quot;run&quot; and &quot;path&quot; fields are not.</span>
+
+<span class="sd">So recurse uses static class members on the object class being created</span>
+<span class="sd">to determine what to do before and after recursion, and how to compute</span>
+<span class="sd">children.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="recurse"><a class="viewcode-back" href="../../../reference/api/bibliopixel.project.recurse.html#bibliopixel.project.recurse.recurse">[docs]</a><span class="k">def</span> <span class="nf">recurse</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="s1">&#39;pre_recursion&#39;</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">python_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Depth first recursion through a dictionary containing type constructors</span>
+
+<span class="sd">    The arguments pre, post and children are independently either:</span>
+
+<span class="sd">    * None, which means to do nothing</span>
+<span class="sd">    * a string, which means to use the static class method of that name on the</span>
+<span class="sd">      class being constructed, or</span>
+<span class="sd">    * a callable, to be called at each recursion</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    dictionary -- a project dictionary or one of its subdictionaries</span>
+<span class="sd">    pre -- called before children are visited node in the recursion</span>
+<span class="sd">    post -- called after children are visited in the recursion</span>
+<span class="sd">    python_path -- relative path to start resolving typenames</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># f is the name of a static class method on the datatype.</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span> <span class="ow">and</span> <span class="n">f</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+
+    <span class="c1"># Automatically load strings that look like JSON or Yaml filenames.</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">load_if_filename</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span> <span class="ow">or</span> <span class="n">desc</span>
+
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">construct</span><span class="o">.</span><span class="n">to_type_constructor</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">python_path</span><span class="p">)</span>
+    <span class="n">datatype</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datatype&#39;</span><span class="p">)</span>
+
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">call</span><span class="p">(</span><span class="n">pre</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span> <span class="ow">or</span> <span class="n">desc</span>
+
+    <span class="k">for</span> <span class="n">child_name</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="s1">&#39;CHILDREN&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">child_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">child</span><span class="p">:</span>
+            <span class="n">is_plural</span> <span class="o">=</span> <span class="n">child_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+            <span class="n">remove_s</span> <span class="o">=</span> <span class="n">is_plural</span> <span class="ow">and</span> <span class="n">child_name</span> <span class="o">!=</span> <span class="s1">&#39;drivers&#39;</span>
+            <span class="c1"># This is because it&#39;s the &quot;drivers&quot; directory, whereas</span>
+            <span class="c1"># the others are animation, control, layout, project</span>
+            <span class="c1"># without the s. TODO: rename drivers/ to driver/ in v4</span>
+
+            <span class="n">cname</span> <span class="o">=</span> <span class="n">child_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">remove_s</span> <span class="k">else</span> <span class="n">child_name</span>
+            <span class="n">new_path</span> <span class="o">=</span> <span class="n">python_path</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;bibliopixel.&#39;</span> <span class="o">+</span> <span class="n">cname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_plural</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+                    <span class="n">child</span> <span class="o">=</span> <span class="p">[</span><span class="n">child</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+                    <span class="n">child</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">recurse</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">new_path</span><span class="p">)</span>
+                <span class="n">desc</span><span class="p">[</span><span class="n">child_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">desc</span><span class="p">[</span><span class="n">child_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">recurse</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">new_path</span><span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">call</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">desc</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">d</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

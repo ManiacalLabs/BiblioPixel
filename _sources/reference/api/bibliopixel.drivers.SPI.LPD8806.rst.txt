@@ -1,0 +1,7 @@
+bibliopixel.drivers.SPI.LPD8806 module
+======================================
+
+.. automodule:: bibliopixel.drivers.SPI.LPD8806
+    :members:
+    :undoc-members:
+    :show-inheritance:

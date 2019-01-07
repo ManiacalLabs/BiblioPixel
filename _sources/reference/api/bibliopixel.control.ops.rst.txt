@@ -1,0 +1,7 @@
+bibliopixel.control.ops module
+==============================
+
+.. automodule:: bibliopixel.control.ops
+    :members:
+    :undoc-members:
+    :show-inheritance:

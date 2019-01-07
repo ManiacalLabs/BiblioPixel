@@ -1,0 +1,32 @@
+Animations
+------------------------------
+
+This section details some interesting and important animations
+
+
+.. toctree::
+   :maxdepth: 1
+
+   mixer
+   sequence
+   split
+   fill
+   BiblioPixelAnimations
+
+
+
+
+----------
+
+.. code-block:: yaml
+
+   shape: [64, 7]
+   animation:
+     typename: $bpa.matrix.Text.ScrollText
+     text: 'Animations'
+
+.. image:: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/animations/index-footer.gif
+   :target: https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/animations/index-footer.gif
+   :alt: doc/tutorial/animations/index-footer
+   :align: center
+

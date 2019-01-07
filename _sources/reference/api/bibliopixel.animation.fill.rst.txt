@@ -1,0 +1,7 @@
+bibliopixel.animation.fill module
+=================================
+
+.. automodule:: bibliopixel.animation.fill
+    :members:
+    :undoc-members:
+    :show-inheritance:

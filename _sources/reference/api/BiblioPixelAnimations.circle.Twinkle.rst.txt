@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.Twinkle module
+===========================================
+
+.. automodule:: BiblioPixelAnimations.circle.Twinkle
+    :members:
+    :undoc-members:
+    :show-inheritance:

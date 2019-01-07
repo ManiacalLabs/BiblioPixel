@@ -1,0 +1,7 @@
+bibliopixel.animation.remote.trigger\_process module
+====================================================
+
+.. automodule:: bibliopixel.animation.remote.trigger_process
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.Text module
+========================================
+
+.. automodule:: BiblioPixelAnimations.matrix.Text
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.circle.pinwheel module
+============================================
+
+.. automodule:: BiblioPixelAnimations.circle.pinwheel
+    :members:
+    :undoc-members:
+    :show-inheritance:

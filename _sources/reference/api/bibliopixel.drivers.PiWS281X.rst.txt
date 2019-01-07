@@ -1,0 +1,7 @@
+bibliopixel.drivers.PiWS281X module
+===================================
+
+.. automodule:: bibliopixel.drivers.PiWS281X
+    :members:
+    :undoc-members:
+    :show-inheritance:

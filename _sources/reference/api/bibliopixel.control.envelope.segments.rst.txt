@@ -1,0 +1,7 @@
+bibliopixel.control.envelope.segments module
+============================================
+
+.. automodule:: bibliopixel.control.envelope.segments
+    :members:
+    :undoc-members:
+    :show-inheritance:

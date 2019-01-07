@@ -1,0 +1,25 @@
+bibliopixel.project.types package
+=================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.project.types.channel_order
+   bibliopixel.project.types.color
+   bibliopixel.project.types.colors
+   bibliopixel.project.types.direction
+   bibliopixel.project.types.duration
+   bibliopixel.project.types.gamma
+   bibliopixel.project.types.int_name
+   bibliopixel.project.types.ledtype
+   bibliopixel.project.types.spi_interface
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.project.types
+    :members:
+    :undoc-members:
+    :show-inheritance:

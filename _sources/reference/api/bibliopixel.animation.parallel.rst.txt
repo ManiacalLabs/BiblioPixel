@@ -1,0 +1,7 @@
+bibliopixel.animation.parallel module
+=====================================
+
+.. automodule:: bibliopixel.animation.parallel
+    :members:
+    :undoc-members:
+    :show-inheritance:

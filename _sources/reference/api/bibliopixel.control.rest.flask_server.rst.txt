@@ -1,0 +1,7 @@
+bibliopixel.control.rest.flask\_server module
+=============================================
+
+.. automodule:: bibliopixel.control.rest.flask_server
+    :members:
+    :undoc-members:
+    :show-inheritance:

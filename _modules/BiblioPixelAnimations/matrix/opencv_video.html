@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BiblioPixelAnimations.matrix.opencv_video &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BiblioPixelAnimations.matrix.opencv_video</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BiblioPixelAnimations.matrix.opencv_video</h1><div class="highlight"><pre>
+<span></span><span class="c1"># OpenCVVideo</span>
+<span class="c1"># Author - Adam Haile - Maniacal Labs</span>
+<span class="c1"># License: MIT</span>
+
+<span class="c1"># Requires numpy 1.9.x or greated and opencv-python 3.0.0 or greater</span>
+<span class="c1"># On Windows, see here for install instructions: http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_setup/py_setup_in_windows/py_setup_in_windows.html</span>
+<span class="c1"># For the Raspberry Pi, see here:</span>
+<span class="c1"># http://www.pyimagesearch.com/2015/07/27/installing-opencv-3-0-for-both-python-2-7-and-python-3-on-your-raspberry-pi-2/</span>
+
+<span class="c1"># OpenCVVideo displays video from either a webcam or video file</span>
+<span class="c1"># to an LEDMatrix instance. Parameters are as follows:</span>
+<span class="c1"># videoSource: Leave as default to use the default system webcam, otherwise set to a video file* path.</span>
+<span class="c1"># mirror: Mirror image over the vertical axis. Mainly for use with webcams.</span>
+<span class="c1"># offset: -1.0 to 1.0, when image is cropped or padded to fix on the display, setting this will shift the image.</span>
+<span class="c1">#     -1.0 means shift to far left or top, 1.0 means far right or bottom.</span>
+<span class="c1"># crop: Fill the display be cropping the image to best fit.</span>
+<span class="c1"># userVidFPS: If true, the fps param can be left off anim.run() and it will use the FPS value of the provided video.</span>
+<span class="c1"># Does nothing with webcams. This is always overriden by the run() fps or</span>
+<span class="c1"># sleep parameters.</span>
+
+<span class="c1"># *Video file codec support is system dependent, but in general very poor.</span>
+<span class="c1"># it is best to conver any videos first, including decreasing their size.</span>
+<span class="c1"># Pre-converting to a smaller resolution will decrease required CPU usage.</span>
+<span class="c1"># The following ffmpeg command line with convert most videos to the required format:</span>
+<span class="c1"># ffmpeg -i &lt;inputfile&gt; -c:v rawvideo -vf scale=&lt;width&gt;:&lt;height&gt; -r &quot;&lt;framerate&gt;&quot; -an &lt;output&gt;.avi</span>
+<span class="c1"># You must set &lt;inputfile&gt;, &lt;output&gt;, &lt;width&gt;, &lt;height&gt;, &lt;framerate&gt;</span>
+
+<span class="c1"># Load driver for your hardware, visualizer just for example</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.animation.matrix</span> <span class="k">import</span> <span class="n">Matrix</span>
+<span class="kn">from</span> <span class="nn">bibliopixel.util</span> <span class="k">import</span> <span class="n">log</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cv2</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not import cv2 library&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="OpenCVVideo"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.opencv_video.html#BiblioPixelAnimations.matrix.opencv_video.OpenCVVideo">[docs]</a><span class="k">class</span> <span class="nc">OpenCVVideo</span><span class="p">(</span><span class="n">Matrix</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">videoSource</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">useVidFPS</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop</span> <span class="o">=</span> <span class="n">crop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span> <span class="o">=</span> <span class="n">mirror</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">videoSource</span> <span class="o">=</span> <span class="n">videoSource</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">videoSource</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">videoSource</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vid</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSource</span><span class="p">)</span>
+        <span class="c1"># cv2 param defs here:</span>
+        <span class="c1"># https://github.com/Itseez/opencv/blob/master/modules/videoio/include/opencv2/videoio/videoio_c.h</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vidfps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ret</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSource</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vid</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># CV_CAP_PROP_POS_FRAMES</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vidfps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># CV_CAP_PROP_FPS</span>
+                <span class="k">if</span> <span class="n">useVidFPS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">internal_delay</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1000</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vidfps</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+                <span class="c1"># CV_CAP_PROP_FRAME_COUNT</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameTotal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Error loading video source&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iw</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ih</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># self._scale = (self.height*1.0/self._ih)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cropY</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cropX</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">xoffset</span> <span class="o">=</span> <span class="n">yoffset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="k">if</span> <span class="n">xoffset</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">xoffset</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="n">xoffset</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">xoffset</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="k">if</span> <span class="n">yoffset</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">yoffset</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="n">yoffset</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">yoffset</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">xoffset</span> <span class="o">+=</span> <span class="mf">1.0</span>
+        <span class="n">yoffset</span> <span class="o">+=</span> <span class="mf">1.0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cropX</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iw</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span>
+                                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ih</span><span class="p">))))</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ih</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iw</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ih</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iw</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cropY</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ih</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span>
+                                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iw</span><span class="p">))))</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ih</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iw</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iw</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ih</span>
+
+        <span class="n">scaleW</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="n">scaleH</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">scale</span><span class="p">)</span>
+
+        <span class="n">padTB</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaleH</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ih</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">padLR</span> <span class="o">=</span> <span class="p">(</span><span class="n">scaleW</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iw</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">padYoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">padTB</span> <span class="o">*</span> <span class="n">yoffset</span><span class="p">))</span> <span class="o">-</span> <span class="n">padTB</span>
+        <span class="n">padXoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">padLR</span> <span class="o">*</span> <span class="n">xoffset</span><span class="p">))</span> <span class="o">-</span> <span class="n">padLR</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pad</span> <span class="o">=</span> <span class="p">(</span><span class="n">padTB</span> <span class="o">+</span> <span class="n">padYoff</span><span class="p">,</span> <span class="n">padTB</span> <span class="o">-</span> <span class="n">padYoff</span><span class="p">,</span>
+                     <span class="n">padLR</span> <span class="o">+</span> <span class="n">padXoff</span><span class="p">,</span> <span class="n">padLR</span> <span class="o">-</span> <span class="n">padXoff</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cropX</span> <span class="o">*</span> <span class="n">xoffset</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cropX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cropY</span> <span class="o">*</span> <span class="n">yoffset</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cropY</span>
+
+    <span class="k">def</span> <span class="nf">_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="c1"># self._vid.release()</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="OpenCVVideo.step"><a class="viewcode-back" href="../../../reference/api/BiblioPixelAnimations.matrix.opencv_video.html#BiblioPixelAnimations.matrix.opencv_video.OpenCVVideo.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amt</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">ret</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGRA</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cropY</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">yoff</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_ih</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cropY</span> <span class="o">+</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">yoff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cropX</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xoff</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_iw</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cropX</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xoff</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pad</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">copyMakeBorder</span><span class="p">(</span>
+                <span class="n">image</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">BORDER_CONSTANT</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span>
+                             <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="p">:</span>
+            <span class="n">resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">resized</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">resized</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSource</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frameTotal</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vid</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># CV_CAP_PROP_POS_FRAMES</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">animComplete</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

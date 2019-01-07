@@ -1,0 +1,7 @@
+bibliopixel.util.image.renderer module
+======================================
+
+.. automodule:: bibliopixel.util.image.renderer
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.util.flatten module
+===============================
+
+.. automodule:: bibliopixel.util.flatten
+    :members:
+    :undoc-members:
+    :show-inheritance:

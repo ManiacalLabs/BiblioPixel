@@ -1,0 +1,7 @@
+bibliopixel.control.envelope.envelope module
+============================================
+
+.. automodule:: bibliopixel.control.envelope.envelope
+    :members:
+    :undoc-members:
+    :show-inheritance:

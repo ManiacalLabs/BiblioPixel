@@ -1,0 +1,48 @@
+bibliopixel.util package
+========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    bibliopixel.util.image
+    bibliopixel.util.threads
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.util.artnet_message
+   bibliopixel.util.attribute_dict
+   bibliopixel.util.class_name
+   bibliopixel.util.color_list
+   bibliopixel.util.colors
+   bibliopixel.util.data_file
+   bibliopixel.util.deprecated
+   bibliopixel.util.duration
+   bibliopixel.util.exception
+   bibliopixel.util.flatten
+   bibliopixel.util.int_names
+   bibliopixel.util.limit
+   bibliopixel.util.log
+   bibliopixel.util.log_errors
+   bibliopixel.util.offset_range
+   bibliopixel.util.permutation
+   bibliopixel.util.persistent_dict
+   bibliopixel.util.pid_context
+   bibliopixel.util.platform
+   bibliopixel.util.server_cache
+   bibliopixel.util.signal_handler
+   bibliopixel.util.udp
+   bibliopixel.util.util
+   bibliopixel.util.walk
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.util
+    :members:
+    :undoc-members:
+    :show-inheritance:

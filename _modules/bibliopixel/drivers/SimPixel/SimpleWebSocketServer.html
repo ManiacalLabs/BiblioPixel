@@ -1,0 +1,870 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.drivers.SimPixel.SimpleWebSocketServer &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.drivers.SimPixel.SimpleWebSocketServer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.drivers.SimPixel.SimpleWebSocketServer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># flake8: noqa</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">VER</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">VER</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">socketserver</span>
+    <span class="kn">from</span> <span class="nn">http.server</span> <span class="k">import</span> <span class="n">BaseHTTPRequestHandler</span>
+    <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span><span class="p">,</span> <span class="n">BytesIO</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">SocketServer</span>
+    <span class="kn">from</span> <span class="nn">BaseHTTPServer</span> <span class="k">import</span> <span class="n">BaseHTTPRequestHandler</span>
+    <span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">ssl</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">select</span> <span class="k">import</span> <span class="n">select</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WebSocket&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;SimpleWebSocketServer&#39;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_check_unicode</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">VER</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">unicode</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">HTTPRequest</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_text</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">VER</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rfile</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">request_text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rfile</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">request_text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_requestline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_message</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_request</span><span class="p">()</span>
+
+
+<span class="n">_VALID_STATUS_CODES</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">1002</span><span class="p">,</span> <span class="mi">1003</span><span class="p">,</span> <span class="mi">1007</span><span class="p">,</span> <span class="mi">1008</span><span class="p">,</span>
+                       <span class="mi">1009</span><span class="p">,</span> <span class="mi">1010</span><span class="p">,</span> <span class="mi">1011</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">3999</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">4999</span><span class="p">]</span>
+
+
+<span class="n">HANDSHAKE_STR</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;HTTP/1.1 101 Switching Protocols</span><span class="se">\r\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Upgrade: WebSocket</span><span class="se">\r\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Connection: Upgrade</span><span class="se">\r\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;Sec-WebSocket-Accept: </span><span class="si">%(acceptstr)s</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+
+<span class="n">GUID_STR</span> <span class="o">=</span> <span class="s1">&#39;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&#39;</span>
+
+<span class="n">STREAM</span> <span class="o">=</span> <span class="mh">0x0</span>
+<span class="n">TEXT</span> <span class="o">=</span> <span class="mh">0x1</span>
+<span class="n">BINARY</span> <span class="o">=</span> <span class="mh">0x2</span>
+<span class="n">CLOSE</span> <span class="o">=</span> <span class="mh">0x8</span>
+<span class="n">PING</span> <span class="o">=</span> <span class="mh">0x9</span>
+<span class="n">PONG</span> <span class="o">=</span> <span class="mh">0xA</span>
+
+<span class="n">HEADERB1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">HEADERB2</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">LENGTHSHORT</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">LENGTHLONG</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">MASK</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">PAYLOAD</span> <span class="o">=</span> <span class="mi">7</span>
+
+<span class="n">MAXHEADER</span> <span class="o">=</span> <span class="mi">65536</span>
+<span class="n">MAXPAYLOAD</span> <span class="o">=</span> <span class="mi">33554432</span>
+
+
+<div class="viewcode-block" id="WebSocket"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket">[docs]</a><span class="k">class</span> <span class="nc">WebSocket</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">sock</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">sock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">address</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">handshaked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headerbuffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headertoread</span> <span class="o">=</span> <span class="mi">2048</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fin</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">usingssl</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">frag_start</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frag_type</span> <span class="o">=</span> <span class="n">BINARY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frag_decoder</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getincrementaldecoder</span><span class="p">(</span>
+            <span class="s1">&#39;utf-8&#39;</span><span class="p">)(</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sendq</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">HEADERB1</span>
+
+        <span class="c1"># restrict the size of header and payload for security reasons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxheader</span> <span class="o">=</span> <span class="n">MAXHEADER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxpayload</span> <span class="o">=</span> <span class="n">MAXPAYLOAD</span>
+
+<div class="viewcode-block" id="WebSocket.handleMessage"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.handleMessage">[docs]</a>    <span class="k">def</span> <span class="nf">handleMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Called when websocket frame is received.</span>
+<span class="sd">            To access the frame data call self.data.</span>
+
+<span class="sd">            If the frame is Text then self.data is a unicode object.</span>
+<span class="sd">            If the frame is Binary then self.data is a bytearray object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="WebSocket.handleConnected"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.handleConnected">[docs]</a>    <span class="k">def</span> <span class="nf">handleConnected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Called when a websocket client connects to the server.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="WebSocket.handleClose"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.handleClose">[docs]</a>    <span class="k">def</span> <span class="nf">handleClose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Called when a websocket server gets a Close frame from a client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="nf">_handlePacket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">CLOSE</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">STREAM</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">TEXT</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">BINARY</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PONG</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PING</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">125</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;control frame length can not be &gt; 125&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># unknown or reserved opcode so just close</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;unknown opcode&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">CLOSE</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="mi">1000</span>
+            <span class="n">reason</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">elif</span> <span class="n">length</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="s1">&#39;!H&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">reason</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+                <span class="k">if</span> <span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_VALID_STATUS_CODES</span><span class="p">:</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="mi">1002</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">reason</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">reason</span> <span class="o">=</span> <span class="n">reason</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="mi">1002</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="mi">1002</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fin</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">!=</span> <span class="n">STREAM</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PING</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PONG</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;control messages can not be fragmented&#39;</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_start</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_decoder</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_type</span> <span class="o">==</span> <span class="n">TEXT</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">utf_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">utf_str</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">utf_str</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_start</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;fragmentation protocol error&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_type</span> <span class="o">==</span> <span class="n">TEXT</span><span class="p">:</span>
+                    <span class="n">utf_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">utf_str</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">utf_str</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">STREAM</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_start</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;fragmentation protocol error&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_type</span> <span class="o">==</span> <span class="n">TEXT</span><span class="p">:</span>
+                    <span class="n">utf_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">utf_str</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">handleMessage</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_decoder</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_type</span> <span class="o">=</span> <span class="n">BINARY</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_start</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frag_buffer</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PING</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sendMessage</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">PONG</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PONG</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frag_start</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;fragmentation protocol error&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">TEXT</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid utf-8 payload&#39;</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">handleMessage</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_handleData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do the HTTP header and handshake</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handshaked</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headertoread</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;remote socket closed&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># accumulate</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">headerbuffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headerbuffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxheader</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;header exceeded allowable size&#39;</span><span class="p">)</span>
+
+                <span class="c1"># indicates end of HTTP header</span>
+                <span class="k">if</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">headerbuffer</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headerbuffer</span><span class="p">)</span>
+
+                    <span class="c1"># handshake rfc 6455</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Sec-WebSocket-Key&#39;</span><span class="p">]</span>
+                        <span class="n">k</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">GUID_STR</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+                        <span class="n">k_s</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span>
+                            <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+                        <span class="n">hStr</span> <span class="o">=</span> <span class="n">HANDSHAKE_STR</span> <span class="o">%</span> <span class="p">{</span><span class="s1">&#39;acceptstr&#39;</span><span class="p">:</span> <span class="n">k_s</span><span class="p">}</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">sendq</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">BINARY</span><span class="p">,</span> <span class="n">hStr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">handshaked</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">handleConnected</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;handshake failed: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="c1"># else do normal data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">8192</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;remote socket closed&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">VER</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_parseMessage</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_parseMessage</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+
+<div class="viewcode-block" id="WebSocket.close"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Send Close frame to the client. The underlying socket is only closed</span>
+<span class="sd">           when the client acknowledges the Close frame.</span>
+
+<span class="sd">           status is the closing identifier.</span>
+<span class="sd">           reason is the reason for the close.</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">close_msg</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                <span class="n">close_msg</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;!H&quot;</span><span class="p">,</span> <span class="n">status</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">_check_unicode</span><span class="p">(</span><span class="n">reason</span><span class="p">):</span>
+                    <span class="n">close_msg</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">reason</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">close_msg</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">reason</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sendMessage</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">CLOSE</span><span class="p">,</span> <span class="n">close_msg</span><span class="p">)</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">_sendBuffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buff</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buff</span><span class="p">)</span>
+        <span class="n">tosend</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="n">already_sent</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="n">tosend</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># i should be able to send a bytearray</span>
+                <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">buff</span><span class="p">[</span><span class="n">already_sent</span><span class="p">:])</span>
+                <span class="k">if</span> <span class="n">sent</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;socket connection broken&#39;</span><span class="p">)</span>
+
+                <span class="n">already_sent</span> <span class="o">+=</span> <span class="n">sent</span>
+                <span class="n">tosend</span> <span class="o">-=</span> <span class="n">sent</span>
+
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># if we have full buffers then wait for them to drain and try</span>
+                <span class="c1"># again</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="ow">in</span> <span class="p">[</span><span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">,</span> <span class="n">errno</span><span class="o">.</span><span class="n">EWOULDBLOCK</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="n">buff</span><span class="p">[</span><span class="n">already_sent</span><span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="WebSocket.sendFragmentStart"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.sendFragmentStart">[docs]</a>    <span class="k">def</span> <span class="nf">sendFragmentStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Send the start of a data fragment stream to a websocket client.</span>
+<span class="sd">            Subsequent data should be sent using sendFragment().</span>
+<span class="sd">            A fragment stream is completed when sendFragmentEnd() is called.</span>
+
+<span class="sd">            If data is a unicode object then the frame is sent as Text.</span>
+<span class="sd">            If the data is a bytearray object then the frame is sent as Binary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opcode</span> <span class="o">=</span> <span class="n">BINARY</span>
+        <span class="k">if</span> <span class="n">_check_unicode</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">opcode</span> <span class="o">=</span> <span class="n">TEXT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sendMessage</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">opcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WebSocket.sendFragment"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.sendFragment">[docs]</a>    <span class="k">def</span> <span class="nf">sendFragment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            see sendFragmentStart()</span>
+
+<span class="sd">            If data is a unicode object then the frame is sent as Text.</span>
+<span class="sd">            If the data is a bytearray object then the frame is sent as Binary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sendMessage</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">STREAM</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WebSocket.sendFragmentEnd"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.sendFragmentEnd">[docs]</a>    <span class="k">def</span> <span class="nf">sendFragmentEnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            see sendFragmentEnd()</span>
+
+<span class="sd">            If data is a unicode object then the frame is sent as Text.</span>
+<span class="sd">            If the data is a bytearray object then the frame is sent as Binary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sendMessage</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">STREAM</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WebSocket.sendMessage"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.WebSocket.sendMessage">[docs]</a>    <span class="k">def</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Send websocket data frame to the client.</span>
+
+<span class="sd">            If data is a unicode object then the frame is sent as Text.</span>
+<span class="sd">            If the data is a bytearray object then the frame is sent as Binary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opcode</span> <span class="o">=</span> <span class="n">BINARY</span>
+        <span class="k">if</span> <span class="n">_check_unicode</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">opcode</span> <span class="o">=</span> <span class="n">TEXT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sendMessage</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">opcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_sendMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fin</span><span class="p">,</span> <span class="n">opcode</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+        <span class="n">b1</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">b2</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">fin</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">b1</span> <span class="o">|=</span> <span class="mh">0x80</span>
+        <span class="n">b1</span> <span class="o">|=</span> <span class="n">opcode</span>
+
+        <span class="k">if</span> <span class="n">_check_unicode</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">125</span><span class="p">:</span>
+            <span class="n">b2</span> <span class="o">|=</span> <span class="n">length</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">length</span> <span class="o">&gt;=</span> <span class="mi">126</span> <span class="ow">and</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">65535</span><span class="p">:</span>
+            <span class="n">b2</span> <span class="o">|=</span> <span class="mi">126</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;!H&quot;</span><span class="p">,</span> <span class="n">length</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">b2</span> <span class="o">|=</span> <span class="mi">127</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;!Q&quot;</span><span class="p">,</span> <span class="n">length</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sendq</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">opcode</span><span class="p">,</span> <span class="n">payload</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_parseMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byte</span><span class="p">):</span>
+        <span class="c1"># read in the header</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">HEADERB1</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fin</span> <span class="o">=</span> <span class="n">byte</span> <span class="o">&amp;</span> <span class="mh">0x80</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">=</span> <span class="n">byte</span> <span class="o">&amp;</span> <span class="mh">0x0F</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">HEADERB2</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+            <span class="n">rsv</span> <span class="o">=</span> <span class="n">byte</span> <span class="o">&amp;</span> <span class="mh">0x70</span>
+            <span class="k">if</span> <span class="n">rsv</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;RSV bit must be 0&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">HEADERB2</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">byte</span> <span class="o">&amp;</span> <span class="mh">0x80</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">byte</span> <span class="o">&amp;</span> <span class="mh">0x7F</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">==</span> <span class="n">PING</span> <span class="ow">and</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">125</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;ping packet is too large&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">mask</span> <span class="o">==</span> <span class="mi">128</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">125</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+
+                <span class="c1"># if we have a mask we must read it</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">MASK</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># if there is no mask and no payload we are done</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_handlePacket</span><span class="p">()</span>
+                        <span class="k">finally</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HEADERB1</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+                    <span class="c1"># we have no mask and some payload</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PAYLOAD</span>
+
+            <span class="k">elif</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">126</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">LENGTHSHORT</span>
+
+            <span class="k">elif</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">127</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">LENGTHLONG</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">LENGTHSHORT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;short length exceeded allowable size&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="s1">&#39;!H&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">MASK</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># if there is no mask and no payload we are done</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_handlePacket</span><span class="p">()</span>
+                        <span class="k">finally</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">HEADERB1</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+                    <span class="c1"># we have no mask and some payload</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PAYLOAD</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">LENGTHLONG</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;long length exceeded allowable size&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="s1">&#39;!Q&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lengtharray</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">MASK</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># if there is no mask and no payload we are done</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_handlePacket</span><span class="p">()</span>
+                        <span class="k">finally</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">HEADERB1</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+                    <span class="c1"># we have no mask and some payload</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PAYLOAD</span>
+
+        <span class="c1"># MASK STATE</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">MASK</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;mask exceeded allowable size&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="c1"># if there is no mask and no payload we are done</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_handlePacket</span><span class="p">()</span>
+                    <span class="k">finally</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">HEADERB1</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+                <span class="c1"># we have no mask and some payload</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PAYLOAD</span>
+
+        <span class="c1"># PAYLOAD STATE</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">PAYLOAD</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasmask</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte</span> <span class="o">^</span> <span class="bp">self</span><span class="o">.</span><span class="n">maskarray</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">%</span> <span class="mi">4</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+
+            <span class="c1"># if length exceeds allowable size then we except and remove the</span>
+            <span class="c1"># connection</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxpayload</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;payload exceeded allowable size&#39;</span><span class="p">)</span>
+
+            <span class="c1"># check if we have processed length bytes; if so we are done</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_handlePacket</span><span class="p">()</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">HEADERB1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="SimpleWebSocketServer"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.SimpleWebSocketServer">[docs]</a><span class="k">class</span> <span class="nc">SimpleWebSocketServer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">websocketclass</span><span class="p">,</span> <span class="n">selectInterval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">websocketclass</span> <span class="o">=</span> <span class="n">websocketclass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">websock_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selectInterval</span> <span class="o">=</span> <span class="n">selectInterval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_decorateSocket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sock</span>
+
+    <span class="k">def</span> <span class="nf">_constructWebSocket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">websocketclass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">websock_kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SimpleWebSocketServer.close"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.SimpleWebSocketServer.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">desc</span><span class="p">,</span> <span class="n">conn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">handleClose</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_kill_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">handleClose</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">traceback</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SimpleWebSocketServer.serveforever"><a class="viewcode-back" href="../../../../reference/api/bibliopixel.drivers.SimPixel.SimpleWebSocketServer.html#bibliopixel.drivers.SimPixel.SimpleWebSocketServer.SimpleWebSocketServer.serveforever">[docs]</a>    <span class="k">def</span> <span class="nf">serveforever</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">writers</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">fileno</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fileno</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">fileno</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">client</span><span class="o">.</span><span class="n">sendq</span><span class="p">:</span>
+                    <span class="n">writers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fileno</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectInterval</span><span class="p">:</span>
+                <span class="n">rList</span><span class="p">,</span> <span class="n">wList</span><span class="p">,</span> <span class="n">xList</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="p">,</span> <span class="n">writers</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectInterval</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rList</span><span class="p">,</span> <span class="n">wList</span><span class="p">,</span> <span class="n">xList</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="p">,</span> <span class="n">writers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">ready</span> <span class="ow">in</span> <span class="n">wList</span><span class="p">:</span>
+                <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">ready</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="n">client</span><span class="o">.</span><span class="n">sendq</span><span class="p">:</span>
+                        <span class="n">opcode</span><span class="p">,</span> <span class="n">payload</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sendq</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+                        <span class="n">remaining</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">_sendBuffer</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">remaining</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">client</span><span class="o">.</span><span class="n">sendq</span><span class="o">.</span><span class="n">appendleft</span><span class="p">((</span><span class="n">opcode</span><span class="p">,</span> <span class="n">remaining</span><span class="p">))</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">opcode</span> <span class="o">==</span> <span class="n">CLOSE</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;received client close&#39;</span><span class="p">)</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_kill_client</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">ready</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">ready</span> <span class="ow">in</span> <span class="n">rList</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ready</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">sock</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+                        <span class="n">newsock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decorateSocket</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
+                        <span class="n">newsock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">fileno</span> <span class="o">=</span> <span class="n">newsock</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">fileno</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_constructWebSocket</span><span class="p">(</span>
+                            <span class="n">newsock</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fileno</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">sock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ready</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">ready</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">client</span><span class="o">.</span><span class="n">_handleData</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_kill_client</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">ready</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">failed</span> <span class="ow">in</span> <span class="n">xList</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">failed</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">serversocket</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;server socket failed&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">failed</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_kill_client</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">failed</span><span class="p">],</span> <span class="n">failed</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

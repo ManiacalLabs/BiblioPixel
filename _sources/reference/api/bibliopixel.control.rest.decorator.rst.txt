@@ -1,0 +1,7 @@
+bibliopixel.control.rest.decorator module
+=========================================
+
+.. automodule:: bibliopixel.control.rest.decorator
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.util.image.mp4 module
+=================================
+
+.. automodule:: bibliopixel.util.image.mp4
+    :members:
+    :undoc-members:
+    :show-inheritance:

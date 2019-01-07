@@ -1,0 +1,30 @@
+bibliopixel.commands package
+============================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.commands.all_pixel
+   bibliopixel.commands.all_pixel_test
+   bibliopixel.commands.animations
+   bibliopixel.commands.clear_cache
+   bibliopixel.commands.demo
+   bibliopixel.commands.devices
+   bibliopixel.commands.info
+   bibliopixel.commands.kill
+   bibliopixel.commands.monitor
+   bibliopixel.commands.new
+   bibliopixel.commands.pid
+   bibliopixel.commands.restart
+   bibliopixel.commands.run
+   bibliopixel.commands.shutdown
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.commands
+    :members:
+    :undoc-members:
+    :show-inheritance:

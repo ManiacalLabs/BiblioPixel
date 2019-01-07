@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.ImageDissolve module
+=================================================
+
+.. automodule:: BiblioPixelAnimations.matrix.ImageDissolve
+    :members:
+    :undoc-members:
+    :show-inheritance:

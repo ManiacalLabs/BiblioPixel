@@ -1,0 +1,48 @@
+BiblioPixelAnimations.matrix package
+====================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    BiblioPixelAnimations.matrix.spectrum
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.matrix.AnalogClock
+   BiblioPixelAnimations.matrix.BinaryClock
+   BiblioPixelAnimations.matrix.CPUUsage
+   BiblioPixelAnimations.matrix.GameOfLife
+   BiblioPixelAnimations.matrix.GradientClock
+   BiblioPixelAnimations.matrix.ImageAnim
+   BiblioPixelAnimations.matrix.ImageDissolve
+   BiblioPixelAnimations.matrix.ImageShow
+   BiblioPixelAnimations.matrix.LangtonsAnt
+   BiblioPixelAnimations.matrix.Mainframe
+   BiblioPixelAnimations.matrix.MathFunc
+   BiblioPixelAnimations.matrix.MatrixRain
+   BiblioPixelAnimations.matrix.OneKClock
+   BiblioPixelAnimations.matrix.ScreenGrab
+   BiblioPixelAnimations.matrix.SpinningTriangle
+   BiblioPixelAnimations.matrix.TallClock
+   BiblioPixelAnimations.matrix.Text
+   BiblioPixelAnimations.matrix.TicTacToe
+   BiblioPixelAnimations.matrix.Twinkle
+   BiblioPixelAnimations.matrix.bloom
+   BiblioPixelAnimations.matrix.circlepop
+   BiblioPixelAnimations.matrix.kimotion
+   BiblioPixelAnimations.matrix.opencv_video
+   BiblioPixelAnimations.matrix.perlin_simplex
+   BiblioPixelAnimations.matrix.pinwheel
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.matrix
+    :members:
+    :undoc-members:
+    :show-inheritance:

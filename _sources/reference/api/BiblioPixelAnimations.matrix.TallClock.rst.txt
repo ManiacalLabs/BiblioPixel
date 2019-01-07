@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.TallClock module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.TallClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

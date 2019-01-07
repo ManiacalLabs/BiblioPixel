@@ -1,0 +1,24 @@
+BiblioPixelAnimations package
+=============================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    BiblioPixelAnimations.base
+    BiblioPixelAnimations.circle
+    BiblioPixelAnimations.cube
+    BiblioPixelAnimations.game
+    BiblioPixelAnimations.matrix
+    BiblioPixelAnimations.receivers
+    BiblioPixelAnimations.simple
+    BiblioPixelAnimations.strip
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations
+    :members:
+    :undoc-members:
+    :show-inheritance:

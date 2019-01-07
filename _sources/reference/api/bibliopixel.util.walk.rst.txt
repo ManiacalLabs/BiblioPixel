@@ -1,0 +1,7 @@
+bibliopixel.util.walk module
+============================
+
+.. automodule:: bibliopixel.util.walk
+    :members:
+    :undoc-members:
+    :show-inheritance:

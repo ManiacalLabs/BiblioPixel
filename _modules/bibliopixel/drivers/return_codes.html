@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.drivers.return_codes &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.drivers.return_codes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.drivers.return_codes</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">..</span> <span class="n">util</span> <span class="kn">import</span> <span class="nn">log</span>
+
+
+<div class="viewcode-block" id="RETURN_CODES"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.return_codes.html#bibliopixel.drivers.return_codes.RETURN_CODES">[docs]</a><span class="k">class</span> <span class="nc">RETURN_CODES</span><span class="p">:</span>
+    <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mi">255</span>  <span class="c1"># All is well</span>
+    <span class="n">REBOOT</span> <span class="o">=</span> <span class="mi">42</span>  <span class="c1"># Device reboot needed after configuration</span>
+    <span class="n">ERROR</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Generic error</span>
+    <span class="n">ERROR_SIZE</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Data received does not match given command length</span>
+    <span class="n">ERROR_UNSUPPORTED</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># Unsupported command</span>
+    <span class="n">ERROR_PIXEL_COUNT</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># Too many pixels for device</span>
+    <span class="n">ERROR_BAD_CMD</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Unknown Command</span></div>
+
+
+<span class="n">RETURN_CODE_ERRORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span> <span class="s1">&#39;Success!&#39;</span><span class="p">,</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">REBOOT</span><span class="p">:</span> <span class="s1">&#39;Device reboot needed after configuration.&#39;</span><span class="p">,</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span> <span class="s1">&#39;Generic error&#39;</span><span class="p">,</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">ERROR_SIZE</span><span class="p">:</span> <span class="s1">&#39;Data packet size incorrect.&#39;</span><span class="p">,</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">ERROR_UNSUPPORTED</span><span class="p">:</span> <span class="s1">&#39;Unsupported configuration attempted.&#39;</span><span class="p">,</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">ERROR_PIXEL_COUNT</span><span class="p">:</span> <span class="s1">&#39;Wrong number of pixels for device.&#39;</span><span class="p">,</span>
+    <span class="n">RETURN_CODES</span><span class="o">.</span><span class="n">ERROR_BAD_CMD</span><span class="p">:</span>
+        <span class="s1">&#39;Unsupported protocol command. Check your device version.&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="BiblioSerialError"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.return_codes.html#bibliopixel.drivers.return_codes.BiblioSerialError">[docs]</a><span class="k">class</span> <span class="nc">BiblioSerialError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="print_error"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.return_codes.html#bibliopixel.drivers.return_codes.print_error">[docs]</a><span class="k">def</span> <span class="nf">print_error</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">RETURN_CODE_ERRORS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s1">&#39;Unknown error occured.&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="raise_error"><a class="viewcode-back" href="../../../reference/api/bibliopixel.drivers.return_codes.html#bibliopixel.drivers.return_codes.raise_error">[docs]</a><span class="k">def</span> <span class="nf">raise_error</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">BiblioSerialError</span><span class="p">(</span><span class="n">print_error</span><span class="p">(</span><span class="n">error</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

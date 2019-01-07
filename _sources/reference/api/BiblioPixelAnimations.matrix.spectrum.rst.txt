@@ -1,0 +1,17 @@
+BiblioPixelAnimations.matrix.spectrum package
+=============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.matrix.spectrum.system_eq
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.matrix.spectrum
+    :members:
+    :undoc-members:
+    :show-inheritance:

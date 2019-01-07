@@ -1,0 +1,24 @@
+bibliopixel.drivers.SPI package
+===============================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.drivers.SPI.APA102
+   bibliopixel.drivers.SPI.LPD8806
+   bibliopixel.drivers.SPI.WS2801
+   bibliopixel.drivers.SPI.WS281X
+   bibliopixel.drivers.SPI.base
+   bibliopixel.drivers.SPI.driver
+   bibliopixel.drivers.SPI.errors
+   bibliopixel.drivers.SPI.interfaces
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.drivers.SPI
+    :members:
+    :undoc-members:
+    :show-inheritance:

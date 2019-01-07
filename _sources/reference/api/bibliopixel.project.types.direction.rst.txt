@@ -1,0 +1,7 @@
+bibliopixel.project.types.direction module
+==========================================
+
+.. automodule:: bibliopixel.project.types.direction
+    :members:
+    :undoc-members:
+    :show-inheritance:

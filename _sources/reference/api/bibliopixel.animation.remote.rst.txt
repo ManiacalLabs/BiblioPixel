@@ -1,0 +1,21 @@
+bibliopixel.animation.remote package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.animation.remote.control
+   bibliopixel.animation.remote.opener
+   bibliopixel.animation.remote.server
+   bibliopixel.animation.remote.trigger
+   bibliopixel.animation.remote.trigger_process
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.animation.remote
+    :members:
+    :undoc-members:
+    :show-inheritance:

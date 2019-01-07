@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.project.edit_queue module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.project.fields module" href="bibliopixel.project.fields.html" />
+    <link rel="prev" title="bibliopixel.project.data_maker module" href="bibliopixel.project.data_maker.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.project.html">bibliopixel.project package</a> &raquo;</li>
+        
+      <li>bibliopixel.project.edit_queue module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.project.edit_queue.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.project.edit_queue">
+<span id="bibliopixel-project-edit-queue-module"></span><h1>bibliopixel.project.edit_queue module<a class="headerlink" href="#module-bibliopixel.project.edit_queue" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bibliopixel.project.edit_queue.EditQueue">
+<em class="property">class </em><code class="descclassname">bibliopixel.project.edit_queue.</code><code class="descname">EditQueue</code><span class="sig-paren">(</span><em>maxsize=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/project/edit_queue.html#EditQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.project.edit_queue.EditQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">queue.Queue</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">Edits``s</span> <span class="pre">are</span> <span class="pre">thread-unsafe</span> <span class="pre">operations</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">executed</span> <span class="pre">later</span> <span class="pre">at</span> <span class="pre">a</span>
+<span class="pre">thread-safe</span> <span class="pre">time.</span>&#160; <span class="pre">In</span> <span class="pre">the</span> <span class="pre">animation</span> <span class="pre">loop,</span> <span class="pre">this</span> <span class="pre">happens</span> <span class="pre">in</span>
+<span class="pre">``bibliopixel.animation.Animation.preframe_callback</span></code>.</p>
+<p>The typical <code class="docutils literal notranslate"><span class="pre">Edit</span></code> is a change to some parameter of an animation,
+but in general is represented by a call to a function with fixed parameters.</p>
+<dl class="method">
+<dt id="bibliopixel.project.edit_queue.EditQueue.get_and_run_edits">
+<code class="descname">get_and_run_edits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/project/edit_queue.html#EditQueue.get_and_run_edits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.project.edit_queue.EditQueue.get_and_run_edits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the edits in the queue, then execute them.</p>
+<p>The algorithm gets all edits, and then executes all of them.  It does
+<em>not</em> pull off one edit, execute, repeat until the queue is empty, and
+that means that the queue might not be empty at the end of
+<code class="docutils literal notranslate"><span class="pre">run_edits</span></code>, because new edits might have entered the queue
+while the previous edits are being executed.</p>
+<p>This has the advantage that if edits enter the queue faster than they
+can be processed, <code class="docutils literal notranslate"><span class="pre">get_and_run_edits</span></code> won’t go into an infinite loop,
+but rather the queue will grow unboundedly, which that can be
+detected, and mitigated and reported on - or if Queue.maxsize is
+set, <code class="docutils literal notranslate"><span class="pre">bp</span></code> will report a fairly clear error and just dump the edits
+on the ground.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.project.edit_queue.EditQueue.put_edit">
+<code class="descname">put_edit</code><span class="sig-paren">(</span><em>f</em>, <em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/project/edit_queue.html#EditQueue.put_edit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.project.edit_queue.EditQueue.put_edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defer an edit to run on the EditQueue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>callable</em>) – The function to be called</li>
+<li><strong>args</strong> (<em>tuple</em>) – Positional arguments to the function</li>
+<li><strong>kwds</strong> (<em>tuple</em>) – Keyword arguments to the function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws queue.Full:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">if the queue is full</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.project.fields.html" class="btn btn-neutral float-right" title="bibliopixel.project.fields module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.project.data_maker.html" class="btn btn-neutral" title="bibliopixel.project.data_maker module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

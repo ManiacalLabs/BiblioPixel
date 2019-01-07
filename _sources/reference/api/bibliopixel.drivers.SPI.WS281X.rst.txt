@@ -1,0 +1,7 @@
+bibliopixel.drivers.SPI.WS281X module
+=====================================
+
+.. automodule:: bibliopixel.drivers.SPI.WS281X
+    :members:
+    :undoc-members:
+    :show-inheritance:

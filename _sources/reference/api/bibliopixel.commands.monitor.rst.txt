@@ -1,0 +1,7 @@
+bibliopixel.commands.monitor module
+===================================
+
+.. automodule:: bibliopixel.commands.monitor
+    :members:
+    :undoc-members:
+    :show-inheritance:

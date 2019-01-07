@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.SaberBlade module
+=============================================
+
+.. automodule:: BiblioPixelAnimations.strip.SaberBlade
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.util.image.gif module
+=================================
+
+.. automodule:: bibliopixel.util.image.gif
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.cube.GameOfLife module
+============================================
+
+.. automodule:: BiblioPixelAnimations.cube.GameOfLife
+    :members:
+    :undoc-members:
+    :show-inheritance:

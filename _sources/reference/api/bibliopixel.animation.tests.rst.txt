@@ -1,0 +1,7 @@
+bibliopixel.animation.tests module
+==================================
+
+.. automodule:: bibliopixel.animation.tests
+    :members:
+    :undoc-members:
+    :show-inheritance:

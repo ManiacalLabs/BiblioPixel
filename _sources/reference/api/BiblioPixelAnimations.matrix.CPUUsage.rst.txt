@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.CPUUsage module
+============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.CPUUsage
+    :members:
+    :undoc-members:
+    :show-inheritance:

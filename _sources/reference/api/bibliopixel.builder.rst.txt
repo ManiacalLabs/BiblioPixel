@@ -1,0 +1,22 @@
+bibliopixel.builder package
+===========================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.builder.builder
+   bibliopixel.builder.description
+   bibliopixel.builder.pixels
+   bibliopixel.builder.runner
+   bibliopixel.builder.saved_description
+   bibliopixel.builder.sections
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.builder
+    :members:
+    :undoc-members:
+    :show-inheritance:

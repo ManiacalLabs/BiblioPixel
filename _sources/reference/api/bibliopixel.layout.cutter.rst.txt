@@ -1,0 +1,7 @@
+bibliopixel.layout.cutter module
+================================
+
+.. automodule:: bibliopixel.layout.cutter
+    :members:
+    :undoc-members:
+    :show-inheritance:

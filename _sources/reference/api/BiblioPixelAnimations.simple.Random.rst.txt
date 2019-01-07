@@ -1,0 +1,7 @@
+BiblioPixelAnimations.simple.Random module
+==========================================
+
+.. automodule:: BiblioPixelAnimations.simple.Random
+    :members:
+    :undoc-members:
+    :show-inheritance:

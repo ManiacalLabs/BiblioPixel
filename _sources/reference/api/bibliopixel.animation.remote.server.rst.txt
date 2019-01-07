@@ -1,0 +1,7 @@
+bibliopixel.animation.remote.server module
+==========================================
+
+.. automodule:: bibliopixel.animation.remote.server
+    :members:
+    :undoc-members:
+    :show-inheritance:

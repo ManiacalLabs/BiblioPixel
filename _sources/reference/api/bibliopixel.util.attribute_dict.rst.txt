@@ -1,0 +1,7 @@
+bibliopixel.util.attribute\_dict module
+=======================================
+
+.. automodule:: bibliopixel.util.attribute_dict
+    :members:
+    :undoc-members:
+    :show-inheritance:

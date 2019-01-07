@@ -1,0 +1,19 @@
+BiblioPixelAnimations.simple package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   BiblioPixelAnimations.simple.Fill
+   BiblioPixelAnimations.simple.LogFade
+   BiblioPixelAnimations.simple.Random
+
+Module contents
+---------------
+
+.. automodule:: BiblioPixelAnimations.simple
+    :members:
+    :undoc-members:
+    :show-inheritance:

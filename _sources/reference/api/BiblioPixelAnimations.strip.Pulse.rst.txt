@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.Pulse module
+========================================
+
+.. automodule:: BiblioPixelAnimations.strip.Pulse
+    :members:
+    :undoc-members:
+    :show-inheritance:

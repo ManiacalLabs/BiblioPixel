@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.BinaryClock module
+===============================================
+
+.. automodule:: BiblioPixelAnimations.matrix.BinaryClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Project Builder &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="The bp program." href="the-bp-program.html" />
+    <link rel="prev" title="Editing a custom animation" href="editing-an-animation.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">The BiblioPixel Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#how-to-get-started-with-bibliopixel">How to get started with BiblioPixel</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="before-you-start.html">Before you start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yaml-and-json.html">Yaml and JSON</a></li>
+<li class="toctree-l4"><a class="reference internal" href="installing-bibliopixel.html">Installing BiblioPixel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="how-to-write-a-project.html">How to write a Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="editing-a-project.html">Editing a Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="editing-an-animation.html">Editing a custom animation</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">The Project Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="the-bp-program.html">The <code class="docutils literal notranslate"><span class="pre">bp</span></code> program.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="animated-gifs.html">About the animated GIFs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/index.html">Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sections/index.html">The Sections in a Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fields/index.html">Field Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../animations/index.html">Animations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/index.html">Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../controls/index.html">Controls</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">The BiblioPixel Tutorial</a> &raquo;</li>
+        
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+        
+      <li>The Project Builder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tutorial/getting-started/the-project-builder.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-project-builder">
+<h1>The Project Builder<a class="headerlink" href="#the-project-builder" title="Permalink to this headline">¶</a></h1>
+<p>The Project Builder is a Python class lets you use Projects and write your own
+main program in Python, or experiment in the Python interpreter</p>
+<div class="section" id="how-to-use-the-project-builder-from-the-python-interpreter">
+<h2>How to use the Project Builder from the Python interpreter<a class="headerlink" href="#how-to-use-the-project-builder-from-the-python-interpreter" title="Permalink to this headline">¶</a></h2>
+<p>Using the Project Builder from the Python interpreter is a lot of fun, and
+anything you do there can be cut-and-pasted into your own scripts.</p>
+<p>There’s automatically generated class documentation here[TODO], but the
+walkthrough below will probably be more entertaining.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ python3
+
+from bibliopixel.project.builder import Builder
+pb = Builder()
+print(pb)
+# Nothing in it yet...
+
+# Open a simpixel in your browser.
+pb.simpixel()
+
+# Let&#39;s start it!
+pb.start()
+# You&#39;re starting an empty project, which works perfectly well but does nothing.
+# Hit Control-C to stop it
+
+pb.shape = 12
+pb.animation = &#39;.tests.PixelTester&#39;
+# This resolves to bibliopixel.animation.tests.PixelTester
+
+pb.start()
+# Now you should see stuff!
+# This blocks - you don&#39;t get a Python prompt while it&#39;s running.
+# Hit Control-C to stop it
+
+# Let&#39;s run in the background, like this:
+pb.threaded = True
+pb.start()
+# Now you can keep going!
+
+pb.shape = 128
+pb.animation = &#39;$bpa.strip.Wave&#39;
+# Resolves to BiblioPixelAnimations.strip.Wave.Wave
+
+# Restart the project with the changes
+pb.start()
+print(pb)
+
+pb.save(&#39;test.yml&#39;)  # Save the data in a file
+
+dr = Builder()       # Let&#39;s make a new project, just for driver info
+dr.driver = &#39;.serial.driver.Serial&#39;
+dr.driver.update(c_order=&#39;RGB&#39;, device_id=10)
+
+dr.start()
+
+dr.save(&#39;driver.yml&#39;)
+
+print(pb)
+
+(pb + dr).start()  # Restarts the Project with a new driver
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="the-bp-program.html" class="btn btn-neutral float-right" title="The bp program." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="editing-an-animation.html" class="btn btn-neutral" title="Editing a custom animation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

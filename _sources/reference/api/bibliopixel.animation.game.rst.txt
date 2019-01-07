@@ -1,0 +1,7 @@
+bibliopixel.animation.game module
+=================================
+
+.. automodule:: bibliopixel.animation.game
+    :members:
+    :undoc-members:
+    :show-inheritance:

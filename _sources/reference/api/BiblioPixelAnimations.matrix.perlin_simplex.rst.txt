@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.perlin\_simplex module
+===================================================
+
+.. automodule:: BiblioPixelAnimations.matrix.perlin_simplex
+    :members:
+    :undoc-members:
+    :show-inheritance:

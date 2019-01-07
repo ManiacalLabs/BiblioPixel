@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.ColorFill module
+============================================
+
+.. automodule:: BiblioPixelAnimations.strip.ColorFill
+    :members:
+    :undoc-members:
+    :show-inheritance:

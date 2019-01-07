@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.BinaryEpochClock module
+===================================================
+
+.. automodule:: BiblioPixelAnimations.strip.BinaryEpochClock
+    :members:
+    :undoc-members:
+    :show-inheritance:

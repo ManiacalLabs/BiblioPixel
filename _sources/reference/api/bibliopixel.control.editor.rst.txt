@@ -1,0 +1,7 @@
+bibliopixel.control.editor module
+=================================
+
+.. automodule:: bibliopixel.control.editor
+    :members:
+    :undoc-members:
+    :show-inheritance:

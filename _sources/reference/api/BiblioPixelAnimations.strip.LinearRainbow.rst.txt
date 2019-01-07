@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.LinearRainbow module
+================================================
+
+.. automodule:: BiblioPixelAnimations.strip.LinearRainbow
+    :members:
+    :undoc-members:
+    :show-inheritance:

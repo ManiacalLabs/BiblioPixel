@@ -1,0 +1,19 @@
+bibliopixel.drivers.SimPixel package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   bibliopixel.drivers.SimPixel.SimpleWebSocketServer
+   bibliopixel.drivers.SimPixel.driver
+   bibliopixel.drivers.SimPixel.websocket
+
+Module contents
+---------------
+
+.. automodule:: bibliopixel.drivers.SimPixel
+    :members:
+    :undoc-members:
+    :show-inheritance:

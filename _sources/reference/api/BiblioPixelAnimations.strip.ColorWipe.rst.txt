@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.ColorWipe module
+============================================
+
+.. automodule:: BiblioPixelAnimations.strip.ColorWipe
+    :members:
+    :undoc-members:
+    :show-inheritance:

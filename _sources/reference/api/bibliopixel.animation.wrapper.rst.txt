@@ -1,0 +1,7 @@
+bibliopixel.animation.wrapper module
+====================================
+
+.. automodule:: bibliopixel.animation.wrapper
+    :members:
+    :undoc-members:
+    :show-inheritance:

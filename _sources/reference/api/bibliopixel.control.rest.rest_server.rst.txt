@@ -1,0 +1,7 @@
+bibliopixel.control.rest.rest\_server module
+============================================
+
+.. automodule:: bibliopixel.control.rest.rest_server
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.util.artnet_message &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bibliopixel.util.artnet_message</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bibliopixel.util.artnet_message</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span><span class="o">,</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">log</span>
+
+<span class="n">DMX_LENGTH</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">ARTNET_DMX</span> <span class="o">=</span> <span class="mh">0x5000</span>
+<span class="n">ARTNET_VERSION</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">NAME</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;Art-Net</span><span class="se">\x00</span><span class="s1">&#39;</span>
+<span class="n">MAX_NET</span> <span class="o">=</span> <span class="mh">0xFF</span>
+<span class="n">MAX_SUBNET</span> <span class="o">=</span> <span class="mh">0xF</span>
+<span class="n">MAX_UNIVERSE</span> <span class="o">=</span> <span class="mh">0xF</span>
+<span class="n">UDP_PORT</span> <span class="o">=</span> <span class="mh">0x1936</span>  <span class="c1"># 6454</span>
+
+
+<div class="viewcode-block" id="MessageClass"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.artnet_message.html#bibliopixel.util.artnet_message.MessageClass">[docs]</a><span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">DMX_LENGTH</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">MessageClass</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="n">DMX_LENGTH</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="n">DMX_LENGTH</span>
+    <span class="k">assert</span> <span class="n">length</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;artnet only takes messages of even length&#39;</span>
+
+    <span class="n">Char</span><span class="p">,</span> <span class="n">Int8</span><span class="p">,</span> <span class="n">Int16</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ushort</span>
+
+    <span class="k">class</span> <span class="nc">DMXMessage</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+        <span class="c1"># http://artisticlicence.com/WebSiteMaster/User%20Guides/art-net.pdf p47</span>
+        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">Char</span> <span class="o">*</span> <span class="mi">8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;opCode&#39;</span><span class="p">,</span> <span class="n">Int16</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;protVerHi&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;protVerLo&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;sequence&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;physical&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;subUni&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;net&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;lengthHi&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="n">Int8</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">Int8</span> <span class="o">*</span> <span class="n">length</span><span class="p">),</span>  <span class="c1"># At position 18</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">DMXMessage</span></div>
+
+
+<div class="viewcode-block" id="dmx_message"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.artnet_message.html#bibliopixel.util.artnet_message.dmx_message">[docs]</a><span class="k">def</span> <span class="nf">dmx_message</span><span class="p">(</span>
+        <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">net</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">subnet</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">universe</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">DMX_LENGTH</span> <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="n">length</span>
+
+    <span class="n">Message</span> <span class="o">=</span> <span class="n">MessageClass</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">sequence</span> <span class="o">&lt;=</span> <span class="n">DMX_LENGTH</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">net</span> <span class="o">&lt;=</span> <span class="n">MAX_NET</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">subnet</span> <span class="o">&lt;=</span> <span class="n">MAX_SUBNET</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">universe</span> <span class="o">&lt;=</span> <span class="n">MAX_UNIVERSE</span>
+
+    <span class="c1"># http://artisticlicence.com/WebSiteMaster/User%20Guides/art-net.pdf p5</span>
+    <span class="n">subUni</span> <span class="o">=</span> <span class="p">(</span><span class="n">subnet</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">universe</span>
+    <span class="n">hi</span><span class="p">,</span> <span class="n">lo</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">NAME</span><span class="p">,</span>
+        <span class="n">opCode</span><span class="o">=</span><span class="n">ARTNET_DMX</span><span class="p">,</span>
+        <span class="n">protVerLo</span><span class="o">=</span><span class="n">ARTNET_VERSION</span><span class="p">,</span>
+        <span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
+        <span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span>
+        <span class="n">subUni</span><span class="o">=</span><span class="n">subUni</span><span class="p">,</span>
+        <span class="n">lengthHi</span><span class="o">=</span><span class="n">hi</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="n">lo</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">return</span> <span class="n">msg</span></div>
+
+
+<span class="n">DMXMessage</span> <span class="o">=</span> <span class="n">MessageClass</span><span class="p">()</span>
+<span class="n">EMPTY_MESSAGE_SIZE</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">MessageClass</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="bytes_to_message"><a class="viewcode-back" href="../../../reference/api/bibliopixel.util.artnet_message.html#bibliopixel.util.artnet_message.bytes_to_message">[docs]</a><span class="k">def</span> <span class="nf">bytes_to_message</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">EMPTY_MESSAGE_SIZE</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">length</span> <span class="o">&lt;=</span> <span class="n">DMX_LENGTH</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">MessageClass</span><span class="p">(</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">NAME</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="c1"># For some reason, ctypes throws away that trailing \0 character</span>
+    <span class="c1"># when converting back to bytes().</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Expected name </span><span class="si">%s</span><span class="s1"> but got name </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">NAME</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bibliopixel.control.serial_gamepad module &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="bibliopixel.drivers package" href="bibliopixel.drivers.html" />
+    <link rel="prev" title="bibliopixel.control.routing module" href="bibliopixel.control.routing.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">The BiblioPixel Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">bibliopixel</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bibliopixel.html">bibliopixel package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="bibliopixel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bibliopixel.html#module-bibliopixel">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#bibliopixelanimations">BiblioPixelAnimations</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="modules.html">bibliopixel</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.html">bibliopixel package</a> &raquo;</li>
+        
+          <li><a href="bibliopixel.control.html">bibliopixel.control package</a> &raquo;</li>
+        
+      <li>bibliopixel.control.serial_gamepad module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/reference/api/bibliopixel.control.serial_gamepad.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-bibliopixel.control.serial_gamepad">
+<span id="bibliopixel-control-serial-gamepad-module"></span><h1>bibliopixel.control.serial_gamepad module<a class="headerlink" href="#module-bibliopixel.control.serial_gamepad" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bibliopixel.control.serial_gamepad.CMDTYPE">
+<em class="property">class </em><code class="descclassname">bibliopixel.control.serial_gamepad.</code><code class="descname">CMDTYPE</code><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#CMDTYPE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.CMDTYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="bibliopixel.control.serial_gamepad.CMDTYPE.GET_BTNS">
+<code class="descname">GET_BTNS</code><em class="property"> = 1</em><a class="headerlink" href="#bibliopixel.control.serial_gamepad.CMDTYPE.GET_BTNS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.control.serial_gamepad.CMDTYPE.INIT">
+<code class="descname">INIT</code><em class="property"> = 0</em><a class="headerlink" href="#bibliopixel.control.serial_gamepad.CMDTYPE.INIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.control.serial_gamepad.CMDTYPE.SET_LEDS">
+<code class="descname">SET_LEDS</code><em class="property"> = 2</em><a class="headerlink" href="#bibliopixel.control.serial_gamepad.CMDTYPE.SET_LEDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.control.serial_gamepad.CMDTYPE.SET_MODE">
+<code class="descname">SET_MODE</code><em class="property"> = 4</em><a class="headerlink" href="#bibliopixel.control.serial_gamepad.CMDTYPE.SET_MODE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad">
+<em class="property">class </em><code class="descclassname">bibliopixel.control.serial_gamepad.</code><code class="descname">SerialGamePad</code><span class="sig-paren">(</span><em>btn_map=('A'</em>, <em>'B'</em>, <em>'SELECT'</em>, <em>'START'</em>, <em>'UP'</em>, <em>'DOWN'</em>, <em>'LEFT'</em>, <em>'RIGHT'</em>, <em>'X'</em>, <em>'Y')</em>, <em>dev=''</em>, <em>hardwareID='1B4F:9206'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bibliopixel.control.gamepad.html#bibliopixel.control.gamepad.BaseGamePad" title="bibliopixel.control.gamepad.BaseGamePad"><code class="xref py py-class docutils literal notranslate"><span class="pre">bibliopixel.control.gamepad.BaseGamePad</span></code></a></p>
+<dl class="method">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.cleanup">
+<code class="descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.devices">
+<code class="descname">devices</code><em class="property"> = []</em><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.devices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.find_serial_devices">
+<em class="property">static </em><code class="descname">find_serial_devices</code><span class="sig-paren">(</span><em>hardwareID='1B4F:9206'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad.find_serial_devices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.find_serial_devices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.getKeys">
+<code class="descname">getKeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad.getKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.getKeys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.setLights">
+<code class="descname">setLights</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad.setLights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.setLights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="bibliopixel.control.serial_gamepad.SerialGamePad.setLightsOff">
+<code class="descname">setLightsOff</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialGamePad.setLightsOff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialGamePad.setLightsOff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="bibliopixel.control.serial_gamepad.SerialPadError">
+<em class="property">exception </em><code class="descclassname">bibliopixel.control.serial_gamepad.</code><code class="descname">SerialPadError</code><a class="reference internal" href="../../_modules/bibliopixel/control/serial_gamepad.html#SerialPadError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bibliopixel.control.serial_gamepad.SerialPadError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bibliopixel.drivers.html" class="btn btn-neutral float-right" title="bibliopixel.drivers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bibliopixel.control.routing.html" class="btn btn-neutral" title="bibliopixel.control.routing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+BiblioPixelAnimations.matrix.spectrum.system\_eq module
+=======================================================
+
+.. automodule:: BiblioPixelAnimations.matrix.spectrum.system_eq
+    :members:
+    :undoc-members:
+    :show-inheritance:

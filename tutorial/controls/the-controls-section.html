@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The controls Section &mdash; BiblioPixel 3.4.42 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Routing, Addresses and Actions" href="routing-addresses-and-actions.html" />
+    <link rel="prev" title="Controls" href="index.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> BiblioPixel
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.4.42
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">The BiblioPixel Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/index.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/index.html">Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sections/index.html">The Sections in a Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fields/index.html">Field Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../animations/index.html">Animations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drivers/index.html">Drivers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Controls</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">The <code class="docutils literal notranslate"><span class="pre">controls</span></code> Section</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#controls-operate-independently-of-everything-else">Controls operate independently of everything else</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-controls-work">How Controls work!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#monitoring-controls">Monitoring controls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#control-fields">Control Fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#normalized-numbers">Normalized numbers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extractors">Extractors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="routing-addresses-and-actions.html">Routing, Addresses and Actions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-help.html">Getting help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topic-papers/index.html">Topic Papers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">For BiblioPixel developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BiblioPixel</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">The BiblioPixel Tutorial</a> &raquo;</li>
+        
+          <li><a href="index.html">Controls</a> &raquo;</li>
+        
+      <li>The <code class="docutils literal notranslate"><span class="pre">controls</span></code> Section</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/tutorial/controls/the-controls-section.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-controls-section">
+<h1>The <code class="docutils literal notranslate"><span class="pre">controls</span></code> Section<a class="headerlink" href="#the-controls-section" title="Permalink to this headline">¶</a></h1>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">controls</span></code> Class Section is an advanced feature which allows you
+to change Fields or call methods on your Project while it is running in response
+to external events in real-time.</p>
+<p>Here’s the high-level picture: a Control converts an incoming RawMessage to a
+Message, and routes that Message to an Address with a list of Actions.</p>
+<p>Currently BiblioPixel has the following Control Classes:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">artnet</span></code></dt>
+<dd>Receive lighting data from a network</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">keyboard</span></code></dt>
+<dd>Keyboard events on a standard computer keyboard</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">midi</span></code></dt>
+<dd>Incoming MIDI events</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">rest</span></code></dt>
+<dd>Brings up a REST server which accepts information incoming</dd>
+</dl>
+<p>This page is going to talk about Controls in general, and the next page will
+discuss routing, Addresses, and Actions in more detail.</p>
+<div class="section" id="controls-operate-independently-of-everything-else">
+<h2>Controls operate independently of everything else<a class="headerlink" href="#controls-operate-independently-of-everything-else" title="Permalink to this headline">¶</a></h2>
+<p>Controls are designed to be completely independent of the rest of BiblioPixel.</p>
+<p>This means that one person can write a specific Control in Python, another one
+can write an Animation in Python, and a third person can write a Project that
+connects the Control to the Animation <em>without programming</em> - just by filling
+the Control Section in a Project.</p>
+<p>All Controls so far run in an independent Python thread, and there’s no reason
+they couldn’t run in a different process (and this will be an option in later
+releases of BiblioPixel).</p>
+</div>
+<div class="section" id="how-controls-work">
+<h2>How Controls work!<a class="headerlink" href="#how-controls-work" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>A Control receives or generates a Raw Message.</li>
+<li>A Raw Message can be anything: MIDI, a keystroke, packets from the Internet,
+or some hardware data.</li>
+<li>The Raw Message is converted into an ordered dictionary called the Message.</li>
+<li>The Message is routed to an Address with the <code class="docutils literal notranslate"><span class="pre">routing</span></code> dictionary, or
+discarded if it can’t be routed.  This will be explained in more detail a
+little later.</li>
+<li>The Address has a list of Actions that it performs with the Message.  These
+typically set values in the Project, but can also be programmed to do any
+operation you need.</li>
+</ol>
+</div>
+<div class="section" id="monitoring-controls">
+<h2>Monitoring controls<a class="headerlink" href="#monitoring-controls" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">bp</span></code> has a simple utility to monitor Control Messages.  Right now it only works on
+MIDI and keyboard inputs.</p>
+<p>The examples in the Controls section use a simple MIDI fader control you can get
+cheaply in any music store.  You should configure it so that its first four
+faders are sending “MIDI control changes” on Control Numbers 0, 1 2, and 3.</p>
+<p>Plug the MIDI fader control into your computer, and enter the command below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bp monitor midi
+</pre></div>
+</div>
+<p>You should see output much like the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>control_change <span class="m">0</span> <span class="m">87</span>/127
+control_change <span class="m">0</span> <span class="m">89</span>/127
+control_change <span class="m">2</span> <span class="m">14</span>/127
+</pre></div>
+</div>
+<p>If you don’t see something like this, then you aren’t receiving MIDI - either
+check that MIDI is being received with some other program, and then ask us for
+help.</p>
+</div>
+<div class="section" id="control-fields">
+<h2>Control Fields<a class="headerlink" href="#control-fields" title="Permalink to this headline">¶</a></h2>
+<p>Each Class of Control has its own specific Fields, but all Controls share the
+following optional fields:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">pre_routing</span></code></dt>
+<dd>A list of Actions that get the entire Message before it gets routed.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">routing</span></code></dt>
+<dd>A dictionary that routes Messages to Actions.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">errors</span></code></dt>
+<dd>How to handle any software errors that occur - default is <code class="docutils literal notranslate"><span class="pre">'raise'</span></code>
+If <code class="docutils literal notranslate"><span class="pre">errors</span></code> is <code class="docutils literal notranslate"><span class="pre">'raise'</span></code>, then a Python exception is raised.
+If <code class="docutils literal notranslate"><span class="pre">errors</span></code> is <code class="docutils literal notranslate"><span class="pre">ignore</span></code>, then software errors are silently ignored
+If <code class="docutils literal notranslate"><span class="pre">errors</span></code> is <code class="docutils literal notranslate"><span class="pre">report</span></code>, then they are reported.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">verbose</span></code></dt>
+<dd>Defaults to False.  If <code class="docutils literal notranslate"><span class="pre">verbose</span></code> is True, the Control will report
+everything that happens to it in detail.</dd>
+</dl>
+</div>
+<div class="section" id="normalized-numbers">
+<h2>Normalized numbers<a class="headerlink" href="#normalized-numbers" title="Permalink to this headline">¶</a></h2>
+<p>Controls have to handle many different sorts of numbers, and it’s going to be
+hard for the user to write Projects that work well if the numbers are all over
+the place!</p>
+<p>This is why the Controls sections <em>normalizes</em> many of the numbers that it
+receives in the Raw Message before putting them into the Message.</p>
+<p>For example, a raw MIDI Note On Message has a velocity that can be any number
+from 0 to 127.  The Controls Section normalizes that to be a number from 0 to 1
+by dividing it by 127 before storing it in the Message.</p>
+<p>A different example: a raw MIDI Pitch Bend Message is a number from 0 to 16383,
+where 8192 means “no bend”.  In this case, the Control Section normalizes this
+number into the range between <em>-1</em> and 1, because Pitch Bend is logically a
+device that has positive (bend up) and negative (bend down) values.</p>
+<p>The “expected range” for numbers is between 0 and 1 for values that can’t be
+negative (like keyboard velocity), and between -1 and 1 for values that can be
+negative (like pitch bend), but BiblioPixel is tolerant of normalized values
+that are out of the expected range</p>
+<p>For example, it is perfectly possible to turn up the brightness in an Animation
+to be greater than 100% (255), and you’ll get perfectly reasonable results.  You
+can even set brightness or other such numbers to be negative values and nothing
+will go wrong - you’ll just see black.</p>
+<p>So don’t be afraid to hook one value up to another in your <code class="docutils literal notranslate"><span class="pre">control</span></code> Section -
+you can’t break anything.</p>
+</div>
+<div class="section" id="extractors">
+<h2>Extractors<a class="headerlink" href="#extractors" title="Permalink to this headline">¶</a></h2>
+<p>Nearly all Controls have an optional <code class="docutils literal notranslate"><span class="pre">extractor</span></code> Class Section.</p>
+<p>An Extractor is an adaptor and a filter to translate “lots of real world data,
+most of which you don’t want” into “a small amount of specific data you do
+want”.</p>
+<p>Technically, an Extractor turns a Raw Message into an ordered Message
+dictionary with specific normalized Fields in a specific order, but you can
+use an Extractor fairly intuitively.</p>
+<p>A Control class has default values for its Extractor, or you can override these
+values in your Project.</p>
+<p>[API-DOC: link to the generated docs, which are pretty good for this
+class] Most of the time, you’ll only be wanting to change the <code class="docutils literal notranslate"><span class="pre">accept</span></code>,
+<code class="docutils literal notranslate"><span class="pre">omit</span></code> or <code class="docutils literal notranslate"><span class="pre">reject</span></code> Subfields in the <code class="docutils literal notranslate"><span class="pre">extractor</span></code> field of the Control.</p>
+<hr class="docutils" />
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">shape</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">24</span><span class="p p-Indicator">]</span>
+<span class="nt">animation</span><span class="p">:</span>
+  <span class="nt">typename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$bpa.matrix.Mainframe</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/controls/the-controls-section-footer.gif"><img alt="doc/tutorial/controls/the-controls-section-footer" class="align-center" src="https://raw.githubusercontent.com/ManiacalLabs/DocsFiles/master/BiblioPixel/doc/tutorial/controls/the-controls-section-footer.gif" /></a>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="routing-addresses-and-actions.html" class="btn btn-neutral float-right" title="Routing, Addresses and Actions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Controls" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, Maniacal Labs, Inc and Tom Ritchford
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

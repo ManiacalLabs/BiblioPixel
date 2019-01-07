@@ -1,0 +1,7 @@
+bibliopixel.commands.devices module
+===================================
+
+.. automodule:: bibliopixel.commands.devices
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.commands.run module
+===============================
+
+.. automodule:: bibliopixel.commands.run
+    :members:
+    :undoc-members:
+    :show-inheritance:

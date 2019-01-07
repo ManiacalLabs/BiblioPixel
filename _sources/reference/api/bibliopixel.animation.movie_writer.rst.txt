@@ -1,0 +1,7 @@
+bibliopixel.animation.movie\_writer module
+==========================================
+
+.. automodule:: bibliopixel.animation.movie_writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

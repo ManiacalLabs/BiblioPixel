@@ -1,0 +1,7 @@
+bibliopixel.layout.update\_threading module
+===========================================
+
+.. automodule:: bibliopixel.layout.update_threading
+    :members:
+    :undoc-members:
+    :show-inheritance:

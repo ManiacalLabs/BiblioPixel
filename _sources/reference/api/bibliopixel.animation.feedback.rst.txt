@@ -1,0 +1,7 @@
+bibliopixel.animation.feedback module
+=====================================
+
+.. automodule:: bibliopixel.animation.feedback
+    :members:
+    :undoc-members:
+    :show-inheritance:

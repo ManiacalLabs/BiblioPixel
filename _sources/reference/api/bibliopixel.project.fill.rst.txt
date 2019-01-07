@@ -1,0 +1,7 @@
+bibliopixel.project.fill module
+===============================
+
+.. automodule:: bibliopixel.project.fill
+    :members:
+    :undoc-members:
+    :show-inheritance:

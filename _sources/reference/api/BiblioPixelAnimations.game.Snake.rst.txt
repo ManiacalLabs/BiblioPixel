@@ -1,0 +1,7 @@
+BiblioPixelAnimations.game.Snake module
+=======================================
+
+.. automodule:: BiblioPixelAnimations.game.Snake
+    :members:
+    :undoc-members:
+    :show-inheritance:

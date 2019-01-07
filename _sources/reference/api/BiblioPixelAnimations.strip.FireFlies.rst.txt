@@ -1,0 +1,7 @@
+BiblioPixelAnimations.strip.FireFlies module
+============================================
+
+.. automodule:: BiblioPixelAnimations.strip.FireFlies
+    :members:
+    :undoc-members:
+    :show-inheritance:

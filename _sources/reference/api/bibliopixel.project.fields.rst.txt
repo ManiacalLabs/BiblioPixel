@@ -1,0 +1,7 @@
+bibliopixel.project.fields module
+=================================
+
+.. automodule:: bibliopixel.project.fields
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+bibliopixel.main.project\_flags module
+======================================
+
+.. automodule:: bibliopixel.main.project_flags
+    :members:
+    :undoc-members:
+    :show-inheritance:
