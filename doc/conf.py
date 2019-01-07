@@ -36,7 +36,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'BiblioPixel'
-copyright = '2018, Maniacal Labs, Inc and Tom Ritchford'
+copyright = '2018-2019, Maniacal Labs, Inc and Tom Ritchford'
 author = 'Maniacal Labs, Inc and Tom Ritchford'
 
 # The version info for the project you're documenting, acts as replacement for
