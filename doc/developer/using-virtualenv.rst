@@ -44,6 +44,12 @@ packages or ones of unknown quality, examine them, and either use them or delete
 them, without affecting any other project you are working in, or the system
 itself.
 
+virtualenv Installation depends on your operating system
+================================================================
+
+Search for "install virtualenv <your-system-here>`, or contact us if
+you get stuck.
+
 
 Using `virtualenv` in practice.
 ================================
@@ -54,48 +60,53 @@ You use virtualenv something like this.
    Let's suppose it's `~/Envs`
 
 1. When you start a new project, experiment or sketch, you create a new
-   clean virtualenv (usually with the same name):
+   clean virtualenv (usually with the same name).  Let's suppose you want
+   to create a new virtualenv named ``bp``.
 
 .. code-block:: bash
 
-    $ virtualenv ~/Envs/my-project -p python3.7
+    $ virtualenv ~/Envs/bp -p python3.7
 
 2. Whenever you work on this project, you switch to that virtualenv
 
 .. code-block:: bash
 
-    $ source ~/Envs/my-project/bin/activate
+    $ source ~/Envs/bp/bin/activate
 
-3. Use the Python package installer `pip3` to add the dependencies
-   you need:
-
-.. code-block:: bash
-
-    $ pip3 install <some-package-here>
-
-4. If you can't remember which virtualenv you are in, use bash's `which`:
+3. If you can't remember which virtualenv you are in, use bash's `which`:
 
 .. code-block:: bash
 
     $ which python
-    ~/Envs/my-project/bin/python
+    ~/Envs/bp/bin/python
 
-4. When you want to go back to the system Python, deactivate the virtualenv:
+4. If you can't remember which Python version you are using:
+
+.. code-block:: bash
+
+    $ python --version
+    Python 3.6.6
+
+
+5. When you want to go back to the system Python, deactivate the virtualenv:
 
 .. code-block:: bash
 
     $ deactivate
 
-5. Or if you have finished your project or experiment forever, you delete the
-   virtualenv:
+6. You can list all the virtualens
 
-.. code-block:: bash
+ .. code-block:: bash
+
+    $ ls ~/Envs/
+
+7. Or if you have finished your project or experiment forever, you can delete
+   the virtualenv:
+
+ .. code-block:: bash
 
     $ deactivate
-    $ rm -R ~/Envs/my-project
+    $ rm -R ~/Envs/bp
 
-
-NOTE: virtualenv Installation depends on your operating system
-================================================================
-
-Search for "install virtualenv <your-system-here>`.
+Since they can be fairly large, hundreds of megabytes, it's definitely worth
+cleaning up old virtualenvs to save disk space.
