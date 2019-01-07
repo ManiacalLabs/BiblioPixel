@@ -9,9 +9,8 @@ you can embed a BiblioPixel project in a documentation page, and it's
 automatically turned into an animated GIF that shows what that project would
 look like if run!
 
-For example, if you look at the ``bp-code-block::` section in `this document
- <https://github.com/ManiacalLabs/BiblioPixel/blob/master/doc/README.rst>`_,
-it corresponds to the Project and image at the bottom of
+For example, look at the ``bp-code-block::`` section in `this document <https://github.com/ManiacalLabs/BiblioPixel/blob/master/doc/README.rst>`_.
+It corresponds to the Project and image at the bottom of
 `this page <https://maniacallabs.github.io/BiblioPixel/>`_.
 
 Unfortunately, this adds complexity to the build, and requires this
