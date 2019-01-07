@@ -142,15 +142,12 @@ def _get_projects(args):
                     root_file = filename
                 elif '{' in filename:
                     desc = data_file.loads(filename)
+                elif '.' in filename:
+                    desc = load.data(filename, False)
+                    desc = data_file.load(desc, filename)
+                    root_file = filename
                 else:
-                    try:
-                        desc = load.data(filename, False)
-                        desc = data_file.load(desc, filename)
-                        root_file = filename
-                    except:
-                        if not _might_be_classname(filename):
-                            raise
-                        desc = {'animation': filename}
+                    raise ValueError('Do not understand command ' + filename)
 
                 descs.append(desc)
 
@@ -196,7 +193,7 @@ def _get_projects(args):
         count=len(failed), s='' if len(failed) == 1 else 's'))
     for msg, args in failed:
         if args:
-            log.error(msg + '\n' + '\n'.join(str(a) for a in args) + '\n')
+            log.error('\n'.join(str(a) for a in args) + '\n')
         else:
             log.error(msg + '\n')
     raise ValueError('Run aborted')
