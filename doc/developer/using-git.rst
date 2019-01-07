@@ -19,8 +19,8 @@ page, we're going to call that account ``<your-git-user>``.
 Once you have the account - it's a real drag if you have to type your password
 in every time you do any git operation!  There are two ways around this:
 `caching your password <https://help.github.com/articles/caching-your-github-password-in-git/]>`_,
-or `using an SSH key <https://help.github.com/articles/connecting-to-github-with-ssh/>`_.  We
-strongly recommend you use one or the other of those methods.
+or `using an SSH key <https://help.github.com/articles/connecting-to-github-with-ssh/>`_.
+We strongly recommend you use one or the other of those methods.
 
 
 1. Forking
@@ -63,11 +63,11 @@ Download the script, save it as ``checkout.sh``, and then type
 
 .. code-block:: bash
 
-    # If you are using an SSH key (recommended) type:
-    source checkout.sh <your-git-user> ssh
-
-    # Otherwise, type:
+    # IF you are using plain old https checkout:
     source checkout.sh <your-git-user> https
+
+    # OR if you are using an SSH key (recommended):
+    source checkout.sh <your-git-user> ssh
 
     #
     # Lots of stuff should happen there

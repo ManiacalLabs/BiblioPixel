@@ -32,18 +32,20 @@ in the documentation then you'd definitely want to run the GIF extraction.
 Because these GIF files are quite large, they live in a separate repository -
 https://github.com/ManiacalLabs/DocsFiles
 
-Start by forking that repository in github.com.
+Start by forking your own copy that repository in github.com:  click on
+https://github.com/ManiacalLabs/DocsFiles, then click on the button marked
+"Fork" in the top right corner.
 
-Then check it out: from the directory _above_ the
+Then check it out: from the directory containing the
 BiblioPixel/BiblioPixelAnimation directories, type:
 
 .. code-block:: bash
 
-    # If you have an SSH certificate:
-    $ git clone git@github.com:<your-git-user>/DocsFiles.git
-
-    # otherwise:
+    # Regular https
     $ git clone https://github.com/<your-git-user>/DocsFiles.git
+
+    # If you have an SSH certificate (BETTER)
+    $ git clone git@github.com:<your-git-user>/DocsFiles.git
 
     # Go back to where you came from:
     $ cd BiblioPixel
