@@ -4,12 +4,11 @@ Automatically extracting GIFs from the documentation
 GIF extraction; and, why the preprocessing phase?
 ===================================================
 
-The documentation has a really neat if somewhat overengineered feature where
-you can embed a BiblioPixel project in a documentation page, and it's
-automatically turned into an animated GIF that shows what that project would
-look like if run!
+The documentation has a nioce feature where if you embed a BiblioPixel project
+in a documentation page, it is automatically turned into an animated GIF that
+shows what that project would look like if run!
 
-For example, look at the ``bp-code-block::`` section in `this document <https://github.com/ManiacalLabs/BiblioPixel/blob/master/doc/README.rst>`_.
+For example, look at the ``bp-code-block::`` section in `this document <https://github.com/ManiacalLabs/BiblioPixel/blob/master/doc/index.rst>`_.
 It corresponds to the Project and image at the bottom of
 `this page <https://maniacallabs.github.io/BiblioPixel/>`_.
 
@@ -18,7 +17,7 @@ preprocessing phase, and that leads to some `some annoyances
 <https://github.com/ManiacalLabs/BiblioPixel/issues/1117>`_
 but we decided that it was worth it because animated GIFs are cool.
 
-Most of the time you as a developer won't need to do this.
+Most of the time you as a developer won't need to do this task.
 
 We try to make sure that each new page has a unique animation on it,
 just because we can, so if you write a new page, you could also add your own

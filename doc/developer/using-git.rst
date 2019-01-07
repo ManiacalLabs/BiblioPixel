@@ -84,7 +84,7 @@ to each of them:
 * ``rec`` is https://github.com/rec 's fork, the other principle developer.
   Having this remote is useful when troubleshooting issues with @rec.
 
-3. Working in a new branch
+3. Each change should be made in a new branch
 =============================
 
 Every change you want to make needs to be made in a new git _branch_ in your
@@ -103,8 +103,8 @@ Here's how to make a new branch called ``new-branch``:
     # Push this branch to your fork
     git push --set-upstream origin new-branch
 
-4. Creating commits and other such things
-===========================================
+4. Creating commits in this branch, and other such tasks
+================================================================
 
 This is beyond the scope of this document.  There are resources at e.g.
 https://www.google.com/search?q=git+primer but none of them are great.  Please
