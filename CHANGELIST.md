@@ -1,3 +1,8 @@
+## v3.4.43 - 2019-01-08
+- Cache Devices by hardware_id
+- Fix #1071
+- More developer documentation
+
 ## v3.4.42 - 2019-01-03
 - Fix `bp devices`
 - Better shutdown for Builder
