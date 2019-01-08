@@ -6,8 +6,23 @@ from ... drivers.return_codes import raise_error
 from ... util import log, util
 from ... project.importer import import_module
 
+_DEVICES_BY_HARDWARE_ID = {}
 
-class Devices(object):
+
+def Devices(hardware_id, baudrate):
+    devices = _DEVICES_BY_HARDWARE_ID.get(hardware_id)
+    if devices:
+        if devices.baudrate != baudrate:
+            log.warning(
+                'Expected baudrate %s but got %s', baudrate, devices.baudrate)
+    else:
+        devices = DevicesImpl(hardware_id, baudrate)
+        _DEVICES_BY_HARDWARE_ID[hardware_id] = devices
+
+    return devices
+
+
+class DevicesImpl(object):
     """Manage a list of serial devices.
 
     :param str hardware_id: A valid USB VID:PID pair such as "1D50:60AB"
@@ -17,12 +32,16 @@ class Devices(object):
     def __init__(self, hardware_id, baudrate):
         self.hardware_id = hardware_id
         self.baudrate = baudrate
+        self.devices = None
 
     def find_serial_devices(self):
         """Scan and report all compatible serial devices on system.
 
         :returns: List of discovered devices
         """
+        if self.devices is not None:
+            return self.devices
+
         self.devices = {}
         hardware_id = "(?i)" + self.hardware_id  # forces case insensitive
 

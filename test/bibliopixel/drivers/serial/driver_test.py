@@ -7,13 +7,13 @@ from test.bibliopixel.drivers.dummy_test import clock_only_project
 
 class DriverTest(unittest.TestCase):
     @mock.patch('serial.Serial', autospec=True)
-    @mock.patch('bibliopixel.drivers.serial.driver.Devices', autospec=True)
-    def test_driver(self, Devices, Serial):
+    @mock.patch('bibliopixel.drivers.serial.devices.DevicesImpl', autospec=True)
+    def test_driver(self, DevicesImpl, Serial):
         device_id, port, version = 10, 23, 5
         dev, device_version = '/dev/wombat', 0
         device_map = {device_id: (port, version)}
 
-        instance = Devices.return_value
+        instance = DevicesImpl.return_value
         instance.find_serial_devices.return_value = device_map
         instance.get_device.return_value = device_id, dev, device_version
         instance.baudrate = 921600
@@ -36,7 +36,7 @@ class DriverTest(unittest.TestCase):
         expected = [
             mock.call().find_serial_devices(),
             mock.call().get_device(None)]
-        self.assertEqual(Devices.method_calls, expected)
+        self.assertEqual(DevicesImpl.method_calls, expected)
 
         expected = [
             call_write(1, 4, 0, 0, 9, 0, 1),
