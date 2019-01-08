@@ -29,8 +29,8 @@ class Devices(object):
         for ports in serial.tools.list_ports.grep(hardware_id):
             port = ports[0]
             try:
-                id = self.get_device_id(port, self.baudrate)
-                ver = self._get_device_version(port, self.baudrate)
+                id = self.get_device_id(port)
+                ver = self._get_device_version(port)
             except:
                 log.debug('Error getting device_id for %s, %s',
                           port, self.baudrate)
@@ -85,31 +85,31 @@ class Devices(object):
         if fail:
             raise IOError(e)
 
-    def set_device_id(self, dev, id, baudrate=921600):
+    def set_device_id(self, dev, id):
         """Set device ID to new value.
 
         :param str dev: Serial device address/path
         :param id: Device ID to set
-        :param baudrate: Baudrate to use when connectinh (optional)
         """
         if id < 0 or id > 255:
             raise ValueError("ID must be an unsigned byte!")
-
-        com, code, ok = io.send_packet(CMDTYPE.SETID, 1, dev, baudrate, 5, id)
+        com, code, ok = io.send_packet(
+            CMDTYPE.SETID, 1, dev, self.baudrate, 5, id)
         if not ok:
             raise_error(code)
 
-    def get_device_id(self, dev, baudrate=921600):
+    def get_device_id(self, dev):
         """Get device ID at given address/path.
 
         :param str dev: Serial device address/path
         :param baudrate: Baudrate to use when connecting (optional)
         """
-        com, code, ok = io.send_packet(CMDTYPE.GETID, 0, dev, baudrate, 5)
+        com, code, ok = io.send_packet(CMDTYPE.GETID, 0, dev, self.baudrate, 5)
         if code is None:
             self.error(action='get_device_id')
         return code
 
-    def _get_device_version(self, dev, baudrate=921600):
-        com, code, ok = io.send_packet(CMDTYPE.GETVER, 0, dev, baudrate, 0.5)
+    def _get_device_version(self, dev):
+        com, code, ok = io.send_packet(
+            CMDTYPE.GETVER, 0, dev, self.baudrate, 0.5)
         return ok and io.read_byte(com) or 0
