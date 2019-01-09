@@ -9,9 +9,9 @@ function is_callable() {
 }
 
 if is_callable new-env ; then
-    delete-env bp-release-test
+    delete-env bp-release-test || echo ""
     new-env bp-release-test
 fi
 
-python setup.py install
+python setup.py develop
 source scripts/developer_install
