@@ -3,7 +3,8 @@ coverage
 flake8<3.7.0
 # flake8-print # This is not available for Python 3.7
 phue
-pytest
+pytest>=3.7
+py>=1.5
 pytest-benchmark
 Pillow>=2.4.0
 
