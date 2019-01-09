@@ -3,7 +3,7 @@ language: python
 
 python:
 - '3.4'
-- '3.5'
+# - '3.5'  # See #1130
 - '3.6'
 # - '3.7'
 # Travis doesn't yet support 3.7
