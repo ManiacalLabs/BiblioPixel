@@ -1,3 +1,6 @@
+## v3.4.44 - 2019-01-10
+- Bump version number
+
 ## v3.4.43 - 2019-01-08
 - Cache Devices by hardware_id
 - Fix #1071
