@@ -1,0 +1,26 @@
+driver:
+  typename: .serial.driver.TeensySmartMatrix
+  width: 128
+  height: 32
+
+drivers:
+  - device_id: 10
+  - device_id: 11
+  - device_id: 12
+
+layout:
+    typename: matrix
+    width: 128
+    height: 96
+    gen_coord_map:
+      - {dx: 128, dy: 32}
+      - {dx: 128, dy: 32}
+      - {dx: 128, dy: 32}
+
+    serpentine: false
+
+animation: $bpa.matrix.bloom
+
+run:
+  fps: 15
+  threaded: True
