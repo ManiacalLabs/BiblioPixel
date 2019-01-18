@@ -61,9 +61,12 @@ def make_matrix_coord_map(
     return result
 
 
-def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
-    matrix_offset = 0
-    matrix_result = []
+def make_matrix_coord_map_multi(config, **kwds):
+    def make_coords(cfg):
+        return make_matrix_coord_map(**dict(kwds, **cfg))
+
+    if isinstance(config, dict):
+        return make_coords(config)
 
     def add_row(offset, matrix, row):
         for y in row:
@@ -86,24 +89,18 @@ def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
             row_offset += count
         return row
 
-    if isinstance(config, dict):
-        matrix_result = make_matrix_coord_map(**config)
+    offset = 0
+    result = []
 
-    else:
-        for row in config:
-            if isinstance(row, dict):  # is configs
-                matrix_offset = add_row(
-                    matrix_offset, matrix_result, make_matrix_coord_map(**row))
+    for row in config:
+        if isinstance(row, dict):  # is configs
+            offset = add_row(offset, result, make_coords(row))
 
-            elif isinstance(row, list):  # is row
-                cols = []
-                for config in row:
-                    cols.append(make_matrix_coord_map(**config))
+        elif isinstance(row, list):  # is row
+            cols = map(make_coords, row)
+            offset = add_row(offset, result, combine_cols(cols))
 
-                matrix_offset = add_row(
-                    matrix_offset, matrix_result, combine_cols(cols))
-
-    return rotate_and_flip(matrix_result, rotation, y_flip)
+    return result
 
 
 def make_matrix_coord_map_positions(coord_map):

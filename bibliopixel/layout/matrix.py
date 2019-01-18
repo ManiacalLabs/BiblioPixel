@@ -37,18 +37,18 @@ class Matrix(MultiLayout):
         vert_flip - flips the generated map along the Y axis.
             This along with rotation can achieve any orientation
         """
-        super().__init__(drivers, threadedUpdate, brightness, **kwargs)
-
+        self.vert_flip = vert_flip
+        self.y_flip = y_flip
+        self.serpentine = serpentine
         rot_mod = rotation % 360
         self.rotation = 90 * round(rot_mod / 90)
         if self.rotation != rot_mod:
             log.warning(ROTATION_WARNING, rotation, self.rotation)
 
+        super().__init__(drivers, threadedUpdate, brightness, **kwargs)
+
         self.width = width or getattr(self.drivers[0], 'width') or 0
         self.height = height or getattr(self.drivers[0], 'height') or 0
-        self.vert_flip = vert_flip
-        self.y_flip = y_flip
-        self.serpentine = serpentine
         self.pixelSize = pixelSize
         pw, ph = self.pixelSize
 
@@ -120,6 +120,10 @@ class Matrix(MultiLayout):
         self.fonts = font.fonts
 
     def gen_multi(self, *args, **kwds):
+        kwds = dict(serpentine=self.serpentine,
+                    rotation=self.rotation,
+                    y_flip=self.vert_flip, **kwds)
+
         return make_matrix_coord_map_multi(*args, **kwds)
 
     @property
