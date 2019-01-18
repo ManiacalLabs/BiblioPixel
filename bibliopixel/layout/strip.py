@@ -9,7 +9,6 @@ class Strip(MultiLayout):
 
     def __init__(self, drivers, threadedUpdate=False,
                  brightness=255, pixelWidth=1, **kwargs):
-        self.gen_multi = make_strip_coord_map_multi
         super().__init__(drivers, threadedUpdate, brightness, **kwargs)
 
         self.pixelWidth = pixelWidth
@@ -35,6 +34,9 @@ class Strip(MultiLayout):
             self.set_base = self._set_base
 
         self.set_pixel_positions(make_strip_coord_map_positions(self.numLEDs))
+
+    def gen_multi(self, *args, **kwds):
+        return make_strip_coord_map_multi(*args, **kwds)
 
     @property
     def shape(self):
