@@ -61,19 +61,9 @@ def make_matrix_coord_map(
     return result
 
 
-DEFAULT_CONFIG = {
-    'serpentine': True,
-    'rotation': 0,
-    'y_flip': False
-}
-
-
 def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
     matrix_offset = 0
     matrix_result = []
-
-    def populate_config(cfg):
-        return dict(DEFAULT_CONFIG, **cfg)
 
     def add_row(offset, matrix, row):
         for y in row:
@@ -102,14 +92,12 @@ def make_matrix_coord_map_multi(config, rotation=0, y_flip=False):
     else:
         for row in config:
             if isinstance(row, dict):  # is configs
-                row = populate_config(row)
                 matrix_offset = add_row(
                     matrix_offset, matrix_result, make_matrix_coord_map(**row))
 
             elif isinstance(row, list):  # is row
                 cols = []
                 for config in row:
-                    config = populate_config(config)
                     cols.append(make_matrix_coord_map(**config))
 
                 matrix_offset = add_row(
