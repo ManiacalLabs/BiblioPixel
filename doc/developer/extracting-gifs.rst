@@ -4,7 +4,7 @@ Automatically extracting GIFs from the documentation
 GIF extraction; and, why the preprocessing phase?
 ===================================================
 
-The documentation has a nioce feature where if you embed a BiblioPixel project
+The documentation has a nice feature where if you embed a BiblioPixel project
 in a documentation page, it is automatically turned into an animated GIF that
 shows what that project would look like if run!
 
