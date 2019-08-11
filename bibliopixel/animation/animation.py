@@ -65,6 +65,7 @@ class Animation(object):
         self.preclear = preclear
         self.runner = None
         self.time = time.time
+        self.sleep_time = 0
         self.preframe_callbacks = []
         self.fail_on_exception = self.FAIL_ON_EXCEPTION if fail_on_exception is None else fail_on_exception
 
@@ -178,7 +179,11 @@ class Animation(object):
                 self.state = runner.STATE.running
 
         if self.top_level:
-            self.threading.wait(self.sleep_time / self.subframes, timestamps)
+            sleep_time = self.sleep_time
+            if hasattr(self, 'current_animation'):  # for running Sequence
+                sleep_time = self.current_animation.sleep_time
+
+            self.threading.wait(sleep_time / self.subframes, timestamps)
 
         if self.threading.stop_event.isSet():
             self.state = runner.STATE.canceled
