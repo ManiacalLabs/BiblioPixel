@@ -21,7 +21,7 @@ class Sequence(wrapper.Indexed):
             self.length = length and [length]
 
     def restart(self):
-        self.random and rand.shuffle(self.animations)
+        self.random and rand.shuffle(self.animations._animations)
         self.index = 0
 
     def pre_run(self):
