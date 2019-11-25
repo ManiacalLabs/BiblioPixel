@@ -77,7 +77,7 @@ class Midi(control.ExtractedLoop):
         port_names = ', '.join('"%s"' % p.name for p in ports)
         log.info('Starting to listen for MIDI on port%s %s',
                  '' if len(ports) == 1 else 's', port_names)
-        for port, msg in mido.ports.MultiPort(ports, yield_ports=True):
+        for port, msg in mido.ports.multi_receive(ports, yield_ports=True):
             mdict = dict(vars(msg), port=port)
 
             if self.use_note_off:

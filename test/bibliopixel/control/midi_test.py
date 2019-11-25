@@ -22,7 +22,7 @@ class FakeMido:
                 return msgs
 
         self.ports = self
-        self.ports.MultiPort = multi_port
+        self.ports.multi_receive = multi_port
 
     def get_input_names(self):
         class Port(str):
