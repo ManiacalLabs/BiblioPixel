@@ -1,4 +1,7 @@
 import functools
+
+import numpy as np
+
 from . classic import Black
 
 
@@ -49,6 +52,8 @@ class Palette(list):
         self.offset = offset
         self.autoscale = autoscale
         self.length = length
+
+        self.np_table = np.array([self.get(i) for i in range(256)])
 
     def __call__(self, position=0):
         return self.get(position)
@@ -116,6 +121,14 @@ class Palette(list):
 
         return r1 + fade * dr, g1 + fade * dg, b1 + fade * db
 
+    def batch_apply_palette(self, np_vals_256):
+        """Batch apply palette to an input numpy array.
+
+        :param np_vals_256: numpy array of arbitrary shape, with values in [0, 255]
+        :returns: numpy array of shape (..., 3) with RGB values for each corresponding entry in the input.
+        """
+        return self.np_table[np_vals_256.astype('uint8')]
+
     def __setitem__(self, i, color):
         from . import make
         super().__setitem__(i, make.color(color))
@@ -123,7 +136,13 @@ class Palette(list):
     def __eq__(self, other):
         return (isinstance(other, Palette) and
                 super().__eq__(other) and
-                vars(self) == vars(other))
+                self.continuous == other.continuous and
+                self.serpentine == other.serpentine and
+                self.scale == other.scale and
+                self.offset == other.offset and
+                self.autoscale == other.autoscale and
+                self.length == other.length)
+        # excluded: np_table since it's a computed attribute
 
     def __ne__(self, other):
         return not (self == other)

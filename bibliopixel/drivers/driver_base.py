@@ -1,3 +1,5 @@
+import numpy as np
+
 from . channel_order import ChannelOrder
 from .. colors import gamma as _gamma
 from .. project import attributes, clock, data_maker, fields
@@ -190,10 +192,19 @@ class DriverBase(object):
             level = 1.0
         else:
             level = self._brightness / 255.0
-        gam, (r, g, b) = self.gamma.get, self.c_order
-        for i in range(min(self.numLEDs, len(self._buf) / 3)):
-            c = [int(level * x) for x in self._colors[i + self._pos]]
-            self._buf[i * 3:(i + 1) * 3] = gam(c[r]), gam(c[g]), gam(c[b])
+
+        if isinstance(self._colors, np.ndarray):
+            colors = self._colors[self._pos:(self._pos + self.numLEDs)]
+            colors *= level
+            if self.c_order != ChannelOrder.RGB:
+                colors = colors.transpose(self.c_order)
+            colors = self.gamma.batch_correct(colors.astype('uint8'))
+            self._buf = colors.tobytes()
+        else:
+            gam, (r, g, b) = self.gamma.get, self.c_order
+            for i in range(min(self.numLEDs, len(self._buf) / 3)):
+                c = [int(level * x) for x in self._colors[i + self._pos]]
+                self._buf[i * 3:(i + 1) * 3] = gam(c[r]), gam(c[g]), gam(c[b])
 
     def _make_buffer(self):
         return self.maker.bytes(self.bufByteCount())

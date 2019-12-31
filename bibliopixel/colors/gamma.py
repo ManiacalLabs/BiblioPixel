@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class Gamma(object):
     """
     Compute a fixed gamma table with 256 entries.
@@ -20,6 +23,7 @@ class Gamma(object):
             return int(lower_bound + pow(i / 255, gamma) * width + offset)
 
         self.table = tuple(gam(i) for i in range(256))
+        self.np_table = np.array(self.table, dtype='uint8')
 
     def get(self, i):
         """
@@ -27,6 +31,13 @@ class Gamma(object):
         :param int i: the index into the table
         """
         return self.table[max(0, min(255, int(i)))]
+
+    def batch_correct(self, uncorrected):
+        """Batch apply gamma correction to a numpy array
+        :param ndarray uncorrected: uncorrected channel values, must be ints in [0,255]
+        :returns: corrected channel values, in the same shape as the input.
+        """
+        return self.np_table[uncorrected]
 
 
 # From https://github.com/scottjgibson/PixelPi/blob/master/pixelpi.py
