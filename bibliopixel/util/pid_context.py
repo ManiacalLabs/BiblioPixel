@@ -31,9 +31,9 @@ def pid_context(pid_filename=None):
     finally:
         try:
             os.remove(pid_filename)
-        except Exception as e:
-            log.error('Got an exception %s deleting the pid_filename %s',
-                      e, pid_filename)
+        except Exception:
+            log.exception('Got an exception deleting the pid_filename %s',
+                          pid_filename)
 
 
 def get_pid(pid_filename=None):

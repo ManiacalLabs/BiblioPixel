@@ -62,10 +62,10 @@ def run(args):
             log.warning('\nKeyboardInterrupt terminated project.')
             needs_pause = False
 
-        except Exception as e:
+        except Exception:
             if not args.ignore_exceptions:
                 raise
-            log.error('Exception %s', e)
+            log.exception('Exception')
             traceback.print_exc()
 
 

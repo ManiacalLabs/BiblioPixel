@@ -91,7 +91,7 @@ def extract_one_gif(args, filename, desc):
     except KeyboardInterrupt:
         raise
     except:
-        log.error('Error in project %s', filename)
+        log.exception('Error in project %s', filename)
         try:
             os.remove(str(path))
         except:
@@ -99,8 +99,6 @@ def extract_one_gif(args, filename, desc):
 
         if args.fail:
             raise
-        else:
-            traceback.print_exc()
 
 
 def extract(args):

@@ -169,22 +169,22 @@ class Serial(DriverBase):
     def _close(self):
         try:
             return self._com and self._com.close()
-        except Exception as e:
-            log.error('Serial exception %s in close', e)
+        except Exception:
+            log.exception('Serial exception in close')
         finally:
             self._com = None
 
     def _write(self, packet):
         try:
             return self._com and self._com.write(packet)
-        except Exception as e:
-            log.error('Serial exception %s in write', e)
+        except Exception:
+            log.exception('Serial exception in write')
 
     def _flushInput(self):
         try:
             return self._com and self._com.flushInput()
-        except Exception as e:
-            log.error('Serial exception %s in flushInput', e)
+        except Exception:
+            log.exception('Serial exception in flushInput')
 
 
 class TeensySmartMatrix(Serial):

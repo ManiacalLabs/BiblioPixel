@@ -15,7 +15,7 @@ def extract_gif_lines(lines):
         try:
             project = data_file.loads(codelines)
         except:
-            log.error('Unable to load code: $s\n%s', filename, codelines)
+            log.exception('Unable to load code: $s\n%s', filename, codelines)
         else:
             yield filename, project
 

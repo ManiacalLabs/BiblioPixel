@@ -89,8 +89,8 @@ class Receiver(runnable.LoopThread):
         super().stop()
         try:
             self.socket.close()
-        except Exception as e:
-            log.error('Exception in socket.close: %s', e)
+        except Exception:
+            log.exception('Exception in socket.close')
 
 
 class QueuedReceiver(Receiver):

@@ -54,5 +54,4 @@ class EditQueue(queue.Queue):
             try:
                 e()
             except:
-                log.error('Error on edit %s', e)
-                traceback.print_exc()
+                log.exception('Error on edit %s', e)

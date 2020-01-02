@@ -52,10 +52,10 @@ class Indexed(Collection):
             return True
         except StopIteration:
             pass
-        except Exception as e:
+        except Exception:
             if self.fail_on_exception:
                 raise
-            log.error('Exception %s in wrapper.step()', e)
+            log.exception('Exception in wrapper.step()')
 
     def forward(self, *unused):
         self.index += 1

@@ -20,5 +20,5 @@ def read_byte(com):
         resp = com.read(1)
         if resp:
             return ord(resp)
-    except Exception as e:
-        log.error('Serial exception %s in read', e)
+    except Exception:
+        log.exception('Serial exception in read')

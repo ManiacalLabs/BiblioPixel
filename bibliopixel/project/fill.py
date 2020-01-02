@@ -65,7 +65,7 @@ def _fill_palettes(desc):
             try:
                 palettes.set_default(default)
             except:
-                log.error('Unable to set default palette to be %s', default)
+                log.exception('Unable to set default palette to be %s', default)
     return desc
 
 

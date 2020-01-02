@@ -93,8 +93,7 @@ class Runnable:
             while self.running:
                 self.run_once()
         except:
-            log.error('Exception at %s: \n%s',
-                      str(self), traceback.format_exc())
+            log.exception('Exception at %s:', str(self))
         finally:
             self.stop()
             self.cleanup()

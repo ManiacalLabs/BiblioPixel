@@ -137,8 +137,8 @@ def is_debug():
 _addLoggingLevel('FRAME', FRAME)
 logger = _new_custom_logger()
 
-frame, debug, info, warning, error = (
-    logger.frame, logger.debug, logger.info, logger.warning, logger.error)
+frame, debug, info, warning, error, exception = (
+    logger.frame, logger.debug, logger.info, logger.warning, logger.error, logger.exception)
 
 
 # The function `printer` emits text no matter what the loglevel, and without any

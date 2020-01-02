@@ -38,8 +38,7 @@ class Runner:
             try:
                 self.thread and self.thread.stop()
             except:
-                log.error('Error stopping thread')
-                traceback.print_exc()
+                log.exception('Error stopping thread')
             self.thread = None
             return True
 
