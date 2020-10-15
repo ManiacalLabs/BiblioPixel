@@ -31,7 +31,7 @@ The PiWS281X driver needs to be run as sudo.  Rerun it with sudo, like this:
 """
 
 try:
-    from neopixel import Adafruit_NeoPixel, Color as NeoColor
+    from rpi_ws281x import Adafruit_NeoPixel, Color as NeoColor
 except:
     NeoColor = None
 
